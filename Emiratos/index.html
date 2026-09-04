@@ -67,15 +67,28 @@
               <a href="registro.html">Registrar mi empresa</a>
               <a href="aprobacion-registro.html">Bandeja del Office Manager</a>
             </div>
+
+            <div class="edoc-legal">
+              <a href="#" data-legal="privacidad">Aviso de privacidad</a>
+              <span>·</span>
+              <a href="#" data-legal="condiciones">Términos y condiciones</a>
+            </div>
           </form>
         </div>
       </div>
 
-      <div class="edoc-aviso edoc-aviso--info">
-        <div>Maqueta de alcance. Cualquier credencial entra: el objetivo es revisar qué lleva el portal, no cómo autentica.</div>
+      <div class="nota nota--fuera mt-3">
+        <span class="nota__sello">Maqueta</span>
+        Cualquier credencial entra: el objetivo es revisar qué lleva el portal, no cómo autentica.
       </div>
 
-      <div class="nota nota--abierto mt-3" style="display:block">
+      <div class="nota nota--decidido mt-2">
+        <span class="nota__sello">Decidido · no negociable</span>
+        <strong>Los textos legales entran en el MVP.</strong> Si vamos a capturar los datos de una empresa, el usuario
+        tiene que poder leer antes qué hacemos con ellos y cómo los protegemos. En Francia estos dos enlaces están
+        vacíos; aquí tienen que llevar a algún sitio antes de salir.
+      </div>
+      <div class="nota nota--abierto mt-2">
         <span class="nota__sello">Abierto</span>
         <strong>El idioma del portal está sin decidir</strong> —solo inglés, o inglés y árabe— y hay que declarárselo a la
         autoridad. Esa decisión arrastra el sentido de lectura de toda la interfaz.
@@ -88,6 +101,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script>
+  /* El acceso no monta el armazón, así que aplica por su cuenta la capa de
+     revisión: las notas solo se ven si se encendieron en el panel de alcance. */
+  try {
+    if (window.localStorage.getItem('edoc-notas') === '1') document.body.classList.add('con-notas');
+  } catch (error) { /* navegador sin almacenamiento: se quedan ocultas */ }
+
   /* Quien entra por primera vez desde un navegador cualquiera va al inicio con
      el alcance de la entrega escrito en la dirección: así lo que ve no depende
      de lo que haya guardado nadie en su equipo, y el enlace se puede copiar tal
@@ -105,6 +124,13 @@
   document.getElementById('forma-acceso').addEventListener('submit', function (e) {
     e.preventDefault(); location.href = destinoDeEntrada();
   });
+  document.querySelectorAll('[data-legal]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      alert('El contenido legal está pendiente de redactar con el área correspondiente. Lo que no puede pasar es lo de Francia: que el enlace esté y no lleve a ninguna parte.');
+    });
+  });
+
   document.getElementById('olvide').addEventListener('click', function (e) {
     e.preventDefault();
     alert('Recuperar contraseña se toma de Francia. En Bolivia el enlace está vacío: es un hallazgo, no un modelo.');

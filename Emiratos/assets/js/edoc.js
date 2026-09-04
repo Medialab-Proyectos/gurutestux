@@ -40,8 +40,25 @@
     megafono: '<path d="M3.4 8.2h2.8l6.4-3.6v10.8L6.2 11.8H3.4z"/><path d="M15.4 7.6a3.4 3.4 0 0 1 0 4.8"/>',
     reenviar: '<path d="M3 5.4h14v9.2H3z"/><path d="m3 5.9 7 4.6 7-4.6"/><path d="m13.6 13.4 2.4 2.4-2.4 2.4"/>',
     mas:      '<path d="M10 4.4v11.2M4.4 10h11.2"/>',
-    puntos:   '<circle cx="10" cy="4.6" r="1.4"/><circle cx="10" cy="10" r="1.4"/><circle cx="10" cy="15.4" r="1.4"/>'
+    puntos:   '<circle cx="10" cy="4.6" r="1.4"/><circle cx="10" cy="10" r="1.4"/><circle cx="10" cy="15.4" r="1.4"/>',
+    /* El ambiente se identifica con un icono de servidor: es el lenguaje
+       universal para «en qué máquina estoy», sin tener que leer «entorno». */
+    servidor: '<rect x="3" y="3.6" width="14" height="5" rx="1"/><rect x="3" y="11.4" width="14" height="5" rx="1"/>' +
+              '<path d="M6 6.1h.01M6 13.9h.01"/>',
+    perfil:   '<circle cx="10" cy="6.6" r="3.1"/><path d="M4.2 16.6c0-2.9 2.6-4.7 5.8-4.7s5.8 1.8 5.8 4.7"/>'
   };
+
+  /* La bandera va con sus colores, no con el trazo de los demás iconos, y
+     recortada en círculo como en el portal de Francia. */
+  function bandera() {
+    return '<span class="edoc-bandera">' +
+      '<svg viewBox="0 0 21 14" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+      '<rect x="0" y="0" width="7" height="14" fill="#CE1126"/>' +
+      '<rect x="7" y="0" width="14" height="4.67" fill="#00843D"/>' +
+      '<rect x="7" y="4.67" width="14" height="4.66" fill="#ffffff"/>' +
+      '<rect x="7" y="9.33" width="14" height="4.67" fill="#000000"/>' +
+      '</svg></span>';
+  }
 
   function icono(nombre, clase) {
     var d = ICONOS[nombre] || '';
@@ -118,14 +135,20 @@
      y la bandeja del Office Manager. No lleva el menú del portal ni la
      identidad de un usuario cliente, porque ahí no hay ninguno.            */
   function encabezadoReducido(quien) {
+    var ambiente = cuerpoDato('ambiente', 'QA');
     return '' +
     '<header class="edoc-encabezado">' +
-      '<span class="edoc-encabezado__pais">Emiratos Árabes Unidos</span>' +
+      '<div class="edoc-contexto">' +
+        '<span class="edoc-ambiente edoc-ambiente--' + ambiente.toLowerCase() + '" ' +
+          'title="Estás conectado al ambiente de ' + ambiente + '">' +
+          icono('servidor') + '<span>' + ambiente + '</span></span>' +
+        (quien ? '<span class="edoc-empresa"><span class="edoc-empresa__textos">' +
+                 '<span class="edoc-empresa__nombre">' + quien + '</span></span></span>' : '') +
+      '</div>' +
       '<a class="edoc-encabezado__marca" href="index.html" aria-label="eDoc">' +
         '<img src="assets/img/edoc-logo-neg-compacto.svg" alt="eDoc · Facturación Electrónica">' +
       '</a>' +
       '<div class="edoc-encabezado__util">' +
-        (quien ? '<span class="edoc-encabezado__pais">' + quien + '</span>' : '') +
         '<button type="button" class="edoc-btn-util" data-alterna-arabe title="Muestra el nombre de la empresa tal como llega, en árabe">' +
           icono('idioma') + '<span>Nombre nativo</span></button>' +
         (herramientaNotas()
@@ -138,33 +161,81 @@
     '</header>';
   }
 
-  /* --- Encabezado -------------------------------------------------------- */
+  /* --- Encabezado ---------------------------------------------------------
+     Izquierda: información de contexto —en qué ambiente estoy, con qué empresa
+     y con qué usuario—. Derecha: herramientas. Centro: la marca.
+     Es el reparto que se acordó y el que ya sigue el portal de Francia.      */
   function encabezado() {
+    var empresa = cuerpoDato('empresa', 'Al Noor Trading LLC');
+    var usuario = cuerpoDato('usuario', 'Fatima Al Marzooqi');
+    var ambiente = cuerpoDato('ambiente', 'QA');
     return '' +
     '<header class="edoc-encabezado">' +
-      '<span class="edoc-encabezado__pais">Emiratos Árabes Unidos</span>' +
+      '<div class="edoc-contexto">' +
+        '<span class="edoc-ambiente edoc-ambiente--' + ambiente.toLowerCase() + '" ' +
+          'title="Estás conectado al ambiente de ' + ambiente + '">' +
+          icono('servidor') + '<span>' + ambiente + '</span></span>' +
+        '<span class="edoc-empresa" title="' + empresa + ' · ' + usuario + '">' +
+          icono('empresa') +
+          '<span class="edoc-empresa__textos">' +
+            '<span class="edoc-empresa__nombre">' + empresa + '</span>' +
+            '<span class="edoc-empresa__usuario">' + usuario + '</span>' +
+          '</span>' +
+        '</span>' +
+        '<span class="edoc-encabezado__separador"></span>' +
+      '</div>' +
+
       '<a class="edoc-encabezado__marca" href="inicio.html" aria-label="eDoc · inicio">' +
         '<img src="assets/img/edoc-logo-neg-compacto.svg" alt="eDoc · Facturación Electrónica">' +
       '</a>' +
+
       '<div class="edoc-encabezado__util">' +
-        '<button type="button" class="edoc-btn-util" data-alterna-arabe title="Muestra el nombre del emisor y del receptor tal como llega, en árabe">' +
+        '<button type="button" class="edoc-btn-util" data-alterna-arabe ' +
+          'title="Muestra el nombre del emisor y del receptor tal como llega, en árabe">' +
           icono('idioma') + '<span>Nombre nativo</span></button>' +
         (herramientaNotas()
           ? '<button type="button" class="edoc-btn-util" data-alterna-notas ' +
             'title="Muestra las decisiones de la reunión sobre cada bloque">' +
             icono('info') + '<span>Notas de diseño</span></button>'
           : '') +
-        '<a class="edoc-btn-util" href="#" data-sin-destino title="Transversal · botón siempre visible">' +
-          icono('soporte') + '<span>Soporte</span></a>' +
-        '<a class="edoc-btn-util" href="#" data-sin-destino title="Transversal · un cliente puede tener sede en Francia, España u Omán">' +
-          icono('pais') + '<span>Portales</span></a>' +
-        '<span class="edoc-usuario">' +
-          '<span class="edoc-usuario__avatar">FA</span>' +
-          '<span class="d-none d-lg-inline">Fatima Al Marzooqi</span>' +
-        '</span>' +
-        '<a class="edoc-btn-util" href="index.html" title="Salir">' + icono('salir') + '</a>' +
+        '<span class="edoc-encabezado__separador"></span>' +
+        '<button type="button" class="edoc-btn-util edoc-btn-util--idioma" data-sin-destino ' +
+          'title="Idioma del portal · pendiente de decidir si va solo en inglés o en inglés y árabe">' +
+          icono('idioma') + '<span class="edoc-btn-util__codigo">en-AE</span>' +
+          '<svg class="edoc-btn-util__chevron" viewBox="0 0 10 6" aria-hidden="true">' +
+          '<path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" ' +
+          'stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+        '<a class="edoc-btn-util edoc-btn-util--icono" href="#" data-sin-destino ' +
+          'title="Emiratos Árabes Unidos · cambiar de portal">' + bandera() + '</a>' +
+        '<a class="edoc-btn-util edoc-btn-util--icono" href="#" data-sin-destino ' +
+          'title="Acceso al soporte">' + icono('soporte') + '</a>' +
+        '<div class="dropdown">' +
+          '<button type="button" class="edoc-usuario" data-toggle="dropdown" ' +
+            'title="' + usuario + '" aria-label="Menú de la cuenta de ' + usuario + '">' +
+            '<span class="edoc-usuario__avatar" data-iniciales="' + iniciales(usuario) + '">' +
+              '<img src="assets/img/avatar.svg" alt="">' +
+            '</span>' +
+          '</button>' +
+          '<ul class="dropdown-menu dropdown-menu-right">' +
+            '<li><h6 class="dropdown-header">' + usuario + '</h6></li>' +
+            '<li><a class="dropdown-item" href="admin-clave.html">' + icono('perfil') + 'Cambiar Contraseña</a></li>' +
+            '<li><hr class="dropdown-divider"></li>' +
+            '<li><a class="dropdown-item" href="index.html">' + icono('salir') + 'Salir</a></li>' +
+          '</ul>' +
+        '</div>' +
       '</div>' +
     '</header>';
+  }
+
+  /* Datos de contexto, con valor por defecto. Se pueden cambiar por pantalla
+     con data-empresa, data-usuario o data-ambiente en el <body>. */
+  function cuerpoDato(nombre, porDefecto) {
+    return document.body.dataset[nombre] || porDefecto;
+  }
+
+  function iniciales(nombre) {
+    var partes = nombre.trim().split(/\s+/);
+    return ((partes[0] || '')[0] || '') + ((partes[1] || '')[0] || '');
   }
 
   /* --- Menú -------------------------------------------------------------- */
@@ -347,6 +418,15 @@
         e.preventDefault();
         window.location.href = 'panel.html';
       }
+    });
+
+    // Si el archivo del avatar no llega, se cae a las iniciales: nunca un hueco.
+    document.querySelectorAll('.edoc-usuario__avatar img').forEach(function (img) {
+      img.addEventListener('error', function () {
+        var caja = img.parentNode;
+        img.remove();
+        caja.textContent = caja.dataset.iniciales || '';
+      });
     });
 
     pintarNombres();

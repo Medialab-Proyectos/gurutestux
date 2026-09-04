@@ -17,8 +17,8 @@ No se dedujo de la reunión: se midió entrando a los portales.
 
 | Portal | Lo que sirve hoy |
 |---|---|
-| **Bolivia** · `devbo-emp-consultaweb-v2-1` | ASP.NET · **jQuery 3.5.1** · **Bootstrap 4.4.1** · **DataTables 1.10.25** (y 1.11.5 en Usuarios) · jquery-validation · jGrowl |
-| **Francia** · `qas-fr-entpr-site` | **Angular 20.3.19** · **Angular Material** |
+| **Bolivia** | ASP.NET · **jQuery 3.5.1** · **Bootstrap 4.4.1** · **DataTables 1.10.25** (y 1.11.5 en Usuarios) · jquery-validation · jGrowl |
+| **Francia** | **Angular 20.3.19** · **Angular Material** |
 
 La maqueta usa **exactamente las versiones de Bolivia**, que es de donde parte Emiratos: Bootstrap
 4.4.1, jQuery 3.5.1 y DataTables 1.10.25 con la misma traducción al español. Así copiar y pegar
@@ -228,9 +228,8 @@ lector de pantalla. Esta maqueta no repite eso:
 
 Dos cosas quedaron sin comprobar en vivo:
 
-- **Bolivia** tiene reCAPTCHA con clave real en el acceso; hay que entrar a mano.
-- **Francia** no acepta `USER TEST` como usuario. Su reCAPTCHA sí usa la clave de pruebas de Google,
-  así que con el usuario correcto se entra sin fricción.
+- **Bolivia** pide verificación de seguridad en el acceso; hay que entrar a mano.
+- **Francia** necesitaba el usuario correcto, que no estaba en las notas de partida.
 
 En `_validacion/` quedan los dos guiones del recorrido: `abrir-sesion.py` abre un navegador con
 puerto de depuración para iniciar sesión a mano, y `recorrer.py` se conecta a esa ventana y vuelca

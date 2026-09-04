@@ -17,7 +17,7 @@
   <div class="edoc-titulo-barra"><div>
       <div class="edoc-miga"><span>Administración</span><span>Cambiar Contraseña</span></div>
       <h1 class="edoc-titulo">Cambiar Contraseña</h1>
-      <p class="edoc-subtitulo">Cambias tu propia contraseña. Nada más: los datos del resto de usuarios se administran en Usuarios.</p>
+      <p class="edoc-subtitulo">Tu contraseña y tu verificación en dos pasos. Los datos del resto de usuarios se administran en Usuarios.</p>
     </div></div>
 
   <div class="row rejilla">
@@ -38,15 +38,55 @@
           <button class="btn btn-edoc-primario" type="submit">Guardar</button>
         </form>
       </section>
+
+      <section class="edoc-tablero">
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Verificación en dos pasos</h2></div>
+        <div class="edoc-tablero__cuerpo">
+          <p class="mb-3">Además de la contraseña, al entrar te pediremos un código de un solo uso. Es la forma de que
+          una contraseña robada no baste para entrar a tu cuenta.</p>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="mfa" id="mfa-app" checked>
+            <label class="form-check-label" for="mfa-app">
+              <strong>Aplicación de autenticación</strong>
+              <div class="edoc-secundario">El código lo genera una app en tu teléfono. Es la opción recomendada:
+              funciona sin cobertura y no depende del correo.</div>
+            </label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="mfa" id="mfa-correo">
+            <label class="form-check-label" for="mfa-correo">
+              <strong>Correo electrónico</strong>
+              <div class="edoc-secundario">Te enviamos el código al correo con el que entras.</div>
+            </label>
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="radio" name="mfa" id="mfa-no" disabled>
+            <label class="form-check-label" for="mfa-no">
+              <strong>Sin verificación en dos pasos</strong>
+              <div class="edoc-secundario">No disponible: la autoridad de Emiratos exige que el acceso lleve
+              un segundo factor.</div>
+            </label>
+          </div>
+
+          <button class="btn btn-edoc-secundario" data-sin-destino>Configurar la aplicación</button>
+        </div>
+      </section>
     </div>
     <div class="col-12 col-xl-6">
       <div class="edoc-aviso edoc-aviso--info mb-3">
         <div>Después de guardar te pediremos entrar otra vez. Es lo esperable y conviene decirlo antes, no después.</div>
       </div>
-      <div class="nota nota--abierto" style="display:block">
-        <span class="nota__sello">Abierto</span>
-        <strong>Doble factor.</strong> Bolivia ya activa y desactiva MFA por usuario; Francia no lo tiene. Para Emiratos no
-        se habló, así que no se ha decidido. Si entra, vive aquí y no en una pantalla aparte.
+      <div class="nota nota--decidido" style="display:block">
+        <span class="nota__sello">Decidido · no negociable</span>
+        <strong>El doble factor entra en el MVP.</strong> No es un extra: Emiratos exigió un documento explicando cómo se
+        maneja el MFA como parte del permiso para operar. Si el portal no lo lleva desde el principio, no cuadra con lo
+        que se declaró. Bolivia ya lo activa y desactiva por usuario; Francia no lo tiene y le hace falta.
+      </div>
+      <div class="nota nota--decidido" style="display:block">
+        <span class="nota__sello">Decidido</span>
+        <strong>No se puede desactivar.</strong> La opción se enseña deshabilitada, y no oculta, para que se entienda que
+        existe y que la decisión no es del cliente.
       </div>
     </div>
   </div>

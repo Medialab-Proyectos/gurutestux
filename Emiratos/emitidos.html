@@ -64,10 +64,10 @@
             <label class="edoc-etiqueta" for="f-entidad">Estado de la entidad</label>
             <select class="custom-select" id="f-entidad">
               <option value="">Cualquiera</option>
-              <option value="c2">C2 · eDoc</option>
-              <option value="c5">C5 · Autoridad</option>
-              <option value="c3">C3 · Plataforma receptora</option>
-              <option value="c4">C4 · Destinatario</option>
+              <option value="c2">eDoc (C2)</option>
+              <option value="c5">Autoridad (C5)</option>
+              <option value="c3">Plataforma receptora (C3)</option>
+              <option value="c4">Destinatario (C4)</option>
             </select>
           </div>
           <div class="col-12 col-md-6 col-xl-3">
@@ -150,10 +150,10 @@
             <th scope="col" class="text-right">Base imponible</th>
             <th scope="col" class="text-right">IVA</th>
             <th scope="col" class="text-right">Total</th>
-            <th scope="col" class="separador-izq">C2 · eDoc</th>
-            <th scope="col">C5 · Autoridad</th>
-            <th scope="col">C3 · Plataforma receptora</th>
-            <th scope="col">C4 · Destinatario</th>
+            <th scope="col" class="separador-izq">eDoc <span class="clave-corner">(C2)</span></th>
+            <th scope="col">Autoridad <span class="clave-corner">(C5)</span></th>
+            <th scope="col">Plataforma receptora <span class="clave-corner">(C3)</span></th>
+            <th scope="col">Destinatario <span class="clave-corner">(C4)</span></th>
           </tr>
         </thead>
         <tbody id="cuerpo-emitidos"></tbody>
@@ -192,13 +192,13 @@
             <table class="edoc-tabla">
               <thead><tr><th scope="col">Columna</th><th scope="col">Quién es</th><th scope="col">Qué puede responder</th></tr></thead>
               <tbody>
-                <tr><td><span class="corner__clave">C2</span> eDoc</td><td>Nosotros, la plataforma emisora acreditada.</td>
+                <tr><td>eDoc <span class="clave-corner">(C2)</span></td><td>Nosotros, la plataforma emisora acreditada.</td>
                     <td>Aprueba el documento o lo rechaza si el XML no valida.</td></tr>
-                <tr><td><span class="corner__clave">C5</span> Autoridad</td><td>La Federal Tax Authority.</td>
+                <tr><td>Autoridad <span class="clave-corner">(C5)</span></td><td>La Federal Tax Authority.</td>
                     <td>Rechaza por datos obligatorios. Es un error grave: el documento no sigue.</td></tr>
-                <tr><td><span class="corner__clave">C3</span> Plataforma receptora</td><td>El proveedor acreditado del comprador.</td>
+                <tr><td>Plataforma receptora <span class="clave-corner">(C3)</span></td><td>El proveedor acreditado del comprador.</td>
                     <td>Entrega o rechaza por validaciones técnicas.</td></tr>
-                <tr><td><span class="corner__clave">C4</span> Destinatario</td><td>El comprador, la empresa que recibe.</td>
+                <tr><td>Destinatario <span class="clave-corner">(C4)</span></td><td>El comprador, la empresa que recibe.</td>
                     <td>Aprueba, rechaza con motivo o solo acusa recibo.</td></tr>
               </tbody>
             </table>
@@ -410,8 +410,8 @@
       var e = D.ESTADOS[estado] || D.ESTADOS.pendiente;
       return '<article class="corner">' +
         '<div class="corner__cabecera">' +
-          '<span class="corner__clave">' + c.clave + '</span>' +
-          '<div class="corner__nombre">' + c.nombre + '</div>' +
+          '<div class="corner__nombre">' + c.nombre +
+            ' <span class="clave-corner">(' + c.clave + ')</span></div>' +
           '<div class="corner__quien">' + c.quien + '</div>' +
           '<div class="mt-2">' + (estado === 'noaplica' ? '<span class="edoc-secundario">Sin actuación</span>' :
             '<span class="edoc-estado edoc-estado--' + e.clase + '">' + e.rotulo + '</span>') + '</div>' +

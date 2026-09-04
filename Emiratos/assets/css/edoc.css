@@ -91,34 +91,94 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 
 /* --- 3. Encabezado · p.38 ------------------------------------------------
    «El logo de eDoc siempre estará de manera visible en la barra superior
-    central de la aplicación, respetando márgenes de seguridad.»           */
+    central de la aplicación, respetando márgenes de seguridad.»
+
+   Reparto acordado: a la izquierda información —ambiente, empresa y usuario—,
+   a la derecha herramientas. Antes el usuario estaba a la derecha y el ambiente
+   en ninguna parte, así que había que mirar a los dos lados para saber dónde
+   estabas y con quién.                                                       */
 .edoc-encabezado {
   height: var(--alto-encabezado);
   background: var(--edoc-azul);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 18px; position: sticky; top: 0; z-index: 1030;
+  padding: 0 16px; position: sticky; top: 0; z-index: 1030;
 }
 .edoc-encabezado__marca { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; }
 .edoc-encabezado__marca img { height: 34px; display: block; }
-.edoc-encabezado__pais {
-  font-family: var(--fuente-titulos); font-size: 11px; font-weight: 600;
-  letter-spacing: .14em; text-transform: uppercase; color: #fff;
-  border: 1px solid rgba(255,255,255,.45); border-radius: 100px; padding: 3px 12px;
+
+/* --- 3.1 · Información de contexto --------------------------------------
+   Texto, no tarjetas. El recuadro daba la sensación de que se podía pulsar, y
+   esto solo informa: en qué ambiente estás, con qué empresa y con qué usuario. */
+.edoc-contexto { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+.edoc-ambiente {
+  display: inline-flex; align-items: center; gap: 7px; flex: none;
+  border-radius: 100px; padding: 5px 13px 5px 10px;
+  font-family: var(--fuente-titulos); font-size: 11px; font-weight: 700;
+  letter-spacing: .1em; line-height: 1;
 }
+.edoc-ambiente svg { width: 15px; height: 15px; }
+/* Producción se pinta distinto a propósito: confundir un ambiente con otro es
+   el error caro. */
+.edoc-ambiente--qa,
+.edoc-ambiente--dev  { background: var(--senal-advertencia); color: #3d2400; }
+.edoc-ambiente--pro,
+.edoc-ambiente--prod { background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.35); }
+
+.edoc-empresa {
+  display: inline-flex; align-items: center; gap: 9px; min-width: 0; color: #fff;
+}
+.edoc-empresa svg { width: 18px; height: 18px; flex: none; opacity: .8; }
+.edoc-empresa__textos { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.edoc-empresa__nombre {
+  font-family: var(--fuente-titulos); font-size: 13px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 27ch;
+}
+.edoc-empresa__usuario {
+  font-size: 11px; color: rgba(255,255,255,.68);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 27ch;
+}
+
+/* --- 3.2 · Herramientas -------------------------------------------------
+   Píldoras y círculos, como en el portal de Francia: la barra se lee como una
+   fila de controles, no como una fila de cajas.                             */
 .edoc-encabezado__util { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.edoc-encabezado__separador {
+  width: 1px; height: 26px; background: rgba(255,255,255,.22); flex: none;
+}
 .edoc-btn-util {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: transparent; border: 1px solid rgba(255,255,255,.4); color: #fff;
-  border-radius: var(--radio-chico); padding: 5px 10px; font-size: 12px; line-height: 1;
+  display: inline-flex; align-items: center; gap: 7px;
+  background: transparent; border: 1px solid rgba(255,255,255,.38); color: #fff;
+  border-radius: 100px; padding: 6px 14px; font-size: 12px; line-height: 1;
+  transition: background .15s, border-color .15s;
 }
-.edoc-btn-util:hover { background: rgba(255,255,255,.12); color: #fff; }
+.edoc-btn-util:hover { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.6); color: #fff; text-decoration: none; }
 .edoc-btn-util svg { width: 15px; height: 15px; }
-.edoc-usuario { display: flex; align-items: center; gap: 8px; color: #fff; font-size: 12px; }
-.edoc-usuario__avatar {
-  width: 28px; height: 28px; border-radius: 50%; background: var(--edoc-verde);
-  color: var(--edoc-azul); display: grid; place-items: center;
-  font-family: var(--fuente-titulos); font-weight: 700; font-size: 11px;
+.edoc-btn-util__codigo { font-family: var(--fuente-titulos); font-size: 11.5px; font-weight: 600; letter-spacing: .05em; }
+
+/* Los que son solo icono van en círculo perfecto. */
+.edoc-btn-util--icono {
+  width: 34px; height: 34px; padding: 0; border-radius: 50%;
+  justify-content: center; flex: none;
 }
+.edoc-btn-util--icono svg { width: 16px; height: 16px; }
+
+.edoc-bandera {
+  width: 22px; height: 22px; border-radius: 50%; overflow: hidden;
+  display: block; box-shadow: 0 0 0 1px rgba(255,255,255,.35);
+}
+.edoc-bandera svg { width: 100%; height: 100%; display: block; }
+
+.edoc-usuario { display: flex; align-items: center; background: transparent; border: 0; padding: 0; }
+.edoc-usuario__avatar {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--edoc-verde);
+  color: var(--edoc-azul); display: grid; place-items: center; overflow: hidden;
+  font-family: var(--fuente-titulos); font-weight: 700; font-size: 12px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.35);
+}
+/* Si el archivo del avatar no carga, quedan las iniciales: nunca un hueco. */
+.edoc-usuario__avatar img { width: 100%; height: 100%; display: block; }
+.edoc-usuario:hover .edoc-usuario__avatar { box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
 
 /* --- 4. Menú ------------------------------------------------------------- */
 .edoc-menu {
@@ -489,8 +549,12 @@ body.con-notas .edoc-pagina.edoc-pagina--lienzo { padding-bottom: var(--alto-pie
    La página nunca se desplaza en horizontal. Lo que no cabe se recorta o se
    desplaza dentro de su propio contenedor: es el defecto que la auditoría de
    Francia encontró en las diez tablas del portal.                          */
-@media (max-width: 1100px) {
-  .edoc-encabezado__pais { display: none; }
+@media (max-width: 1200px) {
+  .edoc-empresa__nombre, .edoc-empresa__usuario { max-width: 18ch; }
+}
+@media (max-width: 1000px) {
+  .edoc-empresa__usuario { display: none; }
+  .edoc-empresa__nombre { max-width: 14ch; }
 }
 @media (max-width: 900px) {
   .edoc-btn-util span { display: none; }
@@ -500,6 +564,9 @@ body.con-notas .edoc-pagina.edoc-pagina--lienzo { padding-bottom: var(--alto-pie
 @media (max-width: 640px) {
   .edoc-encabezado { padding: 0 10px; }
   .edoc-encabezado__marca { position: static; transform: none; margin-right: auto; }
+  .edoc-empresa { display: none; }
+  .edoc-ambiente { padding: 4px 7px; letter-spacing: .06em; }
+  .edoc-encabezado__separador { display: none; }
   .edoc-encabezado__marca img { height: 26px; }
   .edoc-usuario .edoc-usuario__avatar { width: 26px; height: 26px; }
   .edoc-menu { overflow-x: auto; padding: 0 4px; }
@@ -889,3 +956,26 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   .edoc-obra__tarjeta { padding: 30px 20px; }
   .edoc-obra__botones .btn { width: 100%; }
 }
+
+/* --- 26. El código de la entidad, detrás del nombre ----------------------
+   Se decidió en la revisión: el cliente lee «Autoridad», no «C5». El código se
+   conserva porque es el nombre que usa la red en todos los países, pero va
+   detrás y en gris, como ayuda y no como titular.                           */
+.clave-corner {
+  font-family: var(--fuente-cifras); font-weight: 400; font-size: .92em;
+  color: #7d8590; letter-spacing: 0;
+}
+.edoc-tabla thead th .clave-corner { color: #6f7681; }
+.corner__nombre .clave-corner { font-size: .82em; }
+
+/* Enlaces legales del acceso. Van visibles, no escondidos en un pie diminuto:
+   se decidió que el tratamiento de datos no es negociable. */
+.edoc-legal {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 16px; padding-top: 14px; border-top: 1px solid #ececec;
+  font-size: 12px; color: var(--edoc-gris);
+}
+
+/* El selector de idioma, con el locale y el chevron, igual que en Francia. */
+.edoc-btn-util--idioma { padding: 6px 12px 6px 13px; gap: 8px; }
+.edoc-btn-util__chevron { width: 9px; height: 6px; opacity: .8; flex: none; }

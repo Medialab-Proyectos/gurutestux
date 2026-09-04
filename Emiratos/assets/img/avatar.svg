@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Avatar">
+  <!--
+    Avatar por defecto del portal. Silueta neutra, sin rasgos: representa a
+    cualquier persona sin suponer nada de ella. Los colores son los de marca
+    —verde lima #A8C634 sobre azul #001174— para que se distinga del fondo
+    azul del encabezado. Trazo simple y sin recargos, como pide el manual.
+  -->
+  <defs>
+    <clipPath id="avatarRecorte">
+      <circle cx="32" cy="32" r="32"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#avatarRecorte)">
+    <circle cx="32" cy="32" r="32" fill="#A8C634"/>
+    <circle cx="32" cy="25.5" r="10.5" fill="#001174"/>
+    <path d="M32 38.5c-11.4 0-20.6 7.2-20.6 16.1V64h41.2v-9.4c0-8.9-9.2-16.1-20.6-16.1Z" fill="#001174"/>
+  </g>
+</svg>
