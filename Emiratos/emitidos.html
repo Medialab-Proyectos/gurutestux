@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentos Emitidos · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="emision" data-pagina="emitidos.html">
+
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+
+  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Emisión</span><span>Reportes</span><span>Documentos Emitidos</span></div>
+      <h1 class="edoc-titulo">Documentos Emitidos</h1>
+      <p class="edoc-subtitulo">Lo que tu empresa ha emitido y en qué punto está ante cada una de las cuatro entidades que responden por el documento.</p>
+    </div>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    <strong>Aquí «Emisión» es consultar lo emitido.</strong> No se emite desde el portal: eDoc Emisor queda fuera del alcance
+    de Emiratos, así que no hay formulario de factura, ni notas, ni contingencia, ni catálogo de productos.
+    Tampoco hay botón de anular: la única corrección es una nota de crédito y este portal no emite notas.
+  </div>
+
+  <!-- ===================== Banner de búsqueda ========================= -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo" id="rotulo-buscar">Buscar</h2>
+      <button type="button" class="btn btn-edoc-terciario btn-sm" data-toggle="collapse" data-target="#panel-buscar">
+        Mostrar u ocultar
+      </button>
+    </div>
+    <div class="collapse show" id="panel-buscar">
+      <form class="edoc-tablero__cuerpo" id="forma-buscar" novalidate>
+        <div class="row rejilla">
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-desde">Fecha de emisión desde<span class="obligatorio">*</span></label>
+            <input type="date" class="form-control" id="f-desde" value="2026-08-01" required>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-hasta">Fecha de emisión hasta<span class="obligatorio">*</span></label>
+            <input type="date" class="form-control" id="f-hasta" value="2026-08-31" required>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-tipo">Tipo de documento</label>
+            <select class="custom-select" id="f-tipo"><option value="">Todos</option></select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-numero">Número de documento</label>
+            <input type="text" class="form-control cifra" id="f-numero" placeholder="INV-2026-004871" inputmode="latin">
+          </div>
+
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-entidad">Estado de la entidad</label>
+            <select class="custom-select" id="f-entidad">
+              <option value="">Cualquiera</option>
+              <option value="c2">C2 · eDoc</option>
+              <option value="c5">C5 · Autoridad</option>
+              <option value="c3">C3 · Plataforma receptora</option>
+              <option value="c4">C4 · Destinatario</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-estado">Estado</label>
+            <select class="custom-select" id="f-estado">
+              <option value="">Todos los estados</option>
+              <option value="aprobado">Aprobado</option>
+              <option value="rechazado">Rechazado</option>
+              <option value="entregado">Entregado</option>
+              <option value="enviado">Enviado</option>
+              <option value="acuse">Acuse</option>
+              <option value="pendiente">Pendiente</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-trn">Registro fiscal del receptor</label>
+            <input type="text" class="form-control cifra" id="f-trn" placeholder="100234567800003" inputmode="numeric">
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-receptor">Receptor</label>
+            <input type="text" class="form-control" id="f-receptor" placeholder="Nombre del receptor">
+            <div class="edoc-ayuda">Busca por el nombre tal como llega, en el alfabeto que llegue.</div>
+          </div>
+        </div>
+
+        <div class="d-flex hueco-2 flex-wrap mt-4">
+          <button type="submit" class="btn btn-edoc-primario" id="btn-consultar">Consultar</button>
+          <button type="reset" class="btn btn-edoc-terciario" id="btn-limpiar">Limpiar</button>
+        </div>
+
+        <div class="nota nota--decidido">
+          <span class="nota__sello">Decidido</span>
+          <strong>Buscar no es una pantalla.</strong> Es el banner de esta misma página. «Documentos por criterios», con los
+          filtros ampliados, queda para una segunda versión: el MVP arranca con el reporte por rango de fechas.
+        </div>
+        <div class="nota nota--abierto">
+          <span class="nota__sello">Abierto</span>
+          <strong>La búsqueda por nombre arrastra el árabe.</strong> Si el receptor viene en árabe, el filtro tiene que
+          poder buscarlo. Hay que revisar con base de datos la colación y el juego de caracteres del campo antes de
+          prometer esta búsqueda. Regla dura: un solo alfabeto por campo, nunca los dos mezclados.
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===================== Resultados ================================= -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Resultados</h2>
+      <div class="d-flex align-items-center hueco-2 flex-wrap">
+        <div class="dropdown">
+          <button class="btn btn-edoc-secundario btn-sm dropdown-toggle" data-toggle="dropdown" type="button">Exportar</button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><h6 class="dropdown-header">Formato</h6></li>
+            <li><a class="dropdown-item" href="#" data-exportar="XLSX"><span class="icono-xls" data-icono="xls"></span> Hoja de cálculo · XLSX</a></li>
+            <li><a class="dropdown-item" href="#" data-exportar="CSV"><span class="icono-xls" data-icono="xls"></span> Texto separado por comas · CSV</a></li>
+            <li><a class="dropdown-item" href="#" data-exportar="ZIP"><span class="icono-zip" data-icono="zip"></span> Resultados y XML · ZIP</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="edoc-tabla-envoltura">
+      <table class="edoc-tabla" id="tabla-emitidos">
+        <thead>
+          <tr>
+            <th colspan="9" style="background:#fff;border-bottom-color:#fff"></th>
+            <th colspan="4" class="agrupador">Estado por entidad · los cuatro corners
+              <button type="button" class="agrupador__ayuda" data-toggle="modal" data-target="#modal-corners"
+                      aria-label="Qué son C2, C5, C3 y C4">?</button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="col" class="col-acciones">Acciones</th>
+            <th scope="col">Número de documento</th>
+            <th scope="col">Fecha de emisión</th>
+            <th scope="col">Tipo de documento</th>
+            <th scope="col">Receptor</th>
+            <th scope="col">Moneda</th>
+            <th scope="col" class="text-right">Base imponible</th>
+            <th scope="col" class="text-right">IVA</th>
+            <th scope="col" class="text-right">Total</th>
+            <th scope="col" class="separador-izq">C2 · eDoc</th>
+            <th scope="col">C5 · Autoridad</th>
+            <th scope="col">C3 · Plataforma receptora</th>
+            <th scope="col">C4 · Destinatario</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpo-emitidos"></tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    <strong>Los cuatro estados van separados.</strong> En Francia se fusionaron la plataforma receptora y el comprador en
+    una sola columna, y hoy «aprobado» no dice quién aprobó. Como el código 2 significa aprobado para todas las entidades,
+    unificarlas obligaría a inventar códigos 103 en adelante. En Emiratos se separan desde el principio: cuatro columnas,
+    una por entidad, cada una con su propio estado y su propio motivo cuando rechaza.
+  </div>
+
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Fuera del MVP</span>
+    <strong>Reenviar al cliente</strong> está por decidir: en Bolivia va por correo y por WhatsApp, pero aquí el primer
+    canal es la red PEPOL. Abrir el correo como canal alterno puede hacer que un documento se apruebe por una vía y se
+    rechace por la otra. <strong>La cola de reportes pesados</strong> es el patrón correcto, pero de entrada no hay volumen.
+  </div>
+
+  <!-- ===================== Modal · qué son los corners ================ -->
+  <div class="modal fade" id="modal-corners" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Las cuatro entidades que responden por un documento</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>Un mismo documento pasa por cuatro manos y cada una responde por su cuenta. Por eso hay cuatro columnas y
+          no una: <strong>«aprobado» tiene que decir quién aprobó</strong>.</p>
+          <div class="edoc-tabla-envoltura">
+            <table class="edoc-tabla">
+              <thead><tr><th scope="col">Columna</th><th scope="col">Quién es</th><th scope="col">Qué puede responder</th></tr></thead>
+              <tbody>
+                <tr><td><span class="corner__clave">C2</span> eDoc</td><td>Nosotros, la plataforma emisora acreditada.</td>
+                    <td>Aprueba el documento o lo rechaza si el XML no valida.</td></tr>
+                <tr><td><span class="corner__clave">C5</span> Autoridad</td><td>La Federal Tax Authority.</td>
+                    <td>Rechaza por datos obligatorios. Es un error grave: el documento no sigue.</td></tr>
+                <tr><td><span class="corner__clave">C3</span> Plataforma receptora</td><td>El proveedor acreditado del comprador.</td>
+                    <td>Entrega o rechaza por validaciones técnicas.</td></tr>
+                <tr><td><span class="corner__clave">C4</span> Destinatario</td><td>El comprador, la empresa que recibe.</td>
+                    <td>Aprueba, rechaza con motivo o solo acusa recibo.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="edoc-aviso edoc-aviso--advertencia mt-3">
+            <div>Un <strong>Aprobado</strong> en C3 no es la aceptación del comprador: significa que la plataforma del
+            otro lado recibió el documento sin errores técnicos. La aceptación es la de C4.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Modal · ver estados ======================== -->
+  <div class="modal fade" id="modal-estados" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Estados del documento <span id="estados-numero" class="ml-2" style="opacity:.75"></span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="edoc-aviso edoc-aviso--info mb-3">
+            <span data-icono="info" class="edoc-aviso__icono"></span>
+            <div>Cada entidad responde por su cuenta. <strong>«Aprobado» siempre dice quién aprobó</strong>, porque cada
+            columna es una entidad distinta. Un aprobado de la plataforma receptora no es la aceptación del comprador.</div>
+          </div>
+          <div class="corner-rejilla" id="rejilla-corners"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Modal · visor de la factura ================ -->
+  <div class="modal fade" id="modal-visor" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Visor de la factura <span id="visor-numero" class="ml-2" style="opacity:.75"></span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body" style="background:#eef0f2">
+          <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+            <span data-icono="alerta" class="edoc-aviso__icono"></span>
+            <div><strong>Esta vista no es la representación gráfica oficial del documento.</strong> Es un render de los campos
+            del XML que eDoc genera para que puedas leer la factura. Por la red viaja el XML limpio, sin PDF adjunto.</div>
+          </div>
+          <div id="visor-hoja"></div>
+          <div class="nota nota--abierto">
+            <span class="nota__sello">Abierto</span>
+            Falta confirmar si en Emiratos el PDF puede viajar dentro del XML como referencia de documento.
+            Si viaja, esta pantalla muestra el original en vez del render.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="d-flex hueco-2">
+            <button type="button" class="btn btn-edoc-secundario" data-descargar="XML"><span data-icono="xml"></span> Descargar XML</button>
+            <button type="button" class="btn btn-edoc-secundario" data-descargar="PDF"><span data-icono="pdf"></span> Descargar PDF</button>
+            <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script src="assets/js/tablas.js"></script>
+<script>
+(function () {
+  'use strict';
+  var D = window.EDOC, ico = window.edocIcono;
+
+  /* Tipos de documento en el filtro */
+  var sel = document.getElementById('f-tipo');
+  D.TIPOS.forEach(function (t) { sel.insertAdjacentHTML('beforeend', '<option>' + t + '</option>'); });
+
+  /* La pastilla nombra siempre a su entidad. El sentido de la reunión es que
+     «aprobado» no puede quedarse sin decir quién aprobó. */
+  function pastilla(estado, corner) {
+    var e = D.ESTADOS[estado] || D.ESTADOS.pendiente;
+    var c = corner ? D.CORNERS.filter(function (x) { return x.clave === corner; })[0] : null;
+    if (estado === 'noaplica') {
+      return '<span class="edoc-secundario" title="El documento se detuvo antes de llegar a esta entidad">—</span>';
+    }
+    var titulo = c ? (e.rotulo + ' por ' + c.nombre + ' · ' + c.quien) : e.rotulo;
+    return '<span class="edoc-estado edoc-estado--' + e.clase + '" title="' + titulo + '">' +
+           '<span class="sr-only">' + (c ? c.clave + ' ' + c.nombre + ': ' : '') + '</span>' +
+           e.rotulo + '</span>';
+  }
+
+  function fila(doc, i) {
+    var negativo = doc.total < 0 ? ' style="color:var(--rojo-1)"' : '';
+    return '<tr data-fila="' + i + '">' +
+      '<td class="col-acciones">' +
+        '<div class="edoc-acciones-fila">' +
+          '<a class="edoc-accion" href="#" data-accion="estados" data-i="' + i + '" ' +
+            'title="Ver estados de las cuatro entidades" aria-label="Ver los estados de ' + doc.numero + '">' + ico('estados') + '</a>' +
+          '<a class="edoc-accion edoc-accion--gris" href="#" data-accion="xml" data-i="' + i + '" ' +
+            'title="Descargar XML" aria-label="Descargar el XML de ' + doc.numero + '">' + ico('xml') + '</a>' +
+        '</div>' +
+      '</td>' +
+      '<td><a class="edoc-clave-doc" href="#" data-accion="visor" data-i="' + i + '" ' +
+        'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
+      '<td class="cifra">' + doc.fecha + '</td>' +
+      '<td>' + doc.tipo + '</td>' +
+      '<td><span data-nombre-latino="' + doc.receptorLatino + '" data-nombre-arabe="' + doc.receptorArabe + '"></span>' +
+        '<div class="edoc-secundario cifra">' + doc.trn + '</div></td>' +
+      '<td class="cifra">' + doc.moneda + '</td>' +
+      '<td class="cifra cifra-der"' + negativo + '>' + D.dinero(doc.base) + '</td>' +
+      '<td class="cifra cifra-der"' + negativo + '>' + D.dinero(doc.iva) + '</td>' +
+      '<td class="cifra cifra-der font-weight-bold"' + negativo + '>' + D.dinero(doc.total) + '</td>' +
+      '<td class="separador-izq">' + pastilla(doc.c2, 'C2') + '</td>' +
+      '<td>' + pastilla(doc.c5, 'C5') + '</td>' +
+      '<td>' + pastilla(doc.c3, 'C3') + '</td>' +
+      '<td>' + pastilla(doc.c4, 'C4') + '</td>' +
+    '</tr>';
+  }
+
+  var cuerpo = document.getElementById('cuerpo-emitidos');
+  cuerpo.innerHTML = D.EMITIDOS.map(fila).join('');
+  window.edocPintarNombres();
+  window.edocPintarIconos();
+
+  /* La tabla es un DataTable, igual que en Bolivia: de ahí salen el «Mostrar N
+     registros», el conteo y la paginación. Los importes ordenan por su valor,
+     no por el texto con comas. */
+  window.edocTabla('#tabla-emitidos', {
+    language: { emptyTable: 'No hay documentos emitidos en ese rango de fechas. Prueba a ampliarlo.',
+                zeroRecords: 'Ningún documento coincide con lo que buscas.' },
+    columnDefs: [
+      { orderable: false, targets: 0 },
+      { type: 'num-fmt', targets: [7, 8, 9] }
+    ],
+    order: [[2, 'desc']]
+  });
+
+  /* --- Cuatro corners, cada uno con su línea de tiempo ------------------ */
+  function sucesos(doc, clave) {
+    var c = doc[clave.toLowerCase()];
+    var mapa = {
+      c2: [
+        { t: 'Recepción del documento', d: 'El sistema del cliente entrega el XML a eDoc.', s: '08:14', e: 'hecho' },
+        { t: 'Validación de esquema',   d: 'Estructura y campos obligatorios.',              s: '08:14', e: c === 'rechazado' ? 'fallo' : 'hecho' },
+        { t: 'Aprobado',                d: 'Aprobado por la plataforma emisora.',            s: '08:15', e: 'hecho' }
+      ],
+      c5: [
+        { t: 'Envío',        d: 'Documento transmitido a la autoridad fiscal.', s: '08:15', e: 'hecho' },
+        { t: 'Confirmación', d: 'Acuse de recepción de la autoridad.',          s: '08:16', e: 'hecho' },
+        { t: 'Aprobado',     d: 'Validado y aprobado por la autoridad.',        s: '08:22', e: 'hecho' }
+      ],
+      c3: [
+        { t: 'Envío',      d: 'Transmitido por la red a la plataforma del comprador.', s: '08:23', e: 'hecho' },
+        { t: 'Entregado',  d: 'La plataforma receptora confirma la entrega.',          s: '08:24', e: 'hecho' },
+        { t: 'Aprobado',   d: 'Validaciones técnicas superadas.',                      s: '08:26', e: 'hecho' }
+      ],
+      c4: [
+        { t: 'Puesto a disposición', d: 'El documento queda visible para el comprador.', s: '08:26', e: 'hecho' },
+        { t: 'Respuesta',            d: 'El comprador responde al documento.',           s: '09:40', e: 'hecho' }
+      ]
+    }[clave.toLowerCase()];
+
+    if (c === 'noaplica') {
+      return [{ t: 'Sin actuación', d: 'El documento no llegó hasta esta entidad porque se detuvo antes.', s: '', e: 'espera' }];
+    }
+    if (c === 'rechazado') {
+      var motivo = doc['motivo' + clave.toUpperCase()] || 'Rechazado por esta entidad.';
+      var lista = mapa.slice(0, mapa.length - 1);
+      lista.push({ t: 'Rechazado', d: motivo, s: '09:12', e: 'fallo' });
+      return lista;
+    }
+    if (c === 'pendiente') {
+      return mapa.slice(0, 1).concat([{ t: 'A la espera de respuesta', d: 'Esta entidad todavía no ha respondido.', s: '', e: 'espera' }]);
+    }
+    if (c === 'acuse') {
+      var l2 = mapa.slice(0, mapa.length - 1);
+      l2.push({ t: 'Acuse de recibo · MLS AB', d: 'El comprador confirma que le llegó. No es una aprobación.', s: '09:40', e: 'hecho' });
+      return l2;
+    }
+    if (c === 'enviado' || c === 'entregado') return mapa.slice(0, 2);
+    return mapa;
+  }
+
+  function abrirEstados(doc) {
+    document.getElementById('estados-numero').textContent = doc.numero;
+    document.getElementById('rejilla-corners').innerHTML = D.CORNERS.map(function (c) {
+      var estado = doc[c.clave.toLowerCase()];
+      var items = sucesos(doc, c.clave).map(function (s) {
+        return '<li class="' + s.e + '">' +
+          '<div class="linea-tiempo__titulo">' + s.t + '</div>' +
+          '<div class="linea-tiempo__detalle">' + s.d + '</div>' +
+          (s.s ? '<div class="linea-tiempo__sello">' + doc.fecha + ' ' + s.s + '</div>' : '') +
+        '</li>';
+      }).join('');
+      var e = D.ESTADOS[estado] || D.ESTADOS.pendiente;
+      return '<article class="corner">' +
+        '<div class="corner__cabecera">' +
+          '<span class="corner__clave">' + c.clave + '</span>' +
+          '<div class="corner__nombre">' + c.nombre + '</div>' +
+          '<div class="corner__quien">' + c.quien + '</div>' +
+          '<div class="mt-2">' + (estado === 'noaplica' ? '<span class="edoc-secundario">Sin actuación</span>' :
+            '<span class="edoc-estado edoc-estado--' + e.clase + '">' + e.rotulo + '</span>') + '</div>' +
+        '</div>' +
+        '<div class="corner__cuerpo"><ul class="linea-tiempo">' + items + '</ul></div>' +
+      '</article>';
+    }).join('');
+    window.edocPrepararTablas(document.getElementById('modal-estados'));
+    $('#modal-estados').modal('show');
+  }
+
+  /* --- Visor ------------------------------------------------------------ */
+  function abrirVisor(doc) {
+    document.getElementById('visor-numero').textContent = doc.numero;
+    var det = D.DETALLE[doc.numero] || D.DETALLE['INV-2026-004871'];
+    var lineas = det.lineas.map(function (l) {
+      var importe = l.c * l.p;
+      return '<tr>' +
+        '<td>' + l.d + '</td>' +
+        '<td class="cifra cifra-der">' + l.c + '</td>' +
+        '<td class="cifra cifra-der">' + D.dinero(l.p) + '</td>' +
+        '<td class="cifra cifra-der">' + l.iva + ' %</td>' +
+        '<td class="cifra cifra-der">' + D.dinero(importe) + '</td>' +
+      '</tr>';
+    }).join('');
+
+    document.getElementById('visor-hoja').innerHTML =
+      '<div class="visor-hoja">' +
+        '<div class="visor-cabecera">' +
+          '<div>' +
+            '<img src="assets/img/edoc-logo.svg" alt="eDoc" style="height:34px">' +
+            '<div class="mt-2" style="font-family:var(--fuente-titulos);font-weight:600">' + det.emisorLatino + '</div>' +
+            '<div class="edoc-secundario">Registro fiscal <span class="cifra">' + det.emisorTrn + '</span></div>' +
+          '</div>' +
+          '<div class="text-right">' +
+            '<div class="visor-bloque__rotulo">' + doc.tipo + '</div>' +
+            '<div class="edoc-clave-doc" style="font-size:16px">' + doc.numero + '</div>' +
+            '<div class="edoc-secundario cifra">Emisión ' + doc.fecha + '</div>' +
+            '<div class="edoc-secundario cifra">Vencimiento ' + det.vencimiento + '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="visor-partes">' +
+          '<div>' +
+            '<div class="visor-bloque__rotulo">Emisor</div>' +
+            '<div style="font-weight:600">' + det.emisorLatino + '</div>' +
+            '<div class="edoc-secundario">' + det.direccionEmisor + '</div>' +
+          '</div>' +
+          '<div>' +
+            '<div class="visor-bloque__rotulo">Receptor</div>' +
+            '<div style="font-weight:600"><span data-nombre-latino="' + doc.receptorLatino + '" data-nombre-arabe="' + doc.receptorArabe + '"></span></div>' +
+            '<div class="edoc-secundario">Registro fiscal <span class="cifra">' + doc.trn + '</span></div>' +
+            '<div class="edoc-secundario">' + det.direccionReceptor + '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<dl class="visor-dato"><dt>Orden de compra</dt><dd class="cifra">' + det.orden + '</dd></dl>' +
+        '<dl class="visor-dato"><dt>Moneda</dt><dd class="cifra">' + doc.moneda + '</dd></dl>' +
+
+        '<table class="edoc-tabla mt-3">' +
+          '<thead><tr><th scope="col">Descripción</th><th scope="col" class="text-right">Cantidad</th><th scope="col" class="text-right">Precio</th>' +
+          '<th scope="col" class="text-right">IVA</th><th scope="col" class="text-right">Importe</th></tr></thead>' +
+          '<tbody>' + lineas + '</tbody>' +
+        '</table>' +
+
+        '<div class="visor-totales mt-3">' +
+          '<div class="fila"><span>Base imponible</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.base) + '</span></div>' +
+          '<div class="fila"><span>IVA</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.iva) + '</span></div>' +
+          '<div class="fila total"><span>Total</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.total) + '</span></div>' +
+        '</div>' +
+      '</div>';
+
+    window.edocPintarNombres();
+    window.edocPrepararTablas(document.getElementById('modal-visor'));
+    $('#modal-visor').modal('show');
+  }
+
+  /* --- Enganches -------------------------------------------------------- */
+  cuerpo.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-accion]');
+    if (!a) return;
+    e.preventDefault();
+    var doc = D.EMITIDOS[+a.dataset.i];
+    if (a.dataset.accion === 'estados') abrirEstados(doc);
+    if (a.dataset.accion === 'visor') abrirVisor(doc);
+    if (a.dataset.accion === 'xml') window.edocAvisar('Se descargaría el XML de <strong>' + doc.numero + '</strong>. En la maqueta no hay archivo detrás.');
+  });
+
+  document.getElementById('forma-buscar').addEventListener('submit', function (e) {
+    e.preventDefault();
+    window.edocAvisar('Consulta lanzada. La maqueta devuelve siempre el mismo juego de documentos.');
+  });
+
+  document.querySelectorAll('[data-exportar]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.edocAvisar('Se inició un proceso para generar el archivo <strong>' + a.dataset.exportar +
+        '</strong>. Cuando esté listo te lo enviamos por correo.');
+    });
+  });
+  document.querySelectorAll('[data-descargar]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      window.edocAvisar('Se descargaría el ' + b.dataset.descargar + ' del documento abierto.');
+    });
+  });
+})();
+</script>
+</body>
+</html>

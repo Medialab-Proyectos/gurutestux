@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aprobación del registro · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="" data-pagina="aprobacion-registro.html" data-armazon="reducido" data-quien="Office Manager · back-office">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Fuera de la sesión</span><span>Aprobación del registro</span></div>
+      <h1 class="edoc-titulo">Aprobación del registro</h1>
+      <p class="edoc-subtitulo">La bandeja donde el Office Manager revisa cada solicitud de alta y decide si un cliente nuevo entra al portal.</p>
+    </div>
+    <span class="edoc-etiqueta-mvp edoc-etiqueta-mvp--abierto">Back-office</span>
+  </div>
+
+  <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+    <div><strong>Esta pantalla no es del cliente.</strong> La ve solo el Office Manager, que no es usuario del portal.
+    Se queda aquí por ahora para no levantar un segundo sistema, pero hay riesgo de roles cruzados: él puede ver los
+    menús de los demás. Lo correcto sería un portal aparte que muestre solo esto.</div>
+  </div>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Solicitudes de alta</h2>
+      <div class="d-flex align-items-center hueco-2 flex-wrap">
+        <label class="edoc-secundario mb-0" for="s-estado">Estado</label>
+        <select class="custom-select custom-select-sm w-auto" id="s-estado">
+          <option>Pendientes</option><option>Aprobadas</option><option>No conformes</option><option>Todas</option>
+        </select>
+      </div>
+    </div>
+    <div class="edoc-tabla-envoltura">
+      <table class="edoc-tabla">
+        <thead><tr><th scope="col" class="col-acciones">Acciones</th><th scope="col">Referencia</th><th scope="col">Empresa y registro fiscal</th><th scope="col">Recibida</th><th scope="col">Estado</th></tr></thead>
+        <tbody>
+        <tr>
+          <td class="col-acciones"><a class="edoc-accion" href="#" data-revisar="REG-2026-00918" aria-label="Revisar REG-2026-00918"><span data-icono="ver"></span></a></td>
+          <td><span class="edoc-clave-doc">REG-2026-00918</span></td>
+          <td><span data-nombre-latino="Al Noor Trading LLC" data-nombre-arabe="النور للتجارة ذ.م.م"></span><div class="edoc-secundario cifra">100776655400003</div></td>
+          <td class="cifra">2026-08-31</td>
+          <td><span class="edoc-estado edoc-estado--neutro">Pendiente</span></td>
+        </tr>
+        <tr>
+          <td class="col-acciones"><a class="edoc-accion" href="#" data-revisar="REG-2026-00917" aria-label="Revisar REG-2026-00917"><span data-icono="ver"></span></a></td>
+          <td><span class="edoc-clave-doc">REG-2026-00917</span></td>
+          <td><span data-nombre-latino="Gulf Marine Services" data-nombre-arabe="خدمات الخليج البحرية"></span><div class="edoc-secundario cifra">100445566700003</div></td>
+          <td class="cifra">2026-08-30</td>
+          <td><span class="edoc-estado edoc-estado--neutro">Pendiente</span></td>
+        </tr>
+        <tr>
+          <td class="col-acciones"><span class="edoc-secundario">—</span></td>
+          <td><span class="edoc-clave-doc">REG-2026-00914</span></td>
+          <td><span data-nombre-latino="Sharjah Cement Factory" data-nombre-arabe="مصنع الشارقة للإسمنت"></span><div class="edoc-secundario cifra">100556677800003</div></td>
+          <td class="cifra">2026-08-28</td>
+          <td><span class="edoc-estado edoc-estado--exito">Aprobada</span></td>
+        </tr>
+        <tr>
+          <td class="col-acciones"><span class="edoc-secundario">—</span></td>
+          <td><span class="edoc-clave-doc">REG-2026-00911</span></td>
+          <td><span data-nombre-latino="Etihad Rail PJSC" data-nombre-arabe="الاتحاد للقطارات ش.م.ع"></span><div class="edoc-secundario cifra">100667788900003</div></td>
+          <td class="cifra">2026-08-27</td>
+          <td><span class="edoc-estado edoc-estado--error">No conforme</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    <strong>La bandeja muestra referencia, empresa y registro fiscal.</strong> En Francia solo enseña el correo, y ya pasó
+    en la práctica que el Office Manager «no sabía a qué correspondía ese registro».
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Hace falta poder deshacer la aprobación.</strong> Si no existe esa vía dentro de la aplicación, revertir un
+    alta acaba obligando a tocar la base de datos a mano. Tiene que resolverse antes de heredar el módulo.
+  </div>
+
+  <!-- Revisión paso a paso -->
+  <div class="modal fade" id="modal-revisar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Revisión de la solicitud <span id="rev-ref" class="ml-2" style="opacity:.75"></span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p class="edoc-secundario">Se revisa paso a paso, igual que se rellenó. Cada bloque se marca como conforme o no,
+          y lo que quede sin conformidad se le explica a la empresa por correo.</p>
+          <div id="rev-pasos"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-error" id="rev-noconforme">Enviar no conformidad</button>
+          <button type="button" class="btn btn-edoc-exito" id="rev-aprobar">Aprobar el registro</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script src="assets/js/tablas.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.edocTabla('table.edoc-tabla', { order: [[3, 'desc']] });
+  });
+</script>
+
+<script>
+(function () {
+  'use strict';
+  var BLOQUES = [
+    ['Administrador de la cuenta', 'Nombre, cargo y teléfono de quien responde por la cuenta.'],
+    ['Datos de la empresa', 'Nombre legal, registro fiscal, emirato y dirección.'],
+    ['Documento legal', 'Licencia comercial adjunta, legible y vigente.'],
+    ['Contactos por área', 'Comercial y cobros presentes; técnico opcional.'],
+    ['Consentimientos legales', 'Los tres consentimientos aceptados.']
+  ];
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-revisar]');
+    if (!a) return;
+    e.preventDefault();
+    document.getElementById('rev-ref').textContent = a.dataset.revisar;
+    document.getElementById('rev-pasos').innerHTML = BLOQUES.map(function (b, i) {
+      return '<div class="edoc-tablero" style="box-shadow:none;margin-bottom:10px">' +
+        '<div class="edoc-tablero__cuerpo">' +
+          '<div class="edoc-etiqueta mb-1">' + (i + 1) + ' · ' + b[0] + '</div>' +
+          '<div class="edoc-secundario mb-2">' + b[1] + '</div>' +
+          '<div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="b' + i + '" checked>' +
+          '<label class="form-check-label">Conforme</label></div>' +
+          '<div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="b' + i + '">' +
+          '<label class="form-check-label">No conforme</label></div>' +
+        '</div></div>';
+    }).join('');
+    $('#modal-revisar').modal('show');
+  });
+  document.getElementById('rev-aprobar').addEventListener('click', function () {
+    $('#modal-revisar').modal('hide');
+    window.edocAvisar('Registro aprobado. Le enviamos las credenciales por correo.', 'exito');
+  });
+  document.getElementById('rev-noconforme').addEventListener('click', function () {
+    $('#modal-revisar').modal('hide');
+    window.edocAvisar('Enviamos el correo de no conformidad con los puntos marcados.', 'advertencia');
+  });
+})();
+</script>
+</body>
+</html>

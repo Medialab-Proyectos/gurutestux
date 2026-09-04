@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acceso · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body>
+<div class="edoc-acceso">
+  <aside class="edoc-acceso__lienzo">
+    <img src="assets/img/edoc-logo-neg.svg" alt="eDoc · Facturación Electrónica" style="height:56px;position:relative;z-index:2">
+    <h1 style="font-size:30px;font-weight:600;max-width:20ch;position:relative;z-index:2">Portal de consulta · Emiratos Árabes Unidos</h1>
+    <p style="max-width:48ch;color:rgba(255,255,255,.82);position:relative;z-index:2">Somos tu proveedor de servicios acreditado ante la Federal Tax Authority. Entra para consultar tus documentos emitidos, responder los recibidos y administrar tu conexión.</p>
+    <p style="position:relative;z-index:2;font-size:12px;color:rgba(255,255,255,.6)">GuruSoft S.A. © 2026</p>
+  </aside>
+
+  <div class="edoc-acceso__panel">
+    <div class="edoc-acceso__tarjeta">
+      <div class="edoc-tablero">
+        <div class="edoc-tablero__cuerpo">
+          <h2 class="edoc-titulo mb-1" style="font-size:19px">Entrar</h2>
+          <p class="edoc-secundario mb-4">Usa las credenciales que te enviamos por correo.</p>
+          <form id="forma-acceso" novalidate>
+            <div class="mb-3">
+              <label class="edoc-etiqueta" for="usuario">Usuario<span class="obligatorio">*</span></label>
+              <input class="form-control" id="usuario" value="fatima.almarzooqi" autocomplete="username" required>
+            </div>
+            <div class="mb-3">
+              <label class="edoc-etiqueta" for="clave">Contraseña<span class="obligatorio">*</span></label>
+              <input type="password" class="form-control" id="clave" value="demostracion" autocomplete="current-password" required>
+            </div>
+            <div class="mb-3">
+              <label class="edoc-etiqueta" for="trn">Registro fiscal de la empresa<span class="obligatorio">*</span></label>
+              <input class="form-control cifra" id="trn" value="100776655400003" inputmode="numeric" required>
+              <div class="edoc-ayuda">El TRN de quince dígitos con el que estás dado de alta.</div>
+            </div>
+            <div class="mb-4">
+              <label class="edoc-etiqueta" for="idioma">Idioma</label>
+              <select class="custom-select" id="idioma">
+                <option value="en">English</option>
+                <option value="es" selected>Español</option>
+                <option value="ar">العربية</option>
+              </select>
+              <div class="edoc-ayuda">La maqueta se presenta en español para la revisión interna.</div>
+            </div>
+            <div class="mb-4">
+              <label class="edoc-etiqueta">Verificación de seguridad<span class="obligatorio">*</span></label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="robot" checked>
+                <label class="form-check-label" for="robot">No soy un robot</label>
+              </div>
+              <div class="edoc-ayuda">Bolivia y Francia lo piden en el acceso. En la maqueta es solo el hueco donde va.</div>
+            </div>
+
+            <button class="btn btn-edoc-primario w-100" type="submit">Entrar</button>
+            <div class="d-flex justify-content-between mt-3" style="font-size:12.5px">
+              <a href="#" id="olvide">¿Olvidaste tu contraseña?</a>
+              <a href="onboarding.html">Vengo de EmaraTax</a>
+            </div>
+            <div class="d-flex justify-content-between mt-2" style="font-size:12.5px">
+              <a href="registro.html">Registrar mi empresa</a>
+              <a href="aprobacion-registro.html">Bandeja del Office Manager</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="edoc-aviso edoc-aviso--info">
+        <div>Maqueta de alcance. Cualquier credencial entra: el objetivo es revisar qué lleva el portal, no cómo autentica.</div>
+      </div>
+
+      <div class="nota nota--abierto mt-3" style="display:block">
+        <span class="nota__sello">Abierto</span>
+        <strong>El idioma del portal está sin decidir</strong> —solo inglés, o inglés y árabe— y hay que declarárselo a la
+        autoridad. Esa decisión arrastra el sentido de lectura de toda la interfaz.
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script>
+  /* Quien entra por primera vez desde un navegador cualquiera va al inicio con
+     el alcance de la entrega escrito en la dirección: así lo que ve no depende
+     de lo que haya guardado nadie en su equipo, y el enlace se puede copiar tal
+     cual. Si en ese navegador ya se eligió otro alcance desde el panel, se
+     respeta y no se toca la dirección. */
+  function destinoDeEntrada() {
+    var A = window.EDOC_ALCANCE;
+    if (!A) return 'inicio.html';
+    var yaElegido = false;
+    try { yaElegido = !!window.localStorage.getItem('edoc-vistas'); } catch (error) { /* nada */ }
+    if (yaElegido) return 'inicio.html';
+    return 'inicio.html?vistas=' + A.porDefecto().join(',');
+  }
+
+  document.getElementById('forma-acceso').addEventListener('submit', function (e) {
+    e.preventDefault(); location.href = destinoDeEntrada();
+  });
+  document.getElementById('olvide').addEventListener('click', function (e) {
+    e.preventDefault();
+    alert('Recuperar contraseña se toma de Francia. En Bolivia el enlace está vacío: es un hallazgo, no un modelo.');
+  });
+</script>
+</body>
+</html>

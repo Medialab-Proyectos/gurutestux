@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roles · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="administracion" data-pagina="admin-roles.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra"><div>
+      <div class="edoc-miga"><span>Administración</span><span>Roles y Usuarios</span><span>Roles</span></div>
+      <h1 class="edoc-titulo">Roles</h1>
+      <p class="edoc-subtitulo">Qué ventanas y qué acciones puede usar cada rol. El menú no es fijo: se arma con los permisos del usuario que entra.</p>
+    </div></div>
+
+  <div class="row rejilla">
+    <div class="col-12 col-xl-5">
+      <section class="edoc-tablero">
+        <div class="edoc-tablero__cabecera">
+          <h2 class="edoc-tablero__titulo">Roles definidos</h2>
+          <button class="btn btn-edoc-primario btn-sm" data-sin-destino>Crear rol</button>
+        </div>
+        <div class="edoc-tabla-envoltura">
+          <table class="edoc-tabla">
+            <thead><tr><th scope="col">Rol</th><th scope="col">Usuarios</th><th scope="col">Permisos</th></tr></thead>
+            <tbody>
+              <tr class="seleccionada"><td><strong>Administrador</strong></td><td class="cifra">2</td><td class="cifra">19 de 19</td></tr>
+              <tr><td>Consulta</td><td class="cifra">2</td><td class="cifra">6 de 19</td></tr>
+              <tr><td>Recepción</td><td class="cifra">1</td><td class="cifra">9 de 19</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <div class="col-12 col-xl-7">
+      <section class="edoc-tablero">
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Permisos del rol Administrador</h2></div>
+        <div class="edoc-tablero__cuerpo">
+          <div class="mb-3"><div class="edoc-etiqueta mb-2">Inicio</div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Ver la pantalla de bienvenida</label></div>
+          </div>
+          <div class="mb-3"><div class="edoc-etiqueta mb-2">Emisión</div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Documentos Emitidos</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Ver documento</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Ver estados</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Descargar XML</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Exportar resultados</label></div>
+          </div>
+          <div class="mb-3"><div class="edoc-etiqueta mb-2">Recepción</div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Documentos Recibidos</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Aprobar · MLS AP</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Rechazar · MLS RE</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Acusar recibo · MLS AB</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Exportar resultados</label></div>
+          </div>
+          <div class="mb-3"><div class="edoc-etiqueta mb-2">Administración</div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Cambiar Contraseña</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Roles</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Usuarios</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Actualización datos de empresa</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Actualización información de empresa</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Credenciales de consumo Servicio eDoc</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Alertas y comunicados</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label">Manuales</label></div>
+          </div>
+          <button class="btn btn-edoc-secundario" data-sin-destino>Guardar permisos</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    El árbol de permisos por módulo se toma de Francia, que es más fino que el de Bolivia. Cada rama es un módulo y cada
+    hoja una pantalla o una acción. Solo aparecen permisos que tienen una pantalla detrás: en Francia se ofrece
+    «certificado-digital», que no lleva a ninguna parte.
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Ojo</span>
+    El árbol de permisos no puede depender de una biblioteca servida desde fuera: si ese servidor no responde, la
+    pantalla no carga. Aquí es HTML propio.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+</body>
+</html>

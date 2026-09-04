@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clientes y proveedores · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="administracion" data-pagina="admin-clientes.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Administración</span><span>Clientes y proveedores</span></div>
+      <h1 class="edoc-titulo">Clientes y proveedores</h1>
+      <p class="edoc-subtitulo">Las empresas con las que intercambias documentos. Se alimenta de lo que llega y de lo que emites; no hace falta darlas de alta a mano.</p>
+    </div>
+    
+  </div>
+
+  <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+    <div><strong>Falta decidir de qué menú cuelga esta pantalla.</strong> El cruce de capacidades dice que va a Emiratos,
+    pero la propuesta de menú no le dio sitio. En Bolivia aparece dos veces —en Administración y en Emisor— a propósito,
+    porque hay roles que no ven la parte de administración. Aquí, sin eDoc Emisor, ese motivo desaparece.</div>
+  </div>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Buscar</h2>
+    </div>
+    <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Consulta lanzada.')">
+      <div class="row rejilla">
+        <div class="col-12 col-md-6 col-xl-4">
+          <label class="edoc-etiqueta" for="t-nombre">Nombre</label>
+          <input class="form-control" id="t-nombre" placeholder="Nombre de la empresa">
+          <div class="edoc-ayuda">Busca por el nombre tal como llega, en el alfabeto que llegue.</div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-4">
+          <label class="edoc-etiqueta" for="t-trn">Registro fiscal</label>
+          <input class="form-control cifra" id="t-trn" placeholder="100234567800003" inputmode="numeric">
+        </div>
+        <div class="col-12 col-md-6 col-xl-4">
+          <label class="edoc-etiqueta" for="t-tipo">Relación</label>
+          <select class="custom-select" id="t-tipo">
+            <option value="">Todas</option><option>Cliente</option><option>Proveedor</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-edoc-primario" type="submit">Consultar</button>
+    </form>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Resultados</h2></div>
+    <div class="edoc-tabla-envoltura">
+      <table class="edoc-tabla">
+        <thead><tr><th scope="col" class="col-acciones">Acciones</th><th scope="col">Nombre y registro fiscal</th><th scope="col">Relación</th><th scope="col">Emirato</th></tr></thead>
+        <tbody>
+        <tr>
+          <td class="col-acciones"><a class="edoc-accion" href="#" data-sin-destino aria-label="Ver Al Futtaim Logistics LLC"><span data-icono="ver"></span></a></td>
+          <td><span data-nombre-latino="Al Futtaim Logistics LLC" data-nombre-arabe="الفطيم للخدمات اللوجستية ذ.م.م"></span><div class="edoc-secundario cifra">100234567800003</div></td>
+          <td><span class="edoc-estado edoc-estado--transito">Cliente</span></td>
+          <td>Dubái</td>
+        </tr>
+        <tr>
+          <td class="col-acciones"><a class="edoc-accion" href="#" data-sin-destino aria-label="Ver Emirates Steel Arkan PJSC"><span data-icono="ver"></span></a></td>
+          <td><span data-nombre-latino="Emirates Steel Arkan PJSC" data-nombre-arabe="الإمارات للحديد والصلب أركان"></span><div class="edoc-secundario cifra">100987654300003</div></td>
+          <td><span class="edoc-estado edoc-estado--transito">Cliente</span></td>
+          <td>Abu Dabi</td>
+        </tr>
+        <tr>
+          <td class="col-acciones"><a class="edoc-accion" href="#" data-sin-destino aria-label="Ver Al Ain Water Company"><span data-icono="ver"></span></a></td>
+          <td><span data-nombre-latino="Al Ain Water Company" data-nombre-arabe="شركة العين للمياه"></span><div class="edoc-secundario cifra">100908070600003</div></td>
+          <td><span class="edoc-estado edoc-estado--neutro">Proveedor</span></td>
+          <td>Abu Dabi</td>
+        </tr>
+        <tr>
+          <td class="col-acciones"><a class="edoc-accion" href="#" data-sin-destino aria-label="Ver Emirates Global Aluminium"><span data-icono="ver"></span></a></td>
+          <td><span data-nombre-latino="Emirates Global Aluminium" data-nombre-arabe="الإمارات العالمية للألمنيوم"></span><div class="edoc-secundario cifra">100101202300003</div></td>
+          <td><span class="edoc-estado edoc-estado--neutro">Proveedor</span></td>
+          <td>Dubái</td>
+        </tr>
+        <tr>
+          <td class="col-acciones"><a class="edoc-accion" href="#" data-sin-destino aria-label="Ver Dubai Investments PJSC"><span data-icono="ver"></span></a></td>
+          <td><span data-nombre-latino="Dubai Investments PJSC" data-nombre-arabe="دبي للاستثمار ش.م.ع"></span><div class="edoc-secundario cifra">100112233400003</div></td>
+          <td><span class="edoc-estado edoc-estado--transito">Cliente</span></td>
+          <td>Dubái</td>
+        </tr>
+        <tr>
+          <td class="col-acciones"><a class="edoc-accion" href="#" data-sin-destino aria-label="Ver DP World Logistics"><span data-icono="ver"></span></a></td>
+          <td><span data-nombre-latino="DP World Logistics" data-nombre-arabe="موانئ دبي العالمية للخدمات اللوجستية"></span><div class="edoc-secundario cifra">100505606700003</div></td>
+          <td><span class="edoc-estado edoc-estado--neutro">Proveedor</span></td>
+          <td>Dubái</td>
+        </tr>
+        <tr>
+          <td class="col-acciones"><a class="edoc-accion" href="#" data-sin-destino aria-label="Ver Union Coop"><span data-icono="ver"></span></a></td>
+          <td><span data-nombre-latino="Union Coop" data-nombre-arabe="جمعية الاتحاد التعاونية"></span><div class="edoc-secundario cifra">100606707800003</div></td>
+          <td><span class="edoc-estado edoc-estado--neutro">Proveedor</span></td>
+          <td>Dubái</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="edoc-tablero__pie"><div class="edoc-tabla-pie"><span>Mostrando 7 de 7 empresas</span></div></div>
+  </section>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Buscar los datos fiscales de un tercero</strong> quedó en «se va a atender», sin cerrar si entra en el MVP.
+    Depende de que la autoridad de Emiratos publique un directorio consultable, como el Annuaire de Francia.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script src="assets/js/tablas.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.edocTabla('table.edoc-tabla', { order: [[1, 'asc']] });
+  });
+</script>
+
+</body>
+</html>

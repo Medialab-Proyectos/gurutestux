@@ -1,0 +1,873 @@
+/* ==========================================================================
+   eDoc · Plantilla base de portal
+   Derivada del «Manual de Identidad Corporativa · BrandBook eDoc»
+   Todos los valores de color salen del manual. No inventar tonos nuevos.
+   Stack: Bootstrap 4.4.1 + jQuery 3.5.1 + esta hoja. Son las versiones exactas
+   que sirve hoy el portal de Bolivia, de donde parte Emiratos. Sin Angular
+   Material: está atado a Angular y aquí el back es .NET.
+   ========================================================================== */
+
+/* --- 1. Tokens ----------------------------------------------------------- */
+:root {
+  /* Principales · BrandBook p.13 */
+  --edoc-azul:        #001174;   /* encabezado, botón primario, iconos sobre blanco */
+  --edoc-azul-logo:   #002978;   /* azul del imagotipo */
+  --edoc-verde:       #A8C634;   /* acento de marca */
+  --edoc-negro:       #1C1C1C;
+  --edoc-gris-borde:  #575756;   /* borde de icono y de tab sobre fondo gris */
+  --edoc-gris:        #808B89;   /* barra de desplazamiento */
+  --edoc-gris-claro:  #D9D9D9;
+  --edoc-fondo:       #dadada;   /* fondo de la plataforma · p.39 */
+  --edoc-tablero:     #ffffff;   /* tablero · p.39 */
+
+  /* Secundarios · BrandBook p.14 */
+  --azul-2:  #334190;  --azul-3:  #6670AC;
+  --cian-1:  #2697D1;  --cian-2:  #51ACDA;  --cian-3:  #7DC1E3;
+  --rojo-1:  #D63912;  --rojo-2:  #DE6141;  --rojo-3:  #E68871;
+  --gris-1:  #808B89;  --gris-2:  #99A2A1;  --gris-3:  #B3B9B8;
+  --verde-2: #B9D15D;  --verde-3: #D5E39E;
+  --naranja-1: #FD9714; --naranja-2: #FDAC43; --naranja-3: #FEC172;
+
+  /* Señales · BrandBook p.15 */
+  --senal-exito:       var(--edoc-verde);  /* ÉXITO · ACEPTAR · AUTORIZADO */
+  --senal-siguiente:   var(--azul-2);      /* SIGUIENTE */
+  --senal-advertencia: var(--naranja-1);   /* ADVERTENCIA */
+  --senal-error:       var(--rojo-1);      /* RECHAZADO · ERROR */
+
+  /* Iconos de archivo · BrandBook p.46 */
+  --archivo-zip: #FD9714;
+  --archivo-xml: #334190;
+  --archivo-pdf: #D63912;
+  --archivo-xls: #A8C634;
+  --archivo-otros: #575756;
+
+  /* Tipografía · BrandBook p.17-18
+     Open Sans es la cara de las plataformas de Facturación Electrónica.
+     Poppins sostiene títulos y navegación. Arial queda como respaldo del stack. */
+  --fuente-titulos:  'Poppins', Arial, Helvetica, sans-serif;
+  --fuente-texto:    'Open Sans', Arial, Helvetica, sans-serif;
+  --fuente-cifras:   'IBM Plex Mono', 'Consolas', 'Courier New', monospace;
+
+  /* Rejilla */
+  --alto-encabezado: 62px;
+  --alto-menu: 44px;
+  --alto-pie: 52px;
+  --radio: 6px;
+  --radio-chico: 4px;
+  --sombra-tablero: 0 1px 2px rgba(28,28,28,.10), 0 1px 8px rgba(28,28,28,.05);
+  --borde-suave: 1px solid #c9c9c9;
+}
+
+/* --- 2. Base ------------------------------------------------------------- */
+html {
+  scrollbar-color: var(--edoc-gris) var(--edoc-fondo);
+  /* Lo mismo para la página: el encabezado y el pie fijos no pueden tapar
+     aquello a lo que se salta. */
+  scroll-padding-top: calc(var(--alto-encabezado) + var(--alto-menu) + 8px);
+  scroll-padding-bottom: calc(var(--alto-pie) + 8px);
+}
+body {
+  min-height: 100vh; display: flex; flex-direction: column;
+  background: var(--edoc-fondo);
+  color: var(--edoc-negro);
+  font-family: var(--fuente-texto);
+  font-size: 13.5px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, h5, h6, .fuente-titulo { font-family: var(--fuente-titulos); font-weight: 600; }
+a { color: var(--edoc-azul); text-decoration: none; }
+a:hover { color: var(--azul-2); text-decoration: underline; }
+
+/* Barra de desplazamiento gris de marca · p.39 */
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--edoc-fondo); }
+::-webkit-scrollbar-thumb { background: var(--edoc-gris); border-radius: 6px; border: 2px solid var(--edoc-fondo); }
+::-webkit-scrollbar-thumb:hover { background: #6d7876; }
+
+/* Cifras alineadas: todo importe y todo código va en cifras tabulares */
+.cifra { font-family: var(--fuente-cifras); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.cifra-der { text-align: right; }
+
+/* --- 3. Encabezado · p.38 ------------------------------------------------
+   «El logo de eDoc siempre estará de manera visible en la barra superior
+    central de la aplicación, respetando márgenes de seguridad.»           */
+.edoc-encabezado {
+  height: var(--alto-encabezado);
+  background: var(--edoc-azul);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 18px; position: sticky; top: 0; z-index: 1030;
+}
+.edoc-encabezado__marca { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; }
+.edoc-encabezado__marca img { height: 34px; display: block; }
+.edoc-encabezado__pais {
+  font-family: var(--fuente-titulos); font-size: 11px; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: #fff;
+  border: 1px solid rgba(255,255,255,.45); border-radius: 100px; padding: 3px 12px;
+}
+.edoc-encabezado__util { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.edoc-btn-util {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; border: 1px solid rgba(255,255,255,.4); color: #fff;
+  border-radius: var(--radio-chico); padding: 5px 10px; font-size: 12px; line-height: 1;
+}
+.edoc-btn-util:hover { background: rgba(255,255,255,.12); color: #fff; }
+.edoc-btn-util svg { width: 15px; height: 15px; }
+.edoc-usuario { display: flex; align-items: center; gap: 8px; color: #fff; font-size: 12px; }
+.edoc-usuario__avatar {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--edoc-verde);
+  color: var(--edoc-azul); display: grid; place-items: center;
+  font-family: var(--fuente-titulos); font-weight: 700; font-size: 11px;
+}
+
+/* --- 4. Menú ------------------------------------------------------------- */
+.edoc-menu {
+  background: var(--edoc-tablero); border-bottom: 1px solid #c2c2c2;
+  height: var(--alto-menu); display: flex; align-items: stretch;
+  padding: 0 10px; position: sticky; top: var(--alto-encabezado); z-index: 1029;
+}
+.edoc-menu__item {
+  display: flex; align-items: center; gap: 7px; padding: 0 16px;
+  font-family: var(--fuente-titulos); font-size: 13px; font-weight: 500;
+  color: var(--edoc-negro); border-bottom: 3px solid transparent; position: relative;
+}
+.edoc-menu__item:hover { color: var(--edoc-azul); text-decoration: none; background: #f4f4f4; }
+.edoc-menu__item.activo { color: var(--edoc-azul); border-bottom-color: var(--edoc-verde); font-weight: 600; }
+.edoc-menu__item svg { width: 16px; height: 16px; stroke: currentColor; }
+.edoc-menu__panel {
+  display: none; position: absolute; top: 100%; left: 0; min-width: 292px;
+  background: var(--edoc-tablero); border: 1px solid #c2c2c2; border-top: 0;
+  box-shadow: var(--sombra-tablero); padding: 6px 0; z-index: 1040;
+}
+.edoc-menu__contenedor { position: relative; display: flex; }
+.edoc-menu__contenedor:hover .edoc-menu__panel,
+.edoc-menu__contenedor:focus-within .edoc-menu__panel { display: block; }
+.edoc-menu__grupo {
+  font-family: var(--fuente-titulos); font-size: 10.5px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .1em; color: var(--edoc-gris);
+  padding: 9px 16px 4px;
+}
+.edoc-menu__enlace { display: block; padding: 7px 16px; color: var(--edoc-negro); font-size: 13px; }
+.edoc-menu__enlace:hover { background: #eef0f7; color: var(--edoc-azul); text-decoration: none; }
+.edoc-menu__enlace.activo { color: var(--edoc-azul); font-weight: 600; box-shadow: inset 3px 0 0 var(--edoc-verde); }
+.edoc-menu__enlace--posterior { color: var(--edoc-gris); font-style: italic; }
+.edoc-menu__enlace--por-ubicar { color: #8a5200; }
+.edoc-menu__enlace--por-ubicar:hover { background: #fff4e4; color: #8a5200; }
+.edoc-menu__enlace--posterior:hover { background: #f4f4f4; color: var(--edoc-gris); cursor: not-allowed; }
+
+/* --- 5. Página ----------------------------------------------------------- */
+.edoc-pagina { padding: 16px 18px var(--alto-pie); max-width: 1680px; margin: 0 auto; width: 100%; flex: 1; }
+.edoc-titulo-barra { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.edoc-miga { font-size: 11.5px; color: #5c5c5c; margin-bottom: 2px; }
+.edoc-miga span + span::before { content: "›"; margin: 0 6px; color: var(--edoc-gris); }
+.edoc-titulo { font-family: var(--fuente-titulos); font-size: 21px; font-weight: 600; color: var(--edoc-azul); margin: 0; }
+.edoc-subtitulo { color: #4a4a4a; font-size: 12.5px; margin: 2px 0 0; max-width: 78ch; }
+
+/* Tablero blanco sobre fondo #dadada · p.39 */
+.edoc-tablero {
+  background: var(--edoc-tablero); border-radius: var(--radio);
+  box-shadow: var(--sombra-tablero); border: var(--borde-suave); margin-bottom: 16px;
+}
+.edoc-tablero__cabecera {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 11px 16px; border-bottom: 1px solid #e3e3e3; flex-wrap: wrap;
+}
+.edoc-tablero__titulo {
+  font-family: var(--fuente-titulos); font-size: 13.5px; font-weight: 600;
+  color: var(--edoc-azul); margin: 0; display: flex; align-items: center; gap: 8px;
+}
+.edoc-tablero__cuerpo { padding: 16px; }
+.edoc-tablero__pie { padding: 11px 16px; border-top: 1px solid #e3e3e3; }
+
+/* --- 6. Formularios ------------------------------------------------------
+   «textos como las acciones o descripción del campo deben ir en negrita
+    y la primera palabra con letra mayúscula» · p.41                        */
+.edoc-etiqueta {
+  display: block; font-weight: 700; font-size: 12px; color: #2f2f2f; margin-bottom: 4px;
+}
+.edoc-etiqueta .obligatorio { color: var(--senal-error); margin-left: 2px; }
+.form-control, .custom-select {
+  font-size: 13px; border: 1px solid #b6b6b6; border-radius: var(--radio-chico);
+  padding: 6px 10px; color: var(--edoc-negro); background-color: #fff;
+}
+.form-control:focus, .custom-select:focus {
+  border-color: var(--edoc-azul); box-shadow: 0 0 0 3px rgba(0,17,116,.12);
+}
+.form-control::placeholder { color: #9a9a9a; }
+.edoc-ayuda { font-size: 11.5px; color: #666; margin-top: 4px; }
+
+/* --- 7. Botones · jerarquía ---------------------------------------------
+   Un solo botón primario por pantalla.                                     */
+.btn { font-family: var(--fuente-titulos); font-size: 13px; font-weight: 500; border-radius: var(--radio-chico); padding: 6px 16px; }
+.btn:focus-visible { box-shadow: 0 0 0 3px rgba(0,17,116,.25); }
+.btn svg { width: 15px; height: 15px; vertical-align: -3px; }
+
+.btn-edoc-primario { background: var(--edoc-azul); border: 1px solid var(--edoc-azul); color: #fff; }
+.btn-edoc-primario:hover { background: #000d5c; border-color: #000d5c; color: #fff; }
+
+.btn-edoc-secundario { background: #fff; border: 1px solid var(--edoc-azul); color: var(--edoc-azul); }
+.btn-edoc-secundario:hover { background: #eef0f7; color: var(--edoc-azul); }
+
+.btn-edoc-terciario { background: transparent; border: 1px solid #b6b6b6; color: #3d3d3d; }
+.btn-edoc-terciario:hover { background: #f1f1f1; color: var(--edoc-negro); }
+
+.btn-edoc-exito { background: var(--senal-exito); border: 1px solid #94b02c; color: var(--edoc-negro); font-weight: 600; }
+.btn-edoc-exito:hover { background: #98b62e; color: var(--edoc-negro); }
+
+.btn-edoc-error { background: #fff; border: 1px solid var(--senal-error); color: var(--senal-error); }
+.btn-edoc-error:hover { background: var(--senal-error); color: #fff; }
+
+.btn-edoc-siguiente { background: var(--senal-siguiente); border: 1px solid var(--senal-siguiente); color: #fff; }
+.btn-edoc-siguiente:hover { background: #2a3679; color: #fff; }
+
+.btn:disabled, .btn.disabled { opacity: .45; }
+
+/* Botón de icono dentro de la tabla · borde azul sobre blanco · p.40 */
+.edoc-accion {
+  width: 30px; height: 30px; display: inline-grid; place-items: center;
+  border: 1px solid var(--edoc-azul); border-radius: var(--radio-chico);
+  background: #fff; color: var(--edoc-azul);
+}
+.edoc-accion:hover { background: var(--edoc-azul); color: #fff; }
+.edoc-accion svg { width: 16px; height: 16px; }
+.edoc-accion--gris { border-color: var(--edoc-gris-borde); color: var(--edoc-gris-borde); }
+.edoc-accion--gris:hover { background: var(--edoc-gris-borde); color: #fff; }
+
+/* Iconos de archivo con su color · p.46 */
+.icono-xml { color: var(--archivo-xml); }
+.icono-pdf { color: var(--archivo-pdf); }
+.icono-xls { color: var(--archivo-xls); }
+.icono-zip { color: var(--archivo-zip); }
+
+/* --- 8. Pastillas de estado ---------------------------------------------- */
+.edoc-estado {
+  /* `position: relative` para que el texto de lector de pantalla que va dentro
+     quede contenido aquí. Sin esto se posiciona contra el bloque inicial, se
+     escapa del contenedor que desplaza la tabla y estira la página entera. */
+  position: relative;
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  border-radius: 100px; padding: 3px 11px 3px 8px; font-size: 11.5px; font-weight: 600;
+  border: 1px solid; line-height: 1.35;
+}
+.edoc-estado::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.edoc-estado--exito       { color: #5f7410; background: #f2f7e2; border-color: #cbdd8c; }
+.edoc-estado--error       { color: var(--rojo-1); background: #fceeea; border-color: #f0bfb1; }
+.edoc-estado--advertencia { color: #a45f00; background: #fff4e4; border-color: #fcd39a; }
+.edoc-estado--transito    { color: var(--azul-2); background: #eceffa; border-color: #b9c1e6; }
+.edoc-estado--neutro      { color: #5c6664; background: #f0f2f2; border-color: #cfd4d3; }
+
+/* --- 9. Tablas ----------------------------------------------------------- */
+.edoc-tabla-envoltura { overflow-x: auto; }
+.edoc-tabla { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12.5px; }
+.edoc-tabla thead th {
+  background: #f2f3f5; color: #33383f; font-family: var(--fuente-titulos);
+  font-weight: 600; font-size: 11.5px; text-align: left; white-space: nowrap;
+  padding: 9px 12px; border-bottom: 2px solid #d5d7dc; position: sticky; top: 0; z-index: 2;
+}
+.edoc-tabla thead th.agrupador {
+  background: var(--edoc-azul); color: #fff; text-align: center;
+  border-bottom: 1px solid #001a9c; letter-spacing: .04em; font-size: 10.5px;
+  text-transform: uppercase;
+}
+.edoc-tabla thead th.agrupador.tenue { background: #33418f; }
+.edoc-tabla tbody td { padding: 8px 12px; border-bottom: 1px solid #ebebeb; vertical-align: middle; }
+.edoc-tabla tbody tr:hover td { background: #f7f9fc; }
+.edoc-tabla tbody tr.seleccionada td { background: #eef0f7; }
+.edoc-tabla .col-acciones { width: 1%; white-space: nowrap; }
+.edoc-tabla .separador-izq { border-left: 1px solid #e0e2e8; }
+.edoc-tabla__vacia { padding: 42px 16px; text-align: center; color: #6b6b6b; }
+
+.edoc-tabla-pie {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  flex-wrap: wrap; font-size: 12px; color: #4d4d4d;
+}
+
+/* --- 10. Avisos ---------------------------------------------------------- */
+.edoc-aviso {
+  display: flex; gap: 11px; padding: 11px 14px; border-radius: var(--radio);
+  border: 1px solid; font-size: 12.5px; align-items: flex-start;
+}
+.edoc-aviso__icono { flex: none; width: 18px; height: 18px; margin-top: 1px; }
+.edoc-aviso strong { font-weight: 700; }
+.edoc-aviso--info        { background: #eceffa; border-color: #b9c1e6; color: #222c63; }
+.edoc-aviso--exito       { background: #f2f7e2; border-color: #cbdd8c; color: #4d5f0d; }
+.edoc-aviso--advertencia { background: #fff4e4; border-color: #fcd39a; color: #7d4a00; }
+.edoc-aviso--error       { background: #fceeea; border-color: #f0bfb1; color: #8f2409; }
+.edoc-aviso--neutro      { background: #f0f2f2; border-color: #cfd4d3; color: #3e4645; }
+
+/* --- 11. Los cuatro corners ---------------------------------------------- */
+.corner-rejilla { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 991px) { .corner-rejilla { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 575px) { .corner-rejilla { grid-template-columns: 1fr; } }
+.corner {
+  border: 1px solid #dcdfe4; border-radius: var(--radio); background: #fff; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.corner__cabecera { padding: 12px 14px; border-bottom: 1px solid #e8eaee; background: #fafbfc; }
+.corner__clave {
+  display: inline-block; font-family: var(--fuente-titulos); font-weight: 700; font-size: 10.5px;
+  letter-spacing: .1em; color: #fff; background: var(--edoc-azul);
+  border-radius: 3px; padding: 2px 7px; margin-bottom: 6px;
+}
+.corner__nombre { font-family: var(--fuente-titulos); font-weight: 600; font-size: 14px; color: var(--edoc-negro); }
+.corner__quien { font-size: 11.5px; color: #6a6a6a; margin-top: 2px; }
+.corner__cuerpo { padding: 12px 14px; flex: 1; }
+.linea-tiempo { list-style: none; margin: 0; padding: 0; }
+.linea-tiempo li { position: relative; padding: 0 0 14px 22px; }
+.linea-tiempo li::before {
+  content: ""; position: absolute; left: 0; top: 4px; width: 11px; height: 11px;
+  border-radius: 50%; border: 2px solid currentColor; background: #fff;
+}
+.linea-tiempo li:not(:last-child)::after {
+  content: ""; position: absolute; left: 5px; top: 16px; bottom: 0; width: 1px; background: #dcdfe4;
+}
+.linea-tiempo li.hecho { color: #5f7410; }
+.linea-tiempo li.hecho::before { background: var(--senal-exito); border-color: var(--senal-exito); }
+.linea-tiempo li.fallo { color: var(--rojo-1); }
+.linea-tiempo li.fallo::before { background: var(--rojo-1); border-color: var(--rojo-1); }
+.linea-tiempo li.espera { color: #8a8a8a; }
+.linea-tiempo li.espera::before { border-color: #b9bcbb; border-style: dashed; }
+.linea-tiempo__titulo { font-weight: 700; font-size: 12.5px; color: var(--edoc-negro); }
+.linea-tiempo__detalle { font-size: 11.5px; color: #616161; }
+.linea-tiempo__sello { font-size: 11px; color: #8a8a8a; font-family: var(--fuente-cifras); }
+
+/* --- 12. Visor de la factura --------------------------------------------- */
+.visor-hoja {
+  background: #fff; border: 1px solid #d8d8d8; border-radius: var(--radio);
+  padding: 26px 30px; max-width: 780px; margin: 0 auto;
+}
+.visor-cabecera { display: flex; justify-content: space-between; gap: 24px; border-bottom: 2px solid var(--edoc-azul); padding-bottom: 14px; }
+.visor-bloque__rotulo {
+  font-family: var(--fuente-titulos); font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--edoc-gris); margin-bottom: 3px;
+}
+.visor-partes { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 18px 0; }
+.visor-dato { display: flex; gap: 8px; font-size: 12px; padding: 2px 0; }
+.visor-dato dt { font-weight: 700; color: #444; min-width: 118px; flex: none; }
+.visor-dato dd { margin: 0; }
+.visor-totales { margin-left: auto; width: 300px; }
+.visor-totales .fila { display: flex; justify-content: space-between; padding: 5px 0; font-size: 12.5px; }
+.visor-totales .fila.total {
+  border-top: 2px solid var(--edoc-azul); margin-top: 6px; padding-top: 9px;
+  font-family: var(--fuente-titulos); font-weight: 700; font-size: 15px; color: var(--edoc-azul);
+}
+
+/* --- 13. Regla del árabe -------------------------------------------------
+   Ningún campo mezcla los dos alfabetos. El nombre viaja aislado.          */
+.nombre-nativo { unicode-bidi: isolate; }
+.nombre-nativo[dir="rtl"] { direction: rtl; text-align: right; font-size: 13.5px; }
+.celda-ar { text-align: right; }
+.celda-ar .edoc-secundario { text-align: right; }
+.marca-ar {
+  display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .06em;
+  color: var(--edoc-gris); border: 1px solid #c9cdcc; border-radius: 3px;
+  padding: 0 4px; margin-inline-start: 6px; vertical-align: 1px; unicode-bidi: isolate;
+}
+
+/* --- 14. Notas de diseño (capa de revisión) ------------------------------ */
+.nota {
+  display: none; margin-top: 8px; border-left: 3px solid var(--edoc-verde);
+  background: #fbfdf4; padding: 8px 12px; font-size: 11.5px; color: #40460f; border-radius: 0 4px 4px 0;
+}
+.nota strong { color: #2f3607; }
+.nota--decidido { border-left-color: var(--edoc-verde); background: #f7fbec; }
+.nota--abierto  { border-left-color: var(--naranja-1); background: #fff8ef; color: #6d4300; }
+.nota--fuera    { border-left-color: var(--edoc-gris); background: #f4f5f5; color: #4a4a4a; }
+body.con-notas .nota { display: block; }
+.nota__sello {
+  display: inline-block; font-family: var(--fuente-titulos); font-weight: 700; font-size: 9.5px;
+  letter-spacing: .08em; text-transform: uppercase; margin-right: 7px;
+  border-radius: 3px; padding: 1px 6px; background: var(--edoc-verde); color: #2f3607;
+}
+.nota--abierto .nota__sello { background: var(--naranja-1); color: #4a2b00; }
+.nota--fuera .nota__sello   { background: var(--gris-3); color: #33393a; }
+
+/* --- 15. Pie -------------------------------------------------------------
+   Fijo abajo: la versión, el aviso de que esto es una maqueta y el enlace a las
+   bases de diseño tienen que estar siempre a la vista mientras se revisa.
+   La página reserva su alto para que el pie no tape la última fila.         */
+.edoc-pie {
+  position: sticky; bottom: 0; z-index: 1028;
+  background: var(--edoc-azul); color: rgba(255,255,255,.82); font-size: 11.5px;
+  padding: 11px 18px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  box-shadow: 0 -1px 4px rgba(28,28,28,.18);
+}
+.edoc-pie a { color: #fff; }
+
+/* --- 16. Piezas sueltas -------------------------------------------------- */
+.edoc-clave-doc { font-family: var(--fuente-cifras); font-size: 12px; color: var(--edoc-azul); font-weight: 600; }
+.edoc-secundario { color: #6d6d6d; font-size: 11.5px; }
+.edoc-separador { height: 1px; background: #e6e6e6; margin: 16px 0; }
+.edoc-etiqueta-mvp {
+  font-family: var(--fuente-titulos); font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; border-radius: 3px; padding: 2px 7px;
+}
+.edoc-etiqueta-mvp--posterior { background: #eceded; color: #5a5a5a; border: 1px solid #d3d5d5; }
+.edoc-etiqueta-mvp--abierto   { background: #fff4e4; color: #8a5200; border: 1px solid #fcd39a; }
+
+.muestra-color { border-radius: var(--radio); height: 74px; border: 1px solid rgba(0,0,0,.12); }
+.muestra-color + .muestra-pie { font-size: 11px; margin-top: 6px; }
+.muestra-pie code { font-family: var(--fuente-cifras); color: #444; }
+
+/* Acceso · login y pantallas fuera de sesión */
+.edoc-acceso { min-height: 100vh; display: grid; grid-template-columns: 1.05fr .95fr; }
+@media (max-width: 900px) { .edoc-acceso { grid-template-columns: 1fr; } }
+.edoc-acceso__lienzo {
+  background: var(--edoc-azul); color: #fff; padding: 46px; display: flex;
+  flex-direction: column; justify-content: center; gap: 18px; position: relative; overflow: hidden;
+}
+.edoc-acceso__lienzo::after {
+  content: ""; position: absolute; right: -140px; bottom: -170px; width: 460px; height: 460px;
+  border-radius: 50%; background: rgba(168,198,52,.16);
+}
+.edoc-acceso__panel { display: grid; place-items: center; padding: 40px 24px; background: var(--edoc-fondo); }
+.edoc-acceso__tarjeta { width: 100%; max-width: 404px; }
+
+/* Inicio · solo la imagen, sin botonera y sin cuadro de mando.
+   Ocupa exactamente el hueco que dejan encabezado, menú y pie fijos, para que
+   la pantalla de bienvenida no genere desplazamiento. */
+/* El lienzo del inicio ocupa el hueco que queda, sea cual sea el alto del pie:
+   nada de restar altos a mano. Con las notas de diseño abiertas sí crece y la
+   página se desplaza, que es lo esperable. */
+/* El lienzo respeta el mismo margen que el resto de la página: pegado al pie
+   se veía como un descuadre, no como una decisión. */
+.edoc-pagina.edoc-pagina--lienzo { padding-bottom: 16px; display: flex; flex-direction: column; }
+body.con-notas .edoc-pagina.edoc-pagina--lienzo { padding-bottom: var(--alto-pie); }
+.edoc-bienvenida {
+  flex: 1; min-height: 320px;
+  border-radius: var(--radio); position: relative; overflow: hidden;
+  background:
+    radial-gradient(1100px 520px at 82% 8%, rgba(168,198,52,.30), transparent 62%),
+    radial-gradient(760px 520px at 12% 96%, rgba(38,151,209,.30), transparent 60%),
+    linear-gradient(140deg, #001174 0%, #002978 52%, #16225e 100%);
+  display: flex; align-items: flex-end; padding: 46px;
+}
+.edoc-bienvenida__texto { color: #fff; max-width: 660px; position: relative; z-index: 2; }
+.edoc-bienvenida__texto h1 { font-size: clamp(22px, 2.4vw + 6px, 34px); }
+.edoc-bienvenida__texto p  { font-size: clamp(13px, .5vw + 10px, 15px); }
+.edoc-bienvenida__texto img { height: clamp(34px, 3.4vh + 14px, 52px); }
+@media (max-height: 720px) { .edoc-bienvenida { padding: 26px; } }
+.edoc-bienvenida__trama {
+  position: absolute; inset: 0; opacity: .16;
+  background-image: linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+  background-size: 58px 58px;
+  -webkit-mask-image: radial-gradient(120% 90% at 70% 20%, #000 12%, transparent 72%);
+          mask-image: radial-gradient(120% 90% at 70% 20%, #000 12%, transparent 72%);
+}
+
+/* Modales */
+.modal-content { border: 0; border-radius: var(--radio); overflow: hidden; }
+.modal-header { background: var(--edoc-azul); color: #fff; border: 0; padding: 13px 18px; }
+.modal-header .modal-title { font-family: var(--fuente-titulos); font-size: 15px; font-weight: 600; }
+.modal-header .btn-close { filter: invert(1) grayscale(1) brightness(2); opacity: .9; }
+.modal-footer { border-top: 1px solid #e6e6e6; padding: 12px 18px; background: #fafafa; }
+.modal-body { padding: 18px; }
+
+/* Menú de acciones de una fila */
+.dropdown-menu { font-size: 13px; border-color: #d0d0d0; border-radius: var(--radio-chico); box-shadow: var(--sombra-tablero); }
+.dropdown-item { padding: 7px 14px; display: flex; align-items: center; gap: 9px; }
+.dropdown-item svg { width: 15px; height: 15px; flex: none; }
+.dropdown-item:active { background: var(--edoc-azul); }
+.dropdown-header {
+  font-family: var(--fuente-titulos); font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris); padding: 8px 14px 3px;
+}
+.dropdown-item.disabled { color: #adadad; }
+
+/* --- 17. Anchos pequeños -------------------------------------------------
+   La página nunca se desplaza en horizontal. Lo que no cabe se recorta o se
+   desplaza dentro de su propio contenedor: es el defecto que la auditoría de
+   Francia encontró en las diez tablas del portal.                          */
+@media (max-width: 1100px) {
+  .edoc-encabezado__pais { display: none; }
+}
+@media (max-width: 900px) {
+  .edoc-btn-util span { display: none; }
+  .edoc-btn-util { padding: 6px 9px; }
+  .edoc-encabezado__util { gap: 6px; }
+}
+@media (max-width: 640px) {
+  .edoc-encabezado { padding: 0 10px; }
+  .edoc-encabezado__marca { position: static; transform: none; margin-right: auto; }
+  .edoc-encabezado__marca img { height: 26px; }
+  .edoc-usuario .edoc-usuario__avatar { width: 26px; height: 26px; }
+  .edoc-menu { overflow-x: auto; padding: 0 4px; }
+  .edoc-menu__item { padding: 0 11px; white-space: nowrap; }
+  .edoc-menu__panel { position: fixed; left: 0; right: 0; min-width: 0; }
+  .edoc-pagina { padding: 12px 10px var(--alto-pie); }
+  .edoc-titulo { font-size: 18px; }
+  .visor-hoja { padding: 18px 16px; }
+  .visor-partes { grid-template-columns: 1fr; }
+  .visor-totales { width: 100%; }
+}
+
+/* --- 18. Utilidades que Bootstrap 4 no trae ------------------------------
+   Bootstrap 4.4.1 no tiene `gap-*` (llegó en la 5). Se declaran aquí para no
+   ensuciar el marcado con márgenes sueltos en cada hijo.                   */
+.hueco-1 { gap: .25rem; }
+.hueco-2 { gap: .5rem; }
+.hueco-3 { gap: 1rem; }
+
+/* Equivalente de `row g-3`: separación uniforme entre columnas de formulario. */
+.rejilla { margin-left: -8px; margin-right: -8px; }
+.rejilla > [class*="col-"] { padding-left: 8px; padding-right: 8px; margin-bottom: 16px; }
+.rejilla-2 { margin-left: -6px; margin-right: -6px; }
+.rejilla-2 > [class*="col-"] { padding-left: 6px; padding-right: 6px; margin-bottom: 12px; }
+
+/* La aspa de cierre de Bootstrap 4 es `.close`, y en la cabecera azul va blanca. */
+.modal-header .close { color: #fff; opacity: .9; text-shadow: none; font-weight: 400; }
+.modal-header .close:hover { color: #fff; opacity: 1; }
+
+/* --- 19. DataTables 1.10.25 sobre Bootstrap 4 ----------------------------
+   Bolivia sirve esta misma versión. Aquí solo se le pone la ropa de marca:
+   los controles que genera DataTables tienen que leerse como el resto.     */
+.dt-cabecera { padding: 10px 16px; border-bottom: 1px solid #e3e3e3; }
+.dt-cuerpo   { overflow-x: auto; }
+.dt-pie      { padding: 11px 16px; border-top: 1px solid #e3e3e3;
+               display: flex; align-items: center; justify-content: space-between;
+               gap: 14px; flex-wrap: wrap; }
+
+.dataTables_length, .dataTables_info, .dataTables_paginate { font-size: 12px; color: #4d4d4d; }
+.dataTables_length label { margin: 0; display: flex; align-items: center; gap: 8px; font-weight: 400; }
+.dataTables_length select {
+  width: auto; display: inline-block; font-size: 12px; padding: 3px 24px 3px 8px;
+  border: 1px solid #b6b6b6; border-radius: var(--radio-chico); background-color: #fff;
+}
+.dataTables_info { padding: 0 !important; }
+.dataTables_paginate { padding: 0 !important; margin: 0 !important; }
+.dataTables_paginate .pagination { margin: 0; }
+.dataTables_paginate .page-link { font-size: 12px; padding: 4px 10px; color: var(--edoc-azul); border-color: #d5d7dc; }
+.dataTables_paginate .page-item.active .page-link { background: var(--edoc-azul); border-color: var(--edoc-azul); color: #fff; }
+.dataTables_paginate .page-item.disabled .page-link { color: #a5a5a5; }
+
+/* Las flechas de ordenación, en el azul de marca y sin las imágenes de serie. */
+table.edoc-tabla.dataTable thead th { position: relative; }
+table.edoc-tabla.dataTable thead .sorting,
+table.edoc-tabla.dataTable thead .sorting_asc,
+table.edoc-tabla.dataTable thead .sorting_desc { background-image: none; cursor: pointer; padding-right: 24px; }
+table.edoc-tabla.dataTable thead .sorting::after,
+table.edoc-tabla.dataTable thead .sorting_asc::after,
+table.edoc-tabla.dataTable thead .sorting_desc::after {
+  content: "⇅"; position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+  font-size: 11px; color: #9aa0a6;
+}
+table.edoc-tabla.dataTable thead .sorting_asc::after  { content: "↑"; color: var(--edoc-azul); }
+table.edoc-tabla.dataTable thead .sorting_desc::after { content: "↓"; color: var(--edoc-azul); }
+table.edoc-tabla.dataTable thead th.agrupador { padding-right: 12px; }
+table.edoc-tabla.dataTable thead th.agrupador::after { content: none; }
+table.edoc-tabla.dataTable { border-collapse: separate !important; margin: 0 !important; }
+table.edoc-tabla.dataTable tbody tr.odd td,
+table.edoc-tabla.dataTable tbody tr.even td { background: transparent; }
+table.edoc-tabla.dataTable tbody tr:hover td { background: #f7f9fc; }
+
+/* Las acciones de fila son botones en línea, como en Bolivia: no hay menú
+   flotante que pueda quedar recortado por el desplazamiento de la tabla, y se
+   llega a cada acción con un clic en vez de dos. */
+.edoc-acciones-fila { display: flex; gap: 4px; align-items: center; }
+.edoc-acciones-fila .separador {
+  width: 1px; height: 20px; background: #dcdfe4; margin: 0 3px; flex: none;
+}
+.edoc-accion[aria-disabled="true"] {
+  opacity: .35; pointer-events: none; border-color: #b6b6b6; color: #8a8a8a;
+}
+.edoc-accion--exito { border-color: #8fae22; color: #5f7410; }
+.edoc-accion--exito:hover { background: var(--senal-exito); color: var(--edoc-negro); }
+.edoc-accion--error { border-color: var(--senal-error); color: var(--senal-error); }
+.edoc-accion--error:hover { background: var(--senal-error); color: #fff; }
+.edoc-accion--aviso { border-color: #d68300; color: #a45f00; }
+.edoc-accion--aviso:hover { background: var(--senal-advertencia); color: var(--edoc-negro); }
+
+/* --- 20. Ajustes tras cablear DataTables --------------------------------- */
+/* El indicador de orden no debe robar tanto ancho: con catorce columnas,
+   veinticuatro píxeles por cabecera empujan la última fuera de la pantalla. */
+table.edoc-tabla.dataTable thead .sorting,
+table.edoc-tabla.dataTable thead .sorting_asc,
+table.edoc-tabla.dataTable thead .sorting_desc { padding-right: 19px; }
+table.edoc-tabla.dataTable thead .sorting::after,
+table.edoc-tabla.dataTable thead .sorting_asc::after,
+table.edoc-tabla.dataTable thead .sorting_desc::after { right: 6px; }
+table.edoc-tabla thead th { padding-left: 8px; padding-right: 8px; }
+table.edoc-tabla tbody td { padding-left: 8px; padding-right: 8px; }
+
+/* `custom-select` de Bootstrap 4 trae su propia flecha; el relleno de la
+   izquierda no puede pisarla ni dejar que asome la del navegador. */
+.custom-select {
+  padding: 6px 30px 6px 10px;
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23001174' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 8px 10px;
+}
+.custom-select-sm { padding: 3px 26px 3px 8px; background-position: right 8px center; }
+.dataTables_length select {
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23001174' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat; background-position: right 8px center; background-size: 8px 10px;
+}
+
+/* --- 21. Accesibilidad y remates de usabilidad --------------------------- */
+/* Salto al contenido: lo primero que alcanza el teclado, invisible con el ratón. */
+.salto-contenido {
+  position: absolute; left: -9999px; top: 0; z-index: 1100;
+  background: var(--edoc-verde); color: var(--edoc-negro);
+  font-family: var(--fuente-titulos); font-weight: 600; font-size: 13px;
+  padding: 10px 18px; border-radius: 0 0 var(--radio) 0;
+}
+.salto-contenido:focus { left: 0; text-decoration: none; }
+#armazon:focus { outline: none; }
+
+/* Texto solo para lectores de pantalla: la pastilla dice «Aprobado», pero
+   quien la escucha necesita oír «C5 Autoridad: Aprobado». */
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* La ayuda de la cabecera agrupada. */
+.agrupador__ayuda {
+  width: 16px; height: 16px; margin-left: 7px; padding: 0; line-height: 1;
+  border-radius: 50%; border: 1px solid rgba(255,255,255,.6);
+  background: transparent; color: #fff; font-size: 10px; font-weight: 700;
+  vertical-align: 1px;
+}
+.agrupador__ayuda:hover { background: #fff; color: var(--edoc-azul); border-color: #fff; }
+
+/* Foco visible en todo lo que se puede alcanzar con el teclado. */
+a:focus-visible, button:focus-visible, .edoc-accion:focus-visible,
+.form-control:focus-visible, .custom-select:focus-visible, .dropdown-item:focus-visible {
+  outline: 2px solid var(--edoc-verde); outline-offset: 2px;
+}
+.edoc-encabezado a:focus-visible, .edoc-encabezado button:focus-visible { outline-color: #fff; }
+
+/* Tabs · BrandBook p.39 y p.40: alineados, misma altura, y sobre el fondo gris
+   van en blanco con borde gris #575756.                                     */
+/* Los tabs no se parten en varias líneas: el manual pide que queden alineados
+   y con la misma altura. Si no caben, se desplazan de lado. */
+.edoc-tabs {
+  display: flex; gap: 4px; border-bottom: 1px solid #c2c2c2;
+  flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin;
+}
+.edoc-tabs__item { flex: none; }
+.edoc-tabs__item {
+  display: flex; align-items: center; height: 38px; padding: 0 18px;
+  font-family: var(--fuente-titulos); font-size: 13px; font-weight: 500;
+  color: var(--edoc-negro); background: #fff; border: 1px solid var(--edoc-gris-borde);
+  border-bottom: 0; border-radius: var(--radio-chico) var(--radio-chico) 0 0;
+  margin-bottom: -1px;
+}
+.edoc-tabs__item:hover { text-decoration: none; color: var(--edoc-azul); background: #f4f4f4; }
+.edoc-tabs__item.activo {
+  background: var(--edoc-azul); border-color: var(--edoc-azul); color: #fff; font-weight: 600;
+}
+
+/* --- 22. Densidad de la tabla -------------------------------------------
+   Con catorce columnas cada píxel cuenta. El número de documento es además
+   el enlace al visor: es la afordancia natural y ahorra un botón por fila. */
+.edoc-tabla .edoc-accion { width: 27px; height: 27px; }
+.edoc-tabla .edoc-accion svg { width: 15px; height: 15px; }
+.edoc-acciones-fila { gap: 3px; }
+a.edoc-clave-doc { text-decoration: none; border-bottom: 1px dotted #9aa8d0; }
+a.edoc-clave-doc:hover { color: var(--azul-2); border-bottom-color: var(--azul-2); text-decoration: none; }
+.edoc-tabla td [data-nombre-latino] { display: inline-block; min-width: 128px; }
+
+/* ==========================================================================
+   23. Responsive
+   Cuatro anchos, los mismos que midió la auditoría de Francia. El defecto que
+   allí se encontró —«la misma tabla ocupa lo mismo en un teléfono que en un
+   escritorio»— es justo lo que estas reglas evitan.
+   ========================================================================== */
+
+/* --- 23.1 · Cabecera fija -----------------------------------------------
+   El encabezado y el menú se quedan arriba en todos los anchos. Al despegarse
+   del inicio de la página se les marca la sombra, para que se lea que flotan. */
+.edoc-encabezado { box-shadow: 0 1px 0 rgba(0,0,0,.15); }
+.edoc-menu { box-shadow: 0 1px 3px rgba(28,28,28,.09); }
+
+/* La cabecera de la tabla también se queda fija mientras se recorre el listado.
+   DataTables pone `position: relative` en sus `th`, así que hay que ganarle.  */
+.dt-cuerpo {
+  max-height: calc(100vh - 360px); min-height: 180px; overflow: auto;
+  /* Sin esto, al llevar una fila a la vista queda debajo de la cabecera fija y
+     no se puede ni leer ni pulsar. Reserva su alto. */
+  scroll-padding-top: 64px;
+}
+table.edoc-tabla.dataTable thead th,
+table.edoc-tabla thead th { position: sticky !important; top: 0; z-index: 3; }
+table.edoc-tabla.dataTable thead tr:first-child th.agrupador { top: 0; z-index: 4; }
+/* La segunda fila de cabecera baja el alto de la primera. Solo cuando hay dos:
+   `:not(:first-child)` evita que la regla pise las tablas de una sola fila y
+   les tape el primer registro. */
+table.edoc-tabla.dataTable thead tr:last-child:not(:first-child) th { top: 28px; }
+
+/* --- 23.2 · Escritorio pequeño · hasta 1200 px --------------------------- */
+@media (max-width: 1200px) {
+  .edoc-pagina { padding: 14px 12px var(--alto-pie); }
+  .edoc-titulo { font-size: 19px; }
+}
+
+/* --- 23.3 · Tableta · hasta 992 px --------------------------------------- */
+@media (max-width: 992px) {
+  .edoc-tablero__cabecera { align-items: flex-start; }
+  .visor-partes { grid-template-columns: 1fr; }
+  .visor-totales { width: 100%; }
+  .corner-rejilla { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- 23.4 · Móvil · hasta 900 px -----------------------------------------
+   La tabla deja de ser tabla y pasa a ser una lista de fichas. Cada celda
+   enseña el rótulo de su columna, que `tablas.js` copió a `data-rotulo`.    */
+@media (max-width: 900px) {
+  table.edoc-tabla.apilable,
+  table.edoc-tabla.apilable tbody,
+  table.edoc-tabla.apilable tr,
+  table.edoc-tabla.apilable td { display: block; width: auto; }
+
+  table.edoc-tabla.apilable thead { position: absolute; left: -9999px; }
+
+  table.edoc-tabla.apilable tbody tr {
+    border: 1px solid #dcdfe4; border-radius: var(--radio);
+    margin-bottom: 10px; background: #fff; overflow: hidden;
+  }
+  table.edoc-tabla.apilable tbody tr:hover td { background: transparent; }
+
+  table.edoc-tabla.apilable tbody td {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+    padding: 7px 12px; border: 0; border-bottom: 1px solid #f0f1f3; text-align: left;
+  }
+  table.edoc-tabla.apilable tbody td:last-child { border-bottom: 0; }
+  table.edoc-tabla.apilable tbody td::before {
+    content: attr(data-rotulo);
+    /* El rótulo es texto, no cifra: no puede heredar la monoespaciada de la celda. */
+    font-family: var(--fuente-texto); font-variant-numeric: normal; letter-spacing: 0;
+    font-weight: 700; font-size: 11px; color: #5c5c5c;
+    flex: 0 0 40%; text-transform: none; text-align: left;
+  }
+  /* El valor ocupa lo que queda y se parte si hace falta, sin salirse. */
+  table.edoc-tabla.apilable tbody td > * { min-width: 0; }
+  table.edoc-tabla.apilable tbody td [data-nombre-latino] { min-width: 0; }
+  /* El dato secundario —el registro fiscal bajo el nombre— baja a su propia
+     línea en vez de pelear por el ancho con el nombre y partirse en dos. */
+  table.edoc-tabla.apilable tbody td { flex-wrap: wrap; }
+  table.edoc-tabla.apilable tbody td > .edoc-secundario { flex: 1 0 100%; text-align: right; }
+  table.edoc-tabla.apilable tbody td:not(.col-acciones) {
+    overflow-wrap: anywhere;
+  }
+  /* Los importes siguen alineados a la derecha, que es donde se comparan. */
+  table.edoc-tabla.apilable tbody td.cifra-der { justify-content: space-between; }
+
+  /* La primera celda —las acciones— encabeza la ficha, a todo el ancho. */
+  table.edoc-tabla.apilable tbody td.col-acciones {
+    background: #f7f9fc; border-bottom: 1px solid #e3e6ea; padding: 9px 12px;
+  }
+  table.edoc-tabla.apilable tbody td.col-acciones::before { content: none; }
+  table.edoc-tabla.apilable tbody td.col-acciones .edoc-acciones-fila { width: 100%; }
+
+  /* Apilada, la tabla ya cabe: sobra la altura fija. El desplazamiento lateral
+     se deja como red de seguridad para cualquier tabla que no se apile. */
+  .dt-cuerpo { max-height: none; min-height: 0; overflow-x: auto; overflow-y: visible; }
+
+  .corner-rejilla { grid-template-columns: 1fr; }
+  .dt-pie { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* --- 23.5 · Móvil estrecho · hasta 576 px -------------------------------- */
+@media (max-width: 576px) {
+  .edoc-titulo-barra { flex-direction: column; align-items: flex-start; }
+  .edoc-tablero__cabecera { flex-direction: column; align-items: stretch; gap: 10px; }
+  .edoc-tablero__cuerpo { padding: 13px; }
+  table.edoc-tabla.apilable tbody td::before { flex-basis: 46%; }
+  .modal-footer { flex-direction: column-reverse; align-items: stretch; }
+  .modal-footer .btn, .modal-footer .d-flex { width: 100%; }
+  .modal-footer .d-flex { flex-direction: column; }
+}
+
+/* El pie fijo, en pantallas estrechas, se queda en una sola línea legible. */
+@media (max-width: 576px) {
+  .edoc-pie { flex-direction: column; gap: 2px; padding: 8px 12px; font-size: 10.5px; }
+}
+
+/* --- 24. Menú en pantallas estrechas -------------------------------------
+   Por encima de 900 px manda la barra horizontal; por debajo, el cajón.     */
+.edoc-menu__hamburguesa {
+  display: none; width: 38px; height: 32px; margin: auto 6px auto 0; padding: 7px 8px;
+  background: transparent; border: 1px solid #c2c2c2; border-radius: var(--radio-chico);
+  flex-direction: column; justify-content: space-between; flex: none;
+}
+.edoc-menu__hamburguesa span {
+  display: block; height: 2px; width: 100%; background: var(--edoc-azul); border-radius: 2px;
+  transition: transform .18s ease, opacity .18s ease;
+}
+.edoc-menu__hamburguesa.abierta span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.edoc-menu__hamburguesa.abierta span:nth-child(2) { opacity: 0; }
+.edoc-menu__hamburguesa.abierta span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+.edoc-menu-movil { display: none; }
+.edoc-menu-movil__seccion {
+  display: flex; align-items: center; gap: 8px; padding: 11px 16px 6px;
+  font-family: var(--fuente-titulos); font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em; color: var(--edoc-azul);
+  border-top: 1px solid #ececec;
+}
+.edoc-menu-movil__seccion:first-child { border-top: 0; }
+a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
+.edoc-menu-movil__seccion svg { width: 15px; height: 15px; }
+.edoc-menu-movil__grupo {
+  font-family: var(--fuente-titulos); font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .1em; color: var(--edoc-gris);
+  padding: 7px 16px 2px;
+}
+.edoc-menu-movil__enlace { display: block; padding: 9px 16px 9px 26px; font-size: 13.5px; color: var(--edoc-negro); }
+.edoc-menu-movil__enlace:hover { background: #eef0f7; color: var(--edoc-azul); text-decoration: none; }
+.edoc-menu-movil__enlace.activo { color: var(--edoc-azul); font-weight: 600; box-shadow: inset 3px 0 0 var(--edoc-verde); }
+
+@media (max-width: 900px) {
+  .edoc-menu { overflow: visible; padding: 0 8px; }
+  .edoc-menu__hamburguesa { display: flex; }
+  .edoc-menu .edoc-menu__contenedor { display: none; }
+  .edoc-menu::after {
+    content: attr(data-seccion-actual); font-family: var(--fuente-titulos);
+    font-size: 13px; font-weight: 600; color: var(--edoc-azul); align-self: center;
+  }
+  .edoc-menu-movil {
+    display: block; position: sticky; top: calc(var(--alto-encabezado) + var(--alto-menu));
+    z-index: 1028; background: #fff; border-bottom: 1px solid #c2c2c2;
+    box-shadow: 0 6px 14px rgba(28,28,28,.14); max-height: 70vh; overflow-y: auto;
+  }
+  .edoc-menu-movil[hidden] { display: none; }
+}
+
+/* --- 25. Alcance de la entrega -------------------------------------------
+   Lo que está en el mapa pero no en la entrega de hoy se marca en el menú y,
+   si se entra, muestra el aviso en vez de la pantalla.                      */
+.edoc-menu__enlace--obra, .edoc-menu-movil__enlace.edoc-menu__enlace--obra { color: #7a7a7a; }
+.edoc-menu__enlace--obra:hover, .edoc-menu-movil__enlace.edoc-menu__enlace--obra:hover {
+  background: #f4f4f4; color: #5c5c5c;
+}
+
+.edoc-pagina--obra { display: flex; flex-direction: column; }
+.edoc-obra { flex: 1; display: grid; place-items: center; padding: 24px 0; }
+.edoc-obra__tarjeta {
+  background: var(--edoc-tablero); border: var(--borde-suave); border-radius: var(--radio);
+  box-shadow: var(--sombra-tablero); padding: 42px 38px; max-width: 620px; text-align: center;
+}
+.edoc-obra__marca {
+  width: 62px; height: 62px; margin: 0 auto 18px; border-radius: 50%;
+  background: #eef0f7; display: grid; place-items: center; color: var(--edoc-azul);
+}
+.edoc-obra__marca svg { width: 28px; height: 28px; }
+.edoc-obra__titulo {
+  font-family: var(--fuente-titulos); font-size: 23px; font-weight: 600;
+  color: var(--edoc-azul); margin: 0 0 4px;
+}
+.edoc-obra__rotulo {
+  font-family: var(--fuente-titulos); font-size: 12px; font-weight: 600;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--edoc-gris); margin: 0 0 16px;
+}
+.edoc-obra__texto { font-size: 13.5px; color: #4a4a4a; margin: 0 0 24px; }
+.edoc-obra__botones { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+@media (max-width: 576px) {
+  .edoc-obra__tarjeta { padding: 30px 20px; }
+  .edoc-obra__botones .btn { width: 100%; }
+}

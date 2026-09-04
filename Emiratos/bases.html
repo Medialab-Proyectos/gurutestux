@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bases de diseño · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="" data-pagina="bases.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+
+  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Transversal</span><span>Bases de diseño</span></div>
+      <h1 class="edoc-titulo">Bases de diseño</h1>
+      <p class="edoc-subtitulo">La plantilla base para que los tres países partan del mismo archivo y el desarrollo no tenga
+      que inventar clases. Todo lo que hay aquí sale del manual de identidad de eDoc; donde el manual no llega, está dicho.</p>
+    </div>
+    <span class="edoc-etiqueta-mvp edoc-etiqueta-mvp--abierto">Bootstrap 4.4.1 + jQuery 3.5.1</span>
+  </div>
+
+  <!-- ===================== 1 · Marca ================================== -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">1 · La marca en el portal</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="row rejilla align-items-center">
+        <div class="col-12 col-lg-6">
+          <div style="background:#fff;border:1px solid #ddd;border-radius:6px;padding:26px;text-align:center">
+            <img src="assets/img/edoc-logo.svg" alt="eDoc · imagotipo" style="height:56px">
+            <div class="edoc-secundario mt-3">Imagotipo sobre fondo blanco</div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div style="background:var(--edoc-azul);border-radius:6px;padding:26px;text-align:center">
+            <img src="assets/img/edoc-logo-neg.svg" alt="eDoc · imagotipo en negativo" style="height:56px">
+            <div class="edoc-secundario mt-3" style="color:rgba(255,255,255,.75)">Negativo sobre azul <code style="color:#cfe08a">#001174</code></div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-4 mb-0">El logo va siempre visible en la barra superior, centrado, con su área de seguridad respetada.
+      No se rota, no se le añaden iconos, no se cambian sus fuentes y no se pone sobre fondos sobresaturados.</p>
+      <div class="edoc-aviso edoc-aviso--info mt-3">
+        <div>Al escribir el nombre de la plataforma siempre es <strong>eDoc</strong>: e minúscula, D mayúscula, oc minúscula.
+        Nunca Edoc, EDOC ni eDOC.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2 · Color ================================== -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">2 · Color</h2></div>
+    <div class="edoc-tablero__cuerpo">
+
+      <h3 class="edoc-etiqueta">Principales</h3>
+      <div class="row rejilla mb-4" id="paleta-principal"></div>
+
+      <h3 class="edoc-etiqueta">Secundarios · para la interfaz</h3>
+      <div class="row rejilla mb-4" id="paleta-secundaria"></div>
+
+      <h3 class="edoc-etiqueta">Señales · qué significa cada color</h3>
+      <div class="row rejilla mb-4" id="paleta-senales"></div>
+
+      <h3 class="edoc-etiqueta">Iconos de archivo</h3>
+      <div class="row rejilla" id="paleta-archivos"></div>
+
+      <div class="edoc-aviso edoc-aviso--advertencia mt-4">
+        <div>El color nunca va solo. Cada estado lleva además su rótulo escrito, porque un usuario que no distingue el
+        verde del rojo tiene que poder leer «Aprobado» y «Rechazado».</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3 · Tipografía ============================= -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">3 · Tipografía</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="row rejilla">
+        <div class="col-12 col-lg-4">
+          <div class="edoc-etiqueta">Poppins · títulos y navegación</div>
+          <div style="font-family:var(--fuente-titulos);font-size:26px;font-weight:600">Documentos Emitidos</div>
+          <div style="font-family:var(--fuente-titulos);font-size:14px">Menú, títulos de pantalla y de tablero, botones.</div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="edoc-etiqueta">Open Sans · contenido</div>
+          <div style="font-size:14px">Es la cara que el manual asigna a las plataformas de Facturación Electrónica.
+          Sostiene tablas, formularios y textos.</div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="edoc-etiqueta">Monoespaciada · cifras y códigos</div>
+          <div class="cifra" style="font-size:15px">19,320.00<br>100234567800003<br>INV-2026-004871</div>
+          <div class="mt-1" style="font-size:13px">Importes, fechas, números de documento y registros fiscales, para que
+          se alineen en columna y se puedan comparar de un vistazo.</div>
+        </div>
+      </div>
+
+      <div class="edoc-separador"></div>
+
+      <div class="row rejilla">
+        <div class="col-12 col-lg-6">
+          <div class="edoc-etiqueta">Así se escribe</div>
+          <ul class="mb-0">
+            <li>La descripción del campo va en negrita y con la primera palabra en mayúscula: <strong>Código generación</strong>.</li>
+            <li>Nada de jerga técnica, oraciones largas ni dobles negaciones.</li>
+            <li>Se tutea al cliente. El tono es casual sin dejar de ser preciso.</li>
+            <li>El portal no puede tener faltas de ortografía: afecta a la experiencia igual que un botón roto.</li>
+          </ul>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="edoc-etiqueta">Un mensaje bien escrito</div>
+          <div class="edoc-aviso edoc-aviso--info">
+            <div>Se inició un proceso automático para generar el reporte. Cuando esté listo te enviaremos un archivo
+            .csv a tu correo.</div>
+          </div>
+          <div class="edoc-secundario mt-2">Frente a «Erreur du serveur. Contactez un support», que es lo que responde hoy
+          el portal de Francia y no le dice al usuario qué hacer.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4 · Botones ================================ -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">4 · Jerarquía de botones</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="d-flex hueco-2 flex-wrap align-items-center mb-3">
+        <button class="btn btn-edoc-primario">Consultar</button>
+        <button class="btn btn-edoc-secundario">Exportar</button>
+        <button class="btn btn-edoc-terciario">Limpiar</button>
+        <button class="btn btn-edoc-exito">Aprobar · MLS AP</button>
+        <button class="btn btn-edoc-error">Rechazar · MLS RE</button>
+        <button class="btn btn-edoc-siguiente">Acusar recibo · MLS AB</button>
+        <button class="btn btn-edoc-primario" disabled>Deshabilitado</button>
+      </div>
+      <table class="edoc-tabla">
+        <thead><tr><th scope="col">Nivel</th><th scope="col">Cuándo</th><th scope="col">Cuántos por pantalla</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Primario</strong></td><td>La acción que el usuario vino a hacer.</td><td><strong>Uno solo</strong></td></tr>
+          <tr><td>Secundario</td><td>Acciones de apoyo: exportar, crear, guardar en un panel lateral.</td><td>Los que hagan falta</td></tr>
+          <tr><td>Terciario</td><td>Limpiar, cancelar, cerrar.</td><td>Los que hagan falta</td></tr>
+          <tr><td>De señal</td><td>Aprobar, rechazar y acusar. Llevan el color de señalización y su código MLS.</td><td>Solo en recepción</td></tr>
+        </tbody>
+      </table>
+      <div class="nota nota--decidido" style="display:block">
+        <span class="nota__sello">Regla</span>
+        <strong>Un solo botón primario por pantalla.</strong> Si hay dos, el usuario no sabe cuál es el camino.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 5 · Piezas ================================= -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">5 · Piezas de la interfaz</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="row rejilla">
+        <div class="col-12 col-lg-6">
+          <div class="edoc-etiqueta">Campos</div>
+          <label class="edoc-etiqueta" for="d1">Fecha de emisión desde<span class="obligatorio">*</span></label>
+          <input type="date" class="form-control mb-1" id="d1" value="2026-08-01">
+          <div class="edoc-ayuda">La ayuda va debajo, en gris, y no repite lo que ya dice la etiqueta.</div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="edoc-etiqueta">Estados</div>
+          <div class="d-flex hueco-2 flex-wrap">
+            <span class="edoc-estado edoc-estado--exito">Aprobado</span>
+            <span class="edoc-estado edoc-estado--error">Rechazado</span>
+            <span class="edoc-estado edoc-estado--advertencia">Acuse</span>
+            <span class="edoc-estado edoc-estado--transito">Entregado</span>
+            <span class="edoc-estado edoc-estado--neutro">Pendiente</span>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="edoc-etiqueta">Avisos</div>
+          <div class="row rejilla-2">
+            <div class="col-12 col-xl-6"><div class="edoc-aviso edoc-aviso--info"><div>Información. Explica algo que conviene saber antes de actuar.</div></div></div>
+            <div class="col-12 col-xl-6"><div class="edoc-aviso edoc-aviso--exito"><div>Éxito. Confirma que lo que pediste ya ocurrió.</div></div></div>
+            <div class="col-12 col-xl-6"><div class="edoc-aviso edoc-aviso--advertencia"><div>Advertencia. Se puede seguir, pero con una consecuencia.</div></div></div>
+            <div class="col-12 col-xl-6"><div class="edoc-aviso edoc-aviso--error"><div>Error. Algo no se pudo hacer y hay que decir qué hacer ahora.</div></div></div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="edoc-etiqueta">Tabs</div>
+          <div class="edoc-tabs mb-2">
+            <a class="edoc-tabs__item activo" href="#" onclick="return false">Documentos emitidos</a>
+            <a class="edoc-tabs__item" href="#" onclick="return false">Documentos recibidos</a>
+            <a class="edoc-tabs__item" href="#" onclick="return false">Informes</a>
+          </div>
+          <p class="mb-0">El manual es explícito: los tabs van <strong>alineados y con la misma altura</strong>, y sobre el
+          fondo gris <code>#dadada</code> van en blanco con borde gris <code>#575756</code>. El activo se resuelve con el
+          azul de marca.</p>
+        </div>
+
+        <div class="col-12">
+          <div class="edoc-etiqueta">Iconos</div>
+          <p class="mb-2">Trazo simple y minimalista, sin relleno ni recargos, para que se entiendan a 32, 64 y 128 píxeles.
+          Sobre fondo blanco van en azul <code>#001174</code>; sobre el fondo gris <code>#dadada</code>, con borde gris <code>#575756</code>.</p>
+          <div class="d-flex hueco-2 flex-wrap" id="muestra-iconos"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 6 · Rejilla ================================ -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">6 · Rejilla y estructura</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <ul class="mb-3">
+        <li><strong>Encabezado azul</strong> <code>#001174</code>, 62 px, con el logo centrado y las utilidades a la derecha.</li>
+        <li><strong>Menú</strong> blanco de 44 px, pegado bajo el encabezado, con la sección activa marcada en verde.</li>
+        <li><strong>Fondo de la plataforma</strong> <code>#dadada</code>; los tableros van en blanco <code>#ffffff</code>.</li>
+        <li><strong>Barra de desplazamiento</strong> gris <code>#808B89</code>. No se usan otros colores.</li>
+        <li><strong>Ancho máximo</strong> de 1680 px, con la rejilla de doce columnas de Bootstrap 4.</li>
+        <li><strong>Tablas anchas</strong> se desplazan dentro de su propio contenedor. La página nunca se desplaza en horizontal.</li>
+        <li><strong>El encabezado y el menú se quedan fijos arriba</strong>, y la cabecera de la tabla también mientras
+        recorres el listado: con catorce columnas, perder los rótulos es perder el sentido de la fila.</li>
+        <li><strong>El pie se queda fijo abajo.</strong> La versión, el aviso de que esto es una maqueta y el enlace a
+        estas bases tienen que estar siempre a mano mientras se revisa.</li>
+      </ul>
+
+      <div class="edoc-separador"></div>
+
+      <h3 class="edoc-etiqueta">Los cinco anchos</h3>
+      <p class="mb-2">La auditoría de Francia midió cuatro anchos y encontró que «la misma tabla ocupa lo mismo en un
+      teléfono que en un escritorio», y que la navegación desaparecía entre 1104 y 1080 px. Estos son los cortes que
+      evitan las dos cosas.</p>
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Ancho</th><th scope="col">Qué cambia</th></tr></thead>
+          <tbody>
+            <tr><td class="cifra">≥ 1200</td><td>Todo a la vista. Las catorce columnas de Documentos Emitidos caben sin desplazar.</td></tr>
+            <tr><td class="cifra">1200</td><td>Se reduce el margen de página y el tamaño del título.</td></tr>
+            <tr><td class="cifra">992</td><td>El visor pasa a una columna. Los cuatro corners, a dos.</td></tr>
+            <tr><td class="cifra">900</td><td><strong>El corte grande.</strong> El menú se pliega en un cajón con el árbol completo y la barra dice en qué sección estás. La tabla deja de ser tabla: cada fila es una ficha y cada celda lleva el rótulo de su columna.</td></tr>
+            <tr><td class="cifra">576</td><td>Los tableros y el pie de página se apilan. Los botones del modal ocupan todo el ancho.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="nota nota--decidido" style="display:block">
+        <span class="nota__sello">Regla</span>
+        <strong>Por debajo de 900 px la tabla no se desplaza de lado: se apila.</strong> Una tabla de catorce columnas en
+        un teléfono no se lee moviéndola en horizontal, se lee una ficha por documento. El rótulo de cada columna viaja
+        con su celda, así que no hace falta volver a la cabecera para saber qué es cada dato.
+      </div>
+      <div class="edoc-separador"></div>
+
+      <h3 class="edoc-etiqueta">El stack, medido en los portales</h3>
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Portal</th><th scope="col">Lo que sirve hoy</th><th scope="col">Qué significa para Emiratos</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Bolivia</strong></td>
+              <td class="cifra">Bootstrap 4.4.1<br>jQuery 3.5.1<br>ASP.NET</td>
+              <td>Es de donde parte Emiratos. Esta plantilla usa <strong>esas mismas versiones</strong>,
+              para que copiar y pegar funcione sin traducir una sola clase.</td>
+            </tr>
+            <tr>
+              <td><strong>Francia</strong></td>
+              <td class="cifra">Angular 20.3.19<br>Angular Material</td>
+              <td>No viaja. Angular Material está atado a Angular, y aquí el back es .NET.
+              De Francia se toman decisiones de diseño, no código.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="nota nota--decidido" style="display:block">
+        <span class="nota__sello">Decidido</span>
+        <strong>Bootstrap, no Angular Material.</strong> En la reunión quedó dicho: «esencialmente Bootstrap está bien y lo
+        podemos usar». Angular Material se descartó porque está atado a Angular y Emiratos parte del stack de Bolivia.
+      </div>
+      <div class="nota nota--abierto" style="display:block">
+        <span class="nota__sello">Ojo al copiar</span>
+        <strong>Bootstrap 4 no trae <code>gap-*</code> ni gutters <code>g-*</code>.</strong> Llegaron en la 5. Para no llenar
+        el marcado de márgenes sueltos, esta hoja añade <code>.hueco-1/2/3</code> para separar hijos de un
+        <code>d-flex</code>, y <code>.rejilla</code> · <code>.rejilla-2</code> para separar columnas de formulario.
+        Son las únicas clases de utilidad propias: todo lo demás es Bootstrap 4 de serie.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 6b · Accesibilidad ========================= -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">7 · Que se pueda usar</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p>La auditoría de Francia encontró que <strong>ninguna de las diez tablas del portal se puede ordenar ni leer con
+      un lector de pantalla</strong>. Estas reglas están para que eso no se repita.</p>
+      <ul class="mb-3">
+        <li><strong>El color nunca va solo.</strong> Cada estado lleva su rótulo escrito, y la pastilla dice además a qué
+        entidad pertenece para quien la escucha: «C5 Autoridad: Aprobado».</li>
+        <li><strong>Las tablas se ordenan.</strong> Se usa DataTables, igual que Bolivia, con la misma traducción.</li>
+        <li><strong>Toda cabecera de tabla declara <code>scope</code></strong>, para que el lector sepa a qué se refiere cada celda.</li>
+        <li><strong>Cada botón de icono lleva su nombre</strong> en <code>aria-label</code>: sin texto visible, el icono no dice nada.</li>
+        <li><strong>Hay un salto al contenido</strong> como primera parada del teclado, para no recorrer el menú entero.</li>
+        <li><strong>El foco se ve.</strong> Contorno verde de marca en todo lo que se alcanza con el teclado.</li>
+        <li><strong>Los avisos se anuncian</strong> con <code>aria-live</code>: si solo aparecen en una esquina, quien no
+        mira la pantalla no se entera.</li>
+        <li><strong>La página nunca se desplaza en horizontal.</strong> Lo que no cabe se desplaza dentro de su tabla.</li>
+      </ul>
+      <div class="nota nota--decidido" style="display:block">
+        <span class="nota__sello">Regla</span>
+        Un mensaje de error dice <strong>qué pasó y qué hacer ahora</strong>. «Erreur du serveur. Contactez un support»
+        no cumple ninguna de las dos.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 7 · Árabe ================================== -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">8 · La regla del árabe</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="edoc-aviso edoc-aviso--error mb-3">
+        <div><strong>Ningún campo mezcla los dos alfabetos.</strong> Un campo con árabe de derecha a izquierda y latino de
+        izquierda a derecha es donde se rompe la interfaz y donde se rompen las búsquedas. Si hace falta el nombre en los
+        dos alfabetos, son dos campos.</div>
+      </div>
+      <div class="row rejilla">
+        <div class="col-12 col-lg-6">
+          <div class="edoc-etiqueta">Siempre en caracteres latinos</div>
+          <ul class="mb-0"><li>Importes y monedas</li><li>Fechas</li><li>Números de documento</li><li>Registros fiscales y códigos</li></ul>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="edoc-etiqueta">Pueden venir en árabe</div>
+          <ul class="mb-0"><li>El nombre del proveedor</li><li>El nombre del receptor</li></ul>
+          <p class="mt-2 mb-0">Se muestran tal como llegan. <strong>Un nombre de empresa no se traduce nunca.</strong></p>
+        </div>
+        <div class="col-12">
+          <div class="edoc-etiqueta">Cómo se ve en la tabla</div>
+          <div class="edoc-tabla-envoltura">
+            <table class="edoc-tabla">
+              <thead><tr><th scope="col">Número de documento</th><th scope="col">Receptor</th><th scope="col">Registro fiscal</th><th scope="col" class="text-right">Total</th><th scope="col">Estado</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="edoc-clave-doc">INV-2026-004871</span></td>
+                  <td><span data-nombre-latino="Al Futtaim Logistics LLC" data-nombre-arabe="الفطيم للخدمات اللوجستية ذ.م.م"></span></td>
+                  <td class="cifra">100234567800003</td>
+                  <td class="cifra cifra-der">19,320.00</td>
+                  <td><span class="edoc-estado edoc-estado--exito">Aprobado</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="edoc-secundario mt-2">Pulsa <strong>Nombre nativo</strong> en el encabezado para ver la misma fila con
+          el nombre en árabe. Solo cambia esa celda: el resto de la fila se queda en latino.</div>
+        </div>
+      </div>
+      <div class="nota nota--abierto" style="display:block">
+        <span class="nota__sello">Abierto</span>
+        Falta decidir si el portal va solo en inglés o en inglés y árabe, y hay que declarárselo a la autoridad. También
+        hay que revisar con base de datos la colación del campo de nombre para que el filtro no se rompa al buscar en árabe.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 8 · Alcance ================================ -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">9 · Lo que queda fuera del MVP</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Capacidad</th><th scope="col">Por qué no va</th></tr></thead>
+          <tbody>
+            <tr><td><strong>eDoc Emisor</strong> completo</td><td>El portal de Emiratos no emite. Sin formulario de factura, ni notas, ni contingencia, ni catálogo de productos.</td></tr>
+            <tr><td>Anular un documento</td><td>En Emiratos anular no existe: la única corrección es una nota de crédito, y este portal no emite notas.</td></tr>
+            <tr><td>Workflow de aprobaciones</td><td>Módulo con personalidad propia. En Bolivia lleva años sin salir a producción.</td></tr>
+            <tr><td>Cola de reportes pesados</td><td>El patrón es correcto, pero de entrada no hay volumen.</td></tr>
+            <tr><td>Buscador general del portal</td><td>Con tan pocas opciones de menú no agrega valor.</td></tr>
+            <tr><td>Informes fiscales</td><td>Ninguno tiene equivalente conocido en Emiratos.</td></tr>
+            <tr><td>Catálogos oficiales de la autoridad</td><td>Las listas de códigos ya viven en la wiki, y la pantalla se entendería como crear catálogos.</td></tr>
+            <tr><td>Servidor de correo y OAuth de correo</td><td>El cliente no nos contrata para leerle la bandeja. Aquí el canal es la red PEPOL.</td></tr>
+            <tr><td>Sucursales, puntos de venta, parámetros, token de la autoridad</td><td>Conceptos bolivianos.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 9 · Sin decidir ============================ -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">10 · Lo que sigue abierto</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Tema</th><th scope="col">Por qué importa</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Modelo de credenciales</strong></td><td>Bolivia da una credencial por empresa; Francia da varias aplicaciones. Hasta elegir, esa pantalla no se puede diseñar.</td></tr>
+            <tr><td>Idioma del portal</td><td>Solo inglés, o inglés y árabe. Hay que declarárselo a la autoridad y arrastra toda la interfaz.</td></tr>
+            <tr><td>Reenviar por correo</td><td>El primer canal es PEPOL. Un canal alterno puede hacer que un documento se apruebe por una vía y se rechace por la otra.</td></tr>
+            <tr><td>Firma con certificado</td><td>La norma no la exige. Pedirle el certificado al cliente sin que la ley lo pida sería extralimitarse.</td></tr>
+            <tr><td>Registro de empresas</td><td>Pendiente de decidir si se toma el wizard de Francia.</td></tr>
+            <tr><td>PDF dentro del XML</td><td>Si viaja como referencia de documento, el visor muestra el original en vez del render.</td></tr>
+            <tr><td>Bandeja del Office Manager</td><td>Se queda por ahora, pero él no es cliente del portal: hay riesgo de roles cruzados.</td></tr>
+            <tr><td>Textos legales</td><td>Cuánto del reglamento europeo de tratamiento de datos aplica en Medio Oriente.</td></tr>
+            <tr><td>Buscar datos fiscales de un tercero</td><td>Quedó en «se va a atender», sin cerrar si entra en el MVP.</td></tr>
+            <tr><td>Cargar un XML recibido a mano</td><td>Existe en Bolivia y no se trató en la reunión. Queda sin decidir.</td></tr>
+            <tr><td>Equivalente del CUF</td><td>Bolivia filtra los recibidos por el código único de la factura. Falta definir cuál es el identificador en Emiratos y cómo se llama.</td></tr>
+            <tr><td>Dónde cuelga «Clientes y proveedores»</td><td>El cruce dice que va, pero la propuesta de menú no le dio sitio.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  function muestras(destino, lista, columnas) {
+    document.getElementById(destino).innerHTML = lista.map(function (c) {
+      return '<div class="' + columnas + '">' +
+        '<div class="muestra-color" style="background:' + c[0] + '"></div>' +
+        '<div class="muestra-pie"><strong>' + c[1] + '</strong><br><code>' + c[0] + '</code>' +
+        (c[2] ? '<br><span class="edoc-secundario">' + c[2] + '</span>' : '') + '</div></div>';
+    }).join('');
+  }
+
+  muestras('paleta-principal', [
+    ['#001174', 'Azul eDoc', 'Encabezado, botón primario, iconos sobre blanco'],
+    ['#A8C634', 'Verde lima', 'Acento de marca y señal de éxito'],
+    ['#1C1C1C', 'Negro', 'Texto'],
+    ['#575756', 'Gris borde', 'Bordes de icono y de tab sobre fondo gris'],
+    ['#808B89', 'Gris', 'Barra de desplazamiento'],
+    ['#dadada', 'Gris fondo', 'Fondo de la plataforma'],
+    ['#ffffff', 'Blanco', 'Tableros']
+  ], 'col-6 col-md-4 col-xl-3');
+
+  muestras('paleta-secundaria', [
+    ['#334190', 'Azul 2'], ['#6670AC', 'Azul 3'],
+    ['#2697D1', 'Cian 1'], ['#51ACDA', 'Cian 2'], ['#7DC1E3', 'Cian 3'],
+    ['#D63912', 'Rojo 1'], ['#DE6141', 'Rojo 2'], ['#E68871', 'Rojo 3'],
+    ['#808B89', 'Gris 1'], ['#99A2A1', 'Gris 2'], ['#B3B9B8', 'Gris 3'],
+    ['#B9D15D', 'Verde 2'], ['#D5E39E', 'Verde 3'],
+    ['#FD9714', 'Naranja 1'], ['#FDAC43', 'Naranja 2'], ['#FEC172', 'Naranja 3']
+  ], 'col-4 col-md-3 col-xl-2');
+
+  muestras('paleta-senales', [
+    ['#A8C634', 'Éxito', 'Aceptar · Autorizado · Aprobado'],
+    ['#334190', 'Siguiente', 'Avanzar en un flujo · en tránsito'],
+    ['#FD9714', 'Advertencia', 'Se puede seguir, con consecuencia'],
+    ['#D63912', 'Error', 'Rechazado · error']
+  ], 'col-6 col-md-3');
+
+  muestras('paleta-archivos', [
+    ['#FD9714', 'ZIP'], ['#334190', 'XML'], ['#D63912', 'PDF'], ['#A8C634', 'XLS'], ['#575756', 'Otros']
+  ], 'col-4 col-md-3 col-xl-2');
+
+  var nombres = ['buscar', 'ver', 'estados', 'xml', 'pdf', 'xls', 'zip', 'descargar',
+                 'aprobar', 'rechazar', 'acuse', 'reenviar', 'filtro', 'limpiar', 'info',
+                 'alerta', 'candado', 'llave', 'empresa', 'libro', 'megafono', 'soporte',
+                 'pais', 'idioma', 'salir', 'admin', 'emision', 'recepcion', 'inicio'];
+  document.getElementById('muestra-iconos').innerHTML = nombres.map(function (n) {
+    return '<span class="edoc-accion" title="' + n + '">' + window.edocIcono(n) + '</span>';
+  }).join('');
+
+  window.edocPintarNombres();
+})();
+</script>
+</body>
+</html>

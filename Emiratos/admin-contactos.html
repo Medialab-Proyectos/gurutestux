@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Actualización información de empresa · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="administracion" data-pagina="admin-contactos.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra"><div>
+      <div class="edoc-miga"><span>Administración</span><span>Actualización Datos empresas</span><span>Actualización información de empresa</span></div>
+      <h1 class="edoc-titulo">Actualización información de empresa</h1>
+      <p class="edoc-subtitulo">A quién avisamos y para qué. Es lo que más piden en todos los países, y en Francia todavía falta.</p>
+    </div></div>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Contactos</h2></div>
+    <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Contactos guardados.','exito')">
+      <div class="row rejilla">
+      <div class="col-12 col-xl-4">
+        <div class="edoc-tablero" style="box-shadow:none;margin-bottom:0">
+          <div class="edoc-tablero__cabecera"><h3 class="edoc-tablero__titulo">Comercial<span class="obligatorio">*</span></h3></div>
+          <div class="edoc-tablero__cuerpo">
+            <div class="mb-3"><label class="edoc-etiqueta" for="com-n">Nombre</label>
+              <input class="form-control" id="com-n" value="Sara Khalil"></div>
+            <div class="mb-3"><label class="edoc-etiqueta" for="com-c">Correo</label>
+              <input type="email" class="form-control" id="com-c" value="s.khalil@alnoor.ae"></div>
+            <div><label class="edoc-etiqueta" for="com-t">Teléfono</label>
+              <input class="form-control cifra" id="com-t" value="+971 4 555 0142"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-xl-4">
+        <div class="edoc-tablero" style="box-shadow:none;margin-bottom:0">
+          <div class="edoc-tablero__cabecera"><h3 class="edoc-tablero__titulo">Cobros<span class="obligatorio">*</span></h3></div>
+          <div class="edoc-tablero__cuerpo">
+            <div class="mb-3"><label class="edoc-etiqueta" for="cob-n">Nombre</label>
+              <input class="form-control" id="cob-n" value="Rashid Al Hosani"></div>
+            <div class="mb-3"><label class="edoc-etiqueta" for="cob-c">Correo</label>
+              <input type="email" class="form-control" id="cob-c" value="cobros@alnoor.ae"></div>
+            <div><label class="edoc-etiqueta" for="cob-t">Teléfono</label>
+              <input class="form-control cifra" id="cob-t" value="+971 4 555 0188"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-xl-4">
+        <div class="edoc-tablero" style="box-shadow:none;margin-bottom:0">
+          <div class="edoc-tablero__cabecera"><h3 class="edoc-tablero__titulo">Técnico</h3></div>
+          <div class="edoc-tablero__cuerpo">
+            <div class="mb-3"><label class="edoc-etiqueta" for="tec-n">Nombre</label>
+              <input class="form-control" id="tec-n" value="Priya Nair"></div>
+            <div class="mb-3"><label class="edoc-etiqueta" for="tec-c">Correo</label>
+              <input type="email" class="form-control" id="tec-c" value="it@alnoor.ae"></div>
+            <div><label class="edoc-etiqueta" for="tec-t">Teléfono</label>
+              <input class="form-control cifra" id="tec-t" value="+971 4 555 0190"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+      <button class="btn btn-edoc-primario mt-4" type="submit">Guardar</button>
+    </form>
+  </section>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    Comercial y cobros son obligatorios. En Francia los tres correos quedaron opcionales y hoy no sirven para nada porque
+    no hay ninguna emisión de notificaciones detrás. Un contacto que no se usa es un campo que sobra.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+</body>
+</html>

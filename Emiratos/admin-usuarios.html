@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Usuarios · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="administracion" data-pagina="admin-usuarios.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra"><div>
+      <div class="edoc-miga"><span>Administración</span><span>Roles y Usuarios</span><span>Usuarios</span></div>
+      <h1 class="edoc-titulo">Usuarios</h1>
+      <p class="edoc-subtitulo">Alta y baja de los usuarios de tu empresa. El administrador es el primer usuario que se crea al habilitar la empresa.</p>
+    </div></div>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Usuarios de la empresa</h2>
+      <button class="btn btn-edoc-primario btn-sm" data-sin-destino>Añadir usuario</button>
+    </div>
+    <div class="edoc-tabla-envoltura">
+      <table class="edoc-tabla">
+        <thead><tr><th scope="col" class="col-acciones">Acciones</th><th scope="col">Nombre</th><th scope="col">Usuario</th><th scope="col">Rol</th><th scope="col">Correo</th><th scope="col">Última conexión</th><th scope="col">Estado</th></tr></thead>
+        <tbody>
+        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Fatima Al Marzooqi"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Fatima Al Marzooqi" data-nombre-arabe="فاطمة المرزوقي"></span></td><td class="cifra">fatima.almarzooqi</td><td>Administrador</td><td>f.almarzooqi@alnoor.ae</td><td class="cifra">2026-09-01 08:12</td><td><span class="edoc-estado edoc-estado--exito">Activo</span></td></tr>
+        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Rashid Al Hosani"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Rashid Al Hosani" data-nombre-arabe="راشد الحوسني"></span></td><td class="cifra">rashid.alhosani</td><td>Consulta</td><td>r.alhosani@alnoor.ae</td><td class="cifra">2026-08-31 17:40</td><td><span class="edoc-estado edoc-estado--exito">Activo</span></td></tr>
+        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Priya Nair"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Priya Nair" data-nombre-arabe="Priya Nair"></span></td><td class="cifra">priya.nair</td><td>Recepción</td><td>p.nair@alnoor.ae</td><td class="cifra">2026-09-01 09:05</td><td><span class="edoc-estado edoc-estado--exito">Activo</span></td></tr>
+        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Omar Haddad"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Omar Haddad" data-nombre-arabe="عمر حداد"></span></td><td class="cifra">omar.haddad</td><td>Consulta</td><td>o.haddad@alnoor.ae</td><td class="cifra">—</td><td><span class="edoc-estado edoc-estado--neutro">Inactivo</span></td></tr>
+        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Sara Khalil"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Sara Khalil" data-nombre-arabe="سارة خليل"></span></td><td class="cifra">sara.khalil</td><td>Administrador</td><td>s.khalil@alnoor.ae</td><td class="cifra">2026-08-29 11:22</td><td><span class="edoc-estado edoc-estado--exito">Activo</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Del portal de Bolivia</span>
+    <strong>Se conserva el reenvío del correo de bienvenida.</strong> Es la segunda acción de cada fila y en Bolivia se usa
+    a diario: un usuario nuevo que no recibió sus credenciales queda bloqueado hasta que alguien se las reenvía.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    Un solo botón para crear. En Bolivia el de añadir aparece repetido y lo señaló la propia dueña funcional.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Perfiles frente a roles.</strong> Bolivia hoy trabaja a nivel de perfil; falta la parte de roles para que el
+    permiso sea más individual. Francia solo tiene roles y usuarios. Para Emiratos se toma el modelo de Bolivia con roles
+    encima, y esa mezcla hay que cerrarla antes de programar la pantalla de permisos.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script src="assets/js/tablas.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.edocTabla('table.edoc-tabla', { order: [[1, 'asc']] });
+  });
+</script>
+
+</body>
+</html>

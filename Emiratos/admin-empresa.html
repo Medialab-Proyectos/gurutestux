@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Actualización datos de empresa · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="administracion" data-pagina="admin-empresa.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra"><div>
+      <div class="edoc-miga"><span>Administración</span><span>Actualización Datos empresas</span><span>Actualización datos de empresa</span></div>
+      <h1 class="edoc-titulo">Actualización datos de empresa</h1>
+      <p class="edoc-subtitulo">La identificación de tu empresa: nombre, razón social y registro fiscal. Son dos pantallas hijas, no una: los contactos van en la siguiente.</p>
+    </div></div>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Identificación</h2></div>
+    <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Datos guardados.','exito')">
+      <div class="row rejilla">
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e1">Nombre legal en inglés<span class="obligatorio">*</span></label>
+          <input class="form-control" id="e1" value="Al Noor Trading LLC" required></div>
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e2">Nombre legal en árabe</label>
+          <input class="form-control" id="e2" dir="rtl" lang="ar" value="النور للتجارة ذ.م.م">
+          <div class="edoc-ayuda">Campo aparte, en un solo alfabeto. Nunca se traduce el nombre de una empresa.</div></div>
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e3">Registro fiscal · TRN<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="e3" value="100776655400003" inputmode="numeric" required></div>
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e4">Licencia comercial</label>
+          <input class="form-control cifra" id="e4" value="CN-1183042"></div>
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e5">Emirato</label>
+          <select class="custom-select" id="e5"><option>Dubái</option><option>Abu Dabi</option><option>Sharja</option>
+            <option>Ajmán</option><option>Ras al-Jaima</option><option>Fujaira</option><option>Umm al-Qaywayn</option></select></div>
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e6">Actividad</label>
+          <input class="form-control" id="e6" value="Comercio al por mayor"></div>
+        <div class="col-12">
+          <label class="edoc-etiqueta" for="e7">Dirección</label>
+          <input class="form-control" id="e7" value="Jebel Ali Free Zone, Warehouse 44 · Dubái"></div>
+      </div>
+      <button class="btn btn-edoc-primario mt-4" type="submit">Guardar</button>
+    </form>
+  </section>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    <strong>El nombre en árabe y el nombre en latino son dos campos.</strong> Ningún campo mezcla los dos alfabetos: ahí es
+    donde se rompe la interfaz y donde se rompen las búsquedas.
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Fuera del MVP</span>
+    Sucursales, puntos de venta y parámetros de la empresa son conceptos bolivianos y no viajan. El token de la autoridad
+    fiscal tampoco: es particular de Bolivia.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+</body>
+</html>

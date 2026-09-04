@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Credenciales de consumo Servicio eDoc · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="administracion" data-pagina="admin-credenciales.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra"><div>
+      <div class="edoc-miga"><span>Administración</span><span>Credenciales de consumo Servicio eDoc</span></div>
+      <h1 class="edoc-titulo">Credenciales de consumo Servicio eDoc</h1>
+      <p class="edoc-subtitulo">Las credenciales con las que tu sistema se conecta al nuestro. Esta pantalla está bloqueada hasta que se elija el modelo.</p>
+    </div></div>
+
+  <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+    <div><strong>Esta pantalla no se puede diseñar todavía.</strong> Bolivia y Francia no tienen el mismo modelo de
+    credenciales, y hasta que no se elija uno, la interfaz cambiaría entera. Abajo están las dos opciones, para decidir.</div>
+  </div>
+
+  <div class="row rejilla">
+    <div class="col-12 col-lg-6">
+      <section class="edoc-tablero h-100">
+        <div class="edoc-tablero__cabecera">
+          <h2 class="edoc-tablero__titulo">Opción A · una credencial por empresa</h2>
+          <span class="edoc-etiqueta-mvp edoc-etiqueta-mvp--posterior">Como Bolivia</span>
+        </div>
+        <div class="edoc-tablero__cuerpo">
+          <p>La empresa pide sus credenciales y le llegan por correo. Una sola pareja de clave y secreto para toda la empresa.</p>
+          <div class="edoc-tabla-envoltura">
+            <table class="edoc-tabla">
+              <thead><tr><th scope="col">Dato</th><th scope="col">Valor</th></tr></thead>
+              <tbody>
+                <tr><td>Identificador</td><td class="cifra">alnoor-prod</td></tr>
+                <tr><td>Secreto</td><td class="cifra">••••••••••••••••</td></tr>
+                <tr><td>Última emisión</td><td class="cifra">2026-06-14</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn btn-edoc-secundario mt-3" data-sin-destino>Solicitar credenciales por correo</button>
+          <div class="edoc-aviso edoc-aviso--error mt-3">
+            <div>La pantalla equivalente en el portal de referencia está en revisión y no sirve como modelo tal cual
+            está. Hay que rehacerla, no copiarla.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <section class="edoc-tablero h-100">
+        <div class="edoc-tablero__cabecera">
+          <h2 class="edoc-tablero__titulo">Opción B · varias aplicaciones</h2>
+          <span class="edoc-etiqueta-mvp edoc-etiqueta-mvp--posterior">Como Francia</span>
+        </div>
+        <div class="edoc-tablero__cuerpo">
+          <p>Una aplicación por integración, cada una con sus credenciales y su propio ciclo de vida. Se puede revocar una
+          sin tumbar las demás.</p>
+          <div class="edoc-tabla-envoltura">
+            <table class="edoc-tabla">
+              <thead><tr><th scope="col">Aplicación</th><th scope="col">Creada</th><th scope="col">Estado</th></tr></thead>
+              <tbody>
+                <tr><td>ERP · SAP producción</td><td class="cifra">2026-03-02</td><td><span class="edoc-estado edoc-estado--exito">Activa</span></td></tr>
+                <tr><td>ERP · pruebas</td><td class="cifra">2026-05-19</td><td><span class="edoc-estado edoc-estado--exito">Activa</span></td></tr>
+                <tr><td>Portal de compras</td><td class="cifra">2025-11-08</td><td><span class="edoc-estado edoc-estado--neutro">Revocada</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn btn-edoc-secundario mt-3" data-sin-destino>Crear una aplicación</button>
+          <div class="edoc-aviso edoc-aviso--advertencia mt-3">
+            <div>El secreto se enseña una sola vez, al crearlo, y no se vuelve a guardar en claro. Es el patrón correcto
+            y hay que aplicarlo desde el principio.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · bloquea el diseño</span>
+    <strong>Hay que elegir modelo antes de maquetar esta pantalla.</strong> Es uno de los tres puntos críticos junto con las
+    dos vistas de documentos. La opción B envejece mejor, pero es una decisión de producto, no de diseño.
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Fuera del MVP</span>
+    <strong>Certificado o firma digital.</strong> La norma de Emiratos no la exige y en Francia las facturas no llegan
+    firmadas. Pedirle al cliente su certificado sin que la ley lo pida sería extralimitarse. Firmar nosotros con el
+    certificado de la casa es otra conversación y sigue abierta.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+</body>
+</html>

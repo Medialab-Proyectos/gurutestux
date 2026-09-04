@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentos Recibidos · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="recepcion" data-pagina="recibidos.html">
+
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+
+  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Recepción</span><span>Reportes</span><span>Documentos Recibidos</span></div>
+      <h1 class="edoc-titulo">Documentos Recibidos</h1>
+      <p class="edoc-subtitulo">Lo que llega por la red a nombre de tu empresa. Desde aquí lo apruebas, lo rechazas con un motivo o dejas constancia de que llegó.</p>
+    </div>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    <strong>Recepción es una sola página, no un árbol de ventanas.</strong> Aprobar, rechazar y acusar recibo son un menú
+    de acciones dentro de esta misma tabla, y cada opción se habilita según el estado de la fila. Separarlo en pantallas
+    distintas se ve anticuado y obliga a ir y volver.
+  </div>
+
+  <!-- ===================== Banner de búsqueda ========================= -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Buscar</h2>
+      <button type="button" class="btn btn-edoc-terciario btn-sm" data-toggle="collapse" data-target="#panel-buscar">Mostrar u ocultar</button>
+    </div>
+    <div class="collapse show" id="panel-buscar">
+      <form class="edoc-tablero__cuerpo" id="forma-buscar" novalidate>
+        <div class="row rejilla">
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-desde">Fecha de recepción desde<span class="obligatorio">*</span></label>
+            <input type="date" class="form-control" id="f-desde" value="2026-08-01" required>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-hasta">Fecha de recepción hasta<span class="obligatorio">*</span></label>
+            <input type="date" class="form-control" id="f-hasta" value="2026-08-31" required>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-tipo">Tipo de documento</label>
+            <select class="custom-select" id="f-tipo"><option value="">Todos</option></select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-respuesta">Tu respuesta</label>
+            <select class="custom-select" id="f-respuesta">
+              <option value="">Todas</option>
+              <option value="pendiente">Pendiente de responder</option>
+              <option value="aprobado">Aprobada · MLS AP</option>
+              <option value="rechazado">Rechazada · MLS RE</option>
+              <option value="acuse">Acuse de recibo · MLS AB</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-numero">Número de documento</label>
+            <input type="text" class="form-control cifra" id="f-numero" placeholder="INV-882301">
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-trn">Registro fiscal del emisor</label>
+            <input type="text" class="form-control cifra" id="f-trn" placeholder="100908070600003" inputmode="numeric">
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-emisor">Emisor</label>
+            <input type="text" class="form-control" id="f-emisor" placeholder="Nombre del proveedor">
+            <div class="edoc-ayuda">Busca por el nombre tal como llega, en el alfabeto que llegue.</div>
+          </div>
+        </div>
+
+        <div class="d-flex hueco-2 flex-wrap mt-4">
+          <button type="submit" class="btn btn-edoc-primario">Consultar</button>
+          <button type="reset" class="btn btn-edoc-terciario">Limpiar</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===================== Resultados ================================= -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Resultados</h2>
+      <div class="d-flex align-items-center hueco-2 flex-wrap">
+        <div class="dropdown">
+          <button class="btn btn-edoc-secundario btn-sm dropdown-toggle" data-toggle="dropdown" type="button">Exportar</button>
+          <ul class="dropdown-menu dropdown-menu-right" style="min-width:280px">
+            <li><h6 class="dropdown-header">Formato</h6></li>
+            <li><a class="dropdown-item" href="#" data-exportar="XLSX"><span class="icono-xls" data-icono="xls"></span> Hoja de cálculo · XLSX</a></li>
+            <li><a class="dropdown-item" href="#" data-exportar="CSV"><span class="icono-xls" data-icono="xls"></span> Texto separado por comas · CSV</a></li>
+            <li><a class="dropdown-item" href="#" data-exportar="ZIP"><span class="icono-zip" data-icono="zip"></span> Resultados y XML · ZIP</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><div class="px-3 pb-2 edoc-secundario">En recepción exportar pesa más que en emisión, y ya piden que el archivo lleve también el XML.</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="edoc-tabla-envoltura">
+      <table class="edoc-tabla" id="tabla-recibidos">
+        <thead>
+          <tr>
+            <th scope="col" class="col-acciones">Acciones</th>
+            <th scope="col">Número de documento</th>
+            <th scope="col">Fecha de emisión</th>
+            <th scope="col">Fecha de recepción</th>
+            <th scope="col">Tipo de documento</th>
+            <th scope="col">Emisor</th>
+            <th scope="col">Moneda</th>
+            <th scope="col" class="text-right">Base imponible</th>
+            <th scope="col" class="text-right">IVA</th>
+            <th scope="col" class="text-right">Total</th>
+            <th scope="col" class="separador-izq">C3 · Recepción en eDoc</th>
+            <th scope="col">C4 · Tu respuesta</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpo-recibidos"></tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    <strong>Tres respuestas posibles, y el acuse no es una aprobación.</strong>
+    <span class="edoc-estado edoc-estado--exito">Aprobada · MLS AP</span>
+    <span class="edoc-estado edoc-estado--error">Rechazada · MLS RE</span>
+    <span class="edoc-estado edoc-estado--advertencia">Acuse · MLS AB</span>
+    El acuse dice «llegó», no «estoy de acuerdo». Conviene que la interfaz no los pinte del mismo color ni los ponga al
+    mismo nivel, porque en la práctica se confunden. El rechazo pide siempre motivo tipificado.
+  </div>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Bolivia distingue «Rechazar y notificar» de «Solo rechazar».</strong> Son dos botones distintos: uno avisa al
+    proveedor por correo y el otro solo deja el rechazo registrado. Aquí el rechazo viaja por la red como MLS RE, así que
+    el correo sería un canal alterno —el mismo asunto que bloquea «Reenviar al cliente»—. Hay que decidir si el rechazo
+    lleva aviso por correo o no; mientras tanto, esta maqueta ofrece una sola acción.
+  </div>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Falta el equivalente del CUF.</strong> Bolivia filtra también por el código único de la factura, y es de los
+    campos que más se usan para localizar un documento concreto. En Emiratos habrá un identificador equivalente en el XML,
+    pero todavía no está decidido cuál se expone aquí ni cómo se llama en el menú.
+  </div>
+
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Fuera del MVP</span>
+    <strong>Cargar un XML recibido a mano.</strong> En Bolivia existe, para cuando el cliente necesita meter el documento
+    él mismo. No se trató en la reunión, así que queda como estaba: sin decidir.
+  </div>
+
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Fuera del MVP</span>
+    <strong>Workflow de aprobaciones.</strong> Asignar proveedores a usuarios, autoaprobar por reglas y rechazar en masa
+    es un módulo con personalidad propia, hermano de esta consulta y no una opción suya. En Bolivia lleva años sin salir a
+    producción. Se deja escrito para que no se pida como si fuera gratis. Por eso aquí no hay casillas de selección múltiple.
+  </div>
+
+  <!-- ===================== Modal · aprobar ============================ -->
+  <div class="modal fade" id="modal-aprobar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">Aprobar el documento</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>
+        <div class="modal-body">
+          <p class="mb-3">Vas a aprobar <strong id="ap-numero"></strong> de <strong id="ap-emisor"></strong>.
+          Se enviará por la red la respuesta <strong>MLS AP</strong>.</p>
+          <div class="edoc-aviso edoc-aviso--advertencia">
+            <span data-icono="alerta" class="edoc-aviso__icono"></span>
+            <div>La aprobación no se deshace desde el portal. Si después hay que corregir el documento, el emisor tiene que
+            emitir una nota de crédito: en Emiratos anular no existe.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-exito" id="confirmar-aprobar">Aprobar · MLS AP</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Modal · rechazar =========================== -->
+  <div class="modal fade" id="modal-rechazar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">Rechazar el documento</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>
+        <div class="modal-body">
+          <p class="mb-3">Vas a rechazar <strong id="re-numero"></strong> de <strong id="re-emisor"></strong>.
+          Se enviará por la red la respuesta <strong>MLS RE</strong>.</p>
+          <div class="mb-3">
+            <label class="edoc-etiqueta" for="re-motivo">Motivo del rechazo<span class="obligatorio">*</span></label>
+            <select class="custom-select" id="re-motivo" required>
+              <option value="">Elige un motivo</option>
+            </select>
+            <div class="edoc-ayuda">El motivo es tipificado: viaja como código dentro de la respuesta, no como texto libre.</div>
+          </div>
+          <div>
+            <label class="edoc-etiqueta" for="re-detalle">Detalle para el emisor</label>
+            <textarea class="form-control" id="re-detalle" rows="3" maxlength="300" placeholder="Opcional. Ayuda al emisor a corregir."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-error" id="confirmar-rechazar">Rechazar · MLS RE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Modal · acuse ============================== -->
+  <div class="modal fade" id="modal-acuse" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">Acusar recibo</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>
+        <div class="modal-body">
+          <p class="mb-3">Vas a dejar constancia de que <strong id="ab-numero"></strong> llegó. Se enviará la respuesta
+          <strong>MLS AB</strong>.</p>
+          <div class="edoc-aviso edoc-aviso--advertencia">
+            <span data-icono="alerta" class="edoc-aviso__icono"></span>
+            <div><strong>El acuse no es una aprobación.</strong> Dice que el documento llegó, no que estés de acuerdo con
+            él. Sigues pudiendo aprobarlo o rechazarlo después.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-siguiente" id="confirmar-acuse">Acusar recibo · MLS AB</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Modal · visor ============================== -->
+  <div class="modal fade" id="modal-visor" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Visor de la factura <span id="visor-numero" class="ml-2" style="opacity:.75"></span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body" style="background:#eef0f2">
+          <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+            <span data-icono="alerta" class="edoc-aviso__icono"></span>
+            <div><strong>Esta vista no es la representación gráfica oficial del documento.</strong> Es un render de los campos
+            del XML que llegó. Por la red viaja el XML limpio, sin PDF adjunto: sin visor no habría nada que mirar.</div>
+          </div>
+          <div id="visor-hoja"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-secundario" data-descargar="XML"><span data-icono="xml"></span> Descargar XML</button>
+          <button type="button" class="btn btn-edoc-secundario" data-descargar="PDF"><span data-icono="pdf"></span> Descargar PDF</button>
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script src="assets/js/tablas.js"></script>
+<script>
+(function () {
+  'use strict';
+  var D = window.EDOC, ico = window.edocIcono;
+  var docs = D.RECIBIDOS.map(function (d) { return Object.assign({}, d); });
+  var actual = null;
+
+  document.getElementById('f-tipo').insertAdjacentHTML('beforeend',
+    D.TIPOS.map(function (t) { return '<option>' + t + '</option>'; }).join(''));
+  document.getElementById('re-motivo').insertAdjacentHTML('beforeend',
+    D.MOTIVOS_RECHAZO.map(function (m) { return '<option value="' + m.codigo + '">' + m.codigo + ' · ' + m.texto + '</option>'; }).join(''));
+
+  function respuestaPastilla(doc) {
+    if (doc.respuesta === 'pendiente') return '<span class="edoc-estado edoc-estado--neutro">Pendiente</span>';
+    var mapa = { aprobado: ['exito', 'Aprobada · MLS AP'], rechazado: ['error', 'Rechazada · MLS RE'], acuse: ['advertencia', 'Acuse · MLS AB'] };
+    var m = mapa[doc.respuesta];
+    var extra = doc.respuestaSello ? '<div class="edoc-secundario cifra mt-1">' + doc.respuestaSello + '</div>' : '';
+    var motivo = doc.motivo ? '<div class="edoc-secundario mt-1">' + doc.motivo + '</div>' : '';
+    return '<span class="edoc-estado edoc-estado--' + m[0] + '">' + m[1] + '</span>' + extra + motivo;
+  }
+
+  /* El menú de acciones se habilita según el estado de la fila.
+     Respondido con MLS AP o MLS RE cierra el círculo: ya no se puede volver
+     a responder. El acuse no lo cierra, porque no es una aprobación. */
+  /* Las tres respuestas van como botones en línea y se habilitan según el
+     estado de la fila, que es lo que se decidió en la reunión: un menú de
+     acciones dentro de la misma página, no un árbol de ventanas. */
+  function acciones(doc, i) {
+    var cerrado = doc.respuesta === 'aprobado' || doc.respuesta === 'rechazado';
+    function boton(accion, iconoNombre, matiz, rotulo, permitido, razon) {
+      var clases = 'edoc-accion' + (matiz ? ' edoc-accion--' + matiz : '');
+      if (permitido) {
+        return '<a class="' + clases + '" href="#" data-accion="' + accion + '" data-i="' + i + '" ' +
+               'title="' + rotulo + '" aria-label="' + rotulo + ' · ' + doc.numero + '">' + ico(iconoNombre) + '</a>';
+      }
+      return '<span class="' + clases + '" aria-disabled="true" title="' + razon + '" ' +
+             'aria-label="' + rotulo + ' · no disponible: ' + razon + '">' + ico(iconoNombre) + '</span>';
+    }
+    return '<div class="edoc-acciones-fila">' +
+      boton('aprobar',  'aprobar',  'exito', 'Aprobar · MLS AP',       !cerrado, 'Ya respondiste este documento') +
+      boton('rechazar', 'rechazar', 'error', 'Rechazar · MLS RE',      !cerrado, 'Ya respondiste este documento') +
+      boton('acuse',    'acuse',    'aviso', 'Acusar recibo · MLS AB', !cerrado && doc.respuesta !== 'acuse', 'Ya dejaste constancia de que llegó') +
+      '<span class="separador"></span>' +
+      '<a class="edoc-accion edoc-accion--gris" href="#" data-accion="xml" data-i="' + i + '" title="Descargar XML" ' +
+        'aria-label="Descargar el XML de ' + doc.numero + '">' + ico('xml') + '</a>' +
+    '</div>';
+  }
+
+  function pintar() {
+    window.edocDestruirTabla('#tabla-recibidos');
+    document.getElementById('cuerpo-recibidos').innerHTML = docs.map(function (doc, i) {
+      var negativo = doc.total < 0 ? ' style="color:var(--rojo-1)"' : '';
+      return '<tr>' +
+        '<td class="col-acciones">' + acciones(doc, i) + '</td>' +
+        '<td><a class="edoc-clave-doc" href="#" data-accion="visor" data-i="' + i + '" ' +
+          'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
+        '<td class="cifra">' + doc.fechaEmision + '</td>' +
+        '<td class="cifra">' + doc.fecha + '</td>' +
+        '<td>' + doc.tipo + '</td>' +
+        '<td><span data-nombre-latino="' + doc.emisorLatino + '" data-nombre-arabe="' + doc.emisorArabe + '"></span>' +
+          '<div class="edoc-secundario cifra">' + doc.trn + '</div></td>' +
+        '<td class="cifra">' + doc.moneda + '</td>' +
+        '<td class="cifra cifra-der"' + negativo + '>' + D.dinero(doc.base) + '</td>' +
+        '<td class="cifra cifra-der"' + negativo + '>' + D.dinero(doc.iva) + '</td>' +
+        '<td class="cifra cifra-der font-weight-bold"' + negativo + '>' + D.dinero(doc.total) + '</td>' +
+        '<td class="separador-izq">' + window.edocPastilla(doc.recepcion) + '</td>' +
+        '<td>' + respuestaPastilla(doc) + '</td>' +
+      '</tr>';
+    }).join('');
+    window.edocPintarNombres();
+    window.edocPintarIconos();
+    window.edocTabla('#tabla-recibidos', {
+      language: { emptyTable: 'No has recibido documentos en ese rango de fechas.',
+                  zeroRecords: 'Ningún documento coincide con lo que buscas.' },
+      columnDefs: [
+        { orderable: false, targets: 0 },
+        { type: 'num-fmt', targets: [7, 8, 9] }
+      ],
+      order: [[3, 'desc']]
+    });
+  }
+
+  function abrirVisor(doc) {
+    document.getElementById('visor-numero').textContent = doc.numero;
+    document.getElementById('visor-hoja').innerHTML =
+      '<div class="visor-hoja">' +
+        '<div class="visor-cabecera">' +
+          '<div>' +
+            '<div class="visor-bloque__rotulo">Emisor</div>' +
+            '<div style="font-family:var(--fuente-titulos);font-weight:600;font-size:15px">' +
+              '<span data-nombre-latino="' + doc.emisorLatino + '" data-nombre-arabe="' + doc.emisorArabe + '"></span></div>' +
+            '<div class="edoc-secundario">Registro fiscal <span class="cifra">' + doc.trn + '</span></div>' +
+          '</div>' +
+          '<div class="text-right">' +
+            '<div class="visor-bloque__rotulo">' + doc.tipo + '</div>' +
+            '<div class="edoc-clave-doc" style="font-size:16px">' + doc.numero + '</div>' +
+            '<div class="edoc-secundario cifra">Emisión ' + doc.fechaEmision + '</div>' +
+            '<div class="edoc-secundario cifra">Recepción ' + doc.fecha + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="visor-partes">' +
+          '<div><div class="visor-bloque__rotulo">Receptor</div>' +
+            '<div style="font-weight:600">Al Noor Trading LLC</div>' +
+            '<div class="edoc-secundario">Registro fiscal <span class="cifra">100776655400003</span></div></div>' +
+          '<div><div class="visor-bloque__rotulo">Moneda</div><div class="cifra">' + doc.moneda + '</div></div>' +
+        '</div>' +
+        '<table class="edoc-tabla mt-3">' +
+          '<thead><tr><th scope="col">Descripción</th><th scope="col" class="text-right">Cantidad</th><th scope="col" class="text-right">Precio</th><th scope="col" class="text-right">Importe</th></tr></thead>' +
+          '<tbody><tr><td>Suministro según orden de compra</td><td class="cifra cifra-der">1</td>' +
+          '<td class="cifra cifra-der">' + D.dinero(doc.base) + '</td>' +
+          '<td class="cifra cifra-der">' + D.dinero(doc.base) + '</td></tr></tbody>' +
+        '</table>' +
+        '<div class="visor-totales mt-3">' +
+          '<div class="fila"><span>Base imponible</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.base) + '</span></div>' +
+          '<div class="fila"><span>IVA</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.iva) + '</span></div>' +
+          '<div class="fila total"><span>Total</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.total) + '</span></div>' +
+        '</div>' +
+      '</div>';
+    window.edocPintarNombres();
+    $('#modal-visor').modal('show');
+  }
+
+  function sello() {
+    var f = new Date();
+    return '2026-09-01 ' + String(f.getHours()).padStart(2, '0') + ':' + String(f.getMinutes()).padStart(2, '0');
+  }
+
+  document.getElementById('cuerpo-recibidos').addEventListener('click', function (e) {
+    var a = e.target.closest('[data-accion]');
+    if (!a) return;
+    e.preventDefault();
+    var i = +a.dataset.i;
+    actual = i;
+    var doc = docs[i];
+    var accion = a.dataset.accion;
+
+    if (accion === 'visor') return abrirVisor(doc);
+    if (accion === 'xml') return window.edocAvisar('Se descargaría el XML de <strong>' + doc.numero + '</strong>.');
+
+    if (accion === 'aprobar') {
+      document.getElementById('ap-numero').textContent = doc.numero;
+      document.getElementById('ap-emisor').textContent = doc.emisorLatino;
+      $('#modal-aprobar').modal('show');
+    }
+    if (accion === 'rechazar') {
+      document.getElementById('re-numero').textContent = doc.numero;
+      document.getElementById('re-emisor').textContent = doc.emisorLatino;
+      document.getElementById('re-motivo').value = '';
+      document.getElementById('re-detalle').value = '';
+      $('#modal-rechazar').modal('show');
+    }
+    if (accion === 'acuse') {
+      document.getElementById('ab-numero').textContent = doc.numero;
+      $('#modal-acuse').modal('show');
+    }
+  });
+
+  document.getElementById('confirmar-aprobar').addEventListener('click', function () {
+    docs[actual].respuesta = 'aprobado';
+    docs[actual].respuestaSello = sello();
+    $('#modal-aprobar').modal('hide');
+    pintar();
+    window.edocAvisar('Enviamos la aprobación <strong>MLS AP</strong> de ' + docs[actual].numero + '.', 'exito');
+  });
+
+  document.getElementById('confirmar-rechazar').addEventListener('click', function () {
+    var sel = document.getElementById('re-motivo');
+    if (!sel.value) { sel.focus(); return window.edocAvisar('Elige el motivo del rechazo. Es obligatorio.', 'advertencia'); }
+    docs[actual].respuesta = 'rechazado';
+    docs[actual].respuestaSello = sello();
+    docs[actual].motivo = sel.options[sel.selectedIndex].text;
+    $('#modal-rechazar').modal('hide');
+    pintar();
+    window.edocAvisar('Enviamos el rechazo <strong>MLS RE</strong> de ' + docs[actual].numero + '.', 'error');
+  });
+
+  document.getElementById('confirmar-acuse').addEventListener('click', function () {
+    docs[actual].respuesta = 'acuse';
+    docs[actual].respuestaSello = sello();
+    $('#modal-acuse').modal('hide');
+    pintar();
+    window.edocAvisar('Dejamos constancia de que llegó · <strong>MLS AB</strong>. No es una aprobación.', 'advertencia');
+  });
+
+  document.getElementById('forma-buscar').addEventListener('submit', function (e) {
+    e.preventDefault();
+    window.edocAvisar('Consulta lanzada. La maqueta devuelve siempre el mismo juego de documentos.');
+  });
+  document.querySelectorAll('[data-exportar]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.edocAvisar('Se inició un proceso para generar el archivo <strong>' + a.dataset.exportar +
+        '</strong>. Cuando esté listo te lo enviamos por correo.');
+    });
+  });
+  document.querySelectorAll('[data-descargar]').forEach(function (b) {
+    b.addEventListener('click', function () { window.edocAvisar('Se descargaría el ' + b.dataset.descargar + '.'); });
+  });
+
+  pintar();
+})();
+</script>
+</body>
+</html>

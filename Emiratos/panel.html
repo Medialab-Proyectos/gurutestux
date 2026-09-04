@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel de alcance · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+<style>
+  /* El panel no es el portal: se ve distinto a propósito, para que nadie lo
+     confunda con una pantalla de cliente si se proyecta por error. */
+  body { background: #16225e; }
+  .panel { max-width: 860px; margin: 0 auto; padding: 26px 18px 40px; width: 100%; }
+  .panel__cabecera { color: #fff; margin-bottom: 20px; }
+  .panel__cabecera h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+  .panel__cabecera p { color: rgba(255,255,255,.78); font-size: 13px; margin: 0; max-width: 68ch; }
+  .panel__aviso {
+    display: inline-flex; align-items: center; gap: 7px; margin-bottom: 14px;
+    background: rgba(168,198,52,.16); border: 1px solid rgba(168,198,52,.5);
+    color: #d6e79a; border-radius: 100px; padding: 4px 13px;
+    font-family: var(--fuente-titulos); font-size: 11px; font-weight: 600;
+    letter-spacing: .07em; text-transform: uppercase;
+  }
+  .grupo { font-family: var(--fuente-titulos); font-size: 11px; font-weight: 700;
+           letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris);
+           padding: 14px 16px 4px; }
+  .vista { display: flex; align-items: center; gap: 12px; padding: 9px 16px; border-top: 1px solid #f0f1f3; }
+  .vista:hover { background: #f7f9fc; }
+  .vista__rotulo { flex: 1; font-size: 13.5px; }
+  .vista__archivo { font-family: var(--fuente-cifras); font-size: 11px; color: #8a8a8a; }
+  .interruptor { position: relative; width: 40px; height: 22px; flex: none; }
+  .interruptor input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+  .interruptor span {
+    position: absolute; inset: 0; background: #c9cdcc; border-radius: 100px; transition: background .15s;
+    pointer-events: none;
+  }
+  .interruptor span::after {
+    content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px;
+    background: #fff; border-radius: 50%; transition: transform .15s;
+  }
+  .interruptor input:checked + span { background: var(--edoc-verde); }
+  .interruptor input:checked + span::after { transform: translateX(18px); }
+  .interruptor input:focus-visible + span { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
+  .enlace-caja {
+    font-family: var(--fuente-cifras); font-size: 11.5px; word-break: break-all;
+    background: #f4f5f7; border: 1px solid #dcdfe4; border-radius: var(--radio-chico);
+    padding: 9px 11px; color: #33383f;
+  }
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="panel__cabecera">
+    <span class="panel__aviso">Interno · no cuelga de ningún menú</span>
+    <h1>Panel de alcance</h1>
+    <p>Decide qué pantallas se enseñan. Lo que quede apagado sigue en el menú del portal, marcado
+    «en construcción», y muestra un aviso si alguien entra. Se llega aquí con <strong>Ctrl + Alt + P</strong>
+    o escribiendo <strong>/panel.html</strong>; ningún enlace del portal lleva a esta página.</p>
+  </div>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Pantallas</h2>
+      <div class="d-flex hueco-2 flex-wrap">
+        <button class="btn btn-edoc-terciario btn-sm" id="btn-entrega">Solo la entrega de hoy</button>
+        <button class="btn btn-edoc-terciario btn-sm" id="btn-todas">Encender todas</button>
+      </div>
+    </div>
+    <div id="lista"></div>
+    <div class="edoc-tablero__pie">
+      <div class="d-flex hueco-2 flex-wrap align-items-center">
+        <button class="btn btn-edoc-primario" id="btn-guardar">Guardar en este navegador</button>
+        <button class="btn btn-edoc-terciario" id="btn-restablecer">Restablecer</button>
+        <a class="btn btn-edoc-secundario" href="inicio.html" id="btn-ver">Ver el portal</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Capa de revisión</h2></div>
+    <label class="vista" style="border-top:0">
+      <span class="interruptor"><input type="checkbox" id="sw-notas"><span></span></span>
+      <span class="vista__rotulo">
+        <strong>Botón «Notas de diseño»</strong>
+        <div class="edoc-secundario">Pone el botón en la barra superior del portal. Desde ahí se encienden
+        y se apagan las notas: los recuadros que explican, junto a cada bloque, qué se decidió en la
+        reunión, qué sigue abierto y qué queda fuera del MVP.</div>
+      </span>
+    </label>
+    <div class="edoc-tablero__pie">
+      <div class="edoc-secundario">Con el interruptor apagado no hay botón ni notas, así que no pueden
+      aparecer por error en una presentación. Al apagarlo aquí, las notas que estuvieran encendidas se
+      apagan también.</div>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Enlace para compartir</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p class="edoc-secundario mb-2">Lo que guardas aquí vale solo en este navegador. Para que otra persona
+      vea esta misma selección, mándale este enlace: la lleva escrita.</p>
+      <div class="enlace-caja mb-3" id="enlace"></div>
+      <button class="btn btn-edoc-secundario btn-sm" id="btn-copiar">Copiar el enlace</button>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Para dejarlo fijo</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p class="mb-2">Guardar aquí y mandar el enlace resuelve una presentación. Si quieres cambiar lo que
+      ve todo el mundo por defecto, se toca una sola línea por pantalla en
+      <strong>assets/js/alcance.js</strong>: la marca <code>entrega</code>.</p>
+      <div class="enlace-caja">{ archivo: 'admin-usuarios.html', rotulo: 'Usuarios', grupo: 'Administración', entrega: <strong>true</strong> }</div>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.EDOC_ALCANCE;
+  var seleccion = A.habilitadas().slice();
+
+  function pintar() {
+    var grupos = [];
+    A.VISTAS.forEach(function (v) { if (grupos.indexOf(v.grupo) < 0) grupos.push(v.grupo); });
+    document.getElementById('lista').innerHTML = grupos.map(function (g) {
+      var filas = A.VISTAS.filter(function (v) { return v.grupo === g; }).map(function (v) {
+        var puesta = seleccion.indexOf(v.archivo) >= 0 ? ' checked' : '';
+        return '<label class="vista">' +
+          '<span class="interruptor"><input type="checkbox" data-archivo="' + v.archivo + '"' + puesta + '>' +
+          '<span></span></span>' +
+          '<span class="vista__rotulo">' + v.rotulo + '</span>' +
+          '<span class="vista__archivo">' + v.archivo + '</span>' +
+        '</label>';
+      }).join('');
+      return '<div class="grupo">' + g + '</div>' + filas;
+    }).join('');
+    pintarEnlace();
+  }
+
+  function pintarEnlace() {
+    var url = A.enlace(seleccion);
+    document.getElementById('enlace').textContent = url;
+    document.getElementById('btn-ver').href =
+      seleccion.indexOf('inicio.html') >= 0 ? 'inicio.html' : (seleccion[0] || 'inicio.html');
+  }
+
+  document.getElementById('lista').addEventListener('change', function (e) {
+    var caja = e.target.closest('input[data-archivo]');
+    if (!caja) return;
+    var archivo = caja.dataset.archivo;
+    var i = seleccion.indexOf(archivo);
+    if (caja.checked && i < 0) seleccion.push(archivo);
+    if (!caja.checked && i >= 0) seleccion.splice(i, 1);
+    pintarEnlace();
+  });
+
+  document.getElementById('btn-entrega').addEventListener('click', function () {
+    seleccion = A.porDefecto().slice(); pintar();
+  });
+  document.getElementById('btn-todas').addEventListener('click', function () {
+    seleccion = A.VISTAS.map(function (v) { return v.archivo; }); pintar();
+  });
+  document.getElementById('btn-guardar').addEventListener('click', function () {
+    A.guardar(seleccion);
+    avisar('Guardado. Este navegador enseñará ' + seleccion.length + ' pantalla' + (seleccion.length === 1 ? '' : 's') + '.');
+  });
+  document.getElementById('btn-restablecer').addEventListener('click', function () {
+    A.restablecer(); seleccion = A.porDefecto().slice(); pintar();
+    avisar('Restablecido a la entrega de hoy.');
+  });
+  document.getElementById('btn-copiar').addEventListener('click', function () {
+    var texto = document.getElementById('enlace').textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(texto).then(function () { avisar('Enlace copiado.'); },
+        function () { avisar('No se pudo copiar. Selecciónalo a mano.'); });
+    } else {
+      avisar('Tu navegador no deja copiar solo. Selecciónalo a mano.');
+    }
+  });
+
+  function avisar(texto) {
+    var caja = document.getElementById('aviso-panel');
+    if (!caja) {
+      caja = document.createElement('div');
+      caja.id = 'aviso-panel';
+      caja.setAttribute('role', 'status');
+      caja.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:2000;background:#fff;' +
+        'border:1px solid #cbdd8c;border-radius:6px;padding:11px 15px;font-size:13px;' +
+        'box-shadow:0 6px 20px rgba(0,0,0,.22);max-width:340px';
+      document.body.appendChild(caja);
+    }
+    caja.textContent = texto;
+    caja.style.opacity = '1';
+    clearTimeout(caja._t);
+    caja._t = setTimeout(function () { caja.style.transition = 'opacity .3s'; caja.style.opacity = '0'; }, 3200);
+  }
+
+  /* Este interruptor no enciende las notas: enciende el botón que las maneja.
+     Al apagarlo, la capa se apaga con él para no dejarla sin mando. */
+  var swNotas = document.getElementById('sw-notas');
+  try { swNotas.checked = window.localStorage.getItem('edoc-notas-herramienta') === '1'; }
+  catch (error) { /* nada */ }
+  swNotas.addEventListener('change', function () {
+    try {
+      window.localStorage.setItem('edoc-notas-herramienta', swNotas.checked ? '1' : '0');
+      if (!swNotas.checked) window.localStorage.setItem('edoc-notas', '0');
+    } catch (error) { /* nada */ }
+    avisar(swNotas.checked
+      ? 'El botón «Notas de diseño» ya aparece en la barra superior del portal.'
+      : 'Botón y notas fuera del portal.');
+  });
+
+  pintar();
+})();
+</script>
+</body>
+</html>

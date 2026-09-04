@@ -1,0 +1,40 @@
+# ==========================================================================
+# Este repositorio es PÚBLICO. Lo que está aquí no entra, y no es una
+# preferencia: es material que no puede quedar publicado.
+# ==========================================================================
+
+# --- Credenciales de sistemas reales ---------------------------------------
+acceso.txt
+*.credenciales
+.env
+.env.*
+
+# --- Perfil del navegador de validación ------------------------------------
+# 59 MB con cookies de sesión vivas de los portales de QA.
+_validacion/perfil/
+
+# --- Capturas y volcados de los portales internos --------------------------
+_validacion/salida/
+
+# --- Material interno de la empresa ----------------------------------------
+# La transcripción de la reunión, el brandbook y los mapas del portal. Los
+# mapas incluyen además una hoja de hallazgos con debilidades de sistemas en
+# producción. Si algún día tienen que ir a git, que sea a un repo privado.
+Reuniones/
+Manual de Marca/
+Bolivia/
+Francia/
+Conexion/
+CONTEXT.md
+
+# --- Guiones de validación --------------------------------------------------
+# Llevan escritas las direcciones de los entornos de QA.
+_validacion/
+
+# --- Ruido del sistema ------------------------------------------------------
+node_modules/
+.vercel/
+.DS_Store
+Thumbs.db
+*.stackdump
+_gen*.py

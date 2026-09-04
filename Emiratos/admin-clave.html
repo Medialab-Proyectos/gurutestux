@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cambiar Contraseña · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+</head>
+<body data-seccion="administracion" data-pagina="admin-clave.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra"><div>
+      <div class="edoc-miga"><span>Administración</span><span>Cambiar Contraseña</span></div>
+      <h1 class="edoc-titulo">Cambiar Contraseña</h1>
+      <p class="edoc-subtitulo">Cambias tu propia contraseña. Nada más: los datos del resto de usuarios se administran en Usuarios.</p>
+    </div></div>
+
+  <div class="row rejilla">
+    <div class="col-12 col-xl-6">
+      <section class="edoc-tablero">
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Tu contraseña</h2></div>
+        <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Contraseña actualizada.','exito')">
+          <div class="mb-3">
+            <label class="edoc-etiqueta" for="c1">Contraseña actual<span class="obligatorio">*</span></label>
+            <input type="password" class="form-control" id="c1" required></div>
+          <div class="mb-3">
+            <label class="edoc-etiqueta" for="c2">Contraseña nueva<span class="obligatorio">*</span></label>
+            <input type="password" class="form-control" id="c2" required>
+            <div class="edoc-ayuda">Al menos diez caracteres, con una mayúscula, un número y un símbolo.</div></div>
+          <div class="mb-4">
+            <label class="edoc-etiqueta" for="c3">Repite la contraseña nueva<span class="obligatorio">*</span></label>
+            <input type="password" class="form-control" id="c3" required></div>
+          <button class="btn btn-edoc-primario" type="submit">Guardar</button>
+        </form>
+      </section>
+    </div>
+    <div class="col-12 col-xl-6">
+      <div class="edoc-aviso edoc-aviso--info mb-3">
+        <div>Después de guardar te pediremos entrar otra vez. Es lo esperable y conviene decirlo antes, no después.</div>
+      </div>
+      <div class="nota nota--abierto" style="display:block">
+        <span class="nota__sello">Abierto</span>
+        <strong>Doble factor.</strong> Bolivia ya activa y desactiva MFA por usuario; Francia no lo tiene. Para Emiratos no
+        se habló, así que no se ha decidido. Si entra, vive aquí y no en una pantalla aparte.
+      </div>
+    </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+</body>
+</html>
