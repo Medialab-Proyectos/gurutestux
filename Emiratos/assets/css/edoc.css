@@ -135,7 +135,7 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .edoc-menu__item.activo { color: var(--edoc-azul); border-bottom-color: var(--edoc-verde); font-weight: 600; }
 .edoc-menu__item svg { width: 16px; height: 16px; stroke: currentColor; }
 .edoc-menu__panel {
-  display: none; position: absolute; top: 100%; left: 0; min-width: 292px;
+  display: none; position: absolute; top: 100%; left: 0; min-width: 336px;
   background: var(--edoc-tablero); border: 1px solid #c2c2c2; border-top: 0;
   box-shadow: var(--sombra-tablero); padding: 6px 0; z-index: 1040;
 }
@@ -144,12 +144,22 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .edoc-menu__contenedor:focus-within .edoc-menu__panel { display: block; }
 .edoc-menu__grupo {
   font-family: var(--fuente-titulos); font-size: 10.5px; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .1em; color: var(--edoc-gris);
-  padding: 9px 16px 4px;
+  text-transform: uppercase; letter-spacing: .1em; color: #6c6c6c;
+  padding: 11px 16px 5px;
 }
 .edoc-menu__enlace { display: block; padding: 7px 16px; color: var(--edoc-negro); font-size: 13px; }
 .edoc-menu__enlace:hover { background: #eef0f7; color: var(--edoc-azul); text-decoration: none; }
 .edoc-menu__enlace.activo { color: var(--edoc-azul); font-weight: 600; box-shadow: inset 3px 0 0 var(--edoc-verde); }
+/* Los hijos de una subsección van sangrados y con una guía. Sin esto, «Roles»
+   se lee al mismo nivel que «Cambiar Contraseña», que es de primer nivel. */
+.edoc-menu__hijos { position: relative; }
+.edoc-menu__hijos::before {
+  content: ""; position: absolute; left: 21px; top: 3px; bottom: 5px;
+  width: 1px; background: #dcdfe4;
+}
+.edoc-menu__hijos .edoc-menu__enlace { padding-left: 32px; }
+.edoc-menu__hijos .edoc-menu__enlace.activo { box-shadow: inset 3px 0 0 var(--edoc-verde); }
+
 .edoc-menu__enlace--posterior { color: var(--edoc-gris); font-style: italic; }
 .edoc-menu__enlace--por-ubicar { color: #8a5200; }
 .edoc-menu__enlace--por-ubicar:hover { background: #fff4e4; color: #8a5200; }
@@ -813,12 +823,20 @@ table.edoc-tabla.dataTable thead tr:last-child:not(:first-child) th { top: 28px;
 .edoc-menu-movil__seccion:first-child { border-top: 0; }
 a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 .edoc-menu-movil__seccion svg { width: 15px; height: 15px; }
+/* El rótulo del grupo se alinea con sus hermanos de primer nivel, no con la
+   sección: es un hijo de la sección, igual que ellos. */
 .edoc-menu-movil__grupo {
   font-family: var(--fuente-titulos); font-size: 10px; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .1em; color: var(--edoc-gris);
-  padding: 7px 16px 2px;
+  text-transform: uppercase; letter-spacing: .1em; color: #6c6c6c;
+  padding: 9px 16px 3px 26px;
 }
 .edoc-menu-movil__enlace { display: block; padding: 9px 16px 9px 26px; font-size: 13.5px; color: var(--edoc-negro); }
+.edoc-menu-movil__hijos { position: relative; }
+.edoc-menu-movil__hijos::before {
+  content: ""; position: absolute; left: 31px; top: 2px; bottom: 4px;
+  width: 1px; background: #dcdfe4;
+}
+.edoc-menu-movil__hijos .edoc-menu-movil__enlace { padding-left: 42px; }
 .edoc-menu-movil__enlace:hover { background: #eef0f7; color: var(--edoc-azul); text-decoration: none; }
 .edoc-menu-movil__enlace.activo { color: var(--edoc-azul); font-weight: 600; box-shadow: inset 3px 0 0 var(--edoc-verde); }
 

@@ -186,10 +186,10 @@
               icono(seccion.icono) + seccion.rotulo + '</a>' +
               '<div class="edoc-menu__panel">';
       seccion.grupos.forEach(function (grupo) {
-        if (grupo.titulo) html += '<div class="edoc-menu__grupo">' + grupo.titulo + '</div>';
+        var hijos = '';
         grupo.enlaces.forEach(function (enlace) {
           if (enlace.posterior) {
-            html += '<span class="edoc-menu__enlace edoc-menu__enlace--posterior" ' +
+            hijos += '<span class="edoc-menu__enlace edoc-menu__enlace--posterior" ' +
                     'title="Fuera del MVP. Se deja escrito para que no se pida como si fuera gratis.">' +
                     enlace.rotulo + ' · posterior</span>';
           } else {
@@ -200,10 +200,18 @@
               ? ' title="Va a Emiratos, pero falta decidir de qué menú cuelga."'
               : (obra ? ' title="Está en el alcance, pero no en la entrega de hoy."' : '');
             var cola = enlace.porUbicar ? ' · por ubicar' : (obra ? ' · en construcción' : '');
-            html += '<a class="edoc-menu__enlace' + act + dudoso + obra + '" href="' + enlace.url + '"' + pista + '>' +
+            hijos += '<a class="edoc-menu__enlace' + act + dudoso + obra + '" href="' + enlace.url + '"' + pista + '>' +
                     enlace.rotulo + cola + '</a>';
           }
         });
+        // Con título hay dos niveles: el rótulo del grupo y sus hijos sangrados.
+        // Sin título, los enlaces cuelgan directamente de la sección.
+        if (grupo.titulo) {
+          html += '<div class="edoc-menu__grupo">' + grupo.titulo + '</div>' +
+                  '<div class="edoc-menu__hijos">' + hijos + '</div>';
+        } else {
+          html += hijos;
+        }
       });
       html += '</div></div>';
     });
@@ -223,20 +231,26 @@
       html += '<div class="edoc-menu-movil__seccion' + (seccion.id === activo ? ' activo' : '') + '">' +
               icono(seccion.icono) + seccion.rotulo + '</div>';
       seccion.grupos.forEach(function (grupo) {
-        if (grupo.titulo) html += '<div class="edoc-menu-movil__grupo">' + grupo.titulo + '</div>';
+        var hijos = '';
         grupo.enlaces.forEach(function (enlace) {
           if (enlace.posterior) {
-            html += '<span class="edoc-menu-movil__enlace edoc-menu__enlace--posterior">' +
+            hijos += '<span class="edoc-menu-movil__enlace edoc-menu__enlace--posterior">' +
                     enlace.rotulo + ' · posterior</span>';
           } else {
             var act = document.body.dataset.pagina === enlace.url ? ' activo' : '';
             var dudoso = enlace.porUbicar ? ' edoc-menu__enlace--por-ubicar' : '';
             var obra = habilitada(enlace.url) ? '' : ' edoc-menu__enlace--obra';
             var cola = enlace.porUbicar ? ' · por ubicar' : (obra ? ' · en construcción' : '');
-            html += '<a class="edoc-menu-movil__enlace' + act + dudoso + obra + '" href="' + enlace.url + '">' +
+            hijos += '<a class="edoc-menu-movil__enlace' + act + dudoso + obra + '" href="' + enlace.url + '">' +
                     enlace.rotulo + cola + '</a>';
           }
         });
+        if (grupo.titulo) {
+          html += '<div class="edoc-menu-movil__grupo">' + grupo.titulo + '</div>' +
+                  '<div class="edoc-menu-movil__hijos">' + hijos + '</div>';
+        } else {
+          html += hijos;
+        }
       });
     });
     return html + '</div>';
