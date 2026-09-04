@@ -247,27 +247,19 @@ vercel --prod
 
 ### La maqueta va con contraseña
 
-`middleware.js` pone una puerta de acceso delante de todo. Se ejecuta en el borde de Vercel, antes
-de servir cualquier archivo, así que no se salta mirando el HTML: la petición no llega al archivo
-hasta que la autenticación es correcta.
+`middleware.js` y `vercel.json` viven en la **raíz del repositorio**, un nivel por encima de esta
+carpeta: Vercel solo detecta el middleware ahí. La puerta se ejecuta en el borde, antes de servir
+cualquier archivo, así que no se salta mirando el HTML.
 
-Credenciales por defecto —**cámbialas antes de repartir el enlace**, están a la vista en el código:
-
-| Usuario | Contraseña |
-|---|---|
-| `edoc` | `emiratos2026` |
-
-Para ponerles otras, en **Vercel › Settings › Environment Variables**:
+No hay contraseña por defecto: se definen en **Vercel › Settings › Environment Variables**.
 
 | Variable | Valor |
 |---|---|
 | `ACCESO_USUARIO` | el usuario que quieras |
 | `ACCESO_CLAVE` | la contraseña que quieras |
 
-Y volver a desplegar. Si no se definen, se usan las de la tabla de arriba.
+Sin ellas el sitio no deja entrar a nadie y explica qué falta. El repositorio es público: una
+contraseña escrita en el código sería una contraseña publicada.
 
 En local no corre: `python -m http.server` no ejecuta middleware, así que la maqueta se abre directa
 mientras trabajas. Eso es lo que quieres en tu máquina.
-
-`vercel.json` fija además caché para `assets/` y `noindex` para todo, porque es una maqueta interna y
-no debería aparecer en buscadores.

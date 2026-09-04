@@ -14,17 +14,21 @@ Y abrir <http://127.0.0.1:8000/>.
 
 ## Despliegue en Vercel
 
-Sitio estático, sin build. Al conectar el repositorio hay que poner:
+Sitio estático, sin build y **sin ajustes que tocar**: se despliega la raíz del repositorio tal cual.
+`vercel.json` manda la raíz a `/Emiratos/` y `middleware.js` pone la puerta de acceso delante de todo.
 
-| Ajuste | Valor |
+Lo único obligatorio son dos variables de entorno, en **Settings › Environment Variables**:
+
+| Variable | Valor |
 |---|---|
-| **Root Directory** | `Emiratos` |
 | `ACCESO_USUARIO` | el usuario de acceso a la maqueta |
 | `ACCESO_CLAVE` | la contraseña de acceso a la maqueta |
 
-Las dos variables son obligatorias. `Emiratos/middleware.js` pone una puerta de acceso delante de
-todo el sitio y, si no están definidas, no deja entrar a nadie: este repositorio es público y una
-contraseña escrita en el código sería una contraseña publicada.
+Sin ellas el sitio no deja entrar a nadie y responde explicando qué falta. Es a propósito: este
+repositorio es público, y una contraseña escrita en el código sería una contraseña publicada.
+
+**Los dos archivos tienen que quedarse en la raíz.** Vercel solo detecta el middleware en la raíz de
+lo que despliega; dentro de `Emiratos/` no se ejecuta y el sitio queda abierto sin que se note.
 
 ## Qué no está aquí
 

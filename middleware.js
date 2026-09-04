@@ -8,6 +8,10 @@
  * no hay forma de saltárselo mirando el HTML: la petición no llega al archivo
  * hasta que la autenticación es correcta.
  *
+ * Vive en la RAÍZ del repositorio a propósito: Vercel solo detecta el
+ * middleware en la raíz del directorio que despliega. Dentro de Emiratos/ no se
+ * ejecutaba, y el prototipo quedaba abierto sin que se notara.
+ *
  * Credenciales: se ponen en Vercel › Settings › Environment Variables como
  * ACCESO_USUARIO y ACCESO_CLAVE. Aquí no hay ninguna por defecto a propósito:
  * este repositorio es público, y una contraseña escrita en el código es una
