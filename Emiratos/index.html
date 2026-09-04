@@ -14,18 +14,19 @@
 <body>
 <div class="edoc-acceso">
   <aside class="edoc-acceso__lienzo">
-    <img src="assets/img/edoc-logo-neg.svg" alt="eDoc · Facturación Electrónica" style="height:56px;position:relative;z-index:2">
-    <h1 style="font-size:30px;font-weight:600;max-width:20ch;position:relative;z-index:2">Portal de consulta · Emiratos Árabes Unidos</h1>
+    <img class="edoc-acceso__marca" src="assets/img/edoc-logo-neg.svg" alt="eDoc · Facturación Electrónica">
+    <h1 style="font-size:30px;font-weight:600;max-width:20ch;position:relative;z-index:2">Portal Consulta</h1>
+    <p style="position:relative;z-index:2;font-family:var(--fuente-titulos);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.72);margin:-8px 0 4px">Emiratos Árabes Unidos</p>
     <p style="max-width:48ch;color:rgba(255,255,255,.82);position:relative;z-index:2">Somos tu proveedor de servicios acreditado ante la Federal Tax Authority. Entra para consultar tus documentos emitidos, responder los recibidos y administrar tu conexión.</p>
-    <p style="position:relative;z-index:2;font-size:12px;color:rgba(255,255,255,.6)">GuruSoft S.A. © 2026</p>
+    <p style="position:relative;z-index:2;font-size:12px;color:rgba(255,255,255,.6)">GuruSoft S.A. © 2026 · <span class="cifra">v0.1</span></p>
   </aside>
 
   <div class="edoc-acceso__panel">
     <div class="edoc-acceso__tarjeta">
       <div class="edoc-tablero">
         <div class="edoc-tablero__cuerpo">
-          <h2 class="edoc-titulo mb-1" style="font-size:19px">Entrar</h2>
-          <p class="edoc-secundario mb-4">Usa las credenciales que te enviamos por correo.</p>
+          <h2 class="edoc-titulo mb-1" style="font-size:20px">Bienvenido</h2>
+          <p class="edoc-secundario mb-4">Entra con las credenciales que te enviamos por correo.</p>
           <form id="forma-acceso" novalidate>
             <div class="mb-3">
               <label class="edoc-etiqueta" for="usuario">Usuario<span class="obligatorio">*</span></label>
@@ -34,11 +35,6 @@
             <div class="mb-3">
               <label class="edoc-etiqueta" for="clave">Contraseña<span class="obligatorio">*</span></label>
               <input type="password" class="form-control" id="clave" value="demostracion" autocomplete="current-password" required>
-            </div>
-            <div class="mb-3">
-              <label class="edoc-etiqueta" for="trn">Registro fiscal de la empresa<span class="obligatorio">*</span></label>
-              <input class="form-control cifra" id="trn" value="100776655400003" inputmode="numeric" required>
-              <div class="edoc-ayuda">El TRN de quince dígitos con el que estás dado de alta.</div>
             </div>
             <div class="mb-4">
               <label class="edoc-etiqueta" for="idioma">Idioma</label>
@@ -59,6 +55,14 @@
             </div>
 
             <button class="btn btn-edoc-primario w-100" type="submit">Entrar</button>
+
+            <div class="nota nota--decidido mt-3">
+              <span class="nota__sello">Decidido</span>
+              <strong>Fuera el registro fiscal de la empresa.</strong> Se entra con usuario y contraseña. Si ese usuario
+              tiene una sola empresa, se entra directo; si tiene varias, se le pregunta cuál después de identificarse.
+              Pedirle el TRN de quince dígitos cada vez era hacerle trabajo al cliente para un dato que nosotros ya
+              tenemos.
+            </div>
             <div class="d-flex justify-content-between mt-3" style="font-size:12.5px">
               <a href="#" id="olvide">¿Olvidaste tu contraseña?</a>
               <a href="onboarding.html">Vengo de EmaraTax</a>
@@ -73,7 +77,19 @@
               <span>·</span>
               <a href="#" data-legal="condiciones">Términos y condiciones</a>
             </div>
+            <div class="edoc-version">eDoc Consulta AE · <span class="cifra">v0.1</span></div>
           </form>
+        </div>
+      </div>
+
+      <!-- Segundo paso · solo si el usuario tiene más de una empresa -->
+      <div class="edoc-tablero" id="paso-empresa" hidden>
+        <div class="edoc-tablero__cuerpo">
+          <h2 class="edoc-titulo mb-1" style="font-size:20px">¿Con qué empresa entras?</h2>
+          <p class="edoc-secundario mb-4">Tu usuario tiene varias empresas asociadas. Elige una para continuar; podrás
+          cambiar de empresa sin volver a entrar.</p>
+          <div id="lista-empresas"></div>
+          <button class="btn btn-edoc-terciario w-100 mt-3" type="button" id="volver-acceso">Volver</button>
         </div>
       </div>
 
@@ -121,8 +137,52 @@
     return 'inicio.html?vistas=' + A.porDefecto().join(',');
   }
 
+  /* Empresas asociadas al usuario. En el portal real salen de la tabla que
+     relaciona usuario y empresa; aquí van dos para poder enseñar el paso. */
+  var EMPRESAS = [
+    { nombre: 'Al Noor Trading LLC', arabe: 'النور للتجارة ذ.م.م', trn: '100776655400003', emirato: 'Dubái' },
+    { nombre: 'Al Noor Logistics FZE', arabe: 'النور للخدمات اللوجستية', trn: '100776655400012', emirato: 'Sharja' }
+  ];
+
+  var tarjetaAcceso = document.getElementById('forma-acceso').closest('.edoc-tablero');
+  var pasoEmpresa = document.getElementById('paso-empresa');
+
   document.getElementById('forma-acceso').addEventListener('submit', function (e) {
-    e.preventDefault(); location.href = destinoDeEntrada();
+    e.preventDefault();
+    // Con una sola empresa no hay nada que preguntar: se entra directo.
+    if (EMPRESAS.length < 2) { location.href = destinoDeEntrada(); return; }
+    document.getElementById('lista-empresas').innerHTML = EMPRESAS.map(function (em, i) {
+      return '<button type="button" class="edoc-empresa-opcion" data-empresa="' + i + '">' +
+        '<span class="edoc-empresa-opcion__icono">' +
+          '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" ' +
+          'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          '<path d="M3.4 17V4.2a1 1 0 0 1 1-1h6.2a1 1 0 0 1 1 1V17"/>' +
+          '<path d="M11.6 8.4h4a1 1 0 0 1 1 1V17"/><path d="M2.4 17h15.2"/>' +
+          '<path d="M5.8 6.4h3.4M5.8 9.4h3.4M5.8 12.4h3.4"/></svg>' +
+        '</span>' +
+        '<span class="edoc-empresa-opcion__textos">' +
+          '<span class="edoc-empresa-opcion__nombre">' + em.nombre + '</span>' +
+          '<span class="edoc-empresa-opcion__dato"><span class="cifra">' + em.trn + '</span> · ' + em.emirato + '</span>' +
+        '</span>' +
+        '<span class="edoc-empresa-opcion__flecha">›</span>' +
+      '</button>';
+    }).join('');
+    tarjetaAcceso.hidden = true;
+    pasoEmpresa.hidden = false;
+  });
+
+  document.getElementById('lista-empresas').addEventListener('click', function (e) {
+    var boton = e.target.closest('[data-empresa]');
+    if (!boton) return;
+    try {
+      window.localStorage.setItem('edoc-empresa', EMPRESAS[+boton.dataset.empresa].nombre);
+    } catch (error) { /* nada */ }
+    location.href = destinoDeEntrada();
+  });
+
+  document.getElementById('volver-acceso').addEventListener('click', function () {
+    pasoEmpresa.hidden = true;
+    tarjetaAcceso.hidden = false;
   });
   document.querySelectorAll('[data-legal]').forEach(function (a) {
     a.addEventListener('click', function (e) {

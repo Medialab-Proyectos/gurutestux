@@ -45,7 +45,9 @@
        universal para «en qué máquina estoy», sin tener que leer «entorno». */
     servidor: '<rect x="3" y="3.6" width="14" height="5" rx="1"/><rect x="3" y="11.4" width="14" height="5" rx="1"/>' +
               '<path d="M6 6.1h.01M6 13.9h.01"/>',
-    perfil:   '<circle cx="10" cy="6.6" r="3.1"/><path d="M4.2 16.6c0-2.9 2.6-4.7 5.8-4.7s5.8 1.8 5.8 4.7"/>'
+    perfil:   '<circle cx="10" cy="6.6" r="3.1"/><path d="M4.2 16.6c0-2.9 2.6-4.7 5.8-4.7s5.8 1.8 5.8 4.7"/>',
+    campana:  '<path d="M15.4 13.4V9a5.4 5.4 0 1 0-10.8 0v4.4L3.2 15.4h13.6z"/>' +
+              '<path d="M8.2 15.4a1.8 1.8 0 0 0 3.6 0"/>'
   };
 
   /* La bandera va con sus colores, no con el trazo de los demás iconos, y
@@ -75,9 +77,9 @@
         { titulo: 'Roles y Usuarios', enlaces: [
             { rotulo: 'Roles', url: 'admin-roles.html' },
             { rotulo: 'Usuarios', url: 'admin-usuarios.html' } ] },
-        { titulo: 'Actualización Datos empresas', enlaces: [
-            { rotulo: 'Actualización datos de empresa', url: 'admin-empresa.html' },
-            { rotulo: 'Actualización información de empresa', url: 'admin-contactos.html' } ] },
+        { titulo: 'Mi empresa', enlaces: [
+            { rotulo: 'Datos fiscales', url: 'admin-empresa.html' },
+            { rotulo: 'Contactos', url: 'admin-contactos.html' } ] },
         { enlaces: [
             { rotulo: 'Credenciales de consumo Servicio eDoc', url: 'admin-credenciales.html' },
             { rotulo: 'Alertas y comunicados', url: 'admin-alertas.html' },
@@ -93,6 +95,9 @@
       ] },
     { id: 'recepcion', rotulo: 'Recepción', icono: 'recepcion', grupos: [
         { titulo: 'Reportes', enlaces: [ { rotulo: 'Documentos Recibidos', url: 'recibidos.html' } ] },
+        // Ubicación decidida en la revisión: traer un documento de fuera hacia
+        // dentro es importar, no un reporte.
+        { titulo: 'Importar', enlaces: [ { rotulo: 'Cargar XML', posterior: true } ] },
         { titulo: 'Workflow Aprobación', enlaces: [ { rotulo: 'Gestión proveedores', posterior: true } ] }
       ] }
   ];
@@ -141,7 +146,7 @@
       '<div class="edoc-contexto">' +
         '<span class="edoc-ambiente edoc-ambiente--' + ambiente.toLowerCase() + '" ' +
           'title="Estás conectado al ambiente de ' + ambiente + '">' +
-          icono('servidor') + '<span>' + ambiente + '</span></span>' +
+          icono('servidor') + '<span>' + rotuloAmbiente(ambiente) + '</span></span>' +
         (quien ? '<span class="edoc-empresa"><span class="edoc-empresa__textos">' +
                  '<span class="edoc-empresa__nombre">' + quien + '</span></span></span>' : '') +
       '</div>' +
@@ -174,7 +179,7 @@
       '<div class="edoc-contexto">' +
         '<span class="edoc-ambiente edoc-ambiente--' + ambiente.toLowerCase() + '" ' +
           'title="Estás conectado al ambiente de ' + ambiente + '">' +
-          icono('servidor') + '<span>' + ambiente + '</span></span>' +
+          icono('servidor') + '<span>' + rotuloAmbiente(ambiente) + '</span></span>' +
         '<span class="edoc-empresa" title="' + empresa + ' · ' + usuario + '">' +
           icono('empresa') +
           '<span class="edoc-empresa__textos">' +
@@ -207,6 +212,25 @@
           'stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
         '<a class="edoc-btn-util edoc-btn-util--icono" href="#" data-sin-destino ' +
           'title="Emiratos Árabes Unidos · cambiar de portal">' + bandera() + '</a>' +
+        '<div class="dropdown">' +
+          '<button type="button" class="edoc-btn-util edoc-btn-util--icono edoc-campana" ' +
+            'data-toggle="dropdown" title="Notificaciones" aria-label="Notificaciones · 2 sin leer">' +
+            icono('campana') + '<span class="edoc-campana__punto">2</span></button>' +
+          '<ul class="dropdown-menu dropdown-menu-right edoc-notificaciones">' +
+            '<li><h6 class="dropdown-header">Notificaciones</h6></li>' +
+            '<li><a class="dropdown-item edoc-notificacion" href="recibidos.html">' +
+              '<span class="edoc-notificacion__titulo">Dos documentos esperan tu respuesta</span>' +
+              '<span class="edoc-notificacion__detalle">Emirates Global Aluminium y Al Ain Water Company.</span>' +
+              '<span class="edoc-notificacion__sello">hace 2 horas</span></a></li>' +
+            '<li><a class="dropdown-item edoc-notificacion" href="admin-alertas.html">' +
+              '<span class="edoc-notificacion__titulo">Mantenimiento programado</span>' +
+              '<span class="edoc-notificacion__detalle">El sábado 6 de septiembre, de 02:00 a 04:00.</span>' +
+              '<span class="edoc-notificacion__sello">ayer</span></a></li>' +
+            '<li><hr class="dropdown-divider"></li>' +
+            '<li><a class="dropdown-item edoc-notificaciones__todas" href="admin-alertas.html">' +
+              'Ver todas</a></li>' +
+          '</ul>' +
+        '</div>' +
         '<a class="edoc-btn-util edoc-btn-util--icono" href="#" data-sin-destino ' +
           'title="Acceso al soporte">' + icono('soporte') + '</a>' +
         '<div class="dropdown">' +
@@ -231,6 +255,14 @@
      con data-empresa, data-usuario o data-ambiente en el <body>. */
   function cuerpoDato(nombre, porDefecto) {
     return document.body.dataset[nombre] || porDefecto;
+  }
+
+  /* El código es el que usa el equipo; el nombre entre paréntesis es para quien
+     entra al portal y no tiene por qué saber qué significa «QA». */
+  var NOMBRE_AMBIENTE = { QA: 'Calidad', PRO: 'Producción', PROD: 'Producción', DEV: 'Desarrollo' };
+  function rotuloAmbiente(codigo) {
+    var nombre = NOMBRE_AMBIENTE[codigo.toUpperCase()];
+    return nombre ? codigo + ' <span class="edoc-ambiente__nombre">(' + nombre + ')</span>' : codigo;
   }
 
   function iniciales(nombre) {

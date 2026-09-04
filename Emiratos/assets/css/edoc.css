@@ -664,8 +664,8 @@ table.edoc-tabla.dataTable thead .sorting_desc { padding-right: 19px; }
 table.edoc-tabla.dataTable thead .sorting::after,
 table.edoc-tabla.dataTable thead .sorting_asc::after,
 table.edoc-tabla.dataTable thead .sorting_desc::after { right: 6px; }
-table.edoc-tabla thead th { padding-left: 8px; padding-right: 8px; }
-table.edoc-tabla tbody td { padding-left: 8px; padding-right: 8px; }
+table.edoc-tabla thead th { padding-left: 7px; padding-right: 7px; }
+table.edoc-tabla tbody td { padding-left: 7px; padding-right: 7px; }
 
 /* `custom-select` de Bootstrap 4 trae su propia flecha; el relleno de la
    izquierda no puede pisarla ni dejar que asome la del navegador. */
@@ -744,7 +744,7 @@ a:focus-visible, button:focus-visible, .edoc-accion:focus-visible,
    el enlace al visor: es la afordancia natural y ahorra un botón por fila. */
 .edoc-tabla .edoc-accion { width: 27px; height: 27px; }
 .edoc-tabla .edoc-accion svg { width: 15px; height: 15px; }
-.edoc-acciones-fila { gap: 3px; }
+.edoc-acciones-fila { gap: 2px; }
 a.edoc-clave-doc { text-decoration: none; border-bottom: 1px dotted #9aa8d0; }
 a.edoc-clave-doc:hover { color: var(--azul-2); border-bottom-color: var(--azul-2); text-decoration: none; }
 .edoc-tabla td [data-nombre-latino] { display: inline-block; min-width: 128px; }
@@ -979,3 +979,72 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 /* El selector de idioma, con el locale y el chevron, igual que en Francia. */
 .edoc-btn-util--idioma { padding: 6px 12px 6px 13px; gap: 8px; }
 .edoc-btn-util__chevron { width: 9px; height: 6px; opacity: .8; flex: none; }
+
+/* --- 27. Acceso · elegir empresa -----------------------------------------
+   Sustituye al campo del registro fiscal: el cliente no tiene que escribir un
+   número de quince dígitos que nosotros ya tenemos. Con una sola empresa este
+   paso no aparece.                                                          */
+.edoc-empresa-opcion {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+  background: #fff; border: 1px solid #d6d9de; border-radius: var(--radio);
+  padding: 12px 14px; margin-bottom: 9px; color: var(--edoc-negro);
+  transition: border-color .15s, background .15s;
+}
+.edoc-empresa-opcion:hover { border-color: var(--edoc-azul); background: #f7f9fc; }
+.edoc-empresa-opcion:focus-visible { outline: 2px solid var(--edoc-verde); outline-offset: 2px; }
+.edoc-empresa-opcion__icono {
+  width: 38px; height: 38px; border-radius: 50%; background: #eef0f7;
+  display: grid; place-items: center; color: var(--edoc-azul); flex: none;
+}
+.edoc-empresa-opcion__icono svg { width: 19px; height: 19px; }
+.edoc-empresa-opcion__textos { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.edoc-empresa-opcion__nombre {
+  font-family: var(--fuente-titulos); font-weight: 600; font-size: 14px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.edoc-empresa-opcion__dato { font-size: 11.5px; color: #6d6d6d; }
+.edoc-empresa-opcion__flecha { font-size: 20px; color: var(--edoc-gris); flex: none; }
+
+/* La versión, al pie de la tarjeta de acceso: es lo primero que pide soporte. */
+.edoc-version {
+  text-align: center; margin-top: 10px; font-size: 11px; color: var(--edoc-gris);
+}
+
+/* --- 28. Notificaciones ---------------------------------------------------
+   Los avisos que hoy salen en un popup que se desvanece necesitan un sitio
+   donde queden: si el usuario aparta la vista, el aviso no puede perderse.   */
+.edoc-campana { position: relative; }
+.edoc-campana__punto {
+  position: absolute; top: -3px; right: -3px; min-width: 16px; height: 16px;
+  padding: 0 4px; border-radius: 100px; background: var(--senal-error); color: #fff;
+  font-family: var(--fuente-titulos); font-size: 10px; font-weight: 700;
+  display: grid; place-items: center; box-shadow: 0 0 0 2px var(--edoc-azul);
+}
+.edoc-notificaciones { min-width: 320px; max-width: 360px; padding-bottom: 0; }
+.edoc-notificacion { display: block; white-space: normal; padding: 10px 14px; border-bottom: 1px solid #f0f1f3; }
+.edoc-notificacion:last-of-type { border-bottom: 0; }
+.edoc-notificacion__titulo { display: block; font-weight: 700; font-size: 13px; color: var(--edoc-negro); }
+.edoc-notificacion__detalle { display: block; font-size: 12px; color: #5f5f5f; }
+.edoc-notificacion__sello { display: block; font-size: 11px; color: var(--edoc-gris); margin-top: 3px; }
+.edoc-notificaciones__todas {
+  justify-content: center; font-family: var(--fuente-titulos); font-weight: 600;
+  font-size: 12.5px; color: var(--edoc-azul); background: #f7f9fc;
+}
+
+/* El icono de ver PDF va en su color de archivo, como manda el manual. */
+.edoc-accion--pdf { border-color: #d9a294; color: var(--archivo-pdf); }
+.edoc-accion--pdf:hover { background: var(--archivo-pdf); color: #fff; border-color: var(--archivo-pdf); }
+
+/* La marca del acceso crece con el hueco disponible: es lo primero que se ve y
+   no puede quedar por debajo del texto que la acompaña. */
+.edoc-acceso__marca {
+  position: relative; z-index: 2;
+  height: clamp(64px, 9vw, 112px);
+  width: auto; max-width: 100%; margin-bottom: 6px;
+  /* Alineada con el texto que la acompaña, no centrada en la columna. */
+  align-self: flex-start;
+}
+@media (max-width: 900px) { .edoc-acceso__marca { height: clamp(58px, 14vw, 90px); } }
+
+/* El nombre del ambiente acompaña al código, sin robarle protagonismo. */
+.edoc-ambiente__nombre { font-weight: 600; letter-spacing: .04em; opacity: .78; }

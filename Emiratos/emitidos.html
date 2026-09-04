@@ -122,7 +122,6 @@
           <button class="btn btn-edoc-secundario btn-sm dropdown-toggle" data-toggle="dropdown" type="button">Exportar</button>
           <ul class="dropdown-menu dropdown-menu-right">
             <li><h6 class="dropdown-header">Formato</h6></li>
-            <li><a class="dropdown-item" href="#" data-exportar="XLSX"><span class="icono-xls" data-icono="xls"></span> Hoja de cálculo · XLSX</a></li>
             <li><a class="dropdown-item" href="#" data-exportar="CSV"><span class="icono-xls" data-icono="xls"></span> Texto separado por comas · CSV</a></li>
             <li><a class="dropdown-item" href="#" data-exportar="ZIP"><span class="icono-zip" data-icono="zip"></span> Resultados y XML · ZIP</a></li>
           </ul>
@@ -168,6 +167,13 @@
     una sola columna, y hoy «aprobado» no dice quién aprobó. Como el código 2 significa aprobado para todas las entidades,
     unificarlas obligaría a inventar códigos 103 en adelante. En Emiratos se separan desde el principio: cuatro columnas,
     una por entidad, cada una con su propio estado y su propio motivo cuando rechaza.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    <strong>Exportar sale en CSV, no en Excel.</strong> Un XLSX obliga a arrastrar una librería de hojas de cálculo, y eso
+    ata el despliegue —de nube y de sistema operativo— por un formato que el usuario abre igual en Excel. El XLSX se
+    retoma después del MVP, con una librería moderna que aguante volumen.
   </div>
 
   <div class="nota nota--fuera">
@@ -243,7 +249,7 @@
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Visor de la factura <span id="visor-numero" class="ml-2" style="opacity:.75"></span></h5>
+          <h5 class="modal-title">Documento <span id="visor-numero" class="ml-2" style="opacity:.75"></span></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body" style="background:#eef0f2">
@@ -309,6 +315,8 @@
     return '<tr data-fila="' + i + '">' +
       '<td class="col-acciones">' +
         '<div class="edoc-acciones-fila">' +
+          '<a class="edoc-accion edoc-accion--pdf" href="#" data-accion="visor" data-i="' + i + '" ' +
+            'title="Ver PDF" aria-label="Ver el PDF de ' + doc.numero + '">' + ico('pdf') + '</a>' +
           '<a class="edoc-accion" href="#" data-accion="estados" data-i="' + i + '" ' +
             'title="Ver estados de las cuatro entidades" aria-label="Ver los estados de ' + doc.numero + '">' + ico('estados') + '</a>' +
           '<a class="edoc-accion edoc-accion--gris" href="#" data-accion="xml" data-i="' + i + '" ' +
@@ -316,7 +324,7 @@
         '</div>' +
       '</td>' +
       '<td><a class="edoc-clave-doc" href="#" data-accion="visor" data-i="' + i + '" ' +
-        'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
+        'title="Ver el PDF del documento">' + doc.numero + '</a></td>' +
       '<td class="cifra">' + doc.fecha + '</td>' +
       '<td>' + doc.tipo + '</td>' +
       '<td><span data-nombre-latino="' + doc.receptorLatino + '" data-nombre-arabe="' + doc.receptorArabe + '"></span>' +
