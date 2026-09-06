@@ -10,7 +10,7 @@ window.EDOC = (function () {
   /* Los cuatro corners. El código 2 significa «aprobado» para todas las
      entidades; por eso la columna no puede ser una sola. */
   var CORNERS = [
-    { clave: 'C2', nombre: 'eDoc',                  quien: 'Plataforma emisora acreditada · nosotros' },
+    { clave: 'C2', nombre: 'eDoc',                  quien: 'Tu proveedor de servicios acreditado · ASP' },
     { clave: 'C5', nombre: 'Autoridad',             quien: 'Federal Tax Authority · gobierno' },
     { clave: 'C3', nombre: 'Plataforma receptora',  quien: 'El ASP del comprador' },
     { clave: 'C4', nombre: 'Destinatario',          quien: 'El comprador · destinatario final' }

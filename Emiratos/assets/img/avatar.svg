@@ -1,18 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Avatar">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Avatar del usuario">
   <!--
-    Avatar por defecto del portal. Silueta neutra, sin rasgos: representa a
-    cualquier persona sin suponer nada de ella. Los colores son los de marca
-    —verde lima #A8C634 sobre azul #001174— para que se distinga del fondo
-    azul del encabezado. Trazo simple y sin recargos, como pide el manual.
+    Avatar por defecto del portal: un retrato ilustrado, no una silueta. Se
+    dibuja plano y con rasgos mínimos para que se lea a 34 px, que es el tamaño
+    real en la barra superior. No representa a nadie concreto: es lo que se ve
+    mientras el usuario no sube su propia foto.
+
+    Los trazos son simples y sin recargos, como pide el manual, y el fondo y la
+    ropa usan los colores de marca para que destaque sobre el azul del
+    encabezado.
   -->
   <defs>
-    <clipPath id="avatarRecorte">
-      <circle cx="32" cy="32" r="32"/>
-    </clipPath>
+    <clipPath id="avatarRecorte"><circle cx="32" cy="32" r="32"/></clipPath>
   </defs>
+
   <g clip-path="url(#avatarRecorte)">
-    <circle cx="32" cy="32" r="32" fill="#A8C634"/>
-    <circle cx="32" cy="25.5" r="10.5" fill="#001174"/>
-    <path d="M32 38.5c-11.4 0-20.6 7.2-20.6 16.1V64h41.2v-9.4c0-8.9-9.2-16.1-20.6-16.1Z" fill="#001174"/>
+    <circle cx="32" cy="32" r="32" fill="#E9EDF8"/>
+
+    <!-- Hombros y ropa -->
+    <path d="M32 40c-11.6 0-21 7.3-21 16.4V64h42v-7.6C53 47.3 43.6 40 32 40Z" fill="#001174"/>
+    <path d="M32 40c-2.6 0-5.1.4-7.4 1.1L32 50l7.4-8.9A26 26 0 0 0 32 40Z" fill="#A8C634"/>
+
+    <!-- Cuello -->
+    <path d="M26.6 32.4h10.8v10.2a5.4 5.4 0 0 1-10.8 0V32.4Z" fill="#D79E76"/>
+
+    <!-- Cabeza -->
+    <path d="M32 11c7.5 0 13 5.6 13 13.2v4.3c0 7.3-5.8 13.2-13 13.2s-13-5.9-13-13.2v-4.3C19 16.6 24.5 11 32 11Z" fill="#EBB48B"/>
+
+    <!-- Pelo -->
+    <path d="M32 9.4c8 0 13.9 5.5 13.9 13.4 0 1.9-.3 3.6-.8 5.1l-2.6-.5c.3-2.3-.2-4.2-1.3-5.5-1.7 1.4-5 2.2-9.2 2.2-4.3 0-7.5-.8-9.2-2.2-1.1 1.3-1.6 3.2-1.3 5.5l-2.6.5a17 17 0 0 1-.8-5.1C18.1 14.9 24 9.4 32 9.4Z" fill="#2F2620"/>
+
+    <!-- Ojos -->
+    <circle cx="26.4" cy="27.6" r="1.9" fill="#2F2620"/>
+    <circle cx="37.6" cy="27.6" r="1.9" fill="#2F2620"/>
+
+    <!-- Boca -->
+    <path d="M28.4 34.6a4.4 4.4 0 0 0 7.2 0" fill="none" stroke="#8C5A3C"
+          stroke-width="1.9" stroke-linecap="round"/>
   </g>
 </svg>

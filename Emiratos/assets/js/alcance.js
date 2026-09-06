@@ -16,6 +16,7 @@ window.EDOC_ALCANCE = (function () {
     { archivo: 'inicio.html',              rotulo: 'Inicio',                                  grupo: 'Portal',        entrega: true },
     { archivo: 'emitidos.html',            rotulo: 'Documentos Emitidos',                     grupo: 'Portal',        entrega: true },
     { archivo: 'recibidos.html',           rotulo: 'Documentos Recibidos',                    grupo: 'Portal',        entrega: true },
+    { archivo: 'reportes-generados.html',  rotulo: 'Reportes generados · exportación masiva',  grupo: 'Portal',        entrega: true },
     { archivo: 'bases.html',               rotulo: 'Bases de diseño',                         grupo: 'Diseño',        entrega: false },
     { archivo: 'admin-clave.html',         rotulo: 'Cambiar Contraseña',                      grupo: 'Administración', entrega: false },
     { archivo: 'admin-roles.html',         rotulo: 'Roles',                                   grupo: 'Administración', entrega: false },
@@ -32,6 +33,11 @@ window.EDOC_ALCANCE = (function () {
   ];
 
   var LLAVE = 'edoc-vistas';
+  /* Sube cada vez que cambia la lista de pantallas. Una selección guardada con
+     una versión anterior se descarta: si no, una pantalla nueva no aparecería
+     jamás en el navegador de quien ya había guardado. */
+  var VERSION = '2';
+  var LLAVE_VERSION = 'edoc-vistas-version';
 
   function porDefecto() {
     return VISTAS.filter(function (v) { return v.entrega; }).map(function (v) { return v.archivo; });
@@ -52,6 +58,11 @@ window.EDOC_ALCANCE = (function () {
       }).map(function (v) { return v.archivo; });
     }
     try {
+      if (window.localStorage.getItem(LLAVE_VERSION) !== VERSION) {
+        window.localStorage.removeItem(LLAVE);
+        window.localStorage.removeItem(LLAVE_VERSION);
+        return porDefecto();
+      }
       var guardado = window.localStorage.getItem(LLAVE);
       if (guardado) {
         var lista = JSON.parse(guardado);
@@ -67,11 +78,17 @@ window.EDOC_ALCANCE = (function () {
   }
 
   function guardar(lista) {
-    try { window.localStorage.setItem(LLAVE, JSON.stringify(lista)); } catch (error) { /* nada */ }
+    try {
+      window.localStorage.setItem(LLAVE, JSON.stringify(lista));
+      window.localStorage.setItem(LLAVE_VERSION, VERSION);
+    } catch (error) { /* nada */ }
   }
 
   function restablecer() {
-    try { window.localStorage.removeItem(LLAVE); } catch (error) { /* nada */ }
+    try {
+      window.localStorage.removeItem(LLAVE);
+      window.localStorage.removeItem(LLAVE_VERSION);
+    } catch (error) { /* nada */ }
   }
 
   /* Enlace que abre exactamente estas vistas en cualquier navegador. */

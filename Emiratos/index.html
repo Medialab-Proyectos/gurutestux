@@ -14,16 +14,33 @@
 <body>
 <div class="edoc-acceso">
   <aside class="edoc-acceso__lienzo">
-    <img class="edoc-acceso__marca" src="assets/img/edoc-logo-neg.svg" alt="eDoc · Facturación Electrónica">
-    <h1 style="font-size:30px;font-weight:600;max-width:20ch;position:relative;z-index:2">Portal Consulta</h1>
-    <p style="position:relative;z-index:2;font-family:var(--fuente-titulos);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.72);margin:-8px 0 4px">Emiratos Árabes Unidos</p>
-    <p style="max-width:48ch;color:rgba(255,255,255,.82);position:relative;z-index:2">Somos tu proveedor de servicios acreditado ante la Federal Tax Authority. Entra para consultar tus documentos emitidos, responder los recibidos y administrar tu conexión.</p>
-    <p style="position:relative;z-index:2;font-size:12px;color:rgba(255,255,255,.6)">GuruSoft S.A. © 2026 · <span class="cifra">v0.1</span></p>
+    <img class="edoc-acceso__filigrana" src="assets/img/edoc-filigrana.svg" alt="" aria-hidden="true">
+
+    <div class="edoc-acceso__portada">
+      <img class="edoc-acceso__marca" src="assets/img/edoc-logo-neg.svg" alt="eDoc · Facturación Electrónica">
+      <h1 class="edoc-acceso__titulo">Portal Consulta</h1>
+      <p class="edoc-acceso__pais">Emiratos Árabes Unidos</p>
+      <p class="edoc-acceso__lema">Consulta tus documentos emitidos, responde los recibidos y administra tu
+      conexión. Somos tu proveedor de servicios acreditado ante la Federal Tax Authority.</p>
+    </div>
+
+    <p class="edoc-acceso__pie">GuruSoft S.A. © 2026 · <span class="cifra">v0.1</span></p>
   </aside>
 
   <div class="edoc-acceso__panel">
     <div class="edoc-acceso__tarjeta">
       <div class="edoc-tablero">
+        <div class="edoc-acceso__cabecera">
+          <span class="edoc-acceso__cabecera-rotulo">Acceso al portal</span>
+          <label class="edoc-acceso__idioma">
+            <span class="sr-only">Idioma del portal</span>
+            <select id="idioma">
+              <option value="en">English</option>
+              <option value="es" selected>Español</option>
+              <option value="ar">العربية</option>
+            </select>
+          </label>
+        </div>
         <div class="edoc-tablero__cuerpo">
           <h2 class="edoc-titulo mb-1" style="font-size:20px">Bienvenido</h2>
           <p class="edoc-secundario mb-4">Entra con las credenciales que te enviamos por correo.</p>
@@ -37,21 +54,11 @@
               <input type="password" class="form-control" id="clave" value="demostracion" autocomplete="current-password" required>
             </div>
             <div class="mb-4">
-              <label class="edoc-etiqueta" for="idioma">Idioma</label>
-              <select class="custom-select" id="idioma">
-                <option value="en">English</option>
-                <option value="es" selected>Español</option>
-                <option value="ar">العربية</option>
-              </select>
-              <div class="edoc-ayuda">La maqueta se presenta en español para la revisión interna.</div>
-            </div>
-            <div class="mb-4">
               <label class="edoc-etiqueta">Verificación de seguridad<span class="obligatorio">*</span></label>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="robot" checked>
                 <label class="form-check-label" for="robot">No soy un robot</label>
               </div>
-              <div class="edoc-ayuda">Bolivia y Francia lo piden en el acceso. En la maqueta es solo el hueco donde va.</div>
             </div>
 
             <button class="btn btn-edoc-primario w-100" type="submit">Entrar</button>
@@ -63,13 +70,33 @@
               Pedirle el TRN de quince dígitos cada vez era hacerle trabajo al cliente para un dato que nosotros ya
               tenemos.
             </div>
-            <div class="d-flex justify-content-between mt-3" style="font-size:12.5px">
+            <div class="edoc-acceso__ayuda">
               <a href="#" id="olvide">¿Olvidaste tu contraseña?</a>
-              <a href="onboarding.html">Vengo de EmaraTax</a>
             </div>
-            <div class="d-flex justify-content-between mt-2" style="font-size:12.5px">
-              <a href="registro.html">Registrar mi empresa</a>
-              <a href="aprobacion-registro.html">Bandeja del Office Manager</a>
+
+            <div class="edoc-acceso__otros">
+              <div class="edoc-acceso__otros-titulo">¿Todavía no tienes acceso?</div>
+
+              <a class="edoc-acceso__via" href="registro.html">
+                <span class="edoc-acceso__via-textos">
+                  <span class="edoc-acceso__via-nombre">Registrar mi empresa</span>
+                  <span class="edoc-acceso__via-detalle">Empieza el alta: seis pasos y la revisamos nosotros.</span>
+                </span>
+                <span class="edoc-acceso__via-flecha">›</span>
+              </a>
+
+              <a class="edoc-acceso__via" href="onboarding.html">
+                <span class="edoc-acceso__via-textos">
+                  <span class="edoc-acceso__via-nombre">Ya me registré y vengo de EmaraTax</span>
+                  <span class="edoc-acceso__via-detalle">Si en EmaraTax nos elegiste como proveedor y pulsaste
+                  «Proceed to ASP», termina aquí la asociación.</span>
+                </span>
+                <span class="edoc-acceso__via-flecha">›</span>
+              </a>
+
+              <button type="button" class="edoc-acceso__ayuda-enlace" data-toggle="modal" data-target="#modal-emaratax">
+                ¿Qué es EmaraTax y por qué me lo piden?
+              </button>
             </div>
 
             <div class="edoc-legal">
@@ -77,7 +104,10 @@
               <span>·</span>
               <a href="#" data-legal="condiciones">Términos y condiciones</a>
             </div>
-            <div class="edoc-version">eDoc Consulta AE · <span class="cifra">v0.1</span></div>
+            <div class="edoc-version">
+              eDoc Consulta AE · <span class="cifra">v0.1</span>
+              <a class="edoc-version__interno" href="aprobacion-registro.html">Acceso interno</a>
+            </div>
           </form>
         </div>
       </div>
@@ -111,8 +141,54 @@
       </div>
     </div>
   </div>
+
+  <!-- ===================== Ayuda · qué es EmaraTax ===================== -->
+  <div class="modal fade" id="modal-emaratax" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Qué es EmaraTax y por qué te lo pedimos</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>EmaraTax</strong> es el sistema de la autoridad fiscal de Emiratos Árabes Unidos. Ahí las empresas
+          gestionan sus impuestos y, entre otras cosas, eligen con qué proveedor acreditado quieren facturar
+          electrónicamente.</p>
+
+          <p>Nosotros somos uno de esos proveedores: un <strong>ASP</strong>, <em>Accredited Service Provider</em>. Para
+          poder emitir y recibir documentos en tu nombre, a la autoridad tiene que constarle que <strong>tú nos has
+          elegido</strong>. Y esa elección no se hace aquí: se hace en EmaraTax.</p>
+
+          <div class="edoc-etiqueta mt-4 mb-2">Cómo es el recorrido</div>
+          <ul class="linea-tiempo">
+            <li class="hecho"><div class="linea-tiempo__titulo">1 · Nos contratas</div>
+              <div class="linea-tiempo__detalle">El acuerdo comercial ocurre fuera del portal.</div></li>
+            <li class="hecho"><div class="linea-tiempo__titulo">2 · Registras tu empresa aquí</div>
+              <div class="linea-tiempo__detalle">El alta de seis pasos. La revisamos y te enviamos tus credenciales.</div></li>
+            <li class="hecho"><div class="linea-tiempo__titulo">3 · Entras por primera vez</div>
+              <div class="linea-tiempo__detalle">El portal te avisa de que falta el último paso y todavía no te deja operar.</div></li>
+            <li class="espera"><div class="linea-tiempo__titulo">4 · Vas a EmaraTax y nos eliges</div>
+              <div class="linea-tiempo__detalle">Nos buscas entre los proveedores acreditados y pulsas
+              <strong>«Proceed to ASP»</strong>. El sistema te avisa de que vas a salir de EmaraTax.</div></li>
+            <li class="espera"><div class="linea-tiempo__titulo">5 · Vuelves aquí</div>
+              <div class="linea-tiempo__detalle">La autoridad nos comunica tu elección y confirmamos la asociación.</div></li>
+            <li class="espera"><div class="linea-tiempo__titulo">6 · Ya puedes operar</div>
+              <div class="linea-tiempo__detalle">El portal se desbloquea y empiezas a consultar y a responder documentos.</div></li>
+          </ul>
+
+          <div class="edoc-aviso edoc-aviso--info mt-3">
+            <div>Si ya hiciste ese recorrido y el portal sigue bloqueado, entra por
+            <strong>«Ya me registré y vengo de EmaraTax»</strong>: desde ahí comprobamos la asociación.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-edoc-secundario" href="onboarding.html">Ir a terminar la asociación</a>
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/alcance.js"></script>

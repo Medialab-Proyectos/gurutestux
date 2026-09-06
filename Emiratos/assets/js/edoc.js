@@ -91,6 +91,7 @@
     { id: 'emision', rotulo: 'Emisión', icono: 'emision', grupos: [
         { titulo: 'Reportes', enlaces: [
             { rotulo: 'Documentos Emitidos', url: 'emitidos.html' },
+            { rotulo: 'Reportes generados', url: 'reportes-generados.html' },
             { rotulo: 'Documentos por criterios', posterior: true } ] }
       ] },
     { id: 'recepcion', rotulo: 'Recepción', icono: 'recepcion', grupos: [
@@ -184,7 +185,7 @@
           icono('empresa') +
           '<span class="edoc-empresa__textos">' +
             '<span class="edoc-empresa__nombre">' + empresa + '</span>' +
-            '<span class="edoc-empresa__usuario">' + usuario + '</span>' +
+            '<span class="edoc-empresa__usuario">' + icono('perfil') + usuario + '</span>' +
           '</span>' +
         '</span>' +
         '<span class="edoc-encabezado__separador"></span>' +

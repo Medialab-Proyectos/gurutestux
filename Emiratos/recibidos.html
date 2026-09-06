@@ -91,16 +91,8 @@
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Resultados</h2>
       <div class="d-flex align-items-center hueco-2 flex-wrap">
-        <div class="dropdown">
-          <button class="btn btn-edoc-secundario btn-sm dropdown-toggle" data-toggle="dropdown" type="button">Exportar</button>
-          <ul class="dropdown-menu dropdown-menu-right" style="min-width:280px">
-            <li><h6 class="dropdown-header">Formato</h6></li>
-            <li><a class="dropdown-item" href="#" data-exportar="CSV"><span class="icono-xls" data-icono="xls"></span> Texto separado por comas · CSV</a></li>
-            <li><a class="dropdown-item" href="#" data-exportar="ZIP"><span class="icono-zip" data-icono="zip"></span> Resultados y XML · ZIP</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><div class="px-3 pb-2 edoc-secundario">En recepción exportar pesa más que en emisión, y ya piden que el archivo lleve también el XML.</div></li>
-          </ul>
-        </div>
+        <button class="btn btn-edoc-secundario btn-sm" type="button" data-abre-exportar>
+          <span data-icono="descargar"></span> Exportar</button>
       </div>
     </div>
 
@@ -261,6 +253,46 @@
           <button type="button" class="btn btn-edoc-secundario" data-descargar="XML"><span data-icono="xml"></span> Descargar XML</button>
           <button type="button" class="btn btn-edoc-secundario" data-descargar="PDF"><span data-icono="pdf"></span> Descargar PDF</button>
           <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Modal · exportar ============================ -->
+  <div class="modal fade" id="modal-exportar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Exportar resultados</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-3">Se exporta <strong id="exp-cuantos"></strong> del rango de fechas que tienes en la búsqueda,
+          con las columnas que ves en pantalla.</p>
+
+          <div class="edoc-etiqueta mb-2">Qué te llevas</div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="exp-contenido" id="exp-datos" checked>
+            <label class="form-check-label" for="exp-datos">
+              <strong>Solo los datos</strong>
+              <div class="edoc-secundario">Un archivo CSV con una fila por documento.</div>
+            </label>
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="radio" name="exp-contenido" id="exp-xml">
+            <label class="form-check-label" for="exp-xml">
+              <strong>Los datos y los XML</strong>
+              <div class="edoc-secundario">Un ZIP con el CSV y el XML de cada documento. Pesa bastante más.</div>
+            </label>
+          </div>
+
+          <div class="edoc-aviso edoc-aviso--info" id="exp-aviso">
+            <div id="exp-aviso-texto"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" id="exp-confirmar">Exportar</button>
         </div>
       </div>
     </div>
@@ -479,6 +511,74 @@
   });
 
   pintar();
+})();
+</script>
+
+<script>
+(function () {
+  'use strict';
+  /* Por debajo del umbral el archivo se descarga en el momento; por encima va a
+     la cola y el usuario lo recoge en «Reportes generados». Colgar la pantalla
+     cinco minutos esperando un archivo no es una opción. */
+  var UMBRAL = 1000;
+
+  function cuantos() {
+    var t = window.jQuery('#tabla-recibidos').DataTable();
+    return t ? t.rows().count() : 0;
+  }
+
+  function pintarAviso() {
+    var n = cuantos();
+    var conXml = document.getElementById('exp-xml').checked;
+    var pesado = n > UMBRAL || conXml;
+    var caja = document.getElementById('exp-aviso');
+    caja.className = 'edoc-aviso edoc-aviso--' + (pesado ? 'advertencia' : 'info');
+    document.getElementById('exp-aviso-texto').innerHTML = pesado
+      ? 'Con este tamaño el archivo se genera en segundo plano. Te avisamos cuando esté listo y lo recoges en ' +
+        '<a href="reportes-generados.html">Reportes generados</a>; los archivos se guardan siete días.'
+      : 'Son pocos documentos, así que la descarga empieza en cuanto pulses Exportar.';
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-abre-exportar]');
+    if (!b) return;
+    e.preventDefault();
+    var n = cuantos();
+    document.getElementById('exp-cuantos').textContent =
+      n === 1 ? 'un documento' : n.toLocaleString('es-ES') + ' documentos';
+    pintarAviso();
+    window.jQuery('#modal-exportar').modal('show');
+  });
+
+  document.addEventListener('change', function (e) {
+    if (e.target.name === 'exp-contenido') pintarAviso();
+  });
+
+  document.getElementById('exp-confirmar').addEventListener('click', function () {
+    var conXml = document.getElementById('exp-xml').checked;
+    var n = cuantos();
+    var pesado = n > UMBRAL || conXml;
+    window.jQuery('#modal-exportar').modal('hide');
+
+    if (!pesado) {
+      window.edocAvisar('Descargando el archivo <strong>CSV</strong>.', 'exito');
+      return;
+    }
+
+    // Queda registrado para que aparezca en la bandeja: el recorrido tiene que
+    // llegar entero, no terminar en un aviso que no lleva a ninguna parte.
+    var desde = document.getElementById('f-desde');
+    var hasta = document.getElementById('f-hasta');
+    var ficha = window.edocPedirReporte({
+      tipo: 'Documentos Recibidos' + (conXml ? ' y XML' : ''),
+      formato: conXml ? 'ZIP' : 'CSV',
+      desde: desde ? desde.value : '',
+      hasta: hasta ? hasta.value : '',
+      registros: n.toLocaleString('es-ES')
+    });
+    window.edocAvisar('Se está generando <strong>' + ficha.ref + '</strong>. Lo recoges en ' +
+      '<a href="reportes-generados.html">Reportes generados</a>.');
+  });
 })();
 </script>
 </body>
