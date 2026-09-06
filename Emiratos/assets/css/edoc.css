@@ -176,8 +176,10 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
   font-family: var(--fuente-titulos); font-weight: 700; font-size: 12px;
   box-shadow: 0 0 0 1px rgba(255,255,255,.35);
 }
-/* Si el archivo del avatar no carga, quedan las iniciales: nunca un hueco. */
-.edoc-usuario__avatar img { width: 100%; height: 100%; display: block; }
+/* Si el archivo del avatar no carga, quedan las iniciales: nunca un hueco.
+   La foto va recortada al círculo con object-fit para que el día que alguien
+   suba un retrato que no sea cuadrado no salga estirado. */
+.edoc-usuario__avatar img { width: 100%; height: 100%; display: block; object-fit: cover; }
 .edoc-usuario:hover .edoc-usuario__avatar { box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
 
 /* --- 4. Menú ------------------------------------------------------------- */
@@ -587,17 +589,18 @@ body.con-notas .edoc-pagina.edoc-pagina--lienzo { padding-bottom: var(--alto-pie
   .edoc-empresa__usuario { display: none; }
   .edoc-empresa__nombre { max-width: 14ch; }
 }
-@media (max-width: 900px) {
-  .edoc-btn-util span { display: none; }
-  .edoc-btn-util { padding: 6px 9px; }
+@media (max-width: 1000px) {
+  /* Solo el rótulo de texto: la bandera también es un <span> y ocultarla
+     dejaba un círculo vacío en la barra. */
+  .edoc-btn-util__texto { display: none; }
+  .edoc-btn-util { padding: 6px 10px; }
   .edoc-encabezado__util { gap: 6px; }
 }
 @media (max-width: 640px) {
   .edoc-encabezado { padding: 0 10px; }
-  .edoc-encabezado__marca { position: static; transform: none; margin-right: auto; }
-  .edoc-empresa { display: none; }
-  .edoc-ambiente { padding: 4px 7px; letter-spacing: .06em; }
-  .edoc-encabezado__separador { display: none; }
+  /* La marca deja de estar centrada y pasa a seguir a la cápsula del ambiente;
+     el margen izquierdo es el aire que evita que se toquen. */
+  .edoc-encabezado__marca { position: static; transform: none; margin: 0 auto 0 12px; }
   .edoc-encabezado__marca img { height: 26px; }
   .edoc-usuario .edoc-usuario__avatar { width: 26px; height: 26px; }
   .edoc-menu { overflow-x: auto; padding: 0 4px; }
@@ -1171,12 +1174,75 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris);
 }
 .edoc-acceso__idioma { margin: 0; }
-.edoc-acceso__idioma select {
-  -webkit-appearance: none; -moz-appearance: none; appearance: none;
-  border: 1px solid #d6d9de; border-radius: 100px; background-color: #fff;
-  padding: 4px 28px 4px 12px; font-size: 12px; color: var(--edoc-azul);
-  font-family: var(--fuente-titulos); font-weight: 600;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23001174' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e");
-  background-repeat: no-repeat; background-position: right 10px center; background-size: 7px 9px;
+
+/* Mensaje corto bajo el selector: la maqueta no se traduce y hay que decirlo
+   donde se toma la decisión, no en una nota aparte. */
+.edoc-acceso__aviso {
+  margin: 0 0 14px; padding: 9px 12px; border-radius: 8px;
+  background: #f2f5ea; border-left: 3px solid var(--edoc-verde);
+  font-size: 12px; line-height: 1.45; color: #3f4a2e;
 }
-.edoc-acceso__idioma select:focus-visible { outline: 2px solid var(--edoc-verde); outline-offset: 2px; }
+
+/* --- 28.1 · Selector de idioma -------------------------------------------
+   El mismo control en el acceso y en la barra superior. Antes eran dos: un
+   desplegable con tres idiomas al entrar y una pastilla fija con «en-AE»
+   dentro, que ni se abría ni recordaba nada.                               */
+.edoc-idioma__lista { min-width: 216px; padding: 6px 0; }
+.edoc-idioma__opcion {
+  display: flex; align-items: center; gap: 9px;
+}
+.edoc-idioma__nombre { flex: 1 1 auto; }
+.edoc-idioma__codigo { font-size: 11px; color: var(--edoc-gris); letter-spacing: .02em; }
+/* El árabe se enseña marcado: se puede elegir, pero no está cerrado con la
+   autoridad y nadie debe darlo por hecho al ver la demo. */
+.edoc-idioma__pendiente {
+  font-family: var(--fuente-titulos); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  background: var(--senal-advertencia); color: #3d2400;
+  border-radius: 100px; padding: 2px 7px; flex: none;
+}
+/* El idioma activo se marca con una barra verde, no con un tic: el tic ya se
+   usa en las tablas para «aprobado». */
+.edoc-idioma__opcion.activo { box-shadow: inset 3px 0 0 var(--edoc-verde); font-weight: 600; }
+
+/* Sobre fondo blanco la pastilla invierte los colores. */
+.edoc-idioma--claro .edoc-btn-util {
+  border-color: #d6d9de; color: var(--edoc-azul);
+  font-family: var(--fuente-titulos); font-weight: 600;
+  padding: 5px 11px 5px 12px;
+}
+.edoc-idioma--claro .edoc-btn-util:hover { background: #f1f3f7; border-color: #b9bfc9; }
+.edoc-idioma--claro .edoc-btn-util__codigo { color: var(--edoc-azul); }
+
+/* --- 29. Barra superior en pantallas estrechas ---------------------------
+   En un móvil no caben cinco herramientas y el ambiente: se amontonaban y la
+   cápsula acababa pisando la marca. Arriba se queda lo que se mira —dónde
+   estoy y si tengo avisos— y el resto baja al menú de la cuenta.          */
+.solo-movil { display: none; }
+
+@media (max-width: 820px) {
+  /* Flex encoge a sus hijos; sin esto, la cápsula del ambiente se desborda de
+     su contenedor y se dibuja encima del logo. */
+  .edoc-contexto { min-width: 0; flex: 0 1 auto; overflow: hidden; }
+  .edoc-ambiente { min-width: 0; }
+  .edoc-empresa { display: none; }
+  .edoc-encabezado__separador { display: none; }
+
+  /* Las herramientas del portal viven en el menú de la cuenta. */
+  .edoc-solo-ancho { display: none !important; }
+  .solo-movil { display: block; }
+
+  .edoc-encabezado__util { gap: 8px; }
+  .edoc-encabezado__marca img { height: 26px; }
+}
+
+@media (max-width: 480px) {
+  /* Con muy poco ancho el código del ambiente basta: «QA» ya lo dice. */
+  .edoc-ambiente__nombre { display: none; }
+  .edoc-ambiente { padding: 5px 10px; letter-spacing: .08em; }
+  .edoc-encabezado { padding: 0 8px; }
+  .edoc-encabezado__util { gap: 6px; }
+}
+
+/* La bandera dentro del menú de la cuenta se alinea con los demás iconos. */
+.dropdown-item .edoc-bandera { width: 15px; height: 15px; flex: none; }

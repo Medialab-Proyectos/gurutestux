@@ -412,6 +412,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
+<script src="assets/js/idioma.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script>
@@ -459,7 +460,7 @@
   var nombres = ['buscar', 'ver', 'estados', 'xml', 'pdf', 'xls', 'zip', 'descargar',
                  'aprobar', 'rechazar', 'acuse', 'reenviar', 'filtro', 'limpiar', 'info',
                  'alerta', 'candado', 'llave', 'empresa', 'libro', 'megafono', 'soporte',
-                 'pais', 'idioma', 'salir', 'admin', 'emision', 'recepcion', 'inicio'];
+                 'pais', 'idioma', 'alfabeto', 'salir', 'admin', 'emision', 'recepcion', 'inicio'];
   document.getElementById('muestra-iconos').innerHTML = nombres.map(function (n) {
     return '<span class="edoc-accion" title="' + n + '">' + window.edocIcono(n) + '</span>';
   }).join('');

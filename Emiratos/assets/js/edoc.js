@@ -27,6 +27,12 @@
     acuse:    '<path d="M3 5.4h14v9.2H3z"/><path d="m3 5.9 7 4.6 7-4.6"/>',
     soporte:  '<circle cx="10" cy="10" r="7.2"/><path d="M8 8.1a2.1 2.1 0 1 1 2.9 1.9c-.6.3-.9.8-.9 1.4v.4"/><path d="M10 14.6h.01"/>',
     pais:     '<circle cx="10" cy="10" r="7.2"/><path d="M2.9 10h14.2"/><path d="M10 2.8c1.9 2 2.9 4.5 2.9 7.2s-1 5.2-2.9 7.2c-1.9-2-2.9-4.5-2.9-7.2S8.1 4.8 10 2.8Z"/>',
+    /* «Nombre nativo» no es el idioma del portal: es ver el nombre del emisor
+       tal como llega. Lleva icono propio —una A latina junto a una letra
+       árabe— porque antes compartía dibujo con el selector de idioma y en la
+       barra parecían el mismo botón repetido. */
+    alfabeto: '<path d="m2.6 14.4 3.3-8.8 3.3 8.8"/><path d="M3.9 11.6h4"/>' +
+              '<path d="M12 9.4v1.9c0 1.7 1 2.7 2.6 2.7h2.8"/><path d="M14.2 16.4h.01"/>',
     idioma:   '<path d="M2.8 5.6h8.4"/><path d="M7 3.4v2.2"/><path d="M9.1 5.6c0 3.2-2.5 6-6.3 7.1"/><path d="M5 9.2c1 1.7 2.7 3 4.6 3.5"/><path d="m10.8 16.6 3.2-8 3.2 8"/><path d="M11.9 14.2h4.2"/>',
     salir:    '<path d="M12.4 5.6V4a1 1 0 0 0-1-1H4.4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-1.6"/><path d="M8.6 10h8"/><path d="m14 7.4 2.6 2.6L14 12.6"/>',
     filtro:   '<path d="M3 4.6h14l-5.4 6.2v4.9l-3.2 1.7v-6.6z"/>',
@@ -156,11 +162,11 @@
       '</a>' +
       '<div class="edoc-encabezado__util">' +
         '<button type="button" class="edoc-btn-util" data-alterna-arabe title="Muestra el nombre de la empresa tal como llega, en árabe">' +
-          icono('idioma') + '<span>Nombre nativo</span></button>' +
+          icono('alfabeto') + '<span class="edoc-btn-util__texto">Nombre nativo</span></button>' +
         (herramientaNotas()
           ? '<button type="button" class="edoc-btn-util" data-alterna-notas ' +
             'title="Muestra las decisiones de la reunión sobre cada bloque">' +
-            icono('info') + '<span>Notas de diseño</span></button>'
+            icono('info') + '<span class="edoc-btn-util__texto">Notas de diseño</span></button>'
           : '') +
         '<a class="edoc-btn-util" href="index.html" title="Volver al acceso">' + icono('salir') + '</a>' +
       '</div>' +
@@ -198,20 +204,17 @@
       '<div class="edoc-encabezado__util">' +
         '<button type="button" class="edoc-btn-util" data-alterna-arabe ' +
           'title="Muestra el nombre del emisor y del receptor tal como llega, en árabe">' +
-          icono('idioma') + '<span>Nombre nativo</span></button>' +
+          icono('alfabeto') + '<span class="edoc-btn-util__texto">Nombre nativo</span></button>' +
         (herramientaNotas()
           ? '<button type="button" class="edoc-btn-util" data-alterna-notas ' +
             'title="Muestra las decisiones de la reunión sobre cada bloque">' +
-            icono('info') + '<span>Notas de diseño</span></button>'
+            icono('info') + '<span class="edoc-btn-util__texto">Notas de diseño</span></button>'
           : '') +
         '<span class="edoc-encabezado__separador"></span>' +
-        '<button type="button" class="edoc-btn-util edoc-btn-util--idioma" data-sin-destino ' +
-          'title="Idioma del portal · pendiente de decidir si va solo en inglés o en inglés y árabe">' +
-          icono('idioma') + '<span class="edoc-btn-util__codigo">en-AE</span>' +
-          '<svg class="edoc-btn-util__chevron" viewBox="0 0 10 6" aria-hidden="true">' +
-          '<path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" ' +
-          'stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
-        '<a class="edoc-btn-util edoc-btn-util--icono" href="#" data-sin-destino ' +
+        // El mismo selector que se ve al entrar, con la misma lista y el mismo
+        // código: lo que elijas en el acceso es lo que aparece aquí.
+        '<span class="edoc-solo-ancho">' + window.edocSelectorIdioma() + '</span>' +
+        '<a class="edoc-btn-util edoc-btn-util--icono edoc-solo-ancho" href="#" data-sin-destino ' +
           'title="Emiratos Árabes Unidos · cambiar de portal">' + bandera() + '</a>' +
         '<div class="dropdown">' +
           '<button type="button" class="edoc-btn-util edoc-btn-util--icono edoc-campana" ' +
@@ -232,18 +235,31 @@
               'Ver todas</a></li>' +
           '</ul>' +
         '</div>' +
-        '<a class="edoc-btn-util edoc-btn-util--icono" href="#" data-sin-destino ' +
+        '<a class="edoc-btn-util edoc-btn-util--icono edoc-solo-ancho" href="#" data-sin-destino ' +
           'title="Acceso al soporte">' + icono('soporte') + '</a>' +
         '<div class="dropdown">' +
           '<button type="button" class="edoc-usuario" data-toggle="dropdown" ' +
             'title="' + usuario + '" aria-label="Menú de la cuenta de ' + usuario + '">' +
             '<span class="edoc-usuario__avatar" data-iniciales="' + iniciales(usuario) + '">' +
-              '<img src="assets/img/avatar.svg" alt="">' +
+              // Una fotografía, no un dibujo: es lo que se pidió en la revisión.
+              // El origen y la licencia están en assets/img/CREDITOS.md.
+              '<img src="assets/img/avatar.jpg" alt="" width="34" height="34">' +
             '</span>' +
           '</button>' +
           '<ul class="dropdown-menu dropdown-menu-right">' +
             '<li><h6 class="dropdown-header">' + usuario + '</h6></li>' +
             '<li><a class="dropdown-item" href="admin-clave.html">' + icono('perfil') + 'Cambiar Contraseña</a></li>' +
+            // En pantallas estrechas las herramientas del portal no caben en la
+            // barra y caen aquí: siguen a un toque, sin amontonarse arriba.
+            '<li class="solo-movil"><hr class="dropdown-divider"></li>' +
+            (window.edocIdiomaOpciones
+              ? window.edocIdiomaOpciones().replace(/<li>/g, '<li class="solo-movil">') +
+                '<li class="solo-movil"><hr class="dropdown-divider"></li>'
+              : '') +
+            '<li class="solo-movil"><a class="dropdown-item" href="#" data-sin-destino>' +
+              bandera() + 'Emiratos Árabes Unidos</a></li>' +
+            '<li class="solo-movil"><a class="dropdown-item" href="#" data-sin-destino>' +
+              icono('soporte') + 'Acceso al soporte</a></li>' +
             '<li><hr class="dropdown-divider"></li>' +
             '<li><a class="dropdown-item" href="index.html">' + icono('salir') + 'Salir</a></li>' +
           '</ul>' +
@@ -380,6 +396,9 @@
         reducido ? encabezadoReducido(cuerpo.dataset.quien || '') : encabezado() + menu(seccion));
     }
     cuerpo.insertAdjacentHTML('beforeend', pie());
+    // El armazón se pinta después de que idioma.js haya arrancado, así que
+    // hay que dejarle marcar cuál es el idioma activo.
+    if (window.edocPintarIdioma) window.edocPintarIdioma();
 
     // Si la pantalla no entra en la entrega, se cambia su contenido por el
     // aviso. El armazón se queda: el menú tiene que seguir enseñando el alcance.
