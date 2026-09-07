@@ -399,6 +399,10 @@
     // El armazón se pinta después de que idioma.js haya arrancado, así que
     // hay que dejarle marcar cuál es el idioma activo.
     if (window.edocPintarIdioma) window.edocPintarIdioma();
+    // Los enlaces del encabezado, del menú y del pie nacen aquí, después de
+    // alcance.js: hay que pasarles el ?vistas= para que el alcance del enlace
+    // no se pierda al primer clic.
+    if (window.EDOC_ALCANCE && window.EDOC_ALCANCE.propagar) window.EDOC_ALCANCE.propagar();
 
     // Si la pantalla no entra en la entrega, se cambia su contenido por el
     // aviso. El armazón se queda: el menú tiene que seguir enseñando el alcance.
@@ -468,7 +472,7 @@
     document.addEventListener('keydown', function (e) {
       if (e.ctrlKey && e.altKey && (e.key === 'p' || e.key === 'P')) {
         e.preventDefault();
-        window.location.href = 'panel.html';
+        window.location.href = window.EDOC_ALCANCE ? window.EDOC_ALCANCE.conVistas('panel.html') : 'panel.html';
       }
     });
 

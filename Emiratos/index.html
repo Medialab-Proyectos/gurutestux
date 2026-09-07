@@ -204,6 +204,11 @@
   function destinoDeEntrada() {
     var A = window.EDOC_ALCANCE;
     if (!A) return 'inicio.html';
+    /* Si se entró con un enlace de alcance, manda ese enlace. Antes se
+       descartaba aquí, así que entrar por el acceso apagaba las vistas que el
+       enlace había encendido. */
+    var conEnlace = A.conVistas('inicio.html');
+    if (conEnlace !== 'inicio.html') return conEnlace;
     var yaElegido = false;
     try { yaElegido = !!window.localStorage.getItem('edoc-vistas'); } catch (error) { /* nada */ }
     if (yaElegido) return 'inicio.html';

@@ -32,6 +32,46 @@ window.EDOC_ALCANCE = (function () {
     { archivo: 'aprobacion-registro.html', rotulo: 'Aprobación del registro',                 grupo: 'Fuera de la sesión', entrega: false }
   ];
 
+  /* El parámetro de la dirección, tal cual viene. Se lee una vez y se reutiliza:
+     hace falta tanto para decidir qué se abre como para que la elección
+     sobreviva al primer clic. */
+  function parametro() {
+    try { return new URLSearchParams(window.location.search).get('vistas') || ''; }
+    catch (error) { return ''; }
+  }
+
+  /* Pega el parámetro a una dirección interna. Sin esto, abrir la maqueta con
+     ?vistas=... solo servía para la primera pantalla: al pulsar cualquier
+     enlace se perdía y las vistas encendidas por el enlace volvían a salir
+     «En construcción». */
+  function conVistas(url) {
+    var v = parametro();
+    if (!v || !url) return url;
+    if (/^(#|https?:|mailto:|tel:|javascript:)/i.test(url)) return url;
+    if (url.indexOf('vistas=') >= 0) return url;
+    return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'vistas=' + encodeURIComponent(v);
+  }
+
+  /* Reescribe los enlaces ya pintados, para que la dirección que se ve al pasar
+     por encima —y la que se abre en otra pestaña— sea la correcta. El armazón se
+     monta después que este archivo, así que edoc.js vuelve a llamar aquí. */
+  function propagar(raiz) {
+    if (!parametro()) return;
+    (raiz || document).querySelectorAll('a[href]').forEach(function (a) {
+      a.setAttribute('href', conVistas(a.getAttribute('href')));
+    });
+  }
+
+  /* Red de seguridad para los enlaces que nacen después: los avisos flotantes,
+     por ejemplo, llevan enlace a la bandeja de reportes. */
+  if (typeof document !== 'undefined') {
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a || a.hasAttribute('data-sin-destino')) return;
+      a.setAttribute('href', conVistas(a.getAttribute('href')));
+    }, true);
+  }
+
   var LLAVE = 'edoc-vistas';
   /* Sube cada vez que cambia la lista de pantallas. Una selección guardada con
      una versión anterior se descarta: si no, una pantalla nueva no aparecería
@@ -47,8 +87,7 @@ window.EDOC_ALCANCE = (function () {
      navegador, y si no, la entrega de hoy. El parámetro permite mandar un
      enlace que abra vistas concretas sin tocar el código. */
   function habilitadas() {
-    var parametros = new URLSearchParams(window.location.search);
-    var pedido = parametros.get('vistas');
+    var pedido = parametro();
     if (pedido === 'todas') return VISTAS.map(function (v) { return v.archivo; });
     if (pedido === 'entrega') return porDefecto();
     if (pedido) {
@@ -106,6 +145,8 @@ window.EDOC_ALCANCE = (function () {
     estaHabilitada: estaHabilitada,
     guardar: guardar,
     restablecer: restablecer,
-    enlace: enlace
+    enlace: enlace,
+    conVistas: conVistas,
+    propagar: propagar
   };
 })();

@@ -79,7 +79,9 @@
 <script>
   document.getElementById('simular').addEventListener('click', function () {
     window.edocAvisar('Recibimos la asociación desde EmaraTax. Tu portal queda desbloqueado.', 'exito');
-    setTimeout(function () { location.href = 'emitidos.html'; }, 1600);
+    setTimeout(function () {
+      location.href = window.EDOC_ALCANCE ? window.EDOC_ALCANCE.conVistas('emitidos.html') : 'emitidos.html';
+    }, 1600);
   });
 </script>
 </body>
