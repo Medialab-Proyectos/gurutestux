@@ -266,7 +266,12 @@
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Documento <span id="visor-numero" class="ml-2" style="opacity:.75"></span></h5>
+          <!-- «Visor de la factura», no «Documento». Quedó cerrado en la reunión del
+               2026-09-07: la descarga se sigue llamando PDF, que es el término que
+               todo el mundo reconoce, y la ventana que se abre es el visor. Así el
+               cliente no confunde lo que genera el sistema con lo que le mandó el
+               proveedor. -->
+          <h5 class="modal-title">Visor de la factura <span id="visor-numero" class="ml-2" style="opacity:.75"></span></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body" style="background:#eef0f2">
@@ -337,7 +342,7 @@
       '<td class="col-acciones">' +
         '<div class="edoc-acciones-fila">' +
           '<a class="edoc-accion edoc-accion--pdf" href="#" data-accion="visor" data-i="' + i + '" ' +
-            'title="Ver PDF" aria-label="Ver el PDF de ' + doc.numero + '">' + ico('pdf') + '</a>' +
+            'title="Abrir el visor de la factura" aria-label="Abrir el visor de ' + doc.numero + '">' + ico('pdf') + '</a>' +
           '<a class="edoc-accion" href="#" data-accion="estados" data-i="' + i + '" ' +
             'title="Ver estados de las cuatro entidades" aria-label="Ver los estados de ' + doc.numero + '">' + ico('estados') + '</a>' +
           '<a class="edoc-accion edoc-accion--gris" href="#" data-accion="xml" data-i="' + i + '" ' +
@@ -345,7 +350,7 @@
         '</div>' +
       '</td>' +
       '<td><a class="edoc-clave-doc" href="#" data-accion="visor" data-i="' + i + '" ' +
-        'title="Ver el PDF del documento">' + doc.numero + '</a></td>' +
+        'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
       '<td class="cifra">' + doc.fecha + '</td>' +
       '<td>' + doc.tipo + '</td>' +
       '<td><span data-nombre-latino="' + doc.receptorLatino + '" data-nombre-arabe="' + doc.receptorArabe + '"></span>' +

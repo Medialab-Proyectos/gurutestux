@@ -399,8 +399,12 @@
             <tr><td>Buscar datos fiscales de un tercero</td><td>Quedó en «se va a atender», sin cerrar si entra en el MVP.</td></tr>
             <tr><td>Cargar un XML recibido a mano</td><td>Existe en Bolivia y no se trató en la reunión. Queda sin decidir.</td></tr>
             <tr><td>Equivalente del CUF</td><td>Bolivia filtra los recibidos por el código único de la factura. Falta definir cuál es el identificador en Emiratos y cómo se llama.</td></tr>
+            <tr><td><strong>Rechazo técnico y rechazo comercial</strong></td><td>En Emiratos hay plataformas en medio que pueden rechazar un documento por validaciones técnicas, aparte del rechazo comercial que hace el receptor con un motivo. La maqueta solo modela el comercial; falta decidir cómo se distingue en pantalla.</td></tr>
+            <tr><td><strong>Un usuario con varias empresas</strong></td><td>La maqueta ya lo enseña con el paso de elegir empresa, pero se pidió evaluar el impacto antes: cómo se asocia un usuario a varias empresas y qué implica. Hoy va por delante de la decisión.</td></tr>
+            <tr><td>Aprobación y rechazo masivos</td><td>Se pidió revisarlo: hoy el cliente responde documento a documento. Implica selección múltiple en el listado de recibidos.</td></tr>
+            <tr><td>Filtro de proveedores en recepción</td><td>Se pidió traerlo del feedback de Francia desde esta primera versión. Hoy el campo «Emisor» es texto libre, no permite elegir varios proveedores a la vez.</td></tr>
             <tr><td>Dónde cuelga «Clientes y proveedores»</td><td>El cruce dice que va, pero la propuesta de menú no le dio sitio.</td></tr>
-            <tr><td><strong>Asociación en EmaraTax</strong></td><td>Es obligatoria para certificar y no hay documentación oficial. Falta definir cómo nos llama la autoridad al volver. El detalle está en el punto 12.</td></tr>
+            <tr><td><strong>Asociación en EmaraTax</strong></td><td>Es obligatoria para certificar y no hay documentación oficial. Falta definir cómo nos llama la autoridad al volver. El detalle está en el punto 13.</td></tr>
           </tbody>
         </table>
       </div>
@@ -408,7 +412,25 @@
   </section>
 
   <section class="edoc-tablero">
-    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">11 · Credenciales de consumo · decidido</h2></div>
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">11 · Cerrado en la revisión del 2026-09-07</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Tema</th><th scope="col">Qué se decidió</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Visor de la factura</strong></td><td>La descarga se sigue llamando <strong>PDF</strong>, que es el término que todo el mundo reconoce. La ventana que se abre es <strong>el visor de la factura</strong>, con su leyenda de que es un render del XML y no lo que mandó el proveedor. Distinguirlo evita que el cliente confunda lo que genera el sistema con el documento original.</td></tr>
+            <tr><td><strong>Paginación</strong></td><td>La tradicional, por páginas. Nada de paginar por días: eso fue una solución para Panamá y Colombia por volumen, y aquí hay que replantearla si algún día hace falta.</td></tr>
+            <tr><td><strong>Idioma por defecto</strong></td><td>Inglés.</td></tr>
+            <tr><td>Volumen esperado</td><td>Emiratos no contempla facturación B2C, así que el volumen es razonable. Importa para el umbral a partir del cual una exportación se va a la cola.</td></tr>
+            <tr><td>Dónde vive el registro y la bandeja del Office Manager</td><td>Por ahora dentro del portal de consultas, para salir rápido. Su sitio natural no es este portal sino el sistema de administración de la empresa; se separará cuando exista.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">12 · Credenciales de consumo · decidido</h2></div>
     <div class="edoc-tablero__cuerpo">
       <p><strong>Se toma el modelo de Francia, con OAuth y el flujo <span class="cifra">client credentials</span>.</strong>
       Decidido el 2026-09-07. No hay una misma credencial para toda la empresa: cada integración tiene la suya, con su
@@ -428,7 +450,7 @@
   </section>
 
   <section class="edoc-tablero">
-    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">12 · Asociación en EmaraTax · requisito de integración</h2></div>
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">13 · Asociación en EmaraTax · requisito de integración</h2></div>
     <div class="edoc-tablero__cuerpo">
       <p>Esto no es una pantalla del portal, es un requisito de la norma de Emiratos. Vivía dentro de
       «Asociarnos en EmaraTax», donde no pintaba nada: un cliente no ve nunca el flujo de integración ni los
