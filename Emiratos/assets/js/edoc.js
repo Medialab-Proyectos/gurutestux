@@ -380,7 +380,7 @@
   function pie() {
     return '<footer class="edoc-pie">' +
       '<span>GuruSoft S.A. © 2026. Todos los derechos reservados.</span>' +
-      '<span>eDoc Emiratos · maqueta de alcance · v0.1 · no es el diseño final' +
+      '<span>eDoc Emiratos · maqueta de alcance · ' + (window.EDOC_VERSION || '') + ' · no es el diseño final' +
       (habilitada('bases.html') ? ' · <a href="bases.html">Bases de diseño</a>' : '') + '</span>' +
     '</footer>';
   }

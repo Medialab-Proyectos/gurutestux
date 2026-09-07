@@ -11,6 +11,12 @@
    pantallas acordadas salieran «En construcción» en la demo.
    Qué se enseña se decide en panel.html, que no cuelga de ningún menú.
    ========================================================================== */
+/* La versión de la maqueta. Vive aquí porque alcance.js es el único archivo que
+   cargan todas las páginas, el acceso incluido; antes estaba escrita a mano en
+   tres sitios y era cuestión de tiempo que dejaran de coincidir.
+   Se pinta en cualquier elemento con data-version. */
+window.EDOC_VERSION = 'v1.0';
+
 window.EDOC_ALCANCE = (function () {
   'use strict';
 
@@ -71,6 +77,11 @@ window.EDOC_ALCANCE = (function () {
   /* Red de seguridad para los enlaces que nacen después: los avisos flotantes,
      por ejemplo, llevan enlace a la bandeja de reportes. */
   if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('[data-version]').forEach(function (el) {
+        el.textContent = window.EDOC_VERSION;
+      });
+    });
     document.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href]');
       if (!a || a.hasAttribute('data-sin-destino')) return;
