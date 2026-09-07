@@ -322,12 +322,16 @@
     return '<span class="edoc-estado edoc-estado--' + m[0] + '">' + m[1] + '</span>' + extra + motivo;
   }
 
-  /* El menú de acciones se habilita según el estado de la fila.
-     Respondido con MLS AP o MLS RE cierra el círculo: ya no se puede volver
-     a responder. El acuse no lo cierra, porque no es una aprobación. */
-  /* Las tres respuestas van como botones en línea y se habilitan según el
-     estado de la fila, que es lo que se decidió en la reunión: un menú de
-     acciones dentro de la misma página, no un árbol de ventanas. */
+  /* Las acciones se habilitan según el estado de la fila. Responder con MLS AP
+     o MLS RE cierra el círculo: ya no se puede volver a responder. El acuse no
+     lo cierra, porque no es una aprobación.
+
+     Reparto pedido en la revisión del 2026-09-07: «dejaría las opciones
+     principales o las más utilizadas y las otras debajo de este submenú».
+     Fuera quedan las tres del recorrido —mirar la factura y responderla—; en
+     el menú de los tres puntos, las ocasionales. El acuse gana con el cambio:
+     pasa de un icono que nadie descifra a un rótulo que dice en una línea que
+     no es una aprobación. */
   function acciones(doc, i) {
     var cerrado = doc.respuesta === 'aprobado' || doc.respuesta === 'rechazado';
     function boton(accion, iconoNombre, matiz, rotulo, permitido, razon) {
@@ -339,15 +343,31 @@
       return '<span class="' + clases + '" aria-disabled="true" title="' + razon + '" ' +
              'aria-label="' + rotulo + ' · no disponible: ' + razon + '">' + ico(iconoNombre) + '</span>';
     }
+    function opcion(accion, iconoNombre, rotulo, detalle, permitido, razon) {
+      if (!permitido) {
+        return '<li><span class="dropdown-item edoc-mas__opcion" aria-disabled="true" title="' + razon + '">' +
+          ico(iconoNombre) + '<span><span class="edoc-mas__rotulo">' + rotulo + '</span>' +
+          '<span class="edoc-mas__detalle">' + razon + '</span></span></span></li>';
+      }
+      return '<li><a class="dropdown-item edoc-mas__opcion" href="#" data-accion="' + accion + '" data-i="' + i + '">' +
+        ico(iconoNombre) + '<span><span class="edoc-mas__rotulo">' + rotulo + '</span>' +
+        '<span class="edoc-mas__detalle">' + detalle + '</span></span></a></li>';
+    }
     return '<div class="edoc-acciones-fila">' +
-      boton('aprobar',  'aprobar',  'exito', 'Aprobar · MLS AP',       !cerrado, 'Ya respondiste este documento') +
-      boton('rechazar', 'rechazar', 'error', 'Rechazar · MLS RE',      !cerrado, 'Ya respondiste este documento') +
-      boton('acuse',    'acuse',    'aviso', 'Acusar recibo · MLS AB', !cerrado && doc.respuesta !== 'acuse', 'Ya dejaste constancia de que llegó') +
-      '<span class="separador"></span>' +
       '<a class="edoc-accion edoc-accion--pdf" href="#" data-accion="visor" data-i="' + i + '" title="Abrir el visor de la factura" ' +
         'aria-label="Abrir el visor de ' + doc.numero + '">' + ico('pdf') + '</a>' +
-      '<a class="edoc-accion edoc-accion--gris" href="#" data-accion="xml" data-i="' + i + '" title="Descargar XML" ' +
-        'aria-label="Descargar el XML de ' + doc.numero + '">' + ico('xml') + '</a>' +
+      boton('aprobar',  'aprobar',  'exito', 'Aprobar · MLS AP',  !cerrado, 'Ya respondiste este documento') +
+      boton('rechazar', 'rechazar', 'error', 'Rechazar · MLS RE', !cerrado, 'Ya respondiste este documento') +
+      '<div class="dropdown">' +
+        '<button type="button" class="edoc-accion edoc-accion--gris" data-toggle="dropdown" ' +
+          'title="Más acciones" aria-label="Más acciones para ' + doc.numero + '" ' +
+          'aria-haspopup="true" aria-expanded="false">' + ico('puntos') + '</button>' +
+        '<ul class="dropdown-menu dropdown-menu-right edoc-mas">' +
+          opcion('acuse', 'acuse', 'Acusar recibo', 'MLS AB · deja constancia de que llegó, no lo aprueba',
+                 !cerrado && doc.respuesta !== 'acuse', 'Ya dejaste constancia de que llegó') +
+          opcion('xml', 'xml', 'Descargar XML', 'El documento original tal como llegó', true, '') +
+        '</ul>' +
+      '</div>' +
     '</div>';
   }
 

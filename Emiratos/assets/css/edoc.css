@@ -1234,6 +1234,26 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   .edoc-encabezado__util { gap: 6px; }
 }
 
+/* Qué hacer con un rechazo, separado del motivo: el motivo es del documento,
+   la salida es del tipo de rechazo, y pegados en una sola frase se leían como
+   una sola cosa. */
+.linea-tiempo__nota { display: block; margin-top: 4px; color: #7a7a7a; }
+
+/* --- 29.1 · Menú «más acciones» de una fila -------------------------------
+   Pedido en la revisión del 2026-09-07: la columna de acciones crece cada vez
+   que aparece una función nueva, así que fuera se quedan las del recorrido
+   diario y el resto baja aquí. En el menú las acciones llevan rótulo y una
+   línea de explicación, cosa que un icono de 15 px no puede dar.           */
+.edoc-mas { min-width: 268px; padding: 6px 0; }
+.edoc-mas__opcion { display: flex; align-items: flex-start; gap: 10px; white-space: normal; }
+.edoc-mas__opcion svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+.edoc-mas__rotulo { display: block; font-weight: 600; }
+.edoc-mas__detalle { display: block; font-size: 11.5px; color: #6d6d6d; margin-top: 1px; }
+.edoc-mas__opcion[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+/* El botón de los tres puntos es un botón, no un enlace: hay que quitarle el
+   fondo que Bootstrap le pone al abrirse el desplegable. */
+.edoc-tabla .dropdown > .edoc-accion { background: #fff; }
+
 /* --- 30. Menú de exportar ------------------------------------------------
    Cuelga del botón en vez de abrir una ventana. Desde que la exportación se
    lleva solo el CSV no hay nada que preguntar; lo único que había que

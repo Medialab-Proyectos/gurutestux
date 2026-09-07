@@ -230,6 +230,22 @@
             <div>Un <strong>Aprobado</strong> en C3 no es la aceptación del comprador: significa que la plataforma del
             otro lado recibió el documento sin errores técnicos. La aceptación es la de C4.</div>
           </div>
+
+          <h3 class="edoc-tablero__titulo mt-4 mb-2" style="font-size:15px">Hay dos clases de rechazo</h3>
+          <p class="mb-2">No significan lo mismo ni se arreglan igual, aunque los dos se pinten en rojo.</p>
+          <div class="edoc-tabla-envoltura">
+            <table class="edoc-tabla">
+              <thead><tr><th scope="col">Clase</th><th scope="col">Quién lo hace</th><th scope="col">Qué hacer</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Rechazo técnico</strong></td>
+                    <td>eDoc, la autoridad o la plataforma receptora <span class="clave-corner">(C2, C5, C3)</span></td>
+                    <td>El documento no pasó las validaciones. Hay que corregirlo y volver a emitirlo.</td></tr>
+                <tr><td><strong>Rechazo comercial</strong></td>
+                    <td>El destinatario <span class="clave-corner">(C4)</span></td>
+                    <td>El documento está bien hecho, pero el comprador no está de acuerdo. Se corrige con una nota de crédito, porque en Emiratos anular no existe.</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cerrar</button>
@@ -413,9 +429,15 @@
       return [{ t: 'Sin actuación', d: 'El documento no llegó hasta esta entidad porque se detuvo antes.', s: '', e: 'espera' }];
     }
     if (c === 'rechazado') {
+      /* Un rechazo de una plataforma y uno del comprador no significan lo mismo
+         ni se arreglan igual, así que la línea de tiempo dice cuál es. */
+      var ficha = D.CORNERS.filter(function (x) { return x.clave === clave.toUpperCase(); })[0];
+      var clase = D.RECHAZOS[(ficha && ficha.rechazo) || 'tecnico'];
       var motivo = doc['motivo' + clave.toUpperCase()] || 'Rechazado por esta entidad.';
       var lista = mapa.slice(0, mapa.length - 1);
-      lista.push({ t: 'Rechazado', d: motivo, s: '09:12', e: 'fallo' });
+      lista.push({ t: clase.rotulo,
+                   d: motivo + '<span class="linea-tiempo__nota">' + clase.que + '</span>',
+                   s: '09:12', e: 'fallo' });
       return lista;
     }
     if (c === 'pendiente') {
@@ -448,7 +470,9 @@
             ' <span class="clave-corner">(' + c.clave + ')</span></div>' +
           '<div class="corner__quien">' + c.quien + '</div>' +
           '<div class="mt-2">' + (estado === 'noaplica' ? '<span class="edoc-secundario">Sin actuación</span>' :
-            '<span class="edoc-estado edoc-estado--' + e.clase + '">' + e.rotulo + '</span>') + '</div>' +
+            '<span class="edoc-estado edoc-estado--' + e.clase + '">' + e.rotulo + '</span>') +
+            (estado === 'rechazado'
+              ? '<div class="edoc-secundario mt-1">' + D.RECHAZOS[c.rechazo].rotulo + '</div>' : '') + '</div>' +
         '</div>' +
         '<div class="corner__cuerpo"><ul class="linea-tiempo">' + items + '</ul></div>' +
       '</article>';

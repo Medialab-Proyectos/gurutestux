@@ -8,13 +8,31 @@ window.EDOC = (function () {
   'use strict';
 
   /* Los cuatro corners. El código 2 significa «aprobado» para todas las
-     entidades; por eso la columna no puede ser una sola. */
+     entidades; por eso la columna no puede ser una sola.
+
+     `rechazo` dice de qué clase es el rechazo de cada una, que no son lo mismo
+     ni se arreglan igual. Las tres primeras son plataformas y rechazan por
+     validaciones: el documento está mal hecho y hay que corregirlo y reenviarlo.
+     El destinatario rechaza por negocio: el documento está bien hecho pero no
+     está de acuerdo, y la salida es una nota de crédito. */
   var CORNERS = [
-    { clave: 'C2', nombre: 'eDoc',                  quien: 'Tu proveedor de servicios acreditado · ASP' },
-    { clave: 'C5', nombre: 'Autoridad',             quien: 'Federal Tax Authority · gobierno' },
-    { clave: 'C3', nombre: 'Plataforma receptora',  quien: 'El ASP del comprador' },
-    { clave: 'C4', nombre: 'Destinatario',          quien: 'El comprador · destinatario final' }
+    { clave: 'C2', nombre: 'eDoc',                  quien: 'Tu proveedor de servicios acreditado · ASP',
+      rechazo: 'tecnico' },
+    { clave: 'C5', nombre: 'Autoridad',             quien: 'Federal Tax Authority · gobierno',
+      rechazo: 'tecnico' },
+    { clave: 'C3', nombre: 'Plataforma receptora',  quien: 'El ASP del comprador',
+      rechazo: 'tecnico' },
+    { clave: 'C4', nombre: 'Destinatario',          quien: 'El comprador · destinatario final',
+      rechazo: 'comercial' }
   ];
+
+  /* Las dos clases de rechazo, con el nombre que se enseña y qué hacer. */
+  var RECHAZOS = {
+    tecnico:   { rotulo: 'Rechazo técnico',
+                 que: 'El documento no pasó las validaciones. Hay que corregirlo y volver a emitirlo.' },
+    comercial: { rotulo: 'Rechazo comercial',
+                 que: 'El documento está bien hecho, pero el comprador no está de acuerdo. Se corrige con una nota de crédito.' }
+  };
 
   /* Estado → cómo se pinta. Los colores son los de señalización del manual. */
   var ESTADOS = {
@@ -172,7 +190,7 @@ window.EDOC = (function () {
   };
 
   return {
-    CORNERS: CORNERS, ESTADOS: ESTADOS, TIPOS: TIPOS, MOTIVOS_RECHAZO: MOTIVOS_RECHAZO,
+    CORNERS: CORNERS, RECHAZOS: RECHAZOS, ESTADOS: ESTADOS, TIPOS: TIPOS, MOTIVOS_RECHAZO: MOTIVOS_RECHAZO,
     EMITIDOS: EMITIDOS, RECIBIDOS: RECIBIDOS, DETALLE: DETALLE, dinero: d
   };
 })();

@@ -46,7 +46,12 @@
     megafono: '<path d="M3.4 8.2h2.8l6.4-3.6v10.8L6.2 11.8H3.4z"/><path d="M15.4 7.6a3.4 3.4 0 0 1 0 4.8"/>',
     reenviar: '<path d="M3 5.4h14v9.2H3z"/><path d="m3 5.9 7 4.6 7-4.6"/><path d="m13.6 13.4 2.4 2.4-2.4 2.4"/>',
     mas:      '<path d="M10 4.4v11.2M4.4 10h11.2"/>',
-    puntos:   '<circle cx="10" cy="4.6" r="1.4"/><circle cx="10" cy="10" r="1.4"/><circle cx="10" cy="15.4" r="1.4"/>',
+    /* Los tres puntos van rellenos: el resto de iconos se dibuja con
+       fill="none", y así estos salían como tres anillos de un pixel que a 15 px
+       no se veían. El botón parecía vacío. */
+    puntos:   '<circle cx="10" cy="4.6" r="1.5" fill="currentColor" stroke="none"/>' +
+              '<circle cx="10" cy="10" r="1.5" fill="currentColor" stroke="none"/>' +
+              '<circle cx="10" cy="15.4" r="1.5" fill="currentColor" stroke="none"/>',
     /* El ambiente se identifica con un icono de servidor: es el lenguaje
        universal para «en qué máquina estoy», sin tener que leer «entorno». */
     servidor: '<rect x="3" y="3.6" width="14" height="5" rx="1"/><rect x="3" y="11.4" width="14" height="5" rx="1"/>' +

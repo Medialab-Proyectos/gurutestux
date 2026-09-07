@@ -399,8 +399,8 @@
             <tr><td>Buscar datos fiscales de un tercero</td><td>Quedó en «se va a atender», sin cerrar si entra en el MVP.</td></tr>
             <tr><td>Cargar un XML recibido a mano</td><td>Existe en Bolivia y no se trató en la reunión. Queda sin decidir.</td></tr>
             <tr><td>Equivalente del CUF</td><td>Bolivia filtra los recibidos por el código único de la factura. Falta definir cuál es el identificador en Emiratos y cómo se llama.</td></tr>
-            <tr><td><strong>Rechazo técnico y rechazo comercial</strong></td><td>En Emiratos hay plataformas en medio que pueden rechazar un documento por validaciones técnicas, aparte del rechazo comercial que hace el receptor con un motivo. La maqueta solo modela el comercial; falta decidir cómo se distingue en pantalla.</td></tr>
             <tr><td><strong>Un usuario con varias empresas</strong></td><td>La maqueta ya lo enseña con el paso de elegir empresa, pero se pidió evaluar el impacto antes: cómo se asocia un usuario a varias empresas y qué implica. Hoy va por delante de la decisión.</td></tr>
+            <tr><td><strong>Acciones de fila</strong></td><td>Fuera se quedan las del recorrido diario —visor, aprobar, rechazar— y las ocasionales bajan al menú de los tres puntos, con rótulo y una línea de explicación. Aplicado en Documentos Recibidos, que era donde la columna se había hecho larga; Emitidos se queda con sus tres acciones sueltas, porque un menú para un solo elemento no arregla nada.</td></tr>
             <tr><td>Aprobación y rechazo masivos</td><td>Se pidió revisarlo: hoy el cliente responde documento a documento. Implica selección múltiple en el listado de recibidos.</td></tr>
             <tr><td>Filtro de proveedores en recepción</td><td>Se pidió traerlo del feedback de Francia desde esta primera versión. Hoy el campo «Emisor» es texto libre, no permite elegir varios proveedores a la vez.</td></tr>
             <tr><td>Dónde cuelga «Clientes y proveedores»</td><td>El cruce dice que va, pero la propuesta de menú no le dio sitio.</td></tr>
@@ -418,6 +418,7 @@
         <table class="edoc-tabla">
           <thead><tr><th scope="col">Tema</th><th scope="col">Qué se decidió</th></tr></thead>
           <tbody>
+            <tr><td><strong>Rechazo técnico y comercial</strong></td><td>Se distinguen por quién rechaza: C2, C5 y C3 son plataformas y rechazan por validaciones —se corrige y se reemite—; C4 es el comprador y rechaza por negocio —se corrige con una nota de crédito, porque en Emiratos anular no existe—. La línea de tiempo, la tarjeta de cada entidad y la ayuda de las cuatro entidades lo dicen.</td></tr>
             <tr><td><strong>Visor de la factura</strong></td><td>La descarga se sigue llamando <strong>PDF</strong>, que es el término que todo el mundo reconoce. La ventana que se abre es <strong>el visor de la factura</strong>, con su leyenda de que es un render del XML y no lo que mandó el proveedor. Distinguirlo evita que el cliente confunda lo que genera el sistema con el documento original.</td></tr>
             <tr><td><strong>Paginación</strong></td><td>La tradicional, por páginas. Nada de paginar por días: eso fue una solución para Panamá y Colombia por volumen, y aquí hay que replantearla si algún día hace falta.</td></tr>
             <tr><td><strong>Idioma por defecto</strong></td><td>Inglés.</td></tr>
