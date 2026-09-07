@@ -7,19 +7,21 @@
       "permanent": false
     }
   ],
+  "_nota": [
+    "Sin cache mientras la maqueta esta en revision. Antes los assets llevaban",
+    "max-age=3600, y tras un despliegue el navegador seguia sirviendo el CSS y el",
+    "JS viejos hasta una hora: se veia el mismo portal aunque el despliegue fuera",
+    "nuevo. Cuando esto deje de ser una maqueta hay que devolver la cache larga,",
+    "con el nombre del archivo versionado."
+  ],
   "headers": [
-    {
-      "source": "/Emiratos/assets/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=3600"
-        }
-      ]
-    },
     {
       "source": "/(.*)",
       "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0, must-revalidate"
+        },
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"

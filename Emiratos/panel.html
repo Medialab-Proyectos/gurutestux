@@ -111,6 +111,18 @@
   </section>
 
   <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Empezar de cero</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p class="mb-2">La maqueta recuerda cosas en este navegador: qué pantallas enseñas, el idioma,
+      si el nombre nativo está encendido y los reportes que has pedido. Después de un despliegue eso
+      sigue ahí y puede dar la sensación de que nada ha cambiado.</p>
+      <p class="edoc-secundario mb-3">Esto borra lo guardado y recarga. No toca nada del servidor ni
+      de nadie más: es solo tu navegador.</p>
+      <button class="btn btn-edoc-secundario btn-sm" id="btn-limpiar">Borrar lo guardado en este navegador</button>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Para dejarlo fijo</h2></div>
     <div class="edoc-tablero__cuerpo">
       <p class="mb-2">Guardar aquí y mandar el enlace resuelve una presentación. Si quieres cambiar lo que
@@ -179,6 +191,19 @@
     A.restablecer(); seleccion = A.porDefecto().slice(); pintar();
     avisar('Restablecido a la entrega de hoy.');
   });
+  /* Borra solo lo nuestro: las llaves que empiezan por «edoc-». Si algún día
+     esta dirección comparte navegador con otra cosa, no se la lleva por delante. */
+  document.getElementById('btn-limpiar').addEventListener('click', function () {
+    var borradas = 0;
+    try {
+      Object.keys(window.localStorage).forEach(function (llave) {
+        if (llave.indexOf('edoc-') === 0) { window.localStorage.removeItem(llave); borradas++; }
+      });
+    } catch (error) { /* navegador sin almacenamiento: no había nada que borrar */ }
+    avisar('Borradas ' + borradas + ' preferencia' + (borradas === 1 ? '' : 's') + '. Recargando…');
+    setTimeout(function () { window.location.reload(); }, 900);
+  });
+
   document.getElementById('btn-copiar').addEventListener('click', function () {
     var texto = document.getElementById('enlace').textContent;
     if (navigator.clipboard) {
