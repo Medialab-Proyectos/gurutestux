@@ -1234,7 +1234,20 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   .edoc-encabezado__util { gap: 6px; }
 }
 
-/* --- 30. Atajo de la maqueta en «Asociarnos en EmaraTax» -----------------
+/* --- 30. Bloques de código -----------------------------------------------
+   Para lo que se copia tal cual: direcciones, ejemplos de llamada, el secreto
+   de una aplicación. Va en la tipografía de cifras del manual, que es la que
+   distingue el uno de la ele, y con desplazamiento propio para que una línea
+   larga no ensanche la página.                                              */
+.edoc-codigo {
+  font-family: var(--fuente-cifras); font-size: 12px; line-height: 1.65;
+  background: #f4f6f6; border: 1px solid #e0e4e3; border-radius: var(--radio);
+  padding: 12px 14px; margin: 0 0 12px; color: #33403d;
+  overflow-x: auto; white-space: pre;
+}
+.edoc-codigo code { font: inherit; color: inherit; background: none; padding: 0; }
+
+/* --- 31. Atajo de la maqueta en «Asociarnos en EmaraTax» -----------------
    El recorrido necesita un botón para hacer como si el cliente ya hubiera
    vuelto del portal de impuestos. No puede vivir en la capa de notas, que va
    apagada por defecto, así que se marca aquí como lo que es: un apaño de la

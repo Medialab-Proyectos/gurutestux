@@ -14,79 +14,209 @@
 <body data-seccion="administracion" data-pagina="admin-credenciales.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
+  <!--
+    Decidido el 2026-09-07: se toma el modelo de Francia, OAuth con el flujo
+    client credentials, y no una misma credencial para toda la empresa. Antes
+    esta pantalla enseñaba las dos opciones enfrentadas para poder elegir; ya no
+    hay nada que elegir.
+
+    El encargo era «que sea súper sencillo de configurar, pero sin quitar lo
+    técnico». De ahí el reparto: arriba las aplicaciones, que es lo que el
+    cliente administra a diario y no pide saber nada; abajo cómo se conecta, con
+    las direcciones y un ejemplo que se copia tal cual para quien sí lo necesita.
+  -->
   <div class="edoc-titulo-barra"><div>
       <div class="edoc-miga"><span>Administración</span><span>Credenciales de consumo Servicio eDoc</span></div>
       <h1 class="edoc-titulo">Credenciales de consumo Servicio eDoc</h1>
-      <p class="edoc-subtitulo">Las credenciales con las que tu sistema se conecta al nuestro. Hay dos modelos posibles; el que se elija define la pantalla.</p>
+      <p class="edoc-subtitulo">Cada sistema que conectes al nuestro lleva su propia credencial. Así puedes
+      retirar una sin dejar sin servicio a las demás.</p>
     </div></div>
 
-  <div class="row rejilla">
-    <div class="col-12 col-lg-6">
-      <section class="edoc-tablero h-100">
-        <div class="edoc-tablero__cabecera">
-          <h2 class="edoc-tablero__titulo">Opción A · una credencial por empresa</h2>
-          <span class="edoc-etiqueta-mvp edoc-etiqueta-mvp--posterior">Como Bolivia</span>
-        </div>
-        <div class="edoc-tablero__cuerpo">
-          <p>La empresa pide sus credenciales y le llegan por correo. Una sola pareja de clave y secreto para toda la empresa.</p>
-          <div class="edoc-tabla-envoltura">
-            <table class="edoc-tabla">
-              <thead><tr><th scope="col">Dato</th><th scope="col">Valor</th></tr></thead>
-              <tbody>
-                <tr><td>Identificador</td><td class="cifra">alnoor-prod</td></tr>
-                <tr><td>Secreto</td><td class="cifra">••••••••••••••••</td></tr>
-                <tr><td>Última emisión</td><td class="cifra">2026-06-14</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <button class="btn btn-edoc-secundario mt-3" data-sin-destino>Solicitar credenciales por correo</button>
-          <div class="edoc-aviso edoc-aviso--error mt-3">
-            <div>La pantalla equivalente en el portal de referencia está en revisión y no sirve como modelo tal cual
-            está. Hay que rehacerla, no copiarla.</div>
-          </div>
-        </div>
-      </section>
+  <section class="edoc-tablero mb-3">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Tus aplicaciones</h2>
+      <button class="btn btn-edoc-primario btn-sm" data-toggle="modal" data-target="#modal-crear-app">Crear una aplicación</button>
     </div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead>
+            <tr>
+              <th scope="col">Aplicación</th>
+              <th scope="col">Ambiente</th>
+              <th scope="col">Identificador de cliente</th>
+              <th scope="col">Creada</th>
+              <th scope="col">Último uso</th>
+              <th scope="col">Estado</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ERP · SAP</td>
+              <td>Producción</td>
+              <td class="cifra">alnoor-erp-sap</td>
+              <td class="cifra">2026-03-02</td>
+              <td class="cifra">hace 6 minutos</td>
+              <td><span class="edoc-estado edoc-estado--exito">Activa</span></td>
+              <td class="col-acciones">
+                <div class="edoc-acciones-fila">
+                  <button class="edoc-accion" data-icono="llave" data-sin-destino
+                    title="Cambiar el secreto" aria-label="Cambiar el secreto de ERP · SAP"></button>
+                  <button class="edoc-accion edoc-accion--gris" data-icono="limpiar" data-sin-destino
+                    title="Retirar la aplicación" aria-label="Retirar ERP · SAP"></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>ERP · pruebas</td>
+              <td>QA</td>
+              <td class="cifra">alnoor-erp-qa</td>
+              <td class="cifra">2026-05-19</td>
+              <td class="cifra">ayer</td>
+              <td><span class="edoc-estado edoc-estado--exito">Activa</span></td>
+              <td class="col-acciones">
+                <div class="edoc-acciones-fila">
+                  <button class="edoc-accion" data-icono="llave" data-sin-destino
+                    title="Cambiar el secreto" aria-label="Cambiar el secreto de ERP · pruebas"></button>
+                  <button class="edoc-accion edoc-accion--gris" data-icono="limpiar" data-sin-destino
+                    title="Retirar la aplicación" aria-label="Retirar ERP · pruebas"></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Portal de compras</td>
+              <td>Producción</td>
+              <td class="cifra">alnoor-compras</td>
+              <td class="cifra">2025-11-08</td>
+              <td class="cifra">2026-01-30</td>
+              <td><span class="edoc-estado edoc-estado--neutro">Retirada</span></td>
+              <td class="col-acciones"><span class="edoc-secundario">—</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <div class="col-12 col-lg-6">
-      <section class="edoc-tablero h-100">
-        <div class="edoc-tablero__cabecera">
-          <h2 class="edoc-tablero__titulo">Opción B · varias aplicaciones</h2>
-          <span class="edoc-etiqueta-mvp edoc-etiqueta-mvp--posterior">Como Francia</span>
-        </div>
-        <div class="edoc-tablero__cuerpo">
-          <p>Una aplicación por integración, cada una con sus credenciales y su propio ciclo de vida. Se puede revocar una
-          sin tumbar las demás.</p>
-          <div class="edoc-tabla-envoltura">
-            <table class="edoc-tabla">
-              <thead><tr><th scope="col">Aplicación</th><th scope="col">Creada</th><th scope="col">Estado</th></tr></thead>
-              <tbody>
-                <tr><td>ERP · SAP producción</td><td class="cifra">2026-03-02</td><td><span class="edoc-estado edoc-estado--exito">Activa</span></td></tr>
-                <tr><td>ERP · pruebas</td><td class="cifra">2026-05-19</td><td><span class="edoc-estado edoc-estado--exito">Activa</span></td></tr>
-                <tr><td>Portal de compras</td><td class="cifra">2025-11-08</td><td><span class="edoc-estado edoc-estado--neutro">Revocada</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-          <button class="btn btn-edoc-secundario mt-3" data-sin-destino>Crear una aplicación</button>
-          <div class="edoc-aviso edoc-aviso--advertencia mt-3">
-            <div>El secreto se enseña una sola vez, al crearlo, y no se vuelve a guardar en claro. Es el patrón correcto
-            y hay que aplicarlo desde el principio.</div>
-          </div>
-        </div>
-      </section>
+      <div class="edoc-aviso edoc-aviso--info mt-3">
+        <div>Retirar una aplicación le corta el acceso al momento y no se puede deshacer. Las demás siguen
+        funcionando.</div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="nota nota--abierto">
-    <span class="nota__sello">Abierto · bloquea el diseño</span>
-    <strong>Hay que elegir modelo antes de maquetar esta pantalla.</strong> Es uno de los tres puntos críticos junto con las
-    dos vistas de documentos. La opción B envejece mejor, pero es una decisión de producto, no de diseño.
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Cómo se conecta</h2>
+      <span class="edoc-etiqueta-mvp edoc-etiqueta-mvp--posterior">OAuth 2.0 · client credentials</span>
+    </div>
+    <div class="edoc-tablero__cuerpo">
+      <p>Tu sistema no manda el secreto en cada llamada. Lo cambia una vez por un <strong>token</strong> que
+      caduca, y ese token es el que viaja. Si algún día se filtra, deja de valer solo.</p>
+
+      <ul class="linea-tiempo mb-4">
+        <li>
+          <div class="linea-tiempo__titulo">1 · Pide un token</div>
+          <div class="linea-tiempo__detalle">Con el identificador y el secreto de la aplicación. Te devolvemos un
+          token válido durante una hora.</div>
+        </li>
+        <li>
+          <div class="linea-tiempo__titulo">2 · Llama con el token</div>
+          <div class="linea-tiempo__detalle">Va en la cabecera <span class="cifra">Authorization</span> de cada
+          petición, como <span class="cifra">Bearer</span>.</div>
+        </li>
+        <li>
+          <div class="linea-tiempo__titulo">3 · Pide otro cuando caduque</div>
+          <div class="linea-tiempo__detalle">Tu sistema lo renueva solo. No hace falta que nadie entre aquí a
+          tocar nada.</div>
+        </li>
+      </ul>
+
+      <div class="edoc-etiqueta mb-2">Direcciones</div>
+      <div class="edoc-tabla-envoltura mb-4">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Para qué</th><th scope="col">Dirección</th></tr></thead>
+          <tbody>
+            <tr><td>Pedir el token</td><td class="cifra">POST /oauth2/token</td></tr>
+            <tr><td>Consumir el servicio</td><td class="cifra">https://api.edoc.ae/v1/</td></tr>
+            <tr><td>Tipo de concesión</td><td class="cifra">grant_type=client_credentials</td></tr>
+            <tr><td>Alcance</td><td class="cifra">scope=documentos.leer documentos.escribir</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="edoc-etiqueta mb-2">Ejemplo, para copiar tal cual</div>
+      <pre class="edoc-codigo"><code>curl -X POST https://api.edoc.ae/oauth2/token \
+  -d "grant_type=client_credentials" \
+  -d "client_id=alnoor-erp-sap" \
+  -d "client_secret=EL_SECRETO_DE_TU_APLICACION"
+
+# Respuesta
+{ "access_token": "eyJhbGciOi...", "token_type": "Bearer", "expires_in": 3600 }
+
+# Y a partir de ahí, en cada llamada
+curl https://api.edoc.ae/v1/documentos/emitidos \
+  -H "Authorization: Bearer eyJhbGciOi..."</code></pre>
+
+      <p class="edoc-secundario mb-0">¿Lo configura otra persona del equipo técnico? Crea la aplicación, cópiale el
+      identificador y mándale el secreto por un canal privado. Nunca por correo.</p>
+    </div>
+  </section>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 2026-09-07</span>
+    <strong>Se toma el modelo de Francia, con OAuth.</strong> No una misma credencial para toda la empresa: una por
+    integración, cada una con su ciclo de vida. Lo que hay que trabajar es que configurarlo sea sencillo, sin
+    esconderle lo técnico a quien lo necesita.
   </div>
   <div class="nota nota--fuera">
     <span class="nota__sello">Fuera del MVP</span>
     <strong>Certificado o firma digital.</strong> La norma de Emiratos no la exige y en Francia las facturas no llegan
     firmadas. Pedirle al cliente su certificado sin que la ley lo pida sería extralimitarse. Firmar nosotros con el
     certificado de la casa es otra conversación y sigue abierta.
+  </div>
+
+  <!-- ===================== Crear una aplicación ===================== -->
+  <div class="modal fade" id="modal-crear-app" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Crear una aplicación</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+
+        <div class="modal-body" id="app-paso-datos">
+          <div class="mb-3">
+            <label class="edoc-etiqueta" for="app-nombre">Nombre<span class="obligatorio">*</span></label>
+            <input class="form-control" id="app-nombre" placeholder="ERP · SAP" required>
+            <div class="edoc-secundario mt-1">Para reconocerla en la lista. Ponle el nombre del sistema que se va a
+            conectar.</div>
+          </div>
+          <div class="mb-1">
+            <label class="edoc-etiqueta" for="app-ambiente">Ambiente<span class="obligatorio">*</span></label>
+            <select class="form-control" id="app-ambiente">
+              <option>QA · para probar</option>
+              <option>Producción · documentos reales</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-body" id="app-paso-secreto" hidden>
+          <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+            <div><strong>Copia el secreto ahora.</strong> Es la única vez que se enseña. No lo guardamos en claro,
+            así que si lo pierdes hay que generar uno nuevo.</div>
+          </div>
+          <div class="edoc-etiqueta mb-1">Identificador de cliente</div>
+          <pre class="edoc-codigo mb-3"><code id="app-id"></code></pre>
+          <div class="edoc-etiqueta mb-1">Secreto</div>
+          <pre class="edoc-codigo mb-0"><code id="app-secreto"></code></pre>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal" id="app-cancelar">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" id="app-crear">Crear</button>
+        </div>
+      </div>
+    </div>
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -96,5 +226,44 @@
 <script src="assets/js/idioma.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  var modal = window.jQuery('#modal-crear-app');
+  var datos = document.getElementById('app-paso-datos');
+  var secreto = document.getElementById('app-paso-secreto');
+  var crear = document.getElementById('app-crear');
+  var cancelar = document.getElementById('app-cancelar');
+
+  function volverAlPrincipio() {
+    datos.hidden = false; secreto.hidden = true;
+    crear.textContent = 'Crear'; cancelar.textContent = 'Cancelar';
+    document.getElementById('app-nombre').value = '';
+  }
+  modal.on('hidden.bs.modal', volverAlPrincipio);
+
+  function apodo(texto) {
+    return 'alnoor-' + (texto.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
+  }
+  function cadena(n) {
+    var abc = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789';
+    var t = '';
+    for (var i = 0; i < n; i++) t += abc.charAt(Math.floor(Math.random() * abc.length));
+    return t;
+  }
+
+  crear.addEventListener('click', function () {
+    /* Segundo paso: el secreto se enseña una sola vez. Es el patrón correcto y
+       hay que aplicarlo desde el principio, no dejarlo para después. */
+    if (!secreto.hidden) { modal.modal('hide'); return; }
+    var nombre = document.getElementById('app-nombre');
+    if (!nombre.value.trim()) { nombre.focus(); return; }
+    document.getElementById('app-id').textContent = apodo(nombre.value);
+    document.getElementById('app-secreto').textContent = cadena(44);
+    datos.hidden = true; secreto.hidden = false;
+    crear.textContent = 'Ya lo copié'; cancelar.textContent = 'Cerrar';
+  });
+})();
+</script>
 </body>
 </html>

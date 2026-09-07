@@ -369,6 +369,7 @@
             <tr><td>Anular un documento</td><td>En Emiratos anular no existe: la única corrección es una nota de crédito, y este portal no emite notas.</td></tr>
             <tr><td>Workflow de aprobaciones</td><td>Módulo con personalidad propia. En Bolivia lleva años sin salir a producción.</td></tr>
             <tr><td>Cola de reportes pesados</td><td>El patrón es correcto, pero de entrada no hay volumen.</td></tr>
+            <tr><td>Exportar los XML junto al CSV</td><td>Decidido el 2026-09-07: en el MVP la exportación se lleva solo los datos. El ZIP con un XML por documento queda para después.</td></tr>
             <tr><td>Buscador general del portal</td><td>Con tan pocas opciones de menú no agrega valor.</td></tr>
             <tr><td>Informes fiscales</td><td>Ninguno tiene equivalente conocido en Emiratos.</td></tr>
             <tr><td>Catálogos oficiales de la autoridad</td><td>Las listas de códigos ya viven en la wiki, y la pantalla se entendería como crear catálogos.</td></tr>
@@ -388,7 +389,6 @@
         <table class="edoc-tabla">
           <thead><tr><th scope="col">Tema</th><th scope="col">Por qué importa</th></tr></thead>
           <tbody>
-            <tr><td><strong>Modelo de credenciales</strong></td><td>Bolivia da una credencial por empresa; Francia da varias aplicaciones. Hasta elegir, esa pantalla no se puede diseñar.</td></tr>
             <tr><td>Idioma del portal</td><td>Solo inglés, o inglés y árabe. Hay que declarárselo a la autoridad y arrastra toda la interfaz, empezando por el sentido de lectura. El selector de la maqueta incluye español porque la maqueta está escrita en español para la revisión; el español no es un idioma del portal.</td></tr>
             <tr><td>Reenviar por correo</td><td>El primer canal es PEPOL. Un canal alterno puede hacer que un documento se apruebe por una vía y se rechace por la otra.</td></tr>
             <tr><td>Firma con certificado</td><td>La norma no la exige. Pedirle el certificado al cliente sin que la ley lo pida sería extralimitarse.</td></tr>
@@ -400,7 +400,7 @@
             <tr><td>Cargar un XML recibido a mano</td><td>Existe en Bolivia y no se trató en la reunión. Queda sin decidir.</td></tr>
             <tr><td>Equivalente del CUF</td><td>Bolivia filtra los recibidos por el código único de la factura. Falta definir cuál es el identificador en Emiratos y cómo se llama.</td></tr>
             <tr><td>Dónde cuelga «Clientes y proveedores»</td><td>El cruce dice que va, pero la propuesta de menú no le dio sitio.</td></tr>
-            <tr><td><strong>Asociación en EmaraTax</strong></td><td>Es obligatoria para certificar y no hay documentación oficial. Falta definir cómo nos llama la autoridad al volver. El detalle está en el punto 11.</td></tr>
+            <tr><td><strong>Asociación en EmaraTax</strong></td><td>Es obligatoria para certificar y no hay documentación oficial. Falta definir cómo nos llama la autoridad al volver. El detalle está en el punto 12.</td></tr>
           </tbody>
         </table>
       </div>
@@ -408,7 +408,27 @@
   </section>
 
   <section class="edoc-tablero">
-    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">11 · Asociación en EmaraTax · requisito de integración</h2></div>
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">11 · Credenciales de consumo · decidido</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p><strong>Se toma el modelo de Francia, con OAuth y el flujo <span class="cifra">client credentials</span>.</strong>
+      Decidido el 2026-09-07. No hay una misma credencial para toda la empresa: cada integración tiene la suya, con su
+      propio ciclo de vida, y se puede retirar una sin tumbar las demás.</p>
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Qué se decidió</th><th scope="col">Qué implica en la pantalla</th></tr></thead>
+          <tbody>
+            <tr><td>Una credencial por integración, no por empresa</td><td>La pantalla es una lista de aplicaciones con estado, no una ficha con un identificador y un secreto.</td></tr>
+            <tr><td>OAuth, flujo <span class="cifra">client credentials</span></td><td>El secreto no viaja en cada llamada: se cambia por un token que caduca. Hay que enseñar las direcciones y el ejemplo.</td></tr>
+            <tr><td>El secreto se enseña una sola vez</td><td>Al crear la aplicación, en un segundo paso del diálogo, con el aviso de que no se vuelve a mostrar.</td></tr>
+            <tr><td>«Sencillo de configurar, sin quitar lo técnico»</td><td>Arriba lo que se administra a diario, en lenguaje llano; abajo las direcciones y el <span class="cifra">curl</span> para quien lo necesita.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">12 · Asociación en EmaraTax · requisito de integración</h2></div>
     <div class="edoc-tablero__cuerpo">
       <p>Esto no es una pantalla del portal, es un requisito de la norma de Emiratos. Vivía dentro de
       «Asociarnos en EmaraTax», donde no pintaba nada: un cliente no ve nunca el flujo de integración ni los
