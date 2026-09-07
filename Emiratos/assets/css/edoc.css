@@ -1234,7 +1234,26 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   .edoc-encabezado__util { gap: 6px; }
 }
 
-/* --- 30. Bloques de código -----------------------------------------------
+/* --- 30. Menú de exportar ------------------------------------------------
+   Cuelga del botón en vez de abrir una ventana. Desde que la exportación se
+   lleva solo el CSV no hay nada que preguntar; lo único que había que
+   conservar del diálogo era decir la consecuencia antes de pulsar, y eso cabe
+   en una línea bajo la acción.                                              */
+.edoc-exportar { min-width: 268px; }
+.edoc-exportar__accion { display: block; width: 100%; text-align: left; }
+.edoc-exportar__titulo { display: block; font-weight: 600; }
+.edoc-exportar__detalle {
+  display: block; font-size: 11.5px; color: #6d6d6d; margin-top: 2px;
+}
+.edoc-exportar__accion:hover .edoc-exportar__detalle,
+.edoc-exportar__accion:focus .edoc-exportar__detalle { color: #4a4a4a; }
+.edoc-exportar__bandeja { font-size: 12.5px; }
+
+/* El chevron del botón se alinea con el texto, como en las pastillas de la
+   barra superior. */
+[data-abre-exportar] .edoc-btn-util__chevron { margin-left: 4px; }
+
+/* --- 31. Bloques de código -----------------------------------------------
    Para lo que se copia tal cual: direcciones, ejemplos de llamada, el secreto
    de una aplicación. Va en la tipografía de cifras del manual, que es la que
    distingue el uno de la ele, y con desplazamiento propio para que una línea
@@ -1247,7 +1266,7 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 }
 .edoc-codigo code { font: inherit; color: inherit; background: none; padding: 0; }
 
-/* --- 31. Atajo de la maqueta en «Asociarnos en EmaraTax» -----------------
+/* --- 32. Atajo de la maqueta en «Asociarnos en EmaraTax» -----------------
    El recorrido necesita un botón para hacer como si el cliente ya hubiera
    vuelto del portal de impuestos. No puede vivir en la capa de notas, que va
    apagada por defecto, así que se marca aquí como lo que es: un apaño de la
