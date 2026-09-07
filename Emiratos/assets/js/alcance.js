@@ -1,8 +1,14 @@
 /* ==========================================================================
    eDoc Emiratos · alcance de la entrega
-   La reunión pidió maquetar las dos pantallas centrales. Para una presentación
-   se entregan solo esas, más el inicio; el resto del portal sigue en el menú
+   La reunión pidió maquetar las dos pantallas centrales. La entrega creció
+   hasta las siete que se presentan: el inicio, las dos centrales, la bandeja de
+   exportación y las tres de fuera de la sesión —registro, asociación en
+   EmaraTax y credenciales de consumo—. El resto del portal sigue en el menú
    —para que se vea el alcance completo— pero muestra «En construcción».
+
+   Van en la entrega por defecto y no colgando de un ?vistas=: el despliegue
+   redirige la raíz y se come el parámetro, así que fiarlo al enlace hacía que
+   pantallas acordadas salieran «En construcción» en la demo.
    Qué se enseña se decide en panel.html, que no cuelga de ningún menú.
    ========================================================================== */
 window.EDOC_ALCANCE = (function () {
@@ -23,12 +29,12 @@ window.EDOC_ALCANCE = (function () {
     { archivo: 'admin-usuarios.html',      rotulo: 'Usuarios',                                grupo: 'Administración', entrega: false },
     { archivo: 'admin-empresa.html',       rotulo: 'Datos fiscales de la empresa',          grupo: 'Administración', entrega: false },
     { archivo: 'admin-contactos.html',     rotulo: 'Contactos de la empresa',    grupo: 'Administración', entrega: false },
-    { archivo: 'admin-credenciales.html',  rotulo: 'Credenciales de consumo Servicio eDoc',   grupo: 'Administración', entrega: false },
+    { archivo: 'admin-credenciales.html',  rotulo: 'Credenciales de consumo Servicio eDoc',   grupo: 'Administración', entrega: true  },
     { archivo: 'admin-alertas.html',       rotulo: 'Alertas y comunicados',                   grupo: 'Administración', entrega: false },
     { archivo: 'admin-manuales.html',      rotulo: 'Manuales',                                grupo: 'Administración', entrega: false },
     { archivo: 'admin-clientes.html',      rotulo: 'Clientes y proveedores',                  grupo: 'Administración', entrega: false },
-    { archivo: 'onboarding.html',          rotulo: 'Retorno desde EmaraTax',                  grupo: 'Fuera de la sesión', entrega: false },
-    { archivo: 'registro.html',            rotulo: 'Registro de la empresa',                  grupo: 'Fuera de la sesión', entrega: false },
+    { archivo: 'onboarding.html',          rotulo: 'Asociarnos en EmaraTax',                  grupo: 'Fuera de la sesión', entrega: true  },
+    { archivo: 'registro.html',            rotulo: 'Registro de la empresa',                  grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'aprobacion-registro.html', rotulo: 'Aprobación del registro',                 grupo: 'Fuera de la sesión', entrega: false }
   ];
 
@@ -76,7 +82,7 @@ window.EDOC_ALCANCE = (function () {
   /* Sube cada vez que cambia la lista de pantallas. Una selección guardada con
      una versión anterior se descarta: si no, una pantalla nueva no aparecería
      jamás en el navegador de quien ya había guardado. */
-  var VERSION = '2';
+  var VERSION = '3';
   var LLAVE_VERSION = 'edoc-vistas-version';
 
   function porDefecto() {
