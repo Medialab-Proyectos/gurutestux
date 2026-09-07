@@ -267,7 +267,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          <p class="mb-3">Se exporta <strong id="exp-cuantos"></strong> del rango de fechas que tienes en la búsqueda,
+          <p class="mb-3"><span id="exp-cuantos"></span> del rango de fechas que tienes en la búsqueda,
           con las columnas que ves en pantalla.</p>
 
           <div class="edoc-etiqueta mb-2">Qué te llevas</div>
@@ -306,7 +306,6 @@
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
-<script src="assets/js/idioma.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script src="assets/js/tablas.js"></script>
@@ -534,8 +533,13 @@
     var pesado = n > UMBRAL || conXml;
     var caja = document.getElementById('exp-aviso');
     caja.className = 'edoc-aviso edoc-aviso--' + (pesado ? 'advertencia' : 'info');
+    // El motivo importa: con diez documentos no es «el tamaño» lo que manda el
+    // archivo a la cola, es tener que empaquetar un XML por documento.
+    var motivo = n > UMBRAL
+      ? 'Son muchos documentos para descargarlos en el momento.'
+      : 'Empaquetar un XML por documento lleva su tiempo.';
     document.getElementById('exp-aviso-texto').innerHTML = pesado
-      ? 'Con este tamaño el archivo se genera en segundo plano. Te avisamos cuando esté listo y lo recoges en ' +
+      ? motivo + ' El archivo se genera en segundo plano: te avisamos cuando esté listo y lo recoges en ' +
         '<a href="reportes-generados.html">Reportes generados</a>; los archivos se guardan siete días.'
       : 'Son pocos documentos, así que la descarga empieza en cuanto pulses Exportar.';
   }
@@ -545,8 +549,10 @@
     if (!b) return;
     e.preventDefault();
     var n = cuantos();
-    document.getElementById('exp-cuantos').textContent =
-      n === 1 ? 'un documento' : n.toLocaleString('es-ES') + ' documentos';
+    // El verbo va con el número: «Se exporta 10 documentos» estaba mal concordado.
+    document.getElementById('exp-cuantos').innerHTML = n === 1
+      ? 'Se exporta <strong>un documento</strong>'
+      : 'Se exportan <strong>' + n.toLocaleString('es-ES') + ' documentos</strong>';
     pintarAviso();
     window.jQuery('#modal-exportar').modal('show');
   });

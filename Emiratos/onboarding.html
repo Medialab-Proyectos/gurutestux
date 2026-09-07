@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Retorno desde EmaraTax · eDoc Emiratos</title>
+<title>Asociarnos en EmaraTax · eDoc Emiratos</title>
 <link rel="icon" href="assets/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,69 +11,92 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
 </head>
-<body data-seccion="inicio" data-pagina="onboarding.html">
+<!--
+  Esta pantalla se vació a propósito. Antes llevaba el flujo de integración de
+  seis pasos, los parámetros que esperamos de la autoridad y un botón de
+  pruebas: material de equipo interno, no algo que un cliente vea nunca. Todo
+  eso vive ahora en las Bases de diseño, punto 11.
+
+  Lo que queda es lo único que un usuario vive de este asunto: está bloqueado,
+  tiene que ir a EmaraTax, y cuando vuelva el portal funciona. Que se quede
+  corta no es un descuido: la pantalla es corta.
+-->
+<!-- Armazón reducido, sin menú: quien ve esta pantalla todavía no puede usar
+     el portal. Enseñarle Emisión y Recepción arriba contradecía el propio
+     aviso de la pantalla. La salida es volver al acceso. -->
+<body data-seccion="inicio" data-pagina="onboarding.html" data-armazon="reducido"
+      data-quien="Al Noor Trading LLC · sin activar">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <div class="edoc-titulo-barra">
     <div>
-      <div class="edoc-miga"><span>Fuera del menú</span><span>Retorno desde EmaraTax</span></div>
-      <h1 class="edoc-titulo">Retorno desde EmaraTax</h1>
-      <p class="edoc-subtitulo">La dirección a la que vuelve el cliente después de pulsar «Proceed to ASP» en el sistema fiscal de Emiratos.</p>
+      <div class="edoc-miga"><span>Fuera del menú</span><span>Asociarnos en EmaraTax</span></div>
+      <h1 class="edoc-titulo">Asociarnos en EmaraTax</h1>
+      <p class="edoc-subtitulo">Falta un paso en el portal de impuestos para que podamos emitir y recibir
+      documentos a tu nombre.</p>
     </div>
-    <span class="edoc-etiqueta-mvp edoc-etiqueta-mvp--abierto">Obligatorio para certificar</span>
   </div>
 
-  <section class="edoc-tablero">
-    <div class="edoc-tablero__cuerpo">
-      <div class="row rejilla">
-        <div class="col-12 col-lg-7">
-          <h2 class="edoc-tablero__titulo mb-3">Cómo llega el cliente</h2>
+  <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+    <div><strong>Tu empresa está registrada, pero todavía no nos has asociado como proveedor.</strong>
+    Hasta que lo hagas no podemos emitir ni recibir documentos a tu nombre.</div>
+  </div>
+
+  <div class="row rejilla">
+    <div class="col-12 col-lg-7">
+      <section class="edoc-tablero h-100">
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Qué tienes que hacer</h2></div>
+        <div class="edoc-tablero__cuerpo">
           <ul class="linea-tiempo">
-            <li class="hecho"><div class="linea-tiempo__titulo">Nos contrata</div>
-              <div class="linea-tiempo__detalle">El acercamiento comercial ocurre fuera del portal.</div></li>
-            <li class="hecho"><div class="linea-tiempo__titulo">Se registra en el portal</div>
-              <div class="linea-tiempo__detalle">Wizard de seis pasos con verificación por correo. El Office Manager aprueba y le enviamos las credenciales.</div></li>
-            <li class="hecho"><div class="linea-tiempo__titulo">Entra por primera vez</div>
-              <div class="linea-tiempo__detalle">El portal le dice que le falta el onboarding y le bloquea el resto de opciones.</div></li>
-            <li class="espera"><div class="linea-tiempo__titulo">Va a EmaraTax</div>
-              <div class="linea-tiempo__detalle">Nos busca entre los proveedores acreditados, nos selecciona y pulsa «Proceed to ASP». El sistema le avisa de que va a salir.</div></li>
-            <li class="espera"><div class="linea-tiempo__titulo">Vuelve aquí</div>
-              <div class="linea-tiempo__detalle">La autoridad nos llama con un redirect o un callback, probablemente con el TRN y otros parámetros que confirman la asociación.</div></li>
-            <li class="espera"><div class="linea-tiempo__titulo">Se desbloquea el portal</div>
-              <div class="linea-tiempo__detalle">Confirmamos por backend y le mostramos que ya está activo.</div></li>
+            <li>
+              <div class="linea-tiempo__titulo">Entra a EmaraTax</div>
+              <div class="linea-tiempo__detalle">Con las credenciales fiscales de tu empresa. Es el portal de la
+              Federal Tax Authority, no el nuestro.</div>
+            </li>
+            <li>
+              <div class="linea-tiempo__titulo">Búscanos entre los proveedores acreditados</div>
+              <div class="linea-tiempo__detalle">Aparecemos como <strong>GuruSoft S.A.</strong> en la lista de
+              proveedores de servicios acreditados.</div>
+            </li>
+            <li>
+              <div class="linea-tiempo__titulo">Pulsa «Proceed to ASP»</div>
+              <div class="linea-tiempo__detalle">EmaraTax te avisará de que vas a salir de su sistema. Acepta y te
+              traemos de vuelta aquí.</div>
+            </li>
           </ul>
+
+          <a class="btn btn-edoc-primario mt-2" href="#" data-sin-destino>Ir a EmaraTax</a>
         </div>
-        <div class="col-12 col-lg-5">
-          <div class="edoc-aviso edoc-aviso--advertencia mb-3">
-            <div><strong>Tu empresa está registrada, pero todavía no nos has asociado como proveedor.</strong>
-            Hasta que lo hagas no podemos emitir ni recibir documentos a tu nombre.</div>
-          </div>
-          <div class="edoc-tablero" style="box-shadow:none">
-            <div class="edoc-tablero__cuerpo">
-              <div class="visor-bloque__rotulo">Lo que esperamos recibir</div>
-              <dl class="visor-dato mt-2"><dt>TRN</dt><dd class="cifra">100776655400003</dd></dl>
-              <dl class="visor-dato"><dt>Nombre legal</dt><dd>Al Noor Trading LLC</dd></dl>
-              <dl class="visor-dato"><dt>Referencia</dt><dd class="cifra">EMT-ONB-2026-00918</dd></dl>
-              <dl class="visor-dato"><dt>Estado</dt><dd><span class="edoc-estado edoc-estado--neutro">A la espera</span></dd></dl>
-              <button class="btn btn-edoc-primario w-100 mt-3" id="simular">Simular el retorno de EmaraTax</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="nota nota--abierto">
-        <span class="nota__sello">Abierto</span>
-        <strong>No hay documentación oficial todavía.</strong> Sabemos que la prueba de onboarding forma parte de la
-        certificación, pero no cómo se hace. Hay que abrir un ticket para definir la integración: lo más probable es un
-        redirect URI o un callback. También falta decidir de qué parte del menú cuelga esta pantalla.
-      </div>
+      </section>
     </div>
-  </section>
+
+    <div class="col-12 col-lg-5">
+      <section class="edoc-tablero h-100">
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Cuando vuelvas</h2></div>
+        <div class="edoc-tablero__cuerpo">
+          <p>El portal se desbloquea solo. No tienes que avisarnos, ni escribir ningún código, ni volver a entrar:
+          la autoridad nos confirma la asociación y tus opciones se activan.</p>
+          <p class="edoc-secundario">Si vuelves y sigues viendo este aviso, escríbenos desde el acceso al
+          soporte.</p>
+          <a class="btn btn-edoc-secundario" href="index.html">Volver al acceso</a>
+
+          <!-- Fuera de la capa de notas a propósito: esa capa está apagada por
+               defecto y el botón hace falta para seguir el recorrido en la demo. -->
+          <div class="onboarding-maqueta">
+            <p class="edoc-secundario">Desde aquí no se sale de verdad al portal de impuestos. Este botón hace
+            como si ya hubieras vuelto, para poder seguir viendo la maqueta.</p>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="simular">Simular la vuelta desde
+            EmaraTax</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
-<script src="assets/js/idioma.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script>

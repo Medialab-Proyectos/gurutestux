@@ -389,7 +389,7 @@
           <thead><tr><th scope="col">Tema</th><th scope="col">Por qué importa</th></tr></thead>
           <tbody>
             <tr><td><strong>Modelo de credenciales</strong></td><td>Bolivia da una credencial por empresa; Francia da varias aplicaciones. Hasta elegir, esa pantalla no se puede diseñar.</td></tr>
-            <tr><td>Idioma del portal</td><td>Solo inglés, o inglés y árabe. Hay que declarárselo a la autoridad y arrastra toda la interfaz.</td></tr>
+            <tr><td>Idioma del portal</td><td>Solo inglés, o inglés y árabe. Hay que declarárselo a la autoridad y arrastra toda la interfaz, empezando por el sentido de lectura. La maqueta no lleva selector de idioma a propósito: enseñarlo daría por hecho que el portal va a ser bilingüe, y eso es justo lo que falta decidir.</td></tr>
             <tr><td>Reenviar por correo</td><td>El primer canal es PEPOL. Un canal alterno puede hacer que un documento se apruebe por una vía y se rechace por la otra.</td></tr>
             <tr><td>Firma con certificado</td><td>La norma no la exige. Pedirle el certificado al cliente sin que la ley lo pida sería extralimitarse.</td></tr>
             <tr><td>Registro de empresas</td><td>Pendiente de decidir si se toma el wizard de Francia.</td></tr>
@@ -400,8 +400,61 @@
             <tr><td>Cargar un XML recibido a mano</td><td>Existe en Bolivia y no se trató en la reunión. Queda sin decidir.</td></tr>
             <tr><td>Equivalente del CUF</td><td>Bolivia filtra los recibidos por el código único de la factura. Falta definir cuál es el identificador en Emiratos y cómo se llama.</td></tr>
             <tr><td>Dónde cuelga «Clientes y proveedores»</td><td>El cruce dice que va, pero la propuesta de menú no le dio sitio.</td></tr>
+            <tr><td><strong>Asociación en EmaraTax</strong></td><td>Es obligatoria para certificar y no hay documentación oficial. Falta definir cómo nos llama la autoridad al volver. El detalle está en el punto 11.</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">11 · Asociación en EmaraTax · requisito de integración</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p>Esto no es una pantalla del portal, es un requisito de la norma de Emiratos. Vivía dentro de
+      «Asociarnos en EmaraTax», donde no pintaba nada: un cliente no ve nunca el flujo de integración ni los
+      parámetros que nos manda la autoridad. Se guarda aquí, que es donde vive lo interno.</p>
+
+      <div class="row rejilla">
+        <div class="col-12 col-lg-7">
+          <h3 class="edoc-tablero__titulo mb-3" style="font-size:15px">Cómo llega el cliente</h3>
+          <ul class="linea-tiempo">
+            <li class="hecho"><div class="linea-tiempo__titulo">Nos contrata</div>
+              <div class="linea-tiempo__detalle">El acercamiento comercial ocurre fuera del portal.</div></li>
+            <li class="hecho"><div class="linea-tiempo__titulo">Se registra en el portal</div>
+              <div class="linea-tiempo__detalle">Wizard de seis pasos con verificación por correo. El Office Manager aprueba y le enviamos las credenciales.</div></li>
+            <li class="hecho"><div class="linea-tiempo__titulo">Entra por primera vez</div>
+              <div class="linea-tiempo__detalle">El portal le dice que le falta asociarnos y le bloquea el resto de opciones.</div></li>
+            <li class="espera"><div class="linea-tiempo__titulo">Va a EmaraTax</div>
+              <div class="linea-tiempo__detalle">Nos busca entre los proveedores acreditados, nos selecciona y pulsa «Proceed to ASP». El sistema le avisa de que va a salir.</div></li>
+            <li class="espera"><div class="linea-tiempo__titulo">Vuelve a nosotros</div>
+              <div class="linea-tiempo__detalle">La autoridad nos llama con un redirect o un callback, probablemente con el TRN y otros parámetros que confirman la asociación.</div></li>
+            <li class="espera"><div class="linea-tiempo__titulo">Se desbloquea el portal</div>
+              <div class="linea-tiempo__detalle">Confirmamos por backend y le mostramos que ya está activo.</div></li>
+          </ul>
+        </div>
+
+        <div class="col-12 col-lg-5">
+          <h3 class="edoc-tablero__titulo mb-3" style="font-size:15px">Lo que esperamos recibir</h3>
+          <div class="edoc-tabla-envoltura">
+            <table class="edoc-tabla">
+              <thead><tr><th scope="col">Dato</th><th scope="col">Ejemplo</th></tr></thead>
+              <tbody>
+                <tr><td>TRN</td><td class="cifra">100776655400003</td></tr>
+                <tr><td>Nombre legal</td><td>Al Noor Trading LLC</td></tr>
+                <tr><td>Referencia</td><td class="cifra">EMT-ONB-2026-00918</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="edoc-secundario mt-2 mb-0">Son suposiciones, no una especificación. Nadie ha confirmado
+          todavía qué manda la autoridad ni con qué nombres.</p>
+        </div>
+      </div>
+
+      <div class="nota nota--abierto mt-3">
+        <span class="nota__sello">Abierto</span>
+        <strong>No hay documentación oficial todavía.</strong> Sabemos que la prueba de asociación forma parte de la
+        certificacion, pero no cómo se hace. Hay que abrir un ticket para definir la integración: lo más probable es un
+        redirect URI o un callback. Es una decisión de backend y no se resuelve maquetando.
       </div>
     </div>
   </section>
@@ -412,7 +465,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
-<script src="assets/js/idioma.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script>
