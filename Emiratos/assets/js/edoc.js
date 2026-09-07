@@ -211,6 +211,9 @@
             icono('info') + '<span class="edoc-btn-util__texto">Notas de diseño</span></button>'
           : '') +
         '<span class="edoc-encabezado__separador"></span>' +
+        // El mismo selector que se ve al entrar: misma lista, mismo código, y lo
+        // que elijas en el acceso es lo que aparece aquí.
+        '<span class="edoc-solo-ancho">' + window.edocSelectorIdioma() + '</span>' +
         '<a class="edoc-btn-util edoc-btn-util--icono edoc-solo-ancho" href="#" data-sin-destino ' +
           'title="Emiratos Árabes Unidos · cambiar de portal">' + bandera() + '</a>' +
         '<div class="dropdown">' +
@@ -249,6 +252,10 @@
             // En pantallas estrechas las herramientas del portal no caben en la
             // barra y caen aquí: siguen a un toque, sin amontonarse arriba.
             '<li class="solo-movil"><hr class="dropdown-divider"></li>' +
+            (window.edocIdiomaOpciones
+              ? window.edocIdiomaOpciones().replace(/<li>/g, '<li class="solo-movil">') +
+                '<li class="solo-movil"><hr class="dropdown-divider"></li>'
+              : '') +
             '<li class="solo-movil"><a class="dropdown-item" href="#" data-sin-destino>' +
               bandera() + 'Emiratos Árabes Unidos</a></li>' +
             '<li class="solo-movil"><a class="dropdown-item" href="#" data-sin-destino>' +
@@ -389,6 +396,9 @@
         reducido ? encabezadoReducido(cuerpo.dataset.quien || '') : encabezado() + menu(seccion));
     }
     cuerpo.insertAdjacentHTML('beforeend', pie());
+    // El armazón se pinta después de que idioma.js haya arrancado, así que hay
+    // que dejarle marcar cuál es el idioma activo.
+    if (window.edocPintarIdioma) window.edocPintarIdioma();
     // El armazón se pinta después de que idioma.js haya arrancado, así que
     // hay que dejarle marcar cuál es el idioma activo.
     // Los enlaces del encabezado, del menú y del pie nacen aquí, después de

@@ -1010,6 +1010,10 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   font-size: 12px; color: var(--edoc-gris);
 }
 
+/* El selector de idioma, con el código y el chevron, igual que en Francia. */
+.edoc-btn-util--idioma { padding: 6px 12px 6px 13px; gap: 8px; }
+.edoc-btn-util__chevron { width: 9px; height: 6px; opacity: .8; flex: none; }
+
 /* --- 27. Acceso · elegir empresa -----------------------------------------
    Sustituye al campo del registro fiscal: el cliente no tiene que escribir un
    número de quince dígitos que nosotros ya tenemos. Con una sola empresa este
@@ -1169,10 +1173,36 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   font-family: var(--fuente-titulos); font-size: 11px; font-weight: 700;
   letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris);
 }
-/* El selector de idioma se quitó de la maqueta. Decía «en-AE» sobre una
-   pantalla escrita en español, así que lo único que comunicaba era una
-   incoherencia. La decisión —solo inglés, o inglés y árabe— sigue anotada en
-   las Bases de diseño, que es donde vive lo que está sin cerrar. */
+.edoc-acceso__idioma { margin: 0; }
+
+/* Mensaje corto bajo el selector: la maqueta no se traduce y hay que decirlo
+   donde se pulsa, no en una nota aparte. */
+.edoc-acceso__aviso {
+  margin: 0 0 14px; padding: 9px 12px; border-radius: 8px;
+  background: #f2f5ea; border-left: 3px solid var(--edoc-verde);
+  font-size: 12px; line-height: 1.45; color: #3f4a2e;
+}
+
+/* --- 28.1 · Selector de idioma -------------------------------------------
+   El mismo control en el acceso y en la barra superior. El código que enseña
+   es siempre el del idioma que se está leyendo: cuando decía «en-AE» sobre una
+   pantalla en español, solo parecía un fallo.                               */
+.edoc-idioma__lista { min-width: 216px; padding: 6px 0; }
+.edoc-idioma__opcion { display: flex; align-items: center; gap: 9px; }
+.edoc-idioma__nombre { flex: 1 1 auto; }
+.edoc-idioma__codigo { font-size: 11px; color: var(--edoc-gris); letter-spacing: .02em; }
+/* El idioma activo se marca con una barra verde, no con un tic: el tic ya se
+   usa en las tablas para «aprobado». */
+.edoc-idioma__opcion.activo { box-shadow: inset 3px 0 0 var(--edoc-verde); font-weight: 600; }
+
+/* Sobre fondo blanco la pastilla invierte los colores. */
+.edoc-idioma--claro .edoc-btn-util {
+  border-color: #d6d9de; color: var(--edoc-azul);
+  font-family: var(--fuente-titulos); font-weight: 600;
+  padding: 5px 11px 5px 12px;
+}
+.edoc-idioma--claro .edoc-btn-util:hover { background: #f1f3f7; border-color: #b9bfc9; }
+.edoc-idioma--claro .edoc-btn-util__codigo { color: var(--edoc-azul); }
 
 /* --- 29. Barra superior en pantallas estrechas ---------------------------
    En un móvil no caben cinco herramientas y el ambiente: se amontonaban y la
