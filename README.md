@@ -15,20 +15,15 @@ Y abrir <http://127.0.0.1:8000/>.
 ## Despliegue en Vercel
 
 Sitio estático, sin build y **sin ajustes que tocar**: se despliega la raíz del repositorio tal cual.
-`vercel.json` manda la raíz a `/Emiratos/` y `middleware.js` pone la puerta de acceso delante de todo.
+`vercel.json` manda la raíz a `/Emiratos/`.
 
-Lo único obligatorio son dos variables de entorno, en **Settings › Environment Variables**:
+**La maqueta está abierta**: no pide usuario ni contraseña para entrar, para que cualquiera con el
+enlace pueda recorrerla (y quede registrada en Hotjar). Sigue sin indexarse en buscadores por la
+cabecera `X-Robots-Tag: noindex, nofollow` de `vercel.json`.
 
-| Variable | Valor |
-|---|---|
-| `ACCESO_USUARIO` | el usuario de acceso a la maqueta |
-| `ACCESO_CLAVE` | la contraseña de acceso a la maqueta |
-
-Sin ellas el sitio no deja entrar a nadie y responde explicando qué falta. Es a propósito: este
-repositorio es público, y una contraseña escrita en el código sería una contraseña publicada.
-
-**Los dos archivos tienen que quedarse en la raíz.** Vercel solo detecta el middleware en la raíz de
-lo que despliega; dentro de `Emiratos/` no se ejecuta y el sitio queda abierto sin que se note.
+Antes había una puerta con usuario y contraseña (`middleware.js`, con las variables `ACCESO_USUARIO`
+y `ACCESO_CLAVE`). Si hay que volver a cerrarla, está en el historial de git; tiene que ir en la
+raíz del repositorio, porque Vercel solo detecta el middleware ahí.
 
 ## Qué no está aquí
 

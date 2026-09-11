@@ -244,21 +244,11 @@ npm i -g vercel
 vercel --prod
 ```
 
-### La maqueta va con contraseña
+### La maqueta está abierta
 
-`middleware.js` y `vercel.json` viven en la **raíz del repositorio**, un nivel por encima de esta
-carpeta: Vercel solo detecta el middleware ahí. La puerta se ejecuta en el borde, antes de servir
-cualquier archivo, así que no se salta mirando el HTML.
+No pide usuario ni contraseña: cualquiera con el enlace la recorre. `vercel.json` vive en la **raíz
+del repositorio**, un nivel por encima de esta carpeta, y manda la cabecera `noindex, nofollow` para
+que no aparezca en buscadores.
 
-No hay contraseña por defecto: se definen en **Vercel › Settings › Environment Variables**.
-
-| Variable | Valor |
-|---|---|
-| `ACCESO_USUARIO` | el usuario que quieras |
-| `ACCESO_CLAVE` | la contraseña que quieras |
-
-Sin ellas el sitio no deja entrar a nadie y explica qué falta. El repositorio es público: una
-contraseña escrita en el código sería una contraseña publicada.
-
-En local no corre: `python -m http.server` no ejecuta middleware, así que la maqueta se abre directa
-mientras trabajas. Eso es lo que quieres en tu máquina.
+Antes la cerraba un `middleware.js` en la raíz con las variables `ACCESO_USUARIO` y `ACCESO_CLAVE`.
+Si hay que volver a cerrarla, está en el historial de git.
