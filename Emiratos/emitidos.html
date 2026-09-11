@@ -208,7 +208,7 @@
   <div class="nota nota--fuera">
     <span class="nota__sello">Fuera del MVP</span>
     <strong>Reenviar al cliente</strong> está por decidir: en Bolivia va por correo y por WhatsApp, pero aquí el primer
-    canal es la red PEPOL. Abrir el correo como canal alterno puede hacer que un documento se apruebe por una vía y se
+    canal es la red Peppol. Abrir el correo como canal alterno puede hacer que un documento se apruebe por una vía y se
     rechace por la otra. <strong>La cola de reportes pesados</strong> es el patrón correcto, pero de entrada no hay volumen.
   </div>
 
@@ -232,9 +232,9 @@
               <tbody>
                 <tr><td>Tu empresa <span class="clave-corner">(C1)</span></td><td>Tú, quien emite el documento.</td>
                     <td>Lo entrega a eDoc para que lo transmita.</td></tr>
-                <tr><td>eDoc <span class="clave-corner">(C2)</span></td><td>Tu proveedor de servicios acreditado. Es quien transmite el documento por la red.</td>
+                <tr><td>eDoc <span class="clave-corner">(C2)</span></td><td>Tu proveedor de servicios en la red Peppol. Es quien transmite el documento.</td>
                     <td>Aprueba el documento o lo rechaza si el XML no valida.</td></tr>
-                <tr><td>Plataforma receptora <span class="clave-corner">(C3)</span></td><td>El proveedor acreditado del comprador.</td>
+                <tr><td>Plataforma receptora <span class="clave-corner">(C3)</span></td><td>El proveedor de servicios del comprador.</td>
                     <td>Entrega o rechaza por validaciones técnicas.
                     <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="left"
                       data-content="Un Aprobado aquí significa que la plataforma del otro lado recibió el documento sin errores técnicos. No es la aceptación del comprador: esa es la de C4."
@@ -465,7 +465,7 @@
     var mapa = {
       c1: [
         { t: 'Documento generado', d: 'Tu sistema crea la factura y la deja lista para enviar.', s: '08:12', e: 'hecho' },
-        { t: 'Entregado a eDoc',   d: 'Sale de tu sistema hacia tu proveedor acreditado.',      s: '08:14', e: 'hecho' }
+        { t: 'Entregado a eDoc',   d: 'Sale de tu sistema hacia tu proveedor de servicios.',      s: '08:14', e: 'hecho' }
       ],
       c2: [
         { t: 'Recepción del documento', d: 'El sistema del cliente entrega el XML a eDoc.', s: '08:14', e: 'hecho' },

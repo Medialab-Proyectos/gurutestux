@@ -32,7 +32,7 @@ window.EDOC = (function () {
   var CORNERS = [
     { clave: 'C1', nombre: 'Tu empresa',            quien: 'Quien emite el documento',
       rama: 'entrega', rechazo: 'tecnico' },
-    { clave: 'C2', nombre: 'eDoc',                  quien: 'Tu proveedor de servicios acreditado · ASP',
+    { clave: 'C2', nombre: 'eDoc',                  quien: 'Tu proveedor de servicios en la red Peppol',
       rama: 'entrega', rechazo: 'tecnico' },
     { clave: 'C3', nombre: 'Plataforma receptora',  quien: 'El ASP del comprador',
       rama: 'entrega', rechazo: 'tecnico' },
