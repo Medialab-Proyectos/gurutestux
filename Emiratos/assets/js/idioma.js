@@ -118,6 +118,12 @@
      inglés, que es el estándar del portal, y también lo dice.            */
   var EN = {
       "Inicio": "Home",
+      // Títulos de pestaña que no salen en ninguna otra parte de la pantalla.
+      "Acceso": "Sign-in",
+      "Datos fiscales": "Tax details",
+      "Clientes y proveedores": "Customers and suppliers",
+      "Panel de alcance": "Scope panel",
+      "Bases de diseño": "Design foundations",
       "Administración": "Administration",
       "Roles y Usuarios": "Roles and users",
       "Usuarios": "Users",
@@ -157,6 +163,7 @@
       "Emiratos Árabes Unidos · cambiar de portal": "United Arab Emirates · switch portal",
       "Menú principal": "Main menu",
       "Abrir el menú": "Open menu",
+      "Cerrar el menú": "Close menu",
       "Cerrar este aviso": "Close this notice",
       "Cerrar": "Close",
       "Mostrar la contraseña": "Show password",
@@ -987,7 +994,9 @@
   }
 
   // data-content es el texto de los '?' de ayuda.
-  var ATRIBUTOS = ['title', 'aria-label', 'placeholder', 'data-content'];
+  // data-seccion-actual: el nombre de la sección en la barra del menú móvil,
+  // que el CSS pinta con attr() y no es un nodo de texto.
+  var ATRIBUTOS = ['title', 'aria-label', 'placeholder', 'data-content', 'data-seccion-actual'];
   var traduciendo = false;
   var observador = null;
 

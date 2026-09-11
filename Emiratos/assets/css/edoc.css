@@ -1250,18 +1250,25 @@ table.edoc-tabla.dataTable thead tr:last-child:not(:first-child) th { top: 28px;
 
 /* --- 24. Menú en pantallas estrechas -------------------------------------
    Por encima de 900 px manda la barra horizontal; por debajo, el cajón.     */
+/* Las tres rayas salen del centro del botón y se separan 6 px. Antes se
+   repartían con space-between: a 44 px de alto (táctil) quedaban a 13 px y el
+   aspa, que asume 6, se quedaba en una flecha. Así da igual el tamaño. */
 .edoc-menu__hamburguesa {
-  display: none; width: 38px; height: 32px; margin: auto 6px auto 0; padding: 7px 8px;
+  display: none; position: relative; width: 38px; height: 32px; margin: auto 6px auto 0; padding: 0;
   background: transparent; border: 1px solid #c2c2c2; border-radius: var(--radio-chico);
-  flex-direction: column; justify-content: space-between; flex: none;
+  flex: none;
 }
 .edoc-menu__hamburguesa span {
-  display: block; height: 2px; width: 100%; background: var(--edoc-azul); border-radius: 2px;
+  position: absolute; left: 50%; top: 50%; width: 20px; height: 2px; margin: -1px 0 0 -10px;
+  background: var(--edoc-azul); border-radius: 2px;
   transition: transform .18s ease, opacity .18s ease;
 }
-.edoc-menu__hamburguesa.abierta span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.edoc-menu__hamburguesa span:nth-child(1) { transform: translateY(-6px); }
+.edoc-menu__hamburguesa span:nth-child(3) { transform: translateY(6px); }
+.edoc-menu__hamburguesa.abierta span:nth-child(1) { transform: rotate(45deg); }
 .edoc-menu__hamburguesa.abierta span:nth-child(2) { opacity: 0; }
-.edoc-menu__hamburguesa.abierta span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.edoc-menu__hamburguesa.abierta span:nth-child(3) { transform: rotate(-45deg); }
+@media (prefers-reduced-motion: reduce) { .edoc-menu__hamburguesa span { transition: none; } }
 
 .edoc-menu-movil { display: none; }
 .edoc-menu-movil__seccion {
@@ -1559,7 +1566,12 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 /* Con una barra de estado encima, height:100vh desplaza la pantalla y
    overflow:hidden le corta la cabeza. Con barra se pasa a min-height -que es lo
    que ya dice la regla de arriba- y se deja que el navegador haga scroll. */
-body:not(.con-barra-estado) .edoc-acceso { height: 100vh; overflow: hidden; }
+/* Solo con las dos columnas: en móvil esta regla ganaba por especificidad a la
+   de abajo, la página no se desplazaba y la portada se aplastaba cortando la
+   marca. */
+@media (min-width: 901px) {
+  body:not(.con-barra-estado) .edoc-acceso { height: 100vh; overflow: hidden; }
+}
 /* La barra se pega a 106px porque ahi acaba el encabezado del portal. En una
    pantalla sin encabezado -el acceso- ese hueco no existe y la barra se
    descolgaba encima del contenido. */
