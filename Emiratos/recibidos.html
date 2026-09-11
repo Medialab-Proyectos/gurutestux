@@ -60,7 +60,7 @@
             <label class="edoc-etiqueta" for="f-hasta">Fecha de recepción hasta<span class="obligatorio">*</span></label>
             <input type="date" class="form-control" id="f-hasta" value="2026-08-31" required>
           </div>
-          <div class="col-12 col-md-6 col-xl-3">
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
             <label class="edoc-etiqueta" for="f-tipo">Tipo de documento</label>
             <select class="custom-select" id="f-tipo"><option value="">Todos</option></select>
           </div>
@@ -74,11 +74,11 @@
               <option value="acuse">Acuse de recibo · MLS AB</option>
             </select>
           </div>
-          <div class="col-12 col-md-6 col-xl-3">
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
             <label class="edoc-etiqueta" for="f-numero">Número de documento</label>
             <input type="text" class="form-control cifra" id="f-numero" placeholder="INV-882301">
           </div>
-          <div class="col-12 col-md-6 col-xl-3">
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
             <label class="edoc-etiqueta" for="f-trn">Registro fiscal del emisor</label>
             <input type="text" class="form-control cifra" id="f-trn" placeholder="100908070600003" inputmode="numeric">
           </div>
@@ -87,7 +87,7 @@
                documentos de doscientos proveedores y uno no recuerda cómo se
                escribe cada uno. Se elige de la lista, y se pueden marcar
                varios. -->
-          <div class="col-12 col-md-6 col-xl-3">
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
             <label class="edoc-etiqueta" for="f-proveedor">Proveedor</label>
             <div class="dropdown edoc-multi">
               <button class="form-control text-left dropdown-toggle" type="button" id="f-proveedor"
@@ -99,6 +99,9 @@
             <div class="edoc-ayuda">Se pueden marcar varios. Aparecen con el nombre tal como llega.</div>
           </div>
         </div>
+
+        <button type="button" class="btn btn-edoc-terciario edoc-filtros-mas mt-3" data-filtros-mas
+                aria-expanded="false" aria-controls="forma-buscar"><span class="edoc-filtros-mas__rotulo">Más filtros</span><span class="edoc-filtros-mas__cuenta"></span></button>
 
         <div class="d-flex hueco-2 flex-wrap mt-4 align-items-center">
           <button type="submit" class="btn btn-edoc-primario">Consultar</button>

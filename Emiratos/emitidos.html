@@ -63,28 +63,16 @@
             <label class="edoc-etiqueta" for="f-hasta">Fecha de emisión hasta<span class="obligatorio">*</span></label>
             <input type="date" class="form-control" id="f-hasta" value="2026-08-31" required>
           </div>
-          <div class="col-12 col-md-6 col-xl-3">
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
             <label class="edoc-etiqueta" for="f-tipo">Tipo de documento</label>
             <select class="custom-select" id="f-tipo"><option value="">Todos</option></select>
           </div>
-          <div class="col-12 col-md-6 col-xl-3">
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
             <label class="edoc-etiqueta" for="f-numero">Número de documento</label>
             <input type="text" class="form-control cifra" id="f-numero" placeholder="INV-2026-004871" inputmode="latin">
           </div>
-
           <div class="col-12 col-md-6 col-xl-3">
-            <label class="edoc-etiqueta" for="f-entidad">Estado de la entidad</label>
-            <select class="custom-select" id="f-entidad">
-              <option value="">Cualquiera</option>
-              <option value="c1">Tu empresa (C1)</option>
-              <option value="c2">eDoc (C2)</option>
-              <option value="c3">Plataforma receptora (C3)</option>
-              <option value="c4">Destinatario (C4)</option>
-              <option value="c5">Autoridad (C5)</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-6 col-xl-3">
-            <label class="edoc-etiqueta" for="f-estado">Estado</label>
+            <label class="edoc-etiqueta" for="f-estado">Estado del documento</label>
             <select class="custom-select" id="f-estado">
               <option value="">Todos los estados</option>
               <option value="aprobado">Aprobado</option>
@@ -95,16 +83,19 @@
               <option value="pendiente">Pendiente</option>
             </select>
           </div>
-          <div class="col-12 col-md-6 col-xl-3">
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
             <label class="edoc-etiqueta" for="f-trn">Registro fiscal del receptor</label>
             <input type="text" class="form-control cifra" id="f-trn" placeholder="100234567800003" inputmode="numeric">
           </div>
-          <div class="col-12 col-md-6 col-xl-3">
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
             <label class="edoc-etiqueta" for="f-receptor">Receptor</label>
             <input type="text" class="form-control" id="f-receptor" placeholder="Nombre del receptor">
             <div class="edoc-ayuda">Busca por el nombre tal como llega, en el alfabeto que llegue.</div>
           </div>
         </div>
+
+        <button type="button" class="btn btn-edoc-terciario edoc-filtros-mas mt-3" data-filtros-mas
+                aria-expanded="false" aria-controls="forma-buscar"><span class="edoc-filtros-mas__rotulo">Más filtros</span><span class="edoc-filtros-mas__cuenta"></span></button>
 
         <div class="d-flex hueco-2 flex-wrap mt-4">
           <button type="submit" class="btn btn-edoc-primario" id="btn-consultar">Consultar</button>
@@ -115,6 +106,13 @@
           <span class="nota__sello">Decidido</span>
           <strong>Buscar no es una pantalla.</strong> Es el banner de esta misma página. «Documentos por criterios», con los
           filtros ampliados, queda para una segunda versión: el MVP arranca con el reporte por rango de fechas.
+        </div>
+        <div class="nota nota--decidido">
+          <span class="nota__sello">Decidido · sesión del 7 de septiembre</span>
+          <strong>Sin filtro por «Estado de la entidad».</strong> Al enseñarlo se preguntó qué era, y quedó dicho que
+          todavía no estaba pulido: las esquinas C1 a C5 son un alias técnico que «para el usuario no representaba
+          nada», porque él piensa en emisor, receptor y autoridad. Aquí se filtra solo por el estado del documento; lo
+          que dice cada entidad se ve en «Ver estados», con el resumen arriba.
         </div>
         <div class="nota nota--abierto">
           <span class="nota__sello">Abierto</span>
@@ -289,6 +287,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
+          <div class="estados-resumen" id="estados-resumen"></div>
           <div class="edoc-aviso edoc-aviso--info mb-3">
             <span data-icono="info" class="edoc-aviso__icono"></span>
             <div>Cada entidad responde por su cuenta. <strong>«Aprobado» siempre dice quién aprobó</strong>, porque cada
@@ -521,6 +520,50 @@
     return mapa;
   }
 
+  /* Lo primero que se lee al abrir los estados: dónde está el documento,
+     quién tiene que moverlo y qué sigue. Las cinco líneas de tiempo quedan
+     debajo, para quien quiera el detalle. No cambia el nombre de ningún estado:
+     ese vocabulario sigue abierto con la hoja «ESTADOS MVP». */
+  var ORDEN_FLUJO = ['C1', 'C2', 'C5', 'C3', 'C4'];
+  function resumenEstados(doc) {
+    function ficha(k) { return D.CORNERS.filter(function (x) { return x.clave === k; })[0]; }
+    function estadoDe(k) { return doc[k.toLowerCase()]; }
+    var rechazo = ORDEN_FLUJO.filter(function (k) { return estadoDe(k) === 'rechazado'; })[0];
+    var espera = ORDEN_FLUJO.filter(function (k) {
+      return ['pendiente', 'enviado', 'entregado'].indexOf(estadoDe(k)) >= 0; })[0];
+    var donde, quien, sigue, chip, actuas = false;
+    if (rechazo) {
+      chip = 'rechazado'; donde = rechazo; quien = 'Tú'; actuas = true;
+      sigue = D.RECHAZOS[ficha(rechazo).rechazo].que;
+    } else if (espera) {
+      chip = estadoDe(espera); donde = espera; quien = ficha(espera).nombre;
+      sigue = 'No tienes que hacer nada: esperamos su respuesta.';
+    } else if (estadoDe('C4') === 'acuse') {
+      chip = 'acuse'; donde = 'C4'; quien = ficha('C4').nombre;
+      sigue = 'El comprador confirmó que le llegó. Todavía puede aprobarlo o rechazarlo.';
+    } else {
+      chip = 'aprobado'; donde = 'C4'; quien = 'Nadie';
+      sigue = 'No tienes que hacer nada.';
+    }
+    var ultima = '';
+    D.CORNERS.forEach(function (c) {
+      sucesos(doc, c.clave).forEach(function (s) { if (s.s && s.s > ultima) ultima = s.s; });
+    });
+    var e = D.ESTADOS[chip] || D.ESTADOS.pendiente;
+    var f = ficha(donde);
+    function dato(rotulo, valor, extra) {
+      return '<div class="estados-resumen__dato' + (extra || '') + '">' +
+        '<div class="estados-resumen__rotulo">' + rotulo + '</div>' +
+        '<div class="estados-resumen__valor">' + valor + '</div></div>';
+    }
+    document.getElementById('estados-resumen').innerHTML =
+      dato('Dónde está', '<span class="edoc-estado edoc-estado--' + e.clase + '">' + e.rotulo + '</span> ' +
+           '<span class="estados-resumen__entidad">' + f.nombre + ' <span class="clave-corner">(' + f.clave + ')</span></span>') +
+      dato('Quién tiene que actuar', '<span>' + quien + '</span>', actuas ? ' estados-resumen__dato--actuar' : '') +
+      dato('Última actualización', '<span class="cifra">' + doc.fecha + (ultima ? ' ' + ultima : '') + '</span>') +
+      dato('Qué sigue', '<span>' + sigue + '</span>');
+  }
+
   function abrirEstados(doc) {
     document.getElementById('estados-numero').textContent = doc.numero;
     document.getElementById('rejilla-corners').innerHTML = D.CORNERS.map(function (c) {
@@ -546,6 +589,7 @@
         '<div class="corner__cuerpo"><ul class="linea-tiempo">' + items + '</ul></div>' +
       '</article>';
     }).join('');
+    resumenEstados(doc);
     window.edocPrepararTablas(document.getElementById('modal-estados'));
     $('#modal-estados').modal('show');
   }

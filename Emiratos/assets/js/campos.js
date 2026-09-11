@@ -209,3 +209,87 @@
     if (/\D/.test(el.value)) soloCifras(el, el.value);
   });
 }());
+
+/* --- Filtros de las consultas ---------------------------------------------
+   Dos cosas, sin tocar la pantalla:
+   · Se conservan al volver. Quien abre un documento, se va a otra vista y
+     vuelve no tiene que reconstruir la búsqueda. Viven lo que dura la pestaña
+     (sessionStorage) y «Limpiar» los borra.
+   · En móvil, «Más filtros» esconde los secundarios. Con los ocho a la vista,
+     la tabla quedaba varias pantallas más abajo. Lo escondido conserva su
+     valor, y si trae alguno puesto el bloque se abre solo y lo cuenta. */
+(function () {
+  'use strict';
+  function campos(forma) {
+    return [].slice.call(forma.querySelectorAll('input, select, textarea')).filter(function (el) {
+      return el.type !== 'submit' && el.type !== 'reset' && el.type !== 'button';
+    });
+  }
+  function clave(el, i) { return el.id || (el.name ? el.name + ':' + el.value : 'c' + i); }
+  function leer(k) { try { return JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (e) { return null; } }
+  function guardar(forma, k) {
+    var datos = {};
+    campos(forma).forEach(function (el, i) {
+      datos[clave(el, i)] = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+    });
+    try { sessionStorage.setItem(k, JSON.stringify(datos)); } catch (e) {}
+  }
+  function restaurar(forma, k) {
+    var datos = leer(k);
+    if (!datos) return;
+    campos(forma).forEach(function (el, i) {
+      var v = datos[clave(el, i)];
+      if (v === undefined) return;
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        if (el.checked === v) return;
+        el.checked = v;
+      } else {
+        if (el.value === v) return;
+        el.value = v;
+      }
+      // Que la pantalla se entere: el rótulo de «Proveedor» se pinta así.
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  }
+  function cuantosExtra(forma) {
+    var n = 0;
+    forma.querySelectorAll('.edoc-filtro-extra').forEach(function (col) {
+      var puesto = campos(col).some(function (el) {
+        if (el.type === 'checkbox' || el.type === 'radio') return el.checked;
+        if (el.tagName === 'SELECT') return el.selectedIndex > 0;
+        return el.value !== el.defaultValue && el.value !== '';
+      });
+      if (puesto) n++;
+    });
+    return n;
+  }
+  function pintarMas(forma, boton) {
+    var abierto = !forma.classList.contains('edoc-filtros-oculta');
+    var n = cuantosExtra(forma);
+    boton.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+    boton.querySelector('.edoc-filtros-mas__rotulo').textContent = abierto ? 'Menos filtros' : 'Más filtros';
+    boton.querySelector('.edoc-filtros-mas__cuenta').textContent = n ? '(' + n + ')' : '';
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('form#forma-buscar').forEach(function (forma) {
+      var k = 'edoc-filtros:' + location.pathname.split('/').pop();
+      restaurar(forma, k);
+      forma.addEventListener('input', function () { guardar(forma, k); });
+      forma.addEventListener('change', function () { guardar(forma, k); });
+      forma.addEventListener('reset', function () {
+        try { sessionStorage.removeItem(k); } catch (e) {}
+      });
+
+      var boton = forma.querySelector('[data-filtros-mas]');
+      if (!boton) return;
+      if (!cuantosExtra(forma)) forma.classList.add('edoc-filtros-oculta');
+      pintarMas(forma, boton);
+      boton.addEventListener('click', function () {
+        forma.classList.toggle('edoc-filtros-oculta');
+        pintarMas(forma, boton);
+      });
+      forma.addEventListener('change', function () { pintarMas(forma, boton); });
+      forma.addEventListener('reset', function () { window.setTimeout(function () { pintarMas(forma, boton); }, 0); });
+    });
+  });
+})();

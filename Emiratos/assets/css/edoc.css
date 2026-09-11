@@ -196,14 +196,24 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .edoc-menu__item:hover { color: var(--edoc-azul); text-decoration: none; background: #f4f4f4; }
 .edoc-menu__item.activo { color: var(--edoc-azul); border-bottom-color: var(--edoc-verde); font-weight: 600; }
 .edoc-menu__item svg { width: 16px; height: 16px; stroke: currentColor; }
+/* El panel abre al instante y tarda un momento en cerrarse: al bajar en
+   diagonal hacia una opción, el puntero sale un instante del menú y el panel
+   desaparecía. Era la mitad de las reaperturas de la corrida. */
 .edoc-menu__panel {
-  display: none; position: absolute; top: 100%; left: 0; min-width: 336px;
+  display: block; visibility: hidden; opacity: 0;
+  transition: opacity .12s ease .2s, visibility 0s linear .32s;
+  position: absolute; top: 100%; left: 0; min-width: 336px;
   background: var(--edoc-tablero); border: 1px solid #c2c2c2; border-top: 0;
   box-shadow: var(--sombra-tablero); padding: 6px 0; z-index: 1040;
 }
 .edoc-menu__contenedor { position: relative; display: flex; }
 .edoc-menu__contenedor:hover .edoc-menu__panel,
-.edoc-menu__contenedor:focus-within .edoc-menu__panel { display: block; }
+.edoc-menu__contenedor:focus-within .edoc-menu__panel {
+  visibility: visible; opacity: 1; transition-delay: 0s, 0s; z-index: 1041;
+}
+@media (prefers-reduced-motion: reduce) {
+  .edoc-menu__panel { transition: visibility 0s linear .3s; }
+}
 .edoc-menu__grupo {
   font-family: var(--fuente-titulos); font-size: 10.5px; font-weight: 600;
   text-transform: uppercase; letter-spacing: .1em; color: #6c6c6c;
@@ -1817,7 +1827,10 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
    Lo que puede crecer, crece. Los iconos que viven dentro de una fila o de un
    texto no crecen a la vista —descuadrarían la tabla—: se les amplía el
    área de toque con un seudoelemento invisible centrado sobre el icono.   */
-@media (pointer: coarse) {
+/* También en pantallas estrechas, no solo táctiles: una ventana estrecha o
+   el navegador al 200 % dejan el mismo diseño apilado, y quien usa zoom es
+   justo quien más falla al apuntar. */
+@media (pointer: coarse), (max-width: 900px) {
   .edoc-btn-util, .edoc-usuario, .edoc-menu__hamburguesa, .edoc-clave-ojo, .close {
     min-width: 44px; min-height: 44px;
   }
@@ -1880,3 +1893,42 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
    ganaba a [hidden] y los tres avisos salían nada más cargar la página. Aquí
    manda el atributo hidden, que es lo que cambia el código. */
 .edoc-error-campo:not([hidden]) { display: block; }
+
+/* --- Estados · el resumen de arriba ---------------------------------------
+   Cuatro respuestas antes que cinco líneas de tiempo: dónde está, quién tiene
+   que moverlo, cuándo cambió por última vez y qué sigue. */
+.estados-resumen {
+  display: grid; grid-template-columns: 1.2fr 1fr .9fr 1.6fr;
+  border: 1px solid #e1e4ea; border-radius: var(--radio-chico); background: #fff; margin-bottom: 12px;
+}
+.estados-resumen:empty { display: none; }
+.estados-resumen__dato { padding: 10px 14px; border-left: 1px solid #e1e4ea; min-width: 0; }
+.estados-resumen__dato:first-child { border-left: 0; }
+.estados-resumen__rotulo {
+  font-family: var(--fuente-titulos); font-size: 10.5px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em; color: #6c6c6c; margin-bottom: 4px;
+}
+.estados-resumen__valor { font-size: 13.5px; color: var(--edoc-negro); line-height: 1.45; }
+.estados-resumen__entidad { display: inline-block; margin-left: 4px; font-weight: 600; }
+/* Cuando le toca al cliente, se nota sin depender solo del color: va en negrita. */
+.estados-resumen__dato--actuar { background: #fff8ec; box-shadow: inset 3px 0 0 #e08a00; }
+.estados-resumen__dato--actuar .estados-resumen__valor { font-weight: 700; }
+@media (max-width: 767.98px) {
+  .estados-resumen { grid-template-columns: 1fr 1fr; }
+  .estados-resumen__dato:nth-child(3) { border-left: 0; }
+  .estados-resumen__dato:nth-child(n+3) { border-top: 1px solid #e1e4ea; }
+}
+@media (max-width: 420px) {
+  .estados-resumen { grid-template-columns: 1fr; }
+  .estados-resumen__dato { border-left: 0; }
+  .estados-resumen__dato + .estados-resumen__dato { border-top: 1px solid #e1e4ea; }
+}
+
+/* --- Filtros · «Más filtros» solo en móvil ---------------------------------- */
+.edoc-filtros-mas { display: none; }
+/* El botón es flex: el espacio antes del número se perdería. */
+.edoc-filtros-mas__cuenta:not(:empty) { margin-left: .35em; }
+@media (max-width: 767.98px) {
+  .edoc-filtros-mas { display: inline-flex; align-items: center; }
+  .edoc-filtros-oculta .edoc-filtro-extra { display: none; }
+}

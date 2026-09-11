@@ -63,6 +63,10 @@
       pageLength: 10,
       lengthMenu: [10, 25, 50, 100],
       autoWidth: false,
+      // Al volver a la vista, la tabla sigue en la página y el orden en que
+      // se dejó. Dura lo que la pestaña (-1 = sessionStorage).
+      stateSave: true,
+      stateDuration: -1,
       // La primera columna es siempre «Acciones»: no se ordena.
       columnDefs: [{ orderable: false, targets: 0 }],
       order: []
