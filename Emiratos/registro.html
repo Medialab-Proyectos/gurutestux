@@ -10,99 +10,439 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="" data-pagina="registro.html" data-armazon="reducido" data-quien="Registro · sin sesión">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
-<main id="armazon" tabindex="-1" class="edoc-pagina">  <div class="edoc-titulo-barra">
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra">
     <div>
       <div class="edoc-miga"><span>Fuera de la sesión</span><span>Registro de la empresa</span></div>
       <h1 class="edoc-titulo">Registro de la empresa</h1>
-      <p class="edoc-subtitulo">El alta de una empresa nueva. Seis pasos, con verificación por correo al arrancar.</p>
+      <p class="edoc-subtitulo">Verificamos tu correo corporativo y después son seis pasos.</p>
+    </div>
+  </div>
+
+  <!-- =================================================================
+       El asistente. «Solicitud y acceso» es el paso 1, con su tarjeta en el
+       panel: así es el rediseño de Francia y así lo enseña la captura del
+       documento de doble factor, que dice «STEP 1 OF 7». La versión de seis
+       pasos es la anterior, cuando esa pantalla iba suelta por delante.
+       ================================================================= -->
+  <div class="reg">
+    <aside class="reg__lado">
+      <div class="reg__cabecera">
+        <div class="reg__rotulo">Portal consulta</div>
+        <div class="reg__nombre">Registro de empresa</div>
+        <div class="reg__folio">
+          <span class="edoc-secundario" style="font-size:11.5px">Solicitud</span>
+          <span class="edoc-estado edoc-estado--advertencia" style="font-size:10px" id="chip-estado">Pendiente</span>
+        </div>
+        <div class="reg__folio-cod" id="folio-lado">Se abre al verificar el correo</div>
+      </div>
+      <div class="reg__avance">
+        <div class="reg__avance-t" id="voy">Verificación</div>
+        <div class="reg__barra"><i id="barra" style="width:14%"></i></div>
+      </div>
+      <ul class="reg__pasos" id="pasos"></ul>
+    </aside>
+
+    <section class="reg__cuerpo">
+      <div class="reg__eyebrow" id="eyebrow">Registro de empresa · Verificación</div>
+      <div class="reg__titulo-fila">
+        <span class="reg__titulo-icono" id="icono-paso"></span>
+        <h2 class="reg__titulo" id="titulo-paso">Solicitud y acceso</h2>
+      </div>
+      <div class="reg__sub" id="sub-paso">Tipo de solicitud y verificación</div>
+
+      <!-- ------------------------------------- 1 · solicitud y acceso -->
+      <div class="paso" data-paso="1">
+        <div class="edoc-aviso edoc-aviso--info mb-3">
+          <div>Indica si deseas crear un nuevo registro o actualizar uno existente. Esta información
+          permite identificar tu solicitud y asociarla a un seguimiento previo si aplica.</div>
+        </div>
+
+        <div class="edoc-etiqueta mb-2">Tipo de solicitud
+          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></div>
+        <div class="reg__tipos">
+          <label class="reg__tipo" for="tipo-nueva">
+            <input type="radio" name="tipo" id="tipo-nueva" checked>
+            <span class="reg__tipo-marca" aria-hidden="true">✓</span>
+            <span><span class="reg__tipo-t">Nuevo registro</span>
+              <span class="reg__tipo-s">La empresa no está dada de alta todavía.</span></span>
+          </label>
+          <label class="reg__tipo" for="tipo-actualiza">
+            <input type="radio" name="tipo" id="tipo-actualiza">
+            <span class="reg__tipo-marca" aria-hidden="true">✓</span>
+            <span><span class="reg__tipo-t">Actualizar registro existente</span>
+              <span class="reg__tipo-s">Para corregir lo que el revisor observó.</span></span>
+          </label>
+        </div>
+
+        <div id="caja-folio" hidden>
+          <label class="edoc-etiqueta" for="p-folio">Código de seguimiento
+            <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+          <input class="form-control cifra" id="p-folio" placeholder="019fa464-8241-730b-9748-9677cb1ecce8">
+          <div class="edoc-ayuda" id="ayuda-folio">Los 36 caracteres que te dimos al enviar la solicitud.</div>
+        </div>
+
+        <label class="edoc-etiqueta mt-3" for="p-correo">Correo electrónico corporativo
+          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+        <input type="email" class="form-control" id="p-correo" placeholder="hugo.leano@empresa.ae" autocomplete="email">
+        <div class="edoc-ayuda">Del dominio de la empresa, no un correo personal.</div>
+
+        <div class="edoc-aviso edoc-aviso--advertencia mt-2" id="ya-existe" hidden>
+          <div><strong>Ese correo ya tiene un expediente abierto.</strong> Si vuelves a empezar de
+          cero se creará un segundo expediente que alguien tendrá que revisar y descartar a mano.
+          <a href="#" id="pasar-actualizar">Actualiza el que ya existe</a>.</div>
+        </div>
+
+        <label class="edoc-etiqueta mt-3" for="p-codigo">Código de verificación
+          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+        <input class="form-control cifra" id="p-codigo" inputmode="numeric" maxlength="6"
+          autocomplete="one-time-code" placeholder="Ingresa el código de 6 dígitos">
+        <div class="d-flex justify-content-between flex-wrap mt-1">
+          <!-- QW 16: en Francia el código caduca y la pantalla no dice cuánto
+               dura. Quien se levanta a buscar la licencia vuelve a un código
+               muerto sin entender por qué. Aquí se ve el tiempo que queda. -->
+          <span class="edoc-ayuda" id="cuenta-atras">El código caduca en <span class="cifra">5:00</span></span>
+          <a href="#" id="reenviar-codigo" class="edoc-ayuda">➤ Reenviar código</a>
+        </div>
+
+        <div class="edoc-aviso edoc-aviso--info mt-3">
+          <div><strong>Este código es el mismo del doble factor.</strong>
+          Al reenviarlo, el código de seguimiento no cambia: es el mismo expediente.</div>
+        </div>
+      </div>
+
+      <!-- ------------------------------------- 2 · administrador -->
+      <div class="paso" data-paso="2" hidden>
+        <div class="edoc-aviso edoc-aviso--info mb-3">
+          <div>Esta información permite identificar al responsable principal de la cuenta para la
+          validación de la solicitud y la gestión administrativa y legal.</div>
+        </div>
+        <label class="edoc-etiqueta" for="a-nombre">Nombre completo del administrador
+          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+        <input class="form-control" id="a-nombre" placeholder="Fatima Al Marzooqi">
+
+        <label class="edoc-etiqueta mt-3" for="a-cargo">Cargo en la empresa
+          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+        <input class="form-control" id="a-cargo" placeholder="Directora financiera">
+
+        <div class="row rejilla mt-3">
+          <div class="col-12 col-md-5">
+            <label class="edoc-etiqueta" for="a-prefijo">Código
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <select class="custom-select" id="a-prefijo">
+              <option value="+971" selected>+971 · Emiratos Árabes Unidos</option>
+              <option value="+966">+966 · Arabia Saudí</option>
+              <option value="+968">+968 · Omán</option>
+              <option value="+973">+973 · Baréin</option>
+              <option value="+974">+974 · Catar</option>
+              <option value="+965">+965 · Kuwait</option>
+            </select>
+            <div class="edoc-ayuda">Elige el país de tu número.</div>
+          </div>
+          <div class="col-12 col-md-7">
+            <label class="edoc-etiqueta" for="a-tel">Teléfono
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input class="form-control cifra" id="a-tel" placeholder="50 123 4567" inputmode="tel">
+            <div class="edoc-ayuda">Solo cifras, sin el código de país. Lo usamos si hace falta
+            llamarte para desatascar el alta.</div>
+          </div>
+        </div>
+
+        <label class="edoc-etiqueta mt-3" for="a-correo">Correo
+          <span class="marca-campo marca-campo--opcional">Verificado</span></label>
+        <input type="email" class="form-control" id="a-correo" readonly>
+      </div>
+
+      <!-- ------------------------------------- 3 · empresa -->
+      <div class="paso" data-paso="3" hidden>
+        <div class="edoc-aviso edoc-aviso--info mb-3">
+          <div>Esta información permite identificar legal y fiscalmente a la empresa, verificar su
+          registro y aplicar correctamente el tratamiento correspondiente de IVA.</div>
+        </div>
+        <label class="edoc-etiqueta" for="e-legal">Razón social
+          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+        <input class="form-control" id="e-legal" placeholder="Al Noor Trading LLC">
+
+        <div class="row rejilla mt-3">
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-comercial">Nombre comercial
+              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
+            <input class="form-control" id="e-comercial" placeholder="Ej: Al Noor">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-nativo">Razón social en árabe
+              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
+            <input class="form-control" id="e-nativo" dir="rtl" placeholder="النور للتجارة ذ.م.م">
+            <div class="edoc-ayuda">Un solo alfabeto por campo: aquí el árabe, arriba el latino.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-trn">Número de registro fiscal · TRN
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input class="form-control cifra" id="e-trn" inputmode="numeric" maxlength="15" placeholder="100908070600003">
+            <div class="edoc-ayuda">Quince cifras, tal como figura en tu registro fiscal.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-emirato">Emirato
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <select class="custom-select" id="e-emirato">
+              <option value="">Selecciona una opción</option>
+              <option>Abu Dabi</option><option>Dubái</option><option>Sharjah</option>
+              <option>Ajmán</option><option>Umm Al Quwain</option>
+              <option>Ras Al Jaima</option><option>Fujairah</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-sujeta">Empresa sujeta a IVA
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <select class="custom-select" id="e-sujeta">
+              <option value="">Selecciona una opción</option>
+              <option>Sí</option><option>No</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-regimen">Régimen de IVA
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <select class="custom-select" id="e-regimen" disabled>
+              <option value="">Pendiente de la lista de Emiratos</option>
+            </select>
+            <div class="edoc-ayuda">Se habilitará cuando la lista de regímenes esté publicada.</div>
+          </div>
+        </div>
+
+        <label class="edoc-etiqueta mt-3" for="e-dir">Dirección
+          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+        <input class="form-control" id="e-dir" placeholder="Jebel Ali Free Zone, Bloque C, Oficina 214">
+      </div>
+
+      <!-- ------------------------------------- 4 · documento legal -->
+      <div class="paso" data-paso="4" hidden>
+        <div class="edoc-aviso edoc-aviso--info mb-3">
+          <div>La licencia comercial permite validar la existencia legal de la empresa y completar el
+          proceso de verificación empresarial.</div>
+        </div>
+
+        <label class="reg__subir" id="zona-subir" for="d-archivo">
+          <input type="file" id="d-archivo" accept=".pdf,.jpg,.jpeg,.png">
+          <span class="reg__subir-icono" aria-hidden="true">
+            <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13.5V4"/><path d="M6.4 7.6L10 4l3.6 3.6"/><path d="M3.5 13.5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2"/>
+            </svg>
+          </span>
+          <span class="reg__subir-t" id="subir-t">Licencia comercial</span>
+          <span class="reg__subir-s" id="subir-s">Haz clic para subir un archivo</span>
+          <span class="reg__subir-f">Formatos permitidos: PDF, PNG o JPG · Máximo 10&nbsp;MB por archivo</span>
+        </label>
+        <div class="nota nota--decidido">
+          <span class="nota__sello">Cambia respecto de Francia</span>
+          Allí los formatos se enuncian con sus nombres técnicos —«application/pdf, image/png,
+          image/jpeg»—, que es lo que entiende el navegador, no la persona. Aquí se dicen por su nombre.
+        </div>
+
+        <div class="row rejilla mt-3">
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="d-numero">Número de licencia
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input class="form-control cifra" id="d-numero" placeholder="CN-1148820">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="d-caduca">Válida hasta
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input type="date" class="form-control" id="d-caduca" value="2027-06-30">
+          </div>
+        </div>
+      </div>
+
+      <!-- ------------------------------------- 5 · contactos -->
+      <div class="paso" data-paso="5" hidden>
+        <div class="edoc-aviso edoc-aviso--info mb-3">
+          <div>Estos contactos permiten dirigir cada comunicación al responsable adecuado según el
+          tema: gestión comercial, cobros o soporte técnico.</div>
+        </div>
+        <div class="row rejilla">
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="r-com">Contacto comercial
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input class="form-control" id="r-com" placeholder="Nombre y apellidos">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="r-com-c">Correo del contacto comercial
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input type="email" class="form-control" id="r-com-c" placeholder="contacto.comercial@empresa.ae">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="r-cob">Contacto de cobros
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input class="form-control" id="r-cob" placeholder="Nombre y apellidos">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="r-cob-c">Correo del contacto de cobros
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input type="email" class="form-control" id="r-cob-c" placeholder="gestion.pagos@empresa.ae">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="r-tec">Contacto técnico
+              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
+            <input class="form-control" id="r-tec" placeholder="Nombre y apellidos">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="r-tec-c">Correo del contacto técnico
+              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
+            <input type="email" class="form-control" id="r-tec-c" placeholder="contacto.tecnico@empresa.ae">
+          </div>
+        </div>
+        <div class="nota nota--decidido">
+          <span class="nota__sello">Cambia respecto de Francia</span>
+          <strong>Dos cosas.</strong> Allí el paso entero se marca «OPCIONAL» y los tres son solo un
+          correo, sin nombre: hoy no sirven para nada porque no hay ninguna emisión de notificaciones
+          detrás. Aquí comercial y cobros son obligatorios, con nombre, y el técnico sigue opcional
+          porque solo hace falta si la empresa va a integrar por API.
+        </div>
+      </div>
+
+      <!-- ------------------------------------- 6 · consentimientos -->
+      <div class="paso" data-paso="6" hidden>
+        <div class="edoc-aviso edoc-aviso--info mb-3">
+          <div>La aceptación de estos consentimientos confirma que la empresa conoce y aprueba las
+          condiciones de uso, la política de privacidad y el tratamiento de sus datos.</div>
+        </div>
+        <label class="reg__acepto" for="l-privacidad">
+          <input type="checkbox" id="l-privacidad">
+          <span>Acepto la <a href="legales.html" target="_blank" rel="noopener">Política de privacidad</a></span>
+        </label>
+        <label class="reg__acepto" for="l-condiciones">
+          <input type="checkbox" id="l-condiciones">
+          <span>Acepto los <a href="legales.html" target="_blank" rel="noopener">Términos de servicio</a></span>
+        </label>
+        <label class="reg__acepto" for="l-datos">
+          <input type="checkbox" id="l-datos">
+          <span>Acepto el <a href="legales.html" target="_blank" rel="noopener">Tratamiento de datos</a></span>
+        </label>
+
+        <div class="edoc-aviso edoc-aviso--advertencia mt-3">
+          <div>Los documentos se abren en una pestaña aparte y puedes descargarlos para guardarlos.</div>
+        </div>
+      </div>
+
+      <!-- ------------------------------------- 7 · revisión -->
+      <div class="paso" data-paso="7" hidden>
+        <p class="edoc-secundario mb-3">Repasa los seis pasos antes de enviar. Cada tarjeta abre su
+        detalle, y desde ella puedes volver al paso si algo no cuadra.</p>
+        <div id="repaso"></div>
+      </div>
+
+      <div class="reg__nav">
+        <button class="btn btn-edoc-terciario" type="button" id="btn-atras">‹ Anterior</button>
+        <button class="btn btn-edoc-primario" type="button" id="btn-siguiente">Siguiente ›</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== Registro completado ===================== -->
+  <div class="modal fade" id="modal-fin" tabindex="-1" role="dialog" aria-labelledby="t-fin" aria-hidden="true"
+       data-backdrop="static">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="border-top:4px solid var(--edoc-verde)">
+        <div class="modal-body" style="padding:26px">
+          <div class="d-flex hueco-2 align-items-start mb-3">
+            <span class="reg__tipo-marca" style="background:var(--edoc-verde);border-color:var(--edoc-verde);color:#1d2410;width:34px;height:34px;font-size:18px">✓</span>
+            <div>
+              <span class="edoc-estado edoc-estado--exito" style="font-size:10px">Éxito</span>
+              <h3 class="reg__titulo mt-1 mb-1" id="t-fin" style="font-size:21px;text-align:left">Registro completado</h3>
+              <p class="edoc-secundario mb-0">Tu registro se envió correctamente. Guarda este código
+              para consultarlo más adelante.</p>
+            </div>
+          </div>
+
+          <div style="background:#f6f7fa;border:1px solid #e7e9ef;border-radius:9px;padding:12px 14px">
+            <div class="edoc-etiqueta mb-1">Código de seguimiento</div>
+            <div class="d-flex hueco-2 align-items-center">
+              <input class="form-control cifra" id="folio-final" readonly style="font-size:12.5px;background:#fff">
+              <button class="btn btn-edoc-secundario btn-sm" type="button" id="copiar"
+                title="Copiar código" aria-label="Copiar el código de seguimiento">Copiar código</button>
+            </div>
+            <div class="edoc-ayuda mt-1" id="ayuda-copia">Son 36 caracteres. Mejor cópialo que transcribirlo.</div>
+          </div>
+
+          <div class="text-center mt-4">
+            <a class="btn btn-edoc-primario" href="index.html">Ir al login →</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="nota nota--decidido">
-    <span class="nota__sello">Decidido</span>
-    <strong>El código de seguimiento va.</strong> Es el identificador que se genera al empezar el registro, cuando la
-    empresa todavía no tiene usuario ni contraseña. Con él entra a consultar lo que declaró y a corregirlo hasta que se
-    apruebe; después ya solo lo consulta. Funciona como el número de un ticket: da trazabilidad de cada solicitud
-    —cuándo se abrió, en qué estado quedó, si se canceló— y permite distinguir dos solicitudes de la misma empresa
-    hechas con correos distintos, que en la práctica ocurre. Buscar por código es además más rápido que buscar por
-    una cadena de correo.
+    <span class="nota__sello">Resuelto</span>
+    <strong>Son siete pasos, no seis.</strong> «Solicitud y acceso» es el paso 1 y tiene su tarjeta en el
+    panel: así está en el rediseño de Francia y así lo enseña la captura del documento de doble factor,
+    que dice «STEP 1 OF 7». La versión de seis es la anterior, cuando esa pantalla iba suelta por
+    delante. El documento de MVP dice seis porque recoge la vieja.
   </div>
-
-  <div class="row rejilla">
-    <div class="col-12 col-lg-4">
-      <section class="edoc-tablero">
-        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Los seis pasos</h2></div>
-        <div class="edoc-tablero__cuerpo">
-          <ul class="linea-tiempo">
-            <li class="hecho"><div class="linea-tiempo__titulo">Paso 1 · Administrador de la cuenta</div><div class="linea-tiempo__detalle">Nombre, cargo y teléfono de quien responde por la cuenta.</div></li>
-            <li class="hecho"><div class="linea-tiempo__titulo">Paso 2 · Datos de la empresa</div><div class="linea-tiempo__detalle">Nombre legal, registro fiscal, emirato y dirección.</div></li>
-            <li class="hecho"><div class="linea-tiempo__titulo">Paso 3 · Documento legal</div><div class="linea-tiempo__detalle">La licencia comercial que acredita que la empresa existe.</div></li>
-            <li class="hecho"><div class="linea-tiempo__titulo">Paso 4 · Contactos por área <span class="edoc-estado edoc-estado--transito">Estás aquí</span></div><div class="linea-tiempo__detalle">Comercial, cobros y técnico. Los dos primeros son obligatorios.</div></li>
-            <li class="espera"><div class="linea-tiempo__titulo">Paso 5 · Consentimientos legales</div><div class="linea-tiempo__detalle">Lo que la empresa acepta antes de enviar la solicitud.</div></li>
-            <li class="espera"><div class="linea-tiempo__titulo">Paso 6 · Revisión y envío</div><div class="linea-tiempo__detalle">Repaso de todo y código de seguimiento.</div></li>
-          </ul>
-        </div>
-      </section>
-    </div>
-
-    <div class="col-12 col-lg-8">
-      <section class="edoc-tablero">
-        <div class="edoc-tablero__cabecera">
-          <h2 class="edoc-tablero__titulo">Paso 4 · Contactos por área</h2>
-          <span class="edoc-secundario">Solicitud <span class="cifra">REG-2026-00918</span></span>
-        </div>
-        <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Paso guardado.','exito')">
-          <div class="row rejilla">
-            <div class="col-12 col-md-6">
-              <label class="edoc-etiqueta" for="r-com">Contacto comercial<span class="obligatorio">*</span></label>
-              <input class="form-control" id="r-com" placeholder="Nombre y apellidos" required>
-            </div>
-            <div class="col-12 col-md-6">
-              <label class="edoc-etiqueta" for="r-com-c">Correo comercial<span class="obligatorio">*</span></label>
-              <input type="email" class="form-control" id="r-com-c" placeholder="comercial@empresa.ae" required>
-            </div>
-            <div class="col-12 col-md-6">
-              <label class="edoc-etiqueta" for="r-cob">Contacto de cobros<span class="obligatorio">*</span></label>
-              <input class="form-control" id="r-cob" placeholder="Nombre y apellidos" required>
-            </div>
-            <div class="col-12 col-md-6">
-              <label class="edoc-etiqueta" for="r-cob-c">Correo de cobros<span class="obligatorio">*</span></label>
-              <input type="email" class="form-control" id="r-cob-c" placeholder="cobros@empresa.ae" required>
-            </div>
-            <div class="col-12 col-md-6">
-              <label class="edoc-etiqueta" for="r-tec">Contacto técnico</label>
-              <input class="form-control" id="r-tec" placeholder="Nombre y apellidos">
-            </div>
-            <div class="col-12 col-md-6">
-              <label class="edoc-etiqueta" for="r-tec-c">Correo técnico</label>
-              <input type="email" class="form-control" id="r-tec-c" placeholder="it@empresa.ae">
-            </div>
-          </div>
-
-          <div class="d-flex hueco-2 flex-wrap mt-3">
-            <button class="btn btn-edoc-terciario" type="button" data-sin-destino>Anterior</button>
-            <button class="btn btn-edoc-primario" type="submit">Siguiente</button>
-            <button class="btn btn-edoc-terciario" type="button" data-sin-destino>Guardar y salir</button>
-          </div>
-
-          <div class="nota nota--decidido">
-            <span class="nota__sello">Decidido</span>
-            <strong>Comercial y cobros son obligatorios.</strong> En Francia los tres quedaron opcionales y hoy no sirven
-            para nada, porque no hay ninguna emisión de notificaciones detrás.
-          </div>
-        </form>
-      </section>
-    </div>
-  </div>
-
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
-    <strong>Está pendiente de Alejandro</strong> si se toma el wizard de Francia tal cual o no. En Bolivia el registro no
-    existe. Antes de heredarlo hay que cerrar dos puntos: la validación de duplicados —que no se pueda registrar dos
-    veces la misma empresa— y el tratamiento de los datos personales que se recogen.
+    <strong>Un código de 36 caracteres es difícil de manejar.</strong> Es lo que entrega Francia —un
+    identificador universal— y sirve para pegar, pero no para dictarlo por teléfono ni para teclearlo.
+    Con soporte de por medio conviene decidir si se le añade una referencia corta y legible del tipo
+    <span class="cifra">REG-2026-00918</span>, que es la que ya usa la bandeja del Office Manager.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Falta la lista de regímenes de IVA de Emiratos.</strong> Sin ella el paso 3 queda incompleto,
+    y no es algo que se pueda deducir del portal francés.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Quick Win de Francia</span>
+    <strong>Duplicados de correo, avisados.</strong> Allí no hay validación: quien se equivoca de opción
+    vuelve a dar de alta su empresa entera y genera un segundo expediente que alguien tiene que
+    descartar a mano. Aquí, si el correo ya tiene expediente, se avisa y se ofrece actualizarlo.
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Ojo · del portal que copiamos</span>
+    <strong>En Francia estos datos se guardan sin cifrar.</strong> La hoja de hallazgos lo recoge de la
+    propia capacitación: «no estamos cifrando los datos», y son datos de identificación de empresas y de
+    personas físicas —nombre, cargo, teléfono, correo—. Este asistente hereda el flujo de allí, así que
+    conviene decidirlo antes de desarrollarlo y no después.
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Ojo · del portal que copiamos</span>
+    <strong>Al corregir un expediente, el revisor no se entera.</strong> En Francia, cuando el cliente
+    actualiza su solicitud, al Office Manager no le llega ningún aviso: «no está enviando el correo». El
+    expediente se queda corregido y parado hasta que alguien mire la bandeja por su cuenta.
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Ojo · de la capacitación de Francia</span>
+    <strong>Allí los datos de este formulario no se cifran.</strong> Está dicho con esas palabras: «no
+    estamos cifrando los datos». Se guardan en claro la identificación de la empresa y los datos de
+    personas físicas —nombre, cargo, teléfono y correo—. Si el asistente se hereda tal cual, se hereda
+    también eso. Va antes de programar, no después.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Al corregir el expediente hay que avisar al revisor.</strong> En Francia, cuando el cliente
+    actualiza su solicitud, el Office Manager no se entera: «no está enviando el correo». El expediente
+    corregido se queda parado sin que nadie lo sepa. La pantalla de actualizar no sirve de nada si el
+    aviso no sale.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Duplicados de empresa.</strong> El aviso por correo no basta: hay que decidir qué pasa
+    cuando dos correos distintos registran la misma razón social o el mismo TRN. Eso no se puede
+    resolver en la pantalla.
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -110,7 +450,393 @@
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+
+  var $ = function (id) { return document.getElementById(id); };
+  function val(id) { var e = $(id); return e ? (e.value || '').trim() : ''; }
+
+  /* Los pasos que piden datos. La revision final va aparte: no es un paso, es
+     el cierre, y por eso no se numera. El documento de MVP dice 'wizard de seis
+     pasos con OTP'. */
+  var TOTAL = 6;     // los pasos numerados: del 1 al 6
+  var REPASO = 7;    // el orden de la revisión final dentro del recorrido
+  var actual = 1;
+  var masLejos = 1;
+  var folio = null;
+  var conError = {};   // qué pasos han fallado la validación
+
+  /* La numeración es la de Francia, y ahí 'Solicitud y acceso' NO cuenta: es la
+     verificación por correo con la que arranca el asistente, no un paso suyo.
+     Los seis pasos van del administrador a la revisión final, que sí es el
+     sexto. Antes yo tenía lo contrario. */
+  var PASOS = [
+    { n: 0, icono: 'candado', rotulo: 'Solicitud y acceso',        sub: 'Tipo de solicitud y verificación' },
+    { n: 1, icono: 'perfil',  rotulo: 'Administrador de la cuenta', sub: 'Responsable principal' },
+    { n: 2, icono: 'empresa', rotulo: 'Datos de la empresa',        sub: 'Razón social, TRN e IVA' },
+    { n: 3, icono: 'libro',   rotulo: 'Documento legal',            sub: 'Licencia comercial' },
+    { n: 4, icono: 'perfil',  rotulo: 'Contactos por área',         sub: 'Comercial, cobros y técnico' },
+    { n: 5, icono: 'candado', rotulo: 'Consentimientos legales',    sub: 'Revisión y aceptación' },
+    { n: 6, icono: 'aprobar', rotulo: 'Revisión final',             sub: 'Verifica antes de enviar' }
+  ];
+
+  /* Qué campos mira cada paso: sirve para el estado de la tarjeta y para los
+     puntos de la revisión, sin contar nada a mano. */
+  function campos(paso) {
+    if (paso === 1) {
+      var base = [['p-correo', 'Correo corporativo'], ['p-codigo', 'Código de verificación']];
+      if ($('tipo-actualiza').checked) base.unshift(['p-folio', 'Código de seguimiento']);
+      return base;
+    }
+    return ({
+      2: [['a-nombre', 'Nombre'], ['a-cargo', 'Cargo'], ['a-tel', 'Teléfono']],
+      3: [['e-legal', 'Razón social'], ['e-trn', 'Registro fiscal'], ['e-emirato', 'Emirato'],
+          ['e-sujeta', 'Sujeta a IVA'], ['e-dir', 'Dirección']],
+      4: [['d-archivo', 'Archivo'], ['d-numero', 'Número de licencia'], ['d-caduca', 'Válida hasta']],
+      5: [['r-com', 'Contacto comercial'], ['r-com-c', 'Correo comercial'],
+          ['r-cob', 'Contacto de cobros'], ['r-cob-c', 'Correo de cobros']],
+      6: [['l-privacidad', 'Política de privacidad'], ['l-condiciones', 'Términos de servicio'],
+          ['l-datos', 'Tratamiento de datos']]
+    })[paso] || [];
+  }
+
+  function lleno(id) {
+    var e = $(id);
+    if (!e) return false;
+    if (e.type === 'checkbox') return e.checked;
+    if (e.type === 'file') return e.files.length > 0;
+    return !!(e.value || '').trim();
+  }
+
+  function cuantos(paso) {
+    var lista = campos(paso);
+    return { hechos: lista.filter(function (c) { return lleno(c[0]); }).length, total: lista.length };
+  }
+
+  function completo(paso) {
+    var c = cuantos(paso);
+    return c.total > 0 && c.hechos === c.total;
+  }
+
+  /* --- validación, con mensajes nuestros --------------------------------- */
+  function fallo(paso) {
+    var lista = campos(paso);
+    for (var i = 0; i < lista.length; i++) {
+      if (!lleno(lista[i][0])) return { id: lista[i][0], texto: 'Falta «' + lista[i][1] + '».' };
+    }
+    if (paso === 1) {
+      var formato = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if ($('tipo-actualiza').checked && !formato.test(val('p-folio'))) {
+        $('ayuda-folio').textContent = 'El código son 36 caracteres con guiones, tal como te lo dimos.';
+        return { id: 'p-folio', texto: 'Ese código de seguimiento no tiene el formato correcto.' };
+      }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val('p-correo'))) {
+        return { id: 'p-correo', texto: 'Escribe un correo corporativo válido.' };
+      }
+      if (!/^\d{6}$/.test(val('p-codigo'))) {
+        return { id: 'p-codigo', texto: 'El código de verificación son seis cifras.' };
+      }
+    }
+    if (paso === 2 && !/^[\d\s]{7,}$/.test(val('a-tel'))) {
+      return { id: 'a-tel', texto: 'El teléfono son solo cifras, sin el código de país.' };
+    }
+    if (paso === 3 && !/^\d{15}$/.test(val('e-trn'))) {
+      return { id: 'e-trn', texto: 'El registro fiscal son quince cifras.' };
+    }
+    if (paso === 5) {
+      var correos = [['r-com-c', 'comercial'], ['r-cob-c', 'cobros']];
+      for (var j = 0; j < correos.length; j++) {
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val(correos[j][0]))) {
+          return { id: correos[j][0], texto: 'El correo de ' + correos[j][1] + ' no tiene buena pinta.' };
+        }
+      }
+      if (val('r-tec') && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val('r-tec-c'))) {
+        return { id: 'r-tec-c', texto: 'Has puesto contacto técnico: pon también su correo.' };
+      }
+    }
+    return null;
+  }
+
+  function marcarMal(paso, f) {
+    document.querySelectorAll('.is-invalid').forEach(function (e) { e.classList.remove('is-invalid'); });
+    conError[paso] = true;
+    var e = $(f.id);
+    if (e) { e.classList.add('is-invalid'); e.focus(); }
+    pintarPanel();
+    window.edocAvisar(f.texto, 'error');
+  }
+
+  /* --- el panel de la izquierda ------------------------------------------ */
+  function pintarPanel() {
+    $('pasos').innerHTML = PASOS.map(function (p, i) {
+      var orden = i + 1;                 // 1..7, el recorrido
+      var hecho = orden === REPASO ? false : completo(orden);
+      if (hecho) delete conError[orden];
+      var error = !!conError[orden];
+      var puede = orden <= masLejos;
+      var chip = error ? ['error', 'Error']
+               : (hecho ? ['completado', 'Completado'] : ['requerido', 'Requerido']);
+      var clases = 'reg__paso' + (orden === actual ? ' reg__paso--activo' : '') +
+                   (error ? ' reg__paso--error' : (hecho ? ' reg__paso--hecho' : '')) +
+                   (puede ? ' reg__paso--puede' : '');
+      return '<li class="' + clases + '"' +
+        (puede ? ' data-ir="' + orden + '" tabindex="0" role="button"' : '') + '>' +
+        '<span class="reg__paso-icono">' + window.edocIcono(p.icono) + '</span>' +
+        '<span><span class="reg__paso-t">' + p.rotulo + '</span>' +
+          '<span class="reg__paso-s">' + p.sub + '</span>' +
+          '<span class="reg__paso-chip reg__paso-chip--' + chip[0] + '">' + chip[1] + '</span></span>' +
+        '<span class="reg__paso-n">' +
+          (p.n === 0 ? 'Verificación' : p.n + '/' + TOTAL) + '</span>' +
+        '<span class="reg__tic' + (error ? ' reg__tic--error' : '') + '" aria-hidden="true">' +
+          (error ? '✕' : '✓') + '</span>' +
+      '</li>';
+    }).join('');
+    /* La verificación no lleva número, igual que en Francia: es con lo que
+       arranca el asistente, no uno de sus seis pasos. */
+    $('voy').textContent = actual === 1
+      ? 'Verificación'
+      : 'Paso ' + (actual - 1) + ' de ' + TOTAL;
+    $('barra').style.width = Math.round(Math.min(actual, TOTAL) / TOTAL * 100) + '%';
+  }
+
+  /* --- la revisión final -------------------------------------------------- */
+  function pintarRepaso() {
+    /* Se recorre por el ORDEN del recorrido (1..6), que es lo que entienden
+       cuantos(), campos() e ir(). El numero que se ensena es otro: la
+       verificacion va sin numero y los pasos, del 1 al 6. Mezclarlos hacia que
+       'Volver al paso 3' llevara a otro paso y que el primero dijera 'Paso 0'. */
+    $('repaso').innerHTML = PASOS.slice(0, 6).map(function (p, i) {
+      var orden = i + 1;
+      var nombre = p.n === 0 ? 'Verificación' : 'Paso ' + p.n;
+      var c = cuantos(orden);
+      var ok = c.hechos === c.total;
+      var puntos = '';
+      for (var i = 0; i < c.total; i++) puntos += '<i class="' + (i < c.hechos ? 'lleno' : '') + '"></i>';
+      var detalle = campos(orden).map(function (campo) {
+        var e = $(campo[0]);
+        var v = e.type === 'checkbox' ? (e.checked ? 'Aceptado' : '—')
+              : e.type === 'file' ? (e.files.length ? e.files[0].name : '—')
+              : (e.value || '—');
+        return '<dt>' + campo[1] + '</dt><dd>' + v + '</dd>';
+      }).join('');
+      return '<div class="rev__t">' +
+        '<div class="rev__alto">' +
+          '<span class="rev__paso">' + nombre + '</span>' +
+          (ok ? '<span class="rev__ok">✓ Todo bien</span>'
+              : '<span class="rev__falta">Falta ' + (c.total - c.hechos) + '</span>') +
+          '<span class="rev__puntos" aria-hidden="true">' + puntos + '</span>' +
+          '<button type="button" class="btn btn-edoc-terciario btn-sm" data-detalle="' + orden + '" ' +
+            'aria-expanded="false">Ver detalle</button>' +
+        '</div>' +
+        '<div class="rev__rotulo">' + p.rotulo + '</div>' +
+        '<div class="rev__nombre">' + p.sub + '</div>' +
+        '<div class="rev__detalle" data-panel="' + orden + '" hidden><dl>' + detalle + '</dl>' +
+          '<button type="button" class="btn btn-edoc-terciario btn-sm mt-2" data-volver="' + orden + '">' +
+          (p.n === 0 ? 'Volver a la verificación' : 'Volver al paso ' + p.n) + '</button></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  $('repaso').addEventListener('click', function (e) {
+    var ver = e.target.closest('[data-detalle]');
+    if (ver) {
+      var panel = $('repaso').querySelector('[data-panel="' + ver.dataset.detalle + '"]');
+      panel.hidden = !panel.hidden;
+      ver.setAttribute('aria-expanded', panel.hidden ? 'false' : 'true');
+      ver.textContent = panel.hidden ? 'Ver detalle' : 'Ocultar detalle';
+      return;
+    }
+    var volver = e.target.closest('[data-volver]');
+    if (volver) ir(Number(volver.dataset.volver));
+  });
+
+  /* --- moverse ------------------------------------------------------------ */
+  function ir(n) {
+    actual = n;
+    masLejos = Math.max(masLejos, n);
+    document.querySelectorAll('.paso').forEach(function (p) {
+      p.hidden = Number(p.getAttribute('data-paso')) !== n;
+    });
+    var f = PASOS[n - 1];
+    $('eyebrow').textContent = n === 1
+      ? 'Registro de empresa · Verificación'
+      : 'Registro de empresa · Paso ' + (n - 1) + ' de ' + TOTAL;
+    $('titulo-paso').textContent = f.rotulo;
+    $('sub-paso').textContent = f.sub;
+    $('icono-paso').innerHTML = window.edocIcono(f.icono);
+    $('btn-atras').disabled = n === 1;
+    $('btn-siguiente').textContent = n === REPASO ? 'Confirmar registro' : 'Siguiente ›';
+    if (n === REPASO) pintarRepaso();
+    pintarPanel();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function nuevoFolio() {
+    // El de Francia es un identificador universal de 36 caracteres.
+    function trozo(n) {
+      var s = '';
+      for (var i = 0; i < n; i++) s += '0123456789abcdef'[Math.floor(Math.random() * 16)];
+      return s;
+    }
+    return trozo(8) + '-' + trozo(4) + '-' + trozo(4) + '-' + trozo(4) + '-' + trozo(12);
+  }
+
+  $('btn-siguiente').addEventListener('click', function () {
+    if (actual < REPASO) {
+      var f = fallo(actual);
+      if (f) return marcarMal(actual, f);
+      delete conError[actual];
+      document.querySelectorAll('.is-invalid').forEach(function (e) { e.classList.remove('is-invalid'); });
+
+      // Al superar el paso 1 se abre el expediente y se hereda el correo.
+      if (actual === 1) {
+        if (!folio) folio = $('tipo-actualiza').checked ? val('p-folio').toLowerCase() : nuevoFolio();
+        $('folio-lado').textContent = folio;
+        $('a-correo').value = val('p-correo');
+        if ($('tipo-actualiza').checked) {
+          $('a-nombre').value = 'Fatima Al Marzooqi';
+          $('a-cargo').value = 'Directora financiera';
+          $('a-tel').value = '50 123 4567';
+          $('e-legal').value = 'Al Noor Trading LLC';
+          $('e-trn').value = '100908070600003';
+          $('e-emirato').value = 'Dubái';
+          $('e-sujeta').value = 'Sí';
+          $('e-dir').value = 'Jebel Ali Free Zone, Bloque C, Oficina 214';
+          masLejos = 4;
+          window.edocAvisar('Expediente recuperado con los datos que ya tenía.', 'exito');
+        }
+      }
+      ir(actual + 1);
+      return;
+    }
+    // Confirmar: nada se envía si algún paso sigue incompleto.
+    var flojo = [1, 2, 3, 4, 5, 6].filter(function (n) { return !completo(n); });
+    if (flojo.length) {
+      conError[flojo[0]] = true;
+      window.edocAvisar('Falta rellenar el paso ' + flojo[0] + '. Está marcado en el panel.', 'error');
+      ir(flojo[0]);
+      return;
+    }
+    $('chip-estado').textContent = 'Enviada';
+    $('chip-estado').className = 'edoc-estado edoc-estado--exito';
+    $('chip-estado').style.fontSize = '10px';
+    $('folio-final').value = folio;
+    window.jQuery('#modal-fin').modal('show');
+  });
+
+  $('btn-atras').addEventListener('click', function () { if (actual > 1) ir(actual - 1); });
+
+  $('pasos').addEventListener('click', function (e) {
+    var li = e.target.closest('[data-ir]');
+    if (li) ir(Number(li.getAttribute('data-ir')));
+  });
+  $('pasos').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var li = e.target.closest('[data-ir]');
+    if (li) { e.preventDefault(); ir(Number(li.getAttribute('data-ir'))); }
+  });
+
+  // Cualquier cambio repinta el panel: es donde se ve si el paso ya está.
+  document.addEventListener('input', pintarPanel);
+  document.addEventListener('change', pintarPanel);
+
+  /* --- el paso 1 ---------------------------------------------------------- */
+  function alternarFolio() {
+    $('caja-folio').hidden = !$('tipo-actualiza').checked;
+    pintarPanel();
+  }
+  $('tipo-actualiza').addEventListener('change', alternarFolio);
+  $('tipo-nueva').addEventListener('change', alternarFolio);
+
+  /* QW 16 · la cuenta atrás del código. Arranca al escribir un correo válido
+     y se reinicia al reenviarlo. */
+  // Cinco minutos, que es lo que corre en Bolivia. El plazo es un parámetro.
+  var quedan = 300, reloj = null;
+  function pintarReloj() {
+    var m = Math.floor(quedan / 60), sg = quedan % 60;
+    var caja = $('cuenta-atras');
+    if (quedan <= 0) {
+      caja.innerHTML = '<strong style="color:var(--rojo-1,#b3261e)">El código ha caducado.</strong> ' +
+        'Pide uno nuevo.';
+      window.clearInterval(reloj);
+      reloj = null;
+      return;
+    }
+    caja.innerHTML = 'El código caduca en <span class="cifra">' + m + ':' +
+      (sg < 10 ? '0' : '') + sg + '</span>';
+  }
+  function arrancarReloj() {
+    quedan = 300;
+    if (reloj) window.clearInterval(reloj);
+    pintarReloj();
+    reloj = window.setInterval(function () { quedan -= 1; pintarReloj(); }, 1000);
+  }
+
+  /* QW 18 · avisar de que ese correo ya tiene expediente, en vez de dejar que
+     se cree un segundo que alguien tendrá que descartar a mano. */
+  var YA_REGISTRADOS = ['dalida.loja@guru-soft.com', 'f.almarzooqi@alnoor.ae'];
+  $('p-correo').addEventListener('blur', function () {
+    var c = val('p-correo').toLowerCase();
+    var repetido = YA_REGISTRADOS.indexOf(c) >= 0 && $('tipo-nueva').checked;
+    $('ya-existe').hidden = !repetido;
+    if (c && !reloj && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c)) arrancarReloj();
+  });
+
+  $('pasar-actualizar').addEventListener('click', function (e) {
+    e.preventDefault();
+    $('tipo-actualiza').checked = true;
+    alternarFolio();
+    $('ya-existe').hidden = true;
+    $('p-folio').focus();
+    window.edocAvisar('Cambiado a «Actualizar registro existente». Pon el código de seguimiento.');
+  });
+
+  $('reenviar-codigo').addEventListener('click', function (e) {
+    e.preventDefault();
+    if (!val('p-correo')) {
+      return marcarMal(1, { id: 'p-correo', texto: 'Escribe primero el correo corporativo.' });
+    }
+    arrancarReloj();
+    window.edocAvisar('Código reenviado a <strong>' + val('p-correo') + '</strong>. ' +
+      'El código de seguimiento no cambia: es el mismo expediente.');
+  });
+
+  /* --- la zona de subida --------------------------------------------------- */
+  $('d-archivo').addEventListener('change', function () {
+    var hay = this.files.length > 0;
+    $('zona-subir').classList.toggle('reg__subir--lleno', hay);
+    $('subir-t').textContent = hay ? this.files[0].name : 'Licencia comercial';
+    $('subir-s').textContent = hay
+      ? 'Archivo cargado. Haz clic para cambiarlo.'
+      : 'Haz clic para subir un archivo';
+  });
+
+  /* --- copiar el código --------------------------------------------------- */
+  $('copiar').addEventListener('click', function () {
+    var campo = $('folio-final');
+    campo.select();
+    campo.setSelectionRange(0, 99);
+    var bien = false;
+    try { bien = document.execCommand('copy'); } catch (error) { bien = false; }
+    if (!bien && navigator.clipboard) {
+      navigator.clipboard.writeText(campo.value).then(function () {
+        $('ayuda-copia').textContent = 'Copiado.';
+      });
+      return;
+    }
+    $('ayuda-copia').textContent = bien
+      ? 'Copiado.'
+      : 'No se pudo copiar solo: selecciónalo y cópialo a mano.';
+  });
+
+  ir(1);
+}());
+</script>
 </body>
 </html>

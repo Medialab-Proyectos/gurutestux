@@ -10,6 +10,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="" data-pagina="bases.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
@@ -369,7 +380,9 @@
             <tr><td>Anular un documento</td><td>En Emiratos anular no existe: la única corrección es una nota de crédito, y este portal no emite notas.</td></tr>
             <tr><td>Workflow de aprobaciones</td><td>Módulo con personalidad propia. En Bolivia lleva años sin salir a producción.</td></tr>
             <tr><td>Cola de reportes pesados</td><td>El patrón es correcto, pero de entrada no hay volumen.</td></tr>
-            <tr><td>Exportar los XML junto al CSV</td><td>Decidido el 2026-09-07: en el MVP la exportación se lleva solo los datos. El ZIP con un XML por documento queda para después.</td></tr>
+            <tr><td><strong>Descarga masiva de documentos</strong></td><td>El ZIP con el XML y el PDF de cada factura. Queda en <strong>backlog interno</strong>: ni siquiera se nombra en el documento que va a comercial, para no comprometer fecha. «¿Por qué cree que no está en Latinoamérica, en todos los países que tenemos, y todavía no está?».</td></tr>
+            <tr><td>Documentos por criterios</td><td>Fuera. Filtros amplios sin diseño detrás terminan rompiendo la base de datos.</td></tr>
+            <tr><td>Aprobar o rechazar en bloque</td><td>Va en gris, como fase 2. Se entrega un MVP para salir rápido, sin comprometerse a lo que cabe en el incremento siguiente.</td></tr>
             <tr><td>Buscador general del portal</td><td>Con tan pocas opciones de menú no agrega valor.</td></tr>
             <tr><td>Informes fiscales</td><td>Ninguno tiene equivalente conocido en Emiratos.</td></tr>
             <tr><td>Catálogos oficiales de la autoridad</td><td>Las listas de códigos ya viven en la wiki, y la pantalla se entendería como crear catálogos.</td></tr>
@@ -404,7 +417,10 @@
             <tr><td>Aprobación y rechazo masivos</td><td>Se pidió revisarlo: hoy el cliente responde documento a documento. Implica selección múltiple en el listado de recibidos.</td></tr>
             <tr><td>Filtro de proveedores en recepción</td><td>Se pidió traerlo del feedback de Francia desde esta primera versión. Hoy el campo «Emisor» es texto libre, no permite elegir varios proveedores a la vez.</td></tr>
             <tr><td>Dónde cuelga «Clientes y proveedores»</td><td>El cruce dice que va, pero la propuesta de menú no le dio sitio.</td></tr>
-            <tr><td><strong>Asociación en EmaraTax</strong></td><td>Es obligatoria para certificar y no hay documentación oficial. Falta definir cómo nos llama la autoridad al volver. El detalle está en el punto 13.</td></tr>
+            <tr><td><strong>Asociación en EmaraTax</strong></td><td>Obligatoria para certificar. El ticket con la autoridad está <strong>bloqueado</strong> hasta que subamos la documentación: no dan información sin expediente abierto. El detalle está en el punto 17.</td></tr>
+            <tr><td><strong>Modelo de credenciales</strong></td><td>Sin autorizar hasta que haya visto bueno de arquitectura. Lo maquetado es una propuesta, no un acuerdo.</td></tr>
+            <tr><td>La cola de reportes masivos</td><td>La pregunta —si se queda o sobra, y con qué umbral— sigue sin responder: la respuesta que llegó era sobre paginación.</td></tr>
+            <tr><td>Dónde vive el Office Manager</td><td>No debería ver los menús del portal. O se complica este portal, o se hace una versión aparte para él.</td></tr>
           </tbody>
         </table>
       </div>
@@ -412,7 +428,220 @@
   </section>
 
   <section class="edoc-tablero">
-    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">11 · Cerrado en la revisión del 2026-09-07</h2></div>
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">11 · Cómo se llama cada cosa</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p>Estos tres términos se venían usando como sinónimos y no lo son. «Cuando usted cambia una sola
+      palabra nos cambia el contexto»: cada uno nombra una función distinta, con distinto coste y
+      distinta fase.</p>
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Término</th><th scope="col">Qué es</th><th scope="col">Dónde está</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Exportar resultados</strong></td>
+                <td>Coger el listado de la búsqueda —todas las páginas, no solo la que se ve— y sacarlo en un CSV. Es la tabla, no los documentos.</td>
+                <td>En el MVP. Es el botón «Exportar» de Emitidos y de Recibidos.</td></tr>
+            <tr><td><strong>Cola de reportes pesados</strong></td>
+                <td>Cuando ese CSV es grande, no se genera en el momento: se manda a una cola y se avisa al usuario. Evita colgar la pantalla.</td>
+                <td>Es «Reportes generados». Sigue marcada «Por decidir» en el cruce.</td></tr>
+            <tr><td><strong>Descarga masiva</strong></td>
+                <td>Otra cosa: coger factura por factura, con su XML y su PDF, y prepararlas en un ZIP.</td>
+                <td>Fuera. Backlog interno; ni se nombra a comercial.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="edoc-secundario mt-3">La vista se llamaba «Reportes generados · exportación masiva», que
+      mezclaba el segundo con el tercero. Ahora se llama solo <strong>Reportes generados</strong>.</p>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">12 · Respuestas de arquitectura · 2026-09-08</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p>Trece puntos planteados al equipo y contestados por Alejandro Lesmes. Dos cambian lo que ya
+      está maquetado y hay que atenderlos antes de seguir.</p>
+
+      <div class="edoc-aviso edoc-aviso--info mb-3">
+        <div><strong>Resuelto con la documentación de PINT AE</strong>, punto 12. Son cinco, falta C1
+        —tu empresa— y además la autoridad estaba dibujada donde no va.</div>
+      </div>
+
+      <div class="edoc-aviso edoc-aviso--error mb-3">
+        <div><strong>El modelo de credenciales queda sin autorizar.</strong> «No se autoriza por ahora,
+        no se definen esos requisitos sin visto bueno de arquitectura». La pantalla de Credenciales de
+        consumo se rehízo el 7 de septiembre sobre la decisión de tomar el modelo de Francia con OAuth,
+        y esa decisión ya no está en pie. Lo que hay maquetado va por delante de lo aprobado.</div>
+      </div>
+
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Punto</th><th scope="col">Respuesta</th><th scope="col">Qué hacemos</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Asistente de registro</strong></td>
+                <td>Ya está definido. Hay capacitaciones previas; hay que reorganizarlo con lo de EmaraTax.</td>
+                <td>Recibir la capacitación y completar los seis pasos. No es diseño desde cero.</td></tr>
+            <tr><td><strong>Doble factor</strong></td>
+                <td>Ya existe en Bolivia. La documentación es técnica de alto nivel y hay que bajarla a interacciones.</td>
+                <td><strong>Hecho.</strong> El documento D10 la bajó a interacciones; el detalle está en el punto 13.</td></tr>
+            <tr><td>Textos legales</td>
+                <td>Van con SGSI. Hay que crear un proceso para conseguirlos país por país.</td>
+                <td>No es trabajo de diseño: la pantalla espera contenido. Lo lleva soporte con Dalida Loja.</td></tr>
+            <tr><td>Ticket de EmaraTax</td>
+                <td>Hay que abrirlo, pero <strong>estamos bloqueados</strong> hasta subir la documentación: no dan información sin expediente.</td>
+                <td>«Asociarnos en EmaraTax» no se puede cerrar todavía. Dependencia externa.</td></tr>
+            <tr><td><strong>Modelo de credenciales</strong></td>
+                <td>No se autoriza sin visto bueno de arquitectura.</td>
+                <td>Volver a «por decidir». Lo maquetado no está aprobado.</td></tr>
+            <tr><td>Reportes masivos</td>
+                <td>Respondió sobre la paginación —normal, por desplazamiento desde el backend, nada de paginar por días—, no sobre la cola de reportes.</td>
+                <td>Queda por preguntar de nuevo: la pregunta era si la cola de descargas grandes se queda o sobra.</td></tr>
+            <tr><td><strong>Esquinas</strong></td>
+                <td>Aplican cinco y están confirmadas.</td>
+                <td>Incorporar la quinta a la tabla y a la ayuda, tras la capacitación.</td></tr>
+            <tr><td>Recuperar contraseña</td>
+                <td>Existe en Bolivia y está en producción en todos los países.</td>
+                <td>Maquetar desde Bolivia. Hoy el enlace solo muestra un aviso.</td></tr>
+            <tr><td>Aprobar o rechazar en bloque</td>
+                <td>Puede que no sea del primer MVP; por los tiempos, probablemente el siguiente incremento.</td>
+                <td>Fuera por ahora, pendiente de confirmar.</td></tr>
+            <tr><td>Las pantallas de Administración</td>
+                <td>De acuerdo: son las de mayor disonancia. <strong>Manuales, prioridad baja</strong>, y buscar algo mejor que manuales planos —estilo wiki—.</td>
+                <td>Seis pantallas prioritarias; manuales al final y replanteada.</td></tr>
+            <tr><td>Cargar XML</td>
+                <td>Ni prioridad ni parte del MVP.</td>
+                <td>Fuera.</td></tr>
+            <tr><td>Bandeja del Office Manager</td>
+                <td>No es prioridad; se trae casi la de Francia. Queda el dilema: el Office Manager no debería ver los demás menús, así que o se complica el portal o se hace una versión aparte para él.</td>
+                <td>Prioridad baja. La decisión de dónde vive sigue abierta.</td></tr>
+            <tr><td>Workflow de aprobaciones</td>
+                <td>El de Bolivia es el más adelantado y ni siquiera ha salido a producción.</td>
+                <td>Levantar el árbol de opciones —solo el esqueleto— y pedir qué hace cada una. Ahí se decide qué entra.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">13 · Doble factor · lo que se declara a la autoridad</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p>Del borrador <span class="cifra">D10 · Details of MFA</span>, que va dentro de la documentación
+      de acreditación ante Emiratos. Cierra el punto 2 de los pendientes: ya no hay que decidir cómo es
+      el segundo factor, está declarado.</p>
+
+      <div class="edoc-aviso edoc-aviso--error mb-3">
+        <div><strong>Había una pantalla que contradecía el documento.</strong> «Cambiar Contraseña»
+        ofrecía elegir entre <em>aplicación de autenticación</em> y <em>correo</em>, con la app marcada
+        como recomendada. La app me la inventé yo: el documento declara <strong>un código por correo,
+        sin alternativa</strong>. No es una preferencia del usuario, es la especificación.</div>
+      </div>
+
+      <h3 class="edoc-tablero__titulo mb-2" style="font-size:15px">Los cinco pasos del acceso</h3>
+      <div class="edoc-tabla-envoltura mb-3">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Paso</th><th scope="col">Qué pasa</th></tr></thead>
+          <tbody>
+            <tr><td class="cifra">1</td><td>El usuario mete credenciales, los datos adicionales y pasa la verificación humana.</td></tr>
+            <tr><td class="cifra">2</td><td>El backend valida y manda el código al correo registrado. <strong>Todavía no ha iniciado sesión.</strong></td></tr>
+            <tr><td class="cifra">3</td><td>El portal pide el segundo factor.</td></tr>
+            <tr><td class="cifra">4</td><td>El usuario mira su correo y escribe el código.</td></tr>
+            <tr><td class="cifra">5</td><td>El backend valida el proceso pendiente contra el código y su caducidad. Solo entonces genera la sesión y el token.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-3">Ese «todavía no ha iniciado sesión» del paso 2 es lo que ordena la maqueta: elegir
+      empresa va <strong>después</strong> del código, no antes, porque hasta el paso 5 no hay sesión.</p>
+
+      <h3 class="edoc-tablero__titulo mb-2" style="font-size:15px">Dónde más se pide el código</h3>
+      <p class="mb-2">El documento lista los procesos críticos que vuelven a exigir el segundo factor:</p>
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Proceso</th><th scope="col">En la maqueta</th></tr></thead>
+          <tbody>
+            <tr><td>Crear las credenciales de una aplicación (OAuth)</td><td>Aplicado</td></tr>
+            <tr><td>Cambiar o rotar el secreto de una aplicación</td><td>Aplicado</td></tr>
+            <tr><td>Volver a ver un secreto</td><td>Aplicado</td></tr>
+            <tr><td>Cambiar datos sensibles del usuario</td><td>Anunciado en «Cambiar Contraseña», sin pantalla</td></tr>
+            <tr><td>Acciones de seguridad del sistema</td><td>Anunciado, sin pantalla</td></tr>
+            <tr><td>El registro y la asociación, antes de tener sesión</td><td>Pendiente de maquetar</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">14 · Las cinco esquinas · fuente normativa</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p>Del glosario oficial de <strong>PINT AE</strong> (OpenPeppol, <span class="cifra">UAE-C5-Environment-Description
+      v1.1</span> y <span class="cifra">PINT-AE-Billing-TDD-Tax-Reporting v1.1</span>):
+      <em>«C2 = Sending AP, C3 = Receiving AP, C5 = Tax Authority AP»</em>. C1 es el emisor y C4 el
+      receptor. Esto cierra la pregunta de cuántas esquinas aplican, sin depender de una capacitación.</p>
+
+      <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+        <div><strong>La autoridad no está en el camino de la factura, y la maqueta la dibujaba ahí.</strong>
+        El orden era eDoc (C2) · Autoridad (C5) · Plataforma receptora (C3) · Destinatario (C4), lo que
+        hacía creer que la factura pasa por hacienda antes de llegar al comprador. No es así.</div>
+      </div>
+
+      <p><strong>Por qué existen C2 y C3.</strong> En la red Peppol está <em>prohibido</em> que el emisor
+      mande la factura directamente al receptor: «el emisor nunca le puede enviar directamente al
+      receptor facturas electrónicas». La única vía autorizada pasa por dos proveedores acreditados
+      —Access Points—, uno de cada lado. Ni siquiera C2 puede escribirle a C4.</p>
+
+      <div class="edoc-tabla-envoltura mb-3">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Paso</th><th scope="col">Qué ocurre</th></tr></thead>
+          <tbody>
+            <tr><td class="cifra">C1 → C2</td><td>Tu empresa entrega el documento a eDoc, su proveedor acreditado.</td></tr>
+            <tr><td class="cifra">C2 → C3</td><td>eDoc lo transmite por AS4 a la plataforma del comprador.</td></tr>
+            <tr><td class="cifra">C3 → C2</td><td>La plataforma receptora devuelve un <strong>MLS</strong> —Message Level Status— por la factura.</td></tr>
+            <tr><td class="cifra">C3 → C4</td><td>El comprador ve el documento y responde comercialmente.</td></tr>
+            <tr><td class="cifra">C2 → C5</td><td>En paralelo, eDoc arma un <strong>TDD</strong> —un resumen con la factura original adjunta— y lo manda a la autoridad.</td></tr>
+            <tr><td class="cifra">C3 → C5</td><td><strong>Y otra vez</strong>: la plataforma receptora manda su propio TDD al recibir, para que el gobierno cruce que lo que salió es lo mismo que llegó.</td></tr>
+            <tr><td class="cifra">C5 → C2/C3</td><td>La autoridad acusa recibo y luego responde con su MLS, <strong>en un máximo de diez minutos</strong>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Por eso la tabla de Emitidos enseña ahora <strong>C1 · C2 · C3 · C4</strong> como cadena, y
+      <strong>C5 aparte</strong>, detrás de un separador. Y la ayuda lo dice con todas las letras: lo que
+      la autoridad acepta o rechaza es el reporte fiscal, no la factura.</p>
+
+      <div class="edoc-aviso edoc-aviso--advertencia mt-3 mb-3">
+        <div><strong>El doble reporte es propio de Emiratos.</strong> «Es el primer país del mundo que
+        yo conozca en que el receptor está obligado a enviarle otra vez un TDD al gobierno». Emiratos es
+        una <em>autoridad Peppol</em> —PASR, Peppol Authority Specific Requirements—, o sea que puede
+        emitir normas sobre la red y modificarla. Lo que valga aquí no vale en otros países.</div>
+      </div>
+
+      <h3 class="edoc-tablero__titulo mb-2" style="font-size:15px">Los estados del MLS</h3>
+      <p>El MLS es la evolución del MLR clásico, y su lista de códigos es más larga de lo que usa la
+      maqueta. Están los tres que ya enseñamos y al menos tres más:</p>
+      <div class="edoc-tabla-envoltura mb-3">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Estado</th><th scope="col">Qué significa</th><th scope="col">¿En la maqueta?</th></tr></thead>
+          <tbody>
+            <tr><td>Reconocido · <span class="cifra">AB</span></td><td>Recibido y procesado técnicamente, «sin comprometerse mucho». No es una aprobación.</td><td>Sí</td></tr>
+            <tr><td>Aprobado · <span class="cifra">AP</span></td><td>Aceptado.</td><td>Sí</td></tr>
+            <tr><td>Rechazado · <span class="cifra">RE</span></td><td>No aceptado, con motivo.</td><td>Sí</td></tr>
+            <tr><td>En proceso, bajo consulta</td><td>Hace falta información adicional para decidir.</td><td>No</td></tr>
+            <tr><td>Aceptado condicionalmente</td><td>Aceptado con reservas.</td><td>No</td></tr>
+            <tr><td>Pagado</td><td>La factura se pagó.</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="edoc-secundario mb-0">Vocabulario confirmado: <span class="cifra">MLS</span> es Message
+      Level Status y el negativo es <span class="cifra">MLS (RE)</span>; <span class="cifra">TDS</span>
+      es un TDD con código de tipo de documento «F»; <span class="cifra">CTC</span> —Continuous
+      Transaction Controls— es como se llama en Europa el modelo, no «factura electrónica». Y el acuse
+      de recibo del protocolo AS4 es prueba de no repudio, pero <strong>no significa que la factura esté
+      aceptada</strong>.</p>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">15 · Cerrado en la revisión del 2026-09-07</h2></div>
     <div class="edoc-tablero__cuerpo">
       <div class="edoc-tabla-envoltura">
         <table class="edoc-tabla">
@@ -431,11 +660,72 @@
   </section>
 
   <section class="edoc-tablero">
-    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">12 · Credenciales de consumo · decidido</h2></div>
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">16 · Credenciales de consumo · cómo funciona Francia</h2></div>
     <div class="edoc-tablero__cuerpo">
-      <p><strong>Se toma el modelo de Francia, con OAuth y el flujo <span class="cifra">client credentials</span>.</strong>
-      Decidido el 2026-09-07. No hay una misma credencial para toda la empresa: cada integración tiene la suya, con su
-      propio ciclo de vida, y se puede retirar una sin tumbar las demás.</p>
+      <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+        <div><strong>El modelo sigue sin autorizar</strong> —arquitectura pidió su visto bueno antes de
+        cerrar los requisitos—, pero la pantalla ya no está montada sobre suposiciones: la sesión
+        técnica del 8 por la noche enseñó el portal de Francia funcionando.</div>
+      </div>
+      <p><strong>Cómo funciona de verdad en Francia.</strong> Por debajo hay un
+      <span class="cifra">KeyCloak</span>, un servidor de identidades de código abierto, uno por país;
+      el portal solo lo consume. El cliente crea «aplicaciones», cada una con su par de claves, y les da
+      permisos de una lista maestra que eDoc configura al lanzar el producto en el país. De esa lista
+      solo se le enseña lo que su empresa contrató: si contrató emisión, no ve recepción.</p>
+
+      <div class="edoc-tabla-envoltura mb-3">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Qué hace Francia hoy</th><th scope="col">Qué hicimos aquí</th></tr></thead>
+          <tbody>
+            <tr><td>Crear la aplicación son <strong>dos acciones</strong>: primero se crea sin secreto, luego se administran permisos y se genera el secreto aparte.</td>
+                <td><strong>Un solo paso.</strong> Nombre, para qué es y permisos; al guardar salen las claves. Fue lo primero que se señaló como mejorable.</td></tr>
+            <tr><td>La documentación se pasa por correo y hay que salir del portal a buscarla.</td>
+                <td><strong>Enlace a la documentación técnica</strong> en la propia pantalla.</td></tr>
+            <tr><td>Las direcciones de las APIs solo están en la wiki.</td>
+                <td><strong>Las tres esenciales en pantalla</strong> —autenticación, emisión, recepción— y el resto en la wiki.</td></tr>
+            <tr><td>El secreto se enseña una vez; para volver a verlo llega un código por correo.</td>
+                <td>Igual. Es el patrón correcto y se mantiene.</td></tr>
+            <tr><td>Nombre y descripción obligatorios, la descripción con mínimo de caracteres.</td>
+                <td>Igual, con la ayuda explicando por qué: dentro de un año la descripción es lo único que dice para qué servía.</td></tr>
+            <tr><td>Sin límite de aplicaciones. Duplicadas no son un problema técnico.</td>
+                <td>Sin límite. Se sugiere una por sistema, sin obligar.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="edoc-tablero__titulo mt-4 mb-2" style="font-size:15px">Los permisos, vistos en pantalla</h3>
+      <p class="mb-3">Las capturas del portal de Francia enseñan el diálogo «Administrar permisos» con
+      <strong>dos modos</strong>: marcar el servicio entero, o entrar permiso a permiso. Cada permiso
+      lleva <strong>su código técnico debajo</strong> —<span class="cifra">iss.invoice.send</span>—, que
+      es lo que el desarrollador busca en la wiki. Los dos modos y los códigos están copiados; los
+      permisos que yo tenía inventados, fuera.</p>
+      <div class="edoc-tabla-envoltura mb-3">
+        <table class="edoc-tabla">
+          <thead><tr><th scope="col">Emisión · <span class="cifra">iss</span></th><th scope="col">Recepción · <span class="cifra">rec</span></th></tr></thead>
+          <tbody>
+            <tr><td>Enviar facturas · <span class="cifra">iss.invoice.send</span></td><td>Enviar evento · <span class="cifra">rec.event.send</span></td></tr>
+            <tr><td>Enviar evento · <span class="cifra">iss.event.send</span></td><td>Búsqueda específica de factura · <span class="cifra">rec.invoice.search.specific</span></td></tr>
+            <tr><td>Enviar archivo · <span class="cifra">iss.file.send</span></td><td>Obtener archivo · <span class="cifra">rec.file.get</span></td></tr>
+            <tr><td>Búsqueda específica de factura · <span class="cifra">iss.invoice.search.specific</span></td><td>—</td></tr>
+            <tr><td>Obtener archivo · <span class="cifra">iss.file.get</span></td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+        <div><strong>Cuatro cosas de esas capturas que no se copian.</strong>
+        <br>· «Applications.Permissions.rec.invo» sale en crudo y truncado: es una clave de traducción sin
+        traducir donde debería poner «Recepción». En avanzada pasa igual con cada permiso de recepción.
+        <br>· «Enviar facturas · iss.invoice.send» aparece <strong>dos veces</strong> en la lista de emisión.
+        <br>· La cabecera del diálogo se va con el desplazamiento, así que al bajar dejas de ver en qué
+        pestaña estás. Por eso aquí los dos modos no son pestañas: es un bloque que se despliega y
+        siempre se ve lo que llevas marcado.
+        <br>· El secreto se enseña enmascarado pero con los últimos caracteres a la vista y un botón de
+        copiar. Contradice que el secreto se muestre una sola vez y que haga falta un código para verlo.</div>
+      </div>
+
+      <p class="edoc-secundario">Lo que queda por confirmar: las direcciones reales de Emiratos —las de
+      la pantalla son de ejemplo—, la lista maestra de servicios del país, y si el listado de permisos de
+      Emiratos es el mismo que el de Francia.</p>
       <div class="edoc-tabla-envoltura">
         <table class="edoc-tabla">
           <thead><tr><th scope="col">Qué se decidió</th><th scope="col">Qué implica en la pantalla</th></tr></thead>
@@ -451,7 +741,7 @@
   </section>
 
   <section class="edoc-tablero">
-    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">13 · Asociación en EmaraTax · requisito de integración</h2></div>
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">17 · Asociación en EmaraTax · requisito de integración</h2></div>
     <div class="edoc-tablero__cuerpo">
       <p>Esto no es una pantalla del portal, es un requisito de la norma de Emiratos. Vivía dentro de
       «Asociarnos en EmaraTax», donde no pintaba nada: un cliente no ve nunca el flujo de integración ni los
@@ -509,6 +799,8 @@
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script>

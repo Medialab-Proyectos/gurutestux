@@ -222,10 +222,359 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .edoc-menu__hijos .edoc-menu__enlace { padding-left: 32px; }
 .edoc-menu__hijos .edoc-menu__enlace.activo { box-shadow: inset 3px 0 0 var(--edoc-verde); }
 
-.edoc-menu__enlace--posterior { color: var(--edoc-gris); font-style: italic; }
+.edoc-menu__enlace--fase { color: var(--edoc-gris); font-style: italic; }
 .edoc-menu__enlace--por-ubicar { color: #8a5200; }
 .edoc-menu__enlace--por-ubicar:hover { background: #fff4e4; color: #8a5200; }
-.edoc-menu__enlace--posterior:hover { background: #f4f4f4; color: var(--edoc-gris); cursor: not-allowed; }
+.edoc-menu__enlace--fase:hover { background: #f4f4f4; color: var(--edoc-gris); cursor: not-allowed; }
+
+/* --- Selección múltiple y marcas de fase --------------------------------
+   El filtro por proveedor no puede ser un campo de texto: cuando llegan
+   documentos de doscientos proveedores nadie recuerda cómo se escribe cada
+   nombre. Bootstrap 4 no trae multiselección, así que es un desplegable con
+   casillas: el mismo control de siempre, con el rótulo contando cuántos van. */
+.edoc-multi .dropdown-toggle { background: #fff; cursor: pointer; }
+.edoc-multi .dropdown-toggle::after { float: right; margin-top: 9px; }
+.edoc-multi__menu { width: 100%; max-height: 260px; overflow-y: auto; padding: 6px 0; }
+.edoc-multi__opcion { display: flex; align-items: flex-start; gap: 9px; margin: 0;
+                      padding: 7px 14px; font-size: 13px; font-weight: 400; cursor: pointer; }
+.edoc-multi__opcion:hover { background: #f4f6fa; }
+.edoc-multi__opcion input { margin-top: 3px; flex: none; }
+
+/* Lo que no entra en la primera entrega se deja a la vista y en gris, con su
+   fase escrita. Quitarlo le tendería una trampa a quien tiene clientes
+   preguntando; dejarlo sin marcar haría creer que va. */
+.edoc-fase-marca {
+  display: inline-flex; align-items: center;
+  font-size: 12px; font-style: italic; color: var(--edoc-gris);
+  border: 1px dashed #cfcfcf; border-radius: 999px; padding: 4px 12px;
+  cursor: not-allowed; user-select: none;
+}
+
+/* --- El asistente de registro -------------------------------------------
+   Copiado del portal de Francia, que es el que existe: panel de tarjetas a la
+   izquierda con el estado de cada paso, formulario a la derecha y cada campo
+   con su pastilla de obligatorio u opcional. Lo que cambia respecto de
+   Francia va anotado en la propia pantalla. */
+.reg { display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: start; }
+
+.reg__lado { background: #fff; border: 1px solid var(--edoc-linea, #e3e3e3); border-radius: 10px;
+             overflow: hidden; position: sticky; top: 76px; }
+.reg__cabecera { padding: 16px 16px 12px; border-bottom: 1px solid #f0f0f0; }
+.reg__rotulo { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #9a9a9a;
+               font-family: var(--fuente-titulos, inherit); font-weight: 600; }
+.reg__nombre { font-family: var(--fuente-titulos, inherit); font-size: 15px; font-weight: 600;
+               color: var(--edoc-azul); line-height: 1.2; }
+.reg__folio { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+              margin-top: 12px; }
+.reg__folio-cod { font-family: var(--fuente-cifras); font-size: 11px; color: #4a4a4a;
+                  background: #f6f7fa; border: 1px solid #e7e9ef; border-radius: 6px;
+                  padding: 6px 8px; margin-top: 6px; word-break: break-all; line-height: 1.35; }
+.reg__avance { padding: 12px 16px 14px; }
+.reg__avance-t { font-size: 11.5px; color: #6a6a6a; margin-bottom: 6px; }
+.reg__barra { height: 4px; background: #ececec; border-radius: 99px; overflow: hidden; }
+.reg__barra i { display: block; height: 100%; background: var(--edoc-verde);
+                border-radius: 99px; transition: width .25s ease; }
+
+.reg__pasos { list-style: none; margin: 0; padding: 0 12px 14px; display: flex;
+              flex-direction: column; gap: 8px; max-height: 60vh; overflow-y: auto; }
+.reg__paso { position: relative; display: grid; grid-template-columns: 26px 1fr auto; gap: 10px;
+             align-items: start; border: 1px solid #e6e6e6; border-radius: 9px; padding: 11px 12px;
+             background: #fff; cursor: default; }
+.reg__paso--puede { cursor: pointer; }
+.reg__paso--puede:hover { border-color: #cfd6e4; background: #fafbfd; }
+.reg__paso--activo { background: #f4f8e6; border-color: var(--edoc-verde); }
+/* Cuando un paso no pasa la validación, la tarjeta se pone en rojo. Es donde
+   Francia enseña el error, y es lo que hace que se encuentre sin leer el
+   aviso: el panel siempre está a la vista. */
+.reg__paso--error { background: #fdf1f1; border-color: #e3a9a5; }
+.reg__paso--error .reg__paso-icono { color: #b3261e; }
+.reg__paso-icono { color: #7c8496; margin-top: 1px; }
+.reg__paso--activo .reg__paso-icono { color: var(--edoc-azul); }
+/* Son <span> dentro de una celda de rejilla: sin display:block el subtítulo
+   se pega al título en la misma línea. */
+.reg__paso-t { display: block; font-family: var(--fuente-titulos, inherit); font-size: 13.5px;
+               font-weight: 600; line-height: 1.25; color: #22252e; }
+.reg__paso-s { display: block; font-size: 11px; color: #8a8a8a; line-height: 1.3; margin-top: 2px; }
+.reg__paso-n { font-family: var(--fuente-cifras); font-size: 10.5px; color: #7a7a7a;
+               background: #f1f1f1; border-radius: 99px; padding: 2px 7px; white-space: nowrap; }
+.reg__paso--activo .reg__paso-n { background: var(--edoc-verde); color: #1d2410; font-weight: 600; }
+.reg__paso-chip { display: inline-block; font-family: var(--fuente-titulos, inherit); font-size: 9px;
+                  font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+                  border-radius: 4px; padding: 2px 6px; margin-top: 6px; }
+.reg__paso-chip--completado { background: #eef6da; color: #4d6b12; }
+.reg__paso-chip--requerido  { background: #fdeaea; color: #b3261e; }
+.reg__paso-chip--opcional   { background: #f1f1f1; color: #6f6f6f; }
+.reg__paso-chip--error      { background: #fdd9d9; color: #a01a14; }
+.reg__tic { position: absolute; top: 9px; right: 10px; width: 17px; height: 17px; border-radius: 50%;
+            background: var(--edoc-verde); color: #1d2410; display: none;
+            align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.reg__paso--hecho .reg__tic { display: flex; }
+.reg__paso--hecho .reg__paso-n { visibility: hidden; }
+.reg__tic--error { background: #b3261e; color: #fff; }
+.reg__paso--error .reg__tic { display: flex; }
+.reg__paso--error .reg__paso-n { visibility: hidden; }
+
+.reg__cuerpo { background: #fff; border: 1px solid var(--edoc-linea, #e3e3e3); border-radius: 10px;
+               padding: 22px 26px 20px; }
+.reg__eyebrow { text-align: center; font-family: var(--fuente-titulos, inherit); font-size: 10.5px;
+                font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #9a9a9a; }
+.reg__titulo { text-align: center; font-family: var(--fuente-titulos, inherit); font-size: 21px;
+               font-weight: 600; color: var(--edoc-azul); margin: 4px 0 2px; }
+.reg__sub { text-align: center; font-size: 13px; color: #7d7d7d; margin-bottom: 18px; }
+
+/* La pastilla que dice si el campo hay que rellenarlo. En Francia va al lado
+   del rótulo y se lee de un vistazo; es mejor que un asterisco. */
+.marca-campo { display: inline-block; font-family: var(--fuente-titulos, inherit); font-size: 9px;
+               font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+               border-radius: 4px; padding: 2px 6px; margin-left: 7px; vertical-align: 1px; }
+.marca-campo--obligatorio { background: #fdeaea; color: #b3261e; }
+.marca-campo--opcional    { background: #fff4e2; color: #8a5200; }
+
+.reg__nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 22px;
+            padding-top: 16px; border-top: 1px solid #f0f0f0; flex-wrap: wrap; }
+
+/* --- El tipo de solicitud ------------------------------------------------
+   Dos tarjetas, no dos redondeles sueltos: la elegida se ve de lejos. */
+.reg__tipos { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+              gap: 12px; margin-bottom: 18px; }
+.reg__tipo { display: flex; align-items: center; gap: 10px; margin: 0; cursor: pointer;
+             border: 1px solid #dcdcdc; border-radius: 9px; padding: 13px 15px; background: #fff;
+             font-weight: 400; transition: border-color .15s, background .15s; }
+.reg__tipo:hover { border-color: #bcc6d8; }
+.reg__tipo input { position: absolute; opacity: 0; pointer-events: none; }
+.reg__tipo-marca { width: 17px; height: 17px; border-radius: 50%; border: 1.6px solid #c6c6c6;
+                   flex: none; display: flex; align-items: center; justify-content: center;
+                   font-size: 11px; color: transparent; }
+/* Como en las tarjetas del panel: son <span>, y sin display:block el
+   subtítulo se pega al título en la misma línea. */
+.reg__tipo-t { display: block; font-family: var(--fuente-titulos, inherit); font-size: 14px;
+               font-weight: 600; line-height: 1.25; }
+.reg__tipo-s { display: block; font-size: 11.5px; color: #8a8a8a; line-height: 1.35; margin-top: 2px; }
+.reg__tipo input:checked ~ .reg__tipo-marca { border-color: var(--edoc-verde);
+               background: var(--edoc-verde); color: #1d2410; }
+.reg__tipo:has(input:checked) { border-color: var(--edoc-verde); background: #f7fbec; }
+.reg__tipo input:focus-visible ~ .reg__tipo-marca { outline: 2px solid var(--edoc-azul);
+               outline-offset: 2px; }
+
+/* --- La subida del documento --------------------------------------------
+   Zona grande en vez de un campo de fichero suelto: es lo que hace Francia y
+   es lo que se acierta a la primera. */
+.reg__subir { display: block; border: 2px dashed #d2d2d2; border-radius: 12px; padding: 30px 20px;
+              text-align: center; cursor: pointer; background: #fcfcfd; margin: 0;
+              transition: border-color .15s, background .15s; }
+.reg__subir:hover { border-color: var(--edoc-verde); background: #f9fcf2; }
+.reg__subir input { position: absolute; opacity: 0; pointer-events: none; }
+.reg__subir-icono { width: 46px; height: 46px; border-radius: 50%; border: 1.6px solid #c9c9c9;
+                    display: inline-flex; align-items: center; justify-content: center;
+                    color: #6f7686; margin-bottom: 12px; }
+.reg__subir-t { font-family: var(--fuente-titulos, inherit); font-size: 15px; font-weight: 600;
+                color: #22252e; }
+.reg__subir-s { font-size: 12.5px; color: #7d7d7d; margin-top: 3px; }
+.reg__subir-f { font-family: var(--fuente-cifras); font-size: 11px; color: #9a9a9a; margin-top: 6px; }
+.reg__subir--lleno { border-style: solid; border-color: var(--edoc-verde); background: #f7fbec; }
+.reg__subir:focus-within { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
+
+/* El icono que acompaña al título de cada paso. */
+.reg__titulo-fila { display: flex; align-items: center; justify-content: center; gap: 9px; }
+.reg__titulo-fila .reg__titulo { margin: 0; }
+.reg__titulo-icono { color: var(--edoc-azul); display: inline-flex; }
+
+/* Los consentimientos, como en Francia: una línea por documento con el nombre
+   subrayado. Nada de tarjetas. */
+.reg__acepto { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; font-size: 14px; }
+.reg__acepto input { width: 16px; height: 16px; flex: none; margin: 0; }
+.reg__acepto a { text-decoration: underline; }
+
+/* --- La revisión final --------------------------------------------------- */
+.rev__t { border: 1px solid #e6e6e6; border-radius: 9px; padding: 14px 16px; margin-bottom: 10px; }
+.rev__alto { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.rev__paso { font-family: var(--fuente-cifras); font-size: 10.5px; color: #6a6a6a;
+             background: #f3f3f3; border-radius: 5px; padding: 2px 8px; }
+.rev__ok, .rev__falta { font-family: var(--fuente-titulos, inherit); font-size: 10.5px;
+                        font-weight: 600; border-radius: 5px; padding: 2px 8px; }
+.rev__ok    { background: #eef6da; color: #4d6b12; }
+.rev__falta { background: #fdeaea; color: #b3261e; }
+.rev__puntos { margin-left: auto; display: flex; gap: 4px; }
+.rev__puntos i { width: 6px; height: 6px; border-radius: 50%; background: #dcdcdc; }
+.rev__puntos i.lleno { background: var(--edoc-verde); }
+.rev__rotulo { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #a0a0a0;
+               font-family: var(--fuente-titulos, inherit); font-weight: 600; }
+.rev__nombre { font-family: var(--fuente-titulos, inherit); font-size: 17px; font-weight: 600;
+               color: #22252e; line-height: 1.2; }
+.rev__detalle { margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; font-size: 13px; }
+.rev__detalle dl { display: grid; grid-template-columns: minmax(120px, 34%) 1fr; gap: 4px 14px; margin: 0; }
+.rev__detalle dt { color: #7a7a7a; font-weight: 400; }
+.rev__detalle dd { margin: 0; color: #22252e; }
+
+@media (max-width: 900px) {
+  .reg { grid-template-columns: 1fr; }
+  .reg__lado { position: static; }
+  .reg__pasos { max-height: none; }
+}
+
+/* El botón de ver la contraseña. Va dentro del propio campo para que no
+   desplace nada del formulario. */
+.edoc-clave-caja { position: relative; }
+.edoc-clave-caja > input { padding-right: 40px; }
+.edoc-clave-ojo {
+  position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+  width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+  background: none; border: 0; border-radius: 6px; color: #6f7686; cursor: pointer; padding: 0;
+}
+.edoc-clave-ojo:hover { background: #f0f2f7; color: var(--edoc-azul); }
+.edoc-clave-ojo[aria-pressed="true"] { color: var(--edoc-azul); }
+.edoc-clave-ojo:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 1px; }
+
+/* Una frase textual de una reunión, citada dentro de una pantalla. Se
+   distingue del texto propio para que no se confunda lo que dijo alguien con
+   lo que decidimos nosotros. */
+.cita-revision {
+  margin: 0; padding: 10px 0 10px 16px;
+  border-left: 3px solid var(--edoc-verde);
+  font-size: 15px; color: #2f3607; background: #f7fbec;
+  border-radius: 0 6px 6px 0;
+}
+.cita-revision cite {
+  display: block; font-style: normal; font-size: 12px;
+  color: #6b7a3a; margin-top: 5px;
+}
+
+/* Los tres tipos de aviso, con color propio. No es decoración: es lo que
+   permite discutir si de verdad son tres cosas distintas o una sola.
+     alerta       le toca hacer algo al usuario
+     notificacion ya pasó algo y conviene saberlo
+     comunicado   lo anuncia GuruSoft, sin documento detrás            */
+/* El tipo de aviso: rótulo en gris, icono teñido. Es el patrón «Gris con
+   color» del manual de marca, donde el icono se tiñe según lo que representa
+   —ZIP #FD9714, XML #334190, PDF #D63912, XLS #A8C634, otros #575756—. La
+   pastilla de fondo de color no está en el manual y por eso no se usa. */
+.edoc-aviso-tipo {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--fuente-titulos); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  color: #6f7686; margin-bottom: 5px;
+}
+.edoc-aviso-tipo svg { width: 14px; height: 14px; flex: none; }
+/* Alerta: pide que hagas algo, así que va en el naranja de advertencia.
+   Notificación: informa, y toma el azul con el que el manual tiñe el XML.
+   Comunicado: viene de nosotros y no pide nada, así que se queda en el gris
+   de «otros». */
+.edoc-aviso-tipo--alerta svg       { color: #FD9714; }
+.edoc-aviso-tipo--notificacion svg { color: #334190; }
+.edoc-aviso-tipo--comunicado svg   { color: #575756; }
+
+/* Un aviso sin leer se distingue del resto sin depender solo del color: el
+   titulo va en negrita y ademas lleva un punto, arriba a la derecha.
+
+   Ahi mismo va el aspa de archivar, asi que se relevan: en reposo se ve el
+   punto, y al pasar por encima del renglon el punto deja su sitio al aspa. No
+   compiten, y el borde derecho se queda tranquilo mientras solo se lee. */
+.edoc-notificacion--nueva .edoc-notificacion__titulo { font-weight: 700; }
+.edoc-notificacion--nueva::after {
+  content: ""; position: absolute; top: 14px; right: 12px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--edoc-azul);
+  transition: opacity .12s ease;
+}
+.edoc-notificacion--nueva:hover::after { opacity: 0; }
+
+/* La lista completa, en la pantalla. */
+.aviso-fila { display: grid; grid-template-columns: 118px 1fr auto; gap: 14px;
+              padding: 14px 0; border-bottom: 1px solid #eceded; align-items: start; }
+.aviso-fila:last-child { border-bottom: 0; }
+.aviso-fila__t { font-family: var(--fuente-titulos); font-size: 14.5px; font-weight: 600;
+                 color: #22252e; }
+.aviso-fila__d { font-size: 13px; color: #6a6a6a; margin-top: 2px; line-height: 1.45; }
+.aviso-fila__c { font-family: var(--fuente-cifras); font-size: 11.5px; color: #9a9a9a;
+                 white-space: nowrap; }
+.aviso-fila--nueva .aviso-fila__t::after {
+  content: "sin leer"; font-family: var(--fuente-titulos); font-size: 9px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; color: #4a5068; background: #eceef4;
+  border-radius: 4px; padding: 2px 6px; margin-left: 8px; vertical-align: 2px;
+}
+@media (max-width: 700px) {
+  .aviso-fila { grid-template-columns: 1fr; gap: 4px; }
+  .aviso-fila__c { grid-row: 1; }
+}
+
+/* La franja de aviso permanente. Lo que hay que ver sin abrir nada: un corte
+   de servicio, un cambio que afecta a todos. Va en el naranja de ADVERTENCIA,
+   que es lo que el manual reserva para eso, y encima del contenido para que no
+   dependa de que el usuario baje. */
+.edoc-franja {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: #fff6e9; border-bottom: 1px solid var(--senal-advertencia);
+  padding: 11px 18px; font-size: 13.5px; color: #6d4300; line-height: 1.45;
+}
+.edoc-franja__icono { color: var(--senal-advertencia); flex: none; display: flex; margin-top: 1px; }
+.edoc-franja__icono svg { width: 18px; height: 18px; }
+.edoc-franja__texto { flex: 1; }
+.edoc-franja__texto strong { color: #59360a; }
+.edoc-franja__cerrar {
+  background: none; border: 0; color: #a1793f; font-size: 21px; line-height: 1;
+  padding: 0 4px; cursor: pointer; flex: none; border-radius: 5px;
+}
+.edoc-franja__cerrar:hover { background: #fbe9d2; color: #59360a; }
+.edoc-franja__cerrar:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 1px; }
+@media (max-width: 640px) { .edoc-franja { padding: 10px 14px; font-size: 13px; } }
+
+/* El estado del sistema. Se diferencia de la franja de aviso en que no lleva
+   aspa: no se cierra porque sigue siendo verdad. Los dos colores son los del
+   manual —ADVERTENCIA y RECHAZADO/ERROR—, que aquí sí aplican de verdad. */
+.edoc-estado-sistema {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 11px 18px; font-size: 13.5px; line-height: 1.45;
+  border-bottom: 1px solid;
+  /* Se queda pegada bajo el menú al desplazar. Un mantenimiento en curso no
+     puede desaparecer al bajar: sigue siendo verdad en toda la pantalla, y si
+     alguien llega a la mitad de una tabla tiene que seguir viéndolo. */
+  position: sticky; top: calc(var(--alto-encabezado) + var(--alto-menu)); z-index: 1027;
+}
+/* Sin menú —acceso, registro, onboarding— se pega directamente al encabezado. */
+body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado); }
+.edoc-estado-sistema__icono { flex: none; display: flex; margin-top: 1px; }
+.edoc-estado-sistema__icono svg { width: 18px; height: 18px; }
+.edoc-estado-sistema--advertencia {
+  background: #fff2df; border-bottom-color: var(--senal-advertencia); color: #6d4300;
+}
+.edoc-estado-sistema--advertencia .edoc-estado-sistema__icono { color: var(--senal-advertencia); }
+.edoc-estado-sistema--advertencia strong { color: #59360a; }
+.edoc-estado-sistema--error {
+  background: #fdefec; border-bottom-color: var(--senal-error); color: #7d2a12;
+}
+.edoc-estado-sistema--error .edoc-estado-sistema__icono { color: var(--senal-error); }
+.edoc-estado-sistema--error strong { color: #66200d; }
+@media (max-width: 640px) { .edoc-estado-sistema { padding: 10px 14px; font-size: 13px; } }
+
+/* La marca de la pantalla de mantenimiento, en el naranja de ADVERTENCIA para
+   distinguirla de «En construcción», que es azul. Una no existe todavía; la
+   otra existe y vuelve sola. */
+.edoc-obra__marca--mantenimiento { color: var(--senal-advertencia); }
+
+/* Los correos como etiquetas que se quitan con una aspa, que es como se ven
+   en Bolivia. Cada bloque admite varios: «aquí se pueden ir varios». */
+.edoc-fichas { display: flex; flex-wrap: wrap; gap: 6px; min-height: 30px; align-items: center; }
+.edoc-ficha-correo {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #eef1f8; border: 1px solid #dde2ee; border-radius: 100px;
+  padding: 3px 6px 3px 11px; font-size: 12.5px; color: #2b3350;
+  font-family: var(--fuente-cifras);
+}
+.edoc-ficha-correo__x {
+  background: none; border: 0; color: #7c8496; font-size: 15px; line-height: 1;
+  padding: 0 3px; cursor: pointer; border-radius: 50%;
+}
+.edoc-ficha-correo__x:hover { background: #d9dfee; color: #1c2440; }
+.edoc-ficha-correo__x:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 1px; }
+
+/* La línea que dice qué recibe cada bloque, con su marca verde, como allí. */
+.edoc-recibe { display: flex; gap: 7px; font-size: 12.5px; color: #5c5c5c; line-height: 1.45; }
+.edoc-recibe svg { width: 15px; height: 15px; flex: none; color: var(--edoc-verde); margin-top: 2px; }
+
+/* La campana enseña todos los avisos: son pocos y no hay una pantalla que los
+   liste. Prometer un «ver todas» que lleva al formulario de correos sería
+   mentir, y qué pantalla debería listarlos es justo lo que está sin decidir. */
+.edoc-notificaciones { max-height: 70vh; overflow-y: auto; }
+.edoc-notificaciones__pie { display: block; font-size: 12px; color: #8a8a8a; text-align: center; }
 
 /* --- 5. Página ----------------------------------------------------------- */
 .edoc-pagina { padding: 16px 18px var(--alto-pie); max-width: 1680px; margin: 0 auto; width: 100%; flex: 1; }
@@ -1044,6 +1393,73 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   text-align: center; margin-top: 10px; font-size: 11px; color: var(--edoc-gris);
 }
 
+/* --- 26 bis. El plazo del codigo ------------------------------------------
+   El naranja del ultimo minuto es el de ADVERTENCIA del manual: se acaba el
+   tiempo. El rojo del final es el de ERROR: ya no vale.                     */
+.edoc-reloj {
+  margin-top: 8px; font-size: 12.5px; color: #5f5f5f;
+}
+.edoc-reloj--poco { color: var(--senal-advertencia); }
+.edoc-reloj--fuera { color: var(--senal-error); }
+
+/* --- 26 ter. Paneles que se pliegan --------------------------------------
+   Para lo que es material de consulta y no de cada dia: se deja recogido y se
+   abre quien lo necesite, en vez de hacer scroll por encima siempre.        */
+.edoc-tablero--plegable .edoc-tablero__cabecera { padding: 0; }
+.edoc-plegar {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 14px 18px; border: 0; background: none; text-align: left;
+  font: inherit; color: inherit; cursor: pointer;
+}
+.edoc-plegar:hover { color: var(--edoc-azul); }
+.edoc-plegar:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: -2px; }
+.edoc-plegar__flecha {
+  width: 18px; height: 18px; flex: 0 0 18px;
+  transform: rotate(-90deg); transition: transform .16s ease;
+}
+.edoc-plegar[aria-expanded="true"] .edoc-plegar__flecha { transform: rotate(0deg); }
+
+/* --- 27. El '?' de ayuda --------------------------------------------------
+   Para lo que solo hace falta si se pregunta. Un aviso permanente para una
+   duda ocasional acaba siendo ruido que nadie lee.                          */
+.edoc-ayuda-que {
+  display: inline-grid; place-items: center; vertical-align: middle;
+  width: 17px; height: 17px; margin-left: 5px; padding: 0;
+  border: 1px solid #c2c4c6; border-radius: 50%;
+  background: none; color: #6d6f71;
+  font-family: var(--fuente-titulos); font-size: 11px; font-weight: 700;
+  line-height: 1; cursor: pointer;
+}
+.edoc-ayuda-que:hover { background: #6d6f71; border-color: #6d6f71; color: #fff; }
+.edoc-ayuda-que:focus { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
+.popover { font-family: var(--fuente-texto); font-size: 12.5px; max-width: 288px; }
+.popover-body { color: #3d3f42; line-height: 1.5; }
+
+/* --- 27 bis. La salida del simulacro --------------------------------------
+   Solo se ve cuando hay un escenario fijado. Gris oscuro: es una herramienta de
+   la maqueta, no un estado del producto, y por eso no usa ninguno de los cuatro
+   colores que el manual reserva para senalizar.                              */
+.edoc-chincheta {
+  position: fixed; left: 16px; bottom: 16px; z-index: 2001;
+  max-width: 280px; padding: 10px 12px; border-radius: 6px;
+  background: #2b2b2b; color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .28);
+  font-size: 12px; line-height: 1.4;
+}
+.edoc-chincheta__t { display: block; font-family: var(--fuente-titulos); font-size: 12.5px; }
+.edoc-chincheta__d { display: block; margin-top: 2px; color: #b9b9b9; font-size: 11px; }
+.edoc-chincheta__x {
+  margin-top: 8px; padding: 4px 10px; border: 1px solid #6d6d6d; border-radius: 4px;
+  background: none; color: #fff; font-family: var(--fuente-titulos);
+  font-size: 11.5px; font-weight: 600; cursor: pointer;
+}
+.edoc-chincheta__x:hover { background: #fff; color: #2b2b2b; border-color: #fff; }
+
+/* En pantalla estrecha no compite con el contenido: se pega abajo, a lo ancho. */
+@media (max-width: 575.98px) {
+  .edoc-chincheta { left: 8px; right: 8px; bottom: 8px; max-width: none; }
+}
+
 /* --- 28. Notificaciones ---------------------------------------------------
    Los avisos que hoy salen en un popup que se desvanece necesitan un sitio
    donde queden: si el usuario aparta la vista, el aviso no puede perderse.   */
@@ -1055,12 +1471,54 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   display: grid; place-items: center; box-shadow: 0 0 0 2px var(--edoc-azul);
 }
 .edoc-notificaciones { min-width: 320px; max-width: 360px; padding-bottom: 0; }
-.edoc-notificacion { display: block; white-space: normal; padding: 10px 14px; border-bottom: 1px solid #f0f1f3; }
+
+/* El renglon es el <li>: lleva la caja y el borde. Dentro van el cuerpo -que
+   es lo que se pulsa- y el aspa, que tiene que quedar fuera del enlace: un
+   <button> dentro de un <a> no es HTML valido. */
+.edoc-notificacion { position: relative; border-bottom: 1px solid #f0f1f3; }
 .edoc-notificacion:last-of-type { border-bottom: 0; }
+.edoc-notificacion__cuerpo { display: block; white-space: normal; padding: 10px 34px 10px 14px; }
 .edoc-notificacion__titulo { display: block; font-weight: 700; font-size: 13px; color: var(--edoc-negro); }
-.edoc-notificacion__detalle { display: block; font-size: 12px; color: #5f5f5f; }
+
+/* Dos lineas y hasta ahi. Una comunicacion larga no se lee en un desplegable
+   de 360 px: se corta aqui y se abre entera en el visor. */
+.edoc-notificacion__detalle {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; font-size: 12px; color: #5f5f5f;
+}
 .edoc-notificacion__sello { display: block; font-size: 11px; color: var(--edoc-gris); margin-top: 3px; }
-.edoc-notificaciones__todas {
+
+/* Lo que hay que hacer para que una alerta se vaya. Ocupa el sitio del aspa
+   que la alerta no tiene. */
+.edoc-notificacion__solo {
+  display: block; margin-top: 5px; font-size: 11px; color: #8a8a8a; font-style: italic;
+}
+
+.edoc-notificacion__leer {
+  display: inline-block; margin-top: 6px; padding: 0;
+  background: none; border: 0; font-family: var(--fuente-titulos);
+  font-size: 12px; font-weight: 600; color: var(--edoc-azul); cursor: pointer;
+}
+.edoc-notificacion__leer:hover { text-decoration: underline; }
+
+/* El aspa archiva. Discreta hasta que se pasa por encima del renglon: esta
+   siempre disponible, pero no compite con el titulo. */
+.edoc-notificacion__x {
+  position: absolute; top: 8px; right: 8px;
+  width: 22px; height: 22px; padding: 0; border: 0; border-radius: 4px;
+  background: none; color: #b4b4b4; font-size: 17px; line-height: 1;
+  cursor: pointer; opacity: 0; transition: opacity .12s ease, background .12s ease;
+}
+.edoc-notificacion:hover .edoc-notificacion__x,
+.edoc-notificacion__x:focus { opacity: 1; }
+.edoc-notificacion__x:hover { background: #f0f1f3; color: #575756; }
+.edoc-notificaciones__vacio { display: block; padding: 14px; text-align: center; }
+
+/* En pantalla tactil no hay 'pasar por encima', asi que el aspa se queda. */
+@media (hover: none) {
+  .edoc-notificacion__x { opacity: 1; }
+}
+.edoc-notificaciones__pie {
   justify-content: center; font-family: var(--fuente-titulos); font-weight: 600;
   font-size: 12.5px; color: var(--edoc-azul); background: #f7f9fc;
 }
@@ -1098,7 +1556,14 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 /* --- Acceso · sin desplazamiento ----------------------------------------
    El acceso entra entero en pantalla. Si el alto no da, la tarjeta se
    desplaza por dentro y la portada se comprime, pero la página no. */
-.edoc-acceso { height: 100vh; overflow: hidden; }
+/* Con una barra de estado encima, height:100vh desplaza la pantalla y
+   overflow:hidden le corta la cabeza. Con barra se pasa a min-height -que es lo
+   que ya dice la regla de arriba- y se deja que el navegador haga scroll. */
+body:not(.con-barra-estado) .edoc-acceso { height: 100vh; overflow: hidden; }
+/* La barra se pega a 106px porque ahi acaba el encabezado del portal. En una
+   pantalla sin encabezado -el acceso- ese hueco no existe y la barra se
+   descolgaba encima del contenido. */
+body.con-barra-estado .edoc-estado-sistema { top: 0; }
 .edoc-acceso__panel { overflow-y: auto; padding: 30px 24px; }
 .edoc-acceso__tarjeta { margin: auto 0; }
 .edoc-acceso__lienzo { overflow: hidden; }
@@ -1273,6 +1738,42 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
    barra superior. */
 [data-abre-exportar] .edoc-btn-util__chevron { margin-left: 4px; }
 
+/* Lista corta sin adornos, para enumerar cosas dentro de una tarjeta. */
+.edoc-lista-simple { margin: 0; padding-left: 18px; font-size: var(--paso-2, 13.5px); color: #4a4a4a; }
+.edoc-lista-simple li { margin-bottom: 5px; }
+
+/* --- 30.1 · Permisos de una aplicación -----------------------------------
+   Cada aplicación lleva los servicios que puede usar. En la tabla van como
+   pastillas para que se lean de un vistazo; en el diálogo, agrupados por
+   emisión y recepción, que es como se contratan.                           */
+.edoc-permiso {
+  display: inline-block; font-size: 11px; line-height: 1.4;
+  background: #eef1f8; color: #3d4766; border: 1px solid #dbe0ee;
+  border-radius: 100px; padding: 2px 9px; margin: 0 4px 4px 0;
+}
+/* Los dos modos de asignar permisos, y el código técnico de cada uno. Enseñar
+   el código no es un adorno: es lo que el desarrollador va a buscar en la wiki,
+   y el encargo era «sin quitar lo técnico». */
+.modo-permisos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                 gap: 4px 20px; margin-bottom: 14px; }
+.edoc-permiso-cod {
+  font-family: var(--fuente-cifras); font-size: 11px; color: #7b8794;
+  margin-left: 8px; letter-spacing: -.01em;
+}
+.form-check--grupo { margin-bottom: 4px; }
+.edoc-permisos-detalle { display: none; padding: 10px 0 0 26px; margin-top: 8px;
+                         border-top: 1px solid #eceded; }
+#permisos.con-detalle .edoc-permisos-detalle { display: block; }
+#permisos.con-detalle .form-check--grupo .form-check-input { display: none; }
+#permisos.con-detalle .form-check--grupo .form-check-label { margin-left: -26px; }
+
+.edoc-permisos-grupo {
+  border: 1px solid var(--linea-clara, #e6e8ee); border-radius: var(--radio);
+  padding: 14px 16px 8px; height: 100%;
+}
+.edoc-permisos-grupo .form-check-label { cursor: pointer; }
+.form-control.is-invalid { border-color: var(--rojo-1); }
+
 /* --- 31. Bloques de código -----------------------------------------------
    Para lo que se copia tal cual: direcciones, ejemplos de llamada, el secreto
    de una aplicación. Va en la tipografía de cifras del manual, que es la que
@@ -1298,3 +1799,72 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 
 /* La bandera dentro del menú de la cuenta se alinea con los demás iconos. */
 .dropdown-item .edoc-bandera { width: 15px; height: 15px; flex: none; }
+
+/* --- 29. Objetivos táctiles ---------------------------------------------
+   En pantalla táctil ningún control crítico baja de 44 × 44 px (WCAG 2.5.5).
+   Lo que puede crecer, crece. Los iconos que viven dentro de una fila o de un
+   texto no crecen a la vista —descuadrarían la tabla—: se les amplía el
+   área de toque con un seudoelemento invisible centrado sobre el icono.   */
+@media (pointer: coarse) {
+  .edoc-btn-util, .edoc-usuario, .edoc-menu__hamburguesa, .edoc-clave-ojo, .close {
+    min-width: 44px; min-height: 44px;
+  }
+  .btn, .edoc-plegar, .edoc-empresa-opcion, .edoc-chincheta__x,
+  .edoc-notificacion__leer, .dropdown-item, .edoc-menu__item {
+    min-height: 44px;
+  }
+  .edoc-accion, .edoc-notificacion__x, .edoc-ayuda-que, .edoc-ficha-correo__x {
+    position: relative;
+  }
+  .edoc-accion::before, .edoc-notificacion__x::before, .edoc-ayuda-que::before,
+  .edoc-ficha-correo__x::before {
+    content: ""; position: absolute; left: 50%; top: 50%;
+    width: 44px; height: 44px; transform: translate(-50%, -50%);
+  }
+  /* Que dos áreas vecinas no se pisen: si se tocan, gana la de encima y el
+     dedo acaba en la acción de al lado, que es justo el fallo que se midó. */
+  .edoc-accion + .edoc-accion { margin-left: 8px; }
+  /* La casilla es pequeña por diseño de Bootstrap; su etiqueta hace de
+     área de toque, que es lo que la corrida no encontraba. */
+  .form-check-label { min-height: 44px; display: inline-flex; align-items: center; }
+  /* Sin ratón no hay 'pasar por encima', así que el aspa se ve siempre. */
+  .edoc-notificacion__x { opacity: 1; }
+
+  /* Lo que la primera pasada no cubrió, medido con el dedo y no con la caja. */
+  .edoc-encabezado__marca { min-height: 44px; display: inline-flex; align-items: center; }
+  /* Selectores y buscadores de las tablas. A 16 px, además, iOS no hace zoom
+     al tocarlos, que es lo que desordena la pantalla a quien lee con el texto
+     ampliado. */
+  .form-control, .custom-select { min-height: 44px; font-size: 16px; }
+  /* Los enlaces de texto del acceso: la línea de texto medía 21 px de alto. */
+  .edoc-acceso a:not(.btn) { display: inline-block; padding-block: 11px; }
+  /* Dos acciones de fila con 4 px entre ellas: sus áreas de 44 se pisaban y el
+     dedo acababa en la de al lado. Con 16 px entre iconos, cada una tiene la
+     suya. */
+  .col-acciones .hueco-1, .edoc-acciones-fila { gap: 16px; }
+  /* Filas más bajas que 44 px: el área de una acción invadía la fila de abajo
+     y el dedo acababa en la acción de la fila siguiente. */
+  .edoc-tabla td.col-acciones { padding-top: 10px; padding-bottom: 10px; }
+  /* La casilla: la etiqueta hace de área de toque y ahora la envuelve por los
+     cuatro lados. La casilla se mete dentro del hueco de la etiqueta. */
+  .form-check { position: relative; padding-left: 0; }
+  .form-check-input { position: absolute; left: 12px; top: 22px; margin: 0;
+                      width: 22px; height: 22px; transform: translateY(-50%); }
+  .form-check-label { min-height: 44px; padding-left: 44px; width: 100%;
+                      display: flex; align-items: center; }
+}
+
+/* En un teléfono el pie legal deja de ir pegado abajo. Medía 50 px y quedaba por
+   encima del contenido: tapaba el último renglón de cada tabla y se comía los
+   toques de lo que pasaba por debajo. Es texto legal; se lee al final, no
+   todo el rato. En escritorio se queda como estaba.                        */
+@media (max-width: 767.98px) {
+  .edoc-pie { position: static; }
+}
+
+/* El aviso de un campo del acceso. Bootstrap solo enseña .invalid-feedback
+   cuando va justo detrás de un campo marcado, y el de la contraseña no lo va
+   —el ojo se mete en medio—. Con .d-block se veía siempre: su !important le
+   ganaba a [hidden] y los tres avisos salían nada más cargar la página. Aquí
+   manda el atributo hidden, que es lo que cambia el código. */
+.edoc-error-campo:not([hidden]) { display: block; }

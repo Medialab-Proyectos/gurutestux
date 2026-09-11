@@ -24,24 +24,37 @@ window.EDOC_ALCANCE = (function () {
   var SIEMPRE = ['index.html', 'panel.html', ''];
 
   /* `entrega` marca lo que se enseña si nadie ha tocado nada. */
+  /* Qué se entrega. La fuente es «MVP_Portal_y_APIs.xlsx», el documento que
+     el 8 de septiembre se acordó mandar a comercial: una sola versión, y lo
+     que no está ahí no se promete. Tres cosas cambiaron con él:
+
+       · Las seis de Administración pasan a entrega. El MVP las lista todas.
+       · «Reportes generados» sale. No aparece en el MVP; la duda que yo tenía
+         anotada como «por decidir» la resuelve por omisión.
+       · «Clientes y proveedores» sale del menú por lo mismo.
+
+     Y aparecen dos que el MVP pide y no existían: recuperar contraseña y los
+     textos legales, las dos marcadas como no negociables. */
   var VISTAS = [
-    { archivo: 'inicio.html',              rotulo: 'Inicio',                                  grupo: 'Portal',        entrega: true },
-    { archivo: 'emitidos.html',            rotulo: 'Documentos Emitidos',                     grupo: 'Portal',        entrega: true },
-    { archivo: 'recibidos.html',           rotulo: 'Documentos Recibidos',                    grupo: 'Portal',        entrega: true },
-    { archivo: 'reportes-generados.html',  rotulo: 'Reportes generados · exportación masiva',  grupo: 'Portal',        entrega: true },
-    { archivo: 'bases.html',               rotulo: 'Bases de diseño',                         grupo: 'Diseño',        entrega: false },
-    { archivo: 'admin-clave.html',         rotulo: 'Cambiar Contraseña',                      grupo: 'Administración', entrega: false },
-    { archivo: 'admin-roles.html',         rotulo: 'Roles',                                   grupo: 'Administración', entrega: false },
-    { archivo: 'admin-usuarios.html',      rotulo: 'Usuarios',                                grupo: 'Administración', entrega: false },
-    { archivo: 'admin-empresa.html',       rotulo: 'Datos fiscales de la empresa',          grupo: 'Administración', entrega: false },
-    { archivo: 'admin-contactos.html',     rotulo: 'Contactos de la empresa',    grupo: 'Administración', entrega: false },
-    { archivo: 'admin-credenciales.html',  rotulo: 'Credenciales de consumo Servicio eDoc',   grupo: 'Administración', entrega: true  },
-    { archivo: 'admin-alertas.html',       rotulo: 'Alertas y comunicados',                   grupo: 'Administración', entrega: false },
-    { archivo: 'admin-manuales.html',      rotulo: 'Manuales',                                grupo: 'Administración', entrega: false },
-    { archivo: 'admin-clientes.html',      rotulo: 'Clientes y proveedores',                  grupo: 'Administración', entrega: false },
-    { archivo: 'onboarding.html',          rotulo: 'Asociarnos en EmaraTax',                  grupo: 'Fuera de la sesión', entrega: true  },
-    { archivo: 'registro.html',            rotulo: 'Registro de la empresa',                  grupo: 'Fuera de la sesión', entrega: true  },
-    { archivo: 'aprobacion-registro.html', rotulo: 'Aprobación del registro',                 grupo: 'Fuera de la sesión', entrega: false }
+    { archivo: 'inicio.html',              rotulo: 'Inicio',                                     grupo: 'Portal',             entrega: true  },
+    { archivo: 'emitidos.html',            rotulo: 'Documentos Emitidos',                        grupo: 'Portal',             entrega: true  },
+    { archivo: 'recibidos.html',           rotulo: 'Documentos Recibidos',                       grupo: 'Portal',             entrega: true  },
+    { archivo: 'reportes-generados.html',  rotulo: 'Reportes generados',                         grupo: 'Portal',             entrega: false },
+    { archivo: 'bases.html',               rotulo: 'Bases de diseño',                            grupo: 'Diseño',             entrega: false },
+    { archivo: 'admin-clave.html',         rotulo: 'Cambiar Contraseña',                         grupo: 'Administración',     entrega: true  },
+    { archivo: 'admin-roles.html',         rotulo: 'Roles',                                      grupo: 'Administración',     entrega: true  },
+    { archivo: 'admin-usuarios.html',      rotulo: 'Usuarios',                                   grupo: 'Administración',     entrega: true  },
+    { archivo: 'admin-empresa.html',       rotulo: 'Actualización de identificación fiscal',     grupo: 'Administración',     entrega: true  },
+    { archivo: 'admin-contactos.html',     rotulo: 'Actualización de contactos',                 grupo: 'Administración',     entrega: true  },
+    { archivo: 'admin-credenciales.html',  rotulo: 'Credenciales de consumo Servicio eDoc',      grupo: 'Administración',     entrega: true  },
+    { archivo: 'admin-alertas.html',       rotulo: 'Alertas y comunicados',                      grupo: 'Administración',     entrega: true  },
+    { archivo: 'admin-manuales.html',      rotulo: 'Manuales',                                   grupo: 'Administración',     entrega: true  },
+    { archivo: 'admin-clientes.html',      rotulo: 'Clientes y proveedores',                     grupo: 'Administración',     entrega: false },
+    { archivo: 'admin-recuperar.html',     rotulo: 'Recuperar contraseña',                       grupo: 'Fuera de la sesión', entrega: true  },
+    { archivo: 'legales.html',             rotulo: 'Textos legales y tratamiento de datos',      grupo: 'Fuera de la sesión', entrega: true  },
+    { archivo: 'onboarding.html',          rotulo: 'Asociarnos en EmaraTax',                     grupo: 'Fuera de la sesión', entrega: true  },
+    { archivo: 'registro.html',            rotulo: 'Registro de la empresa',                     grupo: 'Fuera de la sesión', entrega: true  },
+    { archivo: 'aprobacion-registro.html', rotulo: 'Aprobación del registro',                    grupo: 'Fuera de la sesión', entrega: true  }
   ];
 
   /* El parámetro de la dirección, tal cual viene. Se lee una vez y se reutiliza:
@@ -93,7 +106,7 @@ window.EDOC_ALCANCE = (function () {
   /* Sube cada vez que cambia la lista de pantallas. Una selección guardada con
      una versión anterior se descarta: si no, una pantalla nueva no aparecería
      jamás en el navegador de quien ya había guardado. */
-  var VERSION = '3';
+  var VERSION = '4';
   var LLAVE_VERSION = 'edoc-vistas-version';
 
   function porDefecto() {

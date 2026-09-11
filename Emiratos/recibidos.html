@@ -11,6 +11,17 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="recepcion" data-pagina="recibidos.html">
 
@@ -71,16 +82,34 @@
             <label class="edoc-etiqueta" for="f-trn">Registro fiscal del emisor</label>
             <input type="text" class="form-control cifra" id="f-trn" placeholder="100908070600003" inputmode="numeric">
           </div>
+          <!-- El MVP lo pide como «Filtrar por proveedor», y viene del feedback
+               de Francia: escribir el nombre a mano no sirve cuando llegan
+               documentos de doscientos proveedores y uno no recuerda cómo se
+               escribe cada uno. Se elige de la lista, y se pueden marcar
+               varios. -->
           <div class="col-12 col-md-6 col-xl-3">
-            <label class="edoc-etiqueta" for="f-emisor">Emisor</label>
-            <input type="text" class="form-control" id="f-emisor" placeholder="Nombre del proveedor">
-            <div class="edoc-ayuda">Busca por el nombre tal como llega, en el alfabeto que llegue.</div>
+            <label class="edoc-etiqueta" for="f-proveedor">Proveedor</label>
+            <div class="dropdown edoc-multi">
+              <button class="form-control text-left dropdown-toggle" type="button" id="f-proveedor"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span id="f-proveedor-rotulo">Todos</span>
+              </button>
+              <div class="dropdown-menu edoc-multi__menu" aria-labelledby="f-proveedor" id="f-proveedor-lista"></div>
+            </div>
+            <div class="edoc-ayuda">Se pueden marcar varios. Aparecen con el nombre tal como llega.</div>
           </div>
         </div>
 
-        <div class="d-flex hueco-2 flex-wrap mt-4">
+        <div class="d-flex hueco-2 flex-wrap mt-4 align-items-center">
           <button type="submit" class="btn btn-edoc-primario">Consultar</button>
           <button type="reset" class="btn btn-edoc-terciario">Limpiar</button>
+          <!-- Se deja a la vista y en gris, con su fase. Es lo que se pidió en
+               la sesión del MVP: si lo quitamos, a quien tiene clientes
+               esperando le tendemos una trampa; si lo dejamos sin marcar,
+               parece que va en la primera entrega. -->
+          <span class="edoc-fase-marca" title="No entra en la primera entrega">
+            Aprobar o rechazar en bloque · fase 2
+          </span>
         </div>
       </form>
     </div>
@@ -133,8 +162,14 @@
             <th scope="col" class="text-right">Base imponible</th>
             <th scope="col" class="text-right">IVA</th>
             <th scope="col" class="text-right">Total</th>
-            <th scope="col" class="separador-izq">Recepción en eDoc <span class="clave-corner">(C3)</span></th>
-            <th scope="col">Tu respuesta <span class="clave-corner">(C4)</span></th>
+            <th scope="col" class="separador-izq">Recepción en eDoc <span class="clave-corner">(C3)</span>
+              <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="bottom"
+                data-content="C3 es la plataforma que recibe el documento en tu nombre: somos nosotros, eDoc. Aquí ves si llegó bien por la red."
+                aria-label="Qué es C3">?</button></th>
+            <th scope="col">Tu respuesta <span class="clave-corner">(C4)</span>
+              <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="bottom"
+                data-content="C4 eres tú, el destinatario. Aquí ves qué has respondido: aprobar, rechazar o confirmar la recepción."
+                aria-label="Qué es C4">?</button></th>
           </tr>
         </thead>
         <tbody id="cuerpo-recibidos"></tbody>
@@ -237,20 +272,20 @@
   <div class="modal fade" id="modal-acuse" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header"><h5 class="modal-title">Acusar recibo</h5>
+        <div class="modal-header"><h5 class="modal-title">Confirmar recepción de la factura</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>
         <div class="modal-body">
-          <p class="mb-3">Vas a dejar constancia de que <strong id="ab-numero"></strong> llegó. Se enviará la respuesta
+          <p class="mb-3">Vas a confirmar que <strong id="ab-numero"></strong> llegó. Se enviará la respuesta
           <strong>MLS AB</strong>.</p>
           <div class="edoc-aviso edoc-aviso--advertencia">
             <span data-icono="alerta" class="edoc-aviso__icono"></span>
-            <div><strong>El acuse no es una aprobación.</strong> Dice que el documento llegó, no que estés de acuerdo con
-            él. Sigues pudiendo aprobarlo o rechazarlo después.</div>
+            <div><strong>Esto no aprueba, acepta ni paga la factura.</strong> Solo deja constancia de que
+            llegó. Sigues pudiendo aprobarla o rechazarla después.</div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-edoc-siguiente" id="confirmar-acuse">Acusar recibo · MLS AB</button>
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Volver sin cambios</button>
+          <button type="button" class="btn btn-edoc-siguiente" id="confirmar-acuse">Confirmar recepción</button>
         </div>
       </div>
     </div>
@@ -298,6 +333,8 @@
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script src="assets/js/tablas.js"></script>
@@ -305,6 +342,42 @@
 (function () {
   'use strict';
   var D = window.EDOC, ico = window.edocIcono;
+
+  /* La lista de proveedores sale de los propios documentos: en el portal real
+     vendrá del backend con los que le han emitido algo a esta empresa. Se
+     ordena por nombre y se marca con casillas. */
+  function montarProveedores() {
+    var vistos = {}, lista = [];
+    (D.RECIBIDOS || []).forEach(function (doc) {
+      if (doc.emisorLatino && !vistos[doc.emisorLatino]) {
+        vistos[doc.emisorLatino] = true;
+        lista.push(doc.emisorLatino);
+      }
+    });
+    lista.sort();
+    var caja = document.getElementById('f-proveedor-lista');
+    if (!caja) return;
+    caja.innerHTML = lista.map(function (nombre, i) {
+      var id = 'prov-' + i;
+      return '<label class="edoc-multi__opcion" for="' + id + '">' +
+        '<input type="checkbox" id="' + id + '" value="' + nombre + '"> ' +
+        '<span>' + nombre + '</span></label>';
+    }).join('');
+
+    var rotulo = document.getElementById('f-proveedor-rotulo');
+    caja.addEventListener('change', function () {
+      var marcados = caja.querySelectorAll('input:checked');
+      if (!marcados.length) rotulo.textContent = 'Todos';
+      else if (marcados.length === 1) rotulo.textContent = marcados[0].value;
+      else rotulo.textContent = marcados.length + ' proveedores';
+    });
+    // Al limpiar el formulario, el rótulo vuelve con las casillas.
+    var forma = caja.closest('form');
+    if (forma) forma.addEventListener('reset', function () {
+      window.setTimeout(function () { rotulo.textContent = 'Todos'; }, 0);
+    });
+  }
+  montarProveedores();
   var docs = D.RECIBIDOS.map(function (d) { return Object.assign({}, d); });
   var actual = null;
 
@@ -355,7 +428,7 @@
     }
     return '<div class="edoc-acciones-fila">' +
       '<a class="edoc-accion edoc-accion--pdf" href="#" data-accion="visor" data-i="' + i + '" title="Abrir el visor de la factura" ' +
-        'aria-label="Abrir el visor de ' + doc.numero + '">' + ico('pdf') + '</a>' +
+        'aria-label="Abrir el visor de ' + doc.numero + '">' + ico('ver') + '</a>' +
       boton('aprobar',  'aprobar',  'exito', 'Aprobar · MLS AP',  !cerrado, 'Ya respondiste este documento') +
       boton('rechazar', 'rechazar', 'error', 'Rechazar · MLS RE', !cerrado, 'Ya respondiste este documento') +
       '<div class="dropdown">' +
@@ -363,8 +436,9 @@
           'title="Más acciones" aria-label="Más acciones para ' + doc.numero + '" ' +
           'aria-haspopup="true" aria-expanded="false">' + ico('puntos') + '</button>' +
         '<ul class="dropdown-menu dropdown-menu-right edoc-mas">' +
-          opcion('acuse', 'acuse', 'Acusar recibo', 'MLS AB · deja constancia de que llegó, no lo aprueba',
+          opcion('acuse', 'acuse', 'Confirmar recepción', 'MLS AB · deja constancia de que llegó, no la aprueba',
                  !cerrado && doc.respuesta !== 'acuse', 'Ya dejaste constancia de que llegó') +
+          opcion('pdf', 'pdf', 'Descargar PDF', 'La representación del documento', true, '') +
           opcion('xml', 'xml', 'Descargar XML', 'El documento original tal como llegó', true, '') +
         '</ul>' +
       '</div>' +
@@ -461,6 +535,7 @@
 
     if (accion === 'visor') return abrirVisor(doc);
     if (accion === 'xml') return window.edocAvisar('Se descargaría el XML de <strong>' + doc.numero + '</strong>.');
+    if (accion === 'pdf') return window.edocAvisar('Se descargaría el PDF de <strong>' + doc.numero + '</strong>.');
 
     if (accion === 'aprobar') {
       document.getElementById('ap-numero').textContent = doc.numero;

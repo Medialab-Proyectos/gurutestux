@@ -3,83 +3,292 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Contactos · eDoc Emiratos</title>
+<title>Actualización de contactos · eDoc Emiratos</title>
 <link rel="icon" href="assets/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="administracion" data-pagina="admin-contactos.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <div class="edoc-titulo-barra"><div>
-      <div class="edoc-miga"><span>Administración</span><span>Mi empresa</span><span>Contactos</span></div>
-      <h1 class="edoc-titulo">Contactos</h1>
-      <p class="edoc-subtitulo">A quién avisamos y para qué. Es lo que más piden en todos los países, y en Francia todavía falta.</p>
+      <div class="edoc-miga"><span>Administración</span><span>Actualización Datos empresas</span><span>Actualización de contactos</span></div>
+      <h1 class="edoc-titulo">Actualización de contactos</h1>
+      <p class="edoc-subtitulo">A quién avisamos y para qué. Cada contacto lleva su tipo, y de un mismo tipo puede haber más de uno.</p>
     </div></div>
 
+  <!-- Estructura de Bolivia: una tabla con un botón de añadir, no tres
+       tarjetas fijas. Allí se llama «Contactos para comunicarnos con usted» y
+       lleva Acciones, Nombre, Cargo, Correo, Teléfono y Tipo. Tres casillas
+       fijas obligan a que una empresa con dos personas en cobros elija a cuál
+       deja fuera. -->
   <section class="edoc-tablero">
-    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Contactos</h2></div>
-    <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Contactos guardados.','exito')">
-      <div class="row rejilla">
-      <div class="col-12 col-xl-4">
-        <div class="edoc-tablero" style="box-shadow:none;margin-bottom:0">
-          <div class="edoc-tablero__cabecera"><h3 class="edoc-tablero__titulo">Comercial<span class="obligatorio">*</span></h3></div>
-          <div class="edoc-tablero__cuerpo">
-            <div class="mb-3"><label class="edoc-etiqueta" for="com-n">Nombre</label>
-              <input class="form-control" id="com-n" value="Sara Khalil"></div>
-            <div class="mb-3"><label class="edoc-etiqueta" for="com-c">Correo</label>
-              <input type="email" class="form-control" id="com-c" value="s.khalil@alnoor.ae"></div>
-            <div><label class="edoc-etiqueta" for="com-t">Teléfono</label>
-              <input class="form-control cifra" id="com-t" value="+971 4 555 0142"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-xl-4">
-        <div class="edoc-tablero" style="box-shadow:none;margin-bottom:0">
-          <div class="edoc-tablero__cabecera"><h3 class="edoc-tablero__titulo">Cobros<span class="obligatorio">*</span></h3></div>
-          <div class="edoc-tablero__cuerpo">
-            <div class="mb-3"><label class="edoc-etiqueta" for="cob-n">Nombre</label>
-              <input class="form-control" id="cob-n" value="Rashid Al Hosani"></div>
-            <div class="mb-3"><label class="edoc-etiqueta" for="cob-c">Correo</label>
-              <input type="email" class="form-control" id="cob-c" value="cobros@alnoor.ae"></div>
-            <div><label class="edoc-etiqueta" for="cob-t">Teléfono</label>
-              <input class="form-control cifra" id="cob-t" value="+971 4 555 0188"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-xl-4">
-        <div class="edoc-tablero" style="box-shadow:none;margin-bottom:0">
-          <div class="edoc-tablero__cabecera"><h3 class="edoc-tablero__titulo">Técnico</h3></div>
-          <div class="edoc-tablero__cuerpo">
-            <div class="mb-3"><label class="edoc-etiqueta" for="tec-n">Nombre</label>
-              <input class="form-control" id="tec-n" value="Priya Nair"></div>
-            <div class="mb-3"><label class="edoc-etiqueta" for="tec-c">Correo</label>
-              <input type="email" class="form-control" id="tec-c" value="it@alnoor.ae"></div>
-            <div><label class="edoc-etiqueta" for="tec-t">Teléfono</label>
-              <input class="form-control cifra" id="tec-t" value="+971 4 555 0190"></div>
-          </div>
-        </div>
-      </div>
-      </div>
-      <button class="btn btn-edoc-primario mt-4" type="submit">Guardar</button>
-    </form>
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Contactos para comunicarnos con usted</h2>
+      <button class="btn btn-edoc-primario btn-sm" type="button" id="btn-anadir">Añadir contacto</button>
+    </div>
+    <div class="edoc-tabla-envoltura">
+      <table class="edoc-tabla" id="tabla-contactos">
+        <thead><tr>
+          <th scope="col" class="col-acciones">Acciones</th>
+          <th scope="col">Nombre</th><th scope="col">Cargo</th>
+          <th scope="col">Correo</th><th scope="col">Teléfono</th><th scope="col">Tipo</th>
+        </tr></thead>
+        <tbody id="cuerpo-contactos"></tbody>
+      </table>
+    </div>
+    <div class="edoc-tablero__cuerpo" id="aviso-faltan"></div>
   </section>
 
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Qué recibe cada tipo</h2>
+    </div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <tbody>
+            <tr><th scope="row" style="width:24%">Comercial<span class="obligatorio">*</span></th>
+                <td>Gestión del contrato, cartera y vencimientos. Es a quien se escribe cuando hay algo
+                que decidir sobre el servicio.</td></tr>
+            <tr><th scope="row">Cobros<span class="obligatorio">*</span></th>
+                <td>Facturación del servicio y avisos de pago.</td></tr>
+            <tr><th scope="row">Técnico</th>
+                <td>Errores en la cuenta, ventanas de mantenimiento y cambios normativos. Solo hace
+                falta si la empresa integra por API.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Alta y edición ===================== -->
+  <div class="modal fade" id="modal-contacto" tabindex="-1" role="dialog" aria-labelledby="t-contacto" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="t-contacto">Añadir contacto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="row rejilla">
+            <div class="col-12 col-md-7">
+              <label class="edoc-etiqueta" for="c-nombre">Nombre<span class="obligatorio">*</span></label>
+              <input class="form-control" id="c-nombre" placeholder="Nombre y apellidos">
+            </div>
+            <div class="col-12 col-md-5">
+              <label class="edoc-etiqueta" for="c-tipo">Tipo<span class="obligatorio">*</span></label>
+              <select class="custom-select" id="c-tipo">
+                <option>Comercial</option><option>Cobros</option><option>Técnico</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-7">
+              <label class="edoc-etiqueta" for="c-cargo">Cargo<span class="obligatorio">*</span></label>
+              <input class="form-control" id="c-cargo" placeholder="Responsable de tesorería">
+            </div>
+            <div class="col-12 col-md-5">
+              <label class="edoc-etiqueta" for="c-tel">Teléfono</label>
+              <input class="form-control cifra" id="c-tel" placeholder="+971 4 555 0142" inputmode="tel">
+            </div>
+            <div class="col-12">
+              <label class="edoc-etiqueta" for="c-correo">Correo<span class="obligatorio">*</span></label>
+              <input type="email" class="form-control" id="c-correo" placeholder="nombre@alnoor.ae">
+              <div class="edoc-ayuda" id="c-ayuda">Ahí llegan los avisos de ese tipo.</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" id="c-confirmar">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">De Bolivia</span>
+    <strong>Es una tabla, no tres casillas.</strong> En Bolivia, dentro de «Actualización datos empresa»,
+    los contactos van en una tabla con un botón de añadir y columnas Nombre, Cargo, Correo, Teléfono y
+    Tipo. Con tres casillas fijas, una empresa con dos personas en cobros tiene que elegir a cuál deja
+    fuera.
+  </div>
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido</span>
-    Comercial y cobros son obligatorios. En Francia los tres correos quedaron opcionales y hoy no sirven para nada porque
-    no hay ninguna emisión de notificaciones detrás. Un contacto que no se usa es un campo que sobra.
+    <strong>Comercial y cobros son obligatorios; el técnico no.</strong> En Francia los tres son
+    opcionales y hoy no sirven para nada, porque no hay ninguna emisión de notificaciones detrás.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Cambia respecto de Bolivia</span>
+    <strong>Aquí es una pantalla propia, no una sección.</strong> En Bolivia estos contactos viven dentro
+    de la misma pantalla que los datos fiscales. El documento de MVP los separa en dos entradas de menú,
+    y así están.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Faltan los tipos que Bolivia sí tiene.</strong> Allí la pantalla de alertas distingue además
+    «Financiero/Contrato» y «Notificaciones». Hay que cerrar si en Emiratos se quedan los tres del MVP o
+    se traen los cinco.
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script src="assets/js/tablas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+
+  var OBLIGATORIOS = ['Comercial', 'Cobros'];
+
+  var CONTACTOS = [
+    { nombre: 'Sara Khalil',      cargo: 'Directora comercial',      correo: 's.khalil@alnoor.ae',  tel: '+971 4 555 0142', tipo: 'Comercial' },
+    { nombre: 'Rashid Al Hosani', cargo: 'Responsable de tesorería', correo: 'cobros@alnoor.ae',    tel: '+971 4 555 0188', tipo: 'Cobros' },
+    { nombre: 'Layla Hassan',     cargo: 'Analista de cobros',       correo: 'l.hassan@alnoor.ae',  tel: '+971 4 555 0189', tipo: 'Cobros' },
+    { nombre: 'Priya Nair',       cargo: 'Jefa de sistemas',         correo: 'it@alnoor.ae',        tel: '+971 4 555 0190', tipo: 'Técnico' }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var ico = window.edocIcono;
+  var editando = -1;
+
+  var LAPIZ = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" ' +
+              'stroke-linecap="round" aria-hidden="true"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg>';
+
+  function pintar() {
+    window.edocDestruirTabla('#tabla-contactos');
+    $('cuerpo-contactos').innerHTML = CONTACTOS.map(function (c, i) {
+      return '<tr>' +
+        '<td class="col-acciones"><div class="d-flex hueco-1">' +
+          '<a class="edoc-accion" href="#" data-editar="' + i + '" title="Editar" ' +
+            'aria-label="Editar a ' + c.nombre + '">' + LAPIZ + '</a>' +
+          '<a class="edoc-accion edoc-accion--gris" href="#" data-borrar="' + i + '" ' +
+            'title="Quitar el contacto" aria-label="Quitar a ' + c.nombre + '">' +
+            ico('rechazar') + '</a>' +
+        '</div></td>' +
+        '<td>' + c.nombre + '</td>' +
+        '<td>' + c.cargo + '</td>' +
+        '<td>' + c.correo + '</td>' +
+        '<td class="cifra">' + (c.tel || '—') + '</td>' +
+        '<td><span class="edoc-estado edoc-estado--neutro">' + c.tipo + '</span></td>' +
+      '</tr>';
+    }).join('');
+    window.edocTabla('#tabla-contactos', { order: [[5, 'asc']] });
+    avisarFaltas();
+  }
+
+  /* Los tipos obligatorios se comprueban sobre la tabla entera, no campo a
+     campo: lo que importa es que haya al menos uno de cada. */
+  function avisarFaltas() {
+    var faltan = OBLIGATORIOS.filter(function (t) {
+      return !CONTACTOS.some(function (c) { return c.tipo === t; });
+    });
+    $('aviso-faltan').innerHTML = faltan.length
+      ? '<div class="edoc-aviso edoc-aviso--advertencia mb-0"><div>Falta al menos un contacto de tipo ' +
+        '<strong>' + faltan.join('</strong> y <strong>') + '</strong>. Sin él no sabemos a quién ' +
+        'escribir cuando haya algo que decidir.</div></div>'
+      : '';
+  }
+
+  function abrir(i) {
+    editando = i;
+    var c = i >= 0 ? CONTACTOS[i] : null;
+    $('t-contacto').textContent = c ? 'Editar a ' + c.nombre : 'Añadir contacto';
+    $('c-confirmar').textContent = c ? 'Guardar cambios' : 'Confirmar';
+    $('c-nombre').value = c ? c.nombre : '';
+    $('c-cargo').value  = c ? c.cargo  : '';
+    $('c-correo').value = c ? c.correo : '';
+    $('c-tel').value    = c ? c.tel    : '';
+    $('c-tipo').value   = c ? c.tipo   : 'Comercial';
+    document.querySelectorAll('#modal-contacto .is-invalid').forEach(function (e) {
+      e.classList.remove('is-invalid');
+    });
+    $('c-ayuda').textContent = 'Ahí llegan los avisos de ese tipo.';
+    window.jQuery('#modal-contacto').modal('show');
+  }
+
+  function mal(id, texto) {
+    document.querySelectorAll('#modal-contacto .is-invalid').forEach(function (e) {
+      e.classList.remove('is-invalid');
+    });
+    $(id).classList.add('is-invalid');
+    if (id === 'c-correo') $('c-ayuda').textContent = texto;
+    else window.edocAvisar(texto, 'error');
+    $(id).focus();
+    return true;
+  }
+
+  $('btn-anadir').addEventListener('click', function () { abrir(-1); });
+
+  $('c-confirmar').addEventListener('click', function () {
+    var nombre = $('c-nombre').value.trim();
+    var cargo  = $('c-cargo').value.trim();
+    var correo = $('c-correo').value.trim();
+    if (!nombre) return mal('c-nombre', 'Falta el nombre del contacto.');
+    if (!cargo)  return mal('c-cargo', 'Falta el cargo. Sirve para saber a quién se escribe.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) return mal('c-correo', 'Ese correo no tiene buena pinta.');
+    var choca = CONTACTOS.some(function (c, i) {
+      return i !== editando && c.correo.toLowerCase() === correo.toLowerCase();
+    });
+    if (choca) return mal('c-correo', 'Ya hay un contacto con ese correo.');
+
+    var datos = { nombre: nombre, cargo: cargo, correo: correo,
+                  tel: $('c-tel').value.trim(), tipo: $('c-tipo').value };
+    if (editando >= 0) CONTACTOS[editando] = datos;
+    else CONTACTOS.push(datos);
+    window.jQuery('#modal-contacto').modal('hide');
+    pintar();
+    window.edocAvisar((editando >= 0 ? 'Cambios guardados en ' : 'Contacto añadido: ') +
+      '<strong>' + nombre + '</strong> · ' + datos.tipo + '.', 'exito');
+  });
+
+  $('cuerpo-contactos').addEventListener('click', function (e) {
+    var a = e.target.closest('[data-editar], [data-borrar]');
+    if (!a) return;
+    e.preventDefault();
+    if (a.dataset.editar !== undefined) return abrir(Number(a.dataset.editar));
+
+    var i = Number(a.dataset.borrar);
+    var c = CONTACTOS[i];
+    // No se puede dejar un tipo obligatorio sin nadie.
+    if (OBLIGATORIOS.indexOf(c.tipo) >= 0) {
+      var otros = CONTACTOS.filter(function (x, j) { return j !== i && x.tipo === c.tipo; });
+      if (!otros.length) {
+        window.edocAvisar('No puedes quitar el único contacto de <strong>' + c.tipo +
+          '</strong>. Añade otro primero.', 'error');
+        return;
+      }
+    }
+    CONTACTOS.splice(i, 1);
+    pintar();
+    window.edocAvisar('<strong>' + c.nombre + '</strong> ya no recibe avisos de ' + c.tipo + '.', 'exito');
+  });
+
+  pintar();
+}());
+</script>
 </body>
 </html>

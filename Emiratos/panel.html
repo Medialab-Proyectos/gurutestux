@@ -52,6 +52,17 @@
     padding: 9px 11px; color: #33383f;
   }
 </style>
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body>
 
@@ -101,6 +112,63 @@
   </section>
 
   <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Simulacro de avisos</h2></div>
+    <div class="edoc-tablero__cuerpo">
+      <p class="mb-2">Los mensajes de mantenimiento y las alertas pueden salir <strong>al azar</strong>,
+      para que en una ronda de evaluación a unos les toquen y a otros no. Nada de esto existe hoy en
+      Bolivia —allí un mantenimiento se avisa por correo desde soporte—, así que
+      <strong>es funcionalidad nueva y hay que aprobarla como tal</strong>.</p>
+
+      <div class="edoc-aviso edoc-aviso--info mb-3">
+        <div><strong>El disparador es entrar con un código.</strong> El escenario se sortea al meter el
+        OTP en el acceso, no al abrir una página cualquiera. Así cada entrada al portal es una visita
+        distinta: quien quiera ver otro escenario solo tiene que salir y volver a entrar.</div>
+      </div>
+
+      <div class="edoc-aviso edoc-aviso--advertencia mb-3">
+        <div><strong>La primera entrada de un navegador trae siempre alertas.</strong> Dos motivos. Uno:
+        casi todo el mundo va a entrar una sola vez, y si en esa entrada la campana sale vacía se van sin
+        haber visto que existe. Dos: con el reparto entero desde el principio, a uno de cada tres le salía
+        «Portal en mantenimiento» con dos pantallas bloqueadas, y quien abre la maqueta por primera vez no
+        lo lee como una simulación, lo lee como que está rota. El reparto entero entra desde la segunda
+        entrada.</div>
+      </div>
+
+      <label class="vista" style="border-top:0;border-bottom:1px solid #ececec">
+        <span class="interruptor"><input type="checkbox" id="sw-azar"><span></span></span>
+        <span class="vista__rotulo">
+          <strong>Sortear un escenario en cada entrada</strong>
+          <div class="edoc-secundario">Viene encendido. Con esto puesto, a cada quien le toca un
+          escenario al entrar con su código, y le dura hasta que vuelva a entrar. Apágalo si necesitas
+          el portal limpio para una demostración.</div>
+        </span>
+      </label>
+
+      <div class="edoc-aviso edoc-aviso--info mb-3 mt-3">
+        <div>Ahora mismo estás viendo <strong id="escenario-actual">—</strong>.
+        <span id="escenario-como"></span></div>
+      </div>
+
+      <div class="edoc-etiqueta mb-2">O fijar uno, para presentar</div>
+      <div class="d-flex hueco-2 flex-wrap mb-2" id="mando"></div>
+      <div class="edoc-secundario mb-3">Al fijar uno se queda hasta que lo sueltes, y apaga el sorteo.
+      «Ninguno» devuelve el portal limpio. También vale añadir <code>?sim=mantenimiento</code> a
+      cualquier dirección: eso enseña un escenario solo en ese enlace, sin tocar nada.</div>
+
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla">
+          <thead><tr>
+            <th scope="col" style="width:24%">Escenario</th>
+            <th scope="col">Qué ve quien entra</th>
+            <th scope="col" style="width:13%">Cada cuánto</th>
+          </tr></thead>
+          <tbody id="tabla-escenarios"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Enlace para compartir</h2></div>
     <div class="edoc-tablero__cuerpo">
       <p class="edoc-secundario mb-2">Lo que guardas aquí vale solo en este navegador. Para que otra persona
@@ -136,6 +204,8 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/alcance.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script>
 (function () {
   'use strict';
@@ -248,6 +318,77 @@
 
   pintar();
 })();
+</script>
+<script>
+(function () {
+  'use strict';
+  var SIM = window.EDOC_SIMULACRO;
+  if (!SIM) return;
+
+  var ESCENARIOS = {
+    nada:          { rotulo: 'Sin mensajes',
+                     que: 'El portal limpio. Ni barra, ni franja, ni avisos en la campana.' },
+    alertas:       { rotulo: 'Alertas',
+                     que: 'La campana trae avisos sin leer, salta el saludo al entrar y sale la franja del mantenimiento programado, que sí se puede cerrar.' },
+    mantenimiento: { rotulo: 'Mantenimiento',
+                     que: 'Barra fija que no se cierra. Credenciales y Roles quedan bloqueadas, y Recibidos avisa de que no se puede responder.' },
+    todo:          { rotulo: 'Las dos cosas',
+                     que: 'Mantenimiento y alertas a la vez, que es el caso peor y el que conviene mirar.' }
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function pintar() {
+    $('sw-azar').checked = SIM.alAzar;
+    var claves = ['', 'nada', 'alertas', 'mantenimiento', 'todo'];
+    $('mando').innerHTML = claves.map(function (c) {
+      var fijado = SIM.forzado && SIM.escenario === c;
+      var suelto = !SIM.forzado && c === '';
+      var activo = fijado || suelto;
+      return '<button type="button" class="btn btn-sm ' +
+        (activo ? 'btn-edoc-secundario' : 'btn-edoc-terciario') + '" data-escenario="' + c + '" ' +
+        'aria-pressed="' + (activo ? 'true' : 'false') + '">' +
+        (c ? ESCENARIOS[c].rotulo : 'Ninguno') + '</button>';
+    }).join('');
+
+    var COMO = { apagado: 'el sorteo está apagado', azar: 'por sorteo de esta entrada',
+                 fijo: 'fijado a mano', enlace: 'puesto en la dirección' };
+    /* Con el sorteo puesto pero sin haber entrado con un código no hay
+       escenario, y decir «por sorteo» ahí despista: parece que le tocó eso. */
+    var porque = (SIM.modo === 'azar' && !SIM.dentro)
+      ? 'todavía no has entrado con un código'
+      : (COMO[SIM.modo] || SIM.modo);
+    $('escenario-actual').textContent = '«' +
+      ((ESCENARIOS[SIM.escenario] || {}).rotulo || SIM.escenario) + '», ' + porque;
+    $('escenario-como').textContent = (ESCENARIOS[SIM.escenario] || {}).que || '';
+
+    var total = SIM.reparto.reduce(function (a, r) { return a + r.peso; }, 0);
+    $('tabla-escenarios').innerHTML = SIM.reparto.map(function (r) {
+      var e = ESCENARIOS[r.clave];
+      var suyo = r.clave === SIM.escenario;
+      return '<tr' + (suyo ? ' class="seleccionada"' : '') + '>' +
+        '<th scope="row">' + e.rotulo +
+          (suyo ? ' <span class="edoc-estado edoc-estado--transito">Te tocó</span>' : '') + '</th>' +
+        '<td>' + e.que + '</td>' +
+        '<td class="cifra">' + Math.round(r.peso / total * 100) + '&#8239;%</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  $('mando').addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-escenario]');
+    if (!b) return;
+    SIM.forzar(b.dataset.escenario);
+    window.setTimeout(function () { window.location.reload(); }, 250);
+  });
+
+  $('sw-azar').addEventListener('change', function () {
+    SIM.sortearOno(this.checked);
+    window.setTimeout(function () { window.location.reload(); }, 250);
+  });
+
+  pintar();
+}());
 </script>
 </body>
 </html>

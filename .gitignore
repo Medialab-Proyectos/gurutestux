@@ -31,6 +31,14 @@ CONTEXT.md
 # Llevan escritas las direcciones de los entornos de QA.
 _validacion/
 
+# --- Revisión interna del trabajo -------------------------------------------
+# Balance de correcciones del proyecto. Es material de equipo, no del cliente.
+_revision/
+
+# --- Evaluación sintética interna -------------------------------------------
+# Perfiles, recorridos e informes internos; no publicar en el repositorio público.
+_agentes_sinteticos/
+
 # --- Ruido del sistema ------------------------------------------------------
 node_modules/
 .vercel/
@@ -38,3 +46,9 @@ node_modules/
 Thumbs.db
 *.stackdump
 _gen*.py
+
+# --- Configuración local de Claude Code -------------------------------------
+# Permisos de la máquina, con rutas y nombres de otros proyectos. No es de este
+# repositorio y no debe ser público.
+agentes_ux/settings.json
+agentes_ux/settings.local.json

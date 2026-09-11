@@ -11,6 +11,17 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="administracion" data-pagina="admin-usuarios.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
@@ -24,21 +35,77 @@
   <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Usuarios de la empresa</h2>
-      <button class="btn btn-edoc-primario btn-sm" data-sin-destino>Añadir usuario</button>
+      <button class="btn btn-edoc-primario btn-sm" type="button" id="btn-anadir">Añadir usuario</button>
     </div>
     <div class="edoc-tabla-envoltura">
-      <table class="edoc-tabla">
-        <thead><tr><th scope="col" class="col-acciones">Acciones</th><th scope="col">Nombre</th><th scope="col">Usuario</th><th scope="col">Rol</th><th scope="col">Correo</th><th scope="col">Última conexión</th><th scope="col">Estado</th></tr></thead>
-        <tbody>
-        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Fatima Al Marzooqi"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Fatima Al Marzooqi" data-nombre-arabe="فاطمة المرزوقي"></span></td><td class="cifra">fatima.almarzooqi</td><td>Administrador</td><td>f.almarzooqi@alnoor.ae</td><td class="cifra">2026-09-01 08:12</td><td><span class="edoc-estado edoc-estado--exito">Activo</span></td></tr>
-        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Rashid Al Hosani"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Rashid Al Hosani" data-nombre-arabe="راشد الحوسني"></span></td><td class="cifra">rashid.alhosani</td><td>Consulta</td><td>r.alhosani@alnoor.ae</td><td class="cifra">2026-08-31 17:40</td><td><span class="edoc-estado edoc-estado--exito">Activo</span></td></tr>
-        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Priya Nair"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Priya Nair" data-nombre-arabe="Priya Nair"></span></td><td class="cifra">priya.nair</td><td>Recepción</td><td>p.nair@alnoor.ae</td><td class="cifra">2026-09-01 09:05</td><td><span class="edoc-estado edoc-estado--exito">Activo</span></td></tr>
-        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Omar Haddad"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Omar Haddad" data-nombre-arabe="عمر حداد"></span></td><td class="cifra">omar.haddad</td><td>Consulta</td><td>o.haddad@alnoor.ae</td><td class="cifra">—</td><td><span class="edoc-estado edoc-estado--neutro">Inactivo</span></td></tr>
-        <tr><td class="col-acciones"><div class="d-flex hueco-1"><a class="edoc-accion" href="#" data-sin-destino aria-label="Editar Sara Khalil"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg></a><a class="edoc-accion edoc-accion--gris" href="#" data-reenviar title="Reenviar el correo de bienvenida"><span data-icono="reenviar"></span></a></div></td><td><span data-nombre-latino="Sara Khalil" data-nombre-arabe="سارة خليل"></span></td><td class="cifra">sara.khalil</td><td>Administrador</td><td>s.khalil@alnoor.ae</td><td class="cifra">2026-08-29 11:22</td><td><span class="edoc-estado edoc-estado--exito">Activo</span></td></tr>
-        </tbody>
+      <table class="edoc-tabla" id="tabla-usuarios">
+        <thead><tr>
+          <th scope="col" class="col-acciones">Acciones</th>
+          <th scope="col">Usuario</th><th scope="col">Nombre</th>
+          <th scope="col">Correo Electrónico</th><th scope="col">Rol</th><th scope="col">Estado</th>
+        </tr></thead>
+        <tbody id="cuerpo-usuarios"></tbody>
       </table>
     </div>
   </section>
+
+  <!-- ===================== Alta y edición ===================== -->
+  <div class="modal fade" id="modal-usuario" tabindex="-1" role="dialog" aria-labelledby="t-usuario" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="t-usuario">Añadir usuario</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="row rejilla">
+            <div class="col-12 col-md-6">
+              <label class="edoc-etiqueta" for="u-nombre">Nombre y apellidos<span class="obligatorio">*</span></label>
+              <input class="form-control" id="u-nombre" placeholder="Nombre y apellidos">
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="edoc-etiqueta" for="u-nativo">Nombre en árabe</label>
+              <input class="form-control" id="u-nativo" dir="rtl" placeholder="الاسم بالعربية">
+              <div class="edoc-ayuda">Opcional. Un solo alfabeto por campo.</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="edoc-etiqueta" for="u-correo">Correo<span class="obligatorio">*</span></label>
+              <input type="email" class="form-control" id="u-correo" placeholder="nombre@alnoor.ae">
+              <div class="edoc-ayuda">Ahí llegan las credenciales y todos los códigos de verificación.</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="edoc-etiqueta" for="u-usuario">Usuario<span class="obligatorio">*</span></label>
+              <input class="form-control cifra" id="u-usuario" placeholder="nombre.apellido">
+              <div class="edoc-ayuda" id="u-ayuda-usuario">Se propone a partir del nombre; puedes cambiarlo.</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="edoc-etiqueta" for="u-rol">Rol<span class="obligatorio">*</span></label>
+              <select class="custom-select" id="u-rol"></select>
+              <div class="edoc-ayuda">Los permisos se definen en la pantalla de <a href="admin-roles.html">Roles</a>.</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="edoc-etiqueta" for="u-estado">Estado</label>
+              <select class="custom-select" id="u-estado">
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
+              </select>
+              <div class="edoc-ayuda">Un usuario inactivo conserva su histórico pero no puede entrar.</div>
+            </div>
+          </div>
+
+          <div class="edoc-aviso edoc-aviso--info mt-3" id="aviso-alta">
+            <div>Al crearlo le mandamos un correo de bienvenida con sus credenciales. Al entrar por
+            primera vez tendrá que cambiar la contraseña, y siempre le pediremos el código de
+            verificación.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" id="u-confirmar">Crear usuario</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="nota nota--decidido">
     <span class="nota__sello">Del portal de Bolivia</span>
@@ -48,6 +115,11 @@
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido</span>
     Un solo botón para crear. En Bolivia el de añadir aparece repetido y lo señaló la propia dueña funcional.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido</span>
+    <strong>No se borran usuarios, se desactivan.</strong> Un usuario que aprobó o rechazó documentos es parte del
+    histórico: si desaparece, esas respuestas se quedan sin autor. Desactivar le quita el acceso y conserva el rastro.
   </div>
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
@@ -63,14 +135,203 @@
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script src="assets/js/tablas.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    window.edocTabla('table.edoc-tabla', { order: [[1, 'asc']] });
-  });
-</script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
 
+  var ROLES = ['Administrador', 'Consulta', 'Recepción'];
+
+  var USUARIOS = [
+    { nombre: 'Fatima Al Marzooqi', arabe: 'فاطمة المرزوقي', usuario: 'fatima.almarzooqi',
+      rol: 'Administrador', correo: 'f.almarzooqi@alnoor.ae',
+      estado: 'activo', yo: true },
+    { nombre: 'Rashid Al Hosani', arabe: 'راشد الحوسني', usuario: 'rashid.alhosani',
+      rol: 'Consulta', correo: 'r.alhosani@alnoor.ae', estado: 'activo' },
+    { nombre: 'Priya Nair', arabe: 'Priya Nair', usuario: 'priya.nair',
+      rol: 'Recepción', correo: 'p.nair@alnoor.ae', estado: 'activo' },
+    { nombre: 'Omar Haddad', arabe: 'عمر حداد', usuario: 'omar.haddad',
+      rol: 'Consulta', correo: 'o.haddad@alnoor.ae', estado: 'inactivo' },
+    { nombre: 'Sara Khalil', arabe: 'سارة خليل', usuario: 'sara.khalil',
+      rol: 'Administrador', correo: 's.khalil@alnoor.ae', estado: 'activo' }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var ico = window.edocIcono;
+  var editando = -1;   // -1 = alta
+
+  var LAPIZ = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" ' +
+              'stroke-linecap="round" aria-hidden="true"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg>';
+
+  function fila(u, i) {
+    var estado = u.estado === 'activo'
+      ? '<span class="edoc-estado edoc-estado--exito">Activo</span>'
+      : '<span class="edoc-estado edoc-estado--neutro">Inactivo</span>';
+    /* El interruptor de activar y desactivar va en la fila porque es lo que se
+       hace a diario; editar abre la ventana. Y el propio usuario no puede
+       desactivarse a sí mismo: se dejaría fuera de su portal. */
+    var apagar = u.yo
+      ? '<span class="edoc-accion" aria-disabled="true" title="No puedes desactivar tu propio usuario">' +
+        ico('candado') + '</span>'
+      : '<a class="edoc-accion edoc-accion--gris" href="#" data-cambiar="' + i + '" ' +
+        'title="' + (u.estado === 'activo' ? 'Desactivar' : 'Activar') + ' a ' + u.nombre + '" ' +
+        'aria-label="' + (u.estado === 'activo' ? 'Desactivar' : 'Activar') + ' a ' + u.nombre + '">' +
+        ico(u.estado === 'activo' ? 'rechazar' : 'aprobar') + '</a>';
+
+    return '<tr>' +
+      '<td class="col-acciones"><div class="d-flex hueco-1">' +
+        '<a class="edoc-accion" href="#" data-editar="' + i + '" ' +
+          'title="Editar" aria-label="Editar a ' + u.nombre + '">' + LAPIZ + '</a>' +
+        '<a class="edoc-accion edoc-accion--gris" href="#" data-reenviar="' + i + '" ' +
+          'title="Reenviar el correo de bienvenida" ' +
+          'aria-label="Reenviar el correo de bienvenida a ' + u.nombre + '">' + ico('reenviar') + '</a>' +
+        apagar +
+      '</div></td>' +
+      '<td class="cifra">' + u.usuario + '</td>' +
+      '<td><span data-nombre-latino="' + u.nombre + '" data-nombre-arabe="' + u.arabe + '"></span></td>' +
+      '<td>' + u.correo + '</td>' +
+      '<td>' + u.rol + '</td>' +
+      '<td>' + estado + '</td>' +
+    '</tr>';
+  }
+
+  function pintar() {
+    window.edocDestruirTabla('#tabla-usuarios');
+    $('cuerpo-usuarios').innerHTML = USUARIOS.map(fila).join('');
+    if (window.edocPintarNombres) window.edocPintarNombres();
+    window.edocTabla('#tabla-usuarios', { order: [[1, 'asc']] });
+  }
+
+  /* --- la ventana --------------------------------------------------------- */
+  function abrir(i) {
+    editando = i;
+    var u = i >= 0 ? USUARIOS[i] : null;
+    $('t-usuario').textContent = u ? 'Editar a ' + u.nombre : 'Añadir usuario';
+    $('u-confirmar').textContent = u ? 'Guardar cambios' : 'Crear usuario';
+    $('aviso-alta').hidden = !!u;
+    $('u-rol').innerHTML = ROLES.map(function (r) {
+      return '<option' + (u && u.rol === r ? ' selected' : '') + '>' + r + '</option>';
+    }).join('');
+    $('u-nombre').value  = u ? u.nombre : '';
+    $('u-nativo').value  = u && u.arabe !== u.nombre ? u.arabe : '';
+    $('u-correo').value  = u ? u.correo : '';
+    $('u-usuario').value = u ? u.usuario : '';
+    $('u-estado').value  = u ? u.estado : 'activo';
+    // El propio usuario no se puede desactivar desde aquí tampoco.
+    $('u-estado').disabled = !!(u && u.yo);
+    document.querySelectorAll('#modal-usuario .is-invalid').forEach(function (e) {
+      e.classList.remove('is-invalid');
+    });
+    $('u-ayuda-usuario').textContent = 'Se propone a partir del nombre; puedes cambiarlo.';
+    window.jQuery('#modal-usuario').modal('show');
+  }
+
+  // Propone el usuario mientras se escribe el nombre, solo en el alta.
+  $('u-nombre').addEventListener('input', function () {
+    if (editando >= 0) return;
+    var partes = $('u-nombre').value.trim().toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z\s]/g, '').split(/\s+/).filter(Boolean);
+    if (partes.length) $('u-usuario').value = partes[0] + (partes[1] ? '.' + partes[1] : '');
+  });
+
+  function mal(id, texto) {
+    var e = $(id);
+    e.classList.add('is-invalid');
+    if (id === 'u-usuario') $('u-ayuda-usuario').textContent = texto;
+    else window.edocAvisar(texto, 'error');
+    e.focus();
+    return true;
+  }
+
+  $('u-confirmar').addEventListener('click', function () {
+    document.querySelectorAll('#modal-usuario .is-invalid').forEach(function (e) {
+      e.classList.remove('is-invalid');
+    });
+    var nombre  = $('u-nombre').value.trim();
+    var correo  = $('u-correo').value.trim();
+    var usuario = $('u-usuario').value.trim();
+
+    if (!nombre) return mal('u-nombre', 'Falta el nombre del usuario.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) return mal('u-correo', 'Ese correo no tiene buena pinta.');
+    if (!usuario) return mal('u-usuario', 'Falta el nombre de usuario.');
+
+    var chocaUsuario = USUARIOS.some(function (u, i) {
+      return i !== editando && u.usuario.toLowerCase() === usuario.toLowerCase();
+    });
+    if (chocaUsuario) return mal('u-usuario', 'Ya hay alguien con ese usuario.');
+
+    var chocaCorreo = USUARIOS.some(function (u, i) {
+      return i !== editando && u.correo.toLowerCase() === correo.toLowerCase();
+    });
+    if (chocaCorreo) return mal('u-correo', 'Ya hay un usuario con ese correo.');
+
+    var datos = {
+      nombre: nombre,
+      arabe: $('u-nativo').value.trim() || nombre,
+      usuario: usuario,
+      rol: $('u-rol').value,
+      correo: correo,
+      estado: $('u-estado').value
+    };
+
+    if (editando >= 0) {
+      var antes = USUARIOS[editando];
+      USUARIOS[editando] = Object.assign({}, antes, datos);
+      window.jQuery('#modal-usuario').modal('hide');
+      pintar();
+      window.edocAvisar('Cambios guardados en <strong>' + nombre + '</strong>.', 'exito');
+      return;
+    }
+
+    USUARIOS.push(datos);
+    window.jQuery('#modal-usuario').modal('hide');
+    pintar();
+    window.edocAvisar('Usuario <strong>' + nombre + '</strong> creado. Le mandamos el correo de ' +
+      'bienvenida a ' + correo + '.', 'exito');
+  });
+
+  /* --- las acciones de la fila ------------------------------------------- */
+  $('btn-anadir').addEventListener('click', function () { abrir(-1); });
+
+  $('cuerpo-usuarios').addEventListener('click', function (e) {
+    var a = e.target.closest('[data-editar], [data-reenviar], [data-cambiar]');
+    if (!a) return;
+    e.preventDefault();
+
+    if (a.dataset.editar !== undefined) return abrir(Number(a.dataset.editar));
+
+    if (a.dataset.reenviar !== undefined) {
+      var u = USUARIOS[Number(a.dataset.reenviar)];
+      window.edocAvisar('Correo de bienvenida reenviado a <strong>' + u.correo + '</strong>.', 'exito');
+      return;
+    }
+
+    var i = Number(a.dataset.cambiar);
+    var v = USUARIOS[i];
+    if (v.estado === 'activo' && v.rol === 'Administrador') {
+      var otros = USUARIOS.filter(function (x, j) {
+        return j !== i && x.rol === 'Administrador' && x.estado === 'activo';
+      });
+      if (!otros.length) {
+        window.edocAvisar('No puedes desactivar al último administrador activo: la empresa se ' +
+          'quedaría sin nadie que pueda administrar el portal.', 'error');
+        return;
+      }
+    }
+    v.estado = v.estado === 'activo' ? 'inactivo' : 'activo';
+    pintar();
+    window.edocAvisar('<strong>' + v.nombre + '</strong> queda ' +
+      (v.estado === 'activo' ? 'activo' : 'inactivo') + '.', 'exito');
+  });
+
+  pintar();
+}());
+</script>
 </body>
 </html>

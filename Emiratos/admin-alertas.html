@@ -10,6 +10,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="administracion" data-pagina="admin-alertas.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
@@ -17,25 +28,109 @@
   <div class="edoc-titulo-barra"><div>
       <div class="edoc-miga"><span>Administración</span><span>Alertas y comunicados</span></div>
       <h1 class="edoc-titulo">Alertas y comunicados</h1>
-      <p class="edoc-subtitulo">Los avisos que eDoc te envía: vencimientos, mantenimientos y cambios de norma. Aquí queda la copia.</p>
+      <p class="edoc-subtitulo">A qué correos te escribimos según el tema. De cada uno puede haber varios.</p>
     </div></div>
 
+  <!-- La pantalla tal como es en Bolivia: tres bloques de correos y Guardar.
+       No manda nada ni enseña nada dentro del portal — «internamente el sistema
+       no hace nada, solo es para contactarlos»—. Lo que se discute sobre ella
+       está en la capa de notas, no encima del formulario. -->
   <section class="edoc-tablero">
-    <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Comunicados recibidos</h2></div>
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Notificaciones</h2>
+      <span class="edoc-secundario">Se pueden poner varios correos por bloque</span>
+    </div>
     <div class="edoc-tablero__cuerpo">
-      <div class="edoc-aviso edoc-aviso--advertencia mb-2"><div><div class="edoc-secundario cifra">2026-08-28</div><strong>Mantenimiento programado</strong><div>El sábado 6 de septiembre, de 02:00 a 04:00, el portal no estará disponible.</div></div></div>
-      <div class="edoc-aviso edoc-aviso--info mb-2"><div><div class="edoc-secundario cifra">2026-08-12</div><strong>Nueva versión del esquema</strong><div>A partir del 1 de octubre entra en vigor la versión 2.1 del esquema de factura.</div></div></div>
-      <div class="edoc-aviso edoc-aviso--info mb-2"><div><div class="edoc-secundario cifra">2026-07-30</div><strong>Recordatorio de vencimiento</strong><div>Tu contrato de servicio se renueva el 30 de septiembre.</div></div></div>
+      <div id="bloques"></div>
+
+      <div class="d-flex hueco-2 mt-4">
+        <button class="btn btn-edoc-primario" type="button" id="guardar">Guardar</button>
+        <button class="btn btn-edoc-terciario" type="button" id="deshacer">Deshacer los cambios</button>
+      </div>
     </div>
   </section>
 
   <div class="nota nota--decidido">
+    <span class="nota__sello">De la sesión con la dueña funcional</span>
+    <strong>Qué es esta pantalla de verdad.</strong> «Aquí es como informativo: lo que hace el usuario
+    de la empresa es agregar los correos donde se les va a llegar cierta información. Aquí se pueden ir
+    varios.» Y sobre todo: «<strong>internamente el sistema no hace nada… solo es para
+    contactarlos</strong>». No manda avisos ni enseña nada dentro del portal.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">De dónde salió</span>
+    <strong>La pidió marketing.</strong> «Marketing siempre le anda pidiendo a soporte un listado o un
+    Excel donde estén todas las compañías, los contactos, los financieros, entonces ellos hacen sus
+    campañas. A soporte se le hace más fácil ir a la tabla donde está guardado esto y enviárselo.» Es
+    una agenda de correos para uso interno, rellenada por el cliente.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido</span>
+    <strong>La campana ya no enlaza aquí.</strong> Decía «Ver todas» y traía a esta pantalla, que es un
+    formulario de correos y no una lista de avisos. Ahora la campana los enseña todos y no promete una
+    pantalla que no existe — qué pantalla debería listarlos es justo lo que sigue sin decidirse.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · se solapa con Contactos</span>
+    <strong>Estos correos y los de «Actualización de contactos» son la misma idea con otros nombres.</strong>
+    Aquí van financiero y contrato, técnico y notificaciones; allí van comercial, cobros y técnico. El
+    documento de MVP mueve los contactos de la empresa a la otra pantalla, así que hay que decidir si
+    esta se queda, si se funden las dos, o si esta desaparece del menú.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Propuesta · en la campana ya funciona así</span>
+    <strong>Lo que separa las tres palabras es cómo se quita cada una.</strong> No hace falta definirlas
+    en abstracto: se definen solas por su ciclo de vida, y así queda montado en la campana.
+    <ul>
+      <li><strong>Alerta</strong> — nace de una condición tuya y se va sola cuando esa condición deja
+      de ser cierta. <strong>No lleva aspa.</strong> Si se dejara cerrar, alguien cerraría el aviso de
+      que su licencia vence y se le pasaría la fecha; en su lugar dice qué hay que hacer para que
+      desaparezca.</li>
+      <li><strong>Notificación</strong> — un hecho puntual y pasado de tu cuenta. Se lee y se archiva a
+      mano. Propuesta de retención: <strong>90 días</strong>, luego al histórico.</li>
+      <li><strong>Comunicado</strong> — va a todos los clientes, lo publica soporte y lleva
+      <strong>fecha de fin</strong> puesta por quien lo publica.</li>
+    </ul>
+    <strong>Abrir la campana marca leído, pero no borra nada.</strong> El contador se va; los avisos se
+    quedan. Leído y resuelto son cosas distintas: si abrir la campana vaciara la lista, quien la abre
+    sin leer pierde el aviso. El resalte de «nuevo» aguanta hasta que se cierra el desplegable, para
+    que dé tiempo a ver cuáles eran.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · decisión del cliente</span>
+    <strong>Dónde se lee una comunicación larga.</strong> El desplegable mide 360 px y no es sitio para
+    tres párrafos, así que el detalle se corta a dos líneas y el texto entero se abre en un visor. Falta
+    decidir dos cosas: <strong>cuánto se guarda</strong> —propuesta, 90 días— y <strong>si esta opción
+    de menú se convierte en la bandeja</strong> donde queda el histórico. Si se convierte, deja de
+    solaparse con «Actualización de contactos» y el texto largo tiene por fin su sitio.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · confirmado por arquitectura</span>
+    <strong>Alerta, notificación y comunicado: tres palabras sin acuerdo.</strong> «Son las que más
+    disonancia tienen, <strong>no hay un lenguaje establecido para cada una</strong>.» En la sesión quedó
+    dicho igual: <strong>hay que definir qué es una notificación y qué es una alerta</strong>. Sale en cada
+    presentación del sitemap. Y en Bolivia ninguna de las tres se enseña dentro del portal: todo va por
+    correo desde soporte.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">De la sesión · lo nuevo</span>
+    <strong>En Bolivia el portal no avisa de un mantenimiento.</strong> Preguntado directamente: «aquí
+    solamente tenemos alertas y comunicados y manuales, pero aquí no… creería que es más tema de
+    soporte, le envían correo a todos como un comunicado». La barra de mantenimiento, la campana y sus
+    avisos <strong>son nuevos</strong>: se pueden ver desde el panel de alcance y hay que aprobarlos
+    como cosa nueva.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Hallazgo · para soporte</span>
+    <strong>Los errores genéricos no llegan a ningún canal.</strong> Cuando algo crítico falla, Bolivia
+    enseña un mensaje que pide contactar con soporte, y ese error no queda registrado: «el usuario se
+    comunica con soporte y soporte revisa mediante logs».
+  </div>
+  <div class="nota nota--decidido">
     <span class="nota__sello">Decidido</span>
-    <strong>Cambia de sentido respecto de Bolivia.</strong> Allá esta pantalla <em>configura a quién avisa el sistema</em>
-    —contacto financiero, técnico y de notificaciones—, y esos contactos aquí viven en «Actualización información de
-    empresa». Lo que queda en esta pantalla es la copia de los comunicados que enviamos nosotros: vencimientos,
-    mantenimientos y cambios de norma. El cliente no nos contrata para leerle la bandeja ni para enviar correos en su
-    nombre, así que el servidor de correo saliente y el OAuth de correo quedan fuera. SMTP, además, ya está obsoleto.
+    <strong>Fuera el servidor de correo saliente y el OAuth de correo.</strong> «El cliente no nos
+    contrata para que le leamos la bandeja de correos ni para que enviemos correos en nombre de él.»
+    SMTP, además, está obsoleto.
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -43,7 +138,124 @@
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+
+  /* Los tres bloques de Bolivia, con su explicación al lado —allí cada uno
+     lleva una línea que dice qué recibe—. Los correos son etiquetas que se
+     quitan con una aspa, que es como se ven allí. */
+  var BLOQUES = [
+    { clave: 'financiero', rotulo: 'Contacto financiero y de contrato',
+      que: 'Gestión de temas relacionados con el contrato, cartera y vencimientos.',
+      correos: ['daniel.tigreros@alnoor.ae', 'cuentas@alnoor.ae'] },
+    { clave: 'tecnico', rotulo: 'Contacto técnico',
+      que: 'Errores en la cuenta, ventanas de mantenimiento y cambios normativos.',
+      correos: ['it@alnoor.ae'] },
+    { clave: 'notificaciones', rotulo: 'Contacto de notificaciones',
+      que: 'Comunicados generales que se envían a todos los clientes.',
+      correos: ['avisos@alnoor.ae'] }
+  ];
+
+  var ORIGINAL = JSON.stringify(BLOQUES);
+  var $ = function (id) { return document.getElementById(id); };
+
+  function pintar() {
+    $('bloques').innerHTML = BLOQUES.map(function (b) {
+      var fichas = b.correos.map(function (c, i) {
+        return '<span class="edoc-ficha-correo">' + c +
+          '<button type="button" class="edoc-ficha-correo__x" data-quitar="' + b.clave + ':' + i + '" ' +
+          'aria-label="Quitar ' + c + '">&times;</button></span>';
+      }).join('');
+      return '<div class="row rejilla align-items-start mb-3">' +
+        '<div class="col-12 col-lg-4">' +
+          '<label class="edoc-etiqueta" for="nuevo-' + b.clave + '">' + b.rotulo + '</label>' +
+        '</div>' +
+        '<div class="col-12 col-lg-5">' +
+          '<div class="edoc-fichas">' + (fichas || '<span class="edoc-secundario">Sin correos.</span>') + '</div>' +
+          '<div class="d-flex hueco-1 mt-2">' +
+            '<input type="email" class="form-control form-control-sm" id="nuevo-' + b.clave + '" ' +
+              'placeholder="nombre@empresa.ae" data-bloque="' + b.clave + '">' +
+            '<button type="button" class="btn btn-edoc-terciario btn-sm" data-anadir="' + b.clave + '">Añadir</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="col-12 col-lg-3">' +
+          '<div class="edoc-recibe">' + window.edocIcono('aprobar') + '<span>' + b.que + '</span></div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function bloque(clave) {
+    return BLOQUES.filter(function (b) { return b.clave === clave; })[0];
+  }
+
+  $('bloques').addEventListener('click', function (e) {
+    var quitar = e.target.closest('[data-quitar]');
+    if (quitar) {
+      var partes = quitar.dataset.quitar.split(':');
+      var b = bloque(partes[0]);
+      var fuera = b.correos.splice(Number(partes[1]), 1)[0];
+      pintar();
+      window.edocAvisar('<strong>' + fuera + '</strong> deja de recibir avisos de ' +
+        b.rotulo.toLowerCase() + '.');
+      return;
+    }
+    var anadir = e.target.closest('[data-anadir]');
+    if (!anadir) return;
+    var b2 = bloque(anadir.dataset.anadir);
+    var campo = $('nuevo-' + b2.clave);
+    var correo = campo.value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) {
+      campo.classList.add('is-invalid');
+      campo.focus();
+      window.edocAvisar('Ese correo no tiene buena pinta.', 'error');
+      return;
+    }
+    var repetido = BLOQUES.some(function (x) {
+      return x.correos.some(function (c) { return c.toLowerCase() === correo.toLowerCase(); });
+    });
+    if (repetido) {
+      campo.classList.add('is-invalid');
+      window.edocAvisar('Ese correo ya está en la lista.', 'error');
+      return;
+    }
+    b2.correos.push(correo);
+    pintar();
+    window.edocAvisar('<strong>' + correo + '</strong> añadido a ' + b2.rotulo.toLowerCase() + '.', 'exito');
+  });
+
+  // Enter añade, que es lo que se espera al escribir un correo tras otro.
+  $('bloques').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' || !e.target.dataset.bloque) return;
+    e.preventDefault();
+    var b = document.querySelector('[data-anadir="' + e.target.dataset.bloque + '"]');
+    if (b) b.click();
+  });
+
+  $('guardar').addEventListener('click', function () {
+    var vacios = BLOQUES.filter(function (b) { return !b.correos.length; });
+    if (vacios.length) {
+      window.edocAvisar('«' + vacios[0].rotulo + '» se queda sin ningún correo. ' +
+        'Si nadie lo recibe, ese aviso no llega a nadie.', 'error');
+      return;
+    }
+    window.edocAvisar('Correos guardados.', 'exito');
+  });
+
+  $('deshacer').addEventListener('click', function () {
+    BLOQUES = JSON.parse(ORIGINAL);
+    pintar();
+    window.edocAvisar('Se descartaron los cambios sin guardar.');
+  });
+
+  pintar();
+}());
+</script>
 </body>
 </html>

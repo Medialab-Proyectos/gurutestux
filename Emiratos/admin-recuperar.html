@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recuperar contraseña · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+</head>
+<body data-seccion="" data-pagina="admin-recuperar.html" data-armazon="reducido" data-quien="Recuperar contraseña · sin sesión">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Fuera de la sesión</span><span>Recuperar contraseña</span></div>
+      <h1 class="edoc-titulo">Recuperar contraseña</h1>
+      <p class="edoc-subtitulo">Tres pasos, con el mismo código por correo que usa el acceso. No es un mecanismo aparte.</p>
+    </div>
+  </div>
+
+  <div class="row rejilla">
+    <div class="col-12 col-lg-4">
+      <section class="edoc-tablero">
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Los tres pasos</h2></div>
+        <div class="edoc-tablero__cuerpo">
+          <ul class="linea-tiempo" id="linea">
+            <li class="hecho" data-p="1"><div class="linea-tiempo__titulo">Paso 1 · Quién eres</div><div class="linea-tiempo__detalle">Tu usuario o el correo con el que entras.</div></li>
+            <li class="espera" data-p="2"><div class="linea-tiempo__titulo">Paso 2 · El código</div><div class="linea-tiempo__detalle">Seis cifras al correo registrado.</div></li>
+            <li class="espera" data-p="3"><div class="linea-tiempo__titulo">Paso 3 · La contraseña nueva</div><div class="linea-tiempo__detalle">Y se cierran las sesiones abiertas.</div></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-12 col-lg-8">
+
+      <!-- Paso 1 -->
+      <section class="edoc-tablero" id="paso-1">
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Paso 1 · Quién eres</h2></div>
+        <div class="edoc-tablero__cuerpo">
+          <p class="mb-3">Dinos con qué entras al portal. Te mandaremos un código al correo que tengas
+          registrado.</p>
+
+          <label class="edoc-etiqueta" for="quien">Usuario o correo<span class="obligatorio">*</span></label>
+          <input class="form-control" id="quien" style="max-width:380px" placeholder="f.almarzooqi@alnoor.ae"
+            autocomplete="username">
+          <div class="edoc-ayuda" id="ayuda-1">Si la cuenta existe, el código sale al momento.</div>
+
+          <button class="btn btn-edoc-primario mt-4" type="button" id="ir-2">Mandarme el código</button>
+          <a class="btn btn-edoc-terciario mt-4 ml-2" href="index.html">Volver al acceso</a>
+        </div>
+      </section>
+
+      <!-- Paso 2 -->
+      <section class="edoc-tablero" id="paso-2" hidden>
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Paso 2 · El código</h2></div>
+        <div class="edoc-tablero__cuerpo">
+          <!-- Mismo mecanismo que el acceso: el D10 no describe la recuperación,
+               pero inventarle un segundo canal sería contradecir el documento,
+               que dice que el segundo factor es el correo y solo el correo. -->
+          <div class="edoc-aviso edoc-aviso--info mb-3">
+            <div>Si esa cuenta existe, mandamos un código a su correo registrado. <strong>No decimos cuál
+            es</strong>: enseñar la dirección permitiría averiguar quién tiene cuenta.</div>
+          </div>
+
+          <label class="edoc-etiqueta" for="codigo">Código<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="codigo" inputmode="numeric" maxlength="6"
+            autocomplete="one-time-code" placeholder="000000"
+            style="max-width:210px;font-size:22px;letter-spacing:.34em;text-align:center">
+          <div class="edoc-ayuda" id="ayuda-2">En la maqueta vale cualquier código de seis cifras.</div>
+          <div class="edoc-reloj" id="reloj-2" data-cuenta-atras="300" role="status"></div>
+
+          <button class="btn btn-edoc-primario mt-4" type="button" id="ir-3">Continuar</button>
+          <button class="btn btn-edoc-terciario mt-4 ml-2" type="button" id="reenviar">No me ha llegado</button>
+        </div>
+      </section>
+
+      <!-- Paso 3 -->
+      <section class="edoc-tablero" id="paso-3" hidden>
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Paso 3 · La contraseña nueva</h2></div>
+        <div class="edoc-tablero__cuerpo">
+          <label class="edoc-etiqueta" for="clave-1">Contraseña nueva<span class="obligatorio">*</span></label>
+          <input class="form-control" id="clave-1" type="password" style="max-width:380px" autocomplete="new-password">
+          <div class="edoc-ayuda">Al menos doce caracteres, con mayúsculas, minúsculas y un número.</div>
+
+          <label class="edoc-etiqueta mt-3" for="clave-2">Repítela<span class="obligatorio">*</span></label>
+          <input class="form-control" id="clave-2" type="password" style="max-width:380px" autocomplete="new-password">
+          <div class="edoc-ayuda" id="ayuda-3">Las dos tienen que coincidir.</div>
+
+          <div class="edoc-aviso edoc-aviso--advertencia mt-3">
+            <div>Al cambiarla <strong>se cierran las sesiones abiertas</strong> en otros navegadores. Es
+            lo que se espera de una recuperación: si alguien había entrado, deja de estar dentro.</div>
+          </div>
+
+          <button class="btn btn-edoc-primario mt-4" type="button" id="terminar">Guardar y entrar</button>
+        </div>
+      </section>
+
+      <!-- Final -->
+      <section class="edoc-tablero" id="paso-fin" hidden>
+        <div class="edoc-tablero__cuerpo text-center" style="padding:44px 24px">
+          <div class="edoc-estado edoc-estado--exito mb-3">Contraseña cambiada</div>
+          <h2 class="edoc-titulo mb-2" style="font-size:22px">Ya puedes entrar</h2>
+          <p class="edoc-secundario mb-4" style="margin:0 auto">Las demás sesiones se han cerrado. Al
+          entrar te pediremos otra vez el código: la contraseña es solo el primer factor.</p>
+          <a class="btn btn-edoc-primario" href="index.html">Ir al acceso</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Del MVP</span>
+    <strong>Entra porque el MVP la lista.</strong> Existe en Francia y en Bolivia —el enlace «¿Olvidaste
+    tu contraseña?» sale en la propia captura del documento D10— y es de las primeras cosas que un
+    usuario busca. No es diseño desde cero: se trae.
+  </div>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Qué pasa si se pierde el acceso al correo.</strong> El correo es el único segundo factor y
+    también la única vía de recuperación, así que quien lo pierde se queda fuera del portal sin salida
+    propia. El documento D10 no describe ninguna alternativa. Hoy eso se resuelve por soporte, y ese
+    camino no está definido ni tiene pantalla.
+  </div>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Cuántos intentos y cada cuánto se puede reenviar.</strong> Ni el D10 ni la maqueta lo fijan.
+    Sin un límite, un código de seis cifras se prueba por fuerza bruta y el botón de reenviar sirve para
+    inundarle el buzón a cualquiera. Hace falta el número antes de desarrollarlo.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* Un paso a la vez, y la línea de la izquierda acompaña. Nada de esto valida
+     de verdad: lo que tiene que quedar claro en la revisión es el recorrido y
+     qué se le dice al usuario en cada punto. */
+  function ir(n) {
+    [1, 2, 3].forEach(function (i) {
+      document.getElementById('paso-' + i).hidden = (i !== n);
+    });
+    document.getElementById('paso-fin').hidden = true;
+    document.querySelectorAll('#linea li').forEach(function (li) {
+      var p = Number(li.getAttribute('data-p'));
+      li.className = p < n ? 'hecho' : (p === n ? 'hecho' : 'espera');
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.getElementById('ir-2').addEventListener('click', function () {
+    var c = document.getElementById('quien');
+    if (!c.value.trim()) {
+      c.classList.add('is-invalid');
+      document.getElementById('ayuda-1').textContent = 'Dinos tu usuario o tu correo.';
+      c.focus();
+      return;
+    }
+    c.classList.remove('is-invalid');
+    ir(2);
+    document.getElementById('codigo').focus();
+  });
+
+  document.getElementById('reenviar').addEventListener('click', function () {
+    document.getElementById('ayuda-2').textContent =
+      'Te lo mandamos otra vez. Si sigue sin llegar, mira la carpeta de correo no deseado.';
+  });
+
+  document.getElementById('ir-3').addEventListener('click', function () {
+    var c = document.getElementById('codigo');
+    if (!/^\d{6}$/.test(c.value.trim())) {
+      c.classList.add('is-invalid');
+      document.getElementById('ayuda-2').textContent = 'El código son seis cifras.';
+      c.focus();
+      return;
+    }
+    c.classList.remove('is-invalid');
+    ir(3);
+    document.getElementById('clave-1').focus();
+  });
+
+  document.getElementById('terminar').addEventListener('click', function () {
+    var a = document.getElementById('clave-1');
+    var b = document.getElementById('clave-2');
+    var ayuda = document.getElementById('ayuda-3');
+    if (a.value.length < 12) {
+      a.classList.add('is-invalid');
+      ayuda.textContent = 'La contraseña necesita al menos doce caracteres.';
+      a.focus();
+      return;
+    }
+    if (a.value !== b.value) {
+      b.classList.add('is-invalid');
+      ayuda.textContent = 'Las dos contraseñas no coinciden.';
+      b.focus();
+      return;
+    }
+    a.classList.remove('is-invalid');
+    b.classList.remove('is-invalid');
+    [1, 2, 3].forEach(function (i) { document.getElementById('paso-' + i).hidden = true; });
+    document.getElementById('paso-fin').hidden = false;
+    document.querySelectorAll('#linea li').forEach(function (li) { li.className = 'hecho'; });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}());
+</script>
+</body>
+</html>

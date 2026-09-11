@@ -11,6 +11,17 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="emision" data-pagina="emitidos.html">
 
@@ -21,7 +32,8 @@
     <div>
       <div class="edoc-miga"><span>Emisión</span><span>Reportes</span><span>Documentos Emitidos</span></div>
       <h1 class="edoc-titulo">Documentos Emitidos</h1>
-      <p class="edoc-subtitulo">Lo que tu empresa ha emitido y en qué punto está ante cada una de las cuatro entidades que responden por el documento.</p>
+      <p class="edoc-subtitulo">Lo que tu empresa ha emitido y en qué punto está: primero el camino
+      hasta el comprador, y aparte la respuesta de la autoridad.</p>
     </div>
   </div>
 
@@ -64,10 +76,11 @@
             <label class="edoc-etiqueta" for="f-entidad">Estado de la entidad</label>
             <select class="custom-select" id="f-entidad">
               <option value="">Cualquiera</option>
+              <option value="c1">Tu empresa (C1)</option>
               <option value="c2">eDoc (C2)</option>
-              <option value="c5">Autoridad (C5)</option>
               <option value="c3">Plataforma receptora (C3)</option>
               <option value="c4">Destinatario (C4)</option>
+              <option value="c5">Autoridad (C5)</option>
             </select>
           </div>
           <div class="col-12 col-md-6 col-xl-3">
@@ -139,8 +152,6 @@
                 <span class="edoc-exportar__detalle" id="exp-detalle"></span>
               </button>
             </li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item edoc-exportar__bandeja" href="reportes-generados.html">Reportes generados</a></li>
           </ul>
         </div>
       </div>
@@ -151,9 +162,9 @@
         <thead>
           <tr>
             <th colspan="9" style="background:#fff;border-bottom-color:#fff"></th>
-            <th colspan="4" class="agrupador">Estado por entidad
+            <th colspan="5" class="agrupador">Estado por entidad
               <button type="button" class="agrupador__ayuda" data-toggle="modal" data-target="#modal-corners"
-                      aria-label="Qué son C2, C5, C3 y C4">?</button>
+                      aria-label="Qué son C1, C2, C3, C4 y C5">?</button>
             </th>
           </tr>
           <tr>
@@ -166,10 +177,11 @@
             <th scope="col" class="text-right">Base imponible</th>
             <th scope="col" class="text-right">IVA</th>
             <th scope="col" class="text-right">Total</th>
-            <th scope="col" class="separador-izq">eDoc <span class="clave-corner">(C2)</span></th>
-            <th scope="col">Autoridad <span class="clave-corner">(C5)</span></th>
+            <th scope="col" class="separador-izq">Tu empresa <span class="clave-corner">(C1)</span></th>
+            <th scope="col">eDoc <span class="clave-corner">(C2)</span></th>
             <th scope="col">Plataforma receptora <span class="clave-corner">(C3)</span></th>
             <th scope="col">Destinatario <span class="clave-corner">(C4)</span></th>
+            <th scope="col" class="separador-izq">Autoridad <span class="clave-corner">(C5)</span></th>
           </tr>
         </thead>
         <tbody id="cuerpo-emitidos"></tbody>
@@ -205,30 +217,44 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Las cuatro entidades que responden por un documento</h5>
+          <h5 class="modal-title">Las cinco esquinas de un documento</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          <p>Un mismo documento pasa por cuatro manos y cada una responde por su cuenta. Por eso hay cuatro columnas y
-          no una: <strong>«aprobado» tiene que decir quién aprobó</strong>.</p>
-          <div class="edoc-tabla-envoltura">
+          <p>Cinco entidades responden por un documento, y no todas están en la misma fila.
+          <strong>La factura recorre un camino</strong> —de ti al comprador— y, aparte,
+          <strong>se le reporta a la autoridad</strong> un documento fiscal distinto.</p>
+
+          <h3 class="edoc-tablero__titulo mb-2" style="font-size:15px">El camino de la factura</h3>
+          <div class="edoc-tabla-envoltura mb-4">
             <table class="edoc-tabla">
-              <thead><tr><th scope="col">Columna</th><th scope="col">Quién es</th><th scope="col">Qué puede responder</th></tr></thead>
+              <thead><tr><th scope="col">Esquina</th><th scope="col">Quién es</th><th scope="col">Qué puede responder</th></tr></thead>
               <tbody>
-                <tr><td>eDoc <span class="clave-corner">(C2)</span></td><td>eDoc, tu proveedor de servicios acreditado ante la autoridad. Es quien transmite el documento por la red.</td>
+                <tr><td>Tu empresa <span class="clave-corner">(C1)</span></td><td>Tú, quien emite el documento.</td>
+                    <td>Lo entrega a eDoc para que lo transmita.</td></tr>
+                <tr><td>eDoc <span class="clave-corner">(C2)</span></td><td>Tu proveedor de servicios acreditado. Es quien transmite el documento por la red.</td>
                     <td>Aprueba el documento o lo rechaza si el XML no valida.</td></tr>
-                <tr><td>Autoridad <span class="clave-corner">(C5)</span></td><td>La Federal Tax Authority.</td>
-                    <td>Rechaza por datos obligatorios. Es un error grave: el documento no sigue.</td></tr>
                 <tr><td>Plataforma receptora <span class="clave-corner">(C3)</span></td><td>El proveedor acreditado del comprador.</td>
-                    <td>Entrega o rechaza por validaciones técnicas.</td></tr>
+                    <td>Entrega o rechaza por validaciones técnicas.
+                    <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="left"
+                      data-content="Un Aprobado aquí significa que la plataforma del otro lado recibió el documento sin errores técnicos. No es la aceptación del comprador: esa es la de C4."
+                      aria-label="Qué significa Aprobado en esta esquina">?</button></td></tr>
                 <tr><td>Destinatario <span class="clave-corner">(C4)</span></td><td>El comprador, la empresa que recibe.</td>
                     <td>Aprueba, rechaza con motivo o solo acusa recibo.</td></tr>
               </tbody>
             </table>
           </div>
-          <div class="edoc-aviso edoc-aviso--advertencia mt-3">
-            <div>Un <strong>Aprobado</strong> en C3 no es la aceptación del comprador: significa que la plataforma del
-            otro lado recibió el documento sin errores técnicos. La aceptación es la de C4.</div>
+
+          <h3 class="edoc-tablero__titulo mb-2" style="font-size:15px">El reporte a la autoridad</h3>
+          <div class="edoc-tabla-envoltura">
+            <table class="edoc-tabla">
+              <thead><tr><th scope="col">Esquina</th><th scope="col">Quién es</th><th scope="col">Qué puede responder</th></tr></thead>
+              <tbody>
+                <tr><td>Autoridad <span class="clave-corner">(C5)</span></td>
+                    <td>El concentrador de la Federal Tax Authority. Detrás están Finanzas, el Ministerio y las demás entidades que fiscalizan.</td>
+                    <td>Acepta o rechaza el <strong>reporte fiscal</strong>, no la factura. Tiene diez minutos para contestar.</td></tr>
+              </tbody>
+            </table>
           </div>
 
           <h3 class="edoc-tablero__titulo mt-4 mb-2" style="font-size:15px">Hay dos clases de rechazo</h3>
@@ -317,6 +343,18 @@
     </div>
   </div>
 
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Del modelo de Emiratos</span>
+    <strong>La autoridad no está en el camino de la factura.</strong> La factura llega al comprador sin
+    pasar por ella. Lo que la autoridad recibe es un <strong>reporte fiscal</strong> aparte —un resumen
+    con la factura original adjunta— y su respuesta es sobre ese reporte.
+    <br><br>En Emiratos ese reporte <strong>se manda dos veces</strong>: uno lo emite eDoc al enviar la
+    factura y otro lo emite la plataforma receptora al recibirla, para que la autoridad pueda cruzar que
+    lo que salió es lo mismo que llegó. Es una exigencia propia de Emiratos, no del estándar.
+    <br><br>Esto no se le cuenta al cliente en la pantalla: a él le basta con que la autoridad responde
+    a un reporte y no a su factura, que es lo que dicen la entradilla del modal y la fila de C5.
+  </div>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -326,6 +364,8 @@
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script src="assets/js/tablas.js"></script>
@@ -356,13 +396,29 @@
     var negativo = doc.total < 0 ? ' style="color:var(--rojo-1)"' : '';
     return '<tr data-fila="' + i + '">' +
       '<td class="col-acciones">' +
+        /* Reparto del MVP: fuera quedan las dos del recorrido —mirar la
+           factura y ver por dónde va—; las descargas, que son ocasionales,
+           bajan al menú de los tres puntos. Y el visor pasa a llevar el icono
+           de «ver»: con el de PDF competía con la descarga de PDF, que es
+           otra cosa. */
         '<div class="edoc-acciones-fila">' +
           '<a class="edoc-accion edoc-accion--pdf" href="#" data-accion="visor" data-i="' + i + '" ' +
-            'title="Abrir el visor de la factura" aria-label="Abrir el visor de ' + doc.numero + '">' + ico('pdf') + '</a>' +
+            'title="Abrir el visor de la factura" aria-label="Abrir el visor de ' + doc.numero + '">' + ico('ver') + '</a>' +
           '<a class="edoc-accion" href="#" data-accion="estados" data-i="' + i + '" ' +
             'title="Ver estados de las cuatro entidades" aria-label="Ver los estados de ' + doc.numero + '">' + ico('estados') + '</a>' +
-          '<a class="edoc-accion edoc-accion--gris" href="#" data-accion="xml" data-i="' + i + '" ' +
-            'title="Descargar XML" aria-label="Descargar el XML de ' + doc.numero + '">' + ico('xml') + '</a>' +
+          '<div class="dropdown">' +
+            '<button type="button" class="edoc-accion edoc-accion--gris" data-toggle="dropdown" ' +
+              'title="Más acciones" aria-label="Más acciones para ' + doc.numero + '" ' +
+              'aria-haspopup="true" aria-expanded="false">' + ico('puntos') + '</button>' +
+            '<ul class="dropdown-menu dropdown-menu-right edoc-mas">' +
+              '<li><a class="dropdown-item edoc-mas__opcion" href="#" data-accion="pdf" data-i="' + i + '">' +
+                ico('pdf') + '<span><span class="edoc-mas__rotulo">Descargar PDF</span>' +
+                '<span class="edoc-mas__detalle">La representación del documento</span></span></a></li>' +
+              '<li><a class="dropdown-item edoc-mas__opcion" href="#" data-accion="xml" data-i="' + i + '">' +
+                ico('xml') + '<span><span class="edoc-mas__rotulo">Descargar XML</span>' +
+                '<span class="edoc-mas__detalle">El documento original tal como salió</span></span></a></li>' +
+            '</ul>' +
+          '</div>' +
         '</div>' +
       '</td>' +
       '<td><a class="edoc-clave-doc" href="#" data-accion="visor" data-i="' + i + '" ' +
@@ -375,10 +431,13 @@
       '<td class="cifra cifra-der"' + negativo + '>' + D.dinero(doc.base) + '</td>' +
       '<td class="cifra cifra-der"' + negativo + '>' + D.dinero(doc.iva) + '</td>' +
       '<td class="cifra cifra-der font-weight-bold"' + negativo + '>' + D.dinero(doc.total) + '</td>' +
-      '<td class="separador-izq">' + pastilla(doc.c2, 'C2') + '</td>' +
-      '<td>' + pastilla(doc.c5, 'C5') + '</td>' +
+      /* La cadena de entrega primero, y la autoridad al final tras un
+         separador: es una rama aparte, no el siguiente paso. */
+      '<td class="separador-izq">' + pastilla(doc.c1, 'C1') + '</td>' +
+      '<td>' + pastilla(doc.c2, 'C2') + '</td>' +
       '<td>' + pastilla(doc.c3, 'C3') + '</td>' +
       '<td>' + pastilla(doc.c4, 'C4') + '</td>' +
+      '<td class="separador-izq">' + pastilla(doc.c5, 'C5') + '</td>' +
     '</tr>';
   }
 
@@ -404,15 +463,25 @@
   function sucesos(doc, clave) {
     var c = doc[clave.toLowerCase()];
     var mapa = {
+      c1: [
+        { t: 'Documento generado', d: 'Tu sistema crea la factura y la deja lista para enviar.', s: '08:12', e: 'hecho' },
+        { t: 'Entregado a eDoc',   d: 'Sale de tu sistema hacia tu proveedor acreditado.',      s: '08:14', e: 'hecho' }
+      ],
       c2: [
         { t: 'Recepción del documento', d: 'El sistema del cliente entrega el XML a eDoc.', s: '08:14', e: 'hecho' },
         { t: 'Validación de esquema',   d: 'Estructura y campos obligatorios.',              s: '08:14', e: c === 'rechazado' ? 'fallo' : 'hecho' },
         { t: 'Aprobado',                d: 'Aprobado por eDoc antes de transmitirlo.',       s: '08:15', e: 'hecho' }
       ],
+      /* La autoridad recibe un documento fiscal aparte —el TDD— que la
+         plataforma receptora genera a partir de la factura. Por eso arranca
+         después de C3 y no en medio de la entrega. */
+      /* Rama fiscal, en paralelo a la entrega. eDoc genera el reporte al enviar
+         la factura; la plataforma receptora genera el suyo al recibirla. */
       c5: [
-        { t: 'Envío',        d: 'Documento transmitido a la autoridad fiscal.', s: '08:15', e: 'hecho' },
-        { t: 'Confirmación', d: 'Acuse de recepción de la autoridad.',          s: '08:16', e: 'hecho' },
-        { t: 'Aprobado',     d: 'Validado y aprobado por la autoridad.',        s: '08:22', e: 'hecho' }
+        { t: 'Reporte fiscal generado',   d: 'eDoc arma el resumen y le adjunta la factura original.',                      s: '08:15', e: 'hecho' },
+        { t: 'Enviado a la autoridad',    d: 'Transmitido al concentrador de la autoridad, en paralelo al envío al comprador.', s: '08:16', e: 'hecho' },
+        { t: 'Acuse de recibo',           d: 'La autoridad confirma que lo tiene. Todavía no dice si está bien.',            s: '08:16', e: 'hecho' },
+        { t: 'Aprobado',                  d: 'Validado. La autoridad tiene diez minutos como máximo para responder.',        s: '08:22', e: 'hecho' }
       ],
       c3: [
         { t: 'Envío',      d: 'Transmitido por la red a la plataforma del comprador.', s: '08:23', e: 'hecho' },
@@ -556,6 +625,7 @@
     if (a.dataset.accion === 'estados') abrirEstados(doc);
     if (a.dataset.accion === 'visor') abrirVisor(doc);
     if (a.dataset.accion === 'xml') window.edocAvisar('Se descargaría el XML de <strong>' + doc.numero + '</strong>. En la maqueta no hay archivo detrás.');
+    if (a.dataset.accion === 'pdf') window.edocAvisar('Se descargaría el PDF de <strong>' + doc.numero + '</strong>. En la maqueta no hay archivo detrás.');
   });
 
   document.getElementById('forma-buscar').addEventListener('submit', function (e) {

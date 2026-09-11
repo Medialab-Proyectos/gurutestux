@@ -10,19 +10,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="administracion" data-pagina="admin-empresa.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <div class="edoc-titulo-barra"><div>
-      <div class="edoc-miga"><span>Administración</span><span>Mi empresa</span><span>Datos fiscales</span></div>
-      <h1 class="edoc-titulo">Datos fiscales</h1>
+      <div class="edoc-miga"><span>Administración</span><span>Actualización Datos empresas</span><span>Actualización de identificación fiscal</span></div>
+      <h1 class="edoc-titulo">Actualización de identificación fiscal</h1>
       <p class="edoc-subtitulo">Con qué identidad factura tu empresa: nombre legal, registro fiscal y domicilio. A quién avisamos se configura en Contactos.</p>
     </div></div>
 
   <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Identificación</h2></div>
-    <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Datos guardados.','exito')">
+    <div class="edoc-tablero__cuerpo">
       <div class="row rejilla">
         <div class="col-12 col-md-6">
           <label class="edoc-etiqueta" for="e1">Nombre legal en inglés<span class="obligatorio">*</span></label>
@@ -42,15 +53,77 @@
           <select class="custom-select" id="e5"><option>Dubái</option><option>Abu Dabi</option><option>Sharja</option>
             <option>Ajmán</option><option>Ras al-Jaima</option><option>Fujaira</option><option>Umm al-Qaywayn</option></select></div>
         <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e8">Nombre comercial<span class="obligatorio">*</span></label>
+          <input class="form-control" id="e8" value="Al Noor">
+          <div class="edoc-ayuda">El nombre con el que se conoce a tu empresa, aunque la razón social
+          sea otra.</div></div>
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e9">Teléfono<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="e9" value="+971 4 555 0100" inputmode="tel">
+          <div class="edoc-ayuda">El de la empresa, no el de una persona. El de cada contacto va en
+          «Actualización de contactos».</div></div>
+        <div class="col-12 col-md-6">
           <label class="edoc-etiqueta" for="e6">Actividad</label>
           <input class="form-control" id="e6" value="Comercio al por mayor"></div>
         <div class="col-12">
           <label class="edoc-etiqueta" for="e7">Dirección</label>
           <input class="form-control" id="e7" value="Jebel Ali Free Zone, Warehouse 44 · Dubái"></div>
       </div>
-      <button class="btn btn-edoc-primario mt-4" type="submit">Guardar</button>
-    </form>
+    </div>
   </section>
+
+  <!-- Sección que Bolivia tiene dentro de «Actualización datos empresa» y que
+       aquí faltaba entera: con qué correo y en qué condiciones se le factura a
+       la empresa el servicio de eDoc. No es la factura del cliente: es la
+       nuestra. -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Indicaciones de facturación para cobro del producto eDoc</h2>
+      <span class="edoc-secundario">Cómo te facturamos nosotros</span>
+    </div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="row rejilla">
+        <div class="col-12 col-lg-6">
+          <label class="edoc-etiqueta" for="f-correo">Correo para facturar<span class="obligatorio">*</span></label>
+          <input type="email" class="form-control" id="f-correo" value="cuentas@alnoor.ae">
+          <div class="edoc-ayuda" id="f-ayuda">Ahí mandamos la factura del servicio de eDoc.</div>
+
+          <label class="edoc-etiqueta mt-3" for="f-dia">Día máximo para facturar<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="f-dia" inputmode="numeric" value="25" style="max-width:120px">
+          <div class="edoc-ayuda" id="f-dia-ayuda">Del 1 al 28. Después de ese día del mes, la factura
+          pasa al siguiente ciclo.</div>
+
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="f-orden">
+            <label class="form-check-label" for="f-orden">
+              <strong>Requiere orden de compra</strong>
+              <div class="edoc-secundario">Si tu empresa no acepta facturas sin número de orden,
+              márcalo y nos lo pedirás por adelantado.</div>
+            </label>
+          </div>
+          <div id="caja-orden" hidden>
+            <label class="edoc-etiqueta mt-2" for="f-orden-num">Número de orden vigente</label>
+            <input class="form-control cifra" id="f-orden-num" placeholder="PO-2026-0148" style="max-width:240px">
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <label class="edoc-etiqueta" for="f-obs">Observaciones para facturar</label>
+          <textarea class="form-control" id="f-obs" rows="7"
+            placeholder="Centro de coste, referencia interna o cualquier dato que tenga que ir en la factura."></textarea>
+          <div class="edoc-ayuda">Va tal cual en la factura, así que escríbelo como quieres verlo.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Un solo botón al pie de toda la pantalla, fuera de los paneles: es
+       exactamente como guarda Bolivia, y cumple la regla de un primario por
+       pantalla. -->
+  <div class="d-flex hueco-2 mb-3">
+    <button class="btn btn-edoc-primario" type="button" id="guardar-todo">Confirmar información</button>
+    <button class="btn btn-edoc-terciario" type="button" id="cancelar-todo">Cancelar</button>
+  </div>
 
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido</span>
@@ -62,13 +135,79 @@
     Sucursales, puntos de venta y parámetros de la empresa son conceptos bolivianos y no viajan. El token de la autoridad
     fiscal tampoco: es particular de Bolivia.
   </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">De Bolivia</span>
+    <strong>Las indicaciones de facturación estaban y faltaban aquí.</strong> En Bolivia esta pantalla
+    lleva tres bloques: identificación y ubicación, contactos, e indicaciones de facturación con el
+    producto eDoc. Los contactos se separaron en su propia pantalla por el MVP; el tercero no estaba en
+    ninguna parte.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">De Bolivia</span>
+    <strong>Un solo «Confirmar información» al pie de toda la pantalla.</strong> Así guarda Bolivia: el
+    botón va fuera de los paneles y guarda las dos secciones a la vez. Y encaja con la regla de un solo
+    botón primario por pantalla.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>¿Quién puede tocar esto?</strong> Cambiar el correo de facturación o el registro fiscal es
+    un dato sensible, y el documento de doble factor obliga a pedir el código otra vez en «cambios de
+    datos sensibles del usuario». Falta decidir si la empresa cuenta como dato sensible.
+  </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  // La orden de compra solo pide número si de verdad hace falta.
+  $('f-orden').addEventListener('change', function () {
+    $('caja-orden').hidden = !this.checked;
+  });
+
+  function mal(id, texto, ayuda) {
+    document.querySelectorAll('.is-invalid').forEach(function (e) { e.classList.remove('is-invalid'); });
+    $(id).classList.add('is-invalid');
+    if (ayuda) $(ayuda).textContent = texto;
+    else window.edocAvisar(texto, 'error');
+    $(id).focus();
+  }
+
+  /* Guarda la pantalla entera, que es como lo hace Bolivia. Se comprueban las
+     dos secciones antes de confirmar nada: no tiene sentido dar por buenos los
+     datos fiscales y dejar el correo de facturación mal escrito. */
+  $('guardar-todo').addEventListener('click', function () {
+    var correo = $('f-correo').value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) {
+      return mal('f-correo', 'Ese correo no tiene buena pinta.', 'f-ayuda');
+    }
+    var dia = Number($('f-dia').value);
+    if (!(dia >= 1 && dia <= 28)) {
+      return mal('f-dia', 'El día tiene que estar entre 1 y 28: los meses cortos no llegan a 31.',
+                 'f-dia-ayuda');
+    }
+    if ($('f-orden').checked && !$('f-orden-num').value.trim()) {
+      return mal('f-orden-num', 'Has marcado que requiere orden de compra: pon el número.');
+    }
+    document.querySelectorAll('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+    window.edocAvisar('Información de la empresa guardada.', 'exito');
+  });
+
+  $('cancelar-todo').addEventListener('click', function () {
+    window.edocAvisar('Se descartaron los cambios sin guardar.');
+  });
+}());
+</script>
 </body>
 </html>

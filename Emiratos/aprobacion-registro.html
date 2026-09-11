@@ -11,6 +11,17 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="" data-pagina="aprobacion-registro.html" data-armazon="reducido" data-quien="Office Manager · back-office">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
@@ -40,39 +51,17 @@
       </div>
     </div>
     <div class="edoc-tabla-envoltura">
-      <table class="edoc-tabla">
-        <thead><tr><th scope="col" class="col-acciones">Acciones</th><th scope="col">Referencia</th><th scope="col">Empresa y registro fiscal</th><th scope="col">Recibida</th><th scope="col">Estado</th></tr></thead>
-        <tbody>
-        <tr>
-          <td class="col-acciones"><a class="edoc-accion" href="#" data-revisar="REG-2026-00918" aria-label="Revisar REG-2026-00918"><span data-icono="ver"></span></a></td>
-          <td><span class="edoc-clave-doc">REG-2026-00918</span></td>
-          <td><span data-nombre-latino="Al Noor Trading LLC" data-nombre-arabe="النور للتجارة ذ.م.م"></span><div class="edoc-secundario cifra">100776655400003</div></td>
-          <td class="cifra">2026-08-31</td>
-          <td><span class="edoc-estado edoc-estado--neutro">Pendiente</span></td>
-        </tr>
-        <tr>
-          <td class="col-acciones"><a class="edoc-accion" href="#" data-revisar="REG-2026-00917" aria-label="Revisar REG-2026-00917"><span data-icono="ver"></span></a></td>
-          <td><span class="edoc-clave-doc">REG-2026-00917</span></td>
-          <td><span data-nombre-latino="Gulf Marine Services" data-nombre-arabe="خدمات الخليج البحرية"></span><div class="edoc-secundario cifra">100445566700003</div></td>
-          <td class="cifra">2026-08-30</td>
-          <td><span class="edoc-estado edoc-estado--neutro">Pendiente</span></td>
-        </tr>
-        <tr>
-          <td class="col-acciones"><span class="edoc-secundario">—</span></td>
-          <td><span class="edoc-clave-doc">REG-2026-00914</span></td>
-          <td><span data-nombre-latino="Sharjah Cement Factory" data-nombre-arabe="مصنع الشارقة للإسمنت"></span><div class="edoc-secundario cifra">100556677800003</div></td>
-          <td class="cifra">2026-08-28</td>
-          <td><span class="edoc-estado edoc-estado--exito">Aprobada</span></td>
-        </tr>
-        <tr>
-          <td class="col-acciones"><span class="edoc-secundario">—</span></td>
-          <td><span class="edoc-clave-doc">REG-2026-00911</span></td>
-          <td><span data-nombre-latino="Etihad Rail PJSC" data-nombre-arabe="الاتحاد للقطارات ش.م.ع"></span><div class="edoc-secundario cifra">100667788900003</div></td>
-          <td class="cifra">2026-08-27</td>
-          <td><span class="edoc-estado edoc-estado--error">No conforme</span></td>
-        </tr>
-        </tbody>
+      <table class="edoc-tabla" id="tabla-solicitudes">
+        <thead><tr>
+          <th scope="col" class="col-acciones">Acciones</th>
+          <th scope="col">Referencia</th><th scope="col">Empresa y registro fiscal</th>
+          <th scope="col">Recibida</th><th scope="col">Estado</th>
+        </tr></thead>
+        <tbody id="cuerpo-solicitudes"></tbody>
       </table>
+    </div>
+    <div class="edoc-tablero__cuerpo edoc-secundario" id="sin-nada" hidden>
+      No hay solicitudes en ese estado.
     </div>
   </section>
 
@@ -80,6 +69,19 @@
     <span class="nota__sello">Decidido</span>
     <strong>La bandeja muestra referencia, empresa y registro fiscal.</strong> En Francia solo enseña el correo, y ya pasó
     en la práctica que el Office Manager «no sabía a qué correspondía ese registro».
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Ojo · del portal que copiamos</span>
+    <strong>Falta el aviso cuando el cliente corrige.</strong> En Francia, si una empresa actualiza su
+    expediente después de una no conformidad, aquí no entra ningún aviso: «no está enviando el correo».
+    La solicitud corregida se queda esperando a que alguien abra la bandeja por su cuenta.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Falta el aviso cuando el cliente corrige.</strong> En Francia, si una empresa actualiza su
+    expediente después de una no conformidad, esta bandeja no se entera: «no está enviando el correo».
+    La solicitud corregida se queda esperando a que alguien la mire por casualidad. Sin ese aviso, el
+    circuito de no conformidad no se cierra.
   </div>
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
@@ -99,6 +101,23 @@
           <p class="edoc-secundario">Se revisa paso a paso, igual que se rellenó. Cada bloque se marca como conforme o no,
           y lo que quede sin conformidad se le explica a la empresa por correo.</p>
           <div id="rev-pasos"></div>
+
+          <!-- Marcar «no conforme» sin decir qué falla deja a la empresa
+               adivinando. En Francia el correo llega con el bloque marcado y
+               sin explicación, y el cliente vuelve a mandar lo mismo. -->
+          <div id="rev-motivo" hidden>
+            <label class="edoc-etiqueta" for="rev-texto">Qué tiene que corregir la empresa<span class="obligatorio">*</span></label>
+            <textarea class="form-control" id="rev-texto" rows="3"
+              placeholder="La licencia comercial adjunta caducó en junio. Hace falta la renovada."></textarea>
+            <div class="edoc-ayuda" id="rev-ayuda">Va tal cual en el correo, así que escríbelo para que se entienda fuera.</div>
+            <!-- QW 7: en Francia las plantillas de correo están traducidas a tres
+                 idiomas, pero el texto que escribe el revisor viaja tal cual, y una
+                 empresa francesa puede recibir en español el motivo del rechazo. -->
+            <div class="edoc-aviso edoc-aviso--advertencia mt-2">
+              <div>El expediente está en <strong>inglés</strong>. Escríbelo en ese idioma: la plantilla
+              del correo se traduce, pero <strong>este texto viaja tal cual</strong>.</div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
@@ -116,52 +135,153 @@
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script src="assets/js/tablas.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    window.edocTabla('table.edoc-tabla', { order: [[3, 'desc']] });
-  });
-</script>
-
-<script>
 (function () {
   'use strict';
+  if (window.edocEnObra) return;
+
+  var SOLICITUDES = [
+    { ref: 'REG-2026-00918', empresa: 'Al Noor Trading LLC',    arabe: 'النور للتجارة ذ.م.م',
+      trn: '100776655400003', recibida: '2026-08-31', estado: 'pendiente' },
+    { ref: 'REG-2026-00917', empresa: 'Gulf Marine Services',   arabe: 'خدمات الخليج البحرية',
+      trn: '100445566700003', recibida: '2026-08-30', estado: 'pendiente' },
+    { ref: 'REG-2026-00914', empresa: 'Sharjah Cement Factory', arabe: 'مصنع الشارقة للإسمنت',
+      trn: '100556677800003', recibida: '2026-08-28', estado: 'aprobada' },
+    { ref: 'REG-2026-00911', empresa: 'Etihad Rail PJSC',       arabe: 'الاتحاد للقطارات ش.م.ع',
+      trn: '100667788900003', recibida: '2026-08-27', estado: 'noconforme',
+      motivo: 'El registro fiscal no coincide con el de la licencia comercial.' }
+  ];
+
   var BLOQUES = [
     ['Administrador de la cuenta', 'Nombre, cargo y teléfono de quien responde por la cuenta.'],
-    ['Datos de la empresa', 'Nombre legal, registro fiscal, emirato y dirección.'],
-    ['Documento legal', 'Licencia comercial adjunta, legible y vigente.'],
-    ['Contactos por área', 'Comercial y cobros presentes; técnico opcional.'],
-    ['Consentimientos legales', 'Los tres consentimientos aceptados.']
+    ['Datos de la empresa',        'Nombre legal, registro fiscal, emirato y dirección.'],
+    ['Documento legal',            'Licencia comercial adjunta, legible y vigente.'],
+    ['Contactos por área',         'Comercial y cobros presentes; técnico opcional.'],
+    ['Consentimientos legales',    'Los tres consentimientos aceptados.']
   ];
-  document.addEventListener('click', function (e) {
+
+  var ESTADOS = {
+    pendiente:  ['neutro', 'Pendiente'],
+    aprobada:   ['exito',  'Aprobada'],
+    noconforme: ['error',  'No conforme']
+  };
+  var FILTRO = { 'Pendientes': 'pendiente', 'Aprobadas': 'aprobada',
+                 'No conformes': 'noconforme', 'Todas': null };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var revisando = null;
+
+  function pintar() {
+    var quiere = FILTRO[$('s-estado').value];
+    var lista = SOLICITUDES.filter(function (s) { return !quiere || s.estado === quiere; });
+    window.edocDestruirTabla('#tabla-solicitudes');
+    $('cuerpo-solicitudes').innerHTML = lista.map(function (s) {
+      var e = ESTADOS[s.estado];
+      /* Solo las pendientes se revisan. Reabrir una ya decidida es justo el
+         hueco anotado abajo: hoy no hay forma de deshacer sin tocar la base de
+         datos, y prefiero que se vea el hueco a inventarme el botón. */
+      var accion = s.estado === 'pendiente'
+        ? '<a class="edoc-accion" href="#" data-revisar="' + s.ref + '" ' +
+          'title="Revisar la solicitud" aria-label="Revisar ' + s.ref + '">' +
+          window.edocIcono('ver') + '</a>'
+        : '<span class="edoc-accion" aria-disabled="true" ' +
+          'title="Ya está decidida. Deshacerlo todavía no se puede desde el portal">' +
+          window.edocIcono('candado') + '</span>';
+      var motivo = s.motivo ? '<div class="edoc-secundario mt-1">' + s.motivo + '</div>' : '';
+      return '<tr>' +
+        '<td class="col-acciones">' + accion + '</td>' +
+        '<td><span class="edoc-clave-doc">' + s.ref + '</span></td>' +
+        '<td><span data-nombre-latino="' + s.empresa + '" data-nombre-arabe="' + s.arabe + '"></span>' +
+          '<div class="edoc-secundario cifra">' + s.trn + '</div></td>' +
+        '<td class="cifra">' + s.recibida + '</td>' +
+        '<td><span class="edoc-estado edoc-estado--' + e[0] + '">' + e[1] + '</span>' + motivo + '</td>' +
+      '</tr>';
+    }).join('');
+    $('sin-nada').hidden = lista.length > 0;
+    if (window.edocPintarNombres) window.edocPintarNombres();
+    if (lista.length) window.edocTabla('#tabla-solicitudes', { order: [[3, 'desc']] });
+  }
+
+  $('s-estado').addEventListener('change', pintar);
+
+  /* --- la revisión ------------------------------------------------------ */
+  function noConformes() {
+    return [].slice.call(document.querySelectorAll('#rev-pasos [data-no]:checked'));
+  }
+
+  function repintarMotivo() {
+    var hay = noConformes().length > 0;
+    $('rev-motivo').hidden = !hay;
+    $('rev-aprobar').disabled = hay;
+    $('rev-aprobar').title = hay
+      ? 'Hay bloques marcados como no conformes: quítalos para poder aprobar'
+      : '';
+  }
+
+  $('cuerpo-solicitudes').addEventListener('click', function (e) {
     var a = e.target.closest('[data-revisar]');
     if (!a) return;
     e.preventDefault();
-    document.getElementById('rev-ref').textContent = a.dataset.revisar;
-    document.getElementById('rev-pasos').innerHTML = BLOQUES.map(function (b, i) {
+    revisando = SOLICITUDES.filter(function (s) { return s.ref === a.dataset.revisar; })[0];
+    $('rev-ref').textContent = revisando.ref;
+    $('rev-pasos').innerHTML = BLOQUES.map(function (b, i) {
       return '<div class="edoc-tablero" style="box-shadow:none;margin-bottom:10px">' +
         '<div class="edoc-tablero__cuerpo">' +
           '<div class="edoc-etiqueta mb-1">' + (i + 1) + ' · ' + b[0] + '</div>' +
           '<div class="edoc-secundario mb-2">' + b[1] + '</div>' +
-          '<div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="b' + i + '" checked>' +
-          '<label class="form-check-label">Conforme</label></div>' +
-          '<div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="b' + i + '">' +
-          '<label class="form-check-label">No conforme</label></div>' +
+          '<div class="form-check form-check-inline">' +
+            '<input class="form-check-input" type="radio" name="b' + i + '" id="b' + i + 's" checked>' +
+            '<label class="form-check-label" for="b' + i + 's">Conforme</label></div>' +
+          '<div class="form-check form-check-inline">' +
+            '<input class="form-check-input" type="radio" name="b' + i + '" id="b' + i + 'n" data-no="' + i + '">' +
+            '<label class="form-check-label" for="b' + i + 'n">No conforme</label></div>' +
         '</div></div>';
     }).join('');
-    $('#modal-revisar').modal('show');
+    $('rev-texto').value = '';
+    $('rev-texto').classList.remove('is-invalid');
+    $('rev-ayuda').textContent = 'Va tal cual en el correo, así que escríbelo para que se entienda fuera.';
+    repintarMotivo();
+    window.jQuery('#modal-revisar').modal('show');
   });
-  document.getElementById('rev-aprobar').addEventListener('click', function () {
-    $('#modal-revisar').modal('hide');
-    window.edocAvisar('Registro aprobado. Le enviamos las credenciales por correo.', 'exito');
+
+  $('rev-pasos').addEventListener('change', repintarMotivo);
+
+  $('rev-aprobar').addEventListener('click', function () {
+    revisando.estado = 'aprobada';
+    delete revisando.motivo;
+    window.jQuery('#modal-revisar').modal('hide');
+    pintar();
+    window.edocAvisar('Registro <strong>' + revisando.ref + '</strong> aprobado. Le enviamos las ' +
+      'credenciales por correo.', 'exito');
   });
-  document.getElementById('rev-noconforme').addEventListener('click', function () {
-    $('#modal-revisar').modal('hide');
-    window.edocAvisar('Enviamos el correo de no conformidad con los puntos marcados.', 'advertencia');
+
+  $('rev-noconforme').addEventListener('click', function () {
+    if (!noConformes().length) {
+      window.edocAvisar('Marca primero qué bloque no es conforme. Si todo está bien, apruébalo.', 'error');
+      return;
+    }
+    var texto = $('rev-texto').value.trim();
+    if (texto.length < 15) {
+      $('rev-texto').classList.add('is-invalid');
+      $('rev-ayuda').textContent = 'Explica qué tiene que corregir. Un correo sin motivo hace que vuelvan a mandar lo mismo.';
+      $('rev-texto').focus();
+      return;
+    }
+    revisando.estado = 'noconforme';
+    revisando.motivo = texto;
+    window.jQuery('#modal-revisar').modal('hide');
+    pintar();
+    window.edocAvisar('Enviamos a <strong>' + revisando.empresa + '</strong> el correo de no ' +
+      'conformidad con ' + noConformes().length + ' punto(s) marcados.', 'advertencia');
   });
-})();
+
+  pintar();
+}());
 </script>
 </body>
 </html>

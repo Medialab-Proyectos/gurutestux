@@ -10,27 +10,68 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="administracion" data-pagina="admin-credenciales.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <!--
-    Decidido el 2026-09-07: se toma el modelo de Francia, OAuth con el flujo
-    client credentials, y no una misma credencial para toda la empresa. Antes
-    esta pantalla enseñaba las dos opciones enfrentadas para poder elegir; ya no
-    hay nada que elegir.
+    Rehecha el 2026-09-08 sobre la sesión con Kevin, que enseñó el portal de
+    Francia funcionando. Antes esta pantalla estaba montada sobre suposiciones
+    mías; ahora sigue lo que el modelo hace de verdad:
 
-    El encargo era «que sea súper sencillo de configurar, pero sin quitar lo
-    técnico». De ahí el reparto: arriba las aplicaciones, que es lo que el
-    cliente administra a diario y no pide saber nada; abajo cómo se conecta, con
-    las direcciones y un ejemplo que se copia tal cual para quien sí lo necesita.
+      · Por debajo hay un KeyCloak, un servidor de identidades por país. El
+        portal solo lo consume.
+      · El cliente crea «aplicaciones». Cada una lleva nombre y descripción, y
+        un conjunto de permisos elegidos de la lista maestra del país.
+      · De esa lista solo se ve lo que la empresa contrató: si contrató
+        emisión, no aparece recepción.
+      · El secreto se enseña una vez. Para volver a verlo hace falta un código
+        que llega por correo.
+
+    Tres mejoras salieron de esa sesión y están aplicadas:
+      1. Crear la aplicación es UN paso. En Francia son dos —creas y luego
+         generas el secreto aparte— y Kevin lo señaló como lo primero a cambiar.
+      2. Enlace a la documentación técnica desde la propia pantalla. Hoy se
+         pasa por correo.
+      3. Las direcciones esenciales aquí mismo, sin obligar a ir a la wiki.
   -->
-  <div class="edoc-titulo-barra"><div>
+  <div class="edoc-titulo-barra">
+    <div>
       <div class="edoc-miga"><span>Administración</span><span>Credenciales de consumo Servicio eDoc</span></div>
       <h1 class="edoc-titulo">Credenciales de consumo Servicio eDoc</h1>
-      <p class="edoc-subtitulo">Cada sistema que conectes al nuestro lleva su propia credencial. Así puedes
-      retirar una sin dejar sin servicio a las demás.</p>
-    </div></div>
+      <p class="edoc-subtitulo">Crea una aplicación por cada sistema que vaya a conectarse, dale solo los
+      permisos que necesita y pásale las claves a quien lo integre.</p>
+    </div>
+    <a class="btn btn-edoc-secundario btn-sm" href="https://wikiedoc.guru-soft.com/integraciones-y-servicios" target="_blank" rel="noopener"
+       title="Abre la wiki de eDoc en otra pestaña">
+      <span data-icono="libro"></span> Documentación técnica</a>
+  </div>
+
+  <!-- Quien crea las credenciales casi nunca es quien las usa. Esto vivía en
+       letra gris dentro de un panel plegado, y quien no es técnico no sabía qué
+       hacer con el identificador y el secreto. Aquí va a la vista, en pasos, y
+       con el mensaje para el técnico ya escrito, sin el secreto. -->
+  <div class="edoc-aviso edoc-aviso--info mb-3" id="entrega-tecnico">
+    <div><strong>¿Lo va a conectar otra persona de tu equipo?</strong> Así se lo pasas sin riesgo:
+      <ol class="mt-2 mb-2 pl-3">
+        <li>Crea la aplicación con los permisos que necesite.</li>
+        <li>Envíale el identificador de cliente. No es secreto.</li>
+        <li>Envíale el secreto por un canal privado —en persona, por teléfono o con un gestor de contraseñas—. Nunca por correo.</li>
+      </ol>
+      <button type="button" class="btn btn-edoc-terciario btn-sm" data-copiar-entrega>Copiar instrucciones para tu técnico</button>
+    </div>
+  </div>
 
   <section class="edoc-tablero mb-3">
     <div class="edoc-tablero__cabecera">
@@ -42,73 +83,36 @@
         <table class="edoc-tabla">
           <thead>
             <tr>
+              <th scope="col" class="col-acciones">Acciones</th>
               <th scope="col">Aplicación</th>
-              <th scope="col">Ambiente</th>
               <th scope="col">Identificador de cliente</th>
+              <th scope="col">Permisos</th>
               <th scope="col">Creada</th>
               <th scope="col">Último uso</th>
               <th scope="col">Estado</th>
-              <th scope="col" class="col-acciones">Acciones</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>ERP · SAP</td>
-              <td>Producción</td>
-              <td class="cifra">alnoor-erp-sap</td>
-              <td class="cifra">2026-03-02</td>
-              <td class="cifra">hace 6 minutos</td>
-              <td><span class="edoc-estado edoc-estado--exito">Activa</span></td>
-              <td class="col-acciones">
-                <div class="edoc-acciones-fila">
-                  <button class="edoc-accion" data-icono="llave" data-sin-destino
-                    title="Cambiar el secreto" aria-label="Cambiar el secreto de ERP · SAP"></button>
-                  <button class="edoc-accion edoc-accion--gris" data-icono="limpiar" data-sin-destino
-                    title="Retirar la aplicación" aria-label="Retirar ERP · SAP"></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>ERP · pruebas</td>
-              <td>QA</td>
-              <td class="cifra">alnoor-erp-qa</td>
-              <td class="cifra">2026-05-19</td>
-              <td class="cifra">ayer</td>
-              <td><span class="edoc-estado edoc-estado--exito">Activa</span></td>
-              <td class="col-acciones">
-                <div class="edoc-acciones-fila">
-                  <button class="edoc-accion" data-icono="llave" data-sin-destino
-                    title="Cambiar el secreto" aria-label="Cambiar el secreto de ERP · pruebas"></button>
-                  <button class="edoc-accion edoc-accion--gris" data-icono="limpiar" data-sin-destino
-                    title="Retirar la aplicación" aria-label="Retirar ERP · pruebas"></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Portal de compras</td>
-              <td>Producción</td>
-              <td class="cifra">alnoor-compras</td>
-              <td class="cifra">2025-11-08</td>
-              <td class="cifra">2026-01-30</td>
-              <td><span class="edoc-estado edoc-estado--neutro">Retirada</span></td>
-              <td class="col-acciones"><span class="edoc-secundario">—</span></td>
-            </tr>
-          </tbody>
+          <tbody id="cuerpo-apps"></tbody>
         </table>
       </div>
 
       <div class="edoc-aviso edoc-aviso--info mt-3">
-        <div>Retirar una aplicación le corta el acceso al momento y no se puede deshacer. Las demás siguen
-        funcionando.</div>
+        <div>Se espera una aplicación por sistema: una para el ERP que emite, otra para el que recibe.
+        No es obligatorio —puedes meterlo todo en una—, pero separarlas deja ver de dónde viene cada
+        llamada y te deja retirar una sin dejar sin servicio a las demás.</div>
       </div>
     </div>
   </section>
 
-  <section class="edoc-tablero">
+  <section class="edoc-tablero edoc-tablero--plegable">
     <div class="edoc-tablero__cabecera">
-      <h2 class="edoc-tablero__titulo">Cómo se conecta</h2>
-      <span class="edoc-etiqueta-mvp edoc-etiqueta-mvp--posterior">OAuth 2.0 · client credentials</span>
+      <h2 class="edoc-tablero__titulo">
+        <button class="edoc-plegar" type="button" data-toggle="collapse"
+                data-target="#panel-conecta" aria-expanded="false" aria-controls="panel-conecta">
+          <svg class="edoc-plegar__flecha" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>Cómo se conecta</button>
+      </h2>
     </div>
+    <div class="collapse" id="panel-conecta">
     <div class="edoc-tablero__cuerpo">
       <p>Tu sistema no manda el secreto en cada llamada. Lo cambia una vez por un <strong>token</strong> que
       caduca, y ese token es el que viaja. Si algún día se filtra, deja de valer solo.</p>
@@ -116,13 +120,14 @@
       <ul class="linea-tiempo mb-4">
         <li>
           <div class="linea-tiempo__titulo">1 · Pide un token</div>
-          <div class="linea-tiempo__detalle">Con el identificador y el secreto de la aplicación. Te devolvemos un
-          token válido durante una hora.</div>
+          <div class="linea-tiempo__detalle">Con el identificador y el secreto de la aplicación, contra el
+          servicio de autenticación.</div>
         </li>
         <li>
           <div class="linea-tiempo__titulo">2 · Llama con el token</div>
           <div class="linea-tiempo__detalle">Va en la cabecera <span class="cifra">Authorization</span> de cada
-          petición, como <span class="cifra">Bearer</span>.</div>
+          petición, como <span class="cifra">Bearer</span>. Solo funcionará con los permisos que le diste a
+          esa aplicación.</div>
         </li>
         <li>
           <div class="linea-tiempo__titulo">3 · Pide otro cuando caduque</div>
@@ -131,21 +136,23 @@
         </li>
       </ul>
 
-      <div class="edoc-etiqueta mb-2">Direcciones</div>
-      <div class="edoc-tabla-envoltura mb-4">
+      <div class="edoc-etiqueta mb-2">Las direcciones que vas a necesitar</div>
+      <div class="edoc-tabla-envoltura mb-3">
         <table class="edoc-tabla">
-          <thead><tr><th scope="col">Para qué</th><th scope="col">Dirección</th></tr></thead>
+          <thead><tr><th scope="col">Servicio</th><th scope="col">Dirección</th></tr></thead>
           <tbody>
-            <tr><td>Pedir el token</td><td class="cifra">POST /oauth2/token</td></tr>
-            <tr><td>Consumir el servicio</td><td class="cifra">https://api.edoc.ae/v1/</td></tr>
-            <tr><td>Tipo de concesión</td><td class="cifra">grant_type=client_credentials</td></tr>
-            <tr><td>Alcance</td><td class="cifra">scope=documentos.leer documentos.escribir</td></tr>
+            <tr><td>Autenticación · pedir el token</td><td class="cifra">POST /auth/realms/ae/protocol/openid-connect/token</td></tr>
+            <tr><td>Emisión</td><td class="cifra">/api/ae/emision/v1/</td></tr>
+            <tr><td>Recepción</td><td class="cifra">/api/ae/recepcion/v1/</td></tr>
           </tbody>
         </table>
       </div>
+      <p class="edoc-secundario mb-4">Estas son las tres esenciales, para no tener que salir de aquí. El
+      resto de los servicios, los campos de cada uno y los ejemplos completos están en la
+      <a href="https://wikiedoc.guru-soft.com/integraciones-y-servicios/rest" target="_blank" rel="noopener">documentación técnica</a>.</p>
 
       <div class="edoc-etiqueta mb-2">Ejemplo, para copiar tal cual</div>
-      <pre class="edoc-codigo"><code>curl -X POST https://api.edoc.ae/oauth2/token \
+      <pre class="edoc-codigo"><code>curl -X POST https://auth.edoc.ae/auth/realms/ae/protocol/openid-connect/token \
   -d "grant_type=client_credentials" \
   -d "client_id=alnoor-erp-sap" \
   -d "client_secret=EL_SECRETO_DE_TU_APLICACION"
@@ -154,19 +161,122 @@
 { "access_token": "eyJhbGciOi...", "token_type": "Bearer", "expires_in": 3600 }
 
 # Y a partir de ahí, en cada llamada
-curl https://api.edoc.ae/v1/documentos/emitidos \
+curl https://api.edoc.ae/api/ae/emision/v1/documentos \
   -H "Authorization: Bearer eyJhbGciOi..."</code></pre>
 
-      <p class="edoc-secundario mb-0">¿Lo configura otra persona del equipo técnico? Crea la aplicación, cópiale el
-      identificador y mándale el secreto por un canal privado. Nunca por correo.</p>
+      <!-- Pedido en la sesión técnica del 8: «aquí será muy práctico tener un
+           hipervínculo, un enlace que me lleve directamente a la wiki». Hoy el
+           enlace llega por correo o por otro lado, y el desarrollador tiene que
+           salir a buscarlo. -->
+      <div class="edoc-aviso edoc-aviso--info mb-0">
+        <div><strong>El detalle de cada llamada está en la wiki.</strong> Cuerpos, errores, códigos y
+        ejemplos completos.
+        <a href="https://wikiedoc.guru-soft.com/integraciones-y-servicios/rest" target="_blank" rel="noopener"><strong>Abrir la wiki de integración</strong></a>.</div>
+      </div>
     </div>
+  </div>
   </section>
 
+  <!-- Lo que se puede hacer por API en la primera entrega, tal como quedó en la
+       hoja «APIs» del documento de MVP. Va aquí porque es la pantalla donde el
+       cliente pide las claves: si va a integrar, esto es lo que va a encontrar
+       al otro lado. Lo que no está en esta lista, no está. -->
+  <section class="edoc-tablero edoc-tablero--plegable">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">
+        <button class="edoc-plegar" type="button" data-toggle="collapse"
+                data-target="#panel-api" aria-expanded="false" aria-controls="panel-api">
+          <svg class="edoc-plegar__flecha" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>Qué se puede hacer por API</button>
+      </h2>
+    </div>
+    <div class="collapse" id="panel-api">
+    <div class="edoc-tablero__cuerpo">
+      <p class="mb-3">Lo que tu sistema puede hacer hoy con la API de eDoc.</p>
+
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="edoc-etiqueta mb-2">Emisión</div>
+          <div class="edoc-tabla-envoltura mb-3">
+            <table class="edoc-tabla">
+              <tbody>
+                <tr><th scope="row">Enviar documentos al gobierno y al receptor</th>
+                    <td>Factura, nota de crédito y <strong>los demás tipos que indique la ley</strong>.
+                    En Emiratos hay más que factura y nota: no comerciales, de exportación, autofactura
+                    y autonota.</td></tr>
+                <tr><th scope="row">El resumen al gobierno, solo</th>
+                    <td>No hay que pedirlo ni programarlo: <strong>sale con cada envío</strong>.</td></tr>
+                <tr><th scope="row">Recibir los estados de lo que emitiste</th>
+                    <td>Del receptor —aprobado o rechazado por quien recibe la factura— y de la
+                    autoridad, por separado. Son dos respuestas distintas, no una.</td></tr>
+                <tr><th scope="row">Consultar un documento emitido</th>
+                    <td>Por su número o por su identificador de seguimiento.</td></tr>
+                <tr><th scope="row">Consultar un documento emitido</th>
+                    <td>Por su número o por su identificador de seguimiento.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="edoc-etiqueta mb-2">Recepción</div>
+          <div class="edoc-tabla-envoltura mb-3">
+            <table class="edoc-tabla">
+              <tbody>
+                <tr><th scope="row">Recibir documentos</th>
+                    <td>Lo que otros te emiten, tal como llega.</td></tr>
+                <tr><th scope="row">La lista de lo que no has visto</th>
+                    <td><strong>Solo los encabezados</strong>, para saber qué hay sin traerlo todo.</td></tr>
+                <tr><th scope="row">Marcar como visto</th>
+                    <td>Uno o varios de una vez.</td></tr>
+                <tr><th scope="row">La lista de lo que no has visto</th>
+                    <td><strong>Solo los encabezados</strong>, para saber qué hay sin traerlo todo.</td></tr>
+                <tr><th scope="row">Marcar como visto</th>
+                    <td>Uno o varios de una vez.</td></tr>
+                <tr><th scope="row">Aprobar</th>
+                    <td><span class="cifra">MLS AP</span></td></tr>
+                <tr><th scope="row">Rechazar</th>
+                    <td><span class="cifra">MLS RE</span> · con motivo tipificado</td></tr>
+                <tr><th scope="row">Acusar recibo</th>
+                    <td><span class="cifra">MLS AB</span> · dice que llegó, <strong>no que se
+                    acepta</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <p class="edoc-secundario mb-0">El detalle de cada llamada —direcciones, cuerpos y errores— va en
+      la wiki, no aquí. Esta pantalla dice <em>qué</em> se puede hacer; la wiki dice <em>cómo</em>.</p>
+    </div>
+  </div>
+  </section>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Son dos modelos distintos y hay que elegir.</strong> En el portal de Bolivia esta pantalla es
+    un título y <em>un solo botón</em>: «Solicitar credenciales», bajo el texto «aquí podrás descargar las
+    credenciales para conectarte a los servicios API REST y WS SOAP». Una credencial por empresa, que se
+    pide y se baja. En Francia son varias aplicaciones con permisos por separado, que es lo maquetado
+    aquí. No es una diferencia de aspecto: es otro modelo de seguridad.
+  </div>
   <div class="nota nota--decidido">
-    <span class="nota__sello">Decidido · 2026-09-07</span>
-    <strong>Se toma el modelo de Francia, con OAuth.</strong> No una misma credencial para toda la empresa: una por
-    integración, cada una con su ciclo de vida. Lo que hay que trabajar es que configurarlo sea sencillo, sin
-    esconderle lo técnico a quien lo necesita.
+    <span class="nota__sello">De la sesión con la dueña funcional</span>
+    <strong>En Bolivia, descargar las credenciales ya pide el código.</strong> «Te mando un código y
+    este código lo colocamos aquí para que se pueda descargar el zipeado y las referencias». Es uno de
+    los dos únicos sitios donde Bolivia pide el segundo factor —el otro es el acceso—, así que pedirlo
+    aquí no es una invención nuestra: ya se hace.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corrige el contexto</span>
+    <strong>La pantalla de Bolivia ya no da error 500.</strong> El documento de contexto la anota como
+    rota, con una traza que exponía rutas del servidor. Al entrar hoy al portal responde y funciona.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>El modelo está sin autorizar.</strong> Arquitectura pidió su visto bueno antes de cerrar
+    estos requisitos. Lo maquetado sigue el portal de Francia tal como funciona hoy —KeyCloak por país,
+    aplicaciones con permisos, secreto de un solo uso— y aplica las tres mejoras que salieron de la
+    sesión técnica. Las direcciones son de ejemplo: las reales salen de la wiki.
   </div>
   <div class="nota nota--fuera">
     <span class="nota__sello">Fuera del MVP</span>
@@ -177,33 +287,85 @@ curl https://api.edoc.ae/v1/documentos/emitidos \
 
   <!-- ===================== Crear una aplicación ===================== -->
   <div class="modal fade" id="modal-crear-app" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Crear una aplicación</h5>
+          <h5 class="modal-title" id="crear-titulo">Crear una aplicación</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
         </div>
 
         <div class="modal-body" id="app-paso-datos">
-          <div class="mb-3">
-            <label class="edoc-etiqueta" for="app-nombre">Nombre<span class="obligatorio">*</span></label>
-            <input class="form-control" id="app-nombre" placeholder="ERP · SAP" required>
-            <div class="edoc-secundario mt-1">Para reconocerla en la lista. Ponle el nombre del sistema que se va a
-            conectar.</div>
+          <!-- Crear credenciales es uno de los procesos críticos que el
+               documento D10 obliga a confirmar con un segundo factor. -->
+          <div class="edoc-aviso edoc-aviso--info mb-3">
+            <div>Crear una aplicación es una acción sensible: antes de generar las claves te pediremos el
+            código que te mandamos por correo.</div>
           </div>
-          <div class="mb-1">
-            <label class="edoc-etiqueta" for="app-ambiente">Ambiente<span class="obligatorio">*</span></label>
-            <select class="form-control" id="app-ambiente">
-              <option>QA · para probar</option>
-              <option>Producción · documentos reales</option>
-            </select>
+          <div class="row rejilla">
+            <div class="col-12 col-md-5">
+              <label class="edoc-etiqueta" for="app-nombre">Nombre<span class="obligatorio">*</span></label>
+              <input class="form-control" id="app-nombre" placeholder="ERP · SAP" maxlength="40" required>
+              <div class="edoc-ayuda">El sistema que se va a conectar. Así lo reconoces en la lista.</div>
+            </div>
+            <div class="col-12 col-md-7">
+              <label class="edoc-etiqueta" for="app-desc">Para qué es<span class="obligatorio">*</span></label>
+              <input class="form-control" id="app-desc" placeholder="Emisión desde el ERP de la planta de Jebel Ali"
+                minlength="10" maxlength="120" required>
+              <div class="edoc-ayuda">Al menos diez caracteres. Dentro de un año esto es lo único que dirá
+              para qué servía.</div>
+            </div>
           </div>
+
+          <div class="edoc-separador"></div>
+
+          <div class="edoc-etiqueta mb-1">Qué podrá hacer<span class="obligatorio">*</span></div>
+          <p class="edoc-secundario mb-2">Marca solo lo que ese sistema necesita. Si mañana necesita más,
+          se le añade. Aquí aparecen los servicios que tu empresa tiene contratados.</p>
+
+          <!-- Dos modos, como en Francia: el que va rápido marca el servicio
+               entero; el que necesita afinar entra al detalle. La diferencia es
+               que aquí no son dos pestañas separadas —había que ir y volver para
+               saber qué llevabas marcado— sino un solo bloque que se despliega. -->
+          <div class="modo-permisos">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="modo" id="modo-todo" checked>
+              <label class="form-check-label" for="modo-todo">
+                <strong>El servicio completo</strong>
+                <div class="edoc-secundario">Marca un servicio y la aplicación podrá hacer todo lo que
+                incluye. Es lo normal.</div>
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="modo" id="modo-detalle">
+              <label class="form-check-label" for="modo-detalle">
+                <strong>Permiso a permiso</strong>
+                <div class="edoc-secundario">Para cuando un sistema solo debe poder hacer una cosa
+                concreta.</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="row rejilla" id="permisos"></div>
+          <div class="edoc-aviso edoc-aviso--error mt-3" id="app-error" hidden>
+            <div>Falta algo por rellenar. Revisa lo que está marcado en rojo.</div>
+          </div>
+        </div>
+
+        <div class="modal-body" id="app-paso-codigo" hidden>
+          <p class="mb-3">Te mandamos un código de seis cifras a
+          <strong>f.almarzooqi@alnoor.ae</strong>. Escríbelo para generar las claves.</p>
+          <label class="edoc-etiqueta" for="crear-codigo">Código<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="crear-codigo" inputmode="numeric" maxlength="6"
+            autocomplete="one-time-code" placeholder="000000"
+            style="max-width:190px;letter-spacing:.32em">
+          <div class="edoc-ayuda">En la maqueta vale cualquier código de seis cifras.</div>
+          <div class="edoc-reloj" data-cuenta-atras="300" role="status"></div>
         </div>
 
         <div class="modal-body" id="app-paso-secreto" hidden>
           <div class="edoc-aviso edoc-aviso--advertencia mb-3">
-            <div><strong>Copia el secreto ahora.</strong> Es la única vez que se enseña. No lo guardamos en claro,
-            así que si lo pierdes hay que generar uno nuevo.</div>
+            <div><strong>Copia el secreto ahora.</strong> Es la única vez que se enseña sin pedirte nada.
+            Para volver a verlo tendrás que confirmar con otro código.</div>
           </div>
           <div class="edoc-etiqueta mb-1">Identificador de cliente</div>
           <pre class="edoc-codigo mb-3"><code id="app-id"></code></pre>
@@ -213,7 +375,37 @@ curl https://api.edoc.ae/v1/documentos/emitidos \
 
         <div class="modal-footer">
           <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal" id="app-cancelar">Cancelar</button>
-          <button type="button" class="btn btn-edoc-primario" id="app-crear">Crear</button>
+          <button type="button" class="btn btn-edoc-primario" id="app-crear">Continuar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Ver el secreto otra vez ===================== -->
+  <div class="modal fade" id="modal-ver" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><span id="ver-titulo">Ver el secreto de</span>
+            <span id="ver-app" style="opacity:.75"></span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body" id="ver-paso-codigo">
+          <p class="mb-3">Te mandamos un código de seis cifras a
+          <strong>f.almarzooqi@alnoor.ae</strong>. Escríbelo aquí para ver el secreto.</p>
+          <label class="edoc-etiqueta" for="ver-codigo">Código<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="ver-codigo" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000"
+            style="max-width:190px;letter-spacing:.32em">
+          <div class="edoc-ayuda">En la maqueta vale cualquier código de seis cifras.</div>
+          <div class="edoc-reloj" data-cuenta-atras="300" role="status"></div>
+        </div>
+        <div class="modal-body" id="ver-paso-secreto" hidden>
+          <div class="edoc-etiqueta mb-1">Secreto</div>
+          <pre class="edoc-codigo mb-0"><code id="ver-secreto"></code></pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal" id="ver-cancelar">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" id="ver-confirmar">Ver el secreto</button>
         </div>
       </div>
     </div>
@@ -224,46 +416,305 @@ curl https://api.edoc.ae/v1/documentos/emitidos \
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script>
 (function () {
   'use strict';
-  var modal = window.jQuery('#modal-crear-app');
+  var $ = window.jQuery;
+
+  /* La lista maestra de servicios la configura eDoc por país al lanzar el
+     producto; el cliente no la toca. De ella solo se le enseña lo que su
+     empresa contrató: aquí, emisión y recepción. */
+  /* Los permisos y sus códigos son los del portal de Francia, tal cual salen en
+     pantalla. Los que tenía antes —«Enviar documentos», «Consultar emitidos»—
+     me los había inventado y no existen. */
+  var PERMISOS = [
+    { grupo: 'Emisión', clave: 'iss', items: [
+      { id: 'p-iss-1', rotulo: 'Enviar facturas',              cod: 'iss.invoice.send' },
+      { id: 'p-iss-2', rotulo: 'Enviar evento',                cod: 'iss.event.send' },
+      { id: 'p-iss-3', rotulo: 'Enviar archivo',               cod: 'iss.file.send' },
+      { id: 'p-iss-4', rotulo: 'Búsqueda específica de factura', cod: 'iss.invoice.search.specific' },
+      { id: 'p-iss-5', rotulo: 'Obtener archivo',              cod: 'iss.file.get' }
+    ] },
+    { grupo: 'Recepción', clave: 'rec', items: [
+      { id: 'p-rec-1', rotulo: 'Enviar evento',                cod: 'rec.event.send' },
+      { id: 'p-rec-2', rotulo: 'Búsqueda específica de factura', cod: 'rec.invoice.search.specific' },
+      { id: 'p-rec-3', rotulo: 'Obtener archivo',              cod: 'rec.file.get' }
+    ] }
+  ];
+
+  var APPS = [
+    { nombre: 'ERP · SAP', desc: 'Emisión desde el ERP de la planta de Jebel Ali',
+      id: 'alnoor-erp-sap', permisos: ['Emisión · completo'],
+      creada: '2026-03-02', uso: 'hace 6 minutos', estado: 'activa' },
+    { nombre: 'Portal de compras', desc: 'Consulta y respuesta de las facturas de proveedores',
+      id: 'alnoor-compras', permisos: ['Recepción · completo'],
+      creada: '2026-05-19', uso: 'ayer', estado: 'activa' },
+    { nombre: 'Contabilidad', desc: 'Descarga mensual de XML para el cierre contable',
+      id: 'alnoor-conta', permisos: ['Obtener archivo', 'Búsqueda específica de factura'],
+      creada: '2025-11-08', uso: '2026-01-30', estado: 'retirada' }
+  ];
+
+  function ico(n) { return window.edocIcono(n); }
+
+  function pintar() {
+    document.getElementById('cuerpo-apps').innerHTML = APPS.map(function (a, i) {
+      var viva = a.estado === 'activa';
+      var acciones = viva
+        ? '<div class="edoc-acciones-fila">' +
+            '<button class="edoc-accion" data-ver="' + i + '" title="Ver el secreto" ' +
+              'aria-label="Ver el secreto de ' + a.nombre + '">' + ico('ver') + '</button>' +
+            '<button class="edoc-accion" data-regenerar="' + i + '" title="Generar un secreto nuevo" ' +
+              'aria-label="Generar un secreto nuevo para ' + a.nombre + '">' + ico('llave') + '</button>' +
+            '<button class="edoc-accion edoc-accion--gris" data-retirar="' + i + '" title="Retirar la aplicación" ' +
+              'aria-label="Retirar ' + a.nombre + '">' + ico('limpiar') + '</button>' +
+          '</div>'
+        : '<span class="edoc-secundario">—</span>';
+      return '<tr>' +
+        '<td class="col-acciones">' + acciones + '</td>' +
+        '<td><strong>' + a.nombre + '</strong>' +
+          '<div class="edoc-secundario">' + a.desc + '</div></td>' +
+        '<td class="cifra">' + a.id + '</td>' +
+        '<td>' + a.permisos.map(function (p) {
+            return '<span class="edoc-permiso">' + p + '</span>'; }).join('') + '</td>' +
+        '<td class="cifra">' + a.creada + '</td>' +
+        '<td class="cifra">' + a.uso + '</td>' +
+        '<td><span class="edoc-estado edoc-estado--' + (viva ? 'exito">Activa' : 'neutro">Retirada') +
+          '</span></td>' +
+      '</tr>';
+    }).join('');
+    window.edocPrepararTablas(document.getElementById('cuerpo-apps').closest('table').parentNode);
+  }
+
+  /* --- Crear ------------------------------------------------------------- */
+  document.getElementById('permisos').innerHTML = PERMISOS.map(function (g) {
+    return '<div class="col-12 col-md-6"><div class="edoc-permisos-grupo">' +
+      '<div class="form-check form-check--grupo">' +
+        '<input class="form-check-input" type="checkbox" id="g-' + g.clave + '" data-grupo="' + g.clave + '">' +
+        '<label class="form-check-label" for="g-' + g.clave + '">' +
+          '<strong>' + g.grupo + '</strong>' +
+          '<span class="edoc-permiso-cod">' + g.clave + '.*</span>' +
+          '<div class="edoc-secundario">' + g.items.length + ' permisos</div>' +
+        '</label>' +
+      '</div>' +
+      '<div class="edoc-permisos-detalle" data-detalle="' + g.clave + '">' +
+        g.items.map(function (it) {
+          return '<div class="form-check mb-2">' +
+            '<input class="form-check-input" type="checkbox" id="' + it.id + '" ' +
+              'data-permiso="' + it.rotulo + '" data-cod="' + it.cod + '" data-de="' + g.clave + '">' +
+            '<label class="form-check-label" for="' + it.id + '">' + it.rotulo +
+            '<span class="edoc-permiso-cod">' + it.cod + '</span></label></div>';
+        }).join('') +
+      '</div></div></div>';
+  }).join('');
+
+  /* El detalle solo se enseña en el modo fino; en el rápido estorba. */
+  function modo() {
+    var fino = document.getElementById('modo-detalle').checked;
+    document.getElementById('permisos').classList.toggle('con-detalle', fino);
+    if (!fino) {
+      document.querySelectorAll('[data-cod]').forEach(function (c) { c.checked = false; });
+    } else {
+      document.querySelectorAll('[data-grupo]').forEach(function (g) { g.checked = false; });
+    }
+  }
+  document.querySelectorAll('[name="modo"]').forEach(function (r) {
+    r.addEventListener('change', modo);
+  });
+  modo();
+
+  var modalCrear = $('#modal-crear-app');
   var datos = document.getElementById('app-paso-datos');
   var secreto = document.getElementById('app-paso-secreto');
   var crear = document.getElementById('app-crear');
   var cancelar = document.getElementById('app-cancelar');
+  var error = document.getElementById('app-error');
 
-  function volverAlPrincipio() {
-    datos.hidden = false; secreto.hidden = true;
-    crear.textContent = 'Crear'; cancelar.textContent = 'Cancelar';
+  var codigo = document.getElementById('app-paso-codigo');
+
+  modalCrear.on('hidden.bs.modal', function () {
+    datos.hidden = false; codigo.hidden = true; secreto.hidden = true; error.hidden = true;
+    document.getElementById('crear-codigo').value = '';
+    document.getElementById('crear-codigo').classList.remove('is-invalid');
+    crear.textContent = 'Continuar'; cancelar.textContent = 'Cancelar';
+    document.getElementById('crear-titulo').textContent = 'Crear una aplicación';
     document.getElementById('app-nombre').value = '';
-  }
-  modal.on('hidden.bs.modal', volverAlPrincipio);
+    document.getElementById('app-desc').value = '';
+    document.querySelectorAll('[data-permiso]').forEach(function (c) { c.checked = false; });
+    document.querySelectorAll('#app-paso-datos .is-invalid').forEach(function (c) {
+      c.classList.remove('is-invalid'); });
+  });
 
-  function apodo(texto) {
-    return 'alnoor-' + (texto.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
+  var pendiente = null;
+
+  function apodo(t) {
+    return 'alnoor-' + (t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
   }
   function cadena(n) {
-    var abc = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789';
-    var t = '';
+    var abc = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789', t = '';
     for (var i = 0; i < n; i++) t += abc.charAt(Math.floor(Math.random() * abc.length));
     return t;
   }
 
   crear.addEventListener('click', function () {
-    /* Segundo paso: el secreto se enseña una sola vez. Es el patrón correcto y
-       hay que aplicarlo desde el principio, no dejarlo para después. */
-    if (!secreto.hidden) { modal.modal('hide'); return; }
+    if (!secreto.hidden) { modalCrear.modal('hide'); return; }
+
+    /* Segundo tramo: el código por correo. Crear credenciales es uno de los
+       procesos críticos que el documento D10 obliga a confirmar con un segundo
+       factor, igual que rotar el secreto. */
+    if (!codigo.hidden) {
+      var c = document.getElementById('crear-codigo');
+      if (!/^\d{6}$/.test(c.value.trim())) { c.classList.add('is-invalid'); c.focus(); return; }
+      c.classList.remove('is-invalid');
+      APPS.unshift(pendiente);
+      pintar();
+      document.getElementById('app-id').textContent = pendiente.id;
+      document.getElementById('app-secreto').textContent = cadena(44);
+      codigo.hidden = true; secreto.hidden = false;
+      document.getElementById('crear-titulo').textContent = 'Guarda estas claves';
+      crear.textContent = 'Ya las copié'; cancelar.textContent = 'Cerrar';
+      return;
+    }
+
+    /* Un solo paso: nombre, para qué es y permisos, y al guardar ya salen las
+       claves. En Francia son dos acciones —crear, y luego generar el secreto
+       aparte— y fue lo primero que se señaló para mejorar. */
     var nombre = document.getElementById('app-nombre');
-    if (!nombre.value.trim()) { nombre.focus(); return; }
-    document.getElementById('app-id').textContent = apodo(nombre.value);
-    document.getElementById('app-secreto').textContent = cadena(44);
-    datos.hidden = true; secreto.hidden = false;
-    crear.textContent = 'Ya lo copié'; cancelar.textContent = 'Cerrar';
+    var desc = document.getElementById('app-desc');
+    var fino = document.getElementById('modo-detalle').checked;
+    var marcados = fino
+      ? [].slice.call(document.querySelectorAll('[data-cod]:checked'))
+      : [].slice.call(document.querySelectorAll('[data-grupo]:checked'));
+    var falla = false;
+    [[nombre, nombre.value.trim().length > 0], [desc, desc.value.trim().length >= 10]]
+      .forEach(function (par) {
+        par[0].classList.toggle('is-invalid', !par[1]);
+        if (!par[1]) falla = true;
+      });
+    if (!marcados.length) falla = true;
+    error.hidden = !falla;
+    if (falla) { (nombre.classList.contains('is-invalid') ? nombre : desc).focus(); return; }
+
+    /* La aplicación queda en espera hasta que se confirme el código: no se
+       crea nada hasta el segundo factor. */
+    pendiente = {
+      nombre: nombre.value.trim(), desc: desc.value.trim(), id: apodo(nombre.value),
+      permisos: marcados.map(function (c) {
+        return fino ? c.dataset.permiso : PERMISOS.filter(function (g) {
+          return g.clave === c.dataset.grupo; })[0].grupo + ' · completo';
+      }),
+      creada: new Date().toISOString().slice(0, 10), uso: '—', estado: 'activa'
+    };
+    datos.hidden = true; codigo.hidden = false; error.hidden = true;
+    document.getElementById('crear-titulo').textContent = 'Confirma que eres tú';
+    crear.textContent = 'Generar las claves';
+    window.edocAvisar('Te mandamos el código a <strong>f.almarzooqi@alnoor.ae</strong>.');
+    document.getElementById('crear-codigo').focus();
   });
+
+  /* --- Ver el secreto otra vez, con código por correo --------------------- */
+  var modalVer = $('#modal-ver');
+  var verCodigo = document.getElementById('ver-paso-codigo');
+  var verSecreto = document.getElementById('ver-paso-secreto');
+  var verConfirmar = document.getElementById('ver-confirmar');
+
+  var rotando = false;
+
+  modalVer.on('hidden.bs.modal', function () {
+    verCodigo.hidden = false; verSecreto.hidden = true; rotando = false;
+    document.getElementById('ver-titulo').textContent = 'Ver el secreto de';
+    verConfirmar.textContent = 'Ver el secreto';
+    document.getElementById('ver-codigo').value = '';
+    document.getElementById('ver-codigo').classList.remove('is-invalid');
+  });
+
+  verConfirmar.addEventListener('click', function () {
+    if (!verSecreto.hidden) { modalVer.modal('hide'); return; }
+    var c = document.getElementById('ver-codigo');
+    var vale = /^\d{6}$/.test(c.value.trim());
+    c.classList.toggle('is-invalid', !vale);
+    if (!vale) { c.focus(); return; }
+    document.getElementById('ver-secreto').textContent = cadena(44);
+    verCodigo.hidden = true; verSecreto.hidden = false;
+    verConfirmar.textContent = 'Cerrar';
+    if (rotando) {
+      window.edocAvisar('Secreto nuevo generado. El anterior deja de valer ahora mismo: ' +
+        'acuérdate de cambiarlo en el sistema que lo usa.', 'exito');
+    }
+  });
+
+  /* --- Acciones de fila --------------------------------------------------- */
+  document.addEventListener('click', function (e) {
+    var v = e.target.closest('[data-ver]');
+    var r = e.target.closest('[data-regenerar]');
+    var q = e.target.closest('[data-retirar]');
+    if (v) {
+      document.getElementById('ver-app').textContent = APPS[+v.dataset.ver].nombre;
+      window.edocAvisar('Te mandamos el código a <strong>f.almarzooqi@alnoor.ae</strong>.');
+      modalVer.modal('show');
+    }
+    if (r) {
+      /* Rotar el secreto es el otro proceso crítico del D10: se confirma con el
+         mismo diálogo del código que se usa para volver a verlo. */
+      var app = APPS[+r.dataset.regenerar];
+      document.getElementById('ver-app').textContent = app.nombre;
+      document.getElementById('ver-titulo').textContent = 'Generar un secreto nuevo para';
+      verConfirmar.textContent = 'Generar el secreto';
+      rotando = true;
+      window.edocAvisar('Te mandamos el código a <strong>f.almarzooqi@alnoor.ae</strong>.');
+      modalVer.modal('show');
+    }
+    if (q) {
+      var a = APPS[+q.dataset.retirar];
+      a.estado = 'retirada';
+      pintar();
+      window.edocAvisar('<strong>' + a.nombre + '</strong> queda retirada. Las demás siguen funcionando.');
+    }
+  });
+
+  pintar();
 })();
+</script>
+<script>
+(function () {
+  'use strict';
+  /* El mensaje para el técnico, ya escrito y sin el secreto, que va aparte. */
+  var WIKI = 'https://wikiedoc.guru-soft.com/integraciones-y-servicios/rest';
+  var TEXTO = {
+    ES: 'Para conectar nuestro sistema con eDoc:\n' +
+        '1. Te paso el identificador de cliente de la aplicación. No es secreto.\n' +
+        '2. El secreto te lo doy aparte, por un canal privado. Nunca por correo.\n' +
+        '3. La documentación técnica está aquí: ' + WIKI,
+    EN: 'To connect our system to eDoc:\n' +
+        '1. I will send you the client ID of the application. It is not secret.\n' +
+        '2. I will give you the secret separately, through a private channel. Never by email.\n' +
+        '3. The technical documentation is here: ' + WIKI
+  };
+  var HECHO = {
+    ES: 'Instrucciones copiadas. Pégalas en un mensaje a tu técnico; el secreto va aparte.',
+    EN: 'Instructions copied. Paste them into a message to your technician; the secret goes separately.'
+  };
+  function idioma() { return (window.edocIdioma && window.edocIdioma() !== 'ES') ? 'EN' : 'ES'; }
+  function copiar(texto) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(texto);
+    var t = document.createElement('textarea');
+    t.value = texto; t.setAttribute('readonly', '');
+    t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); } finally { t.remove(); }
+    return Promise.resolve();
+  }
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-copiar-entrega]')) return;
+    var i = idioma();
+    copiar(TEXTO[i]).then(function () {
+      if (window.edocAvisar) window.edocAvisar(HECHO[i], 'exito');
+    });
+  });
+}());
 </script>
 </body>
 </html>

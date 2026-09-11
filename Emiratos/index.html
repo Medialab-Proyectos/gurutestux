@@ -10,6 +10,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body>
 <div class="edoc-acceso">
@@ -43,17 +54,20 @@
           <form id="forma-acceso" novalidate>
             <div class="mb-3">
               <label class="edoc-etiqueta" for="usuario">Usuario<span class="obligatorio">*</span></label>
-              <input class="form-control" id="usuario" value="fatima.almarzooqi" autocomplete="username" required>
+              <input class="form-control" id="usuario" autocomplete="username" placeholder="Tu usuario" required>
+              <div class="invalid-feedback edoc-error-campo" id="usuario-error" hidden>Escribe tu usuario.</div>
             </div>
             <div class="mb-3">
               <label class="edoc-etiqueta" for="clave">Contraseña<span class="obligatorio">*</span></label>
-              <input type="password" class="form-control" id="clave" value="demostracion" autocomplete="current-password" required>
+              <input type="password" class="form-control" id="clave" autocomplete="current-password" placeholder="Tu contraseña" required>
+              <div class="invalid-feedback edoc-error-campo" id="clave-error" hidden>Escribe tu contraseña.</div>
             </div>
             <div class="mb-4">
               <label class="edoc-etiqueta">Verificación de seguridad<span class="obligatorio">*</span></label>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="robot" checked>
+                <input class="form-check-input" type="checkbox" id="robot">
                 <label class="form-check-label" for="robot">No soy un robot</label>
+                <div class="invalid-feedback edoc-error-campo" id="robot-error" hidden>Marca la verificación de seguridad.</div>
               </div>
             </div>
 
@@ -67,7 +81,7 @@
               tenemos.
             </div>
             <div class="edoc-acceso__ayuda">
-              <a href="#" id="olvide">¿Olvidaste tu contraseña?</a>
+              <a href="admin-recuperar.html" id="olvide">¿Olvidaste tu contraseña?</a>
             </div>
 
             <div class="edoc-acceso__otros">
@@ -96,9 +110,9 @@
             </div>
 
             <div class="edoc-legal">
-              <a href="#" data-legal="privacidad">Aviso de privacidad</a>
+              <a href="legales.html" data-legal="privacidad">Aviso de privacidad</a>
               <span>·</span>
-              <a href="#" data-legal="condiciones">Términos y condiciones</a>
+              <a href="legales.html" data-legal="condiciones">Términos y condiciones</a>
             </div>
             <div class="edoc-version">
               eDoc Consulta AE · <span class="cifra" data-version></span>
@@ -108,7 +122,34 @@
         </div>
       </div>
 
-      <!-- Segundo paso · solo si el usuario tiene más de una empresa -->
+      <!-- Segundo paso · el doble factor.
+           Sale del documento D10 «Details of MFA», el que se manda a la
+           autoridad: el código llega SIEMPRE por correo, y hasta que no se
+           valida el usuario no ha iniciado sesión. -->
+      <div class="edoc-tablero" id="paso-otp" hidden>
+        <div class="edoc-tablero__cuerpo">
+          <h2 class="edoc-titulo mb-1" style="font-size:20px">Confirma que eres tú</h2>
+          <p class="edoc-secundario mb-4">Te mandamos un código de seis cifras a
+          <strong id="otp-correo">f.a•••••@alnoor.ae</strong>. Escríbelo aquí para terminar de entrar.</p>
+
+          <label class="edoc-etiqueta" for="otp-codigo">Código<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="otp-codigo" inputmode="numeric" maxlength="6"
+            autocomplete="one-time-code" placeholder="000000"
+            style="max-width:210px;font-size:22px;letter-spacing:.34em;text-align:center">
+          <div class="edoc-ayuda" id="otp-ayuda">En la maqueta vale cualquier código de seis cifras.</div>
+          <div class="edoc-reloj" id="otp-reloj" data-cuenta-atras="300"
+               data-reloj-para="#otp-confirmar" role="status"></div>
+
+          <button class="btn btn-edoc-primario w-100 mt-4" type="button" id="otp-confirmar">Entrar</button>
+          <div class="edoc-acceso__ayuda">
+            <a href="#" id="otp-reenviar">No me ha llegado, mándalo otra vez</a>
+          </div>
+
+          <button class="btn btn-edoc-terciario w-100 mt-2" type="button" id="otp-volver">Volver</button>
+        </div>
+      </div>
+
+      <!-- Tercer paso · solo si el usuario tiene más de una empresa -->
       <div class="edoc-tablero" id="paso-empresa" hidden>
         <div class="edoc-tablero__cuerpo">
           <h2 class="edoc-titulo mb-1" style="font-size:20px">¿Con qué empresa entras?</h2>
@@ -188,6 +229,8 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script>
   /* El acceso no monta el armazón, así que aplica por su cuenta la capa de
@@ -223,10 +266,82 @@
   ];
 
   var tarjetaAcceso = document.getElementById('forma-acceso').closest('.edoc-tablero');
+  var pasoOtp = document.getElementById('paso-otp');
   var pasoEmpresa = document.getElementById('paso-empresa');
+
+  /* El orden lo fija el documento D10: credenciales, código por correo y solo
+     entonces sesión. Elegir empresa es cosa nuestra y va después, porque para
+     saber qué empresas tiene el usuario primero hay que saber quién es. */
+  /* Nada viene relleno: el acceso lo escribe quien entra. Si falta algo se dice
+     en el propio campo, se lleva el foco al primero que falta y no se avanza.
+     Antes los tres campos llegaban puestos y Entrar pasaba siempre al código. */
+  var REGLAS_ACCESO = [
+    ['usuario', function (el) { return el.value.trim() !== ''; }],
+    ['clave',   function (el) { return el.value !== ''; }],
+    ['robot',   function (el) { return el.checked; }]
+  ];
+
+  function faltaEnAcceso() {
+    var primero = null;
+    REGLAS_ACCESO.forEach(function (r) {
+      var el = document.getElementById(r[0]);
+      var bien = r[1](el);
+      el.classList.toggle('is-invalid', !bien);
+      el.setAttribute('aria-invalid', bien ? 'false' : 'true');
+      document.getElementById(r[0] + '-error').hidden = bien;
+      if (!bien && !primero) primero = el;
+    });
+    return primero;
+  }
+
+  // En cuanto se corrige un campo marcado, el aviso se va: no hay que volver a
+  // pulsar Entrar para saber si ya está bien.
+  REGLAS_ACCESO.forEach(function (r) {
+    var el = document.getElementById(r[0]);
+    el.addEventListener(r[0] === 'robot' ? 'change' : 'input', function () {
+      if (el.classList.contains('is-invalid')) faltaEnAcceso();
+    });
+  });
 
   document.getElementById('forma-acceso').addEventListener('submit', function (e) {
     e.preventDefault();
+    var falta = faltaEnAcceso();
+    if (falta) { falta.focus(); return; }
+    tarjetaAcceso.hidden = true;
+    pasoOtp.hidden = false;
+    document.getElementById('otp-codigo').focus();
+    // El plazo empieza cuando se manda el codigo, no cuando se abrio la pagina.
+    if (window.edocReloj) window.edocReloj('#otp-reloj');
+  });
+
+  document.getElementById('otp-reenviar').addEventListener('click', function (e) {
+    e.preventDefault();
+    if (window.edocReloj) window.edocReloj('#otp-reloj');
+    document.getElementById('otp-ayuda').textContent =
+      'Te lo mandamos otra vez. Si sigue sin llegar, mira la carpeta de correo no deseado.';
+  });
+
+  document.getElementById('otp-volver').addEventListener('click', function () {
+    pasoOtp.hidden = true;
+    tarjetaAcceso.hidden = false;
+  });
+
+  document.getElementById('otp-confirmar').addEventListener('click', function () {
+    var campo = document.getElementById('otp-codigo');
+    if (!/^\d{6}$/.test(campo.value.trim())) {
+      campo.classList.add('is-invalid');
+      document.getElementById('otp-ayuda').textContent = 'El código son seis cifras.';
+      campo.focus();
+      return;
+    }
+    campo.classList.remove('is-invalid');
+    /* Entrar cuenta como una visita nueva: se vuelve a sortear el escenario del
+       simulacro. Es el disparador, para que quien recorra la maqueta pueda ver
+       escenarios distintos saliendo y volviendo a entrar. */
+    if (window.EDOC_SIMULACRO && window.EDOC_SIMULACRO.nuevaEntrada) {
+      window.EDOC_SIMULACRO.nuevaEntrada();
+    }
+    pasoOtp.hidden = true;
     // Con una sola empresa no hay nada que preguntar: se entra directo.
     if (EMPRESAS.length < 2) { location.href = destinoDeEntrada(); return; }
     document.getElementById('lista-empresas').innerHTML = EMPRESAS.map(function (em, i) {
@@ -245,7 +360,6 @@
         '<span class="edoc-empresa-opcion__flecha">›</span>' +
       '</button>';
     }).join('');
-    tarjetaAcceso.hidden = true;
     pasoEmpresa.hidden = false;
   });
 
@@ -262,17 +376,9 @@
     pasoEmpresa.hidden = true;
     tarjetaAcceso.hidden = false;
   });
-  document.querySelectorAll('[data-legal]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      e.preventDefault();
-      alert('El contenido legal está pendiente de redactar con el área correspondiente. Lo que no puede pasar es lo de Francia: que el enlace esté y no lleve a ninguna parte.');
-    });
-  });
-
-  document.getElementById('olvide').addEventListener('click', function (e) {
-    e.preventDefault();
-    alert('Recuperar contraseña se toma de Francia. En Bolivia el enlace está vacío: es un hallazgo, no un modelo.');
-  });
+  /* Los dos ya tienen pantalla: el MVP las lista como no negociables. Antes
+     avisaban de que no llevaban a ninguna parte, que era lo honesto mientras
+     no existían; ahora llevan. */
 </script>
 </body>
 </html>

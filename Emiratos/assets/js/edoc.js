@@ -81,6 +81,15 @@
   window.edocIcono = icono;
 
   /* --- Jerarquía del menú · hoja «Menú Emiratos» ------------------------- */
+  /* El árbol del MVP, tal como quedó en «MVP_Portal_y_APIs.xlsx». Los rótulos
+     son los de ese documento, no los míos: si comercial lee «Actualización
+     Datos empresas» y en el portal dice «Mi empresa», la pregunta es si son
+     dos cosas.
+
+     Lo que no entra ya no se llama «posterior» sino por su fase, porque eso es
+     justo lo que comercial pregunta: «no me comprometo a hacer cosas que puedo
+     hacer la siguiente semana o el siguiente mes». Se deja a la vista, en
+     gris, para no tenderle una trampa a quien tiene clientes esperando. */
   var MENU = [
     { id: 'inicio', rotulo: 'Inicio', icono: 'inicio', url: 'inicio.html' },
     { id: 'administracion', rotulo: 'Administración', icono: 'admin', grupos: [
@@ -88,29 +97,25 @@
         { titulo: 'Roles y Usuarios', enlaces: [
             { rotulo: 'Roles', url: 'admin-roles.html' },
             { rotulo: 'Usuarios', url: 'admin-usuarios.html' } ] },
-        { titulo: 'Mi empresa', enlaces: [
-            { rotulo: 'Datos fiscales', url: 'admin-empresa.html' },
-            { rotulo: 'Contactos', url: 'admin-contactos.html' } ] },
+        { titulo: 'Actualización Datos empresas', enlaces: [
+            { rotulo: 'Actualización de identificación fiscal', url: 'admin-empresa.html' },
+            { rotulo: 'Actualización de contactos', url: 'admin-contactos.html' } ] },
         { enlaces: [
             { rotulo: 'Credenciales de consumo Servicio eDoc', url: 'admin-credenciales.html' },
             { rotulo: 'Alertas y comunicados', url: 'admin-alertas.html' },
-            { rotulo: 'Manuales', url: 'admin-manuales.html' },
-            // El cruce de capacidades dice que va, pero la propuesta de menú no
-            // le dio sitio. Se cuelga aquí y se marca que falta decidirlo.
-            { rotulo: 'Clientes y proveedores', url: 'admin-clientes.html', porUbicar: true } ] }
+            { rotulo: 'Manuales', url: 'admin-manuales.html' } ] }
       ] },
     { id: 'emision', rotulo: 'Emisión', icono: 'emision', grupos: [
         { titulo: 'Reportes', enlaces: [
             { rotulo: 'Documentos Emitidos', url: 'emitidos.html' },
-            { rotulo: 'Reportes generados', url: 'reportes-generados.html' },
-            { rotulo: 'Documentos por criterios', posterior: true } ] }
+            { rotulo: 'Documentos por criterios', fase: 3 } ] }
       ] },
     { id: 'recepcion', rotulo: 'Recepción', icono: 'recepcion', grupos: [
         { titulo: 'Reportes', enlaces: [ { rotulo: 'Documentos Recibidos', url: 'recibidos.html' } ] },
         // Ubicación decidida en la revisión: traer un documento de fuera hacia
         // dentro es importar, no un reporte.
-        { titulo: 'Importar', enlaces: [ { rotulo: 'Cargar XML', posterior: true } ] },
-        { titulo: 'Workflow Aprobación', enlaces: [ { rotulo: 'Gestión proveedores', posterior: true } ] }
+        { titulo: 'Importar', enlaces: [ { rotulo: 'Cargar XML', fase: 2 } ] },
+        { titulo: 'Workflow Aprobación', enlaces: [ { rotulo: 'Gestión proveedores', fase: 3 } ] }
       ] }
   ];
 
@@ -136,12 +141,276 @@
         '<h1 class="edoc-obra__titulo">En construcción</h1>' +
         '<p class="edoc-obra__rotulo">' + (rotulo || 'Esta pantalla') + '</p>' +
         '<p class="edoc-obra__texto">Está dentro del alcance del portal y su sitio en el menú ya está' +
-        ' decidido, pero no entra en la entrega de hoy. Lo que se presenta ahora son las dos pantallas' +
-        ' centrales que se acordaron en la reunión: <strong>Documentos Emitidos</strong> y' +
-        ' <strong>Documentos Recibidos</strong>.</p>' +
+        ' decidido, pero <strong>no entra en el MVP</strong>. Lo que se entrega es lo que recoge el' +
+        ' documento de MVP del portal y las APIs; lo demás se diseña igual, para que se vea el alcance' +
+        ' completo, y se enciende cuando le toque su fase.</p>' +
         '<div class="edoc-obra__botones">' +
-          '<a class="btn btn-edoc-primario" href="emitidos.html">Ir a Documentos Emitidos</a>' +
-          '<a class="btn btn-edoc-secundario" href="recibidos.html">Ir a Documentos Recibidos</a>' +
+          '<a class="btn btn-edoc-primario" href="inicio.html">Volver al inicio</a>' +
+          '<a class="btn btn-edoc-secundario" href="emitidos.html">Ir a Documentos Emitidos</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  /* La campana se pinta desde los datos, no a mano: así el contador de sin
+     leer no puede desmentir a la lista, y las tres palabras se ven separadas.
+     Enseña los tres más recientes; el resto, en «Ver todas». */
+  /* Que se ha leido y que se ha archivado. Va en sessionStorage a proposito:
+     cada persona que abre la maqueta tiene que ver el punto rojo la primera
+     vez. Si fuera localStorage, el segundo evaluador que entrara en el mismo
+     equipo ya no veria nunca que habia avisos. */
+  /* «anotar», no «marcar»: mas abajo ya hay un marcar(boton, activo) para los
+     interruptores del encabezado, y como las declaraciones se izan, la ultima
+     gana y se comia a esta. */
+  var LLAVE_LEIDOS = 'edoc-avisos-leidos';
+  var LLAVE_ARCHIVADOS = 'edoc-avisos-archivados';
+
+  function anotados(llave) {
+    try { return JSON.parse(window.sessionStorage.getItem(llave)) || []; }
+    catch (error) { return []; }
+  }
+
+  function anotar(llave, ids) {
+    var lista = anotados(llave);
+    ids.forEach(function (id) { if (lista.indexOf(id) < 0) lista.push(id); });
+    try { window.sessionStorage.setItem(llave, JSON.stringify(lista)); } catch (error) { /* nada */ }
+  }
+
+  /* Los avisos que siguen vivos: los archivados desaparecen, y los leidos se
+     marcan sin tocar el original -`leido` en datos.js es el estado de partida,
+     no un sitio donde escribir-. */
+  function avisosVivos() {
+    var sim = window.EDOC_SIMULACRO;
+    if (sim && !sim.hayAvisos) return [];
+    var fuera = anotados(LLAVE_ARCHIVADOS);
+    var vistos = anotados(LLAVE_LEIDOS);
+    var hoy = new Date().toISOString().slice(0, 10);
+    return ((window.EDOC && window.EDOC.AVISOS) || [])
+      .filter(function (a) { return fuera.indexOf(a.id) < 0; })
+      /* La vigencia se cumple sola: un comunicado con la fecha pasada se retira
+         sin que nadie lo archive. Es lo que hace que `hasta` sea una fecha de
+         verdad y no un adorno en el visor. */
+      .filter(function (a) { return !a.hasta || a.hasta >= hoy; })
+      .map(function (a) {
+        var copia = {};
+        Object.keys(a).forEach(function (k) { copia[k] = a[k]; });
+        copia.leido = a.leido || vistos.indexOf(a.id) >= 0;
+        return copia;
+      });
+  }
+
+  function renglon(a) {
+    var tipos = (window.EDOC && window.EDOC.TIPOS_AVISO) || {};
+    var t = tipos[a.tipo] || { rotulo: a.tipo, icono: 'info', matiz: 'notificacion' };
+    var largo = !!a.texto;
+
+    var dentro =
+      '<span class="edoc-aviso-tipo edoc-aviso-tipo--' + t.matiz + '">' +
+        icono(t.icono) + t.rotulo + '</span>' +
+      '<span class="edoc-notificacion__titulo">' + a.titulo + '</span>' +
+      '<span class="edoc-notificacion__detalle">' + a.detalle + '</span>' +
+      '<span class="edoc-notificacion__sello">' + a.cuando + '</span>' +
+      /* La alerta no se archiva, así que en el sitio del aspa va lo que hay
+         que hacer para que se vaya. Sin esto, «no puedo quitarla» se lee como
+         un fallo. */
+      (a.seVa ? '<span class="edoc-notificacion__solo">' + a.seVa + '</span>' : '') +
+      (largo ? '<button type="button" class="edoc-notificacion__leer" data-leer="' + a.id + '">' +
+        'Leer el comunicado entero</button>' : '');
+
+    /* Solo es enlace lo que de verdad lleva a alguna parte, y el texto largo
+       manda sobre el enlace: si el aviso trae su propio texto, el renglón abre
+       el texto y no una pantalla. Un comunicado no se disfraza de enlace -antes
+       caían todos en «Alertas y comunicados», que es un formulario de correos-. */
+    var cuerpo = (a.ir && !largo)
+      ? '<a class="dropdown-item edoc-notificacion__cuerpo" href="' + a.ir + '">' + dentro + '</a>'
+      : '<span class="dropdown-item-text edoc-notificacion__cuerpo">' + dentro + '</span>';
+
+    /* El aspa archiva. No la llevan las alertas: una alerta se va cuando deja
+       de ser verdad, no cuando a alguien le molesta. */
+    var aspa = (a.tipo === 'alerta') ? '' :
+      '<button type="button" class="edoc-notificacion__x" data-archivar="' + a.id + '" ' +
+        'title="Archivar" aria-label="Archivar: ' + a.titulo + '">&times;</button>';
+
+    return '<li class="edoc-notificacion' + (a.leido ? '' : ' edoc-notificacion--nueva') + '" ' +
+      'data-aviso="' + a.id + '">' + cuerpo + aspa + '</li>';
+  }
+
+  function campana() {
+    var avisos = avisosVivos();
+    var sinLeer = avisos.filter(function (a) { return !a.leido; }).length;
+
+    var lista = avisos.length
+      ? avisos.map(renglon).join('') +
+        '<li><hr class="dropdown-divider"></li>' +
+        '<li><span class="dropdown-item-text edoc-notificaciones__pie">' +
+          'Esos son todos · ' + avisos.length + '</span></li>'
+      : '<li><span class="dropdown-item-text edoc-secundario edoc-notificaciones__vacio">' +
+          'No te queda ningún aviso.</span></li>';
+
+    return '<div class="dropdown" id="edoc-campana-caja">' +
+      '<button type="button" class="edoc-btn-util edoc-btn-util--icono edoc-campana" ' +
+        'data-toggle="dropdown" title="Notificaciones" ' +
+        'aria-label="Notificaciones · ' + (sinLeer ? sinLeer + ' sin leer' : 'ninguna sin leer') + '">' +
+        icono('campana') +
+        (sinLeer ? '<span class="edoc-campana__punto">' + sinLeer + '</span>' : '') +
+      '</button>' +
+      '<ul class="dropdown-menu dropdown-menu-right edoc-notificaciones">' +
+        '<li><h6 class="dropdown-header">Notificaciones</h6></li>' +
+        lista +
+      '</ul>' +
+    '</div>';
+  }
+
+  /* El visor del texto largo. Se monta una sola vez y se rellena al abrirlo. */
+  function visorAviso() {
+    if (document.getElementById('modal-aviso')) return;
+    document.body.insertAdjacentHTML('beforeend',
+      '<div class="modal fade" id="modal-aviso" tabindex="-1" role="dialog" ' +
+        'aria-labelledby="titulo-aviso" aria-hidden="true">' +
+        '<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">' +
+          '<div class="modal-content">' +
+            '<div class="modal-header">' +
+              '<h5 class="modal-title" id="titulo-aviso">Comunicado</h5>' +
+              '<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">' +
+                '<span aria-hidden="true">&times;</span></button>' +
+            '</div>' +
+            '<div class="modal-body" id="cuerpo-aviso"></div>' +
+            '<div class="modal-footer">' +
+              '<button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cerrar</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>');
+  }
+
+  /* Los tres gestos de la campana. */
+  function cablearCampana() {
+    var caja = document.getElementById('edoc-campana-caja');
+    if (!caja) return;
+
+    /* Abrir la campana marca todo como leido: el contador se va y no vuelve.
+       Pero el resalte de «nuevo» se queda mientras el desplegable esta abierto
+       -si se quitara al abrir, nadie llegaria a ver cuales eran los nuevos- y
+       se retira al cerrarlo. Leido no es lo mismo que hecho: no se borra nada. */
+    if (window.jQuery) {
+      window.jQuery(caja)
+        .on('shown.bs.dropdown', function () {
+          anotar(LLAVE_LEIDOS, avisosVivos().map(function (a) { return a.id; }));
+          var punto = caja.querySelector('.edoc-campana__punto');
+          if (punto) punto.remove();
+          var boton = caja.querySelector('.edoc-campana');
+          if (boton) boton.setAttribute('aria-label', 'Notificaciones · ninguna sin leer');
+        })
+        .on('hidden.bs.dropdown', function () {
+          caja.querySelectorAll('.edoc-notificacion--nueva').forEach(function (li) {
+            li.classList.remove('edoc-notificacion--nueva');
+          });
+        });
+    }
+
+    caja.addEventListener('click', function (e) {
+      var x = e.target.closest('[data-archivar]');
+      if (x) {
+        // Sin esto, Bootstrap cierra el desplegable en cuanto se archiva uno y
+        // hay que volver a abrirlo para archivar el siguiente.
+        e.preventDefault();
+        e.stopPropagation();
+        archivarAviso(caja, x.dataset.archivar);
+        return;
+      }
+      var leer = e.target.closest('[data-leer]');
+      if (!leer) return;
+      e.preventDefault();
+      e.stopPropagation();
+      abrirAviso(leer.dataset.leer);
+    });
+  }
+
+  function archivarAviso(caja, id) {
+    var aviso = avisosVivos().filter(function (a) { return a.id === id; })[0];
+    anotar(LLAVE_ARCHIVADOS, [id]);
+    var li = caja.querySelector('[data-aviso="' + id + '"]');
+    if (li) li.remove();
+
+    var quedan = avisosVivos();
+    var pie = caja.querySelector('.edoc-notificaciones__pie');
+    if (quedan.length && pie) {
+      pie.textContent = 'Esos son todos · ' + quedan.length;
+    } else if (!quedan.length) {
+      var menu = caja.querySelector('.edoc-notificaciones');
+      if (menu) {
+        menu.innerHTML = '<li><h6 class="dropdown-header">Notificaciones</h6></li>' +
+          '<li><span class="dropdown-item-text edoc-secundario edoc-notificaciones__vacio">' +
+          'No te queda ningún aviso.</span></li>';
+      }
+    }
+    if (aviso) avisar('Archivado: <strong>' + aviso.titulo + '</strong>.');
+  }
+
+  function abrirAviso(id) {
+    var aviso = avisosVivos().filter(function (a) { return a.id === id; })[0];
+    if (!aviso || !window.jQuery) return;
+    visorAviso();
+    document.getElementById('titulo-aviso').textContent = aviso.titulo;
+    document.getElementById('cuerpo-aviso').innerHTML =
+      '<p class="edoc-secundario mb-3">' + aviso.cuando +
+      (aviso.hasta ? ' · se retira el ' + aviso.hasta : '') + '</p>' + aviso.texto;
+    window.jQuery('#modal-aviso').modal('show');
+  }
+
+  /* El estado del sistema. Va encima de todo, no se puede cerrar y no entra en
+     la campana: mientras el mantenimiento esté en curso o la conexión caída,
+     esconderlo sería ocultar algo que sigue siendo verdad. Los dos colores que
+     usa —advertencia y error— son los que el manual de marca reserva justo
+     para eso. */
+  function barraEstado() {
+    /* El marcado vive en simulacro.js, que lo carga toda pantalla incluida la
+       del acceso, donde este armazon no existe. Aqui solo se coloca en su
+       sitio: debajo del encabezado. */
+    var sim = window.EDOC_SIMULACRO;
+    return (sim && sim.barraHTML) ? sim.barraHTML() : '';
+  }
+
+  /* Los avisos que hay que ver sin abrir nada: un corte de servicio, un
+     cambio que afecta a todo el mundo. Van en una franja arriba de la página,
+     en toda pantalla. Lleva el naranja de ADVERTENCIA, que es lo que el manual
+     de marca reserva justo para esto. Se puede cerrar, y vuelve en la sesión
+     siguiente: no es un aviso que convenga perder para siempre. */
+  function franjaFija() {
+    var sim = window.EDOC_SIMULACRO;
+    if (sim && !sim.hayAvisos) return '';
+    var avisos = (window.EDOC && window.EDOC.AVISOS) || [];
+    var fijos = avisos.filter(function (a) { return a.fijo; });
+    if (!fijos.length) return '';
+    return fijos.map(function (a, i) {
+      var llave = 'edoc-franja-' + i;
+      var cerrada = false;
+      try { cerrada = window.sessionStorage.getItem(llave) === '1'; } catch (e) { cerrada = false; }
+      if (cerrada) return '';
+      return '<div class="edoc-franja" role="status" data-franja="' + llave + '">' +
+        '<span class="edoc-franja__icono">' + icono('alerta') + '</span>' +
+        '<span class="edoc-franja__texto"><strong>' + a.titulo + '</strong> ' + a.detalle + '</span>' +
+        '<button type="button" class="edoc-franja__cerrar" data-cerrar-franja="' + llave + '" ' +
+          'aria-label="Cerrar este aviso">&times;</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  /* Lo que ve quien entra a una función que está caída por el mantenimiento.
+     Se diferencia de «En construcción» a propósito: aquello no existe todavía,
+     esto existe y vuelve solo. */
+  function pantallaMantenimiento(motivo, hasta) {
+    return '' +
+    '<div class="edoc-obra">' +
+      '<div class="edoc-obra__tarjeta">' +
+        '<div class="edoc-obra__marca edoc-obra__marca--mantenimiento">' + icono('alerta') + '</div>' +
+        '<h1 class="edoc-obra__titulo">Esta función está en mantenimiento</h1>' +
+        '<p class="edoc-obra__rotulo">Vuelve sola ' + hasta + '</p>' +
+        '<p class="edoc-obra__texto">' + motivo + ' No hace falta que hagas nada: en cuanto termine, ' +
+        'esta pantalla vuelve a funcionar. El resto del portal sigue disponible.</p>' +
+        '<div class="edoc-obra__botones">' +
+          '<a class="btn btn-edoc-primario" href="inicio.html">Volver al inicio</a>' +
+          '<a class="btn btn-edoc-secundario" href="#" data-sin-destino>Escribir a soporte</a>' +
         '</div>' +
       '</div>' +
     '</div>';
@@ -221,27 +490,10 @@
         '<span class="edoc-solo-ancho">' + window.edocSelectorIdioma() + '</span>' +
         '<a class="edoc-btn-util edoc-btn-util--icono edoc-solo-ancho" href="#" data-sin-destino ' +
           'title="Emiratos Árabes Unidos · cambiar de portal">' + bandera() + '</a>' +
-        '<div class="dropdown">' +
-          '<button type="button" class="edoc-btn-util edoc-btn-util--icono edoc-campana" ' +
-            'data-toggle="dropdown" title="Notificaciones" aria-label="Notificaciones · 2 sin leer">' +
-            icono('campana') + '<span class="edoc-campana__punto">2</span></button>' +
-          '<ul class="dropdown-menu dropdown-menu-right edoc-notificaciones">' +
-            '<li><h6 class="dropdown-header">Notificaciones</h6></li>' +
-            '<li><a class="dropdown-item edoc-notificacion" href="recibidos.html">' +
-              '<span class="edoc-notificacion__titulo">Dos documentos esperan tu respuesta</span>' +
-              '<span class="edoc-notificacion__detalle">Emirates Global Aluminium y Al Ain Water Company.</span>' +
-              '<span class="edoc-notificacion__sello">hace 2 horas</span></a></li>' +
-            '<li><a class="dropdown-item edoc-notificacion" href="admin-alertas.html">' +
-              '<span class="edoc-notificacion__titulo">Mantenimiento programado</span>' +
-              '<span class="edoc-notificacion__detalle">El sábado 6 de septiembre, de 02:00 a 04:00.</span>' +
-              '<span class="edoc-notificacion__sello">ayer</span></a></li>' +
-            '<li><hr class="dropdown-divider"></li>' +
-            '<li><a class="dropdown-item edoc-notificaciones__todas" href="admin-alertas.html">' +
-              'Ver todas</a></li>' +
-          '</ul>' +
-        '</div>' +
-        '<a class="edoc-btn-util edoc-btn-util--icono edoc-solo-ancho" href="#" data-sin-destino ' +
-          'title="Acceso al soporte">' + icono('soporte') + '</a>' +
+        campana() +
+        // El soporte lleva a la wiki de eDoc: es el destino de ayuda que existe.
+        '<a class="edoc-btn-util edoc-btn-util--icono edoc-solo-ancho" href="https://wikiedoc.guru-soft.com/" ' +
+          'target="_blank" rel="noopener" title="Acceso al soporte">' + icono('soporte') + '</a>' +
         '<div class="dropdown">' +
           '<button type="button" class="edoc-usuario" data-toggle="dropdown" ' +
             'title="' + usuario + '" aria-label="Menú de la cuenta de ' + usuario + '">' +
@@ -263,7 +515,7 @@
               : '') +
             '<li class="solo-movil"><a class="dropdown-item" href="#" data-sin-destino>' +
               bandera() + 'Emiratos Árabes Unidos</a></li>' +
-            '<li class="solo-movil"><a class="dropdown-item" href="#" data-sin-destino>' +
+            '<li class="solo-movil"><a class="dropdown-item" href="https://wikiedoc.guru-soft.com/" target="_blank" rel="noopener">' +
               icono('soporte') + 'Acceso al soporte</a></li>' +
             '<li><hr class="dropdown-divider"></li>' +
             '<li><a class="dropdown-item" href="index.html">' + icono('salir') + 'Salir</a></li>' +
@@ -313,16 +565,16 @@
       seccion.grupos.forEach(function (grupo) {
         var hijos = '';
         grupo.enlaces.forEach(function (enlace) {
-          if (enlace.posterior) {
-            hijos += '<span class="edoc-menu__enlace edoc-menu__enlace--posterior" ' +
-                    'title="Fuera del MVP. Se deja escrito para que no se pida como si fuera gratis.">' +
-                    enlace.rotulo + ' · posterior</span>';
+          if (enlace.fase) {
+            hijos += '<span class="edoc-menu__enlace edoc-menu__enlace--fase" ' +
+                    'title="Fuera de la primera entrega.">' +
+                    enlace.rotulo + ' · fase ' + enlace.fase + '</span>';
           } else {
             var act = document.body.dataset.pagina === enlace.url ? ' activo' : '';
             var dudoso = enlace.porUbicar ? ' edoc-menu__enlace--por-ubicar' : '';
             var obra = habilitada(enlace.url) ? '' : ' edoc-menu__enlace--obra';
             var pista = enlace.porUbicar
-              ? ' title="Va a Emiratos, pero falta decidir de qué menú cuelga."'
+              ? ' title="Llegará en una próxima entrega."'
               : (obra ? ' title="Está en el alcance, pero no en la entrega de hoy."' : '');
             var cola = enlace.porUbicar ? ' · por ubicar' : (obra ? ' · en construcción' : '');
             hijos += '<a class="edoc-menu__enlace' + act + dudoso + obra + '" href="' + enlace.url + '"' + pista + '>' +
@@ -358,9 +610,9 @@
       seccion.grupos.forEach(function (grupo) {
         var hijos = '';
         grupo.enlaces.forEach(function (enlace) {
-          if (enlace.posterior) {
-            hijos += '<span class="edoc-menu-movil__enlace edoc-menu__enlace--posterior">' +
-                    enlace.rotulo + ' · posterior</span>';
+          if (enlace.fase) {
+            hijos += '<span class="edoc-menu-movil__enlace edoc-menu__enlace--fase">' +
+                    enlace.rotulo + ' · fase ' + enlace.fase + '</span>';
           } else {
             var act = document.body.dataset.pagina === enlace.url ? ' activo' : '';
             var dudoso = enlace.porUbicar ? ' edoc-menu__enlace--por-ubicar' : '';
@@ -392,13 +644,16 @@
 
   /* --- Montaje ----------------------------------------------------------- */
   function montar() {
+    var sim = window.EDOC_SIMULACRO;
     var cuerpo = document.body;
+    var pagina = cuerpo.dataset.pagina || '';
     var seccion = cuerpo.dataset.seccion || '';
     var soporte = document.getElementById('armazon');
     var reducido = cuerpo.dataset.armazon === 'reducido';
     if (soporte) {
       soporte.insertAdjacentHTML('beforebegin',
-        reducido ? encabezadoReducido(cuerpo.dataset.quien || '') : encabezado() + menu(seccion));
+        (reducido ? encabezadoReducido(cuerpo.dataset.quien || '') : encabezado() + menu(seccion)) +
+        barraEstado() + franjaFija());
     }
     cuerpo.insertAdjacentHTML('beforeend', pie());
     // El armazón se pinta después de que idioma.js haya arrancado, así que hay
@@ -411,9 +666,47 @@
     // no se pierda al primer clic.
     if (window.EDOC_ALCANCE && window.EDOC_ALCANCE.propagar) window.EDOC_ALCANCE.propagar();
 
+    cablearCampana();
+
+    /* Los '?' de ayuda. Se abren al pulsarlos y se cierran al pulsar fuera,
+       que es el patron 'dismiss on next click' de Bootstrap: hace falta que
+       sean <button> para que puedan recibir el foco. */
+    if (window.jQuery && window.jQuery.fn.popover) {
+      window.jQuery('[data-toggle="popover"]').popover({ trigger: 'focus', html: false });
+    }
+    // Un '?' dentro de una cabecera de tabla abre su ayuda, no reordena la
+    // columna: se para el clic antes de que llegue a la cabecera.
+    document.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('th .edoc-ayuda-que')) e.stopPropagation();
+    }, true);
+
+    /* Una función que se puede mirar pero no usar: se dice dentro de la propia
+       pantalla, no en una barra de arriba que ya se leyó. */
+    if (sim && !window.edocEnObra) {
+      var limite = sim.limitada(pagina);
+      if (limite && soporte) {
+        var barra = soporte.querySelector('.edoc-titulo-barra');
+        var aviso = '<div class="edoc-aviso edoc-aviso--advertencia mb-3">' +
+          '<div><strong>Función limitada por el mantenimiento.</strong> ' + limite + '</div></div>';
+        if (barra) barra.insertAdjacentHTML('afterend', aviso);
+        else soporte.insertAdjacentHTML('afterbegin', aviso);
+      }
+    }
+
+    /* El saludo con el número de notificaciones, una sola vez por sesión: es lo
+       que hace que alguien abra la campana en vez de pasar de largo. */
+    if (sim && sim.saludoPendiente()) {
+      var pendientes = avisosVivos().filter(function (a) { return !a.leido; }).length;
+      if (pendientes) {
+        window.setTimeout(function () {
+          avisar('Tienes <strong>' + pendientes + ' avisos sin leer</strong>. Están en la campana, ' +
+            'arriba a la derecha.');
+        }, 900);
+      }
+    }
+
     // Si la pantalla no entra en la entrega, se cambia su contenido por el
     // aviso. El armazón se queda: el menú tiene que seguir enseñando el alcance.
-    var pagina = cuerpo.dataset.pagina || '';
     if (soporte && pagina && !habilitada(pagina)) {
       var rotuloVista = '';
       if (window.EDOC_ALCANCE) {
@@ -423,6 +716,23 @@
       soporte.innerHTML = pantallaEnObra(rotuloVista);
       soporte.classList.add('edoc-pagina--obra');
       document.title = 'En construcción · eDoc Emiratos';
+      /* El contenido de la página acaba de desaparecer, así que su script no
+         va a encontrar nada. Sin esta bandera revienta con un «null» en la
+         consola, que es lo que pasó al sacar la cola de reportes del MVP. */
+      window.edocEnObra = true;
+    }
+
+    /* Y si esa pantalla está caída por el mantenimiento, lo mismo pero con otro
+       motivo. Va después, para que «no entra en el MVP» gane: si algo no
+       existe, da igual que además esté en mantenimiento. */
+    if (soporte && sim && !window.edocEnObra) {
+      var motivo = sim.bloqueada(pagina);
+      if (motivo) {
+        soporte.innerHTML = pantallaMantenimiento(motivo, sim.hasta());
+        soporte.classList.add('edoc-pagina--obra');
+        document.title = 'En mantenimiento · eDoc Emiratos';
+        window.edocEnObra = true;
+      }
     }
 
     // Si la herramienta está apagada, la capa se apaga con ella: si no, unas
@@ -559,6 +869,16 @@
     setTimeout(function () { el.style.transition = 'opacity .3s'; el.style.opacity = '0';
       setTimeout(function () { el.remove(); }, 320); }, 4200);
   }
+  /* Cerrar la franja la guarda por la sesión, no para siempre: un
+     mantenimiento que aún no ha pasado conviene volver a verlo mañana. */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-cerrar-franja]');
+    if (!b) return;
+    var caja = b.closest('.edoc-franja');
+    if (caja) caja.remove();
+    try { window.sessionStorage.setItem(b.dataset.cerrarFranja, '1'); } catch (error) { /* nada */ }
+  });
+
   window.edocAvisar = avisar;
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar);

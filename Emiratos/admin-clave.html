@@ -10,6 +10,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 </head>
 <body data-seccion="administracion" data-pagina="admin-clave.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
@@ -20,75 +31,146 @@
       <p class="edoc-subtitulo">Tu contraseña y tu verificación en dos pasos. Los datos del resto de usuarios se administran en Usuarios.</p>
     </div></div>
 
-  <div class="row rejilla">
-    <div class="col-12 col-xl-6">
+  <!-- Una sola columna, centrada. Antes eran dos, y la de la derecha solo
+       sujetaba notas de diseño: con la capa apagada -que es lo normal- el
+       formulario quedaba pegado a la izquierda con medio ancho vacío al lado. -->
+  <div class="row rejilla justify-content-center">
+    <div class="col-12 col-lg-9 col-xl-7">
       <section class="edoc-tablero">
         <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Tu contraseña</h2></div>
-        <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Contraseña actualizada.','exito')">
+        <!-- Sin `required`: el aviso nativo del navegador sale en el idioma del
+             navegador y no en el del portal, y encima tapa el campo. La
+             comprobación se hace abajo, con mensajes nuestros. -->
+        <div class="edoc-tablero__cuerpo">
           <div class="mb-3">
             <label class="edoc-etiqueta" for="c1">Contraseña actual<span class="obligatorio">*</span></label>
-            <input type="password" class="form-control" id="c1" required></div>
+            <input type="password" class="form-control" id="c1" autocomplete="current-password"></div>
           <div class="mb-3">
             <label class="edoc-etiqueta" for="c2">Contraseña nueva<span class="obligatorio">*</span></label>
-            <input type="password" class="form-control" id="c2" required>
-            <div class="edoc-ayuda">Al menos diez caracteres, con una mayúscula, un número y un símbolo.</div></div>
+            <input type="password" class="form-control" id="c2" autocomplete="new-password">
+            <div class="edoc-ayuda" id="c-reglas">Al menos diez caracteres, con una mayúscula, un número y un símbolo.</div>
+            <ul class="edoc-lista-simple mt-2" id="c-fuerza" hidden></ul></div>
           <div class="mb-4">
             <label class="edoc-etiqueta" for="c3">Repite la contraseña nueva<span class="obligatorio">*</span></label>
-            <input type="password" class="form-control" id="c3" required></div>
-          <button class="btn btn-edoc-primario" type="submit">Guardar</button>
-        </form>
+            <input type="password" class="form-control" id="c3" autocomplete="new-password"></div>
+          <div class="edoc-aviso edoc-aviso--info mb-3">
+            <div>Después de guardar te pediremos entrar otra vez con la contraseña nueva.</div>
+          </div>
+
+          <!-- Dos botones, como Bolivia: allí cada bloque de esta pantalla lleva
+               su propio Cancelar y Confirmar. -->
+          <div class="d-flex hueco-2">
+            <button class="btn btn-edoc-terciario" type="button" id="c-cancelar">Cancelar</button>
+            <button class="btn btn-edoc-primario" type="button" id="c-guardar">Confirmar</button>
+          </div>
+        </div>
       </section>
 
-      <section class="edoc-tablero">
-        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Verificación en dos pasos</h2></div>
+      <!-- Plegada: es información de consulta, y lo que se viene a hacer aquí es
+           cambiar la contraseña. -->
+      <section class="edoc-tablero edoc-tablero--plegable">
+        <div class="edoc-tablero__cabecera">
+          <h2 class="edoc-tablero__titulo">
+            <button class="edoc-plegar" type="button" data-toggle="collapse"
+                    data-target="#panel-dos-pasos" aria-expanded="false" aria-controls="panel-dos-pasos">
+              <svg class="edoc-plegar__flecha" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>Verificación en dos pasos</button>
+          </h2>
+        </div>
+        <div class="collapse" id="panel-dos-pasos">
         <div class="edoc-tablero__cuerpo">
-          <p class="mb-3">Además de la contraseña, al entrar te pediremos un código de un solo uso. Es la forma de que
-          una contraseña robada no baste para entrar a tu cuenta.</p>
+          <p class="mb-3">Además de la contraseña, al entrar te pedimos un código de un solo uso. Hasta que
+          no lo escribes no has iniciado sesión, así que una contraseña robada no basta para entrar a tu
+          cuenta.</p>
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" name="mfa" id="mfa-app" checked>
-            <label class="form-check-label" for="mfa-app">
-              <strong>Aplicación de autenticación</strong>
-              <div class="edoc-secundario">El código lo genera una app en tu teléfono. Es la opción recomendada:
-              funciona sin cobertura y no depende del correo.</div>
-            </label>
-          </div>
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" name="mfa" id="mfa-correo">
-            <label class="form-check-label" for="mfa-correo">
-              <strong>Correo electrónico</strong>
-              <div class="edoc-secundario">Te enviamos el código al correo con el que entras.</div>
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="radio" name="mfa" id="mfa-no" disabled>
-            <label class="form-check-label" for="mfa-no">
-              <strong>Sin verificación en dos pasos</strong>
-              <div class="edoc-secundario">No disponible: la autoridad de Emiratos exige que el acceso lleve
-              un segundo factor.</div>
-            </label>
+          <!-- Aquí había una elección entre app de autenticación y correo, y la
+               app me la inventé yo. El documento D10 que se manda a la autoridad
+               dice que el segundo factor es un código por correo, sin
+               alternativa. No es una preferencia del usuario: es la
+               especificación. -->
+          <!-- En Bolivia esto es un desplegable Activar/Inactivar MFA. Aqui se
+               ensena el mismo control para que se entienda que existe, pero
+               bloqueado: la decision no es del cliente. Ensenarlo apagado seria
+               mentir, y esconderlo dejaria la pantalla sin explicar por que no
+               se puede tocar. -->
+          <div class="row rejilla align-items-center mb-3">
+            <div class="col-12 col-md-5">
+              <label class="edoc-etiqueta" for="mfa-estado">Activar / Inactivar MFA</label>
+            </div>
+            <div class="col-12 col-md-7">
+              <select class="form-control" id="mfa-estado" disabled>
+                <option selected>Activo</option>
+              </select>
+              <div class="edoc-ayuda">No se puede desactivar: la autoridad de Emiratos exige que el
+              acceso lleve un segundo factor.</div>
+            </div>
           </div>
 
-          <button class="btn btn-edoc-secundario" data-sin-destino>Configurar la aplicación</button>
+          <div class="edoc-tabla-envoltura mb-3">
+            <table class="edoc-tabla">
+              <tbody>
+                <tr><td>Cómo llega el código</td><td><strong>Por correo electrónico</strong></td></tr>
+                <tr><td>A qué dirección</td><td class="cifra">f.almarzooqi@alnoor.ae</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="edoc-secundario mb-3">Si cambias tu dirección de correo, el código empieza a llegar
+          a la nueva.</p>
+
+          <div class="edoc-etiqueta mb-2">Además del acceso, se te pedirá el código en</div>
+          <ul class="edoc-lista-simple">
+            <li>Crear las credenciales de una aplicación</li>
+            <li>Cambiar o rotar el secreto de una aplicación</li>
+            <li>Cambiar datos sensibles de tu usuario</li>
+            <li>Las acciones de seguridad del sistema</li>
+          </ul>
+        </div>
         </div>
       </section>
     </div>
-    <div class="col-12 col-xl-6">
-      <div class="edoc-aviso edoc-aviso--info mb-3">
-        <div>Después de guardar te pediremos entrar otra vez. Es lo esperable y conviene decirlo antes, no después.</div>
-      </div>
-      <div class="nota nota--decidido" style="display:block">
+    <div class="col-12">
+      <div class="nota nota--decidido">
         <span class="nota__sello">Decidido · no negociable</span>
         <strong>El doble factor entra en el MVP.</strong> No es un extra: Emiratos exigió un documento explicando cómo se
         maneja el MFA como parte del permiso para operar. Si el portal no lo lleva desde el principio, no cuadra con lo
         que se declaró. Bolivia ya lo activa y desactiva por usuario; Francia no lo tiene y le hace falta.
       </div>
-      <div class="nota nota--decidido" style="display:block">
+      <div class="nota nota--decidido">
         <span class="nota__sello">Decidido</span>
-        <strong>No se puede desactivar.</strong> La opción se enseña deshabilitada, y no oculta, para que se entienda que
-        existe y que la decisión no es del cliente.
+        <strong>No se puede desactivar.</strong> En Bolivia esta misma pantalla lleva un desplegable
+        «Activar/Inactivar MFA» que el administrador de la empresa maneja a su gusto. Aquí se enseña el
+        mismo control, en el mismo sitio, pero bloqueado en «Activo»: así se entiende que existe y que la
+        decisión no es del cliente. Esconderlo dejaría la pantalla sin explicar por qué no se puede tocar.
+        <br><br>El plazo del código ya no se cuenta aquí: se ve como contador en la pantalla donde se
+        escribe, que es donde le sirve a alguien.
       </div>
     </div>
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Cambia respecto de Bolivia</span>
+    <strong>Aquí falta a propósito el interruptor que tiene Bolivia.</strong> Allí el administrador de
+    la empresa entra a esta misma pantalla y activa o desactiva el doble factor. En Emiratos no se
+    puede: el documento que se presenta a la autoridad lo declara obligatorio, así que ofrecerlo y no
+    dejar apagarlo sería peor que no ofrecerlo. Por eso la pantalla no lo menciona.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">De la sesión con la dueña funcional</span>
+    <strong>En Bolivia el doble factor ya existe y es opcional.</strong> «El parámetro lo maneja el
+    administrador de la empresa: voy a cambiar contraseña y aquí me dice si lo activo o lo desactivo.»
+    El código llega por correo y «creo que está a cinco minutos, está parametrizado». Se pide en el
+    acceso y al descargar las credenciales, en ningún sitio más.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corrige lo que yo tenía</span>
+    <strong>Los diez minutos eran míos.</strong> El documento D10 dice que el código caduca y que el
+    plazo lo configura el personal de la plataforma, sin dar cifra; Bolivia corre a cinco. Aquí ya no
+    se afirma un número como si fuera normativo.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Cuánto dura la sesión.</strong> Es otro reloj, distinto del código: al expirar, el portal
+    devuelve al acceso y allí se pide un código nuevo. Nadie ha fijado ese tiempo para Emiratos, y es
+    lo que decide si a alguien se le cierra el portal mientras revisa una tabla larga.
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -96,7 +178,73 @@
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* Las reglas se enseñan mientras se escribe, no solo al fallar. Es lo que se
+     pidió tras ver Francia: allí la contraseña se rechaza al enviar y no dice
+     cuál de las cuatro reglas incumple. */
+  var REGLAS = [
+    { texto: 'Al menos diez caracteres',   pasa: function (v) { return v.length >= 10; } },
+    { texto: 'Una mayúscula',              pasa: function (v) { return /[A-ZÁÉÍÓÚÑ]/.test(v); } },
+    { texto: 'Un número',                  pasa: function (v) { return /\d/.test(v); } },
+    { texto: 'Un símbolo',                 pasa: function (v) { return /[^A-Za-z0-9]/.test(v); } }
+  ];
+
+  function pintarFuerza() {
+    var v = $('c2').value;
+    var caja = $('c-fuerza');
+    if (!v) { caja.hidden = true; return; }
+    caja.hidden = false;
+    caja.innerHTML = REGLAS.map(function (r) {
+      var ok = r.pasa(v);
+      return '<li style="color:' + (ok ? 'var(--edoc-verde)' : '#8a8a8a') + '">' +
+        (ok ? '✓ ' : '· ') + r.texto + '</li>';
+    }).join('');
+  }
+  $('c2').addEventListener('input', pintarFuerza);
+
+  $('c-cancelar').addEventListener('click', function () {
+    document.querySelectorAll('#c1, #c2, #c3').forEach(function (e) {
+      e.classList.remove('is-invalid'); e.value = '';
+    });
+    $('c-fuerza').hidden = true;
+    window.edocAvisar('Se descartó lo que habías escrito.');
+  });
+
+  function mal(id, texto) {
+    document.querySelectorAll('#c1, #c2, #c3').forEach(function (e) { e.classList.remove('is-invalid'); });
+    $(id).classList.add('is-invalid');
+    $(id).focus();
+    window.edocAvisar(texto, 'error');
+  }
+
+  $('c-guardar').addEventListener('click', function () {
+    var a = $('c1').value, b = $('c2').value, c = $('c3').value;
+    if (!a) return mal('c1', 'Escribe tu contraseña actual.');
+    if (!b) return mal('c2', 'Escribe la contraseña nueva.');
+    var falla = REGLAS.filter(function (r) { return !r.pasa(b); });
+    if (falla.length) return mal('c2', 'A la contraseña nueva le falta: ' +
+      falla.map(function (r) { return r.texto.toLowerCase(); }).join(', ') + '.');
+    if (b === a) return mal('c2', 'La contraseña nueva tiene que ser distinta de la actual.');
+    if (b !== c) return mal('c3', 'Las dos contraseñas nuevas no coinciden.');
+
+    document.querySelectorAll('#c1, #c2, #c3').forEach(function (e) {
+      e.classList.remove('is-invalid'); e.value = '';
+    });
+    $('c-fuerza').hidden = true;
+    window.edocAvisar('Contraseña actualizada. Las sesiones abiertas en otros ' +
+      'navegadores se han cerrado.', 'exito');
+  });
+}());
+</script>
 </body>
 </html>
