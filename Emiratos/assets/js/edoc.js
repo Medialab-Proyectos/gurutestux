@@ -881,6 +881,88 @@
 
   window.edocAvisar = avisar;
 
+  /* --- Cambios sin guardar ------------------------------------------------ */
+  /* RN-02 de la corrida del 14 sep: salir de una pantalla de administración con
+     cambios a medias los perdía sin avisar. La pantalla da una función que
+     resume su estado; si al salir no coincide con lo guardado, el navegador
+     pregunta. fijar() se llama al guardar o al deshacer. */
+  function pendientes(huella) {
+    var base = huella();
+    var saliendo = false;
+    var api = {
+      hay: function () { return huella() !== base; },
+      fijar: function () { base = huella(); }
+    };
+
+    /* Los enlaces del portal —menú, migas, encabezado— preguntan con un modal
+       propio, en el idioma del portal y con lo que se va a perder. */
+    document.addEventListener('click', function (e) {
+      if (saliendo || !api.hay() || e.defaultPrevented || e.button !== 0 ||
+          e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest('a[href]');
+      if (!a || a.target === '_blank' || a.hasAttribute('download') || a.hasAttribute('data-sin-destino')) return;
+      var href = a.getAttribute('href');
+      if (!href || href.charAt(0) === '#' || /^(javascript|mailto|tel):/i.test(href)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      preguntarSalida(a.href, function () { saliendo = true; });
+    }, true);
+
+    /* Cerrar la pestaña, recargar o escribir otra dirección no pasa por ningún
+       enlace, y ahí los navegadores solo dejan su propio cuadro: el texto no
+       se puede cambiar. Es la última red para no perder lo escrito. */
+    window.addEventListener('beforeunload', function (e) {
+      if (saliendo || !api.hay()) return;
+      e.preventDefault();
+      e.returnValue = '';
+    });
+    return api;
+  }
+
+  function preguntarSalida(destino, alSalir) {
+    var modal = document.getElementById('edoc-modal-salir');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.className = 'modal fade';
+      modal.id = 'edoc-modal-salir';
+      modal.tabIndex = -1;
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-labelledby', 'edoc-modal-salir-titulo');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.innerHTML =
+        '<div class="modal-dialog"><div class="modal-content">' +
+          '<div class="modal-header"><h5 class="modal-title" id="edoc-modal-salir-titulo">¿Salir sin guardar?</h5>' +
+            '<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>' +
+          '<div class="modal-body">' +
+            '<p class="mb-2" data-salir-intro></p>' +
+            '<p class="mb-3"><strong data-salir-lista></strong></p>' +
+            '<div class="edoc-aviso edoc-aviso--advertencia">' + icono('alerta', 'edoc-aviso__icono') +
+              '<div>Si sales ahora, se pierden.</div></div>' +
+          '</div>' +
+          '<div class="modal-footer">' +
+            '<button type="button" class="btn btn-edoc-terciario" data-salir-confirmar>Salir sin guardar</button>' +
+            '<button type="button" class="btn btn-edoc-primario" data-dismiss="modal">Seguir editando</button>' +
+          '</div>' +
+        '</div></div>';
+      document.body.appendChild(modal);
+    }
+    // Lo que se pierde: la línea «Sin guardar» de la pantalla, si la tiene.
+    var resumen = document.querySelector('#resumen-cambios:not([hidden]) strong');
+    var lista = resumen ? resumen.textContent.trim() : '';
+    modal.querySelector('[data-salir-intro]').textContent = lista
+      ? 'Tienes cambios sin guardar en esta pantalla:'
+      : 'Tienes cambios sin guardar en esta pantalla.';
+    var hueco = modal.querySelector('[data-salir-lista]');
+    hueco.textContent = lista;
+    hueco.parentNode.hidden = !lista;
+    modal.querySelector('[data-salir-confirmar]').onclick = function () {
+      alSalir();
+      window.location.href = destino;
+    };
+    window.jQuery(modal).modal('show');
+  }
+  window.edocPendientes = pendientes;
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar);
   else montar();
 })();

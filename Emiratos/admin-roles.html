@@ -61,6 +61,7 @@
         </div>
         <div class="edoc-tablero__cuerpo">
           <div id="arbol"></div>
+          <p class="edoc-cambios" id="resumen-cambios" hidden><span>Sin guardar:</span> <strong></strong></p>
           <div class="d-flex hueco-2 flex-wrap mt-2">
             <button class="btn btn-edoc-primario" type="button" id="btn-guardar">Guardar permisos</button>
             <button class="btn btn-edoc-terciario" type="button" id="btn-deshacer">Deshacer los cambios</button>
@@ -267,6 +268,28 @@
           .popover({ trigger: 'focus', html: false });
       }
     }
+    if (pendientes) { pendientes.fijar(); resumenRol(); }
+  }
+
+  /* RN-01 y RN-02 de la corrida del 14 sep. Antes de guardar se ve qué
+     permisos gana (+) y cuáles pierde (−) el rol, y abrir otro rol con cambios
+     a medias ya no los tira sin decir nada. */
+  var pendientes = null;
+  function huellaRol() { return elegido.id + ':' + marcados().sort().join(','); }
+  function resumenRol() {
+    var ahora = marcados();
+    var antes = Array.isArray(elegido.permisos) ? elegido.permisos : [];
+    var nombre = function (id) {
+      var caja = $('arbol').querySelector('[data-permiso="' + id + '"]');
+      var l = caja && caja.closest('.form-check').querySelector('label');
+      return l ? l.textContent.replace(/\s+/g, ' ').trim() : id;
+    };
+    var lineas = ahora.filter(function (p) { return antes.indexOf(p) < 0; })
+      .map(function (p) { return '+ ' + nombre(p); })
+      .concat(antes.filter(function (p) { return ahora.indexOf(p) < 0; })
+      .map(function (p) { return '− ' + nombre(p); }));
+    $('resumen-cambios').hidden = !lineas.length;
+    $('resumen-cambios').querySelector('strong').textContent = lineas.join(' · ');
   }
 
   /* La casilla del módulo marca o desmarca todas sus hojas, y se pone a medias
@@ -322,6 +345,10 @@
     }
     var fila = e.target.closest('[data-rol]');
     if (!fila) return;
+    if (fila.dataset.rol !== elegido.id && pendientes.hay()) {
+      window.edocAvisar('Guarda o deshaz los cambios de este rol antes de abrir otro.', 'error');
+      return;
+    }
     elegido = ROLES.filter(function (r) { return r.id === fila.dataset.rol; })[0] || elegido;
     pintarRoles(); pintarArbol();
   });
@@ -334,9 +361,14 @@
     }
     elegido.permisos = nuevos;
     pintarRoles();
+    pendientes.fijar();
+    resumenRol();
     window.edocAvisar('Permisos de <strong>' + elegido.nombre + '</strong> guardados · ' +
       nuevos.length + ' de ' + TODOS.length + '.', 'exito');
   });
+
+  // Va después del que sincroniza los módulos, para contar ya con sus hojas.
+  $('arbol').addEventListener('change', resumenRol);
 
   $('btn-deshacer').addEventListener('click', function () {
     pintarArbol();
@@ -396,6 +428,7 @@
   });
 
   pintarRoles();
+  pendientes = window.edocPendientes(huellaRol);
   pintarArbol();
 }());
 </script>

@@ -664,6 +664,18 @@ body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado)
 .edoc-accion--gris { border-color: var(--edoc-gris-borde); color: var(--edoc-gris-borde); }
 .edoc-accion--gris:hover { background: var(--edoc-gris-borde); color: #fff; }
 
+/* Cambios sin guardar · RN-02 de la corrida del 14 sep. Una línea junto a los
+   botones que dice qué se va a guardar antes de pulsar. */
+.edoc-cambios {
+  display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  margin: 12px 0 8px; font-size: 13px; color: var(--edoc-negro);
+}
+.edoc-cambios::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%; background: #e0a100;
+  flex: none; transform: translateY(-1px);
+}
+.edoc-cambios strong { font-weight: 600; }
+
 /* Iconos de archivo con su color · p.46 */
 .icono-xml { color: var(--archivo-xml); }
 .icono-pdf { color: var(--archivo-pdf); }
@@ -1830,6 +1842,21 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
 /* También en pantallas estrechas, no solo táctiles: una ventana estrecha o
    el navegador al 200 % dejan el mismo diseño apilado, y quien usa zoom es
    justo quien más falla al apuntar. */
+/* La casilla «No soy un robot» del acceso medía 13 × 13 px también con ratón:
+   era el objetivo más pequeño del camino de entrada y la mitad de los agentes
+   de la corrida del 14 sep no la acertaba. Toda la franja es clicable.       */
+.edoc-acceso .form-check { position: relative; padding-left: 0; }
+.edoc-acceso .form-check-input {
+  position: absolute; left: 14px; top: 22px; margin: 0;
+  width: 20px; height: 20px; transform: translateY(-50%); cursor: pointer;
+}
+.edoc-acceso .form-check-label {
+  display: flex; align-items: center; width: 100%; min-height: 44px; padding-left: 46px;
+  border: 1px solid #d6dae3; border-radius: var(--radio-chico); cursor: pointer;
+}
+.edoc-acceso .form-check-label:hover { border-color: var(--edoc-azul); }
+.edoc-acceso .form-check-input:focus-visible + .form-check-label { box-shadow: 0 0 0 3px rgba(0,17,116,.18); }
+
 @media (pointer: coarse), (max-width: 900px) {
   .edoc-btn-util, .edoc-usuario, .edoc-menu__hamburguesa, .edoc-clave-ojo, .close {
     min-width: 44px; min-height: 44px;
@@ -1849,6 +1876,13 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
   /* Que dos áreas vecinas no se pisen: si se tocan, gana la de encima y el
      dedo acaba en la acción de al lado, que es justo el fallo que se midó. */
   .edoc-accion + .edoc-accion { margin-left: 8px; }
+  /* Corrida del 14 sep: el área de 44 px ya estaba, pero el icono se seguía
+     viendo de 30 y el dedo apunta a lo que ve. La caja visible mide lo mismo
+     que el área. */
+  .edoc-accion, .edoc-tabla .edoc-accion { width: 44px; height: 44px; }
+  .edoc-accion svg, .edoc-tabla .edoc-accion svg { width: 18px; height: 18px; }
+  /* El número de documento abre el visor y su renglón medía 19 px de alto. */
+  a.edoc-clave-doc { display: inline-block; padding-block: 13px; }
   /* La casilla es pequeña por diseño de Bootstrap; su etiqueta hace de
      área de toque, que es lo que la corrida no encontraba. */
   .form-check-label { min-height: 44px; display: inline-flex; align-items: center; }
@@ -1931,4 +1965,160 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
 @media (max-width: 767.98px) {
   .edoc-filtros-mas { display: inline-flex; align-items: center; }
   .edoc-filtros-oculta .edoc-filtro-extra { display: none; }
+}
+
+/* --- Acceso · login del portal (.NET) --------------------------------------
+   El Login.cshtml del portal según Figma «Edoc-Editable», nodo 22-4165, medido
+   sobre el frame de 1366 px: una tarjeta de 976 px, portada de 390 px a la
+   izquierda y formulario a la derecha, todo en Poppins. Convive con las
+   librerías del portal (hoja de Bootstrap 3.1.1, jQuery Validate unobtrusive y
+   reCAPTCHA). Todo va bajo .edoc-login: la maqueta no cambia.                 */
+body.edoc-login-cuerpo {
+  margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+  background: #edf1f8; color: #333;
+  font-family: var(--fuente-titulos); font-size: 14px !important; line-height: 1.45;
+}
+.edoc-login { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
+.edoc-login__tarjeta {
+  width: 100%; max-width: 976px; display: grid; grid-template-columns: 40% 60%;
+  background: #fff; border-radius: 4px; overflow: hidden;
+  box-shadow: 0 10px 34px rgba(0,17,116,.10), 0 1px 3px rgba(0,17,116,.08);
+}
+
+/* Portada */
+.edoc-login__portada {
+  position: relative; overflow: hidden; color: #fff; text-align: center;
+  display: flex; flex-direction: column; align-items: center; padding: 58px 30px 24px;
+  background: linear-gradient(180deg, #001174 0%, #0b1f98 100%);
+}
+/* Dos arcos finos arriba a la derecha y un círculo abajo a la izquierda. */
+.edoc-login__portada::before {
+  content: ""; position: absolute; left: 256px; top: -100px; width: 220px; height: 220px;
+  border-radius: 50%; border: 1px solid rgba(255,255,255,.10);
+  outline: 1px solid rgba(255,255,255,.08); outline-offset: 40px; pointer-events: none;
+}
+.edoc-login__portada::after {
+  content: ""; position: absolute; left: -21px; bottom: 84px; width: 114px; height: 114px;
+  border-radius: 50%; background: rgba(255,255,255,.07); pointer-events: none;
+}
+.edoc-login__filigrana {
+  position: absolute; left: 50%; top: 330px; transform: translateX(-50%);
+  width: 290px; height: auto; opacity: .14; pointer-events: none;
+}
+.edoc-login__marca { position: relative; z-index: 1; height: 95px; width: auto; }
+.edoc-login__titulo {
+  position: relative; z-index: 1; margin: 20px 0 0; font-family: var(--fuente-titulos);
+  font-weight: 500; font-size: 32px; line-height: 1.15; color: #fff;
+}
+.edoc-login__pais {
+  position: relative; z-index: 1; margin: 2px 0 0; font-family: var(--fuente-titulos);
+  font-weight: 500; font-size: 15px; letter-spacing: 0; text-transform: uppercase; color: #fff;
+}
+.edoc-login__lema {
+  position: relative; z-index: 1; max-width: 250px; margin: 22px 0 0;
+  font-family: var(--fuente-titulos); font-weight: 400; font-size: 15px; line-height: 1.3; color: #8e9ad6;
+}
+.edoc-login__legal-portada {
+  position: relative; z-index: 1; margin: auto 0 0; padding-top: 40px;
+  font-size: 9.5px; color: rgba(255,255,255,.62);
+}
+
+/* Formulario */
+.edoc-login__panel { display: flex; flex-direction: column; min-width: 0; padding: 0 31px 0 30px; }
+.edoc-login__cabecera {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0 13px; border-bottom: 1px solid #dedede;
+}
+.edoc-login__cabecera-rotulo { font-family: var(--fuente-titulos); font-weight: 600; font-size: 19px; color: #555; }
+.edoc-login__idioma-boton {
+  display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px;
+  background: #fff; border: 1px solid #cfcfcf; border-radius: 3px;
+  font-family: var(--fuente-titulos); font-size: 11px; font-weight: 500; color: #333;
+}
+.edoc-login__idioma-glifo { font-size: 9px; color: #555; }
+.edoc-login__idioma-flecha { font-size: 9px; color: #555; }
+.edoc-login__idioma .dropdown-menu { min-width: 140px; font-size: 12.5px; }
+.edoc-login__idioma .dropdown-item { display: block; padding: 6px 14px; color: #333; }
+
+.edoc-login__cuerpo { padding: 14px 0 20px; }
+.edoc-login__saludo {
+  display: inline-block; margin: 0; font-family: var(--fuente-titulos); font-weight: 700;
+  font-size: 23px; line-height: 1.2; color: var(--edoc-azul);
+}
+.edoc-login__saludo::after {
+  content: ""; display: block; width: 33px; height: 3px; margin-top: 1px;
+  border-radius: 2px; background: var(--edoc-verde);
+}
+.edoc-login__intro { margin: 8px 0 12px; font-size: 11px; color: #777; }
+.edoc-login__campo { margin-bottom: 10px; }
+.edoc-login label.edoc-etiqueta {
+  display: block; margin: 0 0 4px; font-family: var(--fuente-titulos); font-weight: 400;
+  font-size: 15px; letter-spacing: 0; text-transform: none; color: #333;
+}
+.edoc-login .obligatorio { margin-left: 4px; color: #e5352b; }
+.edoc-login .form-control {
+  height: 44px; padding: 8px 15px; font-family: var(--fuente-titulos); font-size: 17px !important;
+  color: #333; border: 1px solid #dcdcdc; border-radius: 3px; box-shadow: none;
+}
+.edoc-login .form-control::placeholder { color: #6b6b6b; }
+.edoc-login .form-control:focus { border-color: var(--edoc-azul); box-shadow: 0 0 0 3px rgba(0,17,116,.10); outline: 0; }
+.edoc-login__olvide { margin: 6px 0 8px; text-align: right; font-size: 13px; }
+.edoc-login #btnRecuperarClave { color: var(--edoc-azul); cursor: pointer; text-decoration: none; }
+.edoc-login #btnRecuperarClave:hover,
+.edoc-login #btnRecuperarClave:focus { text-decoration: underline; }
+.edoc-login__captcha { display: flex; flex-direction: column; align-items: center; margin: 10px 0 14px; }
+.edoc-login__captcha .row { margin: 0; }
+.edoc-login__seguridad { margin: 0 0 8px; font-size: 11px; color: #777; }
+.edoc-login .btn-edoc-primario {
+  height: 42px; font-family: var(--fuente-titulos); font-weight: 400; font-size: 19px !important;
+  letter-spacing: 0; border-radius: 2px;
+}
+
+/* Validación: jQuery Validate unobtrusive y el resumen del servidor */
+.edoc-login .field-validation-error,
+.edoc-login .edoc-login__campo .text-danger { display: block; margin-top: 3px; font-size: 12px; color: var(--senal-error); }
+.edoc-login .input-validation-error { border-color: var(--senal-error); }
+.edoc-login .validation-summary-valid { display: none; }
+.edoc-login .validation-summary-errors {
+  margin-bottom: 12px; padding: 8px 12px; font-size: 13px; color: var(--senal-error);
+  background: #fdeaea; border: 1px solid #f3b7b3; border-radius: 3px;
+}
+.edoc-login .validation-summary-errors ul { margin: 0; padding-left: 18px; }
+
+/* Sin acceso, legales y versión */
+.edoc-login__otros { margin-top: 14px; padding-top: 14px; border-top: 1px solid #dedede; }
+.edoc-login__otros-titulo { margin: 0 0 12px; font-family: var(--fuente-titulos); font-weight: 400; font-size: 18px; color: #444; }
+.edoc-login__via {
+  display: flex; align-items: center; gap: 12px; padding: 9px 20px 9px 15px;
+  border: 1.5px solid #666; border-radius: 3px; color: #333; transition: border-color .15s, background .15s;
+}
+.edoc-login__via:hover,
+.edoc-login__via:focus { border-color: var(--edoc-azul); background: #f7f9fc; color: #333; text-decoration: none; }
+.edoc-login__via-textos { flex: 1; min-width: 0; }
+.edoc-login__via-nombre { display: block; font-family: var(--fuente-titulos); font-weight: 400; font-size: 19px; line-height: 1.25; color: var(--edoc-azul); }
+.edoc-login__via-detalle { display: block; font-size: 15px; line-height: 1.35; color: #333; }
+.edoc-login__via-flecha { flex: none; font-size: 26px; line-height: 1; color: #333; }
+.edoc-login__legal { position: relative; display: flex; justify-content: space-between; gap: 12px; margin-top: 20px; font-size: 13px; }
+.edoc-login__legal::before {
+  content: ""; position: absolute; left: 50%; top: 2px; bottom: 2px; width: 1px; background: #dcdcdc;
+}
+.edoc-login__legal a,
+.edoc-login__version a { color: var(--edoc-azul); }
+.edoc-login__version { margin-top: 18px; text-align: center; font-size: 13px; color: #8a8a8a; }
+.edoc-login__version a { color: #8a8a8a; }
+
+/* El diseño no lleva barra de pie: la del parcial _Footer se oculta. */
+body.edoc-login-cuerpo > .footer { display: none; }
+
+@media (max-width: 860px) {
+  .edoc-login { align-items: flex-start; padding: 16px; }
+  .edoc-login__tarjeta { grid-template-columns: 1fr; }
+  .edoc-login__portada { padding: 30px 22px 20px; }
+  .edoc-login__portada::before { left: auto; right: -140px; }
+  .edoc-login__marca { height: 64px; }
+  .edoc-login__titulo { font-size: 26px; margin-top: 14px; }
+  .edoc-login__lema { margin-top: 12px; }
+  .edoc-login__legal-portada { padding-top: 16px; }
+  .edoc-login__filigrana { top: auto; bottom: -90px; width: 170px; }
+  .edoc-login__panel { padding: 0 20px; }
 }

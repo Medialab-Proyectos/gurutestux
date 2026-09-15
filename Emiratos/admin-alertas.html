@@ -43,6 +43,7 @@
     <div class="edoc-tablero__cuerpo">
       <div id="bloques"></div>
 
+      <p class="edoc-cambios mt-4" id="resumen-cambios" hidden><span>Sin guardar:</span> <strong></strong></p>
       <div class="d-flex hueco-2 mt-4">
         <button class="btn btn-edoc-primario" type="button" id="guardar">Guardar</button>
         <button class="btn btn-edoc-terciario" type="button" id="deshacer">Deshacer los cambios</button>
@@ -189,6 +190,22 @@
         '</div>' +
       '</div>';
     }).join('');
+    resumen();
+  }
+
+  /* RN-02 de la corrida del 14 sep: qué correos entran (+) y salen (−) antes de
+     guardar, y aviso del navegador si se sale con eso a medias. */
+  var pendientes = null;
+  function resumen() {
+    var antes = JSON.parse(ORIGINAL);
+    var lineas = [];
+    BLOQUES.forEach(function (b, i) {
+      var viejos = antes[i].correos;
+      b.correos.forEach(function (c) { if (viejos.indexOf(c) < 0) lineas.push('+ ' + c); });
+      viejos.forEach(function (c) { if (b.correos.indexOf(c) < 0) lineas.push('− ' + c); });
+    });
+    $('resumen-cambios').hidden = !lineas.length;
+    $('resumen-cambios').querySelector('strong').textContent = lineas.join(' · ');
   }
 
   function bloque(clave) {
@@ -245,6 +262,9 @@
         'Si nadie lo recibe, ese aviso no llega a nadie.', 'error');
       return;
     }
+    ORIGINAL = JSON.stringify(BLOQUES);
+    pendientes.fijar();
+    resumen();
     window.edocAvisar('Correos guardados.', 'exito');
   });
 
@@ -254,6 +274,7 @@
     window.edocAvisar('Se descartaron los cambios sin guardar.');
   });
 
+  pendientes = window.edocPendientes(function () { return JSON.stringify(BLOQUES); });
   pintar();
 }());
 </script>

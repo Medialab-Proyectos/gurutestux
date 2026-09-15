@@ -972,7 +972,94 @@
       "Las reglas del servicio: qué presta eDoc como proveedor de servicios, qué se espera del cliente y qué pasa si una de las dos partes deja de cumplir.": "The rules of the service: what eDoc provides as a service provider, what is expected of the client and what happens if either party fails to comply.",
       "Qué datos personales se recogen, para qué, cuánto se guardan y a quién se ceden. Aquí entra el registro de la empresa, que pide nombre, cargo y teléfono de personas.": "Which personal data is collected, for what, how long it is kept and who it is shared with. This covers company registration, which asks for people’s name, position and phone.",
       "Cuál de los dos, y en": "Which of the two, and in",
-      "qué versión": "which version"
+      "qué versión": "which version",
+      "Sin guardar:": "Unsaved:",
+      "Información de la empresa guardada:": "Company information saved:",
+      "No hay cambios que guardar.": "There are no changes to save.",
+      "Guarda o deshaz los cambios de este rol antes de abrir otro.": "Save or undo this role’s changes before opening another.",
+      "¿Salir sin guardar?": "Leave without saving?",
+      "Tienes cambios sin guardar en esta pantalla:": "You have unsaved changes on this screen:",
+      "Tienes cambios sin guardar en esta pantalla.": "You have unsaved changes on this screen.",
+      "Si sales ahora, se pierden.": "If you leave now, they will be lost.",
+      "Seguir editando": "Keep editing",
+      "Salir sin guardar": "Leave without saving",
+      "Ese correo no tiene buena pinta.": "That email doesn’t look right.",
+      "Ese correo ya está en la lista.": "That email is already on the list.",
+      "Correos guardados.": "Emails saved.",
+      "Se descartaron los cambios sin guardar.": "Unsaved changes were discarded.",
+      "Se descartó lo que habías escrito.": "What you typed was discarded.",
+      "Contraseña actualizada. Las sesiones abiertas en otros navegadores se han cerrado.": "Password updated. Sessions open in other browsers have been signed out.",
+      "Escribe tu contraseña actual.": "Enter your current password.",
+      "Escribe la contraseña nueva.": "Enter the new password.",
+      "La contraseña nueva tiene que ser distinta de la actual.": "The new password must be different from the current one.",
+      "Las dos contraseñas nuevas no coinciden.": "The two new passwords don’t match.",
+      "Consulta lanzada.": "Search started.",
+      "Cambios guardados en": "Changes saved for",
+      "Contacto añadido:": "Contact added:",
+      "No puedes quitar el único contacto de": "You can’t remove the only contact for",
+      ". Añade otro primero.": ". Add another one first.",
+      "Falta el nombre del contacto.": "The contact’s name is missing.",
+      "Falta el cargo. Sirve para saber a quién se escribe.": "The job title is missing. It tells us who we are writing to.",
+      "Ya hay un contacto con ese correo.": "There is already a contact with that email.",
+      "Secreto nuevo generado. El anterior deja de valer ahora mismo: acuérdate de cambiarlo en el sistema que lo usa.": "New secret generated. The previous one stops working right now: remember to update it in the system that uses it.",
+      "queda retirada. Las demás siguen funcionando.": "is retired. The others keep working.",
+      "El día tiene que estar entre 1 y 28: los meses cortos no llegan a 31.": "The day must be between 1 and 28: short months don’t reach 31.",
+      "Has marcado que requiere orden de compra: pon el número.": "You marked that a purchase order is required: enter its number.",
+      "No se puede borrar": "Can’t delete",
+      "borrado.": "deleted.",
+      "Un rol sin ningún permiso no puede ni entrar al portal. Marca al menos uno.": "A role with no permissions can’t even sign in to the portal. Tick at least one.",
+      "Permisos de": "Permissions of",
+      "Escribe en una línea qué puede hacer este rol.": "Describe in one line what this role can do.",
+      "creado sin permisos. Ajústalos y guarda.": "created without permissions. Adjust them and save.",
+      "Correo de bienvenida reenviado a": "Welcome email resent to",
+      "Usuario creado:": "User created:",
+      "No puedes desactivar al último administrador activo: la empresa se quedaría sin nadie que pueda administrar el portal.": "You can’t deactivate the last active administrator: the company would be left with nobody who can manage the portal.",
+      "queda activo.": "is now active.",
+      "queda inactivo.": "is now inactive.",
+      "Falta el nombre del usuario.": "The user’s name is missing.",
+      "Falta el nombre de usuario.": "The username is missing.",
+      "Ya hay alguien con ese usuario.": "Someone already has that username.",
+      "Ya hay un usuario con ese correo.": "There is already a user with that email.",
+      "Registro": "Registration",
+      "aprobado. Le enviamos las credenciales por correo.": "approved. We emailed the credentials.",
+      "Marca primero qué bloque no es conforme. Si todo está bien, apruébalo.": "First mark which section isn’t compliant. If everything is fine, approve it.",
+      "Enviamos a": "We sent",
+      "Se descargaría el XML de": "This would download the XML of",
+      "Se descargaría el PDF de": "This would download the PDF of",
+      ". En la maqueta no hay archivo detrás.": ". There is no file behind it in the mockup.",
+      "Consulta lanzada. La maqueta devuelve siempre el mismo juego de documentos.": "Search started. The mockup always returns the same set of documents.",
+      "Se inició un proceso para generar el archivo": "A process started to generate the",
+      ". Cuando esté listo te lo enviamos por correo.": "file. We will email it to you when it is ready.",
+      "Descargando el archivo": "Downloading the",
+      "Se está generando": "Generating",
+      ". Lo recoges en": ". Pick it up in",
+      "Recibimos la asociación desde EmaraTax. Tu portal queda desbloqueado.": "We received the association from EmaraTax. Your portal is unlocked.",
+      "Enviamos la aprobación": "We sent the approval",
+      "Elige el motivo del rechazo. Es obligatorio.": "Choose the rejection reason. It is required.",
+      "Enviamos el rechazo": "We sent the rejection",
+      "Dejamos constancia de que llegó ·": "We recorded that it arrived ·",
+      ". No es una aprobación.": ". It is not an approval.",
+      "Expediente recuperado con los datos que ya tenía.": "Application recovered with the data it already had.",
+      "Cambiado a «Actualizar registro existente». Pon el código de seguimiento.": "Switched to “Update existing registration”. Enter the tracking code.",
+      "Código reenviado a": "Code resent to",
+      ". El código de seguimiento no cambia: es el mismo expediente.": ". The tracking code doesn’t change: it is the same application.",
+      "Ese código de seguimiento no tiene el formato correcto.": "That tracking code isn’t in the right format.",
+      "Escribe un correo corporativo válido.": "Enter a valid company email.",
+      "El código de verificación son seis cifras.": "The verification code is six digits.",
+      "El teléfono son solo cifras, sin el código de país.": "The phone number is digits only, without the country code.",
+      "El registro fiscal son quince cifras.": "The tax registration number is fifteen digits.",
+      "Has puesto contacto técnico: pon también su correo.": "You added a technical contact: enter their email too.",
+      "Escribe primero el correo corporativo.": "Enter the company email first.",
+      "Tu reporte ya está listo para descargar.": "Your report is ready to download.",
+      "Se descargaría el archivo de": "This would download the file for",
+      "Te enviamos el enlace de": "We sent the link for",
+      "por correo.": "by email.",
+      "Volvemos a generar": "Generating again",
+      ". Te avisamos cuando esté.": ". We will let you know when it is ready.",
+      "al menos diez caracteres": "at least ten characters",
+      "una mayúscula": "an uppercase letter",
+      "un número": "a number",
+      "un símbolo": "a symbol"
   };
 
   var DIAS = { 'lunes': 'Monday', 'martes': 'Tuesday', 'miércoles': 'Wednesday',
@@ -1043,12 +1130,46 @@
     [/^Revisar (.+)$/, 'Review $1'],
     [/^(.+) · no disponible: (.+)$/, function (m, a, b) {
       return (aIngles(a) || a) + ' · not available: ' + (aIngles(b) || b);
-    }]
+    }],
+    // Avisos flotantes con un dato dentro · corrida del 14 sep.
+    [/^deja de recibir avisos de (.+)\.$/, function (m, a) { return 'no longer receives ' + trozo(a) + ' notices.'; }],
+    [/^añadido a (.+)\.$/, function (m, a) { return 'added to ' + trozo(a) + '.'; }],
+    [/^«(.+)» se queda sin ningún correo\. Si nadie lo recibe, ese aviso no llega a nadie\.$/,
+     function (m, a) { return '“' + trozo(a, true) + '” is left without any email. If nobody receives it, that notice reaches no one.'; }],
+    [/^A la contraseña nueva le falta: (.+)\.$/, function (m, a) {
+      return 'The new password is missing: ' + a.split(', ').map(function (x) { return trozo(x); }).join(', ') + '.';
+    }],
+    [/^· (.+)\.$/, function (m, a) { return '· ' + trozo(a, true) + '.'; }],
+    [/^ya no recibe avisos de (.+)\.$/, function (m, a) { return 'no longer receives ' + trozo(a) + ' notices.'; }],
+    [/^: todavía lo usan (\d+) usuarios\. Cámbiales el rol primero\.$/, ': still used by $1 users. Change their role first.'],
+    [/^guardados · (\d+) de (\d+)\.$/, 'saved · $1 of $2.'],
+    [/^creado copiando los permisos de (.+)\. Ajústalos y guarda\.$/,
+     function (m, a) { return 'created with the permissions of ' + trozo(a, true) + '. Adjust them and save.'; }],
+    [/^\. Le mandamos el correo de bienvenida a (\S+)\.$/, '. We sent the welcome email to $1.'],
+    [/^el correo de no conformidad con (\d+) punto\(s\) marcados\.$/, 'the non-compliance email with $1 marked point(s).'],
+    [/^Se descargaría el (\S+) del documento abierto\.$/, 'This would download the $1 of the open document.'],
+    [/^Se descargaría el (\S+)\.$/, 'This would download the $1.'],
+    [/^de (\S+)\.$/, 'for $1.'],
+    [/^Falta rellenar el paso (\d+)\. Está marcado en el panel\.$/, 'Step $1 is incomplete. It is marked in the panel.'],
+    [/^Falta «(.+)»\.$/, function (m, a) { return 'Missing “' + trozo(a, true) + '”.'; }],
+    [/^El correo de (.+) no tiene buena pinta\.$/, function (m, a) { return 'The email for ' + trozo(a) + ' doesn’t look right.'; }],
   ];
 
   /* Elegir inglés no avisa de nada: el cambio se ve. Solo el árabe lo dice,
      porque se pide una cosa y se enseña otra. */
   var AVISO_AR = 'Arabic is not available yet, so the portal is shown in English.';
+
+  /* Un dato que va dentro de una frase: «contacto técnico», «Solo lectura».
+     Se busca tal cual y con mayúscula inicial; si la frase lo pedía en
+     minúscula, se devuelve en minúscula. */
+  function trozo(t, conMayuscula) {
+    var en = aIngles(t);
+    if (en == null) {
+      en = aIngles(t.charAt(0).toUpperCase() + t.slice(1));
+      if (en != null && !conMayuscula) en = en.charAt(0).toLowerCase() + en.slice(1);
+    }
+    return en == null ? t : en;
+  }
 
   function aIngles(texto) {
     if (Object.prototype.hasOwnProperty.call(EN, texto)) return EN[texto];

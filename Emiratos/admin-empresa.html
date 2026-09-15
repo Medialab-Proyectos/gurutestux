@@ -120,6 +120,7 @@
   <!-- Un solo botón al pie de toda la pantalla, fuera de los paneles: es
        exactamente como guarda Bolivia, y cumple la regla de un primario por
        pantalla. -->
+  <p class="edoc-cambios" id="resumen-cambios" hidden><span>Sin guardar:</span> <strong></strong></p>
   <div class="d-flex hueco-2 mb-3">
     <button class="btn btn-edoc-primario" type="button" id="guardar-todo">Confirmar información</button>
     <button class="btn btn-edoc-terciario" type="button" id="cancelar-todo">Cancelar</button>
@@ -184,6 +185,31 @@
     $(id).focus();
   }
 
+  /* Lo que había al abrir, campo a campo: sirve para decir qué va a cambiar
+     antes de confirmar, para avisar al salir con cambios y para que Cancelar
+     deshaga de verdad (antes solo avisaba y dejaba lo escrito). */
+  var CAMPOS = [].slice.call(document.querySelectorAll(
+    'main .edoc-tablero input, main .edoc-tablero select, main .edoc-tablero textarea'));
+  function valor(c) { return c.type === 'checkbox' ? String(c.checked) : c.value; }
+  var ORIGEN = CAMPOS.map(valor);
+  var pendientes = window.edocPendientes(function () { return CAMPOS.map(valor).join('\u0001'); });
+
+  function cambiados() {
+    return CAMPOS.filter(function (c, i) { return valor(c) !== ORIGEN[i]; });
+  }
+  function rotulo(c) {
+    var l = document.querySelector('label[for="' + c.id + '"]');
+    if (!l) return c.id;
+    return (l.querySelector('strong') || l).textContent.replace('*', '').replace(/\s+/g, ' ').trim();
+  }
+  function resumen() {
+    var lista = cambiados();
+    $('resumen-cambios').hidden = !lista.length;
+    $('resumen-cambios').querySelector('strong').textContent = lista.map(rotulo).join(' · ');
+  }
+  document.querySelector('main').addEventListener('input', resumen);
+  document.querySelector('main').addEventListener('change', resumen);
+
   /* Guarda la pantalla entera, que es como lo hace Bolivia. Se comprueban las
      dos secciones antes de confirmar nada: no tiene sentido dar por buenos los
      datos fiscales y dejar el correo de facturación mal escrito. */
@@ -201,10 +227,24 @@
       return mal('f-orden-num', 'Has marcado que requiere orden de compra: pon el número.');
     }
     document.querySelectorAll('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
-    window.edocAvisar('Información de la empresa guardada.', 'exito');
+    var lista = cambiados();
+    if (!lista.length) return window.edocAvisar('No hay cambios que guardar.');
+    ORIGEN = CAMPOS.map(valor);
+    pendientes.fijar();
+    resumen();
+    window.edocAvisar('<span>Información de la empresa guardada:</span> <strong>' +
+      lista.map(rotulo).join(' · ') + '</strong>', 'exito');
   });
 
   $('cancelar-todo').addEventListener('click', function () {
+    CAMPOS.forEach(function (c, i) {
+      if (c.type === 'checkbox') c.checked = ORIGEN[i] === 'true';
+      else c.value = ORIGEN[i];
+      c.classList.remove('is-invalid');
+    });
+    // La casilla de orden de compra enseña u oculta su número al cambiar.
+    $('f-orden').dispatchEvent(new Event('change', { bubbles: true }));
+    resumen();
     window.edocAvisar('Se descartaron los cambios sin guardar.');
   });
 }());
