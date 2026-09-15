@@ -94,6 +94,12 @@
             <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
           <input class="form-control cifra" id="p-folio" placeholder="019fa464-8241-730b-9748-9677cb1ecce8">
           <div class="edoc-ayuda" id="ayuda-folio">Los 36 caracteres que te dimos al enviar la solicitud.</div>
+          <div class="nota nota--abierto mt-2">
+            <span class="nota__sello">Para probar la maqueta</span>
+            <strong>019fa464-8241-730b-9748-9677cb1ecce8</strong> abre el expediente de Al Noor, con la licencia
+            caducada: salta al paso 3. <strong>019fa464-9c10-7d2e-8a41-3f5b2c7e9d01</strong> abre el de Gulf Marine,
+            con el correo de cobros rebotado: salta al paso 4. Cualquier otro código dice que no existe.
+          </div>
         </div>
 
         <label class="edoc-etiqueta mt-3" for="p-correo">Correo electrónico corporativo
@@ -461,6 +467,7 @@
 
   var $ = function (id) { return document.getElementById(id); };
   function val(id) { var e = $(id); return e ? (e.value || '').trim() : ''; }
+  function hoy() { return new Date().toISOString().slice(0, 10); }
 
   /* Los pasos que piden datos. La revision final va aparte: no es un paso, es
      el cierre, y por eso no se numera. El documento de MVP dice 'wizard de seis
@@ -471,6 +478,42 @@
   var masLejos = 1;
   var folio = null;
   var conError = {};   // qué pasos han fallado la validación
+  var archivoPrevio = null;   // la licencia que ya estaba en el expediente recuperado
+
+  /* Los expedientes que se pueden recuperar con su código de seguimiento. Quien
+     vuelve no empieza de cero: se le rellena lo que ya envió y se le lleva
+     directo al paso que el revisor marcó como no conforme. Ese campo queda
+     vacío, para que el paso no cuente como hecho hasta que lo corrija. */
+  var EXPEDIENTES = {
+    '019fa464-8241-730b-9748-9677cb1ecce8': {
+      ref: 'REG-2026-00918', paso: 4, campo: 'd-caduca', archivo: null, archivoCaducado: true,
+      observacion: 'La licencia comercial del expediente caducó. Sube la vigente y pon su fecha de validez.',
+      datos: {
+        'a-nombre': 'Fatima Al Marzooqi', 'a-cargo': 'Directora financiera', 'a-tel': '50 123 4567',
+        'e-legal': 'Al Noor Trading LLC', 'e-comercial': 'Al Noor', 'e-nativo': 'النور للتجارة ذ.م.م',
+        'e-trn': '100908070600003', 'e-emirato': 2, 'e-sujeta': 1,
+        'e-dir': 'Jebel Ali Free Zone, Bloque C, Oficina 214',
+        'd-numero': 'CN-1183042', 'd-caduca': '',
+        'r-com': 'Omar Haddad', 'r-com-c': 'ventas@alnoor.ae',
+        'r-cob': 'Daniel Tigreros', 'r-cob-c': 'cuentas@alnoor.ae',
+        'l-privacidad': true, 'l-condiciones': true, 'l-datos': true
+      }
+    },
+    '019fa464-9c10-7d2e-8a41-3f5b2c7e9d01': {
+      ref: 'REG-2026-00917', paso: 5, campo: 'r-cob-c', archivo: 'licencia-comercial-gms.pdf',
+      observacion: 'El correo del contacto de cobros rebotó: no le llega a nadie. Pon uno que funcione.',
+      datos: {
+        'a-nombre': 'Rashid Al Suwaidi', 'a-cargo': 'Gerente de operaciones', 'a-tel': '55 987 6543',
+        'e-legal': 'Gulf Marine Services', 'e-comercial': 'GMS', 'e-nativo': 'خدمات الخليج البحرية',
+        'e-trn': '100445566700003', 'e-emirato': 1, 'e-sujeta': 1,
+        'e-dir': 'Mussafah Industrial Area, Abu Dabi',
+        'd-numero': 'CN-2207719', 'd-caduca': '2027-11-30',
+        'r-com': 'Sara Mansour', 'r-com-c': 'ventas@gulfmarine.ae',
+        'r-cob': 'Imran Qureshi', 'r-cob-c': '',
+        'l-privacidad': true, 'l-condiciones': true, 'l-datos': true
+      }
+    }
+  };
 
   /* La numeración es la de Francia, y ahí 'Solicitud y acceso' NO cuenta: es la
      verificación por correo con la que arranca el asistente, no un paso suyo.
@@ -510,7 +553,7 @@
     var e = $(id);
     if (!e) return false;
     if (e.type === 'checkbox') return e.checked;
-    if (e.type === 'file') return e.files.length > 0;
+    if (e.type === 'file') return e.files.length > 0 || !!archivoPrevio;
     return !!(e.value || '').trim();
   }
 
@@ -548,6 +591,9 @@
     }
     if (paso === 3 && !/^\d{15}$/.test(val('e-trn'))) {
       return { id: 'e-trn', texto: 'El registro fiscal son quince cifras.' };
+    }
+    if (paso === 4 && val('d-caduca') && val('d-caduca') < hoy()) {
+      return { id: 'd-caduca', texto: 'La licencia está caducada. Sube la vigente y pon su nueva fecha.' };
     }
     if (paso === 5) {
       var correos = [['r-com-c', 'comercial'], ['r-cob-c', 'cobros']];
@@ -621,7 +667,7 @@
       var detalle = campos(orden).map(function (campo) {
         var e = $(campo[0]);
         var v = e.type === 'checkbox' ? (e.checked ? 'Aceptado' : '—')
-              : e.type === 'file' ? (e.files.length ? e.files[0].name : '—')
+              : e.type === 'file' ? (e.files.length ? e.files[0].name : (archivoPrevio || '—'))
               : (e.value || '—');
         return '<dt>' + campo[1] + '</dt><dd>' + v + '</dd>';
       }).join('');
@@ -677,6 +723,44 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  /* Recupera un expediente: rellena lo que ya estaba, abre todos los pasos en
+     el panel y salta al que observó el revisor, con su observación arriba. */
+  function recuperar(exp) {
+    Object.keys(exp.datos).forEach(function (id) {
+      var campo = $(id);
+      var v = exp.datos[id];
+      if (!campo) return;
+      if (campo.type === 'checkbox') campo.checked = !!v;
+      // Los selectores se eligen por posición: su texto cambia al traducir.
+      else if (campo.tagName === 'SELECT') campo.selectedIndex = v;
+      else campo.value = v;
+      if (campo.tagName === 'SELECT') campo.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    archivoPrevio = exp.archivo;
+    if (archivoPrevio) {
+      $('zona-subir').classList.add('reg__subir--lleno');
+      $('subir-t').textContent = archivoPrevio;
+      $('subir-s').textContent = 'Ya está en el expediente. Haz clic para cambiarla.';
+    } else if (exp.archivoCaducado) {
+      $('subir-s').textContent = 'La que tenías caducó: sube la vigente.';
+    }
+    $('chip-estado').textContent = 'Con observaciones';
+
+    var previa = $('obs-revisor');
+    if (previa) previa.remove();
+    document.querySelector('.paso[data-paso="' + exp.paso + '"]').insertAdjacentHTML('afterbegin',
+      '<div class="edoc-aviso edoc-aviso--advertencia mb-3" id="obs-revisor">' +
+        '<div><strong>Observación del revisor.</strong> ' + exp.observacion + '</div></div>');
+
+    masLejos = REPASO;
+    conError[exp.paso] = true;
+    ir(exp.paso);
+    var marcado = $(exp.campo);
+    if (marcado) marcado.classList.add('is-invalid');
+    window.edocAvisar('Expediente <strong>' + exp.ref + '</strong> recuperado. ' +
+      'Te llevamos a lo que observó el revisor.', 'exito');
+  }
+
   function nuevoFolio() {
     // El de Francia es un identificador universal de 36 caracteres.
     function trozo(n) {
@@ -700,16 +784,15 @@
         $('folio-lado').textContent = folio;
         $('a-correo').value = val('p-correo');
         if ($('tipo-actualiza').checked) {
-          $('a-nombre').value = 'Fatima Al Marzooqi';
-          $('a-cargo').value = 'Directora financiera';
-          $('a-tel').value = '50 123 4567';
-          $('e-legal').value = 'Al Noor Trading LLC';
-          $('e-trn').value = '100908070600003';
-          $('e-emirato').value = 'Dubái';
-          $('e-sujeta').value = 'Sí';
-          $('e-dir').value = 'Jebel Ali Free Zone, Bloque C, Oficina 214';
-          masLejos = 4;
-          window.edocAvisar('Expediente recuperado con los datos que ya tenía.', 'exito');
+          var expediente = EXPEDIENTES[folio];
+          if (!expediente) {
+            folio = null;
+            $('folio-lado').textContent = 'Se abre al verificar el correo';
+            return marcarMal(1, { id: 'p-folio',
+              texto: 'No hay ningún expediente con ese código. Revisa que esté completo.' });
+          }
+          recuperar(expediente);
+          return;
         }
       }
       ir(actual + 1);

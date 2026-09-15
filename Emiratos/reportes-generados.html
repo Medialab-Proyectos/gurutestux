@@ -46,7 +46,7 @@
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Buscar</h2>
     </div>
-    <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Consulta lanzada.')">
+    <form class="edoc-tablero__cuerpo" id="forma-buscar" novalidate>
       <div class="row rejilla">
         <div class="col-12 col-md-6 col-xl-3">
           <label class="edoc-etiqueta" for="r-desde">Fecha de creación desde</label>
@@ -54,7 +54,7 @@
         </div>
         <div class="col-12 col-md-6 col-xl-3">
           <label class="edoc-etiqueta" for="r-hasta">Fecha de creación hasta</label>
-          <input type="date" class="form-control" id="r-hasta" value="2026-09-05">
+          <input type="date" class="form-control" id="r-hasta" value="">
         </div>
         <div class="col-12 col-md-6 col-xl-3">
           <label class="edoc-etiqueta" for="r-tipo">Tipo de reporte</label>
@@ -74,7 +74,10 @@
           </select>
         </div>
       </div>
-      <button class="btn btn-edoc-primario" type="submit">Consultar</button>
+      <div class="d-flex hueco-2 flex-wrap mt-3">
+        <button class="btn btn-edoc-primario" type="submit">Consultar</button>
+        <button class="btn btn-edoc-terciario" type="reset">Limpiar</button>
+      </div>
     </form>
   </section>
 
@@ -221,12 +224,40 @@
 
     function montar() {
       window.edocTabla('#tabla-reportes', {
-        language: { emptyTable: 'No has pedido ningún reporte en ese rango de fechas.' },
+        language: {
+          emptyTable: window.edocVacio('No has pedido ningún reporte en ese rango de fechas',
+            'Pídelo desde Documentos Emitidos o Recibidos, con «Exportar».')
+        },
         order: [[3, 'desc']]
       });
     }
 
     pintar();
+
+    /* Buscar. Las filas vienen de la página y de lo pedido en esta sesión, así
+       que se mira la fila tal como se ve; el texto de los selectores y el de las
+       celdas pasan por la misma traducción. «Hasta» va vacío: lo pedido hoy
+       tiene que salir sin tocar las fechas. */
+    function textoCelda(td) { return td ? td.textContent.replace(/\s+/g, ' ').trim() : ''; }
+    function elegido(id) {
+      var s = document.getElementById(id);
+      return s.selectedIndex > 0 ? s.options[s.selectedIndex].text.trim() : '';
+    }
+    window.edocFiltrar('#tabla-reportes', document.getElementById('forma-buscar'), {
+      unidad: ['reporte', 'reportes'],
+      fechas: ['r-desde', 'r-hasta'],
+      leer: function () {
+        return { desde: document.getElementById('r-desde').value, hasta: document.getElementById('r-hasta').value,
+                 tipo: elegido('r-tipo'), estado: elegido('r-estado') };
+      },
+      cumple: function (c, tr) {
+        if (!tr) return true;
+        var creado = textoCelda(tr.cells[3]).slice(0, 10);
+        var tipo = tr.cells[2].firstChild ? String(tr.cells[2].firstChild.textContent).trim() : '';
+        return (!c.desde || creado >= c.desde) && (!c.hasta || creado <= c.hasta) &&
+          (!c.tipo || tipo === c.tipo) && (!c.estado || textoCelda(tr.cells[6]) === c.estado);
+      }
+    });
 
     /* Lo pedido hace un momento pasa a «Listo» sin recargar, que es lo que hace
        el trabajo de fondo en el portal. */

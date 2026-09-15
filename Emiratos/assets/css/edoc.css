@@ -676,6 +676,27 @@ body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado)
 }
 .edoc-cambios strong { font-weight: 600; }
 
+/* Lista sin filas · la tabla dice por qué está vacía y qué hacer. */
+.edoc-vacio {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 36px 16px; text-align: center; white-space: normal;
+}
+.edoc-vacio__icono {
+  width: 48px; height: 48px; margin-bottom: 4px; display: grid; place-items: center;
+  border-radius: 50%; background: #eef1f8; color: var(--edoc-azul);
+}
+.edoc-vacio__icono svg { width: 22px; height: 22px; }
+.edoc-vacio__titulo { font-family: var(--fuente-titulos); font-weight: 600; font-size: 15px; color: var(--edoc-negro); }
+.edoc-vacio__texto { max-width: 46ch; font-size: 13px; color: #6d6d6d; }
+.edoc-vacio .btn { margin-top: 8px; }
+table.edoc-tabla tbody td.dataTables_empty { padding: 0; background: #fff; }
+table.edoc-tabla tbody tr:hover td.dataTables_empty { background: #fff; }
+@media (max-width: 900px) {
+  /* En móvil cada celda lleva el rótulo de su columna; la vacía no tiene columna. */
+  table.edoc-tabla.apilable tbody td.dataTables_empty { display: block; }
+  table.edoc-tabla.apilable tbody td.dataTables_empty::before { content: none; }
+}
+
 /* Iconos de archivo con su color · p.46 */
 .icono-xml { color: var(--archivo-xml); }
 .icono-pdf { color: var(--archivo-pdf); }

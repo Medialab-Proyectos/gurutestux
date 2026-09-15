@@ -8,11 +8,30 @@
   'use strict';
 
   /* Traducción, calcada de la que ya usa el portal de Bolivia. */
+  /* El estado de una lista sin filas. Hay dos y no dicen lo mismo: «no hay
+     nada todavía» y «hay, pero tus filtros lo esconden». Solo el segundo lleva
+     «Limpiar filtros», que es la salida que tiene quien lo ve. */
+  window.edocVacio = function (titulo, texto, conLimpiar, icono) {
+    var dibujo = window.edocIcono ? window.edocIcono(icono || (conLimpiar ? 'buscar' : 'emision')) : '';
+    return '<div class="edoc-vacio">' +
+      '<span class="edoc-vacio__icono" aria-hidden="true">' + dibujo + '</span>' +
+      '<span class="edoc-vacio__titulo">' + titulo + '</span>' +
+      (texto ? '<span class="edoc-vacio__texto">' + texto + '</span>' : '') +
+      (conLimpiar ? '<button type="button" class="btn btn-edoc-terciario btn-sm" data-limpiar-filtros>Limpiar filtros</button>' : '') +
+    '</div>';
+  };
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-limpiar-filtros]')) return;
+    var forma = document.getElementById('forma-buscar');
+    if (forma) forma.reset();
+  });
+
   var IDIOMA = {
     processing:     'Procesando...',
     lengthMenu:     'Mostrar _MENU_ registros',
-    zeroRecords:    'No se encontraron resultados',
-    emptyTable:     'Ningún dato disponible en esta tabla',
+    zeroRecords:    window.edocVacio('Ningún resultado con esos filtros', 'Prueba con otras fechas o quita algún filtro.', true),
+    emptyTable:     window.edocVacio('Todavía no hay nada aquí', 'Cuando haya registros, aparecerán en esta lista.'),
     info:           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
     infoEmpty:      'Mostrando registros del 0 al 0 de un total de 0 registros',
     infoFiltered:   '(filtrado de un total de _MAX_ registros)',
@@ -74,6 +93,65 @@
 
     rotularCeldas(tabla, selector);
     tabla.on('draw.dt', function () { rotularCeldas(tabla, selector); });
+    // Para ver el estado de una lista sin datos: añadir ?sin-datos a la dirección.
+    if (/[?&]sin-datos(=|&|$)/.test(window.location.search)) tabla.clear().draw();
     return tabla;
+  };
+
+  /* Los filtros de búsqueda, sobre las filas que ya tiene la tabla. Se leen al
+     pulsar «Consultar» —no al teclear— y se guardan: al paginar u ordenar se
+     sigue viendo lo que se consultó. «Limpiar» vuelve a enseñarlo todo, y los
+     filtros que campos.js restaura al volver a la vista se aplican al cargar.
+
+     o.leer()                 lo que hay puesto en el formulario
+     o.cumple(c, fila, i)     si la fila i entra con esos criterios
+     o.fechas                 [desde, hasta], para no aceptar un rango al revés
+     o.unidad                 ['documento', 'documentos'], para el aviso */
+  window.edocFiltrar = function (selector, forma, o) {
+    var $ = window.jQuery;
+    var criterios = null;
+    $.fn.dataTable.ext.search.push(function (settings, datos, i) {
+      if (!criterios || settings.nTable !== $(selector)[0]) return true;
+      var fila = settings.aoData[i];
+      return o.cumple(criterios, fila ? fila.nTr : null, i);
+    });
+    function aplicar(avisar) {
+      criterios = o.leer();
+      if (!$.fn.dataTable.isDataTable(selector)) return;
+      var tabla = $(selector).DataTable();
+      tabla.draw();
+      if (!avisar) return;
+      var n = tabla.rows({ search: 'applied' }).count();
+      window.edocAvisar('<span>Encontrados:</span> <strong>' + n + '</strong> <span>' +
+        (n === 1 ? o.unidad[0] : o.unidad[1]) + '.</span>', n ? 'exito' : 'info');
+    }
+    forma.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (o.fechas) {
+        var desde = document.getElementById(o.fechas[0]);
+        var hasta = document.getElementById(o.fechas[1]);
+        desde.classList.remove('is-invalid');
+        hasta.classList.remove('is-invalid');
+        if (desde.value && hasta.value && desde.value > hasta.value) {
+          hasta.classList.add('is-invalid');
+          hasta.focus();
+          window.edocAvisar('La fecha «desde» no puede ser posterior a «hasta».', 'error');
+          return;
+        }
+      }
+      aplicar(true);
+    });
+    forma.addEventListener('reset', function () {
+      window.setTimeout(function () {
+        forma.querySelectorAll('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+        aplicar(false);
+      }, 0);
+    });
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { aplicar(false); });
+    } else {
+      aplicar(false);
+    }
+    return { aplicar: aplicar };
   };
 })();

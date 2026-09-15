@@ -375,7 +375,8 @@
 
   /* Tipos de documento en el filtro */
   var sel = document.getElementById('f-tipo');
-  D.TIPOS.forEach(function (t) { sel.insertAdjacentHTML('beforeend', '<option>' + t + '</option>'); });
+  // Con value: sin él, el valor sería el texto y cambiaría al traducir la página.
+  D.TIPOS.forEach(function (t) { sel.insertAdjacentHTML('beforeend', '<option value="' + t + '">' + t + '</option>'); });
 
   /* La pastilla nombra siempre a su entidad. El sentido de la reunión es que
      «aprobado» no puede quedarse sin decir quién aprobó. */
@@ -449,8 +450,12 @@
      registros», el conteo y la paginación. Los importes ordenan por su valor,
      no por el texto con comas. */
   window.edocTabla('#tabla-emitidos', {
-    language: { emptyTable: 'No hay documentos emitidos en ese rango de fechas. Prueba a ampliarlo.',
-                zeroRecords: 'Ningún documento coincide con lo que buscas.' },
+    language: {
+      emptyTable: window.edocVacio('No hay documentos emitidos en ese rango de fechas',
+        'Prueba a ampliar las fechas. Los documentos aparecen aquí en cuanto tu sistema los envía.'),
+      zeroRecords: window.edocVacio('Ningún documento coincide con lo que buscas',
+        'Revisa el número o quita algún filtro.', true)
+    },
     columnDefs: [
       { orderable: false, targets: 0 },
       { type: 'num-fmt', targets: [7, 8, 9] }
@@ -672,9 +677,42 @@
     if (a.dataset.accion === 'pdf') window.edocAvisar('Se descargaría el PDF de <strong>' + doc.numero + '</strong>. En la maqueta no hay archivo detrás.');
   });
 
-  document.getElementById('forma-buscar').addEventListener('submit', function (e) {
-    e.preventDefault();
-    window.edocAvisar('Consulta lanzada. La maqueta devuelve siempre el mismo juego de documentos.');
+  /* --- Buscar ------------------------------------------------------------ */
+  /* Los filtros filtran los documentos de muestra de verdad. El estado es el
+     del documento entero, con la misma regla que el resumen de estados: manda
+     el primer rechazo; si no hay, la primera entidad que falta por responder;
+     si ya respondieron todas, el acuse o la aprobación. */
+  function estadoDelDocumento(doc) {
+    var orden = ['c1', 'c2', 'c5', 'c3', 'c4'];
+    var k;
+    for (k = 0; k < orden.length; k++) if (doc[orden[k]] === 'rechazado') return 'rechazado';
+    for (k = 0; k < orden.length; k++) {
+      if (['pendiente', 'enviado', 'entregado'].indexOf(doc[orden[k]]) >= 0) return doc[orden[k]];
+    }
+    return doc.c4 === 'acuse' ? 'acuse' : 'aprobado';
+  }
+  function filtroValor(id) { return document.getElementById(id).value.trim(); }
+  function filtroContiene(texto, buscado) {
+    return !buscado || String(texto || '').toLowerCase().indexOf(buscado.toLowerCase()) >= 0;
+  }
+  window.edocFiltrar('#tabla-emitidos', document.getElementById('forma-buscar'), {
+    unidad: ['documento', 'documentos'],
+    fechas: ['f-desde', 'f-hasta'],
+    leer: function () {
+      return {
+        desde: filtroValor('f-desde'), hasta: filtroValor('f-hasta'), tipo: filtroValor('f-tipo'),
+        numero: filtroValor('f-numero'), estado: filtroValor('f-estado'),
+        trn: filtroValor('f-trn').replace(/\D/g, ''), receptor: filtroValor('f-receptor')
+      };
+    },
+    cumple: function (c, tr, i) {
+      var doc = D.EMITIDOS[i];
+      if (!doc) return true;
+      return (!c.desde || doc.fecha >= c.desde) && (!c.hasta || doc.fecha <= c.hasta) &&
+        (!c.tipo || doc.tipo === c.tipo) && filtroContiene(doc.numero, c.numero) &&
+        (!c.estado || estadoDelDocumento(doc) === c.estado) && filtroContiene(doc.trn, c.trn) &&
+        (filtroContiene(doc.receptorLatino, c.receptor) || filtroContiene(doc.receptorArabe, c.receptor));
+    }
   });
 
   document.querySelectorAll('[data-exportar]').forEach(function (a) {
@@ -702,7 +740,8 @@
 
   function cuantos() {
     var t = window.jQuery('#tabla-emitidos').DataTable();
-    return t ? t.rows().count() : 0;
+    // Lo que se exporta es lo que se ve: la consulta con sus filtros.
+    return t ? t.rows({ search: 'applied' }).count() : 0;
   }
 
   /* La consecuencia se dice en el propio menú, antes de pulsar: si son pocos

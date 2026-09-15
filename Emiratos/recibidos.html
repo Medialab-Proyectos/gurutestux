@@ -384,8 +384,9 @@
   var docs = D.RECIBIDOS.map(function (d) { return Object.assign({}, d); });
   var actual = null;
 
+  // Con value: sin él, el valor sería el texto y cambiaría al traducir la página.
   document.getElementById('f-tipo').insertAdjacentHTML('beforeend',
-    D.TIPOS.map(function (t) { return '<option>' + t + '</option>'; }).join(''));
+    D.TIPOS.map(function (t) { return '<option value="' + t + '">' + t + '</option>'; }).join(''));
   document.getElementById('re-motivo').insertAdjacentHTML('beforeend',
     D.MOTIVOS_RECHAZO.map(function (m) { return '<option value="' + m.codigo + '">' + m.codigo + ' · ' + m.texto + '</option>'; }).join(''));
 
@@ -472,8 +473,12 @@
     window.edocPintarNombres();
     window.edocPintarIconos();
     window.edocTabla('#tabla-recibidos', {
-      language: { emptyTable: 'No has recibido documentos en ese rango de fechas.',
-                  zeroRecords: 'Ningún documento coincide con lo que buscas.' },
+      language: {
+        emptyTable: window.edocVacio('No has recibido documentos en ese rango de fechas',
+          'Prueba a ampliar las fechas. Lo que te envíen tus proveedores aparece aquí.'),
+        zeroRecords: window.edocVacio('Ningún documento coincide con lo que buscas',
+          'Revisa el número o quita algún filtro.', true)
+      },
       columnDefs: [
         { orderable: false, targets: 0 },
         { type: 'num-fmt', targets: [7, 8, 9] }
@@ -585,9 +590,31 @@
     window.edocAvisar('Dejamos constancia de que llegó · <strong>MLS AB</strong>. No es una aprobación.', 'advertencia');
   });
 
-  document.getElementById('forma-buscar').addEventListener('submit', function (e) {
-    e.preventDefault();
-    window.edocAvisar('Consulta lanzada. La maqueta devuelve siempre el mismo juego de documentos.');
+  /* --- Buscar ------------------------------------------------------------ */
+  function filtroValor(id) { return document.getElementById(id).value.trim(); }
+  function filtroContiene(texto, buscado) {
+    return !buscado || String(texto || '').toLowerCase().indexOf(buscado.toLowerCase()) >= 0;
+  }
+  window.edocFiltrar('#tabla-recibidos', document.getElementById('forma-buscar'), {
+    unidad: ['documento', 'documentos'],
+    fechas: ['f-desde', 'f-hasta'],
+    leer: function () {
+      return {
+        desde: filtroValor('f-desde'), hasta: filtroValor('f-hasta'), tipo: filtroValor('f-tipo'),
+        respuesta: filtroValor('f-respuesta'), numero: filtroValor('f-numero'),
+        trn: filtroValor('f-trn').replace(/\D/g, ''),
+        proveedores: [].slice.call(document.querySelectorAll('#f-proveedor-lista input:checked'))
+          .map(function (x) { return x.value; })
+      };
+    },
+    cumple: function (c, tr, i) {
+      var doc = docs[i];
+      if (!doc) return true;
+      return (!c.desde || doc.fecha >= c.desde) && (!c.hasta || doc.fecha <= c.hasta) &&
+        (!c.tipo || doc.tipo === c.tipo) && (!c.respuesta || doc.respuesta === c.respuesta) &&
+        filtroContiene(doc.numero, c.numero) && filtroContiene(doc.trn, c.trn) &&
+        (!c.proveedores.length || c.proveedores.indexOf(doc.emisorLatino) >= 0);
+    }
   });
   document.querySelectorAll('[data-exportar]').forEach(function (a) {
     a.addEventListener('click', function (e) {
@@ -614,7 +641,8 @@
 
   function cuantos() {
     var t = window.jQuery('#tabla-recibidos').DataTable();
-    return t ? t.rows().count() : 0;
+    // Lo que se exporta es lo que se ve: la consulta con sus filtros.
+    return t ? t.rows({ search: 'applied' }).count() : 0;
   }
 
   /* La consecuencia se dice en el propio menú, antes de pulsar: si son pocos

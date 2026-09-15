@@ -44,7 +44,7 @@
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Buscar</h2>
     </div>
-    <form class="edoc-tablero__cuerpo" onsubmit="event.preventDefault();window.edocAvisar('Consulta lanzada.')">
+    <form class="edoc-tablero__cuerpo" id="forma-buscar" novalidate>
       <div class="row rejilla">
         <div class="col-12 col-md-6 col-xl-4">
           <label class="edoc-etiqueta" for="t-nombre">Nombre</label>
@@ -62,7 +62,10 @@
           </select>
         </div>
       </div>
-      <button class="btn btn-edoc-primario" type="submit">Consultar</button>
+      <div class="d-flex hueco-2 flex-wrap mt-3">
+        <button class="btn btn-edoc-primario" type="submit">Consultar</button>
+        <button class="btn btn-edoc-terciario" type="reset">Limpiar</button>
+      </div>
     </form>
   </section>
 
@@ -117,7 +120,6 @@
         </tbody>
       </table>
     </div>
-    <div class="edoc-tablero__pie"><div class="edoc-tabla-pie"><span>Mostrando 7 de 7 empresas</span></div></div>
   </section>
 
   <div class="nota nota--abierto">
@@ -140,7 +142,36 @@
 <script src="assets/js/tablas.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    window.edocTabla('table.edoc-tabla', { order: [[1, 'asc']] });
+    window.edocTabla('table.edoc-tabla', {
+      order: [[1, 'asc']],
+      language: {
+        zeroRecords: window.edocVacio('Ninguna empresa coincide con lo que buscas',
+          'Prueba con parte del nombre, en cualquier alfabeto, o quita algún filtro.', true)
+      }
+    });
+
+    /* Buscar: el nombre se busca en latino y en árabe, tal como llega. */
+    function textoCelda(td) { return td ? td.textContent.replace(/\s+/g, ' ').trim() : ''; }
+    function elegido(id) {
+      var s = document.getElementById(id);
+      return s.selectedIndex > 0 ? s.options[s.selectedIndex].text.trim() : '';
+    }
+    window.edocFiltrar('table.edoc-tabla', document.getElementById('forma-buscar'), {
+      unidad: ['empresa', 'empresas'],
+      leer: function () {
+        return { nombre: document.getElementById('t-nombre').value.trim().toLowerCase(),
+                 trn: document.getElementById('t-trn').value.replace(/\D/g, ''),
+                 relacion: elegido('t-tipo') };
+      },
+      cumple: function (c, tr) {
+        if (!tr) return true;
+        var n = tr.cells[1].querySelector('[data-nombre-latino]');
+        var nombres = n ? (n.getAttribute('data-nombre-latino') + ' ' + n.getAttribute('data-nombre-arabe')).toLowerCase() : '';
+        var trn = textoCelda(tr.cells[1].querySelector('.edoc-secundario'));
+        return (!c.nombre || nombres.indexOf(c.nombre) >= 0) && (!c.trn || trn.indexOf(c.trn) >= 0) &&
+          (!c.relacion || textoCelda(tr.cells[2]) === c.relacion);
+      }
+    });
   });
 </script>
 
