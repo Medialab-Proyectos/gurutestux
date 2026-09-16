@@ -9,6 +9,7 @@
 
   /* --- Iconos · trazo simple, sin relleno · BrandBook p.43 --------------- */
   var ICONOS = {
+    correo:   '<rect x="3" y="5" width="14" height="10.5" rx="1.6"/><path d="m3.6 6.2 6.4 4.9 6.4-4.9"/>',
     inicio:   '<path d="M3 9.5 10 3l7 6.5V17a1 1 0 0 1-1 1h-3.5v-5h-5v5H4a1 1 0 0 1-1-1z"/>',
     admin:    '<circle cx="10" cy="6.2" r="3"/><path d="M3.6 17c0-3.2 2.9-5.2 6.4-5.2s6.4 2 6.4 5.2"/>',
     emision:  '<path d="M5 2.5h7l3.5 3.5v11.5H5z"/><path d="M12 2.5V6h3.5"/><path d="M7.6 10h4.8M7.6 13h4.8"/>',
@@ -92,8 +93,11 @@
      gris, para no tenderle una trampa a quien tiene clientes esperando. */
   var MENU = [
     { id: 'inicio', rotulo: 'Inicio', icono: 'inicio', url: 'inicio.html' },
+    /* «Cambiar Contraseña» ya no cuelga de aquí. De la reunión del 15 de
+       septiembre: Administración es de la empresa —sus roles, sus usuarios, sus
+       datos—, y lo mío va en el avatar, que es donde lo busca cualquiera que
+       haya usado otro portal. Mezclarlos era lo que hacía ruido. */
     { id: 'administracion', rotulo: 'Administración', icono: 'admin', grupos: [
-        { enlaces: [ { rotulo: 'Cambiar Contraseña', url: 'admin-clave.html' } ] },
         { titulo: 'Roles y Usuarios', enlaces: [
             { rotulo: 'Roles', url: 'admin-roles.html' },
             { rotulo: 'Usuarios', url: 'admin-usuarios.html' } ] },
@@ -102,7 +106,8 @@
             { rotulo: 'Actualización de contactos', url: 'admin-contactos.html' } ] },
         { enlaces: [
             { rotulo: 'Credenciales de consumo Servicio eDoc', url: 'admin-credenciales.html' },
-            { rotulo: 'Alertas y comunicados', url: 'admin-alertas.html' },
+            // Fuera del primer MVP: se decidió el 16 de septiembre.
+            { rotulo: 'Alertas y comunicados', fase: 2 },
             { rotulo: 'Manuales', url: 'admin-manuales.html' } ] }
       ] },
     { id: 'emision', rotulo: 'Emisión', icono: 'emision', grupos: [
@@ -454,6 +459,7 @@
   function encabezado() {
     var empresa = cuerpoDato('empresa', 'Al Noor Trading LLC');
     var usuario = cuerpoDato('usuario', 'Fatima Al Marzooqi');
+    var correoUsuario = cuerpoDato('correo', 'f.almarzooqi@alnoor.ae');
     var ambiente = cuerpoDato('ambiente', 'QA');
     return '' +
     '<header class="edoc-encabezado">' +
@@ -504,8 +510,14 @@
             '</span>' +
           '</button>' +
           '<ul class="dropdown-menu dropdown-menu-right">' +
-            '<li><h6 class="dropdown-header">' + usuario + '</h6></li>' +
-            '<li><a class="dropdown-item" href="admin-clave.html">' + icono('perfil') + 'Cambiar Contraseña</a></li>' +
+            /* Nombre y, debajo, el correo, como en el avatar de Francia: es la
+               cuenta con la que se ha entrado y a donde llegan los códigos. */
+            '<li class="edoc-cuenta-cabecera"><span class="edoc-cuenta-cabecera__nombre">' + usuario + '</span>' +
+              '<span class="edoc-cuenta-cabecera__correo">' + icono('correo') + correoUsuario + '</span></li>' +
+            /* El mismo reparto que el portal de Francia: mis datos, mi
+               contraseña y, para quien administra, los usuarios de la empresa. */
+            '<li><a class="dropdown-item" href="mi-perfil.html">' + icono('perfil') + 'Mi perfil</a></li>' +
+            '<li><a class="dropdown-item" href="admin-usuarios.html">' + icono('admin') + 'Usuarios eDoc</a></li>' +
             // En pantallas estrechas las herramientas del portal no caben en la
             // barra y caen aquí: siguen a un toque, sin amontonarse arriba.
             '<li class="solo-movil"><hr class="dropdown-divider"></li>' +

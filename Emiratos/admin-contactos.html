@@ -37,24 +37,9 @@
        lleva Acciones, Nombre, Cargo, Correo, Teléfono y Tipo. Tres casillas
        fijas obligan a que una empresa con dos personas en cobros elija a cuál
        deja fuera. -->
-  <section class="edoc-tablero">
-    <div class="edoc-tablero__cabecera">
-      <h2 class="edoc-tablero__titulo">Contactos para comunicarnos con usted</h2>
-      <button class="btn btn-edoc-primario btn-sm" type="button" id="btn-anadir">Añadir contacto</button>
-    </div>
-    <div class="edoc-tabla-envoltura">
-      <table class="edoc-tabla" id="tabla-contactos">
-        <thead><tr>
-          <th scope="col" class="col-acciones">Acciones</th>
-          <th scope="col">Nombre</th><th scope="col">Cargo</th>
-          <th scope="col">Correo</th><th scope="col">Teléfono</th><th scope="col">Tipo</th>
-        </tr></thead>
-        <tbody id="cuerpo-contactos"></tbody>
-      </table>
-    </div>
-    <div class="edoc-tablero__cuerpo" id="aviso-faltan"></div>
-  </section>
-
+  <!-- La explicación va arriba: con la lista de contactos delante se hundía
+       conforme se añadían contactos y dejaba de leerse. Del 15 de septiembre:
+       «cuando agregue más contactos esa lista se le va para abajo… yo la subiría». -->
   <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Qué recibe cada tipo</h2>
@@ -75,6 +60,24 @@
         </table>
       </div>
     </div>
+  </section>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Contactos para comunicarnos con usted</h2>
+      <button class="btn btn-edoc-primario btn-sm" type="button" id="btn-anadir"><span aria-hidden="true">+ </span>Añadir contacto</button>
+    </div>
+    <div class="edoc-tabla-envoltura">
+      <table class="edoc-tabla" id="tabla-contactos">
+        <thead><tr>
+          <th scope="col" class="col-acciones">Acciones</th>
+          <th scope="col">Nombre</th><th scope="col">Cargo</th>
+          <th scope="col">Correo</th><th scope="col">Teléfono</th><th scope="col">Tipo</th>
+        </tr></thead>
+        <tbody id="cuerpo-contactos"></tbody>
+      </table>
+    </div>
+    <div class="edoc-tablero__cuerpo" id="aviso-faltan"></div>
   </section>
 
   <!-- ===================== Alta y edición ===================== -->

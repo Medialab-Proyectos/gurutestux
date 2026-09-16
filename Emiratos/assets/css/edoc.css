@@ -435,6 +435,12 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .edoc-clave-ojo[aria-pressed="true"] { color: var(--edoc-azul); }
 .edoc-clave-ojo:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 1px; }
 
+/* En error, Bootstrap pinta su icono rojo a la derecha del campo, justo debajo
+   del ojo, y los dos se pisaban. En la contraseña sobra: el borde rojo y el
+   mensaje ya dicen que hay un error, y ese hueco es del ojo. */
+.edoc-clave-caja > .form-control.is-invalid,
+.edoc-clave-caja > .form-control.is-valid { background-image: none; padding-right: 40px; }
+
 /* Una frase textual de una reunión, citada dentro de una pantalla. Se
    distingue del texto propio para que no se confunda lo que dijo alguien con
    lo que decidimos nosotros. */
@@ -663,6 +669,10 @@ body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado)
 .edoc-accion svg { width: 16px; height: 16px; }
 .edoc-accion--gris { border-color: var(--edoc-gris-borde); color: var(--edoc-gris-borde); }
 .edoc-accion--gris:hover { background: var(--edoc-gris-borde); color: #fff; }
+/* La acción principal de una fila, rellena. Tres iconos con el mismo borde azul
+   no dicen cuál es la que se usa a diario; con una rellena se ve de un vistazo. */
+.edoc-accion--principal { background: var(--edoc-azul); color: #fff; }
+.edoc-accion--principal:hover { background: var(--azul-2); color: #fff; }
 
 /* Cambios sin guardar · RN-02 de la corrida del 14 sep. Una línea junto a los
    botones que dice qué se va a guardar antes de pulsar. */
@@ -675,6 +685,63 @@ body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado)
   flex: none; transform: translateY(-1px);
 }
 .edoc-cambios strong { font-weight: 600; }
+
+/* Cabecera del menú del avatar: nombre y, debajo, el correo de la cuenta. */
+.edoc-cuenta-cabecera { display: flex; flex-direction: column; gap: 2px; padding: 10px 16px 12px; border-bottom: 1px solid #eceef3; margin-bottom: 4px; }
+.edoc-cuenta-cabecera__nombre { font-family: var(--fuente-titulos); font-weight: 600; font-size: 13.5px; color: var(--edoc-negro); }
+.dropdown-menu:has(> .edoc-cuenta-cabecera) { min-width: 280px; }
+.edoc-cuenta-cabecera__correo { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #6f7686; white-space: nowrap; }
+.edoc-cuenta-cabecera__correo svg { width: 14px; height: 14px; flex: none; }
+
+/* Pestañas · «Mi perfil» las usa para separar cuenta, seguridad y rol, igual
+   que el portal de Francia. Es una barra de navegación dentro de la pantalla,
+   así que cada pestaña es un botón y el panel dice cuál le corresponde.      */
+.edoc-pestanas {
+  display: flex; flex-wrap: wrap; gap: 2px;
+  margin: 0 0 18px; border-bottom: 1px solid var(--edoc-gris-borde);
+}
+.edoc-pestanas__boton {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px;
+  border: 0; border-bottom: 3px solid transparent; background: transparent;
+  font-family: var(--fuente-titulos); font-weight: 600; font-size: 14px; color: #5a5f6a;
+}
+.edoc-pestanas__boton svg { width: 16px; height: 16px; }
+.edoc-pestanas__boton:hover { color: var(--edoc-azul); }
+.edoc-pestanas__boton[aria-selected="true"] { color: var(--edoc-azul); border-bottom-color: var(--edoc-verde); }
+
+/* La foto de perfil, en su tarjeta. */
+.edoc-perfil-foto { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.edoc-perfil-foto img { width: 132px; height: 132px; border-radius: 50%; object-fit: cover; }
+.edoc-perfil-dato + .edoc-perfil-dato { margin-top: 14px; }
+
+/* Mi perfil · una sola rejilla para las tres pestañas: lo principal a la
+   izquierda y lo complementario a la derecha, en dos mitades. Al cambiar de
+   pestaña las tarjetas no cambian de ancho ni de sitio. */
+.perfil-rejilla {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px; align-items: start;
+}
+.perfil-rejilla__principal, .perfil-rejilla__lado { display: grid; gap: 18px; align-content: start; min-width: 0; }
+.perfil-rejilla .edoc-tablero { margin-bottom: 0; }
+.perfil-rejilla .nota { margin: 0; }
+/* Mismo alto de cabecera con chip y sin él: los títulos quedan a la misma altura. */
+.perfil-rejilla .edoc-tablero__cabecera { min-height: 56px; align-items: center; }
+@media (max-width: 991px) { .perfil-rejilla { grid-template-columns: 1fr; } }
+
+/* La pestaña pulsada no deja el recuadro negro del foco del navegador; el
+   foco por teclado se sigue viendo, con el azul de la marca. */
+.edoc-pestanas__boton:focus { outline: 0; }
+.edoc-pestanas__boton:focus-visible { box-shadow: inset 0 0 0 2px var(--edoc-azul); border-radius: 4px 4px 0 0; }
+
+/* Los permisos del rol, en el perfil: carpeta por módulo y estado a la derecha.
+   Es el mismo árbol de «Roles», pero aquí solo se lee. */
+.perfil-permisos__grupo + .perfil-permisos__grupo { margin-top: 16px; }
+.perfil-permisos__modulo {
+  font-family: var(--fuente-titulos); font-weight: 600; font-size: 13px; color: var(--edoc-azul);
+  padding-bottom: 6px; border-bottom: 1px solid var(--edoc-gris-borde); margin-bottom: 4px;
+}
+.perfil-permisos__grupo .form-check { margin: 4px 0; }
+.perfil-permisos__grupo .form-check-input:disabled ~ .form-check-label { color: var(--edoc-negro); opacity: 1; }
 
 /* Lista sin filas · la tabla dice por qué está vacía y qué hacer. */
 .edoc-vacio {
@@ -1403,10 +1470,43 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 
 /* Enlaces legales del acceso. Van visibles, no escondidos en un pie diminuto:
    se decidió que el tratamiento de datos no es negociable. */
+/* La línea de «al continuar, aceptas…». Es una frase con su casilla, no una
+   caja ni una lista de enlaces: se lee de corrido, alineada a la izquierda, y
+   los dos documentos van dentro del propio texto. */
 .edoc-legal {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-top: 16px; padding-top: 14px; border-top: 1px solid #ececec;
-  font-size: 12px; color: var(--edoc-gris);
+  margin: 16px 0 0; padding: 0; border: 0; text-align: left;
+  font-size: 12px; line-height: 1.5; color: var(--edoc-gris);
+}
+.edoc-legal a { text-decoration: underline; }
+
+/* El hito del panel del registro: no es un paso del formulario, así que ni se
+   numera ni se puede pulsar. Se ve porque el camino termina ahí. */
+.reg__paso--hito { border-style: dashed; opacity: .92; cursor: default; }
+.reg__paso--hito .reg__paso-n { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+/* Un dato que nos dio la autoridad: se ve, pero no se reescribe. */
+.reg__campo-autoridad { background: #f4f7ef; border-color: #cfe0a8; }
+
+/* La puerta del registro es el paso 0: va dentro del cuerpo del asistente, con
+   el panel de pasos al lado, no como una tarjeta suelta en medio de la página. */
+.reg-puerta { border: 0; box-shadow: none; background: transparent; }
+.reg-puerta > .edoc-tablero__cuerpo { padding: 0; }
+.reg-puerta__pasos { margin-bottom: 0; }
+/* Sin el marco de las otras casillas del acceso: aquí no es un campo del
+   formulario, es el pie legal. */
+.edoc-acceso .form-check--legal .form-check-label {
+  align-items: flex-start; min-height: 0; padding: 0 0 0 28px;
+  border: 0; border-radius: 0; font-size: 12px; line-height: 1.5; color: var(--edoc-gris);
+}
+.edoc-acceso .form-check--legal .form-check-label:hover { border: 0; }
+.edoc-acceso .form-check--legal .form-check-input { left: 0; top: 10px; width: 16px; height: 16px; }
+
+/* Las dos vías del alta, numeradas: el número dice que hay un orden y que la
+   segunda no se puede hacer antes que la primera. */
+.edoc-acceso__otros-guia { margin: -4px 0 10px; font-size: 12px; color: var(--edoc-gris); }
+.edoc-acceso__via-paso {
+  flex: none; width: 26px; height: 26px; display: grid; place-items: center;
+  border-radius: 50%; background: #eef1f8; color: var(--edoc-azul);
+  font-family: var(--fuente-cifras); font-size: 13px; font-weight: 600;
 }
 
 /* El selector de idioma, con el código y el chevron, igual que en Francia. */
@@ -1872,9 +1972,12 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
   width: 20px; height: 20px; transform: translateY(-50%); cursor: pointer;
 }
 .edoc-acceso .form-check-label {
-  display: flex; align-items: center; width: 100%; min-height: 44px; padding-left: 46px;
+  display: flex; align-items: center; flex-wrap: wrap; gap: .3em;
+  width: 100%; min-height: 44px; padding-left: 46px; padding-right: 12px;
   border: 1px solid #d6dae3; border-radius: var(--radio-chico); cursor: pointer;
 }
+/* La etiqueta es flex y los espacios entre el texto y el enlace se comían:
+   «He leído el» y «Aviso de privacidad» salían pegados. */
 .edoc-acceso .form-check-label:hover { border-color: var(--edoc-azul); }
 .edoc-acceso .form-check-input:focus-visible + .form-check-label { box-shadow: 0 0 0 3px rgba(0,17,116,.18); }
 

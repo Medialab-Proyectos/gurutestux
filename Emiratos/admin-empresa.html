@@ -31,6 +31,44 @@
       <p class="edoc-subtitulo">Con qué identidad factura tu empresa: nombre legal, registro fiscal y domicilio. A quién avisamos se configura en Contactos.</p>
     </div></div>
 
+  <!-- Lo primero de esta pantalla es si la empresa está habilitada, porque es
+       lo que decide si el portal sirve para algo. El dato de verdad no es un
+       cartel nuestro: es la dirección con la que la empresa existe en la red. -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Conexión con la autoridad</h2>
+      <span class="edoc-estado edoc-estado--exito" id="estado-conexion">Activa</span>
+    </div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="row rejilla">
+        <div class="col-12 col-md-4">
+          <div class="edoc-etiqueta">Proveedor nombrado en EmaraTax</div>
+          <div>GuruSoft S.A. · eDoc</div>
+          <div class="edoc-ayuda">Solo puede haber uno, y cubre lo que emites y lo que recibes.</div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="edoc-etiqueta">Tu dirección en la red</div>
+          <div class="cifra">0235:100776655400003</div>
+          <div class="edoc-ayuda">Aquí te llegan las facturas de tus proveedores.</div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="edoc-etiqueta">Asociación confirmada</div>
+          <div class="cifra">2026-09-02 10:41</div>
+          <div class="edoc-ayuda">Desde esa fecha podemos emitir y recibir a tu nombre.</div>
+        </div>
+      </div>
+
+      <div class="nota nota--abierto mt-3">
+        <span class="nota__sello">Abierto · pendiente de confirmar con la autoridad</span>
+        <strong>El identificador y el momento en que se confirma.</strong> El proceso público de Emiratos dice que
+        el alta se inicia en EmaraTax, que desde allí se redirige al proveedor con «Proceed to ASP» y que el
+        proveedor registra al cliente en la red con el formato <span class="cifra">0235:&lt;TRN&gt;</span>. Falta
+        confirmar con la integración qué nos llega exactamente en ese salto —hay documentación que habla de un
+        token que genera el portal— y cuándo pasa a «Active» en el panel de la autoridad.
+      </div>
+    </div>
+  </section>
+
   <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Identificación</h2></div>
     <div class="edoc-tablero__cuerpo">

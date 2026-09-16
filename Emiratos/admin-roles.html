@@ -28,111 +28,127 @@
   <div class="edoc-titulo-barra"><div>
       <div class="edoc-miga"><span>Administración</span><span>Roles y Usuarios</span><span>Roles</span></div>
       <h1 class="edoc-titulo">Roles</h1>
-      <p class="edoc-subtitulo">Qué ventanas y qué acciones puede usar cada rol. El menú no es fijo: se arma con los permisos del usuario que entra.</p>
+      <p class="edoc-subtitulo">Qué puede usar cada rol. El menú de cada usuario se arma con los permisos de su rol.</p>
     </div></div>
 
-  <div class="row rejilla">
-    <div class="col-12 col-xl-5">
-      <section class="edoc-tablero">
-        <div class="edoc-tablero__cabecera">
-          <h2 class="edoc-tablero__titulo">Roles definidos</h2>
-          <!-- Secundario: el primario de esta pantalla es «Guardar permisos»,
-               que es lo que se hace a diario. Un solo primario por pantalla. -->
-          <button class="btn btn-edoc-secundario btn-sm" type="button" id="btn-crear">Crear rol</button>
-        </div>
-        <div class="edoc-tabla-envoltura">
-          <table class="edoc-tabla">
-            <thead><tr>
-              <th scope="col" class="col-acciones">Acciones</th>
-              <th scope="col">Nombre</th><th scope="col">Descripción</th>
-              <th scope="col">Usuarios</th><th scope="col">Permisos</th><th scope="col">Estado</th>
-            </tr></thead>
-            <tbody id="cuerpo-roles"></tbody>
-          </table>
-        </div>
-      </section>
+  <!-- La misma estructura que Bolivia: una tabla con Nombre, Descripción y
+       Estado, y los permisos en un modal por rol. Revisado en su portal el 16 de
+       septiembre. Los ajustes son los de la reunión: crear va arriba y es
+       primario, y en el modal de permisos Guardar va en el pie fijo, siempre a
+       la vista. -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Roles de la empresa</h2>
+      <button class="btn btn-edoc-primario btn-sm" type="button" id="btn-crear"><span aria-hidden="true">+ </span>Crear rol</button>
     </div>
-
-    <div class="col-12 col-xl-7">
-      <section class="edoc-tablero">
-        <div class="edoc-tablero__cabecera">
-          <h2 class="edoc-tablero__titulo" id="titulo-permisos">Permisos</h2>
-          <span class="edoc-secundario" id="cuenta-permisos"></span>
-        </div>
-        <div class="edoc-tablero__cuerpo">
-          <div id="arbol"></div>
-          <p class="edoc-cambios" id="resumen-cambios" hidden><span>Sin guardar:</span> <strong></strong></p>
-          <div class="d-flex hueco-2 flex-wrap mt-2">
-            <button class="btn btn-edoc-primario" type="button" id="btn-guardar">Guardar permisos</button>
-            <button class="btn btn-edoc-terciario" type="button" id="btn-deshacer">Deshacer los cambios</button>
-          </div>
-        </div>
-      </section>
+    <div class="edoc-tabla-envoltura">
+      <table class="edoc-tabla" id="tabla-roles">
+        <thead><tr>
+          <th scope="col" class="col-acciones">Acciones</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Estado</th>
+        </tr></thead>
+        <tbody id="cuerpo-roles"></tbody>
+      </table>
     </div>
-  </div>
+  </section>
 
-  <!-- ===================== Crear un rol ===================== -->
+  <!-- ===================== Crear o editar un rol ===================== -->
+  <!-- Como en Bolivia: nombre, descripción y estado. Un rol no se borra; se
+       inactiva. -->
   <div class="modal fade" id="modal-rol" tabindex="-1" role="dialog" aria-labelledby="t-rol" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="t-rol">Crear un rol</h5>
+          <h5 class="modal-title" id="t-rol">Crear rol</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          <label class="edoc-etiqueta" for="rol-nombre">Nombre del rol<span class="obligatorio">*</span></label>
+          <label class="edoc-etiqueta" for="rol-nombre">Nombre<span class="obligatorio">*</span></label>
           <input class="form-control" id="rol-nombre" placeholder="Contabilidad" maxlength="30">
           <div class="edoc-ayuda" id="rol-ayuda">Como lo verá quien asigne usuarios.</div>
 
           <label class="edoc-etiqueta mt-3" for="rol-desc">Descripción<span class="obligatorio">*</span></label>
           <input class="form-control" id="rol-desc" placeholder="Qué puede hacer este rol, en una línea" maxlength="70">
-          <div class="edoc-ayuda">Se ve en la tabla, y evita acabar con tres roles de nombre parecido
-          sin saber en qué se diferencian.</div>
 
-          <div class="edoc-etiqueta mt-3 mb-1">Empezar desde</div>
-          <select class="custom-select" id="rol-base">
-            <option value="">Sin ningún permiso</option>
+          <label class="edoc-etiqueta mt-3" for="rol-estado">Estado</label>
+          <select class="custom-select" id="rol-estado">
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
           </select>
-          <div class="edoc-ayuda">Copia los permisos de un rol que ya existe y luego los ajustas.</div>
+          <div class="edoc-ayuda" id="rol-estado-ayuda">Un rol inactivo no se puede asignar a nuevos usuarios.</div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-edoc-primario" id="rol-confirmar">Crear</button>
+          <button type="button" class="btn btn-edoc-primario" id="rol-confirmar">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Permisos del rol ===================== -->
+  <!-- Como el «Asignar» de Bolivia: la lista de permisos disponibles con su
+       casilla, agrupada por módulo. El modal se desplaza por dentro y su pie
+       queda fijo, así que Guardar está siempre a la vista aunque la lista sea
+       larga: no hace falta repetirlo arriba. -->
+  <div class="modal fade" id="modal-permisos" tabindex="-1" role="dialog" aria-labelledby="t-permisos" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="t-permisos">Permisos del rol</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="edoc-aviso edoc-aviso--info mb-3" id="aviso-fijo" hidden>
+            <div>El administrador siempre tiene todos los permisos: si se le pudiera quitar uno, una empresa
+            podría dejarse fuera de su propio portal.</div>
+          </div>
+          <div class="d-flex hueco-2 align-items-baseline mb-2">
+            <div class="edoc-etiqueta mb-0">Lista de permisos disponibles</div>
+            <span class="edoc-secundario" id="cuenta-permisos"></span>
+          </div>
+          <div id="arbol"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" data-permisos="guardar">Guardar permisos</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="nota nota--decidido">
-    <span class="nota__sello">De Bolivia</span>
-    <strong>La tabla lleva Descripción y Estado.</strong> Allí cada rol se explica en una línea, y es lo
-    que evita tener tres roles con nombres parecidos sin que nadie sepa en qué se diferencian.
+    <span class="nota__sello">De Bolivia · revisado en su portal</span>
+    <strong>La estructura es la de Bolivia.</strong> Tabla con Nombre, Descripción y Estado; editar y asignar
+    permisos, cada uno en su modal; los permisos, una lista de casillas por módulo. Un rol no se borra: se
+    inactiva. Cambia lo que se pidió en la reunión del 15 de septiembre: «Crear rol» va arriba, es primario y
+    lleva el «+», en vez del «+» de cada fila; y en los permisos, Guardar va en el pie fijo del modal, siempre
+    a la vista aunque la lista sea larga.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · reunión del 15 de septiembre</span>
+    <strong>Casillas, no árbol con buscador.</strong> El árbol de Francia —carpetas, buscador, contadores— se
+    enseñó como referencia para más adelante; para el MVP quedó «así, check, de una», que es lo que desarrollo
+    ya tiene de Bolivia.
   </div>
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido</span>
-    El árbol de permisos por módulo se toma de Francia, que es más fino que el de Bolivia. Cada rama es un módulo y cada
-    hoja una pantalla o una acción. Solo aparecen permisos que tienen una pantalla detrás: en Francia se ofrece
-    «certificado-digital», que no lleva a ninguna parte.
-  </div>
-  <div class="nota nota--decidido">
-    <span class="nota__sello">Decidido</span>
-    <strong>El árbol es el del MVP, no otro.</strong> Si una pantalla no entra en la primera entrega, su permiso tampoco
-    aparece aquí: ofrecer un permiso para algo que no existe es la misma trampa que un menú con opciones muertas.
-  </div>
-  <div class="nota nota--fuera">
-    <span class="nota__sello">Ojo</span>
-    El árbol de permisos no puede depender de una biblioteca servida desde fuera: si ese servidor no responde, la
-    pantalla no carga. Aquí es HTML propio.
+    <strong>Los permisos son los del MVP de Emiratos, no los de Bolivia.</strong> La lista de Bolivia lleva
+    sucursales, puntos de venta, token SIN o CUFD, que aquí no existen. Si una pantalla no entra en la primera
+    entrega, su permiso tampoco aparece.
   </div>
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
     <strong>Perfiles frente a roles.</strong> Bolivia trabaja hoy a nivel de perfil; Francia solo tiene roles y usuarios.
     Para Emiratos se toma el modelo de Bolivia con roles encima, y esa mezcla hay que cerrarla antes de programar la
-    pantalla. Aquí está maquetada solo la parte de roles.
+    pantalla.
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script src="assets/js/datos.js"></script>
 <script src="assets/js/alcance.js"></script>
 <script src="assets/js/idioma.js"></script>
@@ -140,14 +156,16 @@
 <script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script src="assets/js/tablas.js"></script>
 <script>
 (function () {
   'use strict';
   if (window.edocEnObra) return;
 
-  /* El árbol sale de las pantallas y acciones que entran en el MVP, y de nada
-     más. Las cuentas de «X de Y» se calculan: escribirlas a mano es garantía
-     de que dejen de cuadrar en cuanto se toque un permiso. */
+  var $ = function (id) { return document.getElementById(id); };
+  var ico = window.edocIcono;
+
+  /* Los permisos del MVP de Emiratos, por módulo. */
   var ARBOL = [
     { modulo: 'Inicio', items: [
       { id: 'ini.ver', rotulo: 'Ver la pantalla de bienvenida' } ] },
@@ -168,13 +186,11 @@
       { id: 'rec.xml',      rotulo: 'Descargar XML' },
       { id: 'rec.exportar', rotulo: 'Exportar resultados' } ] },
     { modulo: 'Administración', items: [
-      { id: 'adm.clave',    rotulo: 'Cambiar Contraseña' },
       { id: 'adm.roles',    rotulo: 'Roles' },
       { id: 'adm.usuarios', rotulo: 'Usuarios' },
       { id: 'adm.fiscal',   rotulo: 'Actualización de identificación fiscal' },
       { id: 'adm.contactos',rotulo: 'Actualización de contactos' },
       { id: 'adm.cred',     rotulo: 'Credenciales de consumo Servicio eDoc' },
-      { id: 'adm.alertas',  rotulo: 'Alertas y comunicados' },
       { id: 'adm.manuales', rotulo: 'Manuales' } ] }
   ];
 
@@ -182,114 +198,120 @@
     return a.concat(g.items.map(function (i) { return i.id; }));
   }, []);
 
-  function soloLectura() {
-    return ['ini.ver', 'emi.listado', 'emi.estados', 'emi.visor', 'emi.pdf', 'emi.xml', 'emi.exportar',
-            'rec.listado', 'rec.visor', 'rec.pdf', 'rec.xml', 'rec.exportar', 'adm.clave'];
-  }
-
   var ROLES = [
-    { id: 'admin',    nombre: 'Administrador', desc: 'Administrador del sistema',
-      usuarios: 2, fijo: true, activo: true, permisos: TODOS.slice() },
+    { id: 'admin',    nombre: 'Administrador', desc: 'Administrador del sistema', fijo: true,
+      estado: 'activo', permisos: TODOS.slice() },
     { id: 'consulta', nombre: 'Consulta',      desc: 'Solo lectura de emitidos y recibidos',
-      usuarios: 2, activo: true, permisos: soloLectura() },
+      estado: 'activo', permisos: ['ini.ver', 'emi.listado', 'emi.estados', 'emi.visor', 'emi.pdf', 'emi.xml',
+        'emi.exportar', 'rec.listado', 'rec.visor', 'rec.pdf', 'rec.xml', 'rec.exportar'] },
     { id: 'recep',    nombre: 'Recepción',     desc: 'Responde los documentos que llegan',
-      usuarios: 1, activo: true, permisos:
-      ['ini.ver', 'rec.listado', 'rec.aprobar', 'rec.rechazar', 'rec.acuse', 'rec.visor',
-       'rec.pdf', 'rec.xml', 'rec.exportar', 'adm.clave'] }
+      estado: 'activo', permisos: ['ini.ver', 'rec.listado', 'rec.aprobar', 'rec.rechazar', 'rec.acuse',
+        'rec.visor', 'rec.pdf', 'rec.xml', 'rec.exportar'] },
+    { id: 'reportes', nombre: 'Reportes',      desc: 'Exporta emitidos y recibidos',
+      estado: 'inactivo', permisos: ['ini.ver', 'emi.listado', 'emi.exportar', 'rec.listado', 'rec.exportar'] }
   ];
 
-  var elegido = ROLES[0];
-  var $ = function (id) { return document.getElementById(id); };
+  var LAPIZ = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" ' +
+              'stroke-linecap="round" aria-hidden="true"><path d="M13.4 3.6a1.9 1.9 0 0 1 2.7 2.7L7.5 15 4 16l1-3.5z"/></svg>';
 
-  function pintarRoles() {
-    $('cuerpo-roles').innerHTML = ROLES.map(function (r) {
-      var aqui = r.id === elegido.id ? ' class="seleccionada"' : '';
-      var borrar = r.fijo
-        ? '<span class="edoc-accion" aria-disabled="true" title="El rol de administrador no se puede borrar">' +
-          window.edocIcono('rechazar') + '</span>'
-        : '<a class="edoc-accion edoc-accion--gris" href="#" data-borrar="' + r.id + '" ' +
-          'title="Borrar el rol" aria-label="Borrar el rol ' + r.nombre + '">' +
-          window.edocIcono('rechazar') + '</a>';
-      var estado = r.activo
-        ? '<span class="edoc-estado edoc-estado--exito">Activo</span>'
-        : '<span class="edoc-estado edoc-estado--neutro">Inactivo</span>';
-      return '<tr' + aqui + ' data-rol="' + r.id + '" style="cursor:pointer">' +
-        '<td class="col-acciones">' + borrar + '</td>' +
-        '<td>' + (r.fijo ? '<strong>' + r.nombre + '</strong>' : r.nombre) + '</td>' +
-        '<td>' + r.desc + '</td>' +
-        '<td class="cifra">' + r.usuarios + '</td>' +
-        '<td class="cifra">' + r.permisos.length + ' de ' + TODOS.length + '</td>' +
-        '<td>' + estado + '</td></tr>';
-    }).join('');
+  function buscar(id) { return ROLES.filter(function (r) { return r.id === id; })[0]; }
+
+  /* --- la tabla ------------------------------------------------------------ */
+  function fila(r) {
+    var estado = r.estado === 'activo'
+      ? '<span class="edoc-estado edoc-estado--exito">Activo</span>'
+      : '<span class="edoc-estado edoc-estado--neutro">Inactivo</span>';
+    return '<tr>' +
+      '<td class="col-acciones"><div class="d-flex hueco-1">' +
+        // Editar es la principal de la fila, como en Usuarios.
+        '<a class="edoc-accion edoc-accion--principal" href="#" data-editar="' + r.id + '" ' +
+          'title="Editar" aria-label="Editar el rol ' + r.nombre + '">' + LAPIZ + '</a>' +
+        '<a class="edoc-accion edoc-accion--gris" href="#" data-permisos-rol="' + r.id + '" ' +
+          'title="Permisos" aria-label="Permisos del rol ' + r.nombre + '">' + ico('candado') + '</a>' +
+      '</div></td>' +
+      '<td>' + (r.fijo ? '<strong>' + r.nombre + '</strong>' : r.nombre) + '</td>' +
+      '<td>' + r.desc + '</td>' +
+      '<td>' + estado + '</td>' +
+    '</tr>';
   }
 
-  function pintarArbol() {
-    $('titulo-permisos').textContent = 'Permisos del rol ' + elegido.nombre;
-    $('arbol').innerHTML = ARBOL.map(function (g) {
-      var idGrupo = 'g-' + g.modulo.toLowerCase().replace(/[^a-z]/g, '');
-      return '<div class="mb-3">' +
-        '<div class="form-check form-check--grupo">' +
-          '<input class="form-check-input" type="checkbox" id="' + idGrupo + '" data-modulo="' + g.modulo + '">' +
-          '<label class="form-check-label" for="' + idGrupo + '"><span class="edoc-etiqueta">' +
-            g.modulo + '</span></label>' +
-        '</div>' +
-        g.items.map(function (it) {
-          var marcado = elegido.permisos.indexOf(it.id) >= 0 ? ' checked' : '';
-          var tope = elegido.fijo ? ' disabled' : '';
-          return '<div class="form-check" style="margin-left:22px">' +
-            '<input class="form-check-input" type="checkbox" id="p-' + it.id + '" ' +
-              'data-permiso="' + it.id + '" data-de="' + g.modulo + '"' + marcado + tope + '>' +
-            '<label class="form-check-label" for="p-' + it.id + '">' + it.rotulo + '</label></div>';
-        }).join('') +
-      '</div>';
-    }).join('');
-    sincronizarGrupos();
-    contar();
-    $('btn-guardar').disabled = !!elegido.fijo;
-    $('btn-deshacer').disabled = !!elegido.fijo;
-    /* Por qué este rol no se puede tocar. Era un aviso fijo encima del árbol, y
-       un cartel permanente para una duda que se tiene una vez acaba siendo
-       ruido: ahora es un '?' junto al título, que se lee al preguntarlo. */
-    var previo = $('titulo-permisos').querySelector('.edoc-ayuda-que');
-    if (previo) {
-      if (window.jQuery) window.jQuery(previo).popover('dispose');
-      previo.remove();
-    }
-    var viejoAviso = $('arbol').querySelector('.edoc-aviso');
-    if (viejoAviso) viejoAviso.remove();
-    if (elegido.fijo) {
-      $('titulo-permisos').insertAdjacentHTML('beforeend',
-        '<button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="right" ' +
-          'data-content="El administrador siempre tiene todo. Si se le pudiera quitar un permiso, una ' +
-          'empresa podría dejarse fuera de su propio portal." ' +
-          'aria-label="Por qué no se pueden cambiar estos permisos">?</button>');
-      if (window.jQuery && window.jQuery.fn.popover) {
-        window.jQuery($('titulo-permisos').querySelector('.edoc-ayuda-que'))
-          .popover({ trigger: 'focus', html: false });
-      }
-    }
-    if (pendientes) { pendientes.fijar(); resumenRol(); }
+  function pintar() {
+    window.edocDestruirTabla('#tabla-roles');
+    $('cuerpo-roles').innerHTML = ROLES.map(fila).join('');
+    window.edocTabla('#tabla-roles', { order: [[1, 'asc']] });
   }
 
-  /* RN-01 y RN-02 de la corrida del 14 sep. Antes de guardar se ve qué
-     permisos gana (+) y cuáles pierde (−) el rol, y abrir otro rol con cambios
-     a medias ya no los tira sin decir nada. */
-  var pendientes = null;
-  function huellaRol() { return elegido.id + ':' + marcados().sort().join(','); }
-  function resumenRol() {
-    var ahora = marcados();
-    var antes = Array.isArray(elegido.permisos) ? elegido.permisos : [];
-    var nombre = function (id) {
-      var caja = $('arbol').querySelector('[data-permiso="' + id + '"]');
-      var l = caja && caja.closest('.form-check').querySelector('label');
-      return l ? l.textContent.replace(/\s+/g, ' ').trim() : id;
-    };
-    var lineas = ahora.filter(function (p) { return antes.indexOf(p) < 0; })
-      .map(function (p) { return '+ ' + nombre(p); })
-      .concat(antes.filter(function (p) { return ahora.indexOf(p) < 0; })
-      .map(function (p) { return '− ' + nombre(p); }));
-    $('resumen-cambios').hidden = !lineas.length;
-    $('resumen-cambios').querySelector('strong').textContent = lineas.join(' · ');
+  /* --- crear y editar ------------------------------------------------------ */
+  var editando = null;
+
+  function abrirRol(r) {
+    editando = r || null;
+    $('t-rol').textContent = r ? 'Editar el rol' : 'Crear rol';
+    $('rol-nombre').value = r ? r.nombre : '';
+    $('rol-desc').value = r ? r.desc : '';
+    $('rol-estado').value = r ? r.estado : 'activo';
+    $('rol-estado').disabled = !!(r && r.fijo);
+    $('rol-estado-ayuda').textContent = r && r.fijo
+      ? 'El administrador siempre está activo: sin él, nadie podría administrar la empresa.'
+      : 'Un rol inactivo no se puede asignar a nuevos usuarios.';
+    ['rol-nombre', 'rol-desc'].forEach(function (id) { $(id).classList.remove('is-invalid'); });
+    $('rol-ayuda').textContent = 'Como lo verá quien asigne usuarios.';
+    window.jQuery('#modal-rol').modal('show');
+  }
+
+  $('btn-crear').addEventListener('click', function () { abrirRol(null); });
+
+  $('rol-confirmar').addEventListener('click', function () {
+    var campo = $('rol-nombre');
+    var nombre = campo.value.trim();
+    if (!nombre) {
+      campo.classList.add('is-invalid');
+      $('rol-ayuda').textContent = 'Ponle un nombre al rol.';
+      campo.focus();
+      return;
+    }
+    var repetido = ROLES.some(function (r) {
+      return r !== editando && r.nombre.toLowerCase() === nombre.toLowerCase();
+    });
+    if (repetido) {
+      campo.classList.add('is-invalid');
+      $('rol-ayuda').textContent = 'Ya hay un rol con ese nombre.';
+      campo.focus();
+      return;
+    }
+    if (!$('rol-desc').value.trim()) {
+      $('rol-desc').classList.add('is-invalid');
+      window.edocAvisar('Escribe en una línea qué puede hacer este rol.', 'error');
+      $('rol-desc').focus();
+      return;
+    }
+    if (editando) {
+      editando.nombre = nombre;
+      editando.desc = $('rol-desc').value.trim();
+      if (!editando.fijo) editando.estado = $('rol-estado').value;
+      window.jQuery('#modal-rol').modal('hide');
+      pintar();
+      window.edocAvisar('Cambios guardados en <strong>' + nombre + '</strong>.', 'exito');
+      return;
+    }
+    var nuevo = { id: 'r' + Date.now(), nombre: nombre, desc: $('rol-desc').value.trim(),
+                  estado: $('rol-estado').value, permisos: [] };
+    ROLES.push(nuevo);
+    window.jQuery('#modal-rol').modal('hide');
+    pintar();
+    window.edocAvisar('Rol <strong>' + nombre + '</strong> creado. Asígnale permisos desde el candado de su fila.', 'exito');
+  });
+
+  /* --- permisos ------------------------------------------------------------ */
+  var rolPermisos = null;
+
+  function marcados() {
+    return [].slice.call($('arbol').querySelectorAll('[data-permiso]:checked'))
+      .map(function (c) { return c.dataset.permiso; });
+  }
+
+  function contar() {
+    $('cuenta-permisos').textContent = marcados().length + ' de ' + TODOS.length;
   }
 
   /* La casilla del módulo marca o desmarca todas sus hojas, y se pone a medias
@@ -302,17 +324,34 @@
       if (!caja) return;
       caja.checked = marcadas.length === hojas.length && hojas.length > 0;
       caja.indeterminate = marcadas.length > 0 && marcadas.length < hojas.length;
-      caja.disabled = !!elegido.fijo;
+      caja.disabled = !!rolPermisos.fijo;
     });
   }
 
-  function marcados() {
-    return [].slice.call($('arbol').querySelectorAll('[data-permiso]:checked'))
-      .map(function (c) { return c.dataset.permiso; });
-  }
-
-  function contar() {
-    $('cuenta-permisos').textContent = marcados().length + ' de ' + TODOS.length;
+  function abrirPermisos(r) {
+    rolPermisos = r;
+    $('t-permisos').textContent = 'Permisos del rol ' + r.nombre;
+    $('aviso-fijo').hidden = !r.fijo;
+    $('arbol').innerHTML = ARBOL.map(function (g) {
+      var idGrupo = 'g-' + g.modulo.toLowerCase().normalize('NFD').replace(/[^a-z]/g, '');
+      return '<div class="mb-3">' +
+        '<div class="form-check form-check--grupo">' +
+          '<input class="form-check-input" type="checkbox" id="' + idGrupo + '" data-modulo="' + g.modulo + '">' +
+          '<label class="form-check-label" for="' + idGrupo + '"><span class="edoc-etiqueta">' + g.modulo + '</span></label>' +
+        '</div>' +
+        g.items.map(function (it) {
+          return '<div class="form-check" style="margin-left:22px">' +
+            '<input class="form-check-input" type="checkbox" id="p-' + it.id + '" data-permiso="' + it.id + '" ' +
+              'data-de="' + g.modulo + '"' + (r.permisos.indexOf(it.id) >= 0 ? ' checked' : '') +
+              (r.fijo ? ' disabled' : '') + '>' +
+            '<label class="form-check-label" for="p-' + it.id + '">' + it.rotulo + '</label></div>';
+        }).join('') +
+      '</div>';
+    }).join('');
+    sincronizarGrupos();
+    contar();
+    document.querySelectorAll('[data-permisos="guardar"]').forEach(function (b) { b.disabled = !!r.fijo; });
+    window.jQuery('#modal-permisos').modal('show');
   }
 
   $('arbol').addEventListener('change', function (e) {
@@ -326,110 +365,30 @@
     contar();
   });
 
-  $('cuerpo-roles').addEventListener('click', function (e) {
-    var borrar = e.target.closest('[data-borrar]');
-    if (borrar) {
-      e.preventDefault();
-      var r = ROLES.filter(function (x) { return x.id === borrar.dataset.borrar; })[0];
-      if (!r) return;
-      if (r.usuarios > 0) {
-        window.edocAvisar('No se puede borrar <strong>' + r.nombre + '</strong>: todavía lo usan ' +
-          r.usuarios + ' usuarios. Cámbiales el rol primero.', 'error');
-        return;
-      }
-      ROLES = ROLES.filter(function (x) { return x.id !== r.id; });
-      if (elegido.id === r.id) elegido = ROLES[0];
-      pintarRoles(); pintarArbol();
-      window.edocAvisar('Rol <strong>' + r.nombre + '</strong> borrado.', 'exito');
-      return;
-    }
-    var fila = e.target.closest('[data-rol]');
-    if (!fila) return;
-    if (fila.dataset.rol !== elegido.id && pendientes.hay()) {
-      window.edocAvisar('Guarda o deshaz los cambios de este rol antes de abrir otro.', 'error');
-      return;
-    }
-    elegido = ROLES.filter(function (r) { return r.id === fila.dataset.rol; })[0] || elegido;
-    pintarRoles(); pintarArbol();
-  });
-
-  $('btn-guardar').addEventListener('click', function () {
+  document.addEventListener('click', function (e) {
+    var boton = e.target.closest('[data-permisos="guardar"]');
+    if (!boton || boton.disabled || !rolPermisos) return;
     var nuevos = marcados();
     if (!nuevos.length) {
       window.edocAvisar('Un rol sin ningún permiso no puede ni entrar al portal. Marca al menos uno.', 'error');
       return;
     }
-    elegido.permisos = nuevos;
-    pintarRoles();
-    pendientes.fijar();
-    resumenRol();
-    window.edocAvisar('Permisos de <strong>' + elegido.nombre + '</strong> guardados · ' +
+    rolPermisos.permisos = nuevos;
+    window.jQuery('#modal-permisos').modal('hide');
+    window.edocAvisar('Permisos de <strong>' + rolPermisos.nombre + '</strong> guardados · ' +
       nuevos.length + ' de ' + TODOS.length + '.', 'exito');
   });
 
-  // Va después del que sincroniza los módulos, para contar ya con sus hojas.
-  $('arbol').addEventListener('change', resumenRol);
-
-  $('btn-deshacer').addEventListener('click', function () {
-    pintarArbol();
-    window.edocAvisar('Se descartaron los cambios sin guardar.');
+  $('cuerpo-roles').addEventListener('click', function (e) {
+    var editar = e.target.closest('[data-editar]');
+    var permisos = e.target.closest('[data-permisos-rol]');
+    if (!editar && !permisos) return;
+    e.preventDefault();
+    if (editar) abrirRol(buscar(editar.dataset.editar));
+    else abrirPermisos(buscar(permisos.dataset.permisosRol));
   });
 
-  /* --- crear un rol ------------------------------------------------------- */
-  $('btn-crear').addEventListener('click', function () {
-    $('rol-nombre').value = '';
-    $('rol-desc').value = '';
-    $('rol-nombre').classList.remove('is-invalid');
-    $('rol-desc').classList.remove('is-invalid');
-    $('rol-ayuda').textContent = 'Como lo verá quien asigne usuarios.';
-    $('rol-base').innerHTML = '<option value="">Sin ningún permiso</option>' +
-      ROLES.map(function (r) { return '<option value="' + r.id + '">' + r.nombre + '</option>'; }).join('');
-    window.jQuery('#modal-rol').modal('show');
-  });
-
-  $('rol-confirmar').addEventListener('click', function () {
-    var campo = $('rol-nombre');
-    var nombre = campo.value.trim();
-    if (!nombre) {
-      campo.classList.add('is-invalid');
-      $('rol-ayuda').textContent = 'Ponle un nombre al rol.';
-      campo.focus();
-      return;
-    }
-    var repetido = ROLES.some(function (r) { return r.nombre.toLowerCase() === nombre.toLowerCase(); });
-    if (repetido) {
-      campo.classList.add('is-invalid');
-      $('rol-ayuda').textContent = 'Ya hay un rol con ese nombre.';
-      campo.focus();
-      return;
-    }
-    if (!$('rol-desc').value.trim()) {
-      $('rol-desc').classList.add('is-invalid');
-      window.edocAvisar('Escribe en una línea qué puede hacer este rol.', 'error');
-      $('rol-desc').focus();
-      return;
-    }
-    var base = ROLES.filter(function (r) { return r.id === $('rol-base').value; })[0];
-    var nuevo = {
-      id: 'r' + Date.now(),
-      nombre: nombre,
-      desc: $('rol-desc').value.trim(),
-      usuarios: 0,
-      activo: true,
-      permisos: base ? base.permisos.slice() : []
-    };
-    ROLES.push(nuevo);
-    elegido = nuevo;
-    window.jQuery('#modal-rol').modal('hide');
-    pintarRoles(); pintarArbol();
-    window.edocAvisar('Rol <strong>' + nombre + '</strong> creado' +
-      (base ? ' copiando los permisos de ' + base.nombre : ' sin permisos') +
-      '. Ajústalos y guarda.', 'exito');
-  });
-
-  pintarRoles();
-  pendientes = window.edocPendientes(huellaRol);
-  pintarArbol();
+  pintar();
 }());
 </script>
 </body>

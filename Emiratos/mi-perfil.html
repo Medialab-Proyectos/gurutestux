@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi perfil · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+</head>
+<body data-seccion="mi cuenta" data-pagina="mi-perfil.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra"><div>
+      <div class="edoc-miga"><span>Mi cuenta</span><span>Mi perfil</span></div>
+      <h1 class="edoc-titulo">Mi perfil</h1>
+      <p class="edoc-subtitulo">Tus datos, tu contraseña y el rol con el que entras. Los datos de la empresa y los
+      demás usuarios se administran en Administración.</p>
+    </div></div>
+
+  <div class="edoc-pestanas" role="tablist">
+    <button type="button" class="edoc-pestanas__boton" role="tab" id="pestana-cuenta"
+      aria-controls="panel-cuenta" aria-selected="true" data-pestana="cuenta">Cuenta</button>
+    <button type="button" class="edoc-pestanas__boton" role="tab" id="pestana-seguridad"
+      aria-controls="panel-seguridad" aria-selected="false" data-pestana="seguridad">Seguridad</button>
+    <button type="button" class="edoc-pestanas__boton" role="tab" id="pestana-rol"
+      aria-controls="panel-rol" aria-selected="false" data-pestana="rol">Rol</button>
+  </div>
+
+  <!-- Las tres pestañas comparten la misma rejilla: lo principal a la izquierda
+       y lo complementario a la derecha, en dos mitades. Así, al cambiar de pestaña,
+       las tarjetas no saltan de ancho ni de posición. -->
+
+  <!-- ===================== Cuenta ===================== -->
+  <div id="panel-cuenta" role="tabpanel" aria-labelledby="pestana-cuenta">
+    <div class="perfil-rejilla">
+      <div class="perfil-rejilla__principal">
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Datos personales</h2></div>
+          <div class="edoc-tablero__cuerpo">
+            <div class="edoc-perfil-dato">
+              <label class="edoc-etiqueta" for="p-nombre">Nombre</label>
+              <input class="form-control" id="p-nombre" value="Fatima Al Marzooqi" readonly>
+            </div>
+            <div class="edoc-perfil-dato">
+              <label class="edoc-etiqueta" for="p-usuario">Usuario</label>
+              <input class="form-control" id="p-usuario" value="fatima.almarzooqi" readonly>
+            </div>
+            <div class="edoc-perfil-dato">
+              <label class="edoc-etiqueta" for="p-correo">Correo</label>
+              <input class="form-control" id="p-correo" value="f.almarzooqi@alnoor.ae" readonly>
+              <div class="edoc-ayuda">Aquí llegan el código de acceso y los avisos de tu cuenta.</div>
+            </div>
+            <div class="edoc-perfil-dato">
+              <label class="edoc-etiqueta" for="p-empresa">Empresa</label>
+              <input class="form-control" id="p-empresa" value="Al Noor Trading LLC" readonly>
+              <div class="edoc-ayuda cifra">TRN 100776655400003</div>
+            </div>
+
+            <div class="edoc-aviso edoc-aviso--info mt-4 mb-0">
+              <div>Estos datos los cambia un administrador de tu empresa desde
+              <a href="admin-usuarios.html">Usuarios</a>. Aquí se ven para que sepas con qué identidad estás
+              entrando y a qué correo te llegan los códigos.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="perfil-rejilla__lado">
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Foto de perfil</h2></div>
+          <div class="edoc-tablero__cuerpo">
+            <div class="edoc-perfil-foto">
+              <img src="assets/img/avatar.jpg" alt="Foto de perfil de Fatima Al Marzooqi">
+              <button class="btn btn-edoc-terciario" type="button" id="cambiar-foto">Cambiar la foto</button>
+              <p class="edoc-ayuda mb-0">Formatos JPG o PNG · máximo 800 KB.</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="nota nota--abierto">
+          <span class="nota__sello">Abierto</span>
+          <strong>Qué puede cambiar el propio usuario.</strong> En Francia estos datos son de solo lectura y la
+          foto sí se cambia. Falta decidir si aquí el usuario puede corregir su nombre o su correo por su
+          cuenta —el correo es el segundo factor, así que cambiarlo no es un dato más— o si sigue dependiendo
+          de un administrador.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Seguridad ===================== -->
+  <div id="panel-seguridad" role="tabpanel" aria-labelledby="pestana-seguridad" hidden>
+    <div class="perfil-rejilla">
+      <div class="perfil-rejilla__principal">
+        <!-- La contraseña se cambia aquí mismo. Antes era otra pantalla: dos
+             saltos y más clics para algo que se hace desde tu propio perfil. -->
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Tu contraseña</h2></div>
+          <div class="edoc-tablero__cuerpo">
+            <p class="edoc-secundario">La cambiaste por última vez el <span class="cifra">2026-08-14</span>.</p>
+
+            <div class="edoc-perfil-dato">
+              <label class="edoc-etiqueta" for="c1">Contraseña actual<span class="obligatorio">*</span></label>
+              <input type="password" class="form-control" id="c1" autocomplete="current-password">
+            </div>
+            <div class="edoc-perfil-dato">
+              <label class="edoc-etiqueta" for="c2">Contraseña nueva<span class="obligatorio">*</span></label>
+              <input type="password" class="form-control" id="c2" autocomplete="new-password">
+              <div class="edoc-ayuda" id="c-reglas">Al menos diez caracteres, con una mayúscula, un número y un símbolo.</div>
+              <ul class="edoc-lista-simple mt-2" id="c-fuerza" hidden></ul>
+            </div>
+            <div class="edoc-perfil-dato">
+              <label class="edoc-etiqueta" for="c3">Repite la contraseña nueva<span class="obligatorio">*</span></label>
+              <input type="password" class="form-control" id="c3" autocomplete="new-password">
+            </div>
+
+            <div class="edoc-aviso edoc-aviso--info mt-4 mb-3">
+              <div>Al cambiarla se cierran las sesiones abiertas en otros navegadores.</div>
+            </div>
+
+            <div class="d-flex hueco-2">
+              <button class="btn btn-edoc-primario" type="button" id="c-guardar">Confirmar</button>
+              <button class="btn btn-edoc-terciario" type="button" id="c-cancelar">Cancelar</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="perfil-rejilla__lado">
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera">
+            <h2 class="edoc-tablero__titulo">Verificación en dos pasos</h2>
+            <span class="edoc-estado edoc-estado--exito">Activada</span>
+          </div>
+          <div class="edoc-tablero__cuerpo">
+            <p>Cada vez que entras te mandamos un código de seis cifras a
+            <strong>f.a•••••@alnoor.ae</strong>. Sin ese código no hay sesión.</p>
+            <div class="edoc-aviso edoc-aviso--advertencia mb-0">
+              <div><strong>No se puede desactivar.</strong> La Decisión Ministerial 64/2025 obliga a la
+              verificación en dos pasos para entrar al portal, así que el interruptor no existe: enseñar uno
+              apagado sería prometer algo que no se puede hacer.</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="nota nota--abierto">
+          <span class="nota__sello">Abierto</span>
+          <strong>Más factores, no menos.</strong> Hoy el único canal es el correo. En la reunión se planteó
+          añadir mensaje de texto o una aplicación de autenticación, que es lo habitual hoy. Eso amplía el
+          segundo factor sin quitarlo, y hay que decidirlo con seguridad.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Rol ===================== -->
+  <div id="panel-rol" role="tabpanel" aria-labelledby="pestana-rol" hidden>
+    <div class="perfil-rejilla">
+      <div class="perfil-rejilla__principal">
+        <!-- Simple, con check: los permisos del rol con su casilla, en solo
+             lectura. En la grabación del 15 de septiembre el árbol de Francia
+             —carpetas, buscador, contadores— se enseñó como pista para más
+             adelante; para el MVP quedó «así, check, de una». -->
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Qué te deja hacer</h2></div>
+          <div class="edoc-tablero__cuerpo">
+            <div id="lista-permisos"></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="perfil-rejilla__lado">
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera">
+            <h2 class="edoc-tablero__titulo">Tu rol</h2>
+            <span class="edoc-estado edoc-estado--exito">Administrador</span>
+          </div>
+          <div class="edoc-tablero__cuerpo">
+            <p>Con este rol puedes administrar la empresa entera: sus usuarios, sus roles, sus datos fiscales y
+            sus credenciales de conexión.</p>
+            <div class="edoc-aviso edoc-aviso--info mb-0">
+              <div>Tu rol no se cambia desde aquí: lo asigna otro administrador desde
+              <a href="admin-roles.html">Roles</a>. Se enseña para que sepas por qué ves unas opciones y no
+              otras.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · reunión del 15 de septiembre</span>
+    <strong>Lo mío va en el avatar; lo de la empresa, en Administración.</strong> Es el reparto del portal de
+    Francia, y resuelve el ruido que se repite en cada país: quien entra a «Administración» buscando su propia
+    contraseña acaba en una pantalla que administra a los demás. Por eso «Cambiar Contraseña» sale del menú de
+    Administración y cuelga del avatar, junto a «Mi perfil».
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* Los permisos del rol, por módulo y en solo lectura: aquí no se asignan, se
+     leen. Mismo reparto que el árbol de «Roles», para que quien mire su perfil
+     y quien administre vean lo mismo con las mismas palabras. */
+  var ARBOL = [
+    { modulo: 'Inicio', permisos: [
+      { rotulo: 'Ver la pantalla de bienvenida', tiene: true } ] },
+    { modulo: 'Emisión', permisos: [
+      { rotulo: 'Documentos Emitidos', tiene: true },
+      { rotulo: 'Ver estados de las cinco esquinas', tiene: true },
+      { rotulo: 'Visor del documento', tiene: true },
+      { rotulo: 'Descargar PDF', tiene: true },
+      { rotulo: 'Descargar XML', tiene: true },
+      { rotulo: 'Exportar resultados', tiene: true } ] },
+    { modulo: 'Recepción', permisos: [
+      { rotulo: 'Documentos Recibidos', tiene: true },
+      { rotulo: 'Aprobar · MLS AP', tiene: true },
+      { rotulo: 'Rechazar · MLS RE', tiene: true },
+      { rotulo: 'Acusar recibo · MLS AB', tiene: true },
+      { rotulo: 'Visor del documento', tiene: true },
+      { rotulo: 'Exportar resultados', tiene: true } ] },
+    { modulo: 'Administración', permisos: [
+      { rotulo: 'Roles', tiene: true },
+      { rotulo: 'Usuarios', tiene: true },
+      { rotulo: 'Actualización de identificación fiscal', tiene: true },
+      { rotulo: 'Actualización de contactos', tiene: true },
+      { rotulo: 'Credenciales de consumo Servicio eDoc', tiene: true },
+      { rotulo: 'Manuales', tiene: true },
+      { rotulo: 'Clientes y proveedores', tiene: false } ] }
+  ];
+
+  /* Una casilla por permiso, marcada si el rol lo tiene y siempre bloqueada:
+     aquí se lee, no se asigna. */
+  var n = 0;
+  $('lista-permisos').innerHTML = ARBOL.map(function (g) {
+    return '<div class="perfil-permisos__grupo">' +
+      '<div class="perfil-permisos__modulo">' + g.modulo + '</div>' +
+      g.permisos.map(function (p) {
+        n += 1;
+        var id = 'permiso-perfil-' + n;
+        return '<div class="form-check">' +
+          '<input class="form-check-input" type="checkbox" id="' + id + '" disabled' + (p.tiene ? ' checked' : '') + '>' +
+          '<label class="form-check-label" for="' + id + '">' + p.rotulo + '</label>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+  }).join('');
+
+  /* Las pestañas. Una barra de navegación dentro de la pantalla: el panel que
+     se ve es el de la pestaña marcada, y el resto se esconde de verdad. */
+  var PANELES = ['cuenta', 'seguridad', 'rol'];
+  function abrir(cual) {
+    PANELES.forEach(function (p) {
+      $('panel-' + p).hidden = p !== cual;
+      $('pestana-' + p).setAttribute('aria-selected', p === cual ? 'true' : 'false');
+    });
+    try { window.sessionStorage.setItem('edoc-perfil-pestana', cual); } catch (error) { /* nada */ }
+  }
+
+  document.querySelector('.edoc-pestanas').addEventListener('click', function (e) {
+    var boton = e.target.closest('[data-pestana]');
+    if (boton) abrir(boton.dataset.pestana);
+  });
+
+  // Al volver a la pantalla se abre por donde se dejó.
+  var guardada = null;
+  try { guardada = window.sessionStorage.getItem('edoc-perfil-pestana'); } catch (error) { /* nada */ }
+  abrir(PANELES.indexOf(guardada) >= 0 ? guardada : 'cuenta');
+
+  /* --- La contraseña, en esta misma vista ------------------------------- */
+  var REGLAS = [
+    { texto: 'Al menos diez caracteres',   pasa: function (v) { return v.length >= 10; } },
+    { texto: 'Una mayúscula',              pasa: function (v) { return /[A-ZÁÉÍÓÚÑ]/.test(v); } },
+    { texto: 'Un número',                  pasa: function (v) { return /\d/.test(v); } },
+    { texto: 'Un símbolo',                 pasa: function (v) { return /[^A-Za-z0-9]/.test(v); } }
+  ];
+
+  // Las reglas se enseñan mientras se escribe, no solo al fallar.
+  $('c2').addEventListener('input', function () {
+    var v = $('c2').value;
+    var caja = $('c-fuerza');
+    if (!v) { caja.hidden = true; return; }
+    caja.hidden = false;
+    caja.innerHTML = REGLAS.map(function (r) {
+      var ok = r.pasa(v);
+      return '<li style="color:' + (ok ? 'var(--edoc-verde)' : '#8a8a8a') + '">' +
+        (ok ? '✓ ' : '· ') + r.texto + '</li>';
+    }).join('');
+  });
+
+  function malClave(id, texto) {
+    document.querySelectorAll('#c1, #c2, #c3').forEach(function (e) { e.classList.remove('is-invalid'); });
+    $(id).classList.add('is-invalid');
+    $(id).focus();
+    window.edocAvisar(texto, 'error');
+  }
+
+  $('c-cancelar').addEventListener('click', function () {
+    document.querySelectorAll('#c1, #c2, #c3').forEach(function (e) {
+      e.classList.remove('is-invalid'); e.value = '';
+    });
+    $('c-fuerza').hidden = true;
+    window.edocAvisar('Se descartó lo que habías escrito.');
+  });
+
+  $('c-guardar').addEventListener('click', function () {
+    var a = $('c1').value, b = $('c2').value, c = $('c3').value;
+    if (!a) return malClave('c1', 'Escribe tu contraseña actual.');
+    if (!b) return malClave('c2', 'Escribe la contraseña nueva.');
+    var falla = REGLAS.filter(function (r) { return !r.pasa(b); });
+    if (falla.length) return malClave('c2', 'A la contraseña nueva le falta: ' +
+      falla.map(function (r) { return r.texto.toLowerCase(); }).join(', ') + '.');
+    if (b === a) return malClave('c2', 'La contraseña nueva tiene que ser distinta de la actual.');
+    if (b !== c) return malClave('c3', 'Las dos contraseñas nuevas no coinciden.');
+    document.querySelectorAll('#c1, #c2, #c3').forEach(function (e) {
+      e.classList.remove('is-invalid'); e.value = '';
+    });
+    $('c-fuerza').hidden = true;
+    window.edocAvisar('Contraseña actualizada. Las sesiones abiertas en otros ' +
+      'navegadores se han cerrado.', 'exito');
+  });
+
+  $('cambiar-foto').addEventListener('click', function () {
+    window.edocAvisar('En la maqueta no se sube la foto: se abriría el explorador de archivos.');
+  });
+}());
+</script>
+</body>
+</html>

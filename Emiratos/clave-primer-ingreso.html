@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cambia tu contraseña · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+</head>
+<body>
+<div class="edoc-acceso">
+  <aside class="edoc-acceso__lienzo">
+    <img class="edoc-acceso__filigrana" src="assets/img/edoc-filigrana.svg" alt="" aria-hidden="true">
+
+    <div class="edoc-acceso__portada">
+      <img class="edoc-acceso__marca" src="assets/img/edoc-logo-neg.svg" alt="eDoc · Facturación Electrónica">
+      <h1 class="edoc-acceso__titulo">Portal Consulta</h1>
+      <p class="edoc-acceso__pais">Emiratos Árabes Unidos</p>
+      <p class="edoc-acceso__lema">La contraseña que te enviamos por correo sirve para entrar una vez. La que
+      elijas ahora es la tuya, y solo tú la conoces.</p>
+    </div>
+
+    <p class="edoc-acceso__pie">GuruSoft S.A. © 2026 · <span class="cifra" data-version></span></p>
+  </aside>
+
+  <div class="edoc-acceso__panel">
+    <div class="edoc-acceso__tarjeta">
+      <div class="edoc-tablero">
+        <div class="edoc-acceso__cabecera">
+          <span class="edoc-acceso__cabecera-rotulo">Cambio de contraseña</span>
+          <div class="edoc-acceso__idioma" data-selector-idioma="claro"></div>
+        </div>
+        <div class="edoc-tablero__cuerpo">
+          <h2 class="edoc-titulo mb-1" style="font-size:20px">Cambia tu contraseña para entrar</h2>
+          <p class="edoc-secundario mb-4">Es tu primer ingreso. Antes de ver el portal tienes que poner una
+          contraseña tuya: la que te enviamos la conoce quien te dio de alta.</p>
+
+          <form id="forma-clave" novalidate>
+            <div class="mb-3">
+              <label class="edoc-etiqueta" for="clave-nueva">Contraseña nueva<span class="obligatorio">*</span></label>
+              <input type="password" class="form-control" id="clave-nueva" autocomplete="new-password"
+                placeholder="La que vas a usar de ahora en adelante">
+              <div class="edoc-ayuda" id="ayuda-reglas">Al menos diez caracteres, con una mayúscula, un número
+              y un símbolo.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="edoc-etiqueta" for="clave-repetir">Repite la contraseña nueva<span class="obligatorio">*</span></label>
+              <input type="password" class="form-control" id="clave-repetir" autocomplete="new-password"
+                placeholder="La misma otra vez">
+              <div class="invalid-feedback edoc-error-campo" id="repetir-error" hidden>Las dos contraseñas no coinciden.</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="edoc-etiqueta">Verificación de seguridad<span class="obligatorio">*</span></label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="robot">
+                <label class="form-check-label" for="robot">No soy un robot</label>
+                <div class="invalid-feedback edoc-error-campo" id="robot-error" hidden>Marca la verificación de seguridad.</div>
+              </div>
+            </div>
+
+            <button class="btn btn-edoc-primario w-100" type="submit">Guardar y entrar</button>
+
+            <p class="edoc-ayuda mt-3">No hay forma de dejarlo para luego: sin cambiarla no se entra al portal.</p>
+
+            <div class="nota nota--decidido mt-3">
+              <span class="nota__sello">Decidido · reunión del 15 de septiembre</span>
+              <strong>Esta pantalla es aparte y no se puede saltar.</strong> Va después del código y antes del
+              portal, con su propia verificación de seguridad, igual que el acceso y el registro. Si fuera un
+              aviso dentro del portal, bastaría con cerrarlo para seguir usando la contraseña que viajó por
+              correo.
+            </div>
+            <div class="nota nota--abierto mt-2">
+              <span class="nota__sello">Abierto</span>
+              <strong>Las reglas de la contraseña.</strong> Aquí están las mismas que pide «Cambiar Contraseña»
+              dentro del portal —diez caracteres, mayúscula, número y símbolo—. Las definitivas las fija
+              seguridad, junto con cuántos intentos fallidos bloquean la cuenta.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  try {
+    if (window.localStorage.getItem('edoc-notas') === '1') document.body.classList.add('con-notas');
+  } catch (error) { /* navegador sin almacenamiento */ }
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  var REGLAS = [
+    { pasa: function (v) { return v.length >= 10; } },
+    { pasa: function (v) { return /[A-ZÁÉÍÓÚÑ]/.test(v); } },
+    { pasa: function (v) { return /\d/.test(v); } },
+    { pasa: function (v) { return /[^A-Za-z0-9]/.test(v); } }
+  ];
+
+  $('forma-clave').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nueva = $('clave-nueva');
+    var repetir = $('clave-repetir');
+    var robot = $('robot');
+    [nueva, repetir, robot].forEach(function (x) { x.classList.remove('is-invalid'); });
+    $('repetir-error').hidden = true;
+    $('robot-error').hidden = true;
+
+    var floja = REGLAS.some(function (r) { return !r.pasa(nueva.value); });
+    if (floja) {
+      nueva.classList.add('is-invalid');
+      $('ayuda-reglas').textContent = 'Esa contraseña no cumple: diez caracteres, una mayúscula, un número y un símbolo.';
+      nueva.focus();
+      return;
+    }
+    if (nueva.value !== repetir.value) {
+      repetir.classList.add('is-invalid');
+      $('repetir-error').hidden = false;
+      repetir.focus();
+      return;
+    }
+    if (!robot.checked) {
+      robot.classList.add('is-invalid');
+      $('robot-error').hidden = false;
+      robot.focus();
+      return;
+    }
+
+    try { window.localStorage.setItem('edoc-clave-cambiada', '1'); } catch (error) { /* nada */ }
+    var A = window.EDOC_ALCANCE;
+    location.href = A ? A.conVistas('inicio.html') : 'inicio.html';
+  });
+}());
+</script>
+</body>
+</html>

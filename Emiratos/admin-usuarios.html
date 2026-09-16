@@ -29,13 +29,13 @@
   <div class="edoc-titulo-barra"><div>
       <div class="edoc-miga"><span>Administración</span><span>Roles y Usuarios</span><span>Usuarios</span></div>
       <h1 class="edoc-titulo">Usuarios</h1>
-      <p class="edoc-subtitulo">Alta y baja de los usuarios de tu empresa. El administrador es el primer usuario que se crea al habilitar la empresa.</p>
+      <p class="edoc-subtitulo">Alta y baja de los usuarios de tu empresa.</p>
     </div></div>
 
   <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Usuarios de la empresa</h2>
-      <button class="btn btn-edoc-primario btn-sm" type="button" id="btn-anadir">Añadir usuario</button>
+      <button class="btn btn-edoc-primario btn-sm" type="button" id="btn-anadir"><span aria-hidden="true">+ </span>Añadir usuario</button>
     </div>
     <div class="edoc-tabla-envoltura">
       <table class="edoc-tabla" id="tabla-usuarios">
@@ -48,6 +48,40 @@
       </table>
     </div>
   </section>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · de la reunión del 15 de septiembre</span>
+    <strong>Qué más tiene que verse de cada usuario.</strong> Se planteó una columna con la política de datos
+    que aceptó y su versión: si la política cambia cinco veces en dos meses, hay que poder decir cuál firmó
+    cada uno. Eso es un módulo aparte —versionado de textos legales y registro de aceptaciones—, y aquí solo
+    se anota para que no se pierda.
+  </div>
+
+  <!-- ===================== Confirmar el cambio de estado ===================== -->
+  <!-- De la reunión del 15 de septiembre: «está seguro de eso, porque si alguien
+       viene a jugar con esos botones…». Desactivar a una persona la deja fuera
+       del portal, así que se pregunta antes y se dice qué pasa y qué no. -->
+  <div class="modal fade" id="modal-estado" tabindex="-1" role="dialog" aria-labelledby="t-estado" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="t-estado">Desactivar el acceso</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-3" id="estado-texto"></p>
+          <div class="edoc-aviso edoc-aviso--info">
+            <div id="estado-detalle"></div>
+          </div>
+          <p class="edoc-ayuda mt-3">Queda registrado quién lo hizo y cuándo.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" id="estado-confirmar">Desactivar el acceso</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ===================== Alta y edición ===================== -->
   <div class="modal fade" id="modal-usuario" tabindex="-1" role="dialog" aria-labelledby="t-usuario" aria-hidden="true">
@@ -175,17 +209,21 @@
     /* El interruptor de activar y desactivar va en la fila porque es lo que se
        hace a diario; editar abre la ventana. Y el propio usuario no puede
        desactivarse a sí mismo: se dejaría fuera de su portal. */
+    /* «Desactivar el acceso», no una aspa a secas: una X se lee como borrar, y
+       aquí no se borra a nadie. El rótulo lo dice y la confirmación lo repite. */
+    var rotulo = (u.estado === 'activo' ? 'Desactivar el acceso de ' : 'Devolver el acceso a ') + u.nombre;
     var apagar = u.yo
       ? '<span class="edoc-accion" aria-disabled="true" title="No puedes desactivar tu propio usuario">' +
         ico('candado') + '</span>'
       : '<a class="edoc-accion edoc-accion--gris" href="#" data-cambiar="' + i + '" ' +
-        'title="' + (u.estado === 'activo' ? 'Desactivar' : 'Activar') + ' a ' + u.nombre + '" ' +
-        'aria-label="' + (u.estado === 'activo' ? 'Desactivar' : 'Activar') + ' a ' + u.nombre + '">' +
-        ico(u.estado === 'activo' ? 'rechazar' : 'aprobar') + '</a>';
+        'title="' + rotulo + '" aria-label="' + rotulo + '">' +
+        ico(u.estado === 'activo' ? 'candado' : 'aprobar') + '</a>';
 
     return '<tr>' +
       '<td class="col-acciones"><div class="d-flex hueco-1">' +
-        '<a class="edoc-accion" href="#" data-editar="' + i + '" ' +
+        /* Editar es la principal del grupo y va rellena: con tres iconos del
+           mismo color no se distinguía cuál era la de todos los días. */
+        '<a class="edoc-accion edoc-accion--principal" href="#" data-editar="' + i + '" ' +
           'title="Editar" aria-label="Editar a ' + u.nombre + '">' + LAPIZ + '</a>' +
         '<a class="edoc-accion edoc-accion--gris" href="#" data-reenviar="' + i + '" ' +
           'title="Reenviar el correo de bienvenida" ' +
@@ -324,7 +362,32 @@
         return;
       }
     }
+    preguntarEstado(i);
+  });
+
+  /* Preguntar antes de dejar a alguien fuera, y decir qué significa: no se
+     borra al usuario ni sus documentos, deja de poder entrar. */
+  var cambiando = -1;
+  function preguntarEstado(i) {
+    cambiando = i;
+    var v = USUARIOS[i];
+    var apaga = v.estado === 'activo';
+    $('t-estado').textContent = apaga ? 'Desactivar el acceso' : 'Devolver el acceso';
+    $('estado-texto').innerHTML = (apaga ? 'Vas a dejar fuera del portal a ' : 'Vas a devolver el acceso a ') +
+      '<strong>' + v.nombre + '</strong> · ' + v.correo + '.';
+    $('estado-detalle').textContent = apaga
+      ? 'No se borra nada: el usuario y sus documentos se quedan, pero deja de poder entrar. Puedes devolverle el acceso cuando quieras.'
+      : 'Volverá a entrar con su usuario de siempre. Si no recuerda la contraseña, puede recuperarla desde el acceso.';
+    $('estado-confirmar').textContent = apaga ? 'Desactivar el acceso' : 'Devolver el acceso';
+    window.jQuery('#modal-estado').modal('show');
+  }
+
+  $('estado-confirmar').addEventListener('click', function () {
+    if (cambiando < 0) return;
+    var v = USUARIOS[cambiando];
     v.estado = v.estado === 'activo' ? 'inactivo' : 'activo';
+    cambiando = -1;
+    window.jQuery('#modal-estado').modal('hide');
     pintar();
     window.edocAvisar('<strong>' + v.nombre + '</strong> queda ' +
       (v.estado === 'activo' ? 'activo' : 'inactivo') + '.', 'exito');

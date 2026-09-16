@@ -39,7 +39,7 @@
         <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Los tres pasos</h2></div>
         <div class="edoc-tablero__cuerpo">
           <ul class="linea-tiempo" id="linea">
-            <li class="hecho" data-p="1"><div class="linea-tiempo__titulo">Paso 1 · Quién eres</div><div class="linea-tiempo__detalle">Tu usuario o el correo con el que entras.</div></li>
+            <li class="hecho" data-p="1"><div class="linea-tiempo__titulo">Paso 1 · Usuario y empresa</div><div class="linea-tiempo__detalle">Los mismos datos con los que entras al portal.</div></li>
             <li class="espera" data-p="2"><div class="linea-tiempo__titulo">Paso 2 · El código</div><div class="linea-tiempo__detalle">Seis cifras al correo registrado.</div></li>
             <li class="espera" data-p="3"><div class="linea-tiempo__titulo">Paso 3 · La contraseña nueva</div><div class="linea-tiempo__detalle">Y se cierran las sesiones abiertas.</div></li>
           </ul>
@@ -51,15 +51,21 @@
 
       <!-- Paso 1 -->
       <section class="edoc-tablero" id="paso-1">
-        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Paso 1 · Quién eres</h2></div>
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Paso 1 · Usuario y empresa</h2></div>
         <div class="edoc-tablero__cuerpo">
           <p class="mb-3">Dinos con qué entras al portal. Te mandaremos un código al correo que tengas
           registrado.</p>
 
-          <label class="edoc-etiqueta" for="quien">Usuario o correo<span class="obligatorio">*</span></label>
-          <input class="form-control" id="quien" style="max-width:380px" placeholder="f.almarzooqi@alnoor.ae"
+          <label class="edoc-etiqueta" for="quien">Usuario<span class="obligatorio">*</span></label>
+          <input class="form-control" id="quien" style="max-width:380px" placeholder="f.almarzooqi"
             autocomplete="username">
-          <div class="edoc-ayuda" id="ayuda-1">Si la cuenta existe, el código sale al momento.</div>
+          <div class="edoc-ayuda" id="ayuda-1">El mismo usuario con el que entras. No pedimos el correo: es
+          el dato que mandaría el código a donde quisiera quien lo escribe.</div>
+
+          <label class="edoc-etiqueta mt-3" for="empresa">Empresa<span class="obligatorio">*</span></label>
+          <input class="form-control" id="empresa" style="max-width:380px" placeholder="Al Noor Trading LLC">
+          <div class="edoc-ayuda" id="ayuda-empresa">Un mismo usuario puede estar en varias empresas, con una
+          contraseña en cada una. Sin saber cuál, no sabemos qué contraseña recuperar.</div>
 
           <button class="btn btn-edoc-primario mt-4" type="button" id="ir-2">Mandarme el código</button>
           <a class="btn btn-edoc-terciario mt-4 ml-2" href="index.html">Volver al acceso</a>
@@ -74,8 +80,9 @@
                pero inventarle un segundo canal sería contradecir el documento,
                que dice que el segundo factor es el correo y solo el correo. -->
           <div class="edoc-aviso edoc-aviso--info mb-3">
-            <div>Si esa cuenta existe, mandamos un código a su correo registrado. <strong>No decimos cuál
-            es</strong>: enseñar la dirección permitiría averiguar quién tiene cuenta.</div>
+            <div>Si esa cuenta existe, mandamos un código a su correo registrado:
+            <strong id="correo-enmascarado">f.a•••••@a•••••.ae</strong>. Se enseña tapado: entero permitiría
+            averiguar la dirección de cualquier usuario desde fuera.</div>
           </div>
 
           <label class="edoc-etiqueta" for="codigo">Código<span class="obligatorio">*</span></label>
@@ -140,11 +147,19 @@
     camino no está definido ni tiene pantalla.
   </div>
 
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · reunión del 15 de septiembre</span>
+    <strong>Usuario y empresa, como en Francia, y nunca el correo.</strong> Aceptar un correo cualquiera
+    dejaba que alguien pidiera el código de otro a su propia dirección. Y la empresa hace falta porque el
+    mismo usuario puede existir en varias, con una contraseña en cada una. Lo que no se hace es enseñar
+    en qué empresas está ese usuario: eso sería revelar datos a quien todavía no ha entrado.
+  </div>
+
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
-    <strong>Cuántos intentos y cada cuánto se puede reenviar.</strong> Ni el D10 ni la maqueta lo fijan.
-    Sin un límite, un código de seis cifras se prueba por fuerza bruta y el botón de reenviar sirve para
-    inundarle el buzón a cualquiera. Hace falta el número antes de desarrollarlo.
+    <strong>Cuántos intentos y cada cuánto se puede reenviar.</strong> Aquí están puestos cinco reenvíos y
+    tres intentos, con caducidad a los cinco minutos, para poder verlo. El número definitivo lo fija
+    seguridad, junto con cuánto dura el bloqueo de la cuenta.
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -175,29 +190,85 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  /* El usuario llega escrito desde el acceso: allí ya lo puso. Volver a
+     preguntarlo deja meter el de otra persona, que es justo lo que no se quiere
+     en una recuperación. */
+  var deAcceso = new URLSearchParams(window.location.search).get('usuario');
+  if (deAcceso) {
+    document.getElementById('quien').value = deAcceso;
+    document.getElementById('empresa').focus();
+  }
+
+  /* Los mismos topes que el acceso: el código caduca, se puede pedir cinco
+     veces y fallar tres. Pasado eso, se vuelve al primer paso. */
+  var TOPE_REENVIOS = 5;
+  var TOPE_INTENTOS = 3;
+  var reenvios = 0;
+  var intentos = 0;
+
+  function volverAlPrimerPaso(motivo) {
+    reenvios = 0;
+    intentos = 0;
+    document.getElementById('codigo').value = '';
+    ir(1);
+    document.getElementById('ayuda-1').textContent = motivo;
+    window.edocAvisar(motivo, 'error');
+  }
+
   document.getElementById('ir-2').addEventListener('click', function () {
-    var c = document.getElementById('quien');
-    if (!c.value.trim()) {
-      c.classList.add('is-invalid');
-      document.getElementById('ayuda-1').textContent = 'Dinos tu usuario o tu correo.';
-      c.focus();
+    var quien = document.getElementById('quien');
+    var empresa = document.getElementById('empresa');
+    quien.classList.remove('is-invalid');
+    empresa.classList.remove('is-invalid');
+    if (!quien.value.trim()) {
+      quien.classList.add('is-invalid');
+      document.getElementById('ayuda-1').textContent = 'Dinos tu usuario.';
+      quien.focus();
       return;
     }
-    c.classList.remove('is-invalid');
+    if (!empresa.value.trim()) {
+      empresa.classList.add('is-invalid');
+      document.getElementById('ayuda-empresa').textContent = 'Dinos con qué empresa entras.';
+      empresa.focus();
+      return;
+    }
+    reenvios = 0;
+    intentos = 0;
     ir(2);
+    if (window.edocReloj) window.edocReloj('#reloj-2');
     document.getElementById('codigo').focus();
   });
 
+  document.getElementById('reloj-2').addEventListener('edoc-reloj-fin', function () {
+    if (document.getElementById('paso-2').hidden) return;
+    volverAlPrimerPaso('El código caducó. Vuelve a pedirlo desde el principio.');
+  });
+
   document.getElementById('reenviar').addEventListener('click', function () {
+    reenvios += 1;
+    if (reenvios > TOPE_REENVIOS) {
+      volverAlPrimerPaso('Pediste el código demasiadas veces. Empieza otra vez.');
+      return;
+    }
+    if (window.edocReloj) window.edocReloj('#reloj-2');
     document.getElementById('ayuda-2').textContent =
       'Te lo mandamos otra vez. Si sigue sin llegar, mira la carpeta de correo no deseado.';
   });
 
   document.getElementById('ir-3').addEventListener('click', function () {
     var c = document.getElementById('codigo');
-    if (!/^\d{6}$/.test(c.value.trim())) {
+    var escrito = c.value.trim();
+    // Como en el acceso, 000000 hace de código incorrecto para ver el tope.
+    if (!/^\d{6}$/.test(escrito) || escrito === '000000') {
+      intentos += 1;
+      if (intentos >= TOPE_INTENTOS) {
+        volverAlPrimerPaso('Demasiados intentos con el código. Empieza otra vez.');
+        return;
+      }
       c.classList.add('is-invalid');
-      document.getElementById('ayuda-2').textContent = 'El código son seis cifras.';
+      document.getElementById('ayuda-2').textContent = /^\d{6}$/.test(escrito)
+        ? 'Ese código no es correcto. Te quedan ' + (TOPE_INTENTOS - intentos) + ' intentos.'
+        : 'El código son seis cifras.';
       c.focus();
       return;
     }

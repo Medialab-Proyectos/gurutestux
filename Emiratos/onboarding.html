@@ -41,16 +41,23 @@
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <div class="edoc-titulo-barra">
     <div>
-      <div class="edoc-miga"><span>Fuera del menú</span><span>Asociarnos en EmaraTax</span></div>
+      <div class="edoc-miga"><span>Registro de la empresa</span><span>Asociarnos en EmaraTax</span></div>
       <h1 class="edoc-titulo">Asociarnos en EmaraTax</h1>
-      <p class="edoc-subtitulo">Falta un paso en el portal de impuestos para que podamos emitir y recibir
-      documentos a tu nombre.</p>
+      <p class="edoc-subtitulo">Es lo que nos autoriza a facturar por ti, y se hace en el portal de la
+      autoridad, no en el nuestro. Sin esta asociación no podemos emitir ni recibir documentos a tu nombre.</p>
     </div>
   </div>
 
   <div class="edoc-aviso edoc-aviso--advertencia mb-3">
     <div><strong>Tu empresa está registrada, pero todavía no nos has asociado como proveedor.</strong>
     Hasta que lo hagas no podemos emitir ni recibir documentos a tu nombre.</div>
+  </div>
+
+  <!-- El orden completo, para quien llega aquí sin saber dónde está. -->
+  <div class="edoc-aviso edoc-aviso--info mb-3">
+    <div><strong>Dónde estás.</strong> En Emiratos el alta empieza aquí: en EmaraTax nos eliges como tu
+    proveedor y ese sistema te trae de vuelta a nosotros. Lo demás —tus datos y la revisión— va después, y no
+    tienes que avisarnos de nada: la autoridad nos confirma la asociación.</div>
   </div>
 
   <div class="row rejilla">
@@ -76,20 +83,46 @@
             </li>
           </ul>
 
-          <a class="btn btn-edoc-primario mt-2" href="#" data-sin-destino>Ir a EmaraTax</a>
+          <a class="btn btn-edoc-primario mt-2" href="https://eservices.tax.gov.ae/en-us/#/Logon" target="_blank" rel="noopener">Ir a EmaraTax</a>
         </div>
       </section>
     </div>
 
     <div class="col-12 col-lg-5">
       <section class="edoc-tablero h-100">
-        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Cuando vuelvas</h2></div>
+        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Cómo sabrás que ya estás habilitado</h2></div>
         <div class="edoc-tablero__cuerpo">
-          <p>El portal se desbloquea solo. No tienes que avisarnos, ni escribir ningún código, ni volver a entrar:
-          la autoridad nos confirma la asociación y tus opciones se activan.</p>
-          <p class="edoc-secundario">Si vuelves y sigues viendo este aviso, escríbenos desde el acceso al
+          <p>No tienes que avisarnos ni escribir ningún código. Al volver lo verás en tres sitios, y los tres
+          dicen lo mismo:</p>
+          <ul class="linea-tiempo">
+            <li>
+              <div class="linea-tiempo__titulo">Aquí, en tu cuenta</div>
+              <div class="linea-tiempo__detalle">El aviso de arriba desaparece y en
+              <a href="admin-empresa.html">Actualización de identificación fiscal</a> aparece la conexión con la
+              autoridad como <strong>Activa</strong>, con la fecha.</div>
+            </li>
+            <li>
+              <div class="linea-tiempo__titulo">Tu dirección en la red</div>
+              <div class="linea-tiempo__detalle">Te registramos en la red con tu identificador
+              <span class="cifra">0235:&lt;tu TRN&gt;</span>. Es la dirección a la que te llegarán las facturas
+              de tus proveedores: si la ves, estás dentro.</div>
+            </li>
+            <li>
+              <div class="linea-tiempo__titulo">En EmaraTax</div>
+              <div class="linea-tiempo__detalle">En el panel de la autoridad, tu proveedor nombrado aparece como
+              <strong>Active</strong>. Si dice pendiente o fallido, la asociación no llegó a hacerse.</div>
+            </li>
+          </ul>
+          <div class="edoc-etiqueta mt-4 mb-2">¿Y si no llega?</div>
+          <p class="edoc-secundario">La confirmación suele tardar minutos. Si al día siguiente sigues viendo
+          este aviso, lo normal es una de estas tres: que en EmaraTax quedara otro proveedor elegido, que el
+          registro fiscal con el que entraste allí no sea el mismo de esta cuenta, o que se cerrara la ventana
+          antes de volver. Vuelve a intentarlo y, si sigue igual, escríbenos con tu TRN desde el acceso al
           soporte.</p>
-          <a class="btn btn-edoc-secundario" href="index.html">Volver al acceso</a>
+          <div class="d-flex hueco-2 flex-wrap">
+            <a class="btn btn-edoc-secundario" href="index.html">Volver al acceso</a>
+            <a class="btn btn-edoc-terciario" href="registro.html">Volver al registro</a>
+          </div>
 
           <!-- Fuera de la capa de notas a propósito: esa capa está apagada por
                defecto y el botón hace falta para seguir el recorrido en la demo. -->

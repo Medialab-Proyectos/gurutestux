@@ -49,6 +49,9 @@
         </div>
         <div class="edoc-tablero__cuerpo">
           <p class="edoc-acceso__aviso" id="aviso-idioma" role="status" hidden></p>
+          <!-- Por qué se ha vuelto al acceso: código caducado, reenvíos agotados
+               o demasiados intentos. Si no se dice, parece que se perdió lo escrito. -->
+          <p class="edoc-acceso__aviso edoc-acceso__aviso--alerta" id="aviso-acceso" role="alert" hidden></p>
           <h2 class="edoc-titulo mb-1" style="font-size:20px">Bienvenido</h2>
           <p class="edoc-secundario mb-4">Entra con las credenciales que te enviamos por correo.</p>
           <form id="forma-acceso" novalidate>
@@ -62,7 +65,19 @@
               <input type="password" class="form-control" id="clave" autocomplete="current-password" placeholder="Tu contraseña" required>
               <div class="invalid-feedback edoc-error-campo" id="clave-error" hidden>Escribe tu contraseña.</div>
             </div>
-            <div class="mb-4">
+            <!-- La compañía es la identificación tributaria, igual que en Bolivia,
+                 donde el campo se llama «# Identificación de la compañía». Con
+                 ella el usuario dice desde el principio con qué empresa entra, y
+                 no hay que enseñarle después una lista de empresas suyas: eso
+                 sería contar de cuántas forma parte antes de identificarse. -->
+            <div class="mb-3">
+              <label class="edoc-etiqueta" for="compania">Compañía<span class="obligatorio">*</span></label>
+              <input class="form-control cifra" id="compania" inputmode="numeric" autocomplete="organization"
+                placeholder="100776655400003" required>
+              <div class="edoc-ayuda">El registro fiscal de la empresa con la que entras.</div>
+              <div class="invalid-feedback edoc-error-campo" id="compania-error" hidden>Escribe el registro fiscal de tu empresa.</div>
+            </div>
+            <div class="mb-3">
               <label class="edoc-etiqueta">Verificación de seguridad<span class="obligatorio">*</span></label>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="robot">
@@ -74,32 +89,30 @@
             <button class="btn btn-edoc-primario w-100" type="submit">Entrar</button>
 
             <div class="nota nota--decidido mt-3">
-              <span class="nota__sello">Decidido</span>
-              <strong>Fuera el registro fiscal de la empresa.</strong> Se entra con usuario y contraseña. Si ese usuario
-              tiene una sola empresa, se entra directo; si tiene varias, se le pregunta cuál después de identificarse.
-              Pedirle el TRN de quince dígitos cada vez era hacerle trabajo al cliente para un dato que nosotros ya
-              tenemos.
+              <span class="nota__sello">Decidido · 16 de septiembre</span>
+              <strong>La compañía se pide aquí, y es la identificación tributaria.</strong> Es lo que hace el
+              portal de Bolivia, donde el campo se llama «# Identificación de la compañía». Dos razones: el mismo
+              usuario puede existir en varias empresas con contraseñas distintas, así que sin la compañía no se
+              sabe a cuál se entra; y preguntarla después, con una lista de las empresas de ese usuario, sería
+              enseñar a quien todavía no se ha identificado de cuántas empresas forma parte.
             </div>
             <div class="edoc-acceso__ayuda">
               <a href="admin-recuperar.html" id="olvide">¿Olvidaste tu contraseña?</a>
             </div>
 
+            <!-- Una sola vía. Asociarnos en EmaraTax no es una puerta de
+                 entrada: es parte del alta, y por eso vive dentro del registro.
+                 Así quedó dicho en la reunión del 15 de septiembre: «no que
+                 vengo de EmaraTax, sino en el mismo paso de registrar mi
+                 empresa». Aquí se queda la ayuda, que sí es del acceso. -->
             <div class="edoc-acceso__otros">
               <div class="edoc-acceso__otros-titulo">¿Todavía no tienes acceso?</div>
 
               <a class="edoc-acceso__via" href="registro.html">
                 <span class="edoc-acceso__via-textos">
                   <span class="edoc-acceso__via-nombre">Registrar mi empresa</span>
-                  <span class="edoc-acceso__via-detalle">Empieza el alta: seis pasos y la revisamos nosotros.</span>
-                </span>
-                <span class="edoc-acceso__via-flecha">›</span>
-              </a>
-
-              <a class="edoc-acceso__via" href="onboarding.html">
-                <span class="edoc-acceso__via-textos">
-                  <span class="edoc-acceso__via-nombre">Ya me registré y vengo de EmaraTax</span>
-                  <span class="edoc-acceso__via-detalle">Si en EmaraTax nos elegiste como proveedor y pulsaste
-                  «Proceed to ASP», termina aquí la asociación.</span>
+                  <span class="edoc-acceso__via-detalle">Empieza eligiéndonos en EmaraTax, que es lo que nos
+                  autoriza; dentro te explicamos cómo y completas tus datos.</span>
                 </span>
                 <span class="edoc-acceso__via-flecha">›</span>
               </a>
@@ -109,10 +122,15 @@
               </button>
             </div>
 
-            <div class="edoc-legal">
-              <a href="legales.html" data-legal="privacidad">Aviso de privacidad</a>
-              <span>·</span>
-              <a href="legales.html" data-legal="condiciones">Términos y condiciones</a>
+            <!-- La frase con los dos enlaces, y su casilla: marcarla es lo que
+                 deja entrar. Sin caja alrededor y alineada a la izquierda, para
+                 que se lea como una línea de pie y no como un campo más. -->
+            <div class="form-check form-check--legal edoc-legal">
+              <input class="form-check-input" type="checkbox" id="acepto-legales">
+              <label class="form-check-label" for="acepto-legales">Al continuar, aceptas los
+                <a href="legales.html" data-legal="condiciones">Términos y condiciones</a> y el
+                <a href="legales.html" data-legal="privacidad">Aviso de privacidad</a> de eDoc.</label>
+              <div class="invalid-feedback edoc-error-campo" id="acepto-legales-error" hidden>Marca la casilla para entrar.</div>
             </div>
             <div class="edoc-version">
               eDoc Consulta AE · <span class="cifra" data-version></span>
@@ -136,7 +154,8 @@
           <input class="form-control cifra" id="otp-codigo" inputmode="numeric" maxlength="6"
             autocomplete="one-time-code" placeholder="000000"
             style="max-width:210px;font-size:22px;letter-spacing:.34em;text-align:center">
-          <div class="edoc-ayuda" id="otp-ayuda">En la maqueta vale cualquier código de seis cifras.</div>
+          <div class="edoc-ayuda" id="otp-ayuda">En la maqueta vale cualquier código de seis cifras.
+          Con <strong>000000</strong> se ve qué pasa cuando el código no es correcto.</div>
           <div class="edoc-reloj" id="otp-reloj" data-cuenta-atras="300"
                data-reloj-para="#otp-confirmar" role="status"></div>
 
@@ -145,24 +164,34 @@
             <a href="#" id="otp-reenviar">No me ha llegado, mándalo otra vez</a>
           </div>
 
-          <button class="btn btn-edoc-terciario w-100 mt-2" type="button" id="otp-volver">Volver</button>
+
+          <div class="nota nota--decidido mt-3">
+            <span class="nota__sello">Decidido · reunión del 15 de septiembre</span>
+            <strong>Este paso no puede ser una barra libre de intentos.</strong> El código caduca a los cinco
+            minutos y entonces se vuelve solo al acceso; se puede pedir cinco veces y se puede fallar tres,
+            y al pasarse, de vuelta al acceso. <strong>No hay botón «Volver»</strong>: se discutió en la sesión
+            («se lo vamos a quitar») porque volver y entrar otra vez regalaba cinco minutos y tres intentos más.
+            Se sale solo, por caducidad o por agotar reenvíos o intentos, y la cuenta vive en la sesión.
+            Cuántos exactamente lo fija seguridad; aquí están puestos para poder verlo.
+          </div>
         </div>
       </div>
 
-      <!-- Tercer paso · solo si el usuario tiene más de una empresa -->
-      <div class="edoc-tablero" id="paso-empresa" hidden>
-        <div class="edoc-tablero__cuerpo">
-          <h2 class="edoc-titulo mb-1" style="font-size:20px">¿Con qué empresa entras?</h2>
-          <p class="edoc-secundario mb-4">Tu usuario tiene varias empresas asociadas. Elige una para continuar; podrás
-          cambiar de empresa sin volver a entrar.</p>
-          <div id="lista-empresas"></div>
-          <button class="btn btn-edoc-terciario w-100 mt-3" type="button" id="volver-acceso">Volver</button>
-        </div>
+      <div class="nota nota--decidido mt-3">
+        <span class="nota__sello">Decidido · reunión del 15 de septiembre</span>
+        <strong>Los textos legales se aceptan al entrar, con una casilla al pie.</strong> La fórmula de Amazon
+        —«al continuar, aceptas…», con los dos enlaces dentro de la frase— y delante su casilla: marcarla es lo
+        que deja entrar, y así queda constancia de un acto consciente y no de un descuido. De la aceptación se
+        guarda el documento, su versión y la fecha, para poder responder al «yo nunca vi eso».
       </div>
 
       <div class="nota nota--fuera mt-3">
         <span class="nota__sello">Maqueta</span>
         Cualquier credencial entra: el objetivo es revisar qué lleva el portal, no cómo autentica.
+        <strong>El primer ingreso sale por sorteo</strong>, como los escenarios del simulacro: a una de cada
+        cuatro entradas le toca cambiar la contraseña antes de ver el portal. Para verlo siempre, entra con el
+        usuario <strong>nuevo.usuario</strong> o abre el acceso con <strong>?primer-ingreso=1</strong>; para
+        quitarlo mientras enseñas la maqueta, <strong>?primer-ingreso=0</strong>.
       </div>
 
       <div class="nota nota--decidido mt-2">
@@ -171,10 +200,13 @@
         tiene que poder leer antes qué hacemos con ellos y cómo los protegemos. En Francia estos dos enlaces están
         vacíos; aquí tienen que llevar a algún sitio antes de salir.
       </div>
-      <div class="nota nota--abierto mt-2">
-        <span class="nota__sello">Abierto</span>
-        <strong>El idioma del portal está sin decidir</strong> —solo inglés, o inglés y árabe— y hay que declarárselo a la
-        autoridad. Esa decisión arrastra el sentido de lectura de toda la interfaz.
+      <div class="nota nota--decidido mt-2">
+        <span class="nota__sello">Decidido · 15 de septiembre</span>
+        <strong>La primera versión del portal va solo en inglés.</strong> No habrá multiidioma, así que el
+        selector de idioma se recorta en la entrega: dejarlo puesto sin que cambie nada es prometer algo que
+        no está. En la maqueta sí funciona, y a propósito: es lo que permite revisarla en español y comprobar
+        que cada texto tiene su traducción. El árabe se trata aparte, porque arrastra el sentido de lectura de
+        toda la interfaz y hay que declarárselo a la autoridad.
       </div>
     </div>
   </div>
@@ -267,7 +299,104 @@
 
   var tarjetaAcceso = document.getElementById('forma-acceso').closest('.edoc-tablero');
   var pasoOtp = document.getElementById('paso-otp');
-  var pasoEmpresa = document.getElementById('paso-empresa');
+
+  /* Cuántas veces se puede pedir el código y cuántas fallarlo. Los números
+     salen de la reunión del 15 de septiembre; el definitivo lo fija seguridad.
+     La cuenta vive en la sesión y no en una variable, porque «Volver» tiene que
+     devolver al acceso sin devolver también los intentos. */
+  var TOPE_REENVIOS = 5;
+  var TOPE_INTENTOS = 3;
+
+  function cuenta(clave) {
+    try { return Number(window.sessionStorage.getItem('edoc-otp-' + clave) || 0); }
+    catch (error) { return 0; }
+  }
+  function sumar(clave) {
+    var n = cuenta(clave) + 1;
+    try { window.sessionStorage.setItem('edoc-otp-' + clave, String(n)); } catch (error) { /* nada */ }
+    return n;
+  }
+  function borrarCuentas() {
+    try {
+      window.sessionStorage.removeItem('edoc-otp-reenvios');
+      window.sessionStorage.removeItem('edoc-otp-intentos');
+    } catch (error) { /* nada */ }
+  }
+
+  /* Volver al acceso diciendo por qué. Sin el motivo, quien se queda mirando la
+     pantalla del código no entiende qué ha pasado con lo que escribió. */
+  function volverAlAcceso(motivo) {
+    pasoOtp.hidden = true;
+    tarjetaAcceso.hidden = false;
+    var campo = document.getElementById('otp-codigo');
+    campo.value = '';
+    campo.classList.remove('is-invalid');
+    var aviso = document.getElementById('aviso-acceso');
+    if (motivo) {
+      aviso.textContent = motivo;
+      aviso.hidden = false;
+    } else {
+      aviso.hidden = true;
+    }
+    document.getElementById('clave').value = '';
+    document.getElementById('usuario').focus();
+  }
+
+  /* Entrar es aceptar, y de esa aceptación se guarda qué versión y cuándo. Al
+     publicarse una versión nueva esta clave cambia, y lo aceptado deja de valer. */
+  var VERSION_LEGAL = 'sin-publicar';
+  function guardarAceptacion() {
+    try {
+      window.localStorage.setItem('edoc-legales', VERSION_LEGAL);
+      window.localStorage.setItem('edoc-legales-fecha', new Date().toISOString().slice(0, 16).replace('T', ' '));
+    } catch (error) { /* nada */ }
+  }
+
+  /* El primer ingreso obliga a cambiar la contraseña antes de ver el portal.
+     En el portal real lo dice el backend —esa contraseña viajó por correo y hay
+     que quemarla—; aquí sale por sorteo, como los escenarios del simulacro: a
+     una de cada cuatro entradas le toca. Así aparece solo en los recorridos de
+     evaluación, sin tener que saberse un usuario de prueba.
+
+     Se puede forzar: ?primer-ingreso=1 lo enciende y ?primer-ingreso=0 lo apaga,
+     que es lo que necesita quien va a enseñar la maqueta. El usuario de prueba
+     «nuevo.usuario» también lo enciende. Y el sorteo se hace una vez por
+     entrada: recargar no cambia lo que te tocó a mitad de camino. */
+  var PARTE_PRIMERA_VEZ = 0.25;
+
+  function esPrimerIngreso() {
+    var pedido = /[?&]primer-ingreso=?([01])?(&|$)/.exec(window.location.search);
+    if (pedido) return pedido[1] !== '0';
+    if (document.getElementById('usuario').value.trim().toLowerCase().indexOf('nuevo') === 0) return true;
+    var sorteado = null;
+    try { sorteado = window.sessionStorage.getItem('edoc-primera-vez'); } catch (error) { /* nada */ }
+    if (sorteado === null) {
+      sorteado = Math.random() < PARTE_PRIMERA_VEZ ? '1' : '0';
+      try { window.sessionStorage.setItem('edoc-primera-vez', sorteado); } catch (error) { /* nada */ }
+    }
+    return sorteado === '1';
+  }
+
+  /* Con qué empresa se entró: sale del registro fiscal escrito en el acceso.
+     Si no es ninguna de las de muestra, se guarda el número tal cual: la maqueta
+     no valida credenciales. */
+  function guardarEmpresa() {
+    var escrito = document.getElementById('compania').value.replace(/\D/g, '');
+    var ficha = EMPRESAS.filter(function (em) { return em.trn === escrito; })[0];
+    try {
+      window.localStorage.setItem('edoc-empresa', ficha ? ficha.nombre : 'Empresa ' + escrito);
+    } catch (error) { /* nada */ }
+  }
+
+  function entrarAlPortal() {
+    guardarEmpresa();
+    var destino = esPrimerIngreso() ? 'clave-primer-ingreso.html' : destinoDeEntrada();
+    if (esPrimerIngreso() && window.EDOC_ALCANCE) destino = window.EDOC_ALCANCE.conVistas(destino);
+    borrarCuentas();
+    location.href = destino;
+  }
+
+
 
   /* El orden lo fija el documento D10: credenciales, código por correo y solo
      entonces sesión. Elegir empresa es cosa nuestra y va después, porque para
@@ -278,7 +407,9 @@
   var REGLAS_ACCESO = [
     ['usuario', function (el) { return el.value.trim() !== ''; }],
     ['clave',   function (el) { return el.value !== ''; }],
-    ['robot',   function (el) { return el.checked; }]
+    ['compania', function (el) { return el.value.trim() !== ''; }],
+    ['robot',   function (el) { return el.checked; }],
+    ['acepto-legales', function (el) { return el.checked; }]
   ];
 
   function faltaEnAcceso() {
@@ -307,6 +438,13 @@
     e.preventDefault();
     var falta = faltaEnAcceso();
     if (falta) { falta.focus(); return; }
+    document.getElementById('aviso-acceso').hidden = true;
+    // Cada entrada es una visita nueva: se vuelve a sortear si toca primera vez.
+    try { window.sessionStorage.removeItem('edoc-primera-vez'); } catch (error) { /* nada */ }
+    guardarAceptacion();
+    /* La cuenta de intentos y reenvíos NO se borra aquí: volver al acceso y
+       entrar otra vez no puede regalar cinco minutos y tres intentos más.
+       Se borra solo al entrar de verdad al portal. */
     tarjetaAcceso.hidden = true;
     pasoOtp.hidden = false;
     document.getElementById('otp-codigo').focus();
@@ -316,21 +454,38 @@
 
   document.getElementById('otp-reenviar').addEventListener('click', function (e) {
     e.preventDefault();
+    if (sumar('reenvios') > TOPE_REENVIOS) {
+      volverAlAcceso('Pediste el código demasiadas veces. Vuelve a entrar para empezar de nuevo.');
+      return;
+    }
     if (window.edocReloj) window.edocReloj('#otp-reloj');
     document.getElementById('otp-ayuda').textContent =
       'Te lo mandamos otra vez. Si sigue sin llegar, mira la carpeta de correo no deseado.';
   });
 
-  document.getElementById('otp-volver').addEventListener('click', function () {
-    pasoOtp.hidden = true;
-    tarjetaAcceso.hidden = false;
+  /* Si el código caduca no se puede seguir ahí: se vuelve al acceso. Quedarse
+     en esta pantalla con el contador a cero era la puerta abierta a probar
+     códigos toda la tarde. */
+  document.getElementById('otp-reloj').addEventListener('edoc-reloj-fin', function () {
+    if (pasoOtp.hidden) return;
+    volverAlAcceso('El código caducó. Vuelve a entrar para pedir uno nuevo.');
   });
 
   document.getElementById('otp-confirmar').addEventListener('click', function () {
     var campo = document.getElementById('otp-codigo');
-    if (!/^\d{6}$/.test(campo.value.trim())) {
+    var escrito = campo.value.trim();
+    // En la maqueta 000000 hace de código incorrecto: sin un código que falle
+    // no hay forma de enseñar el tope de intentos.
+    if (!/^\d{6}$/.test(escrito) || escrito === '000000') {
+      var fallos = sumar('intentos');
+      if (fallos >= TOPE_INTENTOS) {
+        volverAlAcceso('Demasiados intentos con el código. Vuelve a entrar para pedir uno nuevo.');
+        return;
+      }
       campo.classList.add('is-invalid');
-      document.getElementById('otp-ayuda').textContent = 'El código son seis cifras.';
+      document.getElementById('otp-ayuda').textContent = /^\d{6}$/.test(escrito)
+        ? 'Ese código no es correcto. Te quedan ' + (TOPE_INTENTOS - fallos) + ' intentos.'
+        : 'El código son seis cifras.';
       campo.focus();
       return;
     }
@@ -342,39 +497,18 @@
       window.EDOC_SIMULACRO.nuevaEntrada();
     }
     pasoOtp.hidden = true;
-    // Con una sola empresa no hay nada que preguntar: se entra directo.
-    if (EMPRESAS.length < 2) { location.href = destinoDeEntrada(); return; }
-    document.getElementById('lista-empresas').innerHTML = EMPRESAS.map(function (em, i) {
-      return '<button type="button" class="edoc-empresa-opcion" data-empresa="' + i + '">' +
-        '<span class="edoc-empresa-opcion__icono">' +
-          '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" ' +
-          'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-          '<path d="M3.4 17V4.2a1 1 0 0 1 1-1h6.2a1 1 0 0 1 1 1V17"/>' +
-          '<path d="M11.6 8.4h4a1 1 0 0 1 1 1V17"/><path d="M2.4 17h15.2"/>' +
-          '<path d="M5.8 6.4h3.4M5.8 9.4h3.4M5.8 12.4h3.4"/></svg>' +
-        '</span>' +
-        '<span class="edoc-empresa-opcion__textos">' +
-          '<span class="edoc-empresa-opcion__nombre">' + em.nombre + '</span>' +
-          '<span class="edoc-empresa-opcion__dato"><span class="cifra">' + em.trn + '</span> · ' + em.emirato + '</span>' +
-        '</span>' +
-        '<span class="edoc-empresa-opcion__flecha">›</span>' +
-      '</button>';
-    }).join('');
-    pasoEmpresa.hidden = false;
+    // La empresa ya se dijo en el acceso: no hay nada más que preguntar.
+    entrarAlPortal();
   });
 
-  document.getElementById('lista-empresas').addEventListener('click', function (e) {
-    var boton = e.target.closest('[data-empresa]');
-    if (!boton) return;
-    try {
-      window.localStorage.setItem('edoc-empresa', EMPRESAS[+boton.dataset.empresa].nombre);
-    } catch (error) { /* nada */ }
-    location.href = destinoDeEntrada();
-  });
-
-  document.getElementById('volver-acceso').addEventListener('click', function () {
-    pasoEmpresa.hidden = true;
-    tarjetaAcceso.hidden = false;
+  /* Recuperar la contraseña se lleva el usuario que ya está escrito: volver a
+     preguntar «quién eres» es pedir dos veces el mismo dato y, peor, deja meter
+     el de otra persona. */
+  document.getElementById('olvide').addEventListener('click', function (e) {
+    var quien = document.getElementById('usuario').value.trim();
+    if (!quien) return;
+    e.preventDefault();
+    location.href = 'admin-recuperar.html?usuario=' + encodeURIComponent(quien);
   });
   /* Los dos ya tienen pantalla: el MVP las lista como no negociables. Antes
      avisaban de que no llevaban a ninguna parte, que era lo honesto mientras

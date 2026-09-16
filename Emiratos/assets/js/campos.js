@@ -113,6 +113,8 @@
     el.classList.add('edoc-reloj--fuera');
     var destino = el.dataset.relojPara && document.querySelector(el.dataset.relojPara);
     if (destino) destino.disabled = true;
+    // Quien lo escucha decide qué hacer: el acceso, por ejemplo, vuelve al login.
+    el.dispatchEvent(new CustomEvent('edoc-reloj-fin', { bubbles: true }));
   }
 
   function arranca(el) {
