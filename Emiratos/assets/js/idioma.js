@@ -21,7 +21,18 @@
 (function () {
   'use strict';
 
-  var LLAVE = 'edoc-idioma';
+  /* 17 de septiembre: el portal va solo en inglés y el selector ya no se ve.
+     La llave cambia de nombre a propósito: quien eligió español antes con el
+     selector no se queda atrapado en español sin forma de salir. Para revisar
+     la maqueta en español: ?idioma=es; para volver: ?idioma=en. */
+  var LLAVE = 'edoc-idioma-revision';
+  (function porDireccion() {
+    try {
+      var pedido = (new URLSearchParams(window.location.search).get('idioma') || '').toUpperCase();
+      if (pedido === 'ES') window.localStorage.setItem(LLAVE, 'ES');
+      if (pedido === 'EN') window.localStorage.removeItem(LLAVE);
+    } catch (error) { /* nada */ }
+  }());
 
   /* El portal arranca en INGLÉS, que es su idioma estándar: el primero de la
      lista es el que se usa cuando nadie ha elegido nada. El español se queda
@@ -38,7 +49,7 @@
   }
 
   function actual() {
-    try { return ficha(window.localStorage.getItem(LLAVE)).codigo; }
+    try { return window.localStorage.getItem(LLAVE) === 'ES' ? 'ES' : IDIOMAS[0].codigo; }
     catch (error) { return IDIOMAS[0].codigo; }
   }
   window.edocIdioma = actual;
@@ -1055,6 +1066,52 @@
       "Archivo": "File",
       "Antes de entrar": "Before you go in",
       "Mi perfil": "My profile",
+      "La primera versión del portal va solo en inglés, y el selector de idioma no aparece.": "The first version of the portal is English only, and the language selector is not shown.",
+      "Tu registro está enviado.": "Your registration has been sent.",
+      "Cuando lo aprobemos te llegan las credenciales. La primera vez que entres tendrás que cambiar la contraseña.": "Once we approve it you’ll receive your credentials. The first time you sign in you’ll need to change your password.",
+      "Nos cuentas quién es tu empresa y qué necesita; lo revisamos contigo y, al aprobarlo, te mandamos tus credenciales. Verificamos tu correo corporativo y después son seis pasos.": "Tell us who your company is and what it needs; we review it with you and, once approved, send you your credentials. We verify your corporate email and then there are six steps.",
+      "Todo el alta es digital:": "Sign-up is fully digital:",
+      "sin correos de ida y vuelta ni documentos por separado. Son tres momentos, y en este orden.": "no emails back and forth and no separate paperwork. There are three stages, in this order.",
+      "Cómo funciona": "How it works",
+      "Registras tu empresa aquí": "You register your company here",
+      "Quién es tu empresa, quién responde por ella y sus datos fiscales. Te damos un código de seguimiento para retomarlo cuando quieras.": "Who your company is, who is responsible for it and its tax details. We give you a tracking code so you can pick it up whenever you like.",
+      "Lo revisamos y cerramos el acuerdo": "We review it and close the agreement",
+      "Si falta algo te escribimos. Al aprobarlo te mandamos tus credenciales y ya puedes entrar al portal.": "If anything is missing we write to you. Once approved we send your credentials and you can sign in to the portal.",
+      "Nos asocias en EmaraTax": "You associate us in EmaraTax",
+      "En el portal de la autoridad nos eliges como proveedor. Va al final porque ante la autoridad es definitivo: se hace cuando el acuerdo ya está cerrado. Desde el portal te lo recordamos y te explicamos cómo.": "In the authority’s portal you choose us as your provider. It comes last because it is final for the authority: you do it once the agreement is closed. The portal reminds you and explains how.",
+      "Empezar el registro": "Start registration",
+      "EmaraTax va después.": "EmaraTax comes later.",
+      "No tienes que asociarnos todavía: se hace cuando aprobemos tu solicitud y tengas tus credenciales.": "You don’t need to associate us yet: you do it once we approve your application and you have your credentials.",
+      "Ya dentro del portal, el inicio te lo recuerda y te explica cómo. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.": "Once inside the portal, the home page reminds you and explains how. Until then we can’t issue or receive documents on your behalf.",
+      "Tres momentos, en este orden": "Three stages, in this order",
+      "El orden del alta, en tres momentos.": "The sign-up order, in three stages.",
+      "Empieza aquí": "Start here",
+      "Leído": "Read",
+      "Cuando aprobemos tu solicitud, desde el portal.": "Once we approve your application, from the portal.",
+      "Al final": "Last",
+      "Nos cuentas quién es tu empresa y lo revisamos contigo. EmaraTax va al final, cuando ya tengas tus credenciales.": "Tell us who your company is and we review it with you. EmaraTax comes last, once you have your credentials.",
+      "Ya puedes usar el portal. El inicio te recuerda que falta el último paso.": "You can already use the portal. The home page reminds you that the last step is pending.",
+      "Empezamos a emitir y recibir documentos a tu nombre.": "We start issuing and receiving documents on your behalf.",
+      "Si ya nos asociaste y el inicio te sigue pidiendo ese paso, la confirmación de la autoridad todavía no ha llegado. Suele tardar minutos.": "If you already associated us and the home page still asks for that step, the authority’s confirmation hasn’t arrived yet. It usually takes minutes.",
+      "Tu empresa está aprobada, pero todavía no nos has asociado como proveedor.": "Your company is approved, but you haven’t associated us as your provider yet.",
+      "Puedes usar el portal, pero hasta que nos asocies no podemos emitir ni recibir documentos a tu nombre.": "You can use the portal, but until you associate us we can’t issue or receive documents on your behalf.",
+      "Es el último paso del alta. Tu registro y el acuerdo con nosotros ya están cerrados; ahora falta decírselo a la autoridad. No tienes que avisarnos de nada: la autoridad nos confirma la asociación.": "This is the last step of sign-up. Your registration and your agreement with us are closed; now the authority needs to know. You don’t need to tell us anything: the authority confirms the association to us.",
+      "Recibimos la asociación desde EmaraTax. Ya podemos emitir y recibir a tu nombre.": "We received the association from EmaraTax. We can now issue and receive on your behalf.",
+      "Falta un paso": "One step left",
+      "Asócianos en EmaraTax": "Associate us in EmaraTax",
+      "Tu empresa ya está aprobada y puedes usar el portal. Para que la autoridad sepa que facturamos por ti, elígenos como proveedor en EmaraTax. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.": "Your company is approved and you can use the portal. So the authority knows we invoice for you, choose us as your provider in EmaraTax. Until then we can’t issue or receive documents on your behalf.",
+      "Cómo asociarnos": "How to associate us",
+      "Enviar código": "Send code",
+      "Código enviado": "Code sent",
+      "Del dominio de la empresa, no un correo personal. Te mandamos ahí el código.": "From the company’s domain, not a personal email. We send the code there.",
+      "Pulsa «Enviar código» y te lo mandamos al correo de arriba.": "Click “Send code” and we’ll send it to the email above.",
+      "Te enviamos un código de seis cifras a": "We sent a six-digit code to",
+      ". Si no llega, mira el correo no deseado.": ". If it doesn’t arrive, check your spam folder.",
+      "Pide el código de verificación con «Enviar código».": "Request the verification code with “Send code”.",
+      "Escribe un correo corporativo válido para mandarte el código.": "Enter a valid company email so we can send you the code.",
+      "Te enviamos el código a": "We sent the code to",
+      ". En la maqueta vale cualquier código de seis cifras.": ". In the mockup any six-digit code works.",
+      "Cambiaste el correo: pide el código otra vez.": "You changed the email: request the code again.",
       "Exporta emitidos y recibidos": "Exports issued and received documents",
       "Qué puede usar cada rol. El menú de cada usuario se arma con los permisos de su rol.": "What each role can use. Each user’s menu is built from their role’s permissions.",
       "Roles de la empresa": "Company roles",
@@ -1519,6 +1576,7 @@
   }
 
   function arrancar() {
+    // Los huecos del selector ya no están en las pantallas; si alguno queda, se pinta.
     document.querySelectorAll('[data-selector-idioma]').forEach(function (hueco) {
       hueco.innerHTML = selector(hueco.dataset.selectorIdioma || '');
     });

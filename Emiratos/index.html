@@ -28,7 +28,7 @@
     <img class="edoc-acceso__filigrana" src="assets/img/edoc-filigrana.svg" alt="" aria-hidden="true">
 
     <div class="edoc-acceso__portada">
-      <img class="edoc-acceso__marca" src="assets/img/edoc-logo-neg.svg" alt="eDoc · Facturación Electrónica">
+      <img class="edoc-acceso__marca" src="assets/img/edoc-logo-neg.svg" alt="eDoc · Electronic Invoicing">
       <h1 class="edoc-acceso__titulo">Portal Consulta</h1>
       <p class="edoc-acceso__pais">Emiratos Árabes Unidos</p>
       <p class="edoc-acceso__lema">Consulta tus documentos emitidos, responde los recibidos y administra tu
@@ -45,13 +45,15 @@
           <span class="edoc-acceso__cabecera-rotulo">Acceso al portal</span>
           <!-- El mismo selector que lleva la barra superior del portal: misma
                lista, mismo código y la elección viaja con el usuario. -->
-          <div class="edoc-acceso__idioma" data-selector-idioma="claro"></div>
         </div>
         <div class="edoc-tablero__cuerpo">
           <p class="edoc-acceso__aviso" id="aviso-idioma" role="status" hidden></p>
           <!-- Por qué se ha vuelto al acceso: código caducado, reenvíos agotados
                o demasiados intentos. Si no se dice, parece que se perdió lo escrito. -->
           <p class="edoc-acceso__aviso edoc-acceso__aviso--alerta" id="aviso-acceso" role="alert" hidden></p>
+          <!-- Quien acaba de terminar el registro: se le dice qué va a pasar al
+               entrar, para que el cambio de contraseña no le pille por sorpresa. -->
+          <p class="edoc-acceso__aviso" id="aviso-alta" role="status" hidden></p>
           <h2 class="edoc-titulo mb-1" style="font-size:20px">Bienvenido</h2>
           <p class="edoc-secundario mb-4">Entra con las credenciales que te enviamos por correo.</p>
           <form id="forma-acceso" novalidate>
@@ -111,8 +113,8 @@
               <a class="edoc-acceso__via" href="registro.html">
                 <span class="edoc-acceso__via-textos">
                   <span class="edoc-acceso__via-nombre">Registrar mi empresa</span>
-                  <span class="edoc-acceso__via-detalle">Empieza eligiéndonos en EmaraTax, que es lo que nos
-                  autoriza; dentro te explicamos cómo y completas tus datos.</span>
+                  <span class="edoc-acceso__via-detalle">Nos cuentas quién es tu empresa y lo revisamos contigo.
+                  EmaraTax va al final, cuando ya tengas tus credenciales.</span>
                 </span>
                 <span class="edoc-acceso__via-flecha">›</span>
               </a>
@@ -189,7 +191,8 @@
         <span class="nota__sello">Maqueta</span>
         Cualquier credencial entra: el objetivo es revisar qué lleva el portal, no cómo autentica.
         <strong>El primer ingreso sale por sorteo</strong>, como los escenarios del simulacro: a una de cada
-        cuatro entradas le toca cambiar la contraseña antes de ver el portal. Para verlo siempre, entra con el
+        cuatro entradas le toca cambiar la contraseña antes de ver el portal. <strong>Quien termina el registro y
+        vuelve aquí lo tiene siempre</strong>, hasta que la cambia. Para verlo siempre, entra con el
         usuario <strong>nuevo.usuario</strong> o abre el acceso con <strong>?primer-ingreso=1</strong>; para
         quitarlo mientras enseñas la maqueta, <strong>?primer-ingreso=0</strong>.
       </div>
@@ -201,12 +204,12 @@
         vacíos; aquí tienen que llevar a algún sitio antes de salir.
       </div>
       <div class="nota nota--decidido mt-2">
-        <span class="nota__sello">Decidido · 15 de septiembre</span>
-        <strong>La primera versión del portal va solo en inglés.</strong> No habrá multiidioma, así que el
-        selector de idioma se recorta en la entrega: dejarlo puesto sin que cambie nada es prometer algo que
-        no está. En la maqueta sí funciona, y a propósito: es lo que permite revisarla en español y comprobar
-        que cada texto tiene su traducción. El árabe se trata aparte, porque arrastra el sentido de lectura de
-        toda la interfaz y hay que declarárselo a la autoridad.
+        <span class="nota__sello">Decidido · 15 y 17 de septiembre</span>
+        <strong>La primera versión del portal va solo en inglés, y el selector de idioma no aparece.</strong>
+        No habrá multiidioma: dejar un selector es prometer algo que no está. Sale del acceso, de la barra
+        superior y del menú de la cuenta. «Nombre nativo» se queda, porque no cambia el idioma del portal: enseña
+        el nombre del emisor en árabe. Para revisar la maqueta en español se abre con
+        <strong>?idioma=es</strong>, y con <strong>?idioma=en</strong> se vuelve. El árabe se trata aparte.
       </div>
     </div>
   </div>
@@ -235,19 +238,19 @@
             <li class="hecho"><div class="linea-tiempo__titulo">2 · Registras tu empresa aquí</div>
               <div class="linea-tiempo__detalle">El alta de seis pasos. La revisamos y te enviamos tus credenciales.</div></li>
             <li class="hecho"><div class="linea-tiempo__titulo">3 · Entras por primera vez</div>
-              <div class="linea-tiempo__detalle">El portal te avisa de que falta el último paso y todavía no te deja operar.</div></li>
+              <div class="linea-tiempo__detalle">Ya puedes usar el portal. El inicio te recuerda que falta el último paso.</div></li>
             <li class="espera"><div class="linea-tiempo__titulo">4 · Vas a EmaraTax y nos eliges</div>
               <div class="linea-tiempo__detalle">Nos buscas en la lista de proveedores y pulsas
               <strong>«Proceed to ASP»</strong>. El sistema te avisa de que vas a salir de EmaraTax.</div></li>
             <li class="espera"><div class="linea-tiempo__titulo">5 · Vuelves aquí</div>
               <div class="linea-tiempo__detalle">La autoridad nos comunica tu elección y confirmamos la asociación.</div></li>
             <li class="espera"><div class="linea-tiempo__titulo">6 · Ya puedes operar</div>
-              <div class="linea-tiempo__detalle">El portal se desbloquea y empiezas a consultar y a responder documentos.</div></li>
+              <div class="linea-tiempo__detalle">Empezamos a emitir y recibir documentos a tu nombre.</div></li>
           </ul>
 
           <div class="edoc-aviso edoc-aviso--info mt-3">
-            <div>Si ya hiciste ese recorrido y el portal sigue bloqueado, entra por
-            <strong>«Ya me registré y vengo de EmaraTax»</strong>: desde ahí comprobamos la asociación.</div>
+            <div>Si ya nos asociaste y el inicio te sigue pidiendo ese paso, la confirmación de la autoridad
+            todavía no ha llegado. Suele tardar minutos.</div>
           </div>
         </div>
         <div class="modal-footer">
@@ -364,9 +367,17 @@
      entrada: recargar no cambia lo que te tocó a mitad de camino. */
   var PARTE_PRIMERA_VEZ = 0.25;
 
+  /* El alta que se acaba de terminar en el registro. Mientras exista, entrar es
+     un primer ingreso: siempre, sin sorteo. */
+  function altaReciente() {
+    try { return JSON.parse(window.localStorage.getItem('edoc-alta-reciente') || 'null'); }
+    catch (error) { return null; }
+  }
+
   function esPrimerIngreso() {
     var pedido = /[?&]primer-ingreso=?([01])?(&|$)/.exec(window.location.search);
     if (pedido) return pedido[1] !== '0';
+    if (altaReciente()) return true;
     if (document.getElementById('usuario').value.trim().toLowerCase().indexOf('nuevo') === 0) return true;
     var sorteado = null;
     try { sorteado = window.sessionStorage.getItem('edoc-primera-vez'); } catch (error) { /* nada */ }
@@ -383,10 +394,24 @@
   function guardarEmpresa() {
     var escrito = document.getElementById('compania').value.replace(/\D/g, '');
     var ficha = EMPRESAS.filter(function (em) { return em.trn === escrito; })[0];
+    var alta = altaReciente();
+    if (!ficha && alta && alta.trn === escrito && alta.empresa) ficha = { nombre: alta.empresa };
     try {
       window.localStorage.setItem('edoc-empresa', ficha ? ficha.nombre : 'Empresa ' + escrito);
     } catch (error) { /* nada */ }
   }
+
+  (function avisarAlta() {
+    var alta = altaReciente();
+    if (!alta) return;
+    if (alta.trn && !document.getElementById('compania').value) {
+      document.getElementById('compania').value = alta.trn;
+    }
+    var aviso = document.getElementById('aviso-alta');
+    aviso.innerHTML = '<strong>Tu registro está enviado.</strong> ' +
+      'Cuando lo aprobemos te llegan las credenciales. La primera vez que entres tendrás que cambiar la contraseña.';
+    aviso.hidden = false;
+  }());
 
   function entrarAlPortal() {
     guardarEmpresa();

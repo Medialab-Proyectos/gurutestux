@@ -22,15 +22,15 @@
       })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
   </script>
 </head>
-<body data-seccion="" data-pagina="registro.html" data-armazon="reducido" data-quien="Registro · sin sesión">
+<body data-seccion="" data-pagina="registro.html" data-armazon="reducido" data-quien="">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <div class="edoc-titulo-barra">
     <div>
       <div class="edoc-miga"><span>Fuera de la sesión</span><span>Registro de la empresa</span></div>
       <h1 class="edoc-titulo">Registro de la empresa</h1>
-      <p class="edoc-subtitulo">El alta empieza en EmaraTax, donde nos eliges como tu proveedor; aquí
-      completas tus datos. Verificamos tu correo corporativo y después son seis pasos.</p>
+      <p class="edoc-subtitulo">Nos cuentas quién es tu empresa y qué necesita; lo revisamos contigo y, al
+      aprobarlo, te mandamos tus credenciales. Verificamos tu correo corporativo y después son seis pasos.</p>
     </div>
   </div>
 
@@ -40,84 +40,67 @@
        documento de doble factor, que dice «STEP 1 OF 7». La versión de seis
        pasos es la anterior, cuando esa pantalla iba suelta por delante.
        ================================================================= -->
-  <!-- ===================== La puerta ===================== -->
-  <!-- Quien no viene de EmaraTax no ve el formulario. En Emiratos la autoridad
-       es la que nos autoriza a facturar por una empresa: sin esa asociación no
-       hay alta que tramitar, y pedir seis pasos de datos antes sería hacerle
-       perder el tiempo a alguien a quien todavía no podemos dar de alta. -->
+  <!-- ===================== Paso 0 · cómo funciona ===================== -->
+  <!-- Reunión del 16 de septiembre: el paso 0 se queda porque evita llamadas a
+       soporte, pero explica el orden en vez de mandar fuera. En Emiratos
+       asociarnos en EmaraTax es definitivo ante la autoridad; hacerlo antes de
+       cerrar lo comercial deja a la empresa asociada con un proveedor que quizá
+       no contrate. Por eso va al final. -->
   <section class="edoc-tablero reg-puerta" id="puerta" hidden>
     <div class="edoc-tablero__cuerpo">
       <div class="edoc-aviso edoc-aviso--info mb-3">
-        <div>En Emiratos es la autoridad fiscal quien autoriza a un proveedor a facturar por tu empresa.
-        Mientras eso no conste no podemos darte de alta, así que tampoco te pedimos tus datos todavía: este
-        paso va antes que los seis del formulario.</div>
+        <div><strong>Todo el alta es digital:</strong> sin correos de ida y vuelta ni documentos por separado.
+        Son tres momentos, y en este orden.</div>
       </div>
 
-      <div class="edoc-etiqueta mt-4 mb-2">Cómo se hace</div>
+      <div class="edoc-etiqueta mt-4 mb-2">Cómo funciona</div>
       <ul class="linea-tiempo reg-puerta__pasos">
         <li>
-          <div class="linea-tiempo__titulo">Entra a EmaraTax</div>
-          <div class="linea-tiempo__detalle">Con las credenciales fiscales de tu empresa. Es el portal de la
-          Federal Tax Authority, no el nuestro.</div>
+          <div class="linea-tiempo__titulo">Registras tu empresa aquí</div>
+          <div class="linea-tiempo__detalle">Quién es tu empresa, quién responde por ella y sus datos fiscales.
+          Te damos un código de seguimiento para retomarlo cuando quieras.</div>
         </li>
         <li>
-          <div class="linea-tiempo__titulo">Búscanos y selecciónanos</div>
-          <div class="linea-tiempo__detalle">Aparecemos como <strong>GuruSoft S.A.</strong> en la lista de
-          proveedores de servicios.</div>
+          <div class="linea-tiempo__titulo">Lo revisamos y cerramos el acuerdo</div>
+          <div class="linea-tiempo__detalle">Si falta algo te escribimos. Al aprobarlo te mandamos tus
+          credenciales y ya puedes entrar al portal.</div>
         </li>
         <li>
-          <div class="linea-tiempo__titulo">Pulsa «Proceed to ASP»</div>
-          <div class="linea-tiempo__detalle">EmaraTax te avisa de que vas a salir de su sistema y te trae
-          aquí. Entonces sí te pedimos tus datos, y algunos ya vendrán puestos.</div>
+          <div class="linea-tiempo__titulo">Nos asocias en EmaraTax</div>
+          <div class="linea-tiempo__detalle">En el portal de la autoridad nos eliges como proveedor. Va al final
+          porque ante la autoridad es definitivo: se hace cuando el acuerdo ya está cerrado. Desde el portal te
+          lo recordamos y te explicamos cómo.</div>
         </li>
       </ul>
 
       <div class="d-flex hueco-2 flex-wrap mt-4">
-        <a class="btn btn-edoc-primario" href="https://eservices.tax.gov.ae/en-us/#/Logon" target="_blank" rel="noopener">Ir a EmaraTax</a>
+        <button class="btn btn-edoc-primario" type="button" id="puerta-empezar">Empezar el registro</button>
         <button class="btn btn-edoc-terciario" type="button" id="puerta-codigo">Ya tengo un código de
         seguimiento</button>
       </div>
 
-      <!-- Fuera de la capa de notas a propósito, como en la pantalla de EmaraTax:
-           esa capa está apagada por defecto y el botón hace falta para poder
-           seguir el recorrido en la demo. -->
-      <div class="onboarding-maqueta mt-4">
-        <p class="edoc-secundario">Desde aquí no se sale de verdad al portal de impuestos. Este botón hace como
-        si ya hubieras vuelto, para poder seguir viendo la maqueta.</p>
-        <button type="button" class="btn btn-edoc-terciario btn-sm" id="puerta-simular">Simular la vuelta desde
-        EmaraTax</button>
+      <div class="nota nota--decidido mt-4">
+        <span class="nota__sello">Decidido · 16 de septiembre</span>
+        <strong>Primero el registro con nosotros, EmaraTax al final.</strong> «Primero haga todo su tema
+        comercial», y después «váyase para EmaraTax, lo relaciona». Asociar un proveedor ante la autoridad «es a
+        la fija»: si alguien nos elige antes de negociar y luego no cierra, queda asociado a un proveedor que no
+        contrató. El paso 0 se mantiene porque «no queremos que llamen a soporte»: el sitio explica solo el
+        orden. Registro se sigue llamando registro, que es más universal que onboarding.
       </div>
 
       <div class="nota nota--abierto mt-2">
         <span class="nota__sello">Abierto · para desarrollo</span>
-        <strong>Qué nos llega en la vuelta, y qué no vale.</strong> En la maqueta esta vista se salta con
-        <span class="cifra">?emaratax=1</span> en la dirección, y la vuelta se recuerda durante la visita. Eso
-        es un atajo de maqueta: <strong>una dirección que cualquiera puede escribir no puede ser lo que
-        habilita a una empresa</strong>. En el portal real hay tres formas posibles, y hay que confirmar cuál
-        usa la autoridad: que el redirect traiga un <strong>código de un solo uso</strong> que nosotros
-        canjeamos contra la autoridad por sus datos; que la autoridad genere un <strong>token</strong> que el
-        cliente nos entrega y nosotros validamos; o que nos avise por <strong>llamada de servidor a
-        servidor</strong> y el cliente solo vuelva, sin traer nada en la dirección. En las tres, lo que decide
-        si el formulario se abre es el expediente en nuestro servidor, no la URL.
+        <strong>Qué nos llega cuando nos asocian.</strong> Se sospecha que la autoridad nos hace un callback
+        con los datos de la empresa que nos eligió; no está documentado. Con eso se cruza lo que el cliente
+        escribió aquí. Si llega, este formulario puede acortarse, porque la autoridad ya garantiza quién es la
+        empresa y no hace falta pedir tantos documentos como en Francia. Ese recorte se decide con gerencia.
       </div>
 
       <div class="nota nota--abierto mt-2">
-        <span class="nota__sello">Abierto · pendiente de la reunión de registro</span>
-        <strong>El orden del alta no está cerrado, y esta puerta es una propuesta.</strong> En la sesión del 15 de
-        septiembre el orden dicho fue el contrario: «primero registrarse con GuruSoft, después vaya al portal de
-        EmaraTax, relacione GuruSoft» y «primero registre sus datos, cuando le enviemos la confirmación, váyase a
-        EmaraTax, asócienos y lo traemos de vuelta», con las dos opciones al mismo nivel y una explicación antes. La
-        documentación pública de Emiratos, en cambio, dice que el alta se inicia en EmaraTax con «Proceed to ASP».
-        En la misma sesión se reconoció que «todavía lo tenemos como embolatado» y que el registro «lo revisamos
-        aparte». Se decide ahí.
-      </div>
-
-      <div class="nota nota--abierto mt-2">
-        <span class="nota__sello">Abierto · reunión de flujos por país</span>
-        <strong>Si el alta la abre el callback, este formulario se acorta o desaparece.</strong> En la sesión del
-        15 de septiembre quedó dicho que la autoridad nos manda los datos al asociarnos —«no debemos pedir la
-        información, porque ya el cliente nos la va a enviar en el callback»—. Hasta saber qué llega, el
-        formulario sigue completo y esta puerta impide que alguien lo rellene para nada.
+        <span class="nota__sello">Abierto · flujos por país</span>
+        <strong>Cada país tiene su recorrido.</strong> En Omán la empresa hace todo desde el portal de la
+        autoridad, puede asociarnos estando todavía en negociación y desasociarnos después, y no hay callback:
+        nos toca mirar su panel y marcarlo a mano. Esta pantalla es la de Emiratos.
       </div>
     </div>
   </section>
@@ -162,10 +145,8 @@
              que sepa desde el principio que lo que activa el servicio pasa en el
              portal de la autoridad, y que puede hacerlo ya. -->
         <div class="edoc-aviso edoc-aviso--info mb-3" id="falta-emaratax">
-          <div><strong>¿Ya nos elegiste en EmaraTax?</strong> Es lo que autoriza a la autoridad a que
-          facturemos por ti, y por eso va antes que este formulario. Puedes rellenarlo igualmente: la
-          solicitud queda guardada con su código y esperando esa asociación.
-          <a href="onboarding.html">Cómo se hace</a>.</div>
+          <div><strong>EmaraTax va después.</strong> No tienes que asociarnos todavía: se hace cuando aprobemos
+          tu solicitud y tengas tus credenciales.</div>
         </div>
 
         <div class="edoc-aviso edoc-aviso--exito mb-3" id="viene-emaratax" hidden>
@@ -206,8 +187,14 @@
 
         <label class="edoc-etiqueta mt-3" for="p-correo">Correo electrónico corporativo
           <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input type="email" class="form-control" id="p-correo" placeholder="hugo.leano@empresa.ae" autocomplete="email">
-        <div class="edoc-ayuda">Del dominio de la empresa, no un correo personal.</div>
+        <!-- El código se pide con un botón. Antes el contador arrancaba solo al
+             salir de este campo, sin decir que se había mandado nada: parecía
+             un reloj corriendo sin motivo. -->
+        <div class="reg__correo-fila">
+          <input type="email" class="form-control" id="p-correo" placeholder="hugo.leano@empresa.ae" autocomplete="email">
+          <button class="btn btn-edoc-secundario" type="button" id="enviar-codigo">Enviar código</button>
+        </div>
+        <div class="edoc-ayuda">Del dominio de la empresa, no un correo personal. Te mandamos ahí el código.</div>
 
         <div class="edoc-aviso edoc-aviso--advertencia mt-2" id="ya-existe" hidden>
           <div><strong>Ese correo ya tiene un expediente abierto.</strong> Si vuelves a empezar de
@@ -218,11 +205,13 @@
         <label class="edoc-etiqueta mt-3" for="p-codigo">Código de verificación
           <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
         <input class="form-control cifra" id="p-codigo" inputmode="numeric" maxlength="6"
-          autocomplete="one-time-code" placeholder="Ingresa el código de 6 dígitos">
-        <div class="d-flex justify-content-between flex-wrap mt-1">
+          autocomplete="one-time-code" placeholder="Ingresa el código de 6 dígitos" disabled>
+        <div class="edoc-ayuda" id="codigo-estado">Pulsa «Enviar código» y te lo mandamos al correo de arriba.</div>
+        <div class="d-flex justify-content-between flex-wrap mt-1" id="codigo-reloj" hidden>
           <!-- QW 16: en Francia el código caduca y la pantalla no dice cuánto
                dura. Quien se levanta a buscar la licencia vuelve a un código
-               muerto sin entender por qué. Aquí se ve el tiempo que queda. -->
+               muerto sin entender por qué. Aquí se ve el tiempo que queda,
+               desde que se manda, no desde que se abre la página. -->
           <span class="edoc-ayuda" id="cuenta-atras">El código caduca en <span class="cifra">5:00</span></span>
           <a href="#" id="reenviar-codigo" class="edoc-ayuda">➤ Reenviar código</a>
         </div>
@@ -491,11 +480,6 @@
                aparecía por ningún lado hasta que el portal lo bloqueaba. -->
           <div class="edoc-etiqueta mt-4 mb-2">Qué sigue</div>
           <ul class="linea-tiempo">
-            <li class="espera" id="fin-emaratax-primero">
-              <div class="linea-tiempo__titulo">Nos eliges en EmaraTax</div>
-              <div class="linea-tiempo__detalle">Si todavía no lo has hecho, es lo primero: hasta que la
-              autoridad nos diga que nos has elegido, tu solicitud se queda esperando.</div>
-            </li>
             <li class="espera">
               <div class="linea-tiempo__titulo">Revisamos tu solicitud</div>
               <div class="linea-tiempo__detalle">Si falta algo te escribimos al correo del administrador. Con el
@@ -506,16 +490,15 @@
               <div class="linea-tiempo__detalle">Al aprobarla. La primera vez que entres tendrás que cambiar la
               contraseña.</div>
             </li>
-            <li class="espera" id="fin-emaratax">
-              <div class="linea-tiempo__titulo">Emitir y recibir</div>
-              <div class="linea-tiempo__detalle">Con la asociación confirmada y tus credenciales, el portal
-              queda activo para tu empresa.</div>
+            <li class="espera">
+              <div class="linea-tiempo__titulo">Nos asocias en EmaraTax</div>
+              <div class="linea-tiempo__detalle">Ya dentro del portal, el inicio te lo recuerda y te explica
+              cómo. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.</div>
             </li>
           </ul>
 
           <div class="d-flex hueco-2 flex-wrap justify-content-center mt-4">
-            <a class="btn btn-edoc-primario" href="onboarding.html" id="fin-ir-emaratax">Asociarnos en EmaraTax →</a>
-            <a class="btn btn-edoc-terciario" href="index.html" id="fin-ir-login">Ir al login</a>
+            <a class="btn btn-edoc-primario" href="index.html" id="fin-ir-login">Ir al login</a>
           </div>
         </div>
       </div>
@@ -575,6 +558,19 @@
     aviso no sale.
   </div>
   <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · 16 de septiembre</span>
+    <strong>Qué servicios quiere la empresa.</strong> En Francia no se preguntó porque en el MVP no salió, y
+    se echó en falta: con los datos y los servicios que busca, alguien comercial le llama con los planes. Hay
+    que decidir si entra en este asistente y en qué paso, y con qué lista de servicios.
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Fase posterior · 16 de septiembre</span>
+    <strong>Los derechos sobre los datos del registro.</strong> Quien se registra y no llega a un acuerdo tiene
+    derecho a pedir que se borre su información, a consultar y descargar la cláusula que aceptó, a corregir un
+    dato y a limitar su uso. En Europa es de lo más delicado. «No hemos trabajado ese capítulo por ahora en el
+    MVP»: se hace después, y también en Francia. El borrado no lo ejecuta la plataforma, es una petición.
+  </div>
+  <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
     <strong>Duplicados de empresa.</strong> El aviso por correo no basta: hay que decidir qué pasa
     cuando dos correos distintos registran la misma razón social o el mismo TRN. Eso no se puede
@@ -630,8 +626,11 @@
   }
 
   var recordada = vueltaGuardada();
-  var enLaDireccion = LLEGADA.get('emaratax') === '1' || !!LLEGADA.get('trn');
-  var deEmaraTax = enLaDireccion || !!recordada;
+  /* Desde el 16 de septiembre EmaraTax va al final, así que nadie llega aquí
+     con la asociación hecha. Se deja el mecanismo apagado por si la
+     integración acaba trayendo datos al volver. */
+  var enLaDireccion = false;
+  var deEmaraTax = false;
   var DE_LA_AUTORIDAD = {
     'e-legal': LLEGADA.get('empresa') || (recordada && recordada.empresa) || 'Al Noor Trading LLC',
     'e-trn': LLEGADA.get('trn') || (recordada && recordada.trn) || '100776655400003'
@@ -730,6 +729,9 @@
 
   /* --- validación, con mensajes nuestros --------------------------------- */
   function fallo(paso) {
+    if (paso === 1 && val('p-correo') && !codigoEnviado) {
+      return { id: 'enviar-codigo', texto: 'Pide el código de verificación con «Enviar código».' };
+    }
     var lista = campos(paso);
     for (var i = 0; i < lista.length; i++) {
       if (!lleno(lista[i][0])) return { id: lista[i][0], texto: 'Falta «' + lista[i][1] + '».' };
@@ -804,21 +806,24 @@
           (error ? '✕' : '✓') + '</span>' +
       '</li>';
     }).join('');
-    /* El hito va ARRIBA, antes de la verificación, porque es por donde entra el
-       cliente: en Emiratos nadie nos encuentra en nuestro portal, nos encuentra
-       en el de la autoridad y desde allí nos elige. Este formulario es lo que
-       se completa después. Quien llegue por su cuenta puede rellenarlo, pero su
-       solicitud se queda esperando esa asociación, y eso se dice aquí. */
+    /* Arriba, el paso 0: cómo funciona. Abajo, lo que viene después de la
+       aprobación y fuera de este asistente: asociarnos en EmaraTax. */
     $('pasos').insertAdjacentHTML('afterbegin',
-      '<li class="reg__paso reg__paso--hito' + (deEmaraTax ? ' reg__paso--hecho' : '') + '">' +
-        '<span class="reg__paso-icono">' + window.edocIcono('estados') + '</span>' +
-        '<span><span class="reg__paso-t">Elegirnos en EmaraTax</span>' +
-          '<span class="reg__paso-s">' + (deEmaraTax
-            ? 'Hecho: llegaste desde el portal de la autoridad.'
-            : 'En el portal de la autoridad. Es lo que nos autoriza a facturar por ti.') + '</span>' +
-          '<span class="reg__paso-chip reg__paso-chip--' + (deEmaraTax ? 'completado">Completado' : 'requerido">Pendiente') + '</span></span>' +
-        '<span class="reg__paso-n">' + (deEmaraTax ? '' : 'Paso 0') + '</span>' +
+      '<li class="reg__paso reg__paso--hito' + (actual > 0 ? ' reg__paso--hecho' : '') + '">' +
+        '<span class="reg__paso-icono">' + window.edocIcono('info') + '</span>' +
+        '<span><span class="reg__paso-t">Cómo funciona</span>' +
+          '<span class="reg__paso-s">El orden del alta, en tres momentos.</span>' +
+          '<span class="reg__paso-chip reg__paso-chip--' + (actual > 0 ? 'completado">Leído' : 'requerido">Empieza aquí') + '</span></span>' +
+        '<span class="reg__paso-n">' + (actual > 0 ? '' : 'Paso 0') + '</span>' +
         '<span class="reg__tic" aria-hidden="true">✓</span>' +
+      '</li>');
+    $('pasos').insertAdjacentHTML('beforeend',
+      '<li class="reg__paso reg__paso--hito">' +
+        '<span class="reg__paso-icono">' + window.edocIcono('estados') + '</span>' +
+        '<span><span class="reg__paso-t">Asociarnos en EmaraTax</span>' +
+          '<span class="reg__paso-s">Cuando aprobemos tu solicitud, desde el portal.</span>' +
+          '<span class="reg__paso-chip reg__paso-chip--opcional">Después</span></span>' +
+        '<span class="reg__paso-n">Al final</span>' +
       '</li>');
 
     /* La verificación no lleva número, igual que en Francia: es con lo que
@@ -988,6 +993,14 @@
     $('chip-estado').className = 'edoc-estado edoc-estado--exito';
     $('chip-estado').style.fontSize = '10px';
     $('folio-final').value = folio;
+    /* El alta queda anotada para el acceso: la primera vez que esta empresa
+       entre tendrá que cambiar la contraseña. En el portal real lo sabe el
+       servidor; en la maqueta vive en el navegador hasta que se cambia. */
+    try {
+      window.localStorage.setItem('edoc-alta-reciente', JSON.stringify({
+        empresa: val('e-legal'), trn: val('e-trn'), correo: val('p-correo'), folio: folio
+      }));
+    } catch (error) { /* nada */ }
     // Quien vino desde EmaraTax ya tiene hecha la asociación: no se le manda otra vez.
     if (deEmaraTax) {
       var hito = $('fin-emaratax-primero');
@@ -1028,6 +1041,7 @@
      y se reinicia al reenviarlo. */
   // Cinco minutos, que es lo que corre en Bolivia. El plazo es un parámetro.
   var quedan = 300, reloj = null;
+  var codigoEnviado = false;
   function pintarReloj() {
     var m = Math.floor(quedan / 60), sg = quedan % 60;
     var caja = $('cuenta-atras');
@@ -1055,7 +1069,45 @@
     var c = val('p-correo').toLowerCase();
     var repetido = YA_REGISTRADOS.indexOf(c) >= 0 && $('tipo-nueva').checked;
     $('ya-existe').hidden = !repetido;
-    if (c && !reloj && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c)) arrancarReloj();
+  });
+
+  /* Mandar el código: se comprueba el correo, se dice a dónde se envió, se
+     habilita el campo y empieza a correr el plazo. En el portal real aquí sale
+     el correo; en la maqueta vale cualquier código de seis cifras. */
+  function enviarCodigo(reenvio) {
+    var correo = val('p-correo');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) {
+      return marcarMal(1, { id: 'p-correo', texto: 'Escribe un correo corporativo válido para mandarte el código.' });
+    }
+    $('p-correo').classList.remove('is-invalid');
+    codigoEnviado = true;
+    $('p-codigo').disabled = false;
+    $('codigo-reloj').hidden = false;
+    $('codigo-estado').innerHTML = 'Te enviamos un código de seis cifras a <strong>' + correo + '</strong>. ' +
+      'Si no llega, mira el correo no deseado.';
+    $('enviar-codigo').textContent = 'Código enviado';
+    $('enviar-codigo').disabled = true;
+    arrancarReloj();
+    $('p-codigo').focus();
+    window.edocAvisar(reenvio
+      ? 'Código reenviado a <strong>' + correo + '</strong>. El código de seguimiento no cambia: es el mismo expediente.'
+      : 'Te enviamos el código a <strong>' + correo + '</strong>. En la maqueta vale cualquier código de seis cifras.',
+      'exito');
+  }
+
+  $('enviar-codigo').addEventListener('click', function () { enviarCodigo(false); });
+
+  // Si se cambia el correo después de pedir el código, hay que pedirlo otra vez.
+  $('p-correo').addEventListener('input', function () {
+    if (!codigoEnviado) return;
+    codigoEnviado = false;
+    if (reloj) { window.clearInterval(reloj); reloj = null; }
+    $('p-codigo').value = '';
+    $('p-codigo').disabled = true;
+    $('codigo-reloj').hidden = true;
+    $('codigo-estado').textContent = 'Cambiaste el correo: pide el código otra vez.';
+    $('enviar-codigo').textContent = 'Enviar código';
+    $('enviar-codigo').disabled = false;
   });
 
   $('pasar-actualizar').addEventListener('click', function (e) {
@@ -1072,9 +1124,7 @@
     if (!val('p-correo')) {
       return marcarMal(1, { id: 'p-correo', texto: 'Escribe primero el correo corporativo.' });
     }
-    arrancarReloj();
-    window.edocAvisar('Código reenviado a <strong>' + val('p-correo') + '</strong>. ' +
-      'El código de seguimiento no cambia: es el mismo expediente.');
+    enviarCodigo(true);
   });
 
   /* --- la zona de subida --------------------------------------------------- */
@@ -1105,11 +1155,13 @@
       : 'No se pudo copiar solo: selecciónalo y cópialo a mano.';
   });
 
-  /* La puerta: sin asociación en EmaraTax no se enseña el formulario. Se pasa
-     igualmente con un código de seguimiento —quien ya tiene expediente abierto
-     vuelve a él— y, en la maqueta, con el botón que simula la vuelta. */
+  /* El paso 0 se ve al llegar. Se pasa con «Empezar el registro», que se
+     recuerda durante la visita, o con un código de seguimiento. */
   var conCodigo = LLEGADA.get('retomar') === '1';
-  if (!deEmaraTax && !conCodigo) {
+  var LLAVE_EMPEZADO = 'edoc-registro-empezado';
+  var empezado = LLEGADA.get('empezar') === '1';
+  try { empezado = empezado || window.sessionStorage.getItem(LLAVE_EMPEZADO) === '1'; } catch (error) { /* nada */ }
+  if (!empezado && !conCodigo) {
     /* Paso 0: el panel de la izquierda se queda, con todos los pasos a la vista
        y ninguno accesible. Lo que cambia es el cuerpo: en vez del formulario,
        lo que hay que hacer antes de que el formulario tenga sentido. */
@@ -1119,9 +1171,9 @@
     $('puerta').hidden = false;
 
     $('eyebrow').textContent = 'Registro de empresa · Paso 0';
-    $('titulo-paso').textContent = 'Elegirnos en EmaraTax';
-    $('sub-paso').textContent = 'En el portal de la autoridad, antes de tus datos';
-    $('icono-paso').innerHTML = window.edocIcono('estados');
+    $('titulo-paso').textContent = 'Cómo funciona';
+    $('sub-paso').textContent = 'Tres momentos, en este orden';
+    $('icono-paso').innerHTML = window.edocIcono('info');
 
     actual = 0;      // ninguno de los seis está en curso
     masLejos = 0;    // y ninguno se puede abrir todavía
@@ -1129,8 +1181,9 @@
     $('voy').textContent = 'Antes de empezar';
     $('barra').style.width = '0%';
 
-    $('puerta-simular').addEventListener('click', function () {
-      location.href = 'registro.html?emaratax=1';
+    $('puerta-empezar').addEventListener('click', function () {
+      try { window.sessionStorage.setItem(LLAVE_EMPEZADO, '1'); } catch (error) { /* nada */ }
+      location.href = 'registro.html?empezar=1';
     });
     $('puerta-codigo').addEventListener('click', function () {
       location.href = 'registro.html?retomar=1';

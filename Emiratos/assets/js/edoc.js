@@ -437,7 +437,7 @@
                  '<span class="edoc-empresa__nombre">' + quien + '</span></span></span>' : '') +
       '</div>' +
       '<a class="edoc-encabezado__marca" href="index.html" aria-label="eDoc">' +
-        '<img src="assets/img/edoc-logo-neg-compacto.svg" alt="eDoc · Facturación Electrónica">' +
+        '<img src="assets/img/edoc-logo-neg-compacto.svg" alt="eDoc · Electronic Invoicing">' +
       '</a>' +
       '<div class="edoc-encabezado__util">' +
         '<button type="button" class="edoc-btn-util" data-alterna-arabe title="Muestra el nombre de la empresa tal como llega, en árabe">' +
@@ -447,7 +447,8 @@
             'title="Muestra las decisiones de la reunión sobre cada bloque">' +
             icono('info') + '<span class="edoc-btn-util__texto">Notas de diseño</span></button>'
           : '') +
-        '<a class="edoc-btn-util" href="index.html" title="Volver al acceso">' + icono('salir') + '</a>' +
+        '<a class="edoc-btn-util" href="index.html">' + icono('salir') +
+          '<span class="edoc-btn-util__texto">Volver al acceso</span></a>' +
       '</div>' +
     '</header>';
   }
@@ -478,7 +479,7 @@
       '</div>' +
 
       '<a class="edoc-encabezado__marca" href="inicio.html" aria-label="eDoc · inicio">' +
-        '<img src="assets/img/edoc-logo-neg-compacto.svg" alt="eDoc · Facturación Electrónica">' +
+        '<img src="assets/img/edoc-logo-neg-compacto.svg" alt="eDoc · Electronic Invoicing">' +
       '</a>' +
 
       '<div class="edoc-encabezado__util">' +
@@ -491,9 +492,7 @@
             icono('info') + '<span class="edoc-btn-util__texto">Notas de diseño</span></button>'
           : '') +
         '<span class="edoc-encabezado__separador"></span>' +
-        // El mismo selector que se ve al entrar: misma lista, mismo código, y lo
-        // que elijas en el acceso es lo que aparece aquí.
-        '<span class="edoc-solo-ancho">' + window.edocSelectorIdioma() + '</span>' +
+        // Sin selector de idioma: el portal va solo en inglés (17 de septiembre).
         '<a class="edoc-btn-util edoc-btn-util--icono edoc-solo-ancho" href="#" data-sin-destino ' +
           'title="Emiratos Árabes Unidos · cambiar de portal">' + bandera() + '</a>' +
         campana() +
@@ -521,10 +520,7 @@
             // En pantallas estrechas las herramientas del portal no caben en la
             // barra y caen aquí: siguen a un toque, sin amontonarse arriba.
             '<li class="solo-movil"><hr class="dropdown-divider"></li>' +
-            (window.edocIdiomaOpciones
-              ? window.edocIdiomaOpciones().replace(/<li>/g, '<li class="solo-movil">') +
-                '<li class="solo-movil"><hr class="dropdown-divider"></li>'
-              : '') +
+
             '<li class="solo-movil"><a class="dropdown-item" href="#" data-sin-destino>' +
               bandera() + 'Emiratos Árabes Unidos</a></li>' +
             '<li class="solo-movil"><a class="dropdown-item" href="https://wikiedoc.guru-soft.com/" target="_blank" rel="noopener">' +

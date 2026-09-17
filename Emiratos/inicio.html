@@ -27,6 +27,16 @@
 <main id="armazon" tabindex="-1" class="edoc-pagina edoc-pagina--lienzo">
   <section class="edoc-bienvenida">
     <div class="edoc-bienvenida__trama"></div>
+    <!-- 16 de septiembre: el inicio estaba desaprovechado. Mientras la empresa no
+         nos haya asociado en EmaraTax, aquí se le recuerda, sin bloquearle el
+         portal: el acuerdo comercial ya está firmado. -->
+    <aside class="edoc-pendiente" id="falta-asociar" hidden>
+      <span class="edoc-estado edoc-estado--advertencia">Falta un paso</span>
+      <h2 class="edoc-pendiente__titulo">Asócianos en EmaraTax</h2>
+      <p>Tu empresa ya está aprobada y puedes usar el portal. Para que la autoridad sepa que facturamos por ti,
+      elígenos como proveedor en EmaraTax. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.</p>
+      <a class="btn btn-edoc-primario" href="onboarding.html">Cómo asociarnos</a>
+    </aside>
     <div class="edoc-bienvenida__texto">
       <img src="assets/img/edoc-logo-neg.svg" alt="eDoc">
       <h1 class="mt-4 mb-2" style="font-weight:600;color:#fff">Tu facturación electrónica en Emiratos, en un solo sitio.</h1>
@@ -37,6 +47,18 @@
     </div>
   </section>
 
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 16 de septiembre</span>
+    <strong>Con el registro aprobado se entra al portal, aunque falte EmaraTax.</strong> «¿Para qué le ponemos
+    trabas?»: el acuerdo comercial ya está firmado. El inicio lo recuerda con una tarjeta hasta que la autoridad
+    confirma la asociación, y entonces desaparece. En la maqueta, «Simular la vuelta» en la pantalla de la
+    asociación la quita; <span class="cifra">?asociada=0</span> la vuelve a poner.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · gerencia</span>
+    <strong>O no dejarle entrar hasta que nos asocie.</strong> Es la otra forma de verlo, y puede que gerencia la
+    prefiera. Lo que no vale es mandarle credenciales que no puede usar: sería un correo fantasma.
+  </div>
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido</span>
     <strong>Para el MVP, el inicio es solo la imagen.</strong> Sin botonera de accesos rápidos, porque repetiría el menú que
@@ -58,5 +80,18 @@
 <script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var asociada = false;
+    try {
+      if (q.get('asociada') === '0') window.sessionStorage.removeItem('edoc-asociada');
+      if (q.get('asociada') === '1') window.sessionStorage.setItem('edoc-asociada', '1');
+      asociada = window.sessionStorage.getItem('edoc-asociada') === '1';
+    } catch (error) { asociada = false; }
+    var tarjeta = document.getElementById('falta-asociar');
+    if (tarjeta) tarjeta.hidden = asociada;
+  }());
+</script>
 </body>
 </html>

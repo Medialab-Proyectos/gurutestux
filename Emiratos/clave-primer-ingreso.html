@@ -28,7 +28,7 @@
     <img class="edoc-acceso__filigrana" src="assets/img/edoc-filigrana.svg" alt="" aria-hidden="true">
 
     <div class="edoc-acceso__portada">
-      <img class="edoc-acceso__marca" src="assets/img/edoc-logo-neg.svg" alt="eDoc · Facturación Electrónica">
+      <img class="edoc-acceso__marca" src="assets/img/edoc-logo-neg.svg" alt="eDoc · Electronic Invoicing">
       <h1 class="edoc-acceso__titulo">Portal Consulta</h1>
       <p class="edoc-acceso__pais">Emiratos Árabes Unidos</p>
       <p class="edoc-acceso__lema">La contraseña que te enviamos por correo sirve para entrar una vez. La que
@@ -43,7 +43,6 @@
       <div class="edoc-tablero">
         <div class="edoc-acceso__cabecera">
           <span class="edoc-acceso__cabecera-rotulo">Cambio de contraseña</span>
-          <div class="edoc-acceso__idioma" data-selector-idioma="claro"></div>
         </div>
         <div class="edoc-tablero__cuerpo">
           <h2 class="edoc-titulo mb-1" style="font-size:20px">Cambia tu contraseña para entrar</h2>
@@ -85,6 +84,12 @@
               portal, con su propia verificación de seguridad, igual que el acceso y el registro. Si fuera un
               aviso dentro del portal, bastaría con cerrarlo para seguir usando la contraseña que viajó por
               correo.
+            </div>
+            <div class="nota nota--decidido mt-2">
+              <span class="nota__sello">Decidido · 16 de septiembre</span>
+              <strong>Solo para el primer ingreso.</strong> Salta cuando alguien entra con las credenciales que le
+              mandamos al aprobar su registro. Recuperar la contraseña no pasa por aquí: se hace con un código,
+              como en Francia, y la contraseña nueva se pone en el propio proceso de recuperación.
             </div>
             <div class="nota nota--abierto mt-2">
               <span class="nota__sello">Abierto</span>
@@ -151,7 +156,11 @@
       return;
     }
 
-    try { window.localStorage.setItem('edoc-clave-cambiada', '1'); } catch (error) { /* nada */ }
+    try {
+      window.localStorage.setItem('edoc-clave-cambiada', '1');
+      // Ya no es el primer ingreso de esa alta: las siguientes entradas van directas.
+      window.localStorage.removeItem('edoc-alta-reciente');
+    } catch (error) { /* nada */ }
     var A = window.EDOC_ALCANCE;
     location.href = A ? A.conVistas('inicio.html') : 'inicio.html';
   });

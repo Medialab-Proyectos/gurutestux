@@ -35,13 +35,14 @@
 <!-- Armazón reducido, sin menú: quien ve esta pantalla todavía no puede usar
      el portal. Enseñarle Emisión y Recepción arriba contradecía el propio
      aviso de la pantalla. La salida es volver al acceso. -->
-<body data-seccion="inicio" data-pagina="onboarding.html" data-armazon="reducido"
-      data-quien="Al Noor Trading LLC · sin activar">
+<!-- 16 de septiembre: con el registro aprobado la empresa ya entra al portal, así
+     que esta pantalla va con el armazón normal y se llega desde el inicio. -->
+<body data-seccion="inicio" data-pagina="onboarding.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <div class="edoc-titulo-barra">
     <div>
-      <div class="edoc-miga"><span>Registro de la empresa</span><span>Asociarnos en EmaraTax</span></div>
+      <div class="edoc-miga"><a href="inicio.html">Inicio</a><span>Asociarnos en EmaraTax</span></div>
       <h1 class="edoc-titulo">Asociarnos en EmaraTax</h1>
       <p class="edoc-subtitulo">Es lo que nos autoriza a facturar por ti, y se hace en el portal de la
       autoridad, no en el nuestro. Sin esta asociación no podemos emitir ni recibir documentos a tu nombre.</p>
@@ -49,15 +50,15 @@
   </div>
 
   <div class="edoc-aviso edoc-aviso--advertencia mb-3">
-    <div><strong>Tu empresa está registrada, pero todavía no nos has asociado como proveedor.</strong>
-    Hasta que lo hagas no podemos emitir ni recibir documentos a tu nombre.</div>
+    <div><strong>Tu empresa está aprobada, pero todavía no nos has asociado como proveedor.</strong>
+    Puedes usar el portal, pero hasta que nos asocies no podemos emitir ni recibir documentos a tu nombre.</div>
   </div>
 
   <!-- El orden completo, para quien llega aquí sin saber dónde está. -->
   <div class="edoc-aviso edoc-aviso--info mb-3">
-    <div><strong>Dónde estás.</strong> En Emiratos el alta empieza aquí: en EmaraTax nos eliges como tu
-    proveedor y ese sistema te trae de vuelta a nosotros. Lo demás —tus datos y la revisión— va después, y no
-    tienes que avisarnos de nada: la autoridad nos confirma la asociación.</div>
+    <div><strong>Dónde estás.</strong> Es el último paso del alta. Tu registro y el acuerdo con nosotros ya
+    están cerrados; ahora falta decírselo a la autoridad. No tienes que avisarnos de nada: la autoridad nos
+    confirma la asociación.</div>
   </div>
 
   <div class="row rejilla">
@@ -120,8 +121,7 @@
           antes de volver. Vuelve a intentarlo y, si sigue igual, escríbenos con tu TRN desde el acceso al
           soporte.</p>
           <div class="d-flex hueco-2 flex-wrap">
-            <a class="btn btn-edoc-secundario" href="index.html">Volver al acceso</a>
-            <a class="btn btn-edoc-terciario" href="registro.html">Volver al registro</a>
+            <a class="btn btn-edoc-secundario" href="inicio.html">Volver al inicio</a>
           </div>
 
           <!-- Fuera de la capa de notas a propósito: esa capa está apagada por
@@ -148,9 +148,10 @@
 <script src="assets/js/pantallas.js"></script>
 <script>
   document.getElementById('simular').addEventListener('click', function () {
-    window.edocAvisar('Recibimos la asociación desde EmaraTax. Tu portal queda desbloqueado.', 'exito');
+    try { window.sessionStorage.setItem('edoc-asociada', '1'); } catch (error) { /* nada */ }
+    window.edocAvisar('Recibimos la asociación desde EmaraTax. Ya podemos emitir y recibir a tu nombre.', 'exito');
     setTimeout(function () {
-      location.href = window.EDOC_ALCANCE ? window.EDOC_ALCANCE.conVistas('emitidos.html') : 'emitidos.html';
+      location.href = window.EDOC_ALCANCE ? window.EDOC_ALCANCE.conVistas('inicio.html') : 'inicio.html';
     }, 1600);
   });
 </script>
