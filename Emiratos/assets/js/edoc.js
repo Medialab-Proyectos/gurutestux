@@ -447,7 +447,10 @@
             'title="Muestra las decisiones de la reunión sobre cada bloque">' +
             icono('info') + '<span class="edoc-btn-util__texto">Notas de diseño</span></button>'
           : '') +
-        '<a class="edoc-btn-util" href="index.html" aria-label="Volver al acceso" title="Volver al acceso">' +
+        // Con texto también en móvil y separada del resto: sola era un icono
+        // junto al de «Nombre nativo» y se tocaba por error.
+        '<a class="edoc-btn-util edoc-btn-util--salida" href="index.html" data-salida-acceso ' +
+          'aria-label="Volver al acceso" title="Volver al acceso">' +
           icono('salir') + '<span class="edoc-btn-util__texto">Volver al acceso</span></a>' +
       '</div>' +
     '</header>';

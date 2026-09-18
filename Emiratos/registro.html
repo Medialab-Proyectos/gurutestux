@@ -899,6 +899,9 @@
 
   /* --- moverse ------------------------------------------------------------ */
   function ir(n) {
+    // El aviso de «retomado» se queda hasta que la persona cambia de paso.
+    var retomado = $('aviso-retomado');
+    if (retomado) retomado.remove();
     actual = n;
     masLejos = Math.max(masLejos, n);
     document.querySelectorAll('.paso').forEach(function (p) {
@@ -965,8 +968,20 @@
        · con el navegador cerrado se vuelve con el código de seguimiento.
      En el portal real el borrador vive en el servidor, atado al código; aquí
      vive en el navegador. La licencia no se puede guardar: queda su nombre. */
-  var LLAVE_BORRADOR = 'edoc-registro-borrador';
   var LLAVE_EXPEDIENTES = 'edoc-registro-expedientes';
+  /* Qué registro está en curso en este navegador. Va en una cookie de sesión:
+     la comparten todas las pestañas —volver en otra, por ejemplo tras abrir
+     los términos, retoma igual— y desaparece al cerrar el navegador, que es
+     cuando hay que volver con el código de seguimiento. */
+  var COOKIE_EN_CURSO = 'edoc-registro-en-curso';
+  function enCursoLeer() {
+    var m = document.cookie.match(new RegExp('(?:^|; )' + COOKIE_EN_CURSO + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  function enCursoPoner(f) {
+    document.cookie = COOKIE_EN_CURSO + '=' + (f ? encodeURIComponent(f) : '') + '; path=/; SameSite=Lax' +
+      (f ? '' : '; max-age=0');
+  }
 
   function leerJSON(almacen, llave, defecto) {
     try { return JSON.parse(almacen.getItem(llave) || 'null') || defecto; } catch (error) { return defecto; }
@@ -986,8 +1001,8 @@
       archivo: $('d-archivo').files.length ? $('d-archivo').files[0].name : archivoPrevio,
       fecha: new Date().toISOString()
     };
+    enCursoPoner(folio);
     try {
-      window.sessionStorage.setItem(LLAVE_BORRADOR, JSON.stringify(b));
       var todos = leerJSON(window.localStorage, LLAVE_EXPEDIENTES, {});
       todos[folio] = b;
       window.localStorage.setItem(LLAVE_EXPEDIENTES, JSON.stringify(todos));
@@ -995,8 +1010,8 @@
   }
 
   function borrarBorrador() {
+    enCursoPoner('');
     try {
-      window.sessionStorage.removeItem(LLAVE_BORRADOR);
       var todos = leerJSON(window.localStorage, LLAVE_EXPEDIENTES, {});
       if (folio) delete todos[folio];
       window.localStorage.setItem(LLAVE_EXPEDIENTES, JSON.stringify(todos));
@@ -1060,6 +1075,14 @@
     chip.style.fontSize = '10px';
   }
 
+  function avisarRetomado() {
+    // Encima del registro: en móvil, dentro del cuerpo quedaba bajo el panel de pasos.
+    document.querySelector('.reg').insertAdjacentHTML('beforebegin',
+      '<div class="edoc-aviso edoc-aviso--exito reg__retomado" id="aviso-retomado" role="status">' +
+        '<div><strong>Seguimos donde lo dejaste.</strong> No se perdió nada: tu registro está guardado con el ' +
+        'código de seguimiento <span class="cifra">' + folio + '</span>.</div></div>');
+  }
+
   function mostrarFolio(f) {
     $('folio-lado').textContent = f || 'Te lo damos al verificar tu correo';
     $('copiar-lado').hidden = !f;
@@ -1091,6 +1114,47 @@
         : 'No se pudo copiar solo: selecciónalo y cópialo a mano.', bien ? 'exito' : 'error');
     });
   });
+
+  /* Salir del registro con él empezado pregunta antes. No es «perderás los
+     cambios»: con el código el avance queda guardado, y eso es lo que se dice.
+     Antes de verificar el correo no hay código, y entonces sí se pierde. */
+  function preguntarSalirRegistro(destino) {
+    var modal = $('modal-salir-registro');
+    if (!modal) {
+      document.body.insertAdjacentHTML('beforeend',
+        '<div class="modal fade" id="modal-salir-registro" tabindex="-1" role="dialog" ' +
+          'aria-labelledby="salir-registro-titulo" aria-hidden="true">' +
+          '<div class="modal-dialog modal-dialog-centered"><div class="modal-content">' +
+            '<div class="modal-header"><h5 class="modal-title" id="salir-registro-titulo">¿Salir del registro?</h5>' +
+              '<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">' +
+              '<span aria-hidden="true">&times;</span></button></div>' +
+            '<div class="modal-body" id="salir-registro-cuerpo"></div>' +
+            '<div class="modal-footer">' +
+              '<button type="button" class="btn btn-edoc-terciario" id="salir-registro-si">Salir del registro</button>' +
+              '<button type="button" class="btn btn-edoc-primario" data-dismiss="modal">Seguir con el registro</button>' +
+            '</div>' +
+          '</div></div></div>');
+      modal = $('modal-salir-registro');
+    }
+    $('salir-registro-cuerpo').innerHTML = folio
+      ? '<p class="mb-2">Tu avance queda guardado. Puedes retomarlo cuando quieras con tu código de seguimiento:</p>' +
+        '<p class="mb-0"><strong class="cifra">' + folio + '</strong></p>'
+      : '<p class="mb-0">Todavía no has verificado tu correo, así que lo que has escrito no se guarda.</p>';
+    $('salir-registro-si').onclick = function () { window.location.href = destino; };
+    window.jQuery(modal).modal('show');
+  }
+
+  document.addEventListener('click', function (e) {
+    var enlace = e.target.closest('a[href]');
+    if (!enlace || enviada) return;
+    if (enlace.target === '_blank' || enlace.closest('.modal, .reg__cuerpo, .nota')) return;
+    var href = enlace.getAttribute('href');
+    if (!href || href.charAt(0) === '#' || href.indexOf('registro.html') === 0) return;
+    var empezadoYa = !!folio || !!val('p-correo');
+    if (!empezadoYa) return;
+    e.preventDefault();
+    preguntarSalirRegistro(enlace.href);
+  }, true);
 
   // Cada cambio en el formulario deja el borrador al día.
   document.querySelector('.reg__cuerpo').addEventListener('input', guardarBorrador);
@@ -1125,7 +1189,7 @@
           if (borrador) {
             volcar(borrador, ['tipo-nueva', 'tipo-actualiza', 'p-folio', 'p-correo', 'p-codigo']);
             ir(borrador.actual > 1 ? borrador.actual : 2);
-            window.edocAvisar('Retomamos tu registro donde lo dejaste.', 'exito');
+            avisarRetomado();
             return;
           }
           var expediente = EXPEDIENTES[folio];
@@ -1320,7 +1384,8 @@
      recuerda durante la visita, o con un código de seguimiento. */
   var conCodigo = LLEGADA.get('retomar') === '1';
   var LLAVE_EMPEZADO = 'edoc-registro-empezado';
-  var enCurso = conCodigo ? null : leerJSON(window.sessionStorage, LLAVE_BORRADOR, null);
+  var enCurso = conCodigo || !enCursoLeer() ? null
+    : (leerJSON(window.localStorage, LLAVE_EXPEDIENTES, {})[enCursoLeer()] || null);
   var empezado = LLEGADA.get('empezar') === '1' || !!enCurso;
   try { empezado = empezado || window.sessionStorage.getItem(LLAVE_EMPEZADO) === '1'; } catch (error) { /* nada */ }
   if (!empezado && !conCodigo) {
@@ -1380,7 +1445,7 @@
     volcar(enCurso);
     correoYaVerificado();
     ir(enCurso.actual || 1);
-    window.edocAvisar('Seguimos donde lo dejaste.', 'exito');
+    avisarRetomado();
   } else {
     ir(1);
   }

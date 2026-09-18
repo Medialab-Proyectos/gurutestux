@@ -2409,3 +2409,13 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
   .edoc-ayuda-que, .agrupador__ayuda { position: relative; }
   .edoc-ayuda-que::after, .agrupador__ayuda::after { content: ""; position: absolute; inset: -14px; }
 }
+
+/* La salida del encabezado reducido no es un icono suelto: en móvil también
+   dice a dónde lleva y se separa del botón de al lado. */
+.edoc-btn-util--salida { margin-left: 10px; }
+@media (max-width: 767px) {
+  .edoc-btn-util--salida .edoc-btn-util__texto { display: inline; font-size: 12px; }
+  .edoc-btn-util--salida { margin-left: 14px; padding-left: 10px; padding-right: 10px; min-height: 44px; }
+}
+/* Registro · el aviso de que se retomó, fijo hasta cambiar de paso. */
+.reg__retomado { margin-bottom: 14px; }
