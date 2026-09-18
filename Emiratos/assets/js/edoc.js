@@ -447,8 +447,8 @@
             'title="Muestra las decisiones de la reunión sobre cada bloque">' +
             icono('info') + '<span class="edoc-btn-util__texto">Notas de diseño</span></button>'
           : '') +
-        '<a class="edoc-btn-util" href="index.html">' + icono('salir') +
-          '<span class="edoc-btn-util__texto">Volver al acceso</span></a>' +
+        '<a class="edoc-btn-util" href="index.html" aria-label="Volver al acceso" title="Volver al acceso">' +
+          icono('salir') + '<span class="edoc-btn-util__texto">Volver al acceso</span></a>' +
       '</div>' +
     '</header>';
   }

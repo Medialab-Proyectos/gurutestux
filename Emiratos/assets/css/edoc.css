@@ -16,6 +16,7 @@
   --edoc-negro:       #1C1C1C;
   --edoc-gris-borde:  #575756;   /* borde de icono y de tab sobre fondo gris */
   --edoc-gris:        #808B89;   /* barra de desplazamiento */
+  --edoc-gris-texto:  #5F6A68;   /* el mismo gris, oscurecido para texto: 5,6:1 sobre blanco */
   --edoc-gris-claro:  #D9D9D9;
   --edoc-fondo:       #dadada;   /* fondo de la plataforma · p.39 */
   --edoc-tablero:     #ffffff;   /* tablero · p.39 */
@@ -232,10 +233,10 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .edoc-menu__hijos .edoc-menu__enlace { padding-left: 32px; }
 .edoc-menu__hijos .edoc-menu__enlace.activo { box-shadow: inset 3px 0 0 var(--edoc-verde); }
 
-.edoc-menu__enlace--fase { color: var(--edoc-gris); font-style: italic; }
+.edoc-menu__enlace--fase { color: var(--edoc-gris-texto); font-style: italic; }
 .edoc-menu__enlace--por-ubicar { color: #8a5200; }
 .edoc-menu__enlace--por-ubicar:hover { background: #fff4e4; color: #8a5200; }
-.edoc-menu__enlace--fase:hover { background: #f4f4f4; color: var(--edoc-gris); cursor: not-allowed; }
+.edoc-menu__enlace--fase:hover { background: #f4f4f4; color: var(--edoc-gris-texto); cursor: not-allowed; }
 
 /* --- Selección múltiple y marcas de fase --------------------------------
    El filtro por proveedor no puede ser un campo de texto: cuando llegan
@@ -255,7 +256,7 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
    preguntando; dejarlo sin marcar haría creer que va. */
 .edoc-fase-marca {
   display: inline-flex; align-items: center;
-  font-size: 12px; font-style: italic; color: var(--edoc-gris);
+  font-size: 12px; font-style: italic; color: var(--edoc-gris-texto);
   border: 1px dashed #cfcfcf; border-radius: 999px; padding: 4px 12px;
   cursor: not-allowed; user-select: none;
 }
@@ -270,15 +271,21 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .reg__lado { background: #fff; border: 1px solid var(--edoc-linea, #e3e3e3); border-radius: 10px;
              overflow: hidden; position: sticky; top: 76px; }
 .reg__cabecera { padding: 16px 16px 12px; border-bottom: 1px solid #f0f0f0; }
-.reg__rotulo { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #9a9a9a;
+.reg__rotulo { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #6b6b6b;
                font-family: var(--fuente-titulos, inherit); font-weight: 600; }
 .reg__nombre { font-family: var(--fuente-titulos, inherit); font-size: 15px; font-weight: 600;
                color: var(--edoc-azul); line-height: 1.2; }
 .reg__folio { display: flex; align-items: center; justify-content: space-between; gap: 8px;
               margin-top: 12px; }
+.reg__folio-etiqueta { font-size: 10.5px; color: #666666; margin: 8px 0 3px; }
 .reg__folio-cod { font-family: var(--fuente-cifras); font-size: 11px; color: #4a4a4a;
                   background: #f6f7fa; border: 1px solid #e7e9ef; border-radius: 6px;
                   padding: 6px 8px; margin-top: 6px; word-break: break-all; line-height: 1.35; }
+/* El código y su botón de copiar, en la misma fila. */
+.reg__folio-fila { display: flex; gap: 6px; align-items: stretch; margin-top: 6px; }
+.reg__folio-fila .reg__folio-cod { flex: 1; min-width: 0; margin-top: 0; }
+.reg__folio-copiar { flex: none; font-size: 11.5px; padding: 4px 10px; }
+.reg__folio-ayuda { font-size: 10.5px; color: #666666; margin-top: 5px; line-height: 1.35; }
 .reg__avance { padding: 12px 16px 14px; }
 .reg__avance-t { font-size: 11.5px; color: #6a6a6a; margin-bottom: 6px; }
 .reg__barra { height: 4px; background: #ececec; border-radius: 99px; overflow: hidden; }
@@ -304,8 +311,8 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
    se pega al título en la misma línea. */
 .reg__paso-t { display: block; font-family: var(--fuente-titulos, inherit); font-size: 13.5px;
                font-weight: 600; line-height: 1.25; color: #22252e; }
-.reg__paso-s { display: block; font-size: 11px; color: #8a8a8a; line-height: 1.3; margin-top: 2px; }
-.reg__paso-n { font-family: var(--fuente-cifras); font-size: 10.5px; color: #7a7a7a;
+.reg__paso-s { display: block; font-size: 11px; color: #666666; line-height: 1.3; margin-top: 2px; }
+.reg__paso-n { font-family: var(--fuente-cifras); font-size: 10.5px; color: #5e5e5e;
                background: #f1f1f1; border-radius: 99px; padding: 2px 7px; white-space: nowrap; }
 .reg__paso--activo .reg__paso-n { background: var(--edoc-verde); color: #1d2410; font-weight: 600; }
 .reg__paso-chip { display: inline-block; font-family: var(--fuente-titulos, inherit); font-size: 9px;
@@ -313,7 +320,7 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
                   border-radius: 4px; padding: 2px 6px; margin-top: 6px; }
 .reg__paso-chip--completado { background: #eef6da; color: #4d6b12; }
 .reg__paso-chip--requerido  { background: #fdeaea; color: #b3261e; }
-.reg__paso-chip--opcional   { background: #f1f1f1; color: #6f6f6f; }
+.reg__paso-chip--opcional   { background: #f1f1f1; color: #595959; }
 .reg__paso-chip--error      { background: #fdd9d9; color: #a01a14; }
 .reg__tic { position: absolute; top: 9px; right: 10px; width: 17px; height: 17px; border-radius: 50%;
             background: var(--edoc-verde); color: #1d2410; display: none;
@@ -327,10 +334,10 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .reg__cuerpo { background: #fff; border: 1px solid var(--edoc-linea, #e3e3e3); border-radius: 10px;
                padding: 22px 26px 20px; }
 .reg__eyebrow { text-align: center; font-family: var(--fuente-titulos, inherit); font-size: 10.5px;
-                font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #9a9a9a; }
+                font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #6b6b6b; }
 .reg__titulo { text-align: center; font-family: var(--fuente-titulos, inherit); font-size: 21px;
                font-weight: 600; color: var(--edoc-azul); margin: 4px 0 2px; }
-.reg__sub { text-align: center; font-size: 13px; color: #7d7d7d; margin-bottom: 18px; }
+.reg__sub { text-align: center; font-size: 13px; color: #636363; margin-bottom: 18px; }
 
 /* La pastilla que dice si el campo hay que rellenarlo. En Francia va al lado
    del rótulo y se lee de un vistazo; es mejor que un asterisco. */
@@ -359,7 +366,7 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
    subtítulo se pega al título en la misma línea. */
 .reg__tipo-t { display: block; font-family: var(--fuente-titulos, inherit); font-size: 14px;
                font-weight: 600; line-height: 1.25; }
-.reg__tipo-s { display: block; font-size: 11.5px; color: #8a8a8a; line-height: 1.35; margin-top: 2px; }
+.reg__tipo-s { display: block; font-size: 11.5px; color: #666666; line-height: 1.35; margin-top: 2px; }
 .reg__tipo input:checked ~ .reg__tipo-marca { border-color: var(--edoc-verde);
                background: var(--edoc-verde); color: #1d2410; }
 .reg__tipo:has(input:checked) { border-color: var(--edoc-verde); background: #f7fbec; }
@@ -379,8 +386,8 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
                     color: #6f7686; margin-bottom: 12px; }
 .reg__subir-t { font-family: var(--fuente-titulos, inherit); font-size: 15px; font-weight: 600;
                 color: #22252e; }
-.reg__subir-s { font-size: 12.5px; color: #7d7d7d; margin-top: 3px; }
-.reg__subir-f { font-family: var(--fuente-cifras); font-size: 11px; color: #9a9a9a; margin-top: 6px; }
+.reg__subir-s { font-size: 12.5px; color: #636363; margin-top: 3px; }
+.reg__subir-f { font-family: var(--fuente-cifras); font-size: 11px; color: #6b6b6b; margin-top: 6px; }
 .reg__subir--lleno { border-style: solid; border-color: var(--edoc-verde); background: #f7fbec; }
 .reg__subir:focus-within { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
 
@@ -413,7 +420,7 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
                color: #22252e; line-height: 1.2; }
 .rev__detalle { margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; font-size: 13px; }
 .rev__detalle dl { display: grid; grid-template-columns: minmax(120px, 34%) 1fr; gap: 4px 14px; margin: 0; }
-.rev__detalle dt { color: #7a7a7a; font-weight: 400; }
+.rev__detalle dt { color: #5e5e5e; font-weight: 400; }
 .rev__detalle dd { margin: 0; color: #22252e; }
 
 @media (max-width: 900px) {
@@ -500,7 +507,7 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .aviso-fila__t { font-family: var(--fuente-titulos); font-size: 14.5px; font-weight: 600;
                  color: #22252e; }
 .aviso-fila__d { font-size: 13px; color: #6a6a6a; margin-top: 2px; line-height: 1.45; }
-.aviso-fila__c { font-family: var(--fuente-cifras); font-size: 11.5px; color: #9a9a9a;
+.aviso-fila__c { font-family: var(--fuente-cifras); font-size: 11.5px; color: #6b6b6b;
                  white-space: nowrap; }
 .aviso-fila--nueva .aviso-fila__t::after {
   content: "sin leer"; font-family: var(--fuente-titulos); font-size: 9px; font-weight: 700;
@@ -590,13 +597,13 @@ body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado)
    liste. Prometer un «ver todas» que lleva al formulario de correos sería
    mentir, y qué pantalla debería listarlos es justo lo que está sin decidir. */
 .edoc-notificaciones { max-height: 70vh; overflow-y: auto; }
-.edoc-notificaciones__pie { display: block; font-size: 12px; color: #8a8a8a; text-align: center; }
+.edoc-notificaciones__pie { display: block; font-size: 12px; color: #666666; text-align: center; }
 
 /* --- 5. Página ----------------------------------------------------------- */
 .edoc-pagina { padding: 16px 18px var(--alto-pie); max-width: 1680px; margin: 0 auto; width: 100%; flex: 1; }
 .edoc-titulo-barra { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
 .edoc-miga { font-size: 11.5px; color: #5c5c5c; margin-bottom: 2px; }
-.edoc-miga span + span::before { content: "›"; margin: 0 6px; color: var(--edoc-gris); }
+.edoc-miga span + span::before { content: "›"; margin: 0 6px; color: var(--edoc-gris-texto); }
 .edoc-titulo { font-family: var(--fuente-titulos); font-size: 21px; font-weight: 600; color: var(--edoc-azul); margin: 0; }
 .edoc-subtitulo { color: #4a4a4a; font-size: 12.5px; margin: 2px 0 0; max-width: 78ch; }
 
@@ -630,7 +637,7 @@ body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado)
 .form-control:focus, .custom-select:focus {
   border-color: var(--edoc-azul); box-shadow: 0 0 0 3px rgba(0,17,116,.12);
 }
-.form-control::placeholder { color: #9a9a9a; }
+.form-control::placeholder { color: #757575; }
 .edoc-ayuda { font-size: 11.5px; color: #666; margin-top: 4px; }
 
 /* --- 7. Botones · jerarquía ---------------------------------------------
@@ -782,7 +789,7 @@ table.edoc-tabla tbody tr:hover td.dataTables_empty { background: #fff; }
 }
 .edoc-estado::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
 .edoc-estado--exito       { color: #5f7410; background: #f2f7e2; border-color: #cbdd8c; }
-.edoc-estado--error       { color: var(--rojo-1); background: #fceeea; border-color: #f0bfb1; }
+.edoc-estado--error       { color: #b52f0e; background: #fceeea; border-color: #f0bfb1; }
 .edoc-estado--advertencia { color: #a45f00; background: #fff4e4; border-color: #fcd39a; }
 .edoc-estado--transito    { color: var(--azul-2); background: #eceffa; border-color: #b9c1e6; }
 .edoc-estado--neutro      { color: #5c6664; background: #f0f2f2; border-color: #cfd4d3; }
@@ -856,11 +863,11 @@ table.edoc-tabla tbody tr:hover td.dataTables_empty { background: #fff; }
 .linea-tiempo li.hecho::before { background: var(--senal-exito); border-color: var(--senal-exito); }
 .linea-tiempo li.fallo { color: var(--rojo-1); }
 .linea-tiempo li.fallo::before { background: var(--rojo-1); border-color: var(--rojo-1); }
-.linea-tiempo li.espera { color: #8a8a8a; }
+.linea-tiempo li.espera { color: #666666; }
 .linea-tiempo li.espera::before { border-color: #b9bcbb; border-style: dashed; }
 .linea-tiempo__titulo { font-weight: 700; font-size: 12.5px; color: var(--edoc-negro); }
 .linea-tiempo__detalle { font-size: 11.5px; color: #616161; }
-.linea-tiempo__sello { font-size: 11px; color: #8a8a8a; font-family: var(--fuente-cifras); }
+.linea-tiempo__sello { font-size: 11px; color: #666666; font-family: var(--fuente-cifras); }
 
 /* --- 12. Visor de la factura --------------------------------------------- */
 .visor-hoja {
@@ -870,7 +877,7 @@ table.edoc-tabla tbody tr:hover td.dataTables_empty { background: #fff; }
 .visor-cabecera { display: flex; justify-content: space-between; gap: 24px; border-bottom: 2px solid var(--edoc-azul); padding-bottom: 14px; }
 .visor-bloque__rotulo {
   font-family: var(--fuente-titulos); font-size: 10px; font-weight: 700; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--edoc-gris); margin-bottom: 3px;
+  text-transform: uppercase; color: var(--edoc-gris-texto); margin-bottom: 3px;
 }
 .visor-partes { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 18px 0; }
 .visor-dato { display: flex; gap: 8px; font-size: 12px; padding: 2px 0; }
@@ -891,7 +898,7 @@ table.edoc-tabla tbody tr:hover td.dataTables_empty { background: #fff; }
 .celda-ar .edoc-secundario { text-align: right; }
 .marca-ar {
   display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .06em;
-  color: var(--edoc-gris); border: 1px solid #c9cdcc; border-radius: 3px;
+  color: var(--edoc-gris-texto); border: 1px solid #c9cdcc; border-radius: 3px;
   padding: 0 4px; margin-inline-start: 6px; vertical-align: 1px; unicode-bidi: isolate;
 }
 
@@ -1048,7 +1055,7 @@ body.con-notas .edoc-pagina.edoc-pagina--lienzo { padding-bottom: var(--alto-pie
 .dropdown-item:active { background: var(--edoc-azul); }
 .dropdown-header {
   font-family: var(--fuente-titulos); font-size: 10px; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris); padding: 8px 14px 3px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris-texto); padding: 8px 14px 3px;
 }
 .dropdown-item.disabled { color: #adadad; }
 
@@ -1154,7 +1161,7 @@ table.edoc-tabla.dataTable tbody tr:hover td { background: #f7f9fc; }
   width: 1px; height: 20px; background: #dcdfe4; margin: 0 3px; flex: none;
 }
 .edoc-accion[aria-disabled="true"] {
-  opacity: .35; pointer-events: none; border-color: #b6b6b6; color: #8a8a8a;
+  opacity: .35; pointer-events: none; border-color: #b6b6b6; color: #666666;
 }
 .edoc-accion--exito { border-color: #8fae22; color: #5f7410; }
 .edoc-accion--exito:hover { background: var(--senal-exito); color: var(--edoc-negro); }
@@ -1441,7 +1448,7 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 /* --- 25. Alcance de la entrega -------------------------------------------
    Lo que está en el mapa pero no en la entrega de hoy se marca en el menú y,
    si se entra, muestra el aviso en vez de la pantalla.                      */
-.edoc-menu__enlace--obra, .edoc-menu-movil__enlace.edoc-menu__enlace--obra { color: #7a7a7a; }
+.edoc-menu__enlace--obra, .edoc-menu-movil__enlace.edoc-menu__enlace--obra { color: #5e5e5e; }
 .edoc-menu__enlace--obra:hover, .edoc-menu-movil__enlace.edoc-menu__enlace--obra:hover {
   background: #f4f4f4; color: #5c5c5c;
 }
@@ -1463,7 +1470,7 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 }
 .edoc-obra__rotulo {
   font-family: var(--fuente-titulos); font-size: 12px; font-weight: 600;
-  letter-spacing: .09em; text-transform: uppercase; color: var(--edoc-gris); margin: 0 0 16px;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--edoc-gris-texto); margin: 0 0 16px;
 }
 .edoc-obra__texto { font-size: 13.5px; color: #4a4a4a; margin: 0 0 24px; }
 .edoc-obra__botones { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -1480,7 +1487,7 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   font-family: var(--fuente-cifras); font-weight: 400; font-size: .92em;
   color: #7d8590; letter-spacing: 0;
 }
-.edoc-tabla thead th .clave-corner { color: #6f7681; }
+.edoc-tabla thead th .clave-corner { color: #555c67; }
 .corner__nombre .clave-corner { font-size: .82em; }
 
 /* Enlaces legales del acceso. Van visibles, no escondidos en un pie diminuto:
@@ -1490,7 +1497,7 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
    los dos documentos van dentro del propio texto. */
 .edoc-legal {
   margin: 16px 0 0; padding: 0; border: 0; text-align: left;
-  font-size: 12px; line-height: 1.5; color: var(--edoc-gris);
+  font-size: 12px; line-height: 1.5; color: var(--edoc-gris-texto);
 }
 .edoc-legal a { text-decoration: underline; }
 
@@ -1520,14 +1527,14 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
    formulario, es el pie legal. */
 .edoc-acceso .form-check--legal .form-check-label {
   align-items: flex-start; min-height: 0; padding: 0 0 0 28px;
-  border: 0; border-radius: 0; font-size: 12px; line-height: 1.5; color: var(--edoc-gris);
+  border: 0; border-radius: 0; font-size: 12px; line-height: 1.5; color: var(--edoc-gris-texto);
 }
 .edoc-acceso .form-check--legal .form-check-label:hover { border: 0; }
 .edoc-acceso .form-check--legal .form-check-input { left: 0; top: 10px; width: 16px; height: 16px; }
 
 /* Las dos vías del alta, numeradas: el número dice que hay un orden y que la
    segunda no se puede hacer antes que la primera. */
-.edoc-acceso__otros-guia { margin: -4px 0 10px; font-size: 12px; color: var(--edoc-gris); }
+.edoc-acceso__otros-guia { margin: -4px 0 10px; font-size: 12px; color: var(--edoc-gris-texto); }
 .edoc-acceso__via-paso {
   flex: none; width: 26px; height: 26px; display: grid; place-items: center;
   border-radius: 50%; background: #eef1f8; color: var(--edoc-azul);
@@ -1561,11 +1568,11 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .edoc-empresa-opcion__dato { font-size: 11.5px; color: #6d6d6d; }
-.edoc-empresa-opcion__flecha { font-size: 20px; color: var(--edoc-gris); flex: none; }
+.edoc-empresa-opcion__flecha { font-size: 20px; color: var(--edoc-gris-texto); flex: none; }
 
 /* La versión, al pie de la tarjeta de acceso: es lo primero que pide soporte. */
 .edoc-version {
-  text-align: center; margin-top: 10px; font-size: 11px; color: var(--edoc-gris);
+  text-align: center; margin-top: 10px; font-size: 11px; color: var(--edoc-gris-texto);
 }
 
 /* --- 26 bis. El plazo del codigo ------------------------------------------
@@ -1661,12 +1668,12 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden; font-size: 12px; color: #5f5f5f;
 }
-.edoc-notificacion__sello { display: block; font-size: 11px; color: var(--edoc-gris); margin-top: 3px; }
+.edoc-notificacion__sello { display: block; font-size: 11px; color: var(--edoc-gris-texto); margin-top: 3px; }
 
 /* Lo que hay que hacer para que una alerta se vaya. Ocupa el sitio del aspa
    que la alerta no tiene. */
 .edoc-notificacion__solo {
-  display: block; margin-top: 5px; font-size: 11px; color: #8a8a8a; font-style: italic;
+  display: block; margin-top: 5px; font-size: 11px; color: #666666; font-style: italic;
 }
 
 .edoc-notificacion__leer {
@@ -1773,7 +1780,7 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
 .edoc-acceso__otros { margin-top: 18px; padding-top: 16px; border-top: 1px solid #ececec; }
 .edoc-acceso__otros-titulo {
   font-family: var(--fuente-titulos); font-size: 11px; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris); margin-bottom: 9px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris-texto); margin-bottom: 9px;
 }
 .edoc-acceso__via {
   display: flex; align-items: center; gap: 10px; padding: 9px 12px; margin-bottom: 7px;
@@ -1787,11 +1794,11 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
   color: var(--edoc-azul);
 }
 .edoc-acceso__via-detalle { display: block; font-size: 11.5px; color: #6a6a6a; line-height: 1.4; }
-.edoc-acceso__via-flecha { font-size: 19px; color: var(--edoc-gris); flex: none; }
+.edoc-acceso__via-flecha { font-size: 19px; color: var(--edoc-gris-texto); flex: none; }
 
 /* La bandeja del Office Manager no es del cliente: no comparte sitio con sus
    opciones. Va al pie, discreta y nombrada por lo que es. */
-.edoc-version__interno { margin-left: 10px; color: var(--edoc-gris); text-decoration: underline; }
+.edoc-version__interno { margin-left: 10px; color: var(--edoc-gris-texto); text-decoration: underline; }
 .edoc-version__interno:hover { color: var(--edoc-azul); }
 
 /* La línea del usuario lleva su propio icono: el de empresa es de la línea de
@@ -1816,7 +1823,7 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
 }
 .edoc-acceso__cabecera-rotulo {
   font-family: var(--fuente-titulos); font-size: 11px; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--edoc-gris-texto);
 }
 .edoc-acceso__idioma { margin: 0; }
 
@@ -1835,7 +1842,7 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
 .edoc-idioma__lista { min-width: 216px; padding: 6px 0; }
 .edoc-idioma__opcion { display: flex; align-items: center; gap: 9px; }
 .edoc-idioma__nombre { flex: 1 1 auto; }
-.edoc-idioma__codigo { font-size: 11px; color: var(--edoc-gris); letter-spacing: .02em; }
+.edoc-idioma__codigo { font-size: 11px; color: var(--edoc-gris-texto); letter-spacing: .02em; }
 /* El idioma activo se marca con una barra verde, no con un tic: el tic ya se
    usa en las tablas para «aprobado». */
 .edoc-idioma__opcion.activo { box-shadow: inset 3px 0 0 var(--edoc-verde); font-weight: 600; }
@@ -1882,7 +1889,7 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
 /* Qué hacer con un rechazo, separado del motivo: el motivo es del documento,
    la salida es del tipo de rechazo, y pegados en una sola frase se leían como
    una sola cosa. */
-.linea-tiempo__nota { display: block; margin-top: 4px; color: #7a7a7a; }
+.linea-tiempo__nota { display: block; margin-top: 4px; color: #5e5e5e; }
 
 /* --- 29.1 · Menú «más acciones» de una fila -------------------------------
    Pedido en la revisión del 2026-09-07: la columna de acciones crece cada vez
@@ -2209,7 +2216,7 @@ body.edoc-login-cuerpo {
   height: 44px; padding: 8px 15px; font-family: var(--fuente-titulos); font-size: 17px !important;
   color: #333; border: 1px solid #dcdcdc; border-radius: 3px; box-shadow: none;
 }
-.edoc-login .form-control::placeholder { color: #6b6b6b; }
+.edoc-login .form-control::placeholder { color: #757575; }
 .edoc-login .form-control:focus { border-color: var(--edoc-azul); box-shadow: 0 0 0 3px rgba(0,17,116,.10); outline: 0; }
 .edoc-login__olvide { margin: 6px 0 8px; text-align: right; font-size: 13px; }
 .edoc-login #btnRecuperarClave { color: var(--edoc-azul); cursor: pointer; text-decoration: none; }
@@ -2253,8 +2260,8 @@ body.edoc-login-cuerpo {
 }
 .edoc-login__legal a,
 .edoc-login__version a { color: var(--edoc-azul); }
-.edoc-login__version { margin-top: 18px; text-align: center; font-size: 13px; color: #8a8a8a; }
-.edoc-login__version a { color: #8a8a8a; }
+.edoc-login__version { margin-top: 18px; text-align: center; font-size: 13px; color: #666666; }
+.edoc-login__version a { color: #666666; }
 
 /* El diseño no lleva barra de pie: la del parcial _Footer se oculta. */
 body.edoc-login-cuerpo > .footer { display: none; }
@@ -2270,4 +2277,135 @@ body.edoc-login-cuerpo > .footer { display: none; }
   .edoc-login__legal-portada { padding-top: 16px; }
   .edoc-login__filigrana { top: auto; bottom: -90px; width: 170px; }
   .edoc-login__panel { padding: 0 20px; }
+}
+
+/* --- Registro de la empresa · el asistente del portal (.NET) ---------------
+   El compania.cshtml del portal con la estructura gráfica de registro.html:
+   panel de pasos a la izquierda, formulario a la derecha y cada paso con su
+   pastilla de estado. La vista conserva tal cual las clases y los atributos
+   data- que lee company-registration.js; aquí solo se les da el aspecto del
+   design system. Ninguna de estas clases existe en la maqueta, así que esta
+   sección no toca ninguna otra pantalla.                                    */
+
+/* El panel se queda pegado bajo el encabezado al desplazarse. */
+.wizard-sidebar { top: 70px; }
+
+/* Las tarjetas del panel son <button>, porque el guion las pulsa para saltar
+   de paso, y un botón no hereda la tipografía ni alinea a la izquierda. */
+button.reg__paso {
+  width: 100%; text-align: left; font: inherit; color: inherit;
+  -webkit-appearance: none; appearance: none;
+}
+button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
+
+/* El estado de la tarjeta lo escribe el guion sobre .step-card. El color va
+   sobre esa clase, y no sobre .reg__paso--activo, para que siga estando si el
+   guion rehace el className de la tarjeta. */
+.step-card.active { background: #f4f8e6; border-color: var(--edoc-verde); }
+.step-card.active .reg__paso-icono { color: var(--edoc-azul); }
+.step-card.active .reg__paso-n { background: var(--edoc-verde); color: #1d2410; font-weight: 600; }
+.step-card.error { background: #fdf1f1; border-color: #e3a9a5; }
+.step-card.error .reg__paso-icono { color: #b3261e; }
+
+/* La pastilla del paso: los cuatro estados que trae el esquema, con los
+   colores de .reg__paso-chip. Sin clase de estado se lee como «requerido». */
+.step-badge {
+  display: inline-block; font-family: var(--fuente-titulos); font-size: 9px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; border-radius: 4px; padding: 2px 6px;
+  margin-top: 6px; background: #fdeaea; color: #b3261e;
+}
+.step-badge.completed { background: #eef6da; color: #4d6b12; }
+.step-badge.optional  { background: #f1f1f1; color: #595959; }
+.step-badge.error     { background: #fdd9d9; color: #a01a14; }
+
+/* Los iconos son un <use> de icons.svg y no traen tamaño propio: sin esto un
+   SVG sin ancho se dibuja a 300 × 150. */
+.wizard-sidebar .step-icon { width: 18px; height: 18px; }
+.reg__titulo-icono .icon { width: 20px; height: 20px; }
+.step-description .icon { width: 18px; height: 18px; flex: none; margin-top: 1px; }
+.upload-icon .icon { width: 20px; height: 20px; }
+.menu-toggle .icon { width: 16px; height: 16px; }
+
+/* La rejilla de campos. El esquema manda el ancho de cada campo en
+   --field-span, y aquí se cuenta sobre doce columnas, que es como viene el
+   formulario de Francia. Si el esquema las contara sobre dos, el 12 de esta
+   línea es lo único que hay que cambiar. */
+.wizard-fields { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 16px; }
+.wizard-field { grid-column: span var(--field-span, 12); margin-bottom: 14px; min-width: 0; }
+@media (max-width: 767.98px) { .wizard-field { grid-column: 1 / -1; } }
+
+/* El asterisco del rótulo, con el rojo de señal del manual. */
+.required-star { color: var(--senal-error); margin-left: 2px; }
+
+/* Cada consentimiento es un campo del esquema, así que trae el hueco de un
+   campo y el de la fila: entre tres líneas seguidas sobra uno de los dos. */
+.wizard-field .consent-row { margin-bottom: 0; }
+
+/* El aviso de cada campo. Está siempre en el DOM y el guion le escribe el
+   texto; vacío no ocupa sitio. */
+.field-error { display: block; font-size: 11.5px; color: var(--senal-error); margin-top: 4px; }
+
+/* Si el guion marca el campo con .is-invalid, Bootstrap le mete además su
+   icono rojo dentro. Sobra: el borde rojo y el mensaje ya lo dicen. Es el
+   mismo criterio que en el acceso. En los desplegables no se toca, porque su
+   imagen de fondo es la flecha. */
+.wizard-field input.form-control.is-invalid { background-image: none; padding-right: 10px; }
+
+/* La descripción del paso va dentro de un aviso azul. */
+.step-description p { margin: 0; }
+
+/* La zona de subida. Sus rótulos son <strong>, <span> y <small>, que van en
+   línea: sin display:block se leen los tres seguidos. */
+.file-drop .reg__subir-t,
+.file-drop .reg__subir-s,
+.file-drop .reg__subir-f { display: block; }
+.selected-file {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  margin-top: 10px; padding: 9px 12px; font-size: 12.5px; word-break: break-all;
+  background: #f7fbec; border: 1px solid var(--edoc-verde); border-radius: var(--radio-chico);
+}
+/* El botón que se lee como un enlace: quitar el archivo elegido, y el «editar»
+   de cada tarjeta del repaso, que pinta el guion. */
+.text-link {
+  background: none; border: 0; padding: 0; color: var(--edoc-azul);
+  font-family: var(--fuente-titulos); font-size: 12px; text-decoration: underline;
+}
+.text-link:hover { color: var(--azul-2); }
+
+/* Las flechas de «Previous» y «Next» van dentro del botón, pegadas al texto. */
+.wizard-previous span[aria-hidden], .wizard-next span[aria-hidden] { margin: 0 .35em; }
+
+/* El botón de reintentar de una comprobación de servidor. */
+.backend-action { margin-top: 8px; }
+.wizard-toolbar { margin-bottom: 10px; }
+
+/* La confirmación es un <dialog> nativo, que es lo que abre el guion con
+   showModal(): no es el modal de Bootstrap y necesita su propio aspecto. */
+#confirm-registration {
+  border: 0; border-top: 4px solid var(--edoc-verde); border-radius: var(--radio);
+  padding: 24px 26px; max-width: 460px; width: calc(100% - 32px);
+  box-shadow: 0 10px 34px rgba(0,17,116,.14); color: var(--edoc-negro);
+  font-family: var(--fuente-texto); font-size: 13.5px;
+}
+#confirm-registration::backdrop { background: rgba(34,37,46,.45); }
+#confirm-registration h2 {
+  font-family: var(--fuente-titulos); font-size: 19px; font-weight: 600;
+  color: var(--edoc-azul); margin: 0 0 6px;
+}
+#confirm-registration .dialog-actions {
+  display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; flex-wrap: wrap;
+}
+
+/* Estudio del 17 sep: controles por debajo de 44 px en móvil. Solo se agranda
+   la zona que se puede tocar; el dibujo se queda igual. */
+@media (max-width: 767px) {
+  .dataTables_paginate .page-link { min-height: 44px; min-width: 44px; display: inline-flex;
+    align-items: center; justify-content: center; }
+  .edoc-acceso__ayuda a, .edoc-acceso__ayuda-enlace, .edoc-version__interno,
+  .edoc-legal a { display: inline-flex; align-items: center; min-height: 44px; }
+  .edoc-legal .form-check-label { min-height: 44px; align-items: center; }
+  .edoc-legal .form-check-input { width: 20px; height: 20px; }
+  /* Las «?» de ayuda se quedan pequeñas a la vista, con un área de toque mayor. */
+  .edoc-ayuda-que, .agrupador__ayuda { position: relative; }
+  .edoc-ayuda-que::after, .agrupador__ayuda::after { content: ""; position: absolute; inset: -14px; }
 }

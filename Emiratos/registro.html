@@ -110,11 +110,21 @@
       <div class="reg__cabecera">
         <div class="reg__rotulo">Portal consulta</div>
         <div class="reg__nombre">Registro de empresa</div>
+        <!-- La ficha de la solicitud: su estado y su código de seguimiento. Antes
+             decía «Pendiente» sin haber empezado nada y «Se abre al verificar el
+             correo» sin decir qué se abría. -->
         <div class="reg__folio">
-          <span class="edoc-secundario" style="font-size:11.5px">Solicitud</span>
-          <span class="edoc-estado edoc-estado--advertencia" style="font-size:10px" id="chip-estado">Pendiente</span>
+          <span class="edoc-secundario" style="font-size:11.5px">Tu solicitud</span>
+          <span class="edoc-estado edoc-estado--neutro" style="font-size:10px" id="chip-estado">Sin empezar</span>
         </div>
-        <div class="reg__folio-cod" id="folio-lado">Se abre al verificar el correo</div>
+        <div class="reg__folio-etiqueta">Código de seguimiento</div>
+        <div class="reg__folio-fila">
+          <div class="reg__folio-cod" id="folio-lado">Te lo damos al verificar tu correo</div>
+          <button type="button" class="btn btn-edoc-secundario btn-sm reg__folio-copiar" id="copiar-lado" hidden
+            aria-label="Copiar el código de seguimiento">Copiar</button>
+        </div>
+        <div class="reg__folio-ayuda" id="folio-ayuda" hidden>Guárdalo: con él retomas el registro si cierras el
+        navegador.</div>
       </div>
       <div class="reg__avance">
         <div class="reg__avance-t" id="voy">Verificación</div>
@@ -175,7 +185,7 @@
         <div id="caja-folio" hidden>
           <label class="edoc-etiqueta" for="p-folio">Código de seguimiento
             <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-          <input class="form-control cifra" id="p-folio" placeholder="019fa464-8241-730b-9748-9677cb1ecce8">
+          <input class="form-control cifra" id="p-folio" placeholder="Los 36 caracteres del código">
           <div class="edoc-ayuda" id="ayuda-folio">Los 36 caracteres que te dimos al enviar la solicitud.</div>
           <div class="nota nota--abierto mt-2">
             <span class="nota__sello">Para probar la maqueta</span>
@@ -191,7 +201,7 @@
              salir de este campo, sin decir que se había mandado nada: parecía
              un reloj corriendo sin motivo. -->
         <div class="reg__correo-fila">
-          <input type="email" class="form-control" id="p-correo" placeholder="hugo.leano@empresa.ae" autocomplete="email">
+          <input type="email" class="form-control" id="p-correo" placeholder="Tu correo de la empresa" autocomplete="email">
           <button class="btn btn-edoc-secundario" type="button" id="enviar-codigo">Enviar código</button>
         </div>
         <div class="edoc-ayuda">Del dominio de la empresa, no un correo personal. Te mandamos ahí el código.</div>
@@ -230,11 +240,11 @@
         </div>
         <label class="edoc-etiqueta" for="a-nombre">Nombre completo del administrador
           <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control" id="a-nombre" placeholder="Fatima Al Marzooqi">
+        <input class="form-control" id="a-nombre" placeholder="Nombre y apellidos">
 
         <label class="edoc-etiqueta mt-3" for="a-cargo">Cargo en la empresa
           <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control" id="a-cargo" placeholder="Directora financiera">
+        <input class="form-control" id="a-cargo" placeholder="Tu cargo en la empresa">
 
         <div class="row rejilla mt-3">
           <div class="col-12 col-md-5">
@@ -253,7 +263,7 @@
           <div class="col-12 col-md-7">
             <label class="edoc-etiqueta" for="a-tel">Teléfono
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <input class="form-control cifra" id="a-tel" placeholder="50 123 4567" inputmode="tel">
+            <input class="form-control cifra" id="a-tel" placeholder="Número, sin el prefijo" inputmode="tel">
             <div class="edoc-ayuda">Solo cifras, sin el código de país. Lo usamos si hace falta
             llamarte para desatascar el alta.</div>
           </div>
@@ -272,7 +282,7 @@
         </div>
         <label class="edoc-etiqueta" for="e-legal">Razón social
           <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control" id="e-legal" placeholder="Al Noor Trading LLC">
+        <input class="form-control" id="e-legal" placeholder="Como figura en la licencia comercial">
 
         <div class="row rejilla mt-3">
           <div class="col-12 col-md-6">
@@ -289,7 +299,7 @@
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-trn">Número de registro fiscal · TRN
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <input class="form-control cifra" id="e-trn" inputmode="numeric" maxlength="15" placeholder="100908070600003">
+            <input class="form-control cifra" id="e-trn" inputmode="numeric" maxlength="15" placeholder="15 dígitos">
             <div class="edoc-ayuda">Quince cifras, tal como figura en tu registro fiscal.</div>
           </div>
           <div class="col-12 col-md-6">
@@ -322,7 +332,7 @@
 
         <label class="edoc-etiqueta mt-3" for="e-dir">Dirección
           <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control" id="e-dir" placeholder="Jebel Ali Free Zone, Bloque C, Oficina 214">
+        <input class="form-control" id="e-dir" placeholder="Calle, edificio y ciudad">
       </div>
 
       <!-- ------------------------------------- 4 · documento legal -->
@@ -354,7 +364,7 @@
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="d-numero">Número de licencia
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <input class="form-control cifra" id="d-numero" placeholder="CN-1148820">
+            <input class="form-control cifra" id="d-numero" placeholder="Como figura en la licencia">
           </div>
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="d-caduca">Válida hasta
@@ -605,6 +615,8 @@
   var folio = null;
   var conError = {};   // qué pasos han fallado la validación
   var archivoPrevio = null;   // la licencia que ya estaba en el expediente recuperado
+  var enviada = false;        // tras confirmar ya no hay borrador que guardar
+  var observacion = null;     // la del revisor, si el expediente vino observado
 
   /* Quien llega desde EmaraTax viene con lo que la autoridad nos manda en el
      callback: el registro fiscal, el nombre legal y una referencia. En la
@@ -903,6 +915,7 @@
     $('btn-siguiente').textContent = n === REPASO ? 'Confirmar registro' : 'Siguiente ›';
     if (n === REPASO) pintarRepaso();
     pintarPanel();
+    guardarBorrador();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -927,7 +940,8 @@
     } else if (exp.archivoCaducado) {
       $('subir-s').textContent = 'La que tenías caducó: sube la vigente.';
     }
-    $('chip-estado').textContent = 'Con observaciones';
+    ponerEstado('observada');
+    observacion = { paso: exp.paso, texto: exp.observacion };
 
     var previa = $('obs-revisor');
     if (previa) previa.remove();
@@ -943,6 +957,144 @@
     window.edocAvisar('Expediente <strong>' + exp.ref + '</strong> recuperado. ' +
       'Te llevamos a lo que observó el revisor.', 'exito');
   }
+
+  /* --- el borrador ---------------------------------------------------------
+     Salir a otra pantalla a mitad del registro no puede costar el trabajo
+     hecho (estudio de agentes del 17 sep: 22 pasos rehechos). Dos niveles:
+       · en la misma sesión se vuelve solo, al mismo paso y con lo escrito;
+       · con el navegador cerrado se vuelve con el código de seguimiento.
+     En el portal real el borrador vive en el servidor, atado al código; aquí
+     vive en el navegador. La licencia no se puede guardar: queda su nombre. */
+  var LLAVE_BORRADOR = 'edoc-registro-borrador';
+  var LLAVE_EXPEDIENTES = 'edoc-registro-expedientes';
+
+  function leerJSON(almacen, llave, defecto) {
+    try { return JSON.parse(almacen.getItem(llave) || 'null') || defecto; } catch (error) { return defecto; }
+  }
+
+  function guardarBorrador() {
+    if (!folio || enviada) return;
+    var datos = {};
+    document.querySelectorAll('.reg__cuerpo input[id], .reg__cuerpo select[id], .reg__cuerpo textarea[id]')
+      .forEach(function (e) {
+        if (e.type === 'file') return;
+        datos[e.id] = (e.type === 'checkbox' || e.type === 'radio') ? e.checked
+          : (e.tagName === 'SELECT' ? e.selectedIndex : e.value);
+      });
+    var b = {
+      folio: folio, actual: actual, masLejos: masLejos, datos: datos, observacion: observacion,
+      archivo: $('d-archivo').files.length ? $('d-archivo').files[0].name : archivoPrevio,
+      fecha: new Date().toISOString()
+    };
+    try {
+      window.sessionStorage.setItem(LLAVE_BORRADOR, JSON.stringify(b));
+      var todos = leerJSON(window.localStorage, LLAVE_EXPEDIENTES, {});
+      todos[folio] = b;
+      window.localStorage.setItem(LLAVE_EXPEDIENTES, JSON.stringify(todos));
+    } catch (error) { /* nada */ }
+  }
+
+  function borrarBorrador() {
+    try {
+      window.sessionStorage.removeItem(LLAVE_BORRADOR);
+      var todos = leerJSON(window.localStorage, LLAVE_EXPEDIENTES, {});
+      if (folio) delete todos[folio];
+      window.localStorage.setItem(LLAVE_EXPEDIENTES, JSON.stringify(todos));
+    } catch (error) { /* nada */ }
+  }
+
+  /* Vuelca un borrador en el formulario. `respetar` son los campos que no se
+     pisan: al retomar con el código, el correo y el código recién escritos. */
+  function volcar(b, respetar) {
+    respetar = respetar || [];
+    Object.keys(b.datos || {}).forEach(function (id) {
+      if (respetar.indexOf(id) >= 0) return;
+      var campo = $(id);
+      var v = b.datos[id];
+      if (!campo) return;
+      if (campo.type === 'checkbox' || campo.type === 'radio') campo.checked = !!v;
+      else if (campo.tagName === 'SELECT') campo.selectedIndex = v;
+      else campo.value = v;
+      if (campo.tagName === 'SELECT' || campo.type === 'radio') {
+        campo.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+    if (b.archivo) {
+      archivoPrevio = b.archivo;
+      $('zona-subir').classList.add('reg__subir--lleno');
+      $('subir-t').textContent = b.archivo;
+      $('subir-s').textContent = 'Ya está en el expediente. Haz clic para cambiarla.';
+    }
+    if (b.observacion) {
+      observacion = b.observacion;
+      var previa = $('obs-revisor');
+      if (previa) previa.remove();
+      document.querySelector('.paso[data-paso="' + b.observacion.paso + '"]').insertAdjacentHTML('afterbegin',
+        '<div class="edoc-aviso edoc-aviso--advertencia mb-3" id="obs-revisor">' +
+          '<div><strong>Observación del revisor.</strong> ' + b.observacion.texto + '</div></div>');
+    }
+    folio = b.folio;
+    mostrarFolio(folio);
+    ponerEstado(b.observacion ? 'observada' : 'curso');
+    masLejos = Math.max(masLejos, b.masLejos || 1);
+  }
+
+  /* El correo ya se verificó cuando se abrió el expediente: no se pide otra vez. */
+  function correoYaVerificado() {
+    codigoEnviado = true;
+    $('p-codigo').disabled = false;
+    $('enviar-codigo').textContent = 'Correo verificado';
+    $('enviar-codigo').disabled = true;
+    $('codigo-estado').textContent = 'Correo verificado.';
+  }
+
+  function ponerEstado(cual) {
+    var chip = $('chip-estado');
+    var E = {
+      curso: ['En curso', 'advertencia'],
+      observada: ['Con observaciones', 'advertencia'],
+      enviada: ['Enviada', 'exito']
+    }[cual];
+    chip.textContent = E[0];
+    chip.className = 'edoc-estado edoc-estado--' + E[1];
+    chip.style.fontSize = '10px';
+  }
+
+  function mostrarFolio(f) {
+    $('folio-lado').textContent = f || 'Te lo damos al verificar tu correo';
+    $('copiar-lado').hidden = !f;
+    $('folio-ayuda').hidden = !f;
+  }
+
+  /* Copiar un texto, con el portapapeles moderno y, si no, el de siempre. */
+  function copiarTexto(texto, listo) {
+    function aMano() {
+      var t = document.createElement('textarea');
+      t.value = texto; t.setAttribute('readonly', ''); t.style.position = 'absolute'; t.style.left = '-9999px';
+      document.body.appendChild(t); t.select();
+      var bien = false;
+      try { bien = document.execCommand('copy'); } catch (error) { bien = false; }
+      t.remove();
+      listo(bien);
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(texto).then(function () { listo(true); }, aMano);
+    } else {
+      aMano();
+    }
+  }
+
+  $('copiar-lado').addEventListener('click', function () {
+    if (!folio) return;
+    copiarTexto(folio, function (bien) {
+      window.edocAvisar(bien ? 'Código de seguimiento copiado.'
+        : 'No se pudo copiar solo: selecciónalo y cópialo a mano.', bien ? 'exito' : 'error');
+    });
+  });
+
+  // Cada cambio en el formulario deja el borrador al día.
+  document.querySelector('.reg__cuerpo').addEventListener('input', guardarBorrador);
+  document.querySelector('.reg__cuerpo').addEventListener('change', guardarBorrador);
 
   function nuevoFolio() {
     // El de Francia es un identificador universal de 36 caracteres.
@@ -964,13 +1116,22 @@
       // Al superar el paso 1 se abre el expediente y se hereda el correo.
       if (actual === 1) {
         if (!folio) folio = $('tipo-actualiza').checked ? val('p-folio').toLowerCase() : nuevoFolio();
-        $('folio-lado').textContent = folio;
+        mostrarFolio(folio);
+        ponerEstado('curso');
         $('a-correo').value = val('p-correo');
         if ($('tipo-actualiza').checked) {
+          // Primero un borrador sin enviar con ese código; después, los expedientes enviados.
+          var borrador = leerJSON(window.localStorage, LLAVE_EXPEDIENTES, {})[folio];
+          if (borrador) {
+            volcar(borrador, ['tipo-nueva', 'tipo-actualiza', 'p-folio', 'p-correo', 'p-codigo']);
+            ir(borrador.actual > 1 ? borrador.actual : 2);
+            window.edocAvisar('Retomamos tu registro donde lo dejaste.', 'exito');
+            return;
+          }
           var expediente = EXPEDIENTES[folio];
           if (!expediente) {
             folio = null;
-            $('folio-lado').textContent = 'Se abre al verificar el correo';
+            mostrarFolio(null);
             return marcarMal(1, { id: 'p-folio',
               texto: 'No hay ningún expediente con ese código. Revisa que esté completo.' });
           }
@@ -989,9 +1150,9 @@
       ir(flojo[0]);
       return;
     }
-    $('chip-estado').textContent = 'Enviada';
-    $('chip-estado').className = 'edoc-estado edoc-estado--exito';
-    $('chip-estado').style.fontSize = '10px';
+    ponerEstado('enviada');
+    borrarBorrador();
+    enviada = true;
     $('folio-final').value = folio;
     /* El alta queda anotada para el acceso: la primera vez que esta empresa
        entre tendrá que cambiar la contraseña. En el portal real lo sabe el
@@ -1159,7 +1320,8 @@
      recuerda durante la visita, o con un código de seguimiento. */
   var conCodigo = LLEGADA.get('retomar') === '1';
   var LLAVE_EMPEZADO = 'edoc-registro-empezado';
-  var empezado = LLEGADA.get('empezar') === '1';
+  var enCurso = conCodigo ? null : leerJSON(window.sessionStorage, LLAVE_BORRADOR, null);
+  var empezado = LLEGADA.get('empezar') === '1' || !!enCurso;
   try { empezado = empezado || window.sessionStorage.getItem(LLAVE_EMPEZADO) === '1'; } catch (error) { /* nada */ }
   if (!empezado && !conCodigo) {
     /* Paso 0: el panel de la izquierda se queda, con todos los pasos a la vista
@@ -1214,7 +1376,14 @@
     $('chip-estado').style.fontSize = '10px';
   }
 
-  ir(1);
+  if (enCurso) {
+    volcar(enCurso);
+    correoYaVerificado();
+    ir(enCurso.actual || 1);
+    window.edocAvisar('Seguimos donde lo dejaste.', 'exito');
+  } else {
+    ir(1);
+  }
 }());
 </script>
 </body>
