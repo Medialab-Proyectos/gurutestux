@@ -623,7 +623,23 @@ function iniciarSesion(c) {
   try { localStorage.setItem(STORE + '-sesion', c.id); } catch (e) {}
   save(); location.hash = '#/proyectos'; render();
 }
-function cerrarSesion() {
+async function entrarNube(accion, datos, err) {
+  try {
+    const r = await api(`api/cuenta?accion=${accion}`, { method: 'POST', body: JSON.stringify(datos) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) return err(j.error || 'No pudimos completar la operación. Intenta de nuevo.');
+    await cargarNube(j.cuenta);
+    iniciarSesion(j.cuenta);
+    if (accion === 'registro') toast(`Bienvenida o bienvenido, ${j.cuenta.nombre}.`);
+  } catch (e) { err('No pudimos conectar con Synthetica. Revisa tu conexión e intenta de nuevo.'); }
+}
+async function cerrarSesion() {
+  if (NUBE) {
+    if (guardarBaseT) { clearTimeout(guardarBaseT); guardarNube(); }
+    if (guardandoNube) await guardandoNube;
+    await api('api/cuenta?accion=salir', { method: 'POST' }).catch(() => {});
+    DB = seed(); VERSION_NUBE = 0;
+  }
   UI.sesion = null; UI.wizard = null;
   try { localStorage.removeItem(STORE + '-sesion'); } catch (e) {}
   location.hash = '#/ingresar'; render();
@@ -660,11 +676,13 @@ function wireIngreso(modo) {
       if (!correoValido(correo)) return err('Revisa el correo.');
       if (clave.length < 10) return err('La contraseña debe tener al menos 10 caracteres.');
       if (!$('#in-acepto').checked) return err('Para crear la cuenta debes aceptar los Términos y la Política de privacidad.');
+      if (NUBE) return entrarNube('registro', { nombre, correo, clave, acepta: true }, err);
       if (DB.cuentas.some(c => c.correo === correo)) return err('Ya hay una cuenta con ese correo. Ingresa con ella.');
       const sal = crypto.getRandomValues(new Uint32Array(4)).join('-');
       const c = { id: 'c-' + Date.now().toString(36), nombre, correo, sal, hash: await hashClave(clave, sal), creada: new Date().toISOString(), aceptaciones: aceptaciones() };
       DB.cuentas.push(c); iniciarSesion(c); toast(`Bienvenida o bienvenido, ${nombre}.`);
     } else {
+      if (NUBE) return entrarNube('ingreso', { correo, clave }, err);
       const c = DB.cuentas.find(x => x.correo === correo);
       if (!c || c.hash !== await hashClave(clave, c.sal)) return err('El correo o la contraseña no coinciden.');
       iniciarSesion(c);
@@ -685,6 +703,11 @@ function vistaAceptar() {
    que los guarda en el navegador (IndexedDB) y lo avisa. */
 // Se decide al arrancar preguntando a api/estado: en Vercel (o con doble clic) no hay servidor local.
 let SERVIDOR = false;
+// En Vercel con base de datos (modo nube) cada cuenta guarda todo en el servidor: entra desde
+// cualquier navegador y equipo y sigue donde iba. Los archivos van a Vercel Blob, privados.
+let NUBE = false;
+const api = (url, o = {}) => fetch(url, { credentials: 'same-origin', ...o,
+  headers: { 'X-Synthetica': '1', ...(typeof o.body === 'string' ? { 'Content-Type': 'application/json' } : {}), ...(o.headers || {}) } });
 const slug = t => (t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
 function carpetaDe(dueno) {
   if (dueno.startsWith('b-')) return 'borrador-' + dueno.toLowerCase();
@@ -722,8 +745,45 @@ const AdjuntosNavegador = (() => {
     borrar: async dueno => { const xs = await crudo(dueno); if (xs.length) await tx('readwrite', st => { xs.forEach(x => st.delete(x.id)); }); }
   };
 })();
-// Cada llamada usa el almacén que corresponde según haya o no servidor.
-const Adjuntos = new Proxy({}, { get: (_, k) => (SERVIDOR ? AdjuntosServidor : AdjuntosNavegador)[k] });
+/* En la nube el archivo sube directo del navegador a Vercel Blob (privado, dentro de la carpeta
+   de la cuenta) y aquí solo queda su ficha en DB.adjuntos. Se descarga por api/archivos con la
+   sesión de su dueño. Las operaciones van en fila para que «mover» no adelante a «guardar». */
+const AdjuntosNube = (() => {
+  let cola = Promise.resolve(), cliente = null;
+  const enCola = fn => (cola = cola.then(fn, fn));
+  const lista = () => DB.adjuntos || (DB.adjuntos = []);
+  const nombreSeguro = n => n.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w.\-]+/g, '_').slice(-120) || 'archivo';
+  return {
+    listar: async dueno => { await cola; return lista().filter(x => x.dueno === dueno).map(x => ({ ...x, url: `api/archivos?p=${encodeURIComponent(x.pathname)}&nombre=${encodeURIComponent(x.nombre)}` })); },
+    guardar: (dueno, files, clase = 'fuente') => enCola(async () => {
+      if (!files.length) return;
+      const { upload } = await (cliente ||= import('./vendor/blob-cliente.js'));
+      for (const f of files) {
+        try {
+          const r = await upload(`u/${UI.sesion}/${dueno}/${nombreSeguro(f.name)}`, f, { access: 'private', handleUploadUrl: 'api/subidas', contentType: f.type || 'application/octet-stream' });
+          lista().push({ id: r.pathname, dueno, clase, nombre: f.name, tipo: f.type, bytes: f.size, fecha: new Date().toISOString(), pathname: r.pathname });
+          save();
+        } catch (e) { console.error(e); toast(`No se pudo subir ${f.name}. Intenta de nuevo.`); }
+      }
+    }),
+    mover: (de, a) => enCola(() => { lista().forEach(x => { if (x.dueno === de) x.dueno = a; }); save(); }),
+    copiar: (de, a) => enCola(() => { lista().filter(x => x.dueno === de).forEach(x => lista().push({ ...x, id: x.pathname + ':' + a, dueno: a })); save(); }),
+    borrar: dueno => enCola(async () => {
+      const quitar = lista().filter(x => x.dueno === dueno);
+      DB.adjuntos = lista().filter(x => x.dueno !== dueno); save();
+      const huerfanos = [...new Set(quitar.map(x => x.pathname))].filter(p => !DB.adjuntos.some(x => x.pathname === p));
+      if (huerfanos.length) await api('api/archivos', { method: 'DELETE', body: JSON.stringify({ pathnames: huerfanos }) }).catch(() => {});
+    })
+  };
+})();
+// Cada llamada usa el almacén que corresponde: nube, servidor local o este navegador.
+const Adjuntos = new Proxy({}, { get: (_, k) => (NUBE ? AdjuntosNube : SERVIDOR ? AdjuntosServidor : AdjuntosNavegador)[k] });
+// Evidencia en el servidor del acuerdo de confidencialidad firmado al crear el proyecto.
+function registrarConsentimiento(id) {
+  if (!NUBE) return;
+  api('api/consentimiento', { method: 'POST', body: JSON.stringify({ proyecto_id: id }) }).then(r => r.ok ? r.json() : null)
+    .then(r => { const p = proyecto(id); if (r && p && p.consentimiento) { p.consentimiento.registrado = r.fecha; save(); } }).catch(() => {});
+}
 // Con servidor, la ficha del proyecto y el correo al equipo quedan también en su carpeta.
 function guardarFicha(p, correo) {
   if (!SERVIDOR || !p) return;
@@ -735,7 +795,8 @@ const tamano = b => b < 1024 * 1024 ? `${Math.max(1, Math.round(b / 1024))} KB` 
 function pintarAdjuntos() {
   document.querySelectorAll('[data-adjuntos]').forEach(async el => {
     const dueno = el.dataset.adjuntos; const xs = await Adjuntos.listar(dueno);
-    const donde = SERVIDOR
+    const donde = NUBE ? `<p class="small muted" style="margin-top:6px">Guardados de forma privada en tu cuenta de Synthetica.</p>`
+      : SERVIDOR
       ? `<p class="small muted" style="margin-top:6px">Guardados en <code>work/synthetica-plataforma/${esc(rutaCarpeta(dueno))}/fuentes/</code></p>`
       : location.protocol === 'file:' ? `<p class="small muted" style="margin-top:6px">Guardados en este navegador. Para tenerlos en la carpeta del proyecto, abre la plataforma con <code>python servidor.py</code>.</p>`
       : `<p class="small muted" style="margin-top:6px">Versión de demostración: los archivos quedan guardados en este navegador.</p>`;
@@ -849,7 +910,46 @@ UI.actor = UI.vista === 'interna' ? 'p8' : (UI.sesion || 'p1');
 // Con servidor, la base vive en disco (datos/base.json), como vivirá en PostgreSQL en producción;
 // localStorage queda solo como copia del navegador.
 let guardarBaseT = null;
+let VERSION_NUBE = 0, guardandoNube = null, otraVezNube = false;
+function guardarNube() {
+  guardarBaseT = null;
+  if (guardandoNube) { otraVezNube = true; return guardandoNube; }
+  otraVezNube = false;
+  guardandoNube = api('api/base', { method: 'PUT', body: JSON.stringify({ datos: DB, version: VERSION_NUBE }) })
+    .then(async r => {
+      if (r.status === 409) return recargarNube('Había cambios más nuevos desde otra pestaña o equipo; te mostramos lo último guardado.');
+      if (r.status === 401) return sesionVencida();
+      if (!r.ok) throw new Error(r.status);
+      VERSION_NUBE = (await r.json()).version;
+    })
+    .catch(() => { toast('No se pudo guardar. Revisa tu conexión; lo volvemos a intentar.'); otraVezNube = false; setTimeout(save, 5000); })
+    .finally(() => { guardandoNube = null; if (otraVezNube) guardarNube(); });
+  return guardandoNube;
+}
+async function cargarNube(cuenta) {
+  const r = await api('api/base'); if (!r.ok) throw new Error(r.status);
+  const b = await r.json();
+  DB = b.datos && b.datos.version === seed().version ? b.datos : seed();
+  VERSION_NUBE = b.version || 0;
+  DB.cuentas = [cuenta];
+  if (!DB.personas.some(x => x.id === cuenta.id)) DB.personas.push({ id: cuenta.id, nombre: cuenta.nombre, org: 'Cliente', cargo: '' });
+}
+async function recargarNube(aviso) {
+  const cuenta = cuentaActual(); if (!cuenta) return;
+  try { await cargarNube(cuenta); render(); if (aviso) toast(aviso); } catch (e) {}
+}
+function sesionVencida() { UI.sesion = null; DB = seed(); VERSION_NUBE = 0; location.hash = '#/ingresar'; render(); toast('Tu sesión terminó. Ingresa de nuevo.'); }
+// Al volver a la pestaña trae lo que se haya hecho desde otro equipo.
+document.addEventListener('visibilitychange', () => {
+  if (NUBE && UI.sesion && document.visibilityState === 'visible' && !guardandoNube && !guardarBaseT)
+    api('api/base').then(r => r.ok ? r.json() : null).then(b => { if (b && b.version > VERSION_NUBE && !guardandoNube && !guardarBaseT) recargarNube(); }).catch(() => {});
+});
 function save() {
+  if (typeof NUBE !== 'undefined' && NUBE) {
+    if (UI.sesion) { clearTimeout(guardarBaseT); guardarBaseT = setTimeout(guardarNube, 400); }
+    try { localStorage.setItem(STORE + '-ui', JSON.stringify({ vista: UI.vista, colapsada: !!UI.colapsada })); } catch (e) {}
+    return;
+  }
   if (typeof SERVIDOR !== 'undefined' && SERVIDOR) {
     clearTimeout(guardarBaseT);
     guardarBaseT = setTimeout(() => fetch('api/base', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(DB) }).catch(() => toast('No se pudo guardar en el servidor.')), 300);
@@ -877,12 +977,12 @@ const defEtapa = (p, n) => catalogo(p).find(e => e.n === n);
 const rolDe = (p, pid) => (p.miembros.find(m => m.persona === pid) || {}).rol;
 // MVP: quien se registra y crea el proyecto lo sigue entero. La vista interna es la del
 // analista de Synthetica (lanza corridas y ve el informe completo del motor).
-const puede = (p, accion) => accion === 'interna' ? UI.vista === 'interna' : true;
+const puede = (p, accion) => accion === 'interna' ? interna() : true;
 const actual = p => p.etapas.find(e => ['analista', 'pensando', 'detenido', 'revision', 'humana', 'vivo'].includes(e.estado)) || p.etapas.filter(e => e.estado === 'hecha').pop();
 const contratoDe = org => (DB.contratos || []).find(c => c.org === org && new Date(c.hasta) > new Date());
 const orgsConContrato = () => (DB.contratos || []).filter(c => new Date(c.hasta) > new Date()).map(c => c.org);
 const fmtD = d => new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(d + 'T12:00'));
-const internaDisponible = () => true;
+const internaDisponible = () => !NUBE || !!(cuentaActual() || {}).equipo;
 const interna = () => UI.vista === 'interna' && internaDisponible();
 
 /* Vueltas de una caja: cada «pedir otra vuelta» abre una nueva, más corta que la anterior. */
@@ -903,7 +1003,7 @@ function correoEquipo(p, asunto, lineas) {
   const correo = { proyecto: p.id, para: CORREO_EQUIPO, asunto, cuerpo: lineas.filter(Boolean).join('\n'), fecha: new Date().toISOString() };
   (DB.correos || (DB.correos = [])).unshift(correo);
   guardarFicha(p, correo);
-  if (SERVIDOR) fetch('api/correo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ asunto, cuerpo: correo.cuerpo }) })
+  if (SERVIDOR || NUBE) api('api/correo', { method: 'POST', body: JSON.stringify({ asunto, cuerpo: correo.cuerpo }) })
     .then(r => r.json()).then(res => { correo.envio = res; save(); }).catch(() => { correo.envio = { enviado: false, motivo: 'El servidor no respondió' }; save(); });
 }
 function fichaProyecto(p) {
@@ -1364,7 +1464,7 @@ function renderTop(crumbs) {
   $('#crumbs').innerHTML = crumbs.map((c, i) => i < crumbs.length - 1 ? `<a href="${c[1]}">${esc(c[0])}</a><span aria-hidden="true">/</span>` : `<strong>${esc(c[0])}</strong>`).join('');
   const dis = false;
   $('#who').innerHTML = `
-    <div class="seg" role="group" aria-label="Vista">
+    <div class="seg" role="group" aria-label="Vista" ${internaDisponible() ? '' : 'style="display:none"'}>
       <button aria-pressed="${UI.vista === 'cliente'}" data-v="cliente">Vista del cliente</button>
       <button aria-pressed="${UI.vista === 'interna'}" data-v="interna" ${dis ? 'disabled title="Solo el equipo Synthetica ve la vista interna"' : ''}>Vista interna</button>
     </div>
@@ -1382,7 +1482,7 @@ function todoHTML(x) {
    versión con servidor (archivos en carpetas). Son dos «sitios» distintos para el
    navegador: se exporta un archivo en una y se importa en la otra. */
 function traspasoHTML() {
-  if (!SERVIDOR && location.protocol !== 'file:') return '';  // versión publicada de demostración
+  if (NUBE || (!SERVIDOR && location.protocol !== 'file:')) return '';  // en la nube no hay nada que traspasar
   return SERVIDOR
     ? `<div class="card" style="margin-top:16px"><div class="row between"><div><h3>¿Creaste proyectos abriendo la plataforma con doble clic?</h3><p class="sub">Tráelos aquí para que sus archivos queden en la carpeta de cada proyecto.</p></div>
         <label class="btn small">Importar exportación<input type="file" id="importar" accept=".json,application/json" class="sr"></label></div></div>`
@@ -1455,7 +1555,7 @@ function vistaValidar() {
     <p class="lede">Informes listos para auditar y escenarios listos para que los pruebes.${interna() ? ' En la vista interna también ves lo que hay que lanzar desde la consola.' : ''}</p>
     <div class="todo-strip">${lista.map(todoHTML).join('') || '<div class="empty">No tienes nada pendiente. Te escribiremos cuando algo esté listo.</div>'}</div>
     ${interna() ? `<div class="card" style="margin-top:22px"><h2>Correos al equipo</h2><p class="sub">Todo lo que llega a ${CORREO_EQUIPO} para lanzar y revisar cada estudio en local. En la plataforma real los envía el servidor; aquí puedes abrirlos en tu correo.</p>
-      ${(DB.correos || []).map(c => `<details class="note" style="margin-top:8px"><summary><strong>${esc(c.asunto)}</strong> <span class="muted small">· ${fmtF(c.fecha)}</span> ${!SERVIDOR ? '<span class="chip">Solo en la maqueta</span>' : !c.envio ? '<span class="chip">Enviando…</span>' : c.envio.enviado ? '<span class="chip green">Enviado</span>' : `<span class="chip red" title="${esc(c.envio.motivo || '')}">No enviado</span>`}</summary>
+      ${(DB.correos || []).map(c => `<details class="note" style="margin-top:8px"><summary><strong>${esc(c.asunto)}</strong> <span class="muted small">· ${fmtF(c.fecha)}</span> ${!SERVIDOR && !NUBE ? '<span class="chip">Solo en la maqueta</span>' : !c.envio ? '<span class="chip">Enviando…</span>' : c.envio.enviado ? '<span class="chip green">Enviado</span>' : `<span class="chip red" title="${esc(c.envio.motivo || '')}">No enviado</span>`}</summary>
         ${c.envio && !c.envio.enviado ? `<p class="small" style="color:var(--red);margin-top:6px">${esc(c.envio.motivo || '')}</p>` : ''}
         <pre style="white-space:pre-wrap;font:12px/1.5 ui-monospace,Consolas,monospace;margin:8px 0">${esc(c.cuerpo)}</pre>
         <a class="btn small" href="mailto:${c.para}?subject=${encodeURIComponent(c.asunto)}&body=${encodeURIComponent(c.cuerpo)}">Abrir en tu correo</a></details>`).join('') || '<p class="small muted" style="margin-top:8px">Todavía no se ha enviado ninguno.</p>'}</div>` : ''}`;
@@ -2367,7 +2467,7 @@ function wireWizard() {
       const np = proyectoDesdeMotor(mp, { id, cuenta: cta.id, consentimiento, cliente: w.cliente, nombre: w.nombre.trim(), url: w.url.trim(), creado: new Date().toISOString(), miembros: w.miembros, deriva_de: w.deriva || null,
         fuentes: fuentesDe(w) });
       DB.proyectos.unshift(np); sincronizarProyecto(np);
-      correoEquipo(np, `Nuevo proyecto para ejecutar: ${np.nombre}`, fichaProyecto(np)); guardarAdjuntosDe(w, id); quitarBorrador(w);
+      correoEquipo(np, `Nuevo proyecto para ejecutar: ${np.nombre}`, fichaProyecto(np)); registrarConsentimiento(id); guardarAdjuntosDe(w, id); quitarBorrador(w);
       UI.wizard = null; UI.recienCreado = id; save(); location.hash = '#/p/' + id; return;
     }
     const cat = TIPOS[w.tipo].etapas; const now = new Date().toISOString(); const primera = cat[0];
@@ -2377,7 +2477,7 @@ function wireWizard() {
       etapas: cat.map(e => ({ n: e.n, estado: e === primera ? estado0 : 'cola', inicio: e === primera && estado0 !== 'analista' ? now : null, fin: null })) });
     if (w.tipo === 'completo') avisar(id, 'equipo', `Un proyecto nuevo acaba de iniciar: ${w.nombre.trim()}`);
     correoEquipo(proyecto(id), `Nuevo proyecto para ejecutar: ${w.nombre.trim()}`, fichaProyecto(proyecto(id)));
-    guardarAdjuntosDe(w, id); quitarBorrador(w);
+    registrarConsentimiento(id); guardarAdjuntosDe(w, id); quitarBorrador(w);
     UI.wizard = null; UI.recienCreado = id; save(); location.hash = '#/p/' + id;
   };
 }
@@ -2408,7 +2508,14 @@ function render() {
     if (!c && ruta[0] !== 'legal') wireIngreso(ruta[0] === 'crear-cuenta' ? 'crear' : 'ingresar');
     if (c && ruta[0] !== 'legal') {
       $('#ac-salir').onclick = cerrarSesion;
-      $('#ac-si').onclick = () => { if (!$('#ac-acepto').checked) return toast('Marca la casilla para continuar.'); c.aceptaciones = [...(c.aceptaciones || []), ...aceptaciones()]; save(); render(); };
+      $('#ac-si').onclick = async () => {
+        if (!$('#ac-acepto').checked) return toast('Marca la casilla para continuar.');
+        if (NUBE) {
+          const r = await api('api/cuenta?accion=aceptar', { method: 'POST', body: JSON.stringify({ acepta: true }) }).catch(() => null);
+          if (!r || !r.ok) return toast('No pudimos registrar tu aceptación. Intenta de nuevo.');
+          c.aceptaciones = (await r.json()).cuenta.aceptaciones; return render();
+        }
+        c.aceptaciones = [...(c.aceptaciones || []), ...aceptaciones()]; save(); render(); };
     }
     document.querySelectorAll('[data-legal]').forEach(a => a.onclick = ev => { ev.preventDefault(); verLegal(a.dataset.legal); });
     return;
@@ -2503,7 +2610,19 @@ setInterval(() => {
 }, 20000);
 
 (async () => {
-  try { const r = await fetch('api/estado', { cache: 'no-store' }); SERVIDOR = r.ok && (await r.json()).ok === true; } catch (e) { SERVIDOR = false; }
+  try { const r = await fetch('api/estado', { cache: 'no-store' }); const j = r.ok ? await r.json() : {}; NUBE = j.modo === 'nube'; SERVIDOR = !NUBE && j.ok === true; } catch (e) { SERVIDOR = false; }
+  if (NUBE) {
+    // Nada de la cuenta queda en el navegador: todo se trae del servidor con la sesión.
+    try { localStorage.removeItem(STORE); localStorage.removeItem(STORE + '-sesion'); } catch (e) {}
+    DB = seed(); UI.sesion = null;
+    try {
+      const r = await api('api/cuenta?accion=yo');
+      if (r.ok) { const { cuenta } = await r.json(); await cargarNube(cuenta); UI.sesion = cuenta.id; }
+    } catch (e) {}
+    if (!internaDisponible()) UI.vista = 'cliente';
+    UI.actor = interna() ? 'p8' : (UI.sesion || 'p1');
+    return render();
+  }
   if (SERVIDOR) {
     try { const r = await fetch('api/base'); const b = r.ok ? await r.json() : null; if (b && b.version === DB.version) DB = b; } catch (e) {}
   }

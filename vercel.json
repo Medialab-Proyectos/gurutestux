@@ -38,5 +38,16 @@
         }
       ]
     }
-  ]
+  ],
+  "rewrites": [
+    {
+      "source": "/work/synthetica-plataforma/api/:ruta",
+      "destination": "/api/synthetica/:ruta"
+    }
+  ],
+  "functions": {
+    "api/synthetica/*.js": {
+      "maxDuration": 30
+    }
+  }
 }

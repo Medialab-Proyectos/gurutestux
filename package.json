@@ -1,0 +1,20 @@
+{
+  "name": "gurutestux",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "synthetica:vendor": "esbuild work/synthetica-plataforma/vendor/entrada-blob.js --bundle --format=esm --minify --outfile=work/synthetica-plataforma/vendor/blob-cliente.js",
+    "synthetica:local": "node work/synthetica-plataforma/prueba-local.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.8.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.3.0",
+    "esbuild": "^0.25.0"
+  }
+}
