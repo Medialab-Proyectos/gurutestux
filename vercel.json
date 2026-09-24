@@ -5,6 +5,11 @@
       "source": "/",
       "destination": "/Emiratos/",
       "permanent": false
+    },
+    {
+      "source": "/synthetica",
+      "destination": "/work/synthetica-plataforma/",
+      "permanent": false
     }
   ],
   "headers": [

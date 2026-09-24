@@ -29,6 +29,8 @@ VersionPrevia/
 Francia/
 Conexion/
 CONTEXT.md
+# Material de un cliente (presentación y reuniones): no es público.
+Courvus/
 
 # --- Guiones de validación --------------------------------------------------
 # Llevan escritas las direcciones de los entornos de QA.
@@ -41,6 +43,18 @@ _revision/
 # --- Evaluación sintética interna -------------------------------------------
 # Perfiles, recorridos e informes internos; no publicar en el repositorio público.
 _agentes_sinteticos/
+
+# --- Documentos de clientes de Synthetica -----------------------------------
+# Lo que los clientes suben y lo que se descarga aquí para procesarlo no se sube
+# a GitHub, ni en desarrollo ni en producción. El código de la plataforma sí puede.
+work/synthetica-plataforma/proyectos/
+work/synthetica-plataforma/descargas/
+# Lo que el conector lee del motor: nombres y textos de fuentes, hallazgos y rutas de estudios.
+work/synthetica-plataforma/datos-motor.js
+# La base de datos local de la plataforma (proyectos, auditorías, correos).
+work/synthetica-plataforma/datos/
+# Exportaciones de la plataforma (datos y archivos en base64).
+synthetica-exportacion-*.json
 
 # --- Ruido del sistema ------------------------------------------------------
 node_modules/
