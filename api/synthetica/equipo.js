@@ -5,11 +5,20 @@
 //   POST /api/equipo?accion=etapa { cuenta, id, n, estado: 'en_curso' | 'progreso' | 'lista', logros?, nota?, detalle?, resultado?, motor? }
 //     progreso: solo actualiza «Ahora: …» sin cambiar la etapa. resultado: hallazgos del estudio para auditar.
 import { get } from '@vercel/blob';
+import crypto from 'node:crypto';
 import { Readable } from 'node:stream';
 import { query, esquema } from '../_synthetica/db.js';
 import { usuarioDe } from '../_synthetica/sesion.js';
 import { responder, exigirOrigenPropio, cuerpo } from '../_synthetica/http.js';
 
+// El administrador entra sin cuenta con la llave SYNTHETICA_LLAVE_ADMIN (la usa operador.py).
+function esAdmin(req) {
+  const llave = process.env.SYNTHETICA_LLAVE_ADMIN || '';
+  const m = String(req.headers.authorization || '').match(/^Bearer (.+)$/);
+  if (llave.length < 32 || !m) return false;
+  const a = crypto.createHash('sha256').update(m[1]).digest(), b = crypto.createHash('sha256').update(llave).digest();
+  return crypto.timingSafeEqual(a, b);
+}
 const esEquipo = u => !!u && String(process.env.CORREOS_EQUIPO || '').toLowerCase().split(',').map(x => x.trim()).filter(Boolean).includes(u.correo);
 
 function resumen(p) {
@@ -67,9 +76,10 @@ export default async function handler(req, res) {
   if (!exigirOrigenPropio(req, res)) return;
   try {
     await esquema();
-    const u = await usuarioDe(req);
-    if (!u) return responder(res, 401, { error: 'Sin sesión' });
-    if (!esEquipo(u)) return responder(res, 403, { error: 'Solo el equipo Synthetica' });
+    const admin = esAdmin(req);
+    const u = admin ? null : await usuarioDe(req);
+    if (!admin && !u) return responder(res, 401, { error: 'Sin sesión' });
+    if (!admin && !esEquipo(u)) return responder(res, 403, { error: 'Solo el equipo Synthetica' });
     const q = new URL(req.url, 'http://x').searchParams;
     const accion = q.get('accion');
 
