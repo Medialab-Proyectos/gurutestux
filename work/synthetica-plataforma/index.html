@@ -137,6 +137,15 @@ a { color: var(--blue); }
 .person strong { display: block; font-size: 13px; }
 .person small { display: block; color: var(--muted); font-size: 11px; }
 .empty { padding: 26px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); text-align: center; }
+.extension { margin: 10px 0 0; padding: 8px 12px; border-radius: 8px; background: var(--soft-orange); font-size: 14px; }
+.ahora { margin: 8px 0 0; font-size: 14px; }
+.aviso-paso { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 18px; padding: 14px 16px; border: 1px solid var(--brand); border-radius: 12px; background: var(--soft-blue); font-size: 15px; line-height: 1.5; }
+.aviso-icono { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: #fff; font: 700 14px/1 Georgia, serif; }
+.archivos-elegidos { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.archivos-elegidos li { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 4px 4px 4px 10px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; }
+.archivos-elegidos span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.quitar-archivo { flex: none; width: 24px; height: 24px; border: 0; border-radius: 50%; background: transparent; color: var(--muted); font-size: 17px; line-height: 1; cursor: pointer; }
+.quitar-archivo:hover, .quitar-archivo:focus-visible { background: var(--soft-orange); color: var(--red); }
 .note-box { padding: 12px 14px; border-left: 4px solid var(--brand); border-radius: 0 8px 8px 0; background: var(--soft-blue); font-size: 13px; }
 .note-box.green { border-color: var(--green); background: var(--soft-green); }
 .note-box.orange { border-color: var(--orange); background: var(--soft-orange); }
@@ -457,7 +466,7 @@ const TIPOS = {
         hace: ['Protopersonas a partir de tu público', 'Recorridos de las tareas principales', 'Contextos de uso (móvil, interrupciones, prisa)', 'Plan muestral reproducible'],
         entrega: 'Validas que las personas y las tareas se parezcan a tu realidad.' },
       { n: 2, nombre: 'Ejecución de los agentes', corto: 'Ejecución', min: 1440, modo: 'auto',
-        hace: ['Recorridos con cada agente', 'KLM y tiempos por paso', 'Grabación y mirada simulada', 'Tabla de severidad interna'],
+        hace: ['Recorridos con cada agente', 'KLM y tiempos por paso', 'Grabación y mirada simulada', 'Hallazgos con su evidencia'],
         entrega: 'Nada que validar: los agentes trabajan.' },
       { n: 3, nombre: 'Informe y ajustes', corto: 'Informe', min: 240, modo: 'auto',
         hace: ['Recomendaciones UX y UI con evidencia', 'Auditoría experta', 'Comparación con el estudio anterior'],
@@ -721,7 +730,8 @@ const AdjuntosServidor = {
     .catch(() => toast('No se pudieron guardar los archivos en la carpeta del proyecto.')),
   mover: (de, a) => fetch(`api/mover?de=${encodeURIComponent(carpetaDe(de))}&a=${encodeURIComponent(carpetaDe(a))}`, { method: 'POST' }).catch(() => {}),
   copiar: (de, a) => fetch(`api/copiar?de=${encodeURIComponent(carpetaDe(de))}&a=${encodeURIComponent(carpetaDe(a))}`, { method: 'POST' }).catch(() => {}),
-  borrar: dueno => fetch(`api/adjuntos?dueno=${encodeURIComponent(carpetaDe(dueno))}`, { method: 'DELETE' }).catch(() => {})
+  borrar: dueno => fetch(`api/adjuntos?dueno=${encodeURIComponent(carpetaDe(dueno))}`, { method: 'DELETE' }).catch(() => {}),
+  quitar: (dueno, x) => fetch(`api/adjuntos?dueno=${encodeURIComponent(carpetaDe(dueno))}&nombre=${encodeURIComponent(x.nombre)}`, { method: 'DELETE' }).catch(() => {})
 };
 const AdjuntosNavegador = (() => {
   let dbp = null;
@@ -742,7 +752,8 @@ const AdjuntosNavegador = (() => {
     guardar: (dueno, files, clase = 'fuente') => files.length ? tx('readwrite', st => { files.forEach(f => st.put({ id: `${dueno}:${Date.now()}:${Math.random().toString(36).slice(2)}`, dueno, clase, nombre: f.name, tipo: f.type, bytes: f.size, fecha: new Date().toISOString(), blob: f })); }).catch(() => toast('No se pudieron guardar los archivos en este navegador.')) : Promise.resolve(),
     mover: async (de, a) => { const xs = await crudo(de); if (xs.length) await tx('readwrite', st => { xs.forEach(x => { st.delete(x.id); st.put({ ...x, dueno: a }); }); }); },
     copiar: async (de, a) => { const xs = await crudo(de); if (xs.length) await tx('readwrite', st => { xs.forEach(x => st.put({ ...x, id: `${a}:${Date.now()}:${Math.random().toString(36).slice(2)}`, dueno: a })); }); },
-    borrar: async dueno => { const xs = await crudo(dueno); if (xs.length) await tx('readwrite', st => { xs.forEach(x => st.delete(x.id)); }); }
+    borrar: async dueno => { const xs = await crudo(dueno); if (xs.length) await tx('readwrite', st => { xs.forEach(x => st.delete(x.id)); }); },
+    quitar: (dueno, x) => tx('readwrite', st => { st.delete(x.id); }).catch(() => {})
   };
 })();
 /* En la nube el archivo sube directo del navegador a Vercel Blob (privado, dentro de la carpeta
@@ -768,6 +779,10 @@ const AdjuntosNube = (() => {
     }),
     mover: (de, a) => enCola(() => { lista().forEach(x => { if (x.dueno === de) x.dueno = a; }); save(); }),
     copiar: (de, a) => enCola(() => { lista().filter(x => x.dueno === de).forEach(x => lista().push({ ...x, id: x.pathname + ':' + a, dueno: a })); save(); }),
+    quitar: (dueno, x) => enCola(async () => {
+      DB.adjuntos = lista().filter(y => y.id !== x.id); save();
+      if (!DB.adjuntos.some(y => y.pathname === x.pathname)) await api('api/archivos', { method: 'DELETE', body: JSON.stringify({ pathnames: [x.pathname] }) }).catch(() => {});
+    }),
     borrar: dueno => enCola(async () => {
       const quitar = lista().filter(x => x.dueno === dueno);
       DB.adjuntos = lista().filter(x => x.dueno !== dueno); save();
@@ -801,9 +816,26 @@ function pintarAdjuntos() {
       : location.protocol === 'file:' ? `<p class="small muted" style="margin-top:6px">Guardados en este navegador. Para tenerlos en la carpeta del proyecto, abre la plataforma con <code>python servidor.py</code>.</p>`
       : `<p class="small muted" style="margin-top:6px">Versión de demostración: los archivos quedan guardados en este navegador.</p>`;
     el.innerHTML = xs.length
-      ? `<ul class="plain" style="margin:0">${xs.map(x => `<li><a href="${esc(x.url)}" download="${esc(x.nombre)}">${esc(x.nombre.replace(/^marca--/, ''))}</a> <span class="muted small">· ${tamano(x.bytes)}${x.clase === 'marca' ? ' · manual de marca' : ''} · ${fmtF(x.fecha)}</span></li>`).join('')}</ul>${donde}`
+      ? `<ul class="plain" style="margin:0">${xs.map((x, i) => `<li><a href="${esc(x.url)}" download="${esc(x.nombre)}">${esc(x.nombre.replace(/^marca--/, ''))}</a> <span class="muted small">· ${tamano(x.bytes)}${x.clase === 'marca' ? ' · manual de marca' : ''} · ${fmtF(x.fecha)}</span>${dueno.startsWith('b-') ? '' : ` <button class="btn small" type="button" data-quitar-doc="${i}" title="Quitar este documento del proyecto">Quitar</button>`}</li>`).join('')}</ul>${donde}`
       : el.dataset.vacio || '<span class="muted small">Sin archivos.</span>';
+    el.querySelectorAll('[data-quitar-doc]').forEach(b => b.onclick = () => quitarDocumento(dueno, xs[+b.dataset.quitarDoc]));
   });
+}
+
+async function quitarDocumento(pid, x) {
+  const nombre = x.nombre.replace(/^marca--/, '');
+  if (!confirm(`¿Quitar «${nombre}» del proyecto? Ya no lo usaremos en el estudio. Si te equivocaste de archivo, luego sube el correcto al volver a ejecutar.`)) return;
+  await Adjuntos.quitar(pid, x);
+  const p = proyecto(pid);
+  if (p) {
+    const f = p.fuentes || (p.fuentes = {});
+    if (x.clase === 'marca') f.manual = ''; else f.archivos = (f.archivos || []).filter(n => n !== nombre);
+    f.nuevas = (f.nuevas || []).filter(n => n.enlace || n.nombre !== nombre);
+    (f.quitados || (f.quitados = [])).push({ nombre, fecha: new Date().toISOString() });
+    correoEquipo(p, `Documento quitado: ${p.nombre}`, [`La persona quitó «${nombre}» del proyecto ${p.nombre}. No lo uses en el estudio.`, '', ...fichaProyecto(p)]);
+    save();
+  }
+  toast(`Quitamos ${nombre}.`); render();
 }
 
 /* ---------------------------------------------------------------- Datos */
@@ -831,6 +863,7 @@ const MOTOR = window.SYNTHETICA_MOTOR || null;
 const motorProyecto = id => MOTOR && MOTOR.proyectos.find(x => x.id === id);
 const estudiosDe = id => MOTOR ? MOTOR.estudios.filter(e => e.proyecto_id === id) : [];
 const estudioDe = p => {
+  if (p.resultado_motor) return p.resultado_motor;
   if (!p.motor) return null;
   const es = estudiosDe(p.motor.proyecto_id);
   return es.find(e => e.carpeta === p.motor.estudio) || es[es.length - 1] || null;
@@ -868,10 +901,10 @@ function proyectoDesdeMotor(mp, extra = {}) {
   }, extra);
 }
 function sincronizarProyecto(p) {
-  const est = estudioDe(p); const mp = motorProyecto(p.motor.proyecto_id);
-  if (!est || !mp) return;
+  const est = estudioDe(p); const mp = p.motor && motorProyecto(p.motor.proyecto_id);
+  if (!est || (!mp && !p.resultado_motor)) return;
   const e1 = p.etapas.find(x => x.n === 1), e3 = p.etapas.find(x => x.n === 3);
-  e1.logros = [`${mp.perfiles.length} perfiles, ${mp.recorridos.length} recorridos y ${mp.contextos.length} contextos de uso, leídos del motor`];
+  if (mp) e1.logros = [`${mp.perfiles.length} perfiles, ${mp.recorridos.length} recorridos y ${mp.contextos.length} contextos de uso, leídos del motor`];
   const r = est.resumen || {};
   e3.logros = [
     `${est.hallazgos.length} hallazgos del estudio del ${fmtF(est.fecha_hora)}`,
@@ -932,6 +965,7 @@ async function cargarNube(cuenta) {
   DB = b.datos && b.datos.version === seed().version ? b.datos : seed();
   VERSION_NUBE = b.version || 0;
   DB.cuentas = [cuenta];
+  DB.proyectos.filter(p => p.resultado_motor).forEach(sincronizarProyecto);
   if (!DB.personas.some(x => x.id === cuenta.id)) DB.personas.push({ id: cuenta.id, nombre: cuenta.nombre, org: 'Cliente', cargo: '' });
 }
 async function recargarNube(aviso) {
@@ -939,11 +973,15 @@ async function recargarNube(aviso) {
   try { await cargarNube(cuenta); render(); if (aviso) toast(aviso); } catch (e) {}
 }
 function sesionVencida() { UI.sesion = null; DB = seed(); VERSION_NUBE = 0; location.hash = '#/ingresar'; render(); toast('Tu sesión terminó. Ingresa de nuevo.'); }
-// Al volver a la pestaña trae lo que se haya hecho desde otro equipo.
-document.addEventListener('visibilitychange', () => {
-  if (NUBE && UI.sesion && document.visibilityState === 'visible' && !guardandoNube && !guardarBaseT)
-    api('api/base').then(r => r.ok ? r.json() : null).then(b => { if (b && b.version > VERSION_NUBE && !guardandoNube && !guardarBaseT) recargarNube(); }).catch(() => {});
-});
+// Cada minuto, y al volver a la pestaña, trae lo nuevo (el avance que reporta el analista o lo hecho
+// desde otro equipo) sin recargar la página. No interrumpe si la persona está escribiendo.
+function refrescarNube() {
+  if (!NUBE || !UI.sesion || guardandoNube || guardarBaseT || document.visibilityState !== 'visible') return;
+  if (UI.wizard || (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))) return;
+  api('api/base').then(r => r.ok ? r.json() : null).then(b => { if (b && b.version > VERSION_NUBE && !guardandoNube && !guardarBaseT) recargarNube(); }).catch(() => {});
+}
+document.addEventListener('visibilitychange', refrescarNube);
+setInterval(refrescarNube, 60000);
 function save() {
   if (typeof NUBE !== 'undefined' && NUBE) {
     if (UI.sesion) { clearTimeout(guardarBaseT); guardarBaseT = setTimeout(guardarNube, 400); }
@@ -994,8 +1032,16 @@ function progresoEtapa(p, e) {
   const m = minEtapa(p, e);
   if (e.estado !== 'pensando' || !m) return null;
   const pas = (Date.now() - new Date(e.inicio)) / MIN;
-  return { pct: Math.min(99, Math.max(1, pas / m * 100)), restante: Math.max(0, m - pas), fin: new Date(new Date(e.inicio).getTime() + m * MIN).toISOString() };
+  // En línea la etapa termina cuando llega el resultado real: si el tiempo se cumple, se extiende 1 h.
+  const extendido = NUBE && pas >= m ? Math.floor((pas - m) / 60) + 1 : 0;
+  const total = m + extendido * 60;
+  return { pct: Math.min(99, Math.max(1, pas / total * 100)), restante: Math.max(0, total - pas), fin: new Date(new Date(e.inicio).getTime() + total * MIN).toISOString(), extendido };
 }
+const RAZON_EXTENSION = {
+  sintetico: ['para leer mejor tus fuentes', 'para identificar mejor tu producto y armar recorridos más fieles', 'para que los agentes completen sus recorridos', 'para terminar el informe con toda la evidencia'],
+  completo: 'para afinar mejor este escenario', seguimiento: 'para reunir más datos'
+};
+const razonExtension = (p, n) => { const r = RAZON_EXTENSION[p.tipo]; return Array.isArray(r) ? r[n] || r[r.length - 1] : r || 'para hacerlo mejor'; };
 // Cada proyecto nuevo y cada ejecución pedida mandan toda la información al equipo,
 // para lanzarla y revisarla en local. En la plataforma real lo envía el servidor.
 const CORREO_EQUIPO = 'hello@medialab.design';
@@ -1012,7 +1058,7 @@ function fichaProyecto(p) {
     `Proyecto: ${p.nombre}`, `Tipo: ${TIPOS[p.tipo].nombre}`, p.url ? `URL: ${p.url}` : '', `Creado: ${fmtF(p.creado)}`,
     p.motor ? `Proyecto del motor: ${p.motor.proyecto_id}` : '',
     f.descripcion ? `Descripción: ${f.descripcion}` : '',
-    en.alcance ? `Alcance: ${en.alcance}` : '', en.analizar ? `Qué quiere analizar: ${en.analizar}` : '', en.esperas ? `Qué espera obtener: ${en.esperas}` : '',
+    en.alcance ? `Alcance: ${en.alcance}` : '', en.analizar ? `Problemas que ya identificó: ${en.analizar}` : '', en.esperas ? `Qué espera obtener: ${en.esperas}` : '',
     en.storybook ? `Sistema de diseño / Storybook: ${en.storybook}` : '', en.secciones ? `Secciones útiles: ${en.secciones}` : '',
     p.deriva_de ? `Rehace el proyecto: ${(proyecto(p.deriva_de) || {}).nombre || p.deriva_de}` : '',
     en.objetivo ? `Objetivo: ${en.objetivo}` : '', en.intencion ? `Intención y condiciones de negocio: ${en.intencion}` : '', en.flujo ? `Flujo actual: ${en.flujo}` : '',
@@ -1116,7 +1162,9 @@ function completarEtapa(p, e) {
     ['serena', 'contraste', 'calida'].forEach((st, i) => DB.variantes.push({ id: 'v' + Date.now() + i, proyecto: p.id, etapa: e.n, letra: 'ABC'[i], nombre: ['Serena', 'Contraste alto', 'Cálida'][i], estilo: st, votos: [1, 2, 0][i], razon: 'Voto de ejemplo generado por la maqueta.' }));
   }
 }
+// En línea las etapas no terminan solas: esperan el resultado real que publica el analista.
 function tick() {
+  if (NUBE) return false;
   let cambio = false;
   for (const p of DB.proyectos) for (const e of p.etapas) {
     if (e.estado !== 'pensando' || p.cancelado) continue;
@@ -1420,6 +1468,7 @@ function rehacer(pid) {
   };
 }
 function adelantar(pid) {
+  if (NUBE) return;
   const p = proyecto(pid); const e = p.etapas.find(x => x.estado === 'pensando');
   if (!e) return; completarEtapa(p, e); save(); render();
 }
@@ -1451,11 +1500,11 @@ function renderSide(ruta) {
       }).join('') || '<p class="muted small" style="padding:0 10px">Todavía no tienes proyectos.</p>'}</div>
     </div>
     <div class="side-foot">
-      <p>La <strong>vista interna</strong> (arriba a la derecha) es la del analista de Synthetica.</p>
+      ${NUBE ? '' : '<p>La <strong>vista interna</strong> (arriba a la derecha) es la del analista de Synthetica.</p>'}
       <p><a href="#/legal/terminos">Términos</a> · <a href="#/legal/privacidad">Privacidad</a></p>
-      <button class="btn small" id="reset">Reiniciar la maqueta</button>
+      ${NUBE ? '' : '<button class="btn small" id="reset">Reiniciar la maqueta</button>'}
     </div>`;
-  $('#reset').onclick = reiniciar;
+  const reset = document.getElementById('reset'); if (reset) reset.onclick = reiniciar;
   $('#colapsar').onclick = () => { UI.colapsada = !UI.colapsada; save(); render(); };
 }
 function aplicarColapso() { document.querySelector('.app').classList.toggle('colapsada', !!UI.colapsada); }
@@ -1626,7 +1675,7 @@ function vistaCanvas(p) {
         <div class="cv-pri"><strong>Principios y procesos</strong><ul>${c.pri.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
         <div class="cv-proto"><span class="cv-tok">${c.tok}</span><strong>${e.n === 9 ? 'Salida consolidada' : 'Prototipo creado'}</strong><span>${esc(e.prototipo || (e.estado === 'cola' ? 'Pendiente' : '—'))}</span></div>
         <div class="cv-eval"><div>${evalVis}${evalTxt}</div></div>
-        <div class="cv-actions">${verCaja}${vivo}${e.estado === 'pensando' ? `<button class="btn small" data-adelantar="${p.id}">Adelantar (maqueta)</button>` : ''}</div>
+        <div class="cv-actions">${verCaja}${vivo}${e.estado === 'pensando' && !NUBE ? `<button class="btn small" data-adelantar="${p.id}">Adelantar (maqueta)</button>` : ''}</div>
         <svg class="cv-flow" viewBox="0 0 560 402" aria-hidden="true">
           <defs><marker id="cv-a-${p.id}-${e.n}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="var(--muted)"></path></marker></defs>
           <path d="M138 47 H158" marker-end="url(#cv-a-${p.id}-${e.n})"></path>
@@ -1712,13 +1761,15 @@ function etapaHTML(p, e) {
       <div class="thinking" style="margin-top:14px">
         <div class="row"><span class="pulse" aria-hidden="true"><i></i><i></i><i></i></span><strong>Synthetica está pensando</strong></div>
         <div class="bar" role="progressbar" aria-valuenow="${Math.round(pr.pct)}" aria-valuemin="0" aria-valuemax="100" aria-label="Avance de la etapa"><i data-etapa="${p.id}:${e.n}" style="width:${pr.pct}%"></i></div>
-        <p class="small">Empezó ${fmtF(e.inicio)}${rondas(e).length > 1 ? `, vuelta ${rondas(e).length}` : ''}. ${rondas(e).length > 1 ? `Como ya conocemos tu producto, esta vuelta tarda unas ${dur(minEtapa(p, e))}` : `${p.tipo === 'completo' ? 'Este escenario' : 'Esta etapa'} tarda ${esc(d.rango || 'en promedio ' + dur(d.min))}`}; debería estar lista hacia <strong>${fmtH(pr.fin)}</strong>. Te escribiremos en cuanto esté lista.</p>
+        ${pr.extendido ? `<p class="extension">Extendimos ${pr.extendido === 1 ? '1 hora' : pr.extendido + ' horas'} ${esc(razonExtension(p, e.n))}. Ahora debería estar lista hacia <strong>${fmtH(pr.fin)}</strong>.</p>` : ''}
+        ${e.detalle ? `<p class="ahora"><strong>Ahora:</strong> ${esc(e.detalle)} <span class="muted">· ${fmtF(e.detalle_fecha)}</span></p>` : ''}
+        <p class="small">Empezó ${fmtF(e.inicio)}${rondas(e).length > 1 ? `, vuelta ${rondas(e).length}` : ''}. ${rondas(e).length > 1 ? `Como ya conocemos tu producto, esta vuelta tarda unas ${dur(minEtapa(p, e))}` : `${p.tipo === 'completo' ? 'Este escenario' : 'Esta etapa'} tarda ${esc(d.rango || 'en promedio ' + dur(d.min))}`}${pr.extendido ? '' : `; debería estar lista hacia <strong>${fmtH(pr.fin)}</strong>`}. Te escribiremos en cuanto esté lista.</p>
         <ul class="checklist">${d.hace.map((h, i) => `<li class="${i < k ? 'done' : i === k ? 'now' : ''}">${esc(h)}</li>`).join('')}</ul>
       </div>
       ${(e.n === 0 && p.tipo === 'sintetico' && !p.motor) || (e.n === 1 && p.tipo === 'completo') ? `<h3 style="margin-top:16px">Lo que nos diste</h3>${entradasHTML(p)}` : ''}
       <p class="small muted" style="margin-top:12px">Mientras tanto puedes dejar notas: las leemos antes de cerrar la etapa.</p>
       ${interna() ? `<div class="internal" style="margin-top:12px"><b>Interno.</b> Corrida del motor ligada a esta etapa: <code>${p.id}-e${e.n}</code>. ${p.tipo === 'sintetico' ? 'Motor completo: KLM, grabación y mirada simulada.' : 'Motor ligero: 3–5 agentes, sin KLM ni grabación.'}</div>` : ''}
-      <div class="row" style="margin-top:14px"><button class="btn small" data-adelantar="${p.id}" title="Solo en la maqueta">Adelantar el tiempo (maqueta)</button></div>
+      ${NUBE ? '' : `<div class="row" style="margin-top:14px"><button class="btn small" data-adelantar="${p.id}" title="Solo en la maqueta">Adelantar el tiempo (maqueta)</button></div>`}
     </div>`;
   }
   if (e.estado === 'detenido') return `<div class="card">${cab}
@@ -1761,6 +1812,7 @@ function etapaHTML(p, e) {
   return `<div class="card">${cab}
       <p class="sub" style="margin-top:6px">${revisando ? `Lista desde el ${fmtF(e.fin)}.` : e.auto ? `Lista el ${fmtF(e.fin)}; pasó sola a la siguiente etapa.` : e.aprobada_por ? `Aprobada por ${esc(persona(e.aprobada_por).nombre)}${e.aprobada_en ? ' el ' + fmtF(e.aprobada_en) : ''}.` : e.en_motor ? (e.inicio ? `Corrió en el motor del ${fmtF(e.inicio)} al ${fmtF(e.fin)}.` : 'Se configuró directamente en el motor, antes de ligar el proyecto a la plataforma.') : 'Terminada.'}</p>
       ${e.logros ? `<h3 style="margin-top:16px">Qué logramos</h3><ul class="plain">${e.logros.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
+      ${e.nota_equipo ? `<div class="note-box" style="margin-top:12px"><strong>Nota del equipo Synthetica.</strong> ${esc(e.nota_equipo)}</div>` : ''}
       ${e.prototipo ? `<div class="note-box" style="margin-top:16px"><div class="row between"><div><strong>Prueba la interfaz</strong><div class="small muted">${esc(e.prototipo)} · navegable, con los datos que nos diste</div></div><button class="btn small primary" data-probar="${p.id}:${e.n}">Abrir el prototipo</button></div></div>` : ''}
       ${e.eval ? `<h3 style="margin-top:18px">Cómo les fue a los agentes</h3>
         <p class="small muted">Evaluación ligera: ${e.eval.agentes} agentes, sin KLM ni grabaciones.</p>
@@ -1787,7 +1839,7 @@ function entradasHTML(p) {
   const html = [
     fila('Acuerdo de confidencialidad', p.consentimiento ? `Aceptado por ${esc(p.consentimiento.nombre)} (${esc(p.consentimiento.correo)}) el ${fmtF(p.consentimiento.fecha)} · versión ${esc(p.consentimiento.version)}` : ''),
     fila('Descripción', f.descripcion ? esc(f.descripcion) : ''),
-    fila('Alcance', en.alcance ? esc(en.alcance) : ''), fila('Qué quieres analizar', en.analizar ? esc(en.analizar) : ''), fila('Qué esperas obtener', en.esperas ? esc(en.esperas) : ''),
+    fila('Alcance', en.alcance ? esc(en.alcance) : ''), fila('Problemas que identificaste', en.analizar ? esc(en.analizar) : ''), fila('Qué esperas obtener', en.esperas ? esc(en.esperas) : ''),
     fila('Sistema de diseño / Storybook', en.storybook ? `<a href="${esc(en.storybook)}" target="_blank" rel="noopener">${esc(en.storybook)}</a>` : ''), fila('Secciones útiles', en.secciones ? esc(en.secciones) : ''),
     fila('Objetivo', en.objetivo ? esc(en.objetivo) : ''), fila('Intención y condiciones de negocio', en.intencion ? esc(en.intencion) : ''), fila('Flujo actual', en.flujo ? esc(en.flujo) : ''),
     fila('Contexto pegado', f.pegado ? esc(f.pegado) : ''),
@@ -1922,6 +1974,8 @@ function ajusteHTML(a, enEtapa) {
 
 function motorEtapaHTML(p, e) {
   const est = estudioDe(p); const mp = motorProyecto(p.motor.proyecto_id);
+  // En línea no está datos-motor.js: fuentes y cohorte se cuentan en «Qué logramos».
+  if (!mp && (e.n === 0 || e.n === 1)) return '';
   if (!est) return `<div class="card"><h2>Motor de agentes</h2><p class="sub">El proyecto «${esc(p.motor.proyecto_id)}» del motor todavía no tiene estudios.</p></div>`;
   const hh = s => s == null ? '—' : s < 3600 ? Math.round(s / 60) + ' min' : (s / 3600).toFixed(1).replace('.', ',') + ' h';
   const pc = x => x == null ? '—' : Math.round(x * 100) + ' %';
@@ -1946,7 +2000,7 @@ function motorEtapaHTML(p, e) {
   const s = est.satisfaccion;
   const ult = (p.ejecuciones || []).slice(-1)[0];
   const aviso = ult && new Date(ult.fecha) > new Date(est.fecha_hora) ? `<div class="note-box orange" style="margin-bottom:12px">Pediste una ejecución con ${ult.agentes} ${ult.agentes === 1 ? 'agente' : 'agentes'} el ${fmtF(ult.fecha)}. Mientras el analista no traiga su estudio (con <code>conector_motor.py</code>), aquí sigues viendo el del ${fmtF(est.fecha_hora)}.</div>` : '';
-  const todos = estudiosDe(mp.id).slice().reverse();
+  const todos = mp ? estudiosDe(mp.id).slice().reverse() : [est];
   return `${aviso}<div class="card"><div class="row between"><div><h2>El estudio</h2><p class="sub">Estudio del ${fmtF(est.fecha_hora)} · ${est.agentes} agentes · ${est.recorridos} recorridos.</p></div>
       <button class="btn primary" data-reporte="${p.id}">Descargar el reporte en PDF</button></div>
     <p class="small muted" style="margin-top:6px">Con la marca Synthetica: el resumen del estudio y los hallazgos para auditar, con el resultado de tu auditoría. Se abre para guardarlo como PDF.</p>
@@ -2200,6 +2254,12 @@ function filtrarEnvio(files, usados) {
   });
   return r;
 }
+// Archivos elegidos en el asistente, cada uno con su botón para quitarlo si no era ese.
+function listaArchivosWizard(w) {
+  if (!w.archivos.length) return '';
+  return `<p class="small" style="margin-top:10px"><strong>Leeremos ${w.archivos.length === 1 ? 'este archivo' : `estos ${w.archivos.length} archivos`}</strong> <span class="muted">· ¿subiste uno que no era? Quítalo con la ×</span></p>
+    <ul class="archivos-elegidos">${w.archivos.map((n, i) => `<li><span>${esc(n)}</span><button type="button" class="quitar-archivo" data-quitar-arch="${i}" aria-label="Quitar ${esc(n)}" title="Quitar">×</button></li>`).join('')}</ul>`;
+}
 function nuevoWizard() {
   return { paso: 1, tipo: null, motor: '', cliente: '',
     nombre: '', descripcion: '', url: '', analizar: '', esperas: '', alcance: '', storybook: '', secciones: '', objetivo: '', intencion: '', flujo: '', github: '', enlaces: '', competencia: '',
@@ -2270,23 +2330,23 @@ function vistaNuevo() {
     </div>
     ${w.tipo === 'sintetico' ? `<div class="card" style="max-width:780px"><h3>Acceso (si tu producto pide iniciar sesión)</h3>
       <div class="grid2" style="margin-top:10px">${campo('acceso_usuario', 'Usuario de prueba', 'usuario')}<label class="field"><span>Contraseña</span><input id="w-clave" type="password" autocomplete="new-password" placeholder="${w.acceso_clave ? 'Entregada: escribe otra para reemplazarla' : ''}"></label></div>
-      <p class="small" style="margin-top:6px">Va aparte y cifrada: solo la ve el analista que ejecuta el estudio. <span class="muted">En esta maqueta no se guarda.</span></p></div>` : ''}
+      <p class="small" style="margin-top:6px">Va aparte y cifrada: solo la ve el analista que ejecuta el estudio. <span class="muted">${NUBE ? 'Por seguridad no la guardamos aquí: el analista te la pide por un canal privado.' : 'En esta maqueta no se guarda.'}</span></p></div>` : ''}
     ${w.tipo === 'sintetico' ? `<div class="card" style="max-width:780px;background:var(--panel)"><h3>Proyecto en el motor de agentes</h3>
       <p class="sub">Si el producto ya tiene estudios en el motor, elígelo y verás sus resultados al crear el proyecto.</p>
       <label class="field" style="margin-top:10px"><span>Proyecto del motor</span><select id="w-motor"><option value="">Nuevo: el motor lo configura con lo que compartas</option>${conEstudios.map(x => `<option value="${esc(x.id)}" ${w.motor === x.id ? 'selected' : ''}>${esc(x.nombre)} · ${estudiosDe(x.id).length} estudios</option>`).join('')}</select></label></div>` : ''}`;
   } else if (w.paso === 3 && w.tipo !== 'completo') {
-    body = `<div class="note-box" style="margin-bottom:16px"><strong>Todo es opcional.</strong> Si nos dices qué buscas, los agentes se concentran en eso. Solo leemos documentos de texto: Word, PDF, Excel, CSV y TXT, hasta 10 MB en total (un zip sirve).</div>
+    body = `<div class="aviso-paso"><span class="aviso-icono" aria-hidden="true">i</span><div><strong>Este paso es opcional.</strong> Puedes seguir sin llenar nada. Si nos cuentas lo que ya sabes, los agentes se enfocan en eso y el estudio sale más útil.</div></div>
     <div class="grid2">
       <div class="card" style="margin:0"><h3>Qué buscas</h3>
         <div class="stack" style="margin-top:10px">${campo('intencion', 'Intención del producto y condiciones de negocio', 'Qué es (una herramienta interna, un servicio para clientes…), para quién y con qué reglas de negocio funciona', 3)}
           ${campo('alcance', '¿Qué partes del producto evaluamos?', 'Solo las secciones que te importan: registro, pago, panel de administración…', 2)}
-          ${campo('analizar', '¿Qué quieres analizar?', 'Por ejemplo: dónde abandonan o cómo se usa desde el celular', 2)}${campo('esperas', '¿Qué esperas obtener?', 'Por ejemplo: saber qué no se entiende y qué arreglar primero', 2)}</div>
+          ${campo('analizar', '¿Qué problemas has podido identificar?', 'Por ejemplo: la gente abandona en el pago, o desde el celular no encuentran el menú', 2)}</div>
         <p class="small muted" style="margin-top:8px">La intención y las condiciones de negocio las usamos para arrancar: sin ellas trabajamos con supuestos.</p></div>
       <div class="card" style="margin:0"><h3>Información de apoyo</h3><p class="sub">Documentos o enlaces que ayuden a entender el producto y a su público.</p>
         <label class="drop" id="drop" style="margin-top:12px"><input type="file" id="w-files" multiple accept=".zip,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.md,.rtf,.odt,.ods" class="sr">
-          <strong style="color:var(--blue)">Arrastra aquí o elige archivos</strong><span class="small muted">Un zip o documentos · hasta 10 MB en total</span></label>
+          <strong style="color:var(--blue)">Arrastra aquí o elige archivos</strong><span class="small">Word, PDF, Excel, CSV o TXT, sueltos o en un zip · hasta 10 MB entre todos</span></label>
         <p class="small muted" style="margin-top:6px">${w.bytes ? `Llevas ${mb(w.bytes)} de 10 MB.` : 'Máximo 10 MB por envío, entre el zip y los documentos.'}</p>
-        ${w.archivos.length ? `<p class="small" style="margin-top:8px"><strong>Leeremos ${w.archivos.length}:</strong> ${w.archivos.map(esc).join(', ')}</p>` : ''}
+        ${listaArchivosWizard(w)}
         ${w.ignorados.length ? `<p class="small" style="margin-top:4px;color:var(--orange)"><strong>No leeremos ${w.ignorados.length}</strong> porque no son texto: ${w.ignorados.map(esc).join(', ')}</p>` : ''}
         <div style="margin-top:12px">${campo('enlaces', 'Enlaces de apoyo', 'Un enlace por línea, con un título: Documentación — https://…', 3)}</div></div>
     </div>`;
@@ -2297,12 +2357,12 @@ function vistaNuevo() {
         <div class="stack" style="margin-top:10px">${campo('objetivo', '¿Qué objetivo tienes?', 'Por ejemplo: que el ciudadano haga el trámite sin ir a la sede', 2)}${campo('intencion', 'Intención del producto y condiciones de negocio', 'Qué es (una herramienta, un servicio…), qué hace por las personas y con qué reglas de negocio funciona', 3)}${campo('alcance', '¿Qué partes del producto hacemos?', 'Si ya tienes un producto, lista solo las secciones que quieres que trabajemos', 2)}${campo('flujo', '¿Cómo funciona hoy?', 'El flujo actual, aunque sea a mano o en papel', 2)}</div></div>
       <div class="card" style="margin:0"><h3>Tus archivos</h3><p class="sub">Contexto, investigación, reuniones de negocio, ejemplos del proyecto actual… Un zip con todo sirve.</p>
         <label class="drop" id="drop" style="margin-top:12px"><input type="file" id="w-files" multiple accept=".zip,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.md,.rtf,.odt,.ods" class="sr">
-          <strong style="color:var(--blue)">Arrastra aquí o elige archivos</strong><span class="small muted">Un zip o documentos · hasta 10 MB en total</span></label>
+          <strong style="color:var(--blue)">Arrastra aquí o elige archivos</strong><span class="small">Word, PDF, Excel, CSV o TXT, sueltos o en un zip · hasta 10 MB entre todos</span></label>
         <p class="small muted" style="margin-top:6px">${w.bytes ? `Llevas ${mb(w.bytes)} de 10 MB.` : 'Máximo 10 MB por envío, entre el zip y los documentos.'}</p>
-        ${w.archivos.length ? `<p class="small" style="margin-top:8px"><strong>Leeremos ${w.archivos.length}:</strong> ${w.archivos.map(esc).join(', ')}</p>` : ''}
+        ${listaArchivosWizard(w)}
         ${w.ignorados.length ? `<p class="small" style="margin-top:4px;color:var(--orange)"><strong>No leeremos ${w.ignorados.length}</strong> porque no son texto: ${w.ignorados.map(esc).join(', ')}</p>` : ''}
         <label class="field" style="margin-top:12px"><span>Manual de marca (opcional)</span><input type="file" id="w-manual" accept=".pdf,.doc,.docx"></label>
-        <p class="small muted" style="margin-top:4px">${w.manual ? `Usaremos tus colores de <strong>${esc(w.manual)}</strong>.` : 'No diseñamos logos: si no tienes, usamos uno temporal para el proyecto.'}</p></div>
+        <p class="small muted" style="margin-top:4px">${w.manual ? `Usaremos tus colores de <strong>${esc(w.manual)}</strong>. <button class="btn small" type="button" data-quitar-manual>Quitar</button>` : 'No diseñamos logos: si no tienes, usamos uno temporal para el proyecto.'}</p></div>
     </div>
     <div class="grid2" style="margin-top:16px">
       <div class="card" style="margin:0"><h3>Lo que ya existe</h3><p class="sub">Puedes mandarnos el código fuente (en el zip), darnos acceso de lectura a GitHub, tu manual de marca, la estructura de diseño y tu sistema de diseño o Storybook. Mejor aún: <strong>lista solo las secciones que te parezcan útiles</strong>, así limitamos el trabajo a lo que importa.</p>
@@ -2314,7 +2374,7 @@ function vistaNuevo() {
       <div class="card" style="margin:0"><h3>Plataforma actual (si existe)</h3><p class="sub">Si es un proyecto nuevo, sáltalo.</p>
         <div class="stack" style="margin-top:10px">${campo('acceso_url', 'Dirección', 'https://', 0, 'url')}${campo('acceso_usuario', 'Usuario', 'usuario de prueba')}
           <label class="field"><span>Contraseña</span><input id="w-clave" type="password" autocomplete="new-password" placeholder="${w.acceso_clave ? 'Entregada: escribe otra para reemplazarla' : ''}"></label></div>
-        <p class="small" style="margin-top:6px">${ICON.persona.replace('<svg', '<svg width="12" height="12"')} Va aparte y cifrada: solo la ve el analista que ejecuta el proyecto y nunca viaja dentro del zip. <span class="muted">En esta maqueta no se guarda.</span></p></div>
+        <p class="small" style="margin-top:6px">${ICON.persona.replace('<svg', '<svg width="12" height="12"')} Va aparte y cifrada: solo la ve el analista que ejecuta el proyecto y nunca viaja dentro del zip. <span class="muted">${NUBE ? 'Por seguridad no la guardamos aquí: el analista te la pide por un canal privado.' : 'En esta maqueta no se guarda.'}</span></p></div>
     </div>
 `;
   } else {
@@ -2323,7 +2383,7 @@ function vistaNuevo() {
     body = `${w.motor ? `<div class="note-box green" style="margin-bottom:14px">Ligado al proyecto <strong>${esc(motorProyecto(w.motor).nombre)}</strong> del motor: verás su último estudio en cuanto lo crees.</div>` : ''}<div class="grid2">
       <div class="card" style="margin:0"><h3>${esc(w.nombre)}</h3><p class="sub">${t.nombre}${w.url ? ' · ' + esc(urlNormal(w.url)) : ''}</p>
         ${w.descripcion.trim() ? `<p style="margin-top:8px">${esc(w.descripcion)}</p>` : ''}
-        <h3 style="margin-top:14px">Lo que compartes</h3><p class="small">${[w.analizar.trim() ? 'qué quieres analizar' : '', w.esperas.trim() ? 'qué esperas obtener' : '', w.acceso_usuario.trim() ? 'acceso' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : '', w.archivos.length ? w.archivos.length + ' archivo(s)' : '', w.manual ? 'manual de marca' : '', w.objetivo.trim() ? 'objetivo' : '', w.intencion.trim() ? 'intención' : '', w.flujo.trim() ? 'flujo actual' : '', w.github.trim() ? 'código' : '', w.enlaces.trim() ? 'enlaces' : '', w.competencia.trim() ? 'competencia' : '', w.acceso_url.trim() ? 'acceso a la plataforma actual' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : ''].filter(Boolean).join(', ') || 'Solo lo básico: arrancamos con eso.'}.</p>
+        <h3 style="margin-top:14px">Lo que compartes</h3><p class="small">${[w.analizar.trim() ? 'problemas que identificaste' : '', w.esperas.trim() ? 'qué esperas obtener' : '', w.acceso_usuario.trim() ? 'acceso' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : '', w.archivos.length ? w.archivos.length + ' archivo(s)' : '', w.manual ? 'manual de marca' : '', w.objetivo.trim() ? 'objetivo' : '', w.intencion.trim() ? 'intención' : '', w.flujo.trim() ? 'flujo actual' : '', w.github.trim() ? 'código' : '', w.enlaces.trim() ? 'enlaces' : '', w.competencia.trim() ? 'competencia' : '', w.acceso_url.trim() ? 'acceso a la plataforma actual' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : ''].filter(Boolean).join(', ') || 'Solo lo básico: arrancamos con eso.'}.</p>
         ${w.tipo === 'completo' ? `<p class="small muted">Falta: ${CARPETAS.filter(([k]) => !det[k]).map(([, n]) => n.toLowerCase()).join(', ') || 'nada'}. Seguiremos con supuestos marcados como tales.</p>` : ''}
 </div>
       <div class="card" style="margin:0"><h3>Qué pasa al enviarlo</h3>
@@ -2425,7 +2485,7 @@ function wireWizard() {
     const box = document.getElementById('det-box'); if (box) box.innerHTML = detHTML(detectar(w));
     const pal = document.getElementById('w-palabras'); if (pal && k === 'descripcion') { const n = palabras(w.descripcion); pal.textContent = n ? `${n} palabras${n < 50 ? ' · perfecto si es una frase; entre 50 y 100 nos da más contexto' : n > 100 ? ' · con menos de 100 basta' : ' · muy bien'}` : 'Si no te gusta escribir, puedes saltarlo.'; }
   }; });
-  const clave = document.getElementById('w-clave'); if (clave) clave.onchange = () => { sync(); toast('Contraseña recibida. En la plataforma real se guarda cifrada; aquí no se guarda.'); };
+  const clave = document.getElementById('w-clave'); if (clave) clave.onchange = () => { sync(); toast(NUBE ? 'No guardamos la contraseña aquí: el analista te la pedirá por un canal privado.' : 'Contraseña recibida. En la plataforma real se guarda cifrada; aquí no se guarda.'); };
   const manual = document.getElementById('w-manual'); if (manual) manual.onchange = () => { sync(); if (manual.files[0]) { const f = manual.files[0]; if ((w.bytes || 0) + f.size > LIMITE_ENVIO) toast(`El manual (${mb(f.size)}) no cabe en los 10 MB del envío.`); else { w.manual = f.name; w._manual = f; w.bytes = (w.bytes || 0) + f.size; } } render(); };
   const repartir = files => {
     const r = filtrarEnvio(files, w.bytes || 0);
@@ -2440,6 +2500,22 @@ function wireWizard() {
     drop.ondragleave = () => drop.classList.remove('over');
     drop.ondrop = ev => { ev.preventDefault(); sync(); repartir(ev.dataTransfer.files); render(); };
   }
+  document.querySelectorAll('[data-quitar-arch]').forEach(b => b.onclick = async () => {
+    sync(); const nombre = w.archivos[+b.dataset.quitarArch]; w.archivos.splice(+b.dataset.quitarArch, 1);
+    const j = (w._files || []).findIndex(f => f.name === nombre);
+    if (j >= 0) { w.bytes = Math.max(0, (w.bytes || 0) - w._files[j].size); w._files.splice(j, 1); }
+    else if (w.borrador) {  // ya estaba guardado con el borrador
+      const x = (await Adjuntos.listar(w.borrador)).find(y => y.clase !== 'marca' && y.nombre === nombre);
+      if (x) { await Adjuntos.quitar(w.borrador, x); w.bytes = Math.max(0, (w.bytes || 0) - (x.bytes || 0)); }
+    }
+    toast(`Quitamos ${nombre}.`); render();
+  });
+  const qm = document.querySelector('[data-quitar-manual]'); if (qm) qm.onclick = async () => {
+    sync();
+    if (w._manual) { w.bytes = Math.max(0, (w.bytes || 0) - w._manual.size); w._manual = null; }
+    else if (w.borrador) { const x = (await Adjuntos.listar(w.borrador)).find(y => y.clase === 'marca'); if (x) { await Adjuntos.quitar(w.borrador, x); w.bytes = Math.max(0, (w.bytes || 0) - (x.bytes || 0)); } }
+    w.manual = ''; render();
+  };
   document.querySelectorAll('[data-rol]').forEach(s => s.onchange = () => { w.miembros[+s.dataset.rol].rol = s.value; render(); });
   document.querySelectorAll('[data-quitar]').forEach(b => b.onclick = () => { w.miembros.splice(+b.dataset.quitar, 1); render(); });
   const add = document.getElementById('w-add');

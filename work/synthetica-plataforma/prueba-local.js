@@ -49,6 +49,11 @@ http.createServer(async (req, res) => {
       res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(url.searchParams.get('nombre') || 'archivo')}`);
       return fs.createReadStream(path.join(BLOBS, p)).on('error', () => { res.statusCode = 404; res.end(); }).pipe(res);
     }
+    if (url.pathname === BASE + '/api/equipo' && url.searchParams.get('accion') === 'archivo') {
+      const u = await usuarioDe(req); const p = url.searchParams.get('p') || '';
+      if (!u || !process.env.CORREOS_EQUIPO.split(',').includes(u.correo) || p.includes('..')) { res.statusCode = 403; return res.end(); }
+      return fs.createReadStream(path.join(BLOBS, p)).on('error', () => { res.statusCode = 404; res.end(); }).pipe(res);
+    }
     if (url.pathname === BASE + '/api/archivos' && req.method === 'DELETE') {
       const u = await usuarioDe(req); const trozos = []; for await (const t of req) trozos.push(t);
       const { pathnames = [] } = JSON.parse(Buffer.concat(trozos).toString() || '{}');

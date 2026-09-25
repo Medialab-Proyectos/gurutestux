@@ -43,6 +43,7 @@ _revision/
 # --- Evaluación sintética interna -------------------------------------------
 # Perfiles, recorridos e informes internos; no publicar en el repositorio público.
 _agentes_sinteticos/
+_creacion_productos/
 
 # --- Documentos de clientes de Synthetica -----------------------------------
 # Lo que los clientes suben y lo que se descarga aquí para procesarlo no se sube
@@ -53,6 +54,8 @@ work/synthetica-plataforma/descargas/
 work/synthetica-plataforma/datos-motor.js
 # La base de datos local de la plataforma (proyectos, auditorías, correos).
 work/synthetica-plataforma/datos/
+# Sesión del analista en la consola (operador.py) y lo que ya vio
+work/synthetica-plataforma/.operador/
 # Exportaciones de la plataforma (datos y archivos en base64).
 synthetica-exportacion-*.json
 
@@ -69,3 +72,6 @@ _gen*.py
 # repositorio y no debe ser público.
 agentes_ux/settings.json
 agentes_ux/settings.local.json
+.vercel
+.env*
+__pycache__/
