@@ -2,9 +2,10 @@
 //   GET  /api/equipo?accion=proyectos                      → todos los proyectos de todas las cuentas
 //   GET  /api/equipo?accion=proyecto&cuenta=<id>&id=<id>   → el proyecto, su ficha y sus archivos
 //   GET  /api/equipo?accion=archivo&cuenta=<id>&p=<ruta>   → descarga un archivo de esa cuenta
+//   POST /api/equipo?accion=borrar { cuenta, id }  → quita el proyecto, sus documentos y su historial
 //   POST /api/equipo?accion=etapa { cuenta, id, n, estado: 'en_curso' | 'progreso' | 'lista', logros?, nota?, detalle?, resultado?, motor? }
 //     progreso: solo actualiza «Ahora: …» sin cambiar la etapa. resultado: hallazgos del estudio para auditar.
-import { get } from '@vercel/blob';
+import { get, del } from '@vercel/blob';
 import crypto from 'node:crypto';
 import { Readable } from 'node:stream';
 import { query, esquema } from '../_synthetica/db.js';
@@ -123,6 +124,23 @@ export default async function handler(req, res) {
         return marcarEtapa(p, Number(d.n), d.estado, logros, d.nota ? String(d.nota).slice(0, 4000) : '', d.detalle ? String(d.detalle).slice(0, 300) : '');
       });
       return e ? responder(res, 200, { etapa: e.n, estado: e.estado }) : responder(res, 404, { error: 'No existe ese proyecto o esa etapa' });
+    }
+    if (req.method === 'POST' && accion === 'borrar') {
+      const d = await cuerpo(req);
+      let archivos = [];
+      const nombre = await cambiarDocumento(String(d.cuenta || ''), datos => {
+        const p = (datos.proyectos || []).find(x => x.id === d.id);
+        if (!p) return null;
+        const quitar = (datos.adjuntos || []).filter(x => x.dueno === p.id);
+        datos.adjuntos = (datos.adjuntos || []).filter(x => x.dueno !== p.id);
+        archivos = [...new Set(quitar.map(x => x.pathname))].filter(x => !datos.adjuntos.some(y => y.pathname === x));
+        datos.proyectos = datos.proyectos.filter(x => x.id !== p.id);
+        for (const k of ['ajustes', 'notas', 'correos', 'avisos', 'variantes', 'elecciones']) if (Array.isArray(datos[k])) datos[k] = datos[k].filter(x => x.proyecto !== p.id);
+        return p.nombre;
+      });
+      if (!nombre) return responder(res, 404, { error: 'No existe ese proyecto' });
+      if (archivos.length) await del(archivos);
+      return responder(res, 200, { borrado: nombre, archivos: archivos.length });
     }
     return responder(res, 400, { error: 'Acción desconocida' });
   } catch (e) {
