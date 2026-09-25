@@ -54,6 +54,22 @@ http.createServer(async (req, res) => {
       if (!u || !process.env.CORREOS_EQUIPO.split(',').includes(u.correo) || p.includes('..')) { res.statusCode = 403; return res.end(); }
       return fs.createReadStream(path.join(BLOBS, p)).on('error', () => { res.statusCode = 404; res.end(); }).pipe(res);
     }
+    // Lo publicado por el equipo (recorrido interactivo): subir y servir, como Vercel Blob privado.
+    if (url.pathname === BASE + '/api/equipo' && url.searchParams.get('accion') === 'subir') {
+      const m = String(req.headers.authorization || '').match(/^Bearer (.+)$/);
+      if (!m || m[1] !== process.env.SYNTHETICA_LLAVE_ADMIN) { res.statusCode = 403; return res.end(); }
+      const cuenta = url.searchParams.get('cuenta'), ruta = url.searchParams.get('p');
+      if (!cuenta || !ruta || ruta.includes('..')) { res.statusCode = 400; return res.end(); }
+      const t = []; for await (const x of req) t.push(x);
+      const f = path.join(BLOBS, 'u', cuenta, 'publicado', ruta); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, Buffer.concat(t));
+      res.setHeader('Content-Type', 'application/json'); return res.end(JSON.stringify({ ruta }));
+    }
+    if (url.pathname.startsWith(BASE + '/publicado/')) {
+      const u = await usuarioDe(req); const ruta = decodeURIComponent(url.pathname.slice((BASE + '/publicado/').length));
+      if (!u || ruta.includes('..')) { res.statusCode = 404; return res.end(); }
+      res.setHeader('Content-Type', TIPOS[path.extname(ruta)] || 'application/octet-stream');
+      return fs.createReadStream(path.join(BLOBS, 'u', u.id, 'publicado', ruta)).on('error', () => { res.statusCode = 404; res.end(); }).pipe(res);
+    }
     if (url.pathname === BASE + '/api/archivos' && req.method === 'DELETE') {
       const u = await usuarioDe(req); const trozos = []; for await (const t of req) trozos.push(t);
       const { pathnames = [] } = JSON.parse(Buffer.concat(trozos).toString() || '{}');

@@ -43,6 +43,10 @@
     {
       "source": "/work/synthetica-plataforma/api/:ruta",
       "destination": "/api/synthetica/:ruta"
+    },
+    {
+      "source": "/work/synthetica-plataforma/publicado/:ruta*",
+      "destination": "/api/synthetica/publicado?ruta=:ruta*"
     }
   ],
   "functions": {

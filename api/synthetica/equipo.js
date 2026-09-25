@@ -5,9 +5,10 @@
 //   GET  /api/equipo?accion=cuentas                       → cuentas registradas
 //   POST /api/equipo?accion=clave { correo, clave }        → el administrador pone una contraseña nueva
 //   POST /api/equipo?accion=borrar { cuenta, id }  → quita el proyecto, sus documentos y su historial
+//   POST /api/equipo?accion=subir&cuenta=<id>&p=<proyecto>/<ruta>  (cuerpo: el archivo) → publica en u/<cuenta>/publicado/
 //   POST /api/equipo?accion=etapa { cuenta, id, n, estado: 'en_curso' | 'progreso' | 'lista', logros?, nota?, detalle?, resultado?, motor? }
 //     progreso: solo actualiza «Ahora: …» sin cambiar la etapa. resultado: hallazgos del estudio para auditar.
-import { get, del } from '@vercel/blob';
+import { get, del, put } from '@vercel/blob';
 import crypto from 'node:crypto';
 import { Readable } from 'node:stream';
 import { query, esquema } from '../_synthetica/db.js';
@@ -102,6 +103,17 @@ export default async function handler(req, res) {
         archivos: (c.datos.adjuntos || []).filter(x => duenos.has(x.dueno)),
         correos: (c.datos.correos || []).filter(x => x.proyecto === p.id)
       });
+    }
+    if (req.method === 'POST' && accion === 'subir') {
+      // Publica un archivo para el cliente (el recorrido y sus capturas). Solo dentro de su carpeta «publicado».
+      const cuenta = q.get('cuenta') || '', ruta = q.get('p') || '';
+      if (!/^c-[\w-]+$/.test(cuenta) || !ruta || ruta.includes('..') || ruta.startsWith('/')) return responder(res, 400, { error: 'Ruta no válida' });
+      // Llega como application/octet-stream para que Vercel no lo convierta; el tipo real viene en X-Tipo.
+      const datos = Buffer.isBuffer(req.body) ? req.body : typeof req.body === 'string' ? Buffer.from(req.body)
+        : await (async () => { const t = []; for await (const x of req) t.push(x); return Buffer.concat(t); })();
+      const b = await put(`u/${cuenta}/publicado/${ruta}`, datos, { access: 'private', addRandomSuffix: false, allowOverwrite: true,
+        contentType: String(req.headers['x-tipo'] || 'application/octet-stream') });
+      return responder(res, 200, { ruta, bytes: datos.length, pathname: b.pathname });
     }
     if (req.method === 'GET' && accion === 'archivo') {
       const cuenta = q.get('cuenta'), p = q.get('p');
