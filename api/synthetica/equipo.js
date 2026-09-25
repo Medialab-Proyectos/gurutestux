@@ -139,6 +139,21 @@ export default async function handler(req, res) {
       const r = await query('update usuarios set clave_hash = $2 where correo = $1 returning nombre, correo', [String(d.correo || '').trim().toLowerCase(), hashClave(clave)]);
       return r.rows.length ? responder(res, 200, r.rows[0]) : responder(res, 404, { error: 'No hay una cuenta con ese correo' });
     }
+    if (req.method === 'POST' && accion === 'url') {
+      // Misma regla que ve el cliente: solo mientras la caja 0 (fuentes) no ha terminado.
+      const d = await cuerpo(req); let motivo = 'No existe ese proyecto';
+      const nueva = String(d.url || '').trim();
+      if (!/^https?:\/\/[^\s/.]+(\.[^\s/.]+)+(\/\S*)?$/i.test(nueva)) return responder(res, 400, { error: 'La URL debe empezar por https:// y verse como https://tuproducto.com' });
+      const r = await cambiarDocumento(String(d.cuenta || ''), datos => {
+        const p = (datos.proyectos || []).find(x => x.id === d.id);
+        if (!p) return null;
+        const e0 = (p.etapas || []).find(e => e.n === 0), e1 = (p.etapas || []).find(e => e.n === 1);
+        if (!(p.tipo === 'sintetico' && e0 && ['pensando', 'analista', 'detenido'].includes(e0.estado) && (!e1 || e1.estado === 'cola'))) { motivo = 'La URL ya no se puede cambiar: el proyecto pasó de la caja de fuentes'; return null; }
+        (p.cambios_url || (p.cambios_url = [])).push({ de: p.url, a: nueva, fecha: new Date().toISOString(), por: 'equipo' });
+        p.url = nueva; return { nombre: p.nombre, url: nueva };
+      });
+      return r ? responder(res, 200, r) : responder(res, 409, { error: motivo });
+    }
     if (req.method === 'POST' && accion === 'reiniciar') {
       // Devuelve el proyecto a su estado real: desde la etapa «desde» nada ha empezado y espera al analista.
       const d = await cuerpo(req); const desde = Number(d.desde) || 0;

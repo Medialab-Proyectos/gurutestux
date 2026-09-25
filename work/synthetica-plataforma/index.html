@@ -1505,6 +1505,33 @@ function rehacer(pid) {
     dlg.close(); location.hash = '#/nuevo';
   };
 }
+/* La URL del estudio se puede corregir solo mientras leemos las fuentes (caja 0): desde la cohorte,
+   los recorridos de los agentes ya se arman sobre esa URL. */
+function urlEditable(p) {
+  if (p.tipo !== 'sintetico' || p.cancelado) return false;
+  const e0 = p.etapas.find(e => e.n === 0), e1 = p.etapas.find(e => e.n === 1);
+  return !!e0 && ['pensando', 'analista', 'detenido'].includes(e0.estado) && (!e1 || e1.estado === 'cola');
+}
+function cambiarUrl(pid) {
+  const p = proyecto(pid); if (!urlEditable(p)) return toast('La URL ya no se puede cambiar: los agentes ya se prepararon con ella.');
+  const dlg = $('#dlg');
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlgTitle" style="font-size:17px;font-weight:800">Cambiar la URL del estudio</h2><button class="btn small" id="dlgClose">Cerrar</button></div>
+    <div class="dlg-body stack"><p class="small">Puedes corregirla mientras leemos tus fuentes. Cuando empecemos la cohorte y los recorridos, queda fija.</p>
+      <label class="field"><span>URL del producto</span><input id="cu-url" type="url" value="${esc(p.url)}"></label>
+      <p class="small" id="cu-error" style="color:var(--red)" hidden></p>
+      <div class="row" style="justify-content:flex-end"><button class="btn" id="cu-no">Cancelar</button><button class="btn primary" id="cu-si">Guardar</button></div></div>`;
+  dlg.showModal(); $('#cu-url').focus();
+  $('#dlgClose').onclick = $('#cu-no').onclick = () => dlg.close();
+  $('#cu-si').onclick = () => {
+    const nueva = urlNormal($('#cu-url').value), err = $('#cu-error');
+    if (!urlValida(nueva)) { err.textContent = 'Revisa la URL: debe verse como tuproducto.com o https://tuproducto.com'; err.hidden = false; return; }
+    if (nueva === p.url) return dlg.close();
+    const antes = p.url; p.url = nueva;
+    (p.cambios_url || (p.cambios_url = [])).push({ de: antes, a: nueva, fecha: new Date().toISOString() });
+    correoEquipo(p, `URL corregida: ${p.nombre}`, [`La persona corrigió la URL del estudio ${p.nombre}.`, `Antes: ${antes}`, `Ahora: ${nueva}`, '', 'Usa la nueva al iniciar el proyecto en el motor (vuelve a bajarlo para actualizar el arranque).']);
+    save(); dlg.close(); render(); toast('Listo: usaremos la URL nueva.');
+  };
+}
 function adelantar(pid) {
   if (NUBE) return;
   const p = proyecto(pid); const e = p.etapas.find(x => x.estado === 'pensando');
@@ -1665,7 +1692,7 @@ function vistaProyecto(pid, nSel) {
       <div>
         <p class="kicker">${TIPOS[p.tipo].nombre}</p>
         <h1 class="h1">${esc(p.nombre)}</h1>
-        <p class="sub">${p.url ? `<a href="${esc(p.url)}" rel="noopener" target="_blank">${esc(p.url)}</a> · ` : ''}Creado el ${fmtF(p.creado)}${origen ? ` · Rehace <a href="#/p/${origen.id}">«${esc(origen.nombre)}»</a>` : ''}${hijos.map(h => ` · Rehecho en <a href="#/p/${h.id}">«${esc(h.nombre)}»</a>`).join('')}</p>
+        <p class="sub">${p.url ? `<a href="${esc(p.url)}" rel="noopener" target="_blank">${esc(p.url)}</a>${urlEditable(p) ? ` <button class="btn small" data-cambiar-url="${p.id}" title="Solo mientras leemos tus fuentes">Cambiar URL</button>` : ''} · ` : ''}Creado el ${fmtF(p.creado)}${origen ? ` · Rehace <a href="#/p/${origen.id}">«${esc(origen.nombre)}»</a>` : ''}${hijos.map(h => ` · Rehecho en <a href="#/p/${h.id}">«${esc(h.nombre)}»</a>`).join('')}</p>
       </div>
       <div style="min-width:240px">
         <div class="row between small"><span>${st.chip}</span><span class="muted">${pr.pct}%</span></div>
@@ -2692,6 +2719,7 @@ function wire(ruta) {
   document.querySelectorAll('[data-editar]').forEach(b => b.onclick = () => { UI.editando[b.dataset.editar] = true; render(); });
   document.querySelectorAll('[data-noeditar]').forEach(b => b.onclick = () => { delete UI.editando[b.dataset.noeditar]; render(); });
   document.querySelectorAll('[data-reejecutar]').forEach(b => b.onclick = () => pedirReejecucion(b.dataset.reejecutar));
+  document.querySelectorAll('[data-cambiar-url]').forEach(b => b.onclick = () => cambiarUrl(b.dataset.cambiarUrl));
   document.querySelectorAll('[data-reporte]').forEach(b => b.onclick = () => reportePDF(b.dataset.reporte));
   document.querySelectorAll('[data-detener]').forEach(b => b.onclick = () => detener(b.dataset.detener));
   document.querySelectorAll('[data-reanudar]').forEach(b => b.onclick = () => reanudar(b.dataset.reanudar));
