@@ -457,19 +457,19 @@ const ROLES = {
    que va guardando). null = depende de personas, no del motor. */
 const TIPOS = {
   sintetico: {
-    nombre: 'Estudio sintético', corto: 'Sintético', total: 'Primera evaluación en unos 1,4 días',
+    nombre: 'Estudio sintético', corto: 'Sintético', total: 'Primera evaluación en unas 8 horas',
     resumen: 'Nos das la URL y evaluamos el producto como está, con el motor completo de agentes.',
     etapas: [
-      { n: 0, nombre: 'Lectura de tus fuentes', corto: 'Fuentes', min: 60, modo: 'auto',
+      { n: 0, nombre: 'Lectura de tus fuentes', corto: 'Fuentes', min: 30, modo: 'auto',
         hace: ['Descomprimir y clasificar los archivos', 'Redactar datos personales', 'Armar el contexto de negocio y producto', 'Detectar lo que falta'],
         entrega: 'Te mostramos lo que entendimos y lo que falta.' },
-      { n: 1, nombre: 'Cohorte y recorridos', corto: 'Cohorte', min: 240, modo: 'auto',
+      { n: 1, nombre: 'Cohorte y recorridos', corto: 'Cohorte', min: 90, modo: 'auto',
         hace: ['Protopersonas a partir de tu público', 'Recorridos de las tareas principales', 'Contextos de uso (móvil, interrupciones, prisa)', 'Plan muestral reproducible'],
         entrega: 'Validas que las personas y las tareas se parezcan a tu realidad.' },
-      { n: 2, nombre: 'Ejecución de los agentes', corto: 'Ejecución', min: 1440, modo: 'auto',
+      { n: 2, nombre: 'Ejecución de los agentes', corto: 'Ejecución', min: 300, modo: 'auto',
         hace: ['Recorridos con cada agente', 'KLM y tiempos por paso', 'Grabación y mirada simulada', 'Hallazgos con su evidencia'],
         entrega: 'Nada que validar: los agentes trabajan.' },
-      { n: 3, nombre: 'Informe y ajustes', corto: 'Informe', min: 240, modo: 'auto',
+      { n: 3, nombre: 'Informe y ajustes', corto: 'Informe', min: 60, modo: 'auto',
         hace: ['Recomendaciones UX y UI con evidencia', 'Auditoría experta', 'Comparación con el estudio anterior'],
         entrega: 'Validas los ajustes que proponemos.' }
     ]
@@ -2586,8 +2586,8 @@ function wireWizard() {
       UI.wizard = null; UI.recienCreado = id; save(); location.hash = '#/p/' + id; return;
     }
     const cat = TIPOS[w.tipo].etapas; const now = new Date().toISOString(); const primera = cat[0];
-    // En línea nada arranca solo: el estudio espera a que el analista lo ponga en marcha en el motor.
-    const estado0 = w.tipo === 'completo' || (NUBE && w.tipo === 'sintetico') ? 'analista' : primera.modo === 'humana' ? 'humana' : 'pensando';
+    // El sintético arranca su reloj al crearse (8 h en total); el completo espera al analista.
+    const estado0 = w.tipo === 'completo' ? 'analista' : primera.modo === 'humana' ? 'humana' : 'pensando';
     DB.proyectos.unshift({ id, cuenta: cta.id, consentimiento, cliente: w.cliente, nombre: w.nombre.trim(), tipo: w.tipo, url: w.url.trim(), creado: now, deriva_de: w.deriva || null, miembros: w.miembros,
       fuentes: fuentesDe(w),
       etapas: cat.map(e => ({ n: e.n, estado: e === primera ? estado0 : 'cola', inicio: e === primera && estado0 !== 'analista' ? now : null, fin: null })) });
