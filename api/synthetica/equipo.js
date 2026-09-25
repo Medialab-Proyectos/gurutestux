@@ -68,6 +68,7 @@ export default async function handler(req, res) {
   try {
     await esquema();
     const u = await usuarioDe(req);
+    if (!u) return responder(res, 401, { error: 'Sin sesión' });
     if (!esEquipo(u)) return responder(res, 403, { error: 'Solo el equipo Synthetica' });
     const q = new URL(req.url, 'http://x').searchParams;
     const accion = q.get('accion');
