@@ -2039,10 +2039,10 @@ function ajusteHTML(a, enEtapa) {
 }
 
 function motorEtapaHTML(p, e) {
-  const est = estudioDe(p); const mp = motorProyecto(p.motor.proyecto_id);
-  // En línea no está datos-motor.js: fuentes y cohorte se cuentan en «Qué logramos».
+  // En línea no está datos-motor.js: fuentes, cohorte y recorridos los publica el vigilante en p.motor_proyecto.
+  const est = estudioDe(p); const mp = motorProyecto(p.motor.proyecto_id) || p.motor_proyecto;
   if (!mp && (e.n === 0 || e.n === 1)) return '';
-  if (!est) return `<div class="card"><h2>Motor de agentes</h2><p class="sub">El proyecto «${esc(p.motor.proyecto_id)}» del motor todavía no tiene estudios.</p></div>`;
+  if (!est && e.n > 1) return `<div class="card"><h2>Motor de agentes</h2><p class="sub">El proyecto «${esc(p.motor.proyecto_id)}» del motor todavía no tiene estudios.</p></div>`;
   const hh = s => s == null ? '—' : s < 3600 ? Math.round(s / 60) + ' min' : (s / 3600).toFixed(1).replace('.', ',') + ' h';
   const pc = x => x == null ? '—' : Math.round(x * 100) + ' %';
   if (e.n === 0) {
@@ -2055,9 +2055,12 @@ function motorEtapaHTML(p, e) {
       ${(p.fuentes.nuevas || []).length ? `<h3 style="margin-top:16px">Documentos que subiste</h3><div data-adjuntos="${p.id}" data-vacio="<span class='muted small'>Solo quedaron los nombres de abajo: se subieron antes de que la plataforma guardara los archivos.</span>" style="margin-top:6px"><span class="muted small">Cargando…</span></div>
         <h3 style="margin-top:16px">Sumadas desde la plataforma</h3><table style="margin-top:4px"><tbody>${p.fuentes.nuevas.map(x => `<tr><td><strong>${esc(x.nombre)}</strong></td><td class="small muted">${x.enlace ? 'Enlace' : 'Archivo'} · ${fmtF(x.fecha)}</td></tr>`).join('')}</tbody></table>` : ''}</div>`;
   }
-  if (e.n === 1) return `<div class="card"><h2>Cohorte y recorridos del motor</h2><p class="sub">Leídos de <code>proyectos/${esc(mp.id)}/</code> en el motor.</p>
-    <table style="margin-top:10px"><thead><tr><th>Perfil</th><th>Rol</th><th class="num">Edad</th></tr></thead><tbody>${mp.perfiles.map(x => `<tr><td><strong>${esc(x.nombre)}</strong></td><td>${esc(x.rol || '')}</td><td class="num">${x.edad ?? '—'}</td></tr>`).join('')}</tbody></table>
-    <table style="margin-top:14px"><thead><tr><th>Recorrido</th><th class="num">Pasos</th></tr></thead><tbody>${mp.recorridos.map(x => `<tr><td><strong>${esc(x.nombre)}</strong><div class="small muted">${esc(x.descripcion || '')}</div></td><td class="num">${x.pasos}</td></tr>`).join('')}</tbody></table></div>`;
+  if (e.n === 1) return `<div class="card"><h2>Quiénes evalúan tu producto</h2><p class="sub">Personas sintéticas armadas con tus documentos. Revisa que se parezcan a quienes de verdad usan tu producto.</p>
+    <div class="grid2" style="margin-top:12px">${mp.perfiles.map(x => `<div class="note-box" style="margin:0"><strong>${esc(x.nombre)}</strong>${x.edad ? ` <span class="muted small">· ${x.edad} años</span>` : ''}${x.dispositivo ? ` <span class="chip">${esc(x.dispositivo === 'movil' ? 'Celular' : 'Computador')}</span>` : ''}
+      <div class="small" style="margin-top:4px">${esc(x.rol || '')}</div>${(x.objetivos || []).length ? `<ul class="plain small" style="margin-top:6px">${x.objetivos.map(o => `<li>· ${esc(o)}</li>`).join('')}</ul>` : ''}</div>`).join('')}</div>
+    ${(mp.contextos || []).length ? `<p class="small muted" style="margin-top:10px">Situaciones en que las probamos: ${mp.contextos.map(esc).join(' · ')}.</p>` : ''}
+    <h2 style="margin-top:20px">Qué intentarán hacer en tu producto</h2><p class="sub">Cada recorrido es una meta de una persona real, no una lista de clics.</p>
+    <table style="margin-top:10px"><thead><tr><th>Recorrido</th><th class="num">Pasos</th></tr></thead><tbody>${mp.recorridos.map(x => `<tr><td><strong>${esc(x.nombre)}</strong><div class="small muted">${esc(x.descripcion || '')}</div>${(x.objetivos || []).length ? `<ol class="small" style="margin:6px 0 0 18px">${x.objetivos.map(o => `<li>${esc(o)}</li>`).join('')}</ol>` : ''}</td><td class="num">${x.pasos}</td></tr>`).join('')}</tbody></table></div>`;
   if (e.n === 2) return `<div class="card"><h2>La corrida en el motor</h2><p class="sub">Estudio <code>${esc(est.carpeta)}</code> del ${fmtF(est.fecha_hora)}.</p>
     <div class="kpis" style="margin-top:12px"><div class="kpi"><span>Agentes</span><strong>${est.agentes ?? '—'}</strong></div><div class="kpi"><span>Recorridos</span><strong>${est.recorridos ?? '—'}</strong></div><div class="kpi"><span>Pasos ejecutados</span><strong>${est.pasos ?? '—'}</strong></div><div class="kpi"><span>Duración</span><strong>${hh(est.duracion_s)}</strong></div></div>
     <p class="small" style="margin-top:10px">Cobertura del user flow: <strong>${pc(est.cobertura_pasos)}</strong> · de las vistas del producto: <strong>${pc(est.cobertura_vistas)}</strong> · costo de IA: <strong>${est.costo_usd === 0 ? 'ninguno' : est.costo_usd ?? '—'}</strong></p>

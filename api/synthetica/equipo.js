@@ -122,6 +122,11 @@ export default async function handler(req, res) {
         const p = (datos.proyectos || []).find(x => x.id === d.id);
         if (!p) return null;
         if (d.resultado && typeof d.resultado === 'object') p.resultado_motor = d.resultado;
+        // Fuentes, cohorte y recorridos del motor, para que el cliente los vea y los valide.
+        if (d.proyecto_motor && typeof d.proyecto_motor === 'object' && JSON.stringify(d.proyecto_motor).length < 400_000) {
+          p.motor_proyecto = d.proyecto_motor;
+          p.motor = { proyecto_id: String(d.proyecto_motor.id || ''), estudio: p.motor?.estudio || null };
+        }
         if (d.motor && typeof d.motor === 'object') p.motor = { proyecto_id: String(d.motor.proyecto_id || ''), estudio: d.motor.estudio ? String(d.motor.estudio) : null };
         return marcarEtapa(p, Number(d.n), d.estado, logros, d.nota ? String(d.nota).slice(0, 4000) : '', d.detalle ? String(d.detalle).slice(0, 300) : '');
       });
