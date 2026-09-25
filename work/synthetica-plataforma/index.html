@@ -204,6 +204,7 @@ th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align:
 .checklist li.done::before { border-color: var(--green); background: var(--green); }
 .checklist li.now::before { border-color: var(--brand); }
 .checklist li.done { color: var(--muted); }
+.checklist li.plan::before { border-style: dashed; }
 ul.plain { margin: 8px 0 0; padding-left: 18px; }
 ul.plain li + li { margin-top: 4px; }
 
@@ -1743,7 +1744,7 @@ function vistaCanvas(p) {
     ${cajas.map(caja).join('')}${cajas.map(conector).join('')}
     <div class="cv-next" style="left:${left(9) + 560}px;width:160px;background:var(--blue-2)"></div>
     <div class="cv-out" style="left:${left(9) + 720}px"><span class="cv-tok" style="margin:0 auto;background:var(--soft-blue)">FIGMA</span><strong>Diseño humano en paralelo</strong><span>Figma, sistema de diseño, especificaciones y evolución futura del producto.</span></div>`;
-  const analista = cur && cur.estado === 'analista' ? `<div class="note-box cv-cta"><div><strong>Recibimos tu proyecto.</strong> Avisamos al equipo; un analista pondrá en marcha el primer escenario y te escribiremos cuando esté lista (${esc(defEtapa(p, 1).rango)}).</div>${puede(p, 'interna') ? `<button class="btn small primary" data-lanzar="${p.id}">Lanzar el primer escenario (analista)</button>` : ''}</div>` : '';
+  const analista = cur && cur.estado === 'analista' ? `<div class="note-box cv-cta"><div><strong>Recibimos tu proyecto.</strong> Avisamos al equipo; un analista pondrá en marcha ${p.tipo === 'completo' ? 'el primer escenario' : 'tu estudio'} y te escribiremos cuando esté lista (${esc(defEtapa(p, 1).rango)}).</div>${puede(p, 'interna') ? `<button class="btn small primary" data-lanzar="${p.id}">Lanzar el primer escenario (analista)</button>` : ''}</div>` : '';
   const revisar = cur && cur.estado === 'revision' ? `<div class="note-box orange cv-cta"><div><strong>El escenario ${cur.n}, ${esc(defEtapa(p, cur.n).nombre)}, está listo.</strong> Pruébalo y danos tu opinión antes de seguir.</div><a class="btn small primary" href="#/p/${p.id}/e/${cur.n}">Revisar el escenario ${cur.n}</a></div>` : '';
   return `
     <div class="row between" style="align-items:flex-start">
@@ -1793,7 +1794,8 @@ function etapaHTML(p, e) {
   const cab = `<div class="row between"><div><p class="kicker">Etapa ${e.n}${p.tipo === 'completo' && e.n ? ' · escenario ' + e.n : ''}</p><h2 style="font-size:20px;font-weight:800">${esc(d.nombre)}</h2></div><span class="chip">${d.rango ? 'Primera vuelta: ' + d.rango : d.min ? 'Tiempo promedio ' + dur(d.min) : 'La hace tu equipo'}</span></div>`;
   if (e.estado === 'pensando') {
     const pr = progresoEtapa(p, e);
-    const k = Math.floor(pr.pct / 100 * d.hace.length);
+    // En línea los pasos no se marcan por tiempo: el avance real llega en «Ahora: …».
+    const k = NUBE ? -1 : Math.floor(pr.pct / 100 * d.hace.length);
     return `<div class="card">${cab}
       <div class="thinking" style="margin-top:14px">
         <div class="row"><span class="pulse" aria-hidden="true"><i></i><i></i><i></i></span><strong>Synthetica está pensando</strong></div>
@@ -1801,7 +1803,7 @@ function etapaHTML(p, e) {
         ${pr.extendido ? `<p class="extension">Extendimos ${pr.extendido === 1 ? '1 hora' : pr.extendido + ' horas'} ${esc(razonExtension(p, e.n))}. Ahora debería estar lista hacia <strong>${fmtH(pr.fin)}</strong>.</p>` : ''}
         ${e.detalle ? `<p class="ahora"><strong>Ahora:</strong> ${esc(e.detalle)} <span class="muted">· ${fmtF(e.detalle_fecha)}</span></p>` : ''}
         <p class="small">Empezó ${fmtF(e.inicio)}${rondas(e).length > 1 ? `, vuelta ${rondas(e).length}` : ''}. ${rondas(e).length > 1 ? `Como ya conocemos tu producto, esta vuelta tarda unas ${dur(minEtapa(p, e))}` : `${p.tipo === 'completo' ? 'Este escenario' : 'Esta etapa'} tarda ${esc(d.rango || 'en promedio ' + dur(d.min))}`}${pr.extendido ? '' : `; debería estar lista hacia <strong>${fmtH(pr.fin)}</strong>`}. Te escribiremos en cuanto esté lista.</p>
-        <ul class="checklist">${d.hace.map((h, i) => `<li class="${i < k ? 'done' : i === k ? 'now' : ''}">${esc(h)}</li>`).join('')}</ul>
+        <ul class="checklist">${d.hace.map((h, i) => `<li class="${k < 0 ? 'plan' : i < k ? 'done' : i === k ? 'now' : ''}">${esc(h)}</li>`).join('')}</ul>
       </div>
       ${(e.n === 0 && p.tipo === 'sintetico' && !p.motor) || (e.n === 1 && p.tipo === 'completo') ? `<h3 style="margin-top:16px">Lo que nos diste</h3>${entradasHTML(p)}` : ''}
       <p class="small muted" style="margin-top:12px">Mientras tanto puedes dejar notas: las leemos antes de cerrar la etapa.</p>
@@ -1832,7 +1834,7 @@ function etapaHTML(p, e) {
   if (e.estado === 'analista') return `<div class="card">${cab}
       <div class="thinking" style="margin-top:14px">
         <strong>Recibimos tu proyecto</strong>
-        <ul class="checklist"><li class="done">Tus archivos se están procesando (tarda entre 5 y 10 minutos)</li><li class="done">Avisamos al equipo por correo: «un proyecto nuevo acaba de iniciar»</li><li class="now">Un analista pone en marcha el primer escenario desde la consola</li><li>El primer escenario tarda ${esc(d.rango || dur(d.min))}; te escribimos en cuanto esté lista</li></ul>
+        <ul class="checklist"><li class="done">Guardamos tus archivos</li><li class="done">Avisamos al equipo por correo</li><li class="now">Un analista pone en marcha ${p.tipo === 'completo' ? 'el primer escenario' : 'tu estudio'}</li><li>${p.tipo === 'completo' ? 'El primer escenario' : 'La primera etapa'} tarda ${esc(d.rango || dur(d.min))}; aquí verás cada avance</li></ul>
       </div>
       ${entradasHTML(p)}
       ${puede(p, 'interna') ? `<div class="internal" style="margin-top:14px"><b>Equipo Synthetica.</b> Lánzala desde la consola con las entradas de arriba y la credencial cifrada, si la hay. En la maqueta, este botón hace de consola.<div class="row" style="margin-top:8px"><button class="btn small primary" data-lanzar="${p.id}">Lanzar el primer escenario (analista)</button></div></div>` : ''}
@@ -2584,7 +2586,8 @@ function wireWizard() {
       UI.wizard = null; UI.recienCreado = id; save(); location.hash = '#/p/' + id; return;
     }
     const cat = TIPOS[w.tipo].etapas; const now = new Date().toISOString(); const primera = cat[0];
-    const estado0 = w.tipo === 'completo' ? 'analista' : primera.modo === 'humana' ? 'humana' : 'pensando';
+    // En línea nada arranca solo: el estudio espera a que el analista lo ponga en marcha en el motor.
+    const estado0 = w.tipo === 'completo' || (NUBE && w.tipo === 'sintetico') ? 'analista' : primera.modo === 'humana' ? 'humana' : 'pensando';
     DB.proyectos.unshift({ id, cuenta: cta.id, consentimiento, cliente: w.cliente, nombre: w.nombre.trim(), tipo: w.tipo, url: w.url.trim(), creado: now, deriva_de: w.deriva || null, miembros: w.miembros,
       fuentes: fuentesDe(w),
       etapas: cat.map(e => ({ n: e.n, estado: e === primera ? estado0 : 'cola', inicio: e === primera && estado0 !== 'analista' ? now : null, fin: null })) });

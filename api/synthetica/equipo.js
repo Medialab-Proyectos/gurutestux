@@ -139,6 +139,19 @@ export default async function handler(req, res) {
       const r = await query('update usuarios set clave_hash = $2 where correo = $1 returning nombre, correo', [String(d.correo || '').trim().toLowerCase(), hashClave(clave)]);
       return r.rows.length ? responder(res, 200, r.rows[0]) : responder(res, 404, { error: 'No hay una cuenta con ese correo' });
     }
+    if (req.method === 'POST' && accion === 'reiniciar') {
+      // Devuelve el proyecto a su estado real: desde la etapa «desde» nada ha empezado y espera al analista.
+      const d = await cuerpo(req); const desde = Number(d.desde) || 0;
+      const r = await cambiarDocumento(String(d.cuenta || ''), datos => {
+        const p = (datos.proyectos || []).find(x => x.id === d.id);
+        if (!p) return null;
+        for (const e of p.etapas || []) if (e.n >= desde)
+          Object.assign(e, { estado: e.n === desde ? 'analista' : 'cola', inicio: null, fin: null, logros: null, detalle: null, nota_equipo: null, auto: false, rondas: undefined });
+        if (desde <= 3) { delete p.resultado_motor; datos.ajustes = (datos.ajustes || []).filter(a => !(a.proyecto === p.id && a.hallazgo_ref && !a.auditoria)); }
+        return p.nombre;
+      });
+      return r ? responder(res, 200, { reiniciado: r, desde }) : responder(res, 404, { error: 'No existe ese proyecto' });
+    }
     if (req.method === 'POST' && accion === 'borrar') {
       const d = await cuerpo(req);
       let archivos = [];
