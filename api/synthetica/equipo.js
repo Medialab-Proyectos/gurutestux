@@ -2,6 +2,8 @@
 //   GET  /api/equipo?accion=proyectos                      → todos los proyectos de todas las cuentas
 //   GET  /api/equipo?accion=proyecto&cuenta=<id>&id=<id>   → el proyecto, su ficha y sus archivos
 //   GET  /api/equipo?accion=archivo&cuenta=<id>&p=<ruta>   → descarga un archivo de esa cuenta
+//   GET  /api/equipo?accion=cuentas                       → cuentas registradas
+//   POST /api/equipo?accion=clave { correo, clave }        → el administrador pone una contraseña nueva
 //   POST /api/equipo?accion=borrar { cuenta, id }  → quita el proyecto, sus documentos y su historial
 //   POST /api/equipo?accion=etapa { cuenta, id, n, estado: 'en_curso' | 'progreso' | 'lista', logros?, nota?, detalle?, resultado?, motor? }
 //     progreso: solo actualiza «Ahora: …» sin cambiar la etapa. resultado: hallazgos del estudio para auditar.
@@ -9,7 +11,7 @@ import { get, del } from '@vercel/blob';
 import crypto from 'node:crypto';
 import { Readable } from 'node:stream';
 import { query, esquema } from '../_synthetica/db.js';
-import { usuarioDe } from '../_synthetica/sesion.js';
+import { usuarioDe, hashClave } from '../_synthetica/sesion.js';
 import { responder, exigirOrigenPropio, cuerpo } from '../_synthetica/http.js';
 
 // El administrador entra sin cuenta con la llave SYNTHETICA_LLAVE_ADMIN (la usa operador.py).
@@ -124,6 +126,18 @@ export default async function handler(req, res) {
         return marcarEtapa(p, Number(d.n), d.estado, logros, d.nota ? String(d.nota).slice(0, 4000) : '', d.detalle ? String(d.detalle).slice(0, 300) : '');
       });
       return e ? responder(res, 200, { etapa: e.n, estado: e.estado }) : responder(res, 404, { error: 'No existe ese proyecto o esa etapa' });
+    }
+    if (req.method === 'GET' && accion === 'cuentas') {
+      const r = await query(`select u.id, u.nombre, u.correo, u.creado, coalesce(jsonb_array_length(d.datos -> 'proyectos'), 0) as proyectos
+                             from usuarios u left join documentos d on d.usuario_id = u.id order by u.creado`);
+      return responder(res, 200, { cuentas: r.rows });
+    }
+    if (req.method === 'POST' && accion === 'clave') {
+      const d = await cuerpo(req);
+      const clave = String(d.clave || '');
+      if (clave.length < 10) return responder(res, 400, { error: 'La contraseña debe tener al menos 10 caracteres' });
+      const r = await query('update usuarios set clave_hash = $2 where correo = $1 returning nombre, correo', [String(d.correo || '').trim().toLowerCase(), hashClave(clave)]);
+      return r.rows.length ? responder(res, 200, r.rows[0]) : responder(res, 404, { error: 'No hay una cuenta con ese correo' });
     }
     if (req.method === 'POST' && accion === 'borrar') {
       const d = await cuerpo(req);

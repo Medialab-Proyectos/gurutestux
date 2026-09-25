@@ -674,7 +674,17 @@ function vistaIngreso(modo) {
 function wireIngreso(modo) {
   document.querySelectorAll('[data-modo]').forEach(b => b.onclick = () => { location.hash = b.dataset.modo === 'crear' ? '#/crear-cuenta' : '#/ingresar'; });
   const err = t => { const e = $('#in-error'); e.textContent = t; e.hidden = !t; };
-  const olv = $('#in-olvide'); if (olv) olv.onclick = () => toast('En la plataforma real te llega por correo un enlace para crear una contraseña nueva.');
+  const olv = $('#in-olvide'); if (olv) olv.onclick = async () => {
+    if (!NUBE) return toast('En la plataforma en línea te llega por correo un enlace para crear una contraseña nueva.');
+    const correo = $('#in-correo').value.trim().toLowerCase();
+    if (!correoValido(correo)) { err('Escribe tu correo arriba y vuelve a tocar «¿Olvidaste tu contraseña?».'); return $('#in-correo').focus(); }
+    olv.disabled = true;
+    const r = await api('api/cuenta?accion=olvide', { method: 'POST', body: JSON.stringify({ correo }) }).then(x => x.json()).catch(() => null);
+    olv.disabled = false; err('');
+    const box = document.createElement('p'); box.className = 'note-box green'; box.setAttribute('role', 'status');
+    box.textContent = r ? r.mensaje : 'No pudimos conectar. Intenta de nuevo.';
+    olv.replaceWith(box);
+  };
   $('#f-ingreso').onsubmit = async ev => {
     ev.preventDefault();
     const correo = $('#in-correo').value.trim().toLowerCase(), clave = $('#in-clave').value;
@@ -696,6 +706,33 @@ function wireIngreso(modo) {
       if (!c || c.hash !== await hashClave(clave, c.sal)) return err('El correo o la contraseña no coinciden.');
       iniciarSesion(c);
     }
+  };
+}
+function vistaNuevaClave() {
+  return `<div style="min-height:calc(100vh - 56px);display:grid;place-items:center;padding:24px 0"><section class="card" style="width:min(460px,100%)">
+    <div class="logo" style="justify-content:center;font-size:24px">${ICON.logo}<span>synthetica</span></div>
+    <h1 class="h1" style="font-size:22px;margin-top:14px">Crea tu contraseña nueva</h1>
+    <form id="f-nueva" class="stack" style="margin-top:12px" novalidate>
+      <label class="field"><span>Contraseña nueva</span><input id="nc-clave" type="password" autocomplete="new-password" minlength="10" required></label>
+      <label class="field"><span>Repítela</span><input id="nc-clave2" type="password" autocomplete="new-password" minlength="10" required></label>
+      <p class="small muted" style="margin-top:-4px">Al menos 10 caracteres.</p>
+      <p class="small" id="nc-error" style="color:var(--red)" hidden></p>
+      <button class="btn primary" type="submit">Guardar y entrar</button>
+    </form></section></div>`;
+}
+function wireNuevaClave(token) {
+  const err = t => { const e = $('#nc-error'); e.textContent = t; e.hidden = !t; };
+  $('#f-nueva').onsubmit = async ev => {
+    ev.preventDefault();
+    const clave = $('#nc-clave').value;
+    if (clave.length < 10) return err('La contraseña debe tener al menos 10 caracteres.');
+    if (clave !== $('#nc-clave2').value) return err('Las dos contraseñas no coinciden.');
+    try {
+      const r = await api('api/cuenta?accion=nueva-clave', { method: 'POST', body: JSON.stringify({ token, clave }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) return err(j.error || 'No pudimos guardar la contraseña.');
+      await cargarNube(j.cuenta); iniciarSesion(j.cuenta); toast('Listo: tu contraseña quedó cambiada.');
+    } catch (e) { err('No pudimos conectar. Intenta de nuevo.'); }
   };
 }
 function vistaAceptar() {
@@ -2579,9 +2616,11 @@ function render() {
   const app = document.querySelector('.app');
   if (!c || !aceptoVigente(c)) {
     app.classList.add('sin-sesion');
-    const vista = !c ? (ruta[0] === 'legal' ? legalHTML(ruta[1]) : vistaIngreso(ruta[0] === 'crear-cuenta' ? 'crear' : 'ingresar')) : ruta[0] === 'legal' ? legalHTML(ruta[1]) : vistaAceptar();
+    const nueva = !c && NUBE && ruta[0] === 'nueva-clave' && ruta[1];
+    const vista = nueva ? vistaNuevaClave() : !c ? (ruta[0] === 'legal' ? legalHTML(ruta[1]) : vistaIngreso(ruta[0] === 'crear-cuenta' ? 'crear' : 'ingresar')) : ruta[0] === 'legal' ? legalHTML(ruta[1]) : vistaAceptar();
     $('#view').innerHTML = vista;
-    if (!c && ruta[0] !== 'legal') wireIngreso(ruta[0] === 'crear-cuenta' ? 'crear' : 'ingresar');
+    if (nueva) wireNuevaClave(ruta[1]);
+    else if (!c && ruta[0] !== 'legal') wireIngreso(ruta[0] === 'crear-cuenta' ? 'crear' : 'ingresar');
     if (c && ruta[0] !== 'legal') {
       $('#ac-salir').onclick = cerrarSesion;
       $('#ac-si').onclick = async () => {

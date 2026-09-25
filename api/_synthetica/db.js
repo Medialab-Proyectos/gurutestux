@@ -47,6 +47,14 @@ const ESQUEMA = [
      ip text,
      navegador text
    )`,
+  // Enlaces para crear una contraseña nueva: se guarda solo el hash del token, vence en 1 hora y sirve una vez.
+  `create table if not exists recuperaciones (
+     token_hash text primary key,
+     usuario_id text not null references usuarios(id) on delete cascade,
+     vence timestamptz not null,
+     usado boolean not null default false,
+     creado timestamptz not null default now()
+   )`,
   `create table if not exists correos_enviados (
      id bigserial primary key,
      usuario_id text not null references usuarios(id) on delete cascade,
