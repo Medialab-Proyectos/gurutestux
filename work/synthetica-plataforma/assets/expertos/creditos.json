@@ -1,18 +1,18 @@
 {
  "experta-ux": {
-  "autor": "FairFace, imagen 26168 (Kärkkäinen y Joo, 2021)",
+  "autor": "FairFace, imagen 18958 (Kärkkäinen y Joo, 2021)",
   "fuente": "FairFace en Hugging Face",
   "url": "https://huggingface.co/datasets/HuggingFaceM4/FairFace",
   "licencia": "CC BY 4.0",
   "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
-  "apariencia": "mujer, 40-49 años, México"
+  "apariencia": "mujer, 40-49 años, Colombia"
  },
  "experto-ui": {
-  "autor": "FairFace, imagen 24456 (Kärkkäinen y Joo, 2021)",
+  "autor": "FairFace, imagen 8428 (Kärkkäinen y Joo, 2021)",
   "fuente": "FairFace en Hugging Face",
   "url": "https://huggingface.co/datasets/HuggingFaceM4/FairFace",
   "licencia": "CC BY 4.0",
   "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
-  "apariencia": "hombre, 30-39 años, México"
+  "apariencia": "hombre, 30-39 años, Colombia"
  }
 }
