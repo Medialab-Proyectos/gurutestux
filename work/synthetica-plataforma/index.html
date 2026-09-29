@@ -170,6 +170,13 @@ a { color: var(--blue); }
 .agente-op:focus-within { outline: 2px solid var(--brand); outline-offset: 2px; }
 .precio { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: var(--soft-green); }
 @media (max-width: 560px) { .agentes-op { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kpi-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.kpi-top > span:first-child { min-width: 0; }
+.semaforo { flex: none; display: inline-flex !important; flex-direction: row; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.semaforo > span { display: inline-flex !important; } .semaforo svg { width: 14px; height: 14px; display: block; }
+.semaforo.bien { background: var(--soft-green); color: var(--green); }
+.semaforo.mejorable { background: var(--soft-orange); color: var(--orange); }
+.semaforo.atencion { background: light-dark(#fde8e8, #4a1f24); color: var(--red); }
 .aviso-paso { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 18px; padding: 14px 16px; border: 1px solid var(--brand); border-radius: 12px; background: var(--soft-blue); font-size: 15px; line-height: 1.5; }
 .aviso-icono { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: #fff; font: 700 14px/1 Georgia, serif; }
 .archivos-elegidos { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
@@ -447,6 +454,7 @@ const STORE = 'synthetica-plataforma-v1';
 const MIN = 60000;
 
 const ICON = {
+  alerta: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>',
   rayo: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
   reloj: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
   estrella: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>',
@@ -1010,7 +1018,7 @@ function sincronizarProyecto(p) {
       titulo: h.titulo, vimos: (h.evidencia || []).join(' · ') || h.titulo, por_que: (h.por_que || []).join(' '), resultado_paso: h.resultado_paso || '', propuesta: h.recomendacion, criterio: h.criterio, validacion: h.validacion,
       donde: [h.vista, h.recorrido].filter(Boolean).join(' · '),
       evidencia: `${h.afectados} de ${h.expuestos} agentes` + (h.dispositivos.length ? ` · ${h.dispositivos.join(' y ')}` : ''),
-      quick_win: h.quick_win, estudio: est.carpeta, fuera: false, capa: CAPA_TIPO[h.tipo] || 'UX',
+      quick_win: h.quick_win, estudio: est.carpeta, fuera: false, capa: h.capa || CAPA_TIPO[h.tipo] || 'UX',
       int: { sev: SEV[h.severidad] || 1, arr: ARREGLO[h.esfuerzo] || 'media', frec: `${h.afectados}/${h.expuestos}`, p: h.severidad }
     });
     if (!a.validador || !rolDe(p, a.validador)) a.validador = validadorPara(p, h.validacion);
@@ -2136,6 +2144,13 @@ const HORIZONTE = {
   futuro: { t: 'A futuro', d: 'Ideas para seguir mejorando cuando lo anterior esté listo.', ico: ICON.estrella }
 };
 const ESFUERZO = { bajo: 'Esfuerzo bajo', medio: 'Esfuerzo medio', alto: 'Esfuerzo alto' };
+/* Semáforo de los indicadores de encuesta: verde bien, naranja mejorable, rojo atención.
+   Umbrales: CSAT ≥ 4 bien y < 3 atención; NPS ≥ 30 bien y < 0 atención; NASA-TLX (carga, menos es mejor) < 30 bien y > 50 atención. */
+const nivelCSAT = v => v == null ? null : v >= 4 ? 'bien' : v >= 3 ? 'mejorable' : 'atencion';
+const nivelNPS = v => v == null ? null : v >= 30 ? 'bien' : v >= 0 ? 'mejorable' : 'atencion';
+const nivelTLX = v => v == null ? null : v < 30 ? 'bien' : v <= 50 ? 'mejorable' : 'atencion';
+const SEMAFORO = { bien: ['Bien', ICON.ok], mejorable: ['Mejorable', ICON.alerta], atencion: ['Atención', ICON.no] };
+const semaforo = n => n ? `<span class="semaforo ${n}" title="${SEMAFORO[n][0]}"><span aria-hidden="true">${SEMAFORO[n][1]}</span>${SEMAFORO[n][0]}</span>` : '';
 function gananciaHTML(i) {
   const kpi = (ico, grande, txt, sub) => `<div class="indicador"><span class="ind-ico" aria-hidden="true">${ico}</span><strong>${grande}</strong><span>${txt}</span>${sub ? `<small>${sub}</small>` : ''}</div>`;
   const flecha = (a, b, suf = '') => a == null || b == null ? '—' : `${a}${suf} <span aria-hidden="true">→</span><span class="sr"> pasa a </span> ${b}${suf}`;
@@ -2150,7 +2165,7 @@ function gananciaHTML(i) {
 }
 function oportunidadesHTML(d) {
   const card = x => `<article class="propuesta"><div class="row" style="gap:6px"><span class="chip ${x.capa === 'UI' ? 'capa-ui' : 'capa-ux'}">${x.capa === 'UI' ? 'UI · interfaz' : 'UX · experiencia'}</span><span class="chip">${esc(x.sobre)}</span></div>
-      <h4>${esc(x.titulo)}</h4>${x.conviene ? `<p class="small"><strong>Conviene:</strong> ${esc(x.conviene)}</p>` : ''}${x.riesgo ? `<p class="small muted"><strong>A cuidar:</strong> ${esc(x.riesgo)}</p>` : ''}
+      <h4>${esc(x.titulo)}</h4>${x.detalle ? `<p class="small">${esc(x.detalle)}</p>` : ''}${x.conviene ? `<p class="small"><strong>Conviene:</strong> ${esc(x.conviene)}</p>` : ''}${x.riesgo ? `<p class="small muted"><strong>A cuidar:</strong> ${esc(x.riesgo)}</p>` : ''}
       ${(x.donde || []).length ? `<p class="small muted">Dónde: ${x.donde.map(esc).join(' · ')}${x.mas_lugares ? ` y ${x.mas_lugares} más` : ''}</p>` : ''}
       ${x.fuente ? `<p class="small muted" style="margin-top:4px">Fuente: ${esc(x.fuente)}</p>` : ''}</article>`;
   const ops = d.oportunidades || [];
@@ -2226,9 +2241,9 @@ function motorEtapaHTML(p, e) {
     ${interna() ? `<div class="internal" style="margin-top:14px"><b>Vista interna · informe completo del motor.</b> Cada enlace abre el informe original.
       <div class="grid2" style="margin-top:10px">${est.entregables.map(x => `<a class="note-box" style="text-decoration:none;color:inherit;background:var(--board)" href="${esc(x.href)}" target="_blank" rel="noopener"><strong style="color:var(--blue)">${esc(x.titulo)}</strong><div class="small muted">${esc(x.descripcion)}</div></a>`).join('')}</div></div>` : ''}
     ${s ? `<h3 style="margin-top:16px">Qué dijeron los agentes al terminar</h3><div class="grid3" style="margin-top:8px">
-      <div class="kpi"><span>CSAT</span><strong>${String(s.csat ?? '—').replace('.', ',')}</strong><small>de 5</small></div>
-      <div class="kpi"><span>NPS estimado</span><strong>${s.nps ?? '—'}</strong><small>de −100 a 100</small></div>
-      <div class="kpi"><span>NASA-TLX</span><strong>${s.tlx != null ? String(s.tlx).replace('.', ',') : '—'}</strong><small>carga ${esc(s.tlx_banda || '')}${s.tlx_dominante ? ' · pesa más: ' + esc(s.tlx_dominante.replace('_', ' ')) : ''}</small></div></div>
+      <div class="kpi"><div class="kpi-top"><span>CSAT · satisfacción</span>${semaforo(nivelCSAT(s.csat))}</div><strong>${String(s.csat ?? '—').replace('.', ',')}</strong><small>de 1 a 5 · bien desde 4</small></div>
+      <div class="kpi"><div class="kpi-top"><span>NPS · recomendación</span>${semaforo(nivelNPS(s.nps))}</div><strong>${s.nps ?? '—'}</strong><small>de −100 a 100 · bien desde 30</small></div>
+      <div class="kpi"><div class="kpi-top"><span>NASA-TLX · esfuerzo</span>${semaforo(nivelTLX(s.tlx))}</div><strong>${s.tlx != null ? String(s.tlx).replace('.', ',') : '—'}</strong><small>carga ${esc(s.tlx_banda || '')} · mejor si es menos de 30${s.tlx_dominante ? ' · pesa más: ' + esc(s.tlx_dominante.replace('_', ' ')) : ''}</small></div></div>
       <p class="small muted" style="margin-top:6px">Son respuestas de agentes sintéticos: orientan, pero no sustituyen una encuesta a personas reales.</p>` : ''}
     ${est.limites.length ? `<h3 style="margin-top:16px">Lo que no se pudo medir</h3><p class="sub">No se atribuye al producto: se repite ese recorrido antes de sacar conclusiones.</p><ul class="plain">${est.limites.map(l => `<li><strong>${esc(l.recorrido)} · ${esc(l.paso)}</strong>: ${esc(l.que_paso)}</li>`).join('')}</ul>` : ''}
     <h3 style="margin-top:16px">Estudios de este producto en el motor</h3>
