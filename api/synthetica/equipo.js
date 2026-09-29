@@ -68,12 +68,25 @@ function marcarEtapa(p, n, estado, logros, nota, detalle) {
   if (logros?.length) e.logros = logros;
   if (nota) e.nota_equipo = nota;
   const ronda = e.rondas?.[e.rondas.length - 1]; if (ronda) ronda.fin = ahora;
+  const arrancar = sig => { if (sig && ['cola', 'analista'].includes(sig.estado)) Object.assign(sig, { estado: 'pensando', inicio: ahora, fin: null }); };
   if (p.tipo === 'sintetico' && n < 3) {
-    // Fuentes, cohorte y ejecución se aprueban solas; el informe es el que se audita.
+    // Fuentes, definición y ejecución se aprueban solas.
     e.estado = 'hecha'; e.auto = true;
-    const sig = p.etapas.find(x => x.n === n + 1); if (sig) Object.assign(sig, { estado: 'pensando', inicio: ahora, fin: null });
+    arrancar(p.etapas.find(x => x.n === n + 1));
+  } else if (p.tipo === 'sintetico' && n === 3) {
+    // Los hallazgos se auditan; mientras tanto se redactan las propuestas de mejora (caja 4).
+    e.estado = 'revision';
+    arrancar(p.etapas.find(x => x.n === 4));
+  } else if (p.tipo === 'sintetico' && n === 4) {
+    e.estado = 'hecha'; e.auto = true;   // las propuestas se leen y se deciden; no bloquean el estudio
   } else e.estado = 'revision';
   return e;
+}
+
+// Estudios sintéticos creados antes de la caja 4 (propuestas de mejora): se les agrega en cola.
+function conCajaDePropuestas(p) {
+  if (p.tipo === 'sintetico' && Array.isArray(p.etapas) && !p.etapas.some(x => x.n === 4))
+    p.etapas.push({ n: 4, estado: 'cola', inicio: null, fin: null });
 }
 
 export default async function handler(req, res) {
@@ -129,11 +142,15 @@ export default async function handler(req, res) {
       const d = await cuerpo(req);
       if (!['en_curso', 'progreso', 'lista'].includes(d.estado)) return responder(res, 400, { error: 'estado debe ser en_curso, progreso o lista' });
       if (d.resultado && JSON.stringify(d.resultado).length > 2_500_000) return responder(res, 413, { error: 'El resultado es demasiado grande' });
+      if (d.propuestas && JSON.stringify(d.propuestas).length > 1_500_000) return responder(res, 413, { error: 'Las propuestas son demasiado grandes' });
       const logros = Array.isArray(d.logros) ? d.logros.map(x => String(x).slice(0, 300)).slice(0, 12) : null;
       const e = await cambiarDocumento(String(d.cuenta || ''), datos => {
         const p = (datos.proyectos || []).find(x => x.id === d.id);
         if (!p) return null;
+        conCajaDePropuestas(p);
         if (d.resultado && typeof d.resultado === 'object') p.resultado_motor = d.resultado;
+        // Propuestas de mejora e indicadores (caja 4), ya pulidas por el analista.
+        if (d.propuestas && typeof d.propuestas === 'object') p.propuestas = d.propuestas;
         // Fuentes, cohorte y recorridos del motor, para que el cliente los vea y los valide.
         if (d.proyecto_motor && typeof d.proyecto_motor === 'object' && JSON.stringify(d.proyecto_motor).length < 400_000) {
           p.motor_proyecto = d.proyecto_motor;

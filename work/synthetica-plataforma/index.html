@@ -139,6 +139,36 @@ a { color: var(--blue); }
 .empty { padding: 26px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); text-align: center; }
 .extension { margin: 10px 0 0; padding: 8px 12px; border-radius: 8px; background: var(--soft-orange); font-size: 14px; }
 .ahora { margin: 8px 0 0; font-size: 14px; }
+.capas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.capa { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 10px; align-items: center; text-align: left; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); color: inherit; cursor: pointer; font: inherit; }
+.capa.activa { border-color: var(--brand); box-shadow: 0 0 0 2px var(--soft-blue) inset; }
+.capa .capa-ico { grid-row: span 2; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: var(--soft-blue); color: var(--brand); }
+.capa strong { font-size: 22px; line-height: 1; } .capa span:last-child { font-size: 13px; color: var(--muted); }
+.buscar { display: block; } .buscar .inp { width: 100%; }
+.chip.capa-ux { background: var(--soft-blue); color: var(--brand); } .chip.capa-ui { background: var(--soft-orange); color: var(--ink); }
+.persona-card { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.persona-card.experto { background: var(--soft-blue); border-color: transparent; }
+.rostro { flex: none; width: 56px; height: 56px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: var(--brand); color: #fff; font-weight: 800; }
+.rostro img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.plan-agentes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.plan-agentes > div, .indicador { display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); }
+.plan-agentes strong, .indicador strong { font-size: 24px; line-height: 1.1; } .plan-agentes span:last-child, .indicador > span:not(.ind-ico) { font-size: 13px; }
+.kpi-ico, .ind-ico, .hz-ico { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--soft-blue); color: var(--brand); margin-bottom: 4px; }
+.indicadores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.indicador small { color: var(--muted); font-size: 12px; }
+.propuesta { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.propuesta h4 { margin: 8px 0 4px; font-size: 15px; }
+.horizonte-ahora .hz-ico { background: var(--soft-green); color: var(--green); }
+.horizonte-despues .hz-ico { background: var(--soft-orange); color: var(--orange); }
+.chip.esf-bajo { background: var(--soft-green); } .chip.esf-alto { background: var(--soft-orange); }
+@media (max-width: 760px) { .capas, .plan-agentes { grid-template-columns: 1fr; } .indicadores { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.agentes-op { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.agente-op { display: grid; justify-items: center; gap: 2px; padding: 12px 8px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; background: var(--panel); }
+.agente-op strong { font-size: 24px; line-height: 1; } .agente-op span { font-size: 13px; } .agente-op small { font-size: 12px; color: var(--muted); }
+.agente-op.activa { border-color: var(--brand); box-shadow: 0 0 0 2px var(--soft-blue) inset; }
+.agente-op:focus-within { outline: 2px solid var(--brand); outline-offset: 2px; }
+.precio { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: var(--soft-green); }
+@media (max-width: 560px) { .agentes-op { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .aviso-paso { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 18px; padding: 14px 16px; border: 1px solid var(--brand); border-radius: 12px; background: var(--soft-blue); font-size: 15px; line-height: 1.5; }
 .aviso-icono { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: #fff; font: 700 14px/1 Georgia, serif; }
 .archivos-elegidos { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
@@ -416,6 +446,12 @@ const STORE = 'synthetica-plataforma-v1';
 const MIN = 60000;
 
 const ICON = {
+  rayo: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
+  reloj: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  estrella: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>',
+  tropiezo: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 20l5-9 5 9"/><path d="M12 5v2"/><path d="M5.6 7.6l1.4 1.4M18.4 7.6 17 9"/></svg>',
+  herramienta: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>',
+  sonrisa: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"/><path d="M9 9.5h.01M15 9.5h.01"/></svg>',
   pausa: '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="4" y="3" width="3" height="10" rx="1"/><rect x="9" y="3" width="3" height="10" rx="1"/></svg>',
   play: '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3l8 5-8 5z"/></svg>',
   flecha: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>',
@@ -457,21 +493,24 @@ const ROLES = {
    que va guardando). null = depende de personas, no del motor. */
 const TIPOS = {
   sintetico: {
-    nombre: 'Estudio sintético', corto: 'Sintético', total: 'Primera evaluación en unas 8 horas',
+    nombre: 'Estudio sintético', corto: 'Sintético', total: 'Primera evaluación en unas 9 horas',
     resumen: 'Nos das la URL y evaluamos el producto como está, con el motor completo de agentes.',
     etapas: [
       { n: 0, nombre: 'Lectura de tus fuentes', corto: 'Fuentes', min: 30, modo: 'auto',
         hace: ['Descomprimir y clasificar los archivos', 'Redactar datos personales', 'Armar el contexto de negocio y producto', 'Detectar lo que falta'],
         entrega: 'Te mostramos lo que entendimos y lo que falta.' },
-      { n: 1, nombre: 'Cohorte y recorridos', corto: 'Cohorte', min: 90, modo: 'auto',
-        hace: ['Protopersonas a partir de tu público', 'Recorridos de las tareas principales', 'Contextos de uso (móvil, interrupciones, prisa)', 'Plan muestral reproducible'],
+      { n: 1, nombre: 'Definición del estudio', corto: 'Definición', min: 90, modo: 'auto',
+        hace: ['Personas sintéticas a partir de tu público', 'Recorridos de las tareas principales', 'Expertos UX y UI que también revisan tu producto', 'Cuántos agentes y en qué dispositivos'],
         entrega: 'Validas que las personas y las tareas se parezcan a tu realidad.' },
       { n: 2, nombre: 'Ejecución de los agentes', corto: 'Ejecución', min: 300, modo: 'auto',
         hace: ['Recorridos con cada agente', 'KLM y tiempos por paso', 'Grabación y mirada simulada', 'Hallazgos con su evidencia'],
         entrega: 'Nada que validar: los agentes trabajan.' },
-      { n: 3, nombre: 'Informe y ajustes', corto: 'Informe', min: 60, modo: 'auto',
-        hace: ['Recomendaciones UX y UI con evidencia', 'Auditoría experta', 'Comparación con el estudio anterior'],
-        entrega: 'Validas los ajustes que proponemos.' }
+      { n: 3, nombre: 'Hallazgos', corto: 'Hallazgos', min: 60, modo: 'auto',
+        hace: ['Problemas de experiencia (UX) con su evidencia', 'Problemas de interfaz (UI) verificados', 'Revisión de los expertos'],
+        entrega: 'Auditas lo que encontramos.' },
+      { n: 4, nombre: 'Propuestas de mejora', corto: 'Mejoras', min: 60, modo: 'auto',
+        hace: ['Mejoras explicadas en tu lenguaje', 'Qué aplicar ahora, más adelante y a futuro', 'Cuánto mejora tu producto y con qué esfuerzo'],
+        entrega: 'Decides qué aplicar y cuándo.' }
     ]
   },
   completo: {
@@ -938,6 +977,17 @@ function proyectoDesdeMotor(mp, extra = {}) {
     ]
   }, extra);
 }
+function normalizarProyectos() {
+  (DB.proyectos || []).forEach(p => {
+    if (p.tipo === 'sintetico' && Array.isArray(p.etapas) && !p.etapas.some(e => e.n === 4)) p.etapas.push({ n: 4, estado: 'cola', inicio: null, fin: null });
+  });
+}
+// Qué es de interfaz (UI) y qué de experiencia (UX), para clasificar los hallazgos.
+const CAPA_TIPO = { icono_sin_nombre: 'UI', contraste_insuficiente: 'UI', texto_pequeno: 'UI', objetivos_tactiles_pequenos: 'UI', acierto_tactil_bajo: 'UI',
+  fallo_de_apuntado: 'UI', competencia_visual: 'UI', objetivo_visto_tarde: 'UI', parece_pulsable: 'UI' };
+const GRUPO_UI = { 'Accesibilidad': 'accesibilidad', 'Objetivos interactivos': 'ergonomia', 'Tipografía': 'ergonomia', 'Responsive': 'ergonomia',
+  'Design system': 'diseno', 'Componentes': 'diseno', 'Iconografía': 'diseno', 'Contenido': 'contenido', 'Arquitectura de información': 'arquitectura',
+  'Estructura': 'arquitectura', 'Flujo': 'flujo', 'Formularios': 'usabilidad', 'Rendimiento percibido': 'usabilidad' };
 function sincronizarProyecto(p) {
   const est = estudioDe(p); const mp = p.motor && motorProyecto(p.motor.proyecto_id);
   if (!est || (!mp && !p.resultado_motor)) return;
@@ -959,10 +1009,21 @@ function sincronizarProyecto(p) {
       titulo: h.titulo, vimos: (h.evidencia || []).join(' · ') || h.titulo, por_que: (h.por_que || []).join(' '), resultado_paso: h.resultado_paso || '', propuesta: h.recomendacion, criterio: h.criterio, validacion: h.validacion,
       donde: [h.vista, h.recorrido].filter(Boolean).join(' · '),
       evidencia: `${h.afectados} de ${h.expuestos} agentes` + (h.dispositivos.length ? ` · ${h.dispositivos.join(' y ')}` : ''),
-      quick_win: h.quick_win, estudio: est.carpeta, fuera: false,
+      quick_win: h.quick_win, estudio: est.carpeta, fuera: false, capa: CAPA_TIPO[h.tipo] || 'UX',
       int: { sev: SEV[h.severidad] || 1, arr: ARREGLO[h.esfuerzo] || 'media', frec: `${h.afectados}/${h.expuestos}`, p: h.severidad }
     });
     if (!a.validador || !rolDe(p, a.validador)) a.validador = validadorPara(p, h.validacion);
+  }
+  // Hallazgos de interfaz (UI) que el motor verificó: fallas de accesibilidad, defectos y desviaciones del sistema de diseño.
+  for (const h of (est.ui || []).filter(x => x.verificado)) {
+    ids.add(h.id);
+    let a = DB.ajustes.find(x => x.proyecto === p.id && x.hallazgo_ref === h.id);
+    if (!a) { a = { id: 'u-' + p.id + '-' + h.id, proyecto: p.id, hallazgo_ref: h.id, estado: 'pendiente', decidido_por: null, decidido_en: null, comentario: '', validador: null }; DB.ajustes.push(a); }
+    Object.assign(a, { etapa: 3, grupo: GRUPO_UI[h.categoria] || 'usabilidad', capa: 'UI', control: h.titulo, titulo: h.titulo,
+      vimos: h.titulo + (h.referencia ? ` (referencia: ${h.referencia})` : ''), por_que: '', resultado_paso: '', propuesta: h.recomendacion,
+      criterio: h.referencia ? `Cumple ${h.referencia}` : '', validacion: 'automatica', donde: (h.vistas || []).slice(0, 3).join(' · '),
+      evidencia: h.dispositivo ? (h.dispositivo === 'movil' ? 'en celular' : 'en computador') : '', quick_win: false, estudio: est.carpeta, fuera: false,
+      int: { sev: h.severidad === 'P1' ? 3 : 1, arr: 'alta', frec: '', p: h.severidad } });
   }
   DB.ajustes.filter(a => a.proyecto === p.id && a.hallazgo_ref && !ids.has(a.hallazgo_ref)).forEach(a => { a.fuera = true; });
 }
@@ -1003,6 +1064,7 @@ async function cargarNube(cuenta) {
   DB = b.datos && b.datos.version === seed().version ? b.datos : seed();
   VERSION_NUBE = b.version || 0;
   DB.cuentas = [cuenta];
+  normalizarProyectos();
   DB.proyectos.filter(p => p.resultado_motor).forEach(sincronizarProyecto);
   if (!DB.personas.some(x => x.id === cuenta.id)) DB.personas.push({ id: cuenta.id, nombre: cuenta.nombre, org: 'Cliente', cargo: '' });
 }
@@ -1096,6 +1158,7 @@ function fichaProyecto(p) {
     `Proyecto: ${p.nombre}`, `Tipo: ${TIPOS[p.tipo].nombre}`, p.url ? `URL: ${p.url}` : '', `Creado: ${fmtF(p.creado)}`,
     p.motor ? `Proyecto del motor: ${p.motor.proyecto_id}` : '',
     f.descripcion ? `Descripción: ${f.descripcion}` : '',
+    f.agentes ? `Personas sintéticas: ${f.agentes} (USD ${precioEstudio(f.agentes)} el análisis completo, expertos UX y UI sin costo)` : '',
     en.alcance ? `Alcance: ${en.alcance}` : '', en.analizar ? `Problemas que ya identificó: ${en.analizar}` : '', en.esperas ? `Qué espera obtener: ${en.esperas}` : '',
     en.storybook ? `Sistema de diseño / Storybook: ${en.storybook}` : '', en.secciones ? `Secciones útiles: ${en.secciones}` : '',
     p.deriva_de ? `Rehace el proyecto: ${(proyecto(p.deriva_de) || {}).nombre || p.deriva_de}` : '',
@@ -1172,6 +1235,7 @@ function completarEtapa(p, e) {
     e.estado = 'hecha'; const sig = p.etapas.find(x => x.n === 2); sig.estado = 'vivo'; sig.inicio = e.fin;
     return;
   }
+  if (p.tipo === 'sintetico' && e.n === 4) { e.estado = 'hecha'; e.auto = true; return; }
   if (p.tipo === 'sintetico' && e.n < 3) {
     // Fuentes, cohorte y ejecución se aprueban solas; el informe es el que se audita.
     e.estado = 'hecha'; e.auto = true; e.pedida = null;
@@ -1180,6 +1244,7 @@ function completarEtapa(p, e) {
     return;
   }
   e.estado = 'revision';
+  if (p.tipo === 'sintetico' && e.n === 3) { const e4 = p.etapas.find(x => x.n === 4); if (e4 && e4.estado === 'cola') Object.assign(e4, { estado: 'pensando', inicio: e.fin, fin: null }); }
   const r = rondaActual(e); r.fin = e.fin;
   if (p.tipo === 'completo') {
     if (r.n > 1) {
@@ -1711,7 +1776,7 @@ function vistaProyecto(pid, nSel) {
       return `<button role="listitem" class="step ${x.estado} ${d.modo === 'humana' ? 'humana' : ''}" data-step="${x.n}" ${x.n === e.n ? 'aria-current="step"' : ''}><span class="n">${x.n}</span><strong>${esc(d.corto)}</strong><small class="st-ico">${ico} ${lab}</small></button>`;
     }).join('')}
     ${p.tipo === 'sintetico' ? (() => { const e3 = p.etapas.find(x => x.n === 3); const corriendo = !['revision', 'hecha'].includes(e3.estado) || !!p.cancelado;
-      return `<button role="listitem" class="step" data-reejecutar="${p.id}" ${corriendo ? 'disabled title="Ya hay una ejecución en curso"' : ''}><span class="n">${ICON.repetir}</span><strong>Volver a ejecutar</strong><small>${p.cancelado ? 'Proyecto cancelado' : corriendo ? 'Ejecución en curso' : 'Eliges cuántos agentes'}</small></button>`; })() : ''}</div>
+      return `<button role="listitem" class="step" data-reejecutar="${p.id}" ${corriendo ? 'disabled title="Ya hay una ejecución en curso"' : ''}><span class="n">${ICON.repetir}</span><strong>Rehacer</strong><small>${p.cancelado ? 'Proyecto cancelado' : corriendo ? 'Ejecución en curso' : 'Eliges cuántos agentes'}</small></button>`; })() : ''}</div>
     ${p.tipo === 'seguimiento' && e.estado === 'vivo' ? vistaSeguimiento(p) : `
     <div class="split" style="margin-top:8px">
       <div>${etapaHTML(p, e)}</div>
@@ -1876,7 +1941,7 @@ function etapaHTML(p, e) {
   const sig = defEtapa(p, e.n + 1);
   const revisando = e.estado === 'revision';
   return `<div class="card">${cab}
-      <p class="sub" style="margin-top:6px">${revisando ? `Lista desde el ${fmtF(e.fin)}.` : e.auto ? `Lista el ${fmtF(e.fin)}; pasó sola a la siguiente etapa.` : e.aprobada_por ? `Aprobada por ${esc(persona(e.aprobada_por).nombre)}${e.aprobada_en ? ' el ' + fmtF(e.aprobada_en) : ''}.` : e.en_motor ? (e.inicio ? `Corrió en el motor del ${fmtF(e.inicio)} al ${fmtF(e.fin)}.` : 'Se configuró directamente en el motor, antes de ligar el proyecto a la plataforma.') : 'Terminada.'}</p>
+      <p class="sub" style="margin-top:6px">${revisando ? `Lista desde el ${fmtF(e.fin)}.` : e.auto ? `Lista el ${fmtF(e.fin)}${defEtapa(p, e.n + 1) ? '; pasó sola a la siguiente etapa' : ''}.` : e.aprobada_por ? `Aprobada por ${esc(persona(e.aprobada_por).nombre)}${e.aprobada_en ? ' el ' + fmtF(e.aprobada_en) : ''}.` : e.en_motor ? (e.inicio ? `Corrió en el motor del ${fmtF(e.inicio)} al ${fmtF(e.fin)}.` : 'Se configuró directamente en el motor, antes de ligar el proyecto a la plataforma.') : 'Terminada.'}</p>
       ${e.logros ? `<h3 style="margin-top:16px">Qué logramos</h3><ul class="plain">${e.logros.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
       ${e.nota_equipo ? `<div class="note-box" style="margin-top:12px"><strong>Nota del equipo Synthetica.</strong> ${esc(e.nota_equipo)}</div>` : ''}
       ${e.prototipo ? `<div class="note-box" style="margin-top:16px"><div class="row between"><div><strong>Prueba la interfaz</strong><div class="small muted">${esc(e.prototipo)} · navegable, con los datos que nos diste</div></div><button class="btn small primary" data-probar="${p.id}:${e.n}">Abrir el prototipo</button></div></div>` : ''}
@@ -1888,6 +1953,7 @@ function etapaHTML(p, e) {
     </div>
     ${(e.n === 1 && p.tipo === 'completo') || (e.n === 0 && p.tipo === 'sintetico' && !p.motor) ? `<div class="card"><h2>Lo que nos diste</h2>${entradasHTML(p)}</div>` : ''}
     ${p.motor ? motorEtapaHTML(p, e) : ''}
+    ${p.tipo === 'sintetico' && e.n === 4 && p.propuestas ? propuestasHTML(p) : ''}
     ${esDiseno ? disenoHTML(p, e) : ''}
     ${conVueltas ? opinionHTML(p, e) : ''}
     ${ajs.length ? auditoriaHTML(p, e, ajs) : ''}
@@ -1994,15 +2060,21 @@ function resultadoPaso(t) {
   return t;
 }
 function auditoriaHTML(p, e, ajs) {
-  const clave = p.id + ':' + e.n; const f = UI.filtros[clave] || (UI.filtros[clave] = { g: '', est: '', val: '' });
+  const clave = p.id + ':' + e.n; const f = UI.filtros[clave] || (UI.filtros[clave] = { g: '', est: '', val: '', c: '', q: '' });
   const grupos = [...new Set(ajs.map(a => a.grupo))];
   const hechos = ajs.filter(a => a.auditoria).length;
-  const vis = ajs.filter(a => (!f.g || a.grupo === f.g) && (!f.est || (f.est === 'hechos' ? a.auditoria : !a.auditoria)) && (!f.val || a.validacion === f.val))
+  const nUX = ajs.filter(a => (a.capa || 'UX') === 'UX').length, nUI = ajs.length - nUX;
+  const q = (f.q || '').trim().toLowerCase();
+  const vis = ajs.filter(a => (!f.g || a.grupo === f.g) && (!f.c || (a.capa || 'UX') === f.c) && (!q || [a.control, a.vimos, a.propuesta, a.donde].join(' ').toLowerCase().includes(q))
+      && (!f.est || (f.est === 'hechos' ? a.auditoria : !a.auditoria)) && (!f.val || a.validacion === f.val))
     .sort((a, b) => (b.quick_win ? 1 : 0) - (a.quick_win ? 1 : 0) || (a.validacion === 'personas' ? -1 : 1) - (b.validacion === 'personas' ? -1 : 1) || ((b.int || {}).sev || 0) - ((a.int || {}).sev || 0));
   const todos = UI.abiertos[clave]; const mostrar = todos ? vis : vis.slice(0, 10);
   const chip = (g, txt, n) => `<button class="chip ${f.g === g ? 'blue' : ''}" data-fg="${clave}|${g}" aria-pressed="${f.g === g}" style="cursor:pointer">${g ? ICON[g] || '' : ''}${txt} · ${n}</button>`;
+  const capa = (c, txt, n, ico) => `<button class="capa ${f.c === c ? 'activa' : ''}" data-fcapa="${clave}|${c}" aria-pressed="${f.c === c}"><span class="capa-ico" aria-hidden="true">${ico}</span><strong>${n}</strong><span>${txt}</span></button>`;
   return `<div class="card">
-    <div class="row between"><div><h2>Auditoría de los hallazgos</h2><p class="sub">${hechos} de ${ajs.length} auditados. Revisa cada hallazgo, marca qué encontraste y deja un comentario si hace falta. Tu auditoría se guarda: si el hallazgo vuelve a salir en la siguiente corrida, la conserva.</p></div></div>
+    <div class="capas" role="group" aria-label="Filtrar por tipo de hallazgo">${capa('', 'hallazgos en total', ajs.length, ICON.auditar)}${capa('UX', 'de experiencia (UX): entender, decidir, avanzar', nUX, ICON.flujo)}${capa('UI', 'de interfaz (UI): ver, leer, tocar', nUI, ICON.diseno)}</div>
+    <label class="buscar" style="margin-top:12px"><span class="sr">Buscar en los hallazgos</span><input class="inp" type="search" id="fq-${clave}" data-fbus="${clave}" value="${esc(f.q || '')}" placeholder="Buscar un hallazgo: «Agendar», «celular», «contraste»…"></label>
+    <div class="row between" style="margin-top:14px"><div><h2>Auditoría de los hallazgos</h2><p class="sub">${hechos} de ${ajs.length} auditados. Revisa cada hallazgo, marca qué encontraste y deja un comentario si hace falta. Tu auditoría se guarda: si el hallazgo vuelve a salir en la siguiente corrida, la conserva.</p></div></div>
     <div class="grid2" style="margin-top:10px">
       <div class="note-box"><span class="chip orange">${ICON.persona}Pide tu auditoría</span><p class="small" style="margin-top:4px">Depende de cómo entienden o deciden las personas reales: el motor no puede confirmarlo solo.</p></div>
       <div class="note-box green"><span class="chip">${ICON.ok}Verificación automática</span><p class="small" style="margin-top:4px">El motor la vuelve a medir en la próxima ejecución. Auditarla es opcional.</p></div>
@@ -2021,9 +2093,9 @@ function ajusteHTML(a, enEtapa) {
   const p = proyecto(a.proyecto);
   const au = a.auditoria; const editar = !au || UI.editando[a.id];
   return `<article class="adj ${au ? (au.resultado === 'no_pasa' ? 'rechazado' : 'aceptado') : ''}">
-    <div class="row between"><div class="row" style="gap:6px"><span class="chip blue">${ICON[a.grupo] || ''}${GRUPOS[a.grupo]}</span>${a.validacion ? (a.validacion === 'personas' ? `<span class="chip orange">${ICON.persona}Pide tu auditoría</span>` : `<span class="chip">${ICON.ok}Verificación automática</span>`) : ''}${a.quick_win ? '<span class="chip green">Quick win</span>' : ''}</div>${enEtapa ? '' : `<a class="small" href="#/p/${p.id}/e/${a.etapa}">${esc(p.nombre)} · ${esc(defEtapa(p, a.etapa).corto)}</a>`}</div>
-    <h4>${esc(a.control)}</h4>
-    <dl>${a.donde ? `<dt>Dónde</dt><dd>${esc(a.donde)}</dd>` : ''}<dt>Qué vimos</dt><dd>${esc(a.vimos)}${a.evidencia ? ` <span class="muted">(${esc(a.evidencia)})</span>` : ''}</dd>
+    <div class="row between"><div class="row" style="gap:6px"><span class="chip ${(a.capa || 'UX') === 'UI' ? 'capa-ui' : 'capa-ux'}">${(a.capa || 'UX') === 'UI' ? 'UI · interfaz' : 'UX · experiencia'}</span><span class="chip blue">${ICON[a.grupo] || ''}${GRUPOS[a.grupo]}</span>${a.validacion ? (a.validacion === 'personas' ? `<span class="chip orange">${ICON.persona}Pide tu auditoría</span>` : `<span class="chip">${ICON.ok}Verificación automática</span>`) : ''}${a.quick_win ? '<span class="chip green">Quick win</span>' : ''}</div>${enEtapa ? '' : `<a class="small" href="#/p/${p.id}/e/${a.etapa}">${esc(p.nombre)} · ${esc(defEtapa(p, a.etapa).corto)}</a>`}</div>
+    <h4>${esc(a.titulo && a.titulo !== a.control ? a.titulo : a.control)}</h4>
+    <dl>${a.titulo && a.titulo !== a.control ? `<dt>En</dt><dd>${esc(a.control)}</dd>` : ''}${a.donde ? `<dt>Dónde</dt><dd>${esc(a.donde)}</dd>` : ''}<dt>Qué vimos</dt><dd>${esc(a.vimos)}${a.evidencia ? ` <span class="muted">(${esc(a.evidencia)})</span>` : ''}</dd>
     ${a.por_que ? `<dt>Por qué pesa</dt><dd>${esc(a.por_que)}</dd>` : ''}
     ${a.resultado_paso ? `<dt>Cómo le fue al agente</dt><dd class="muted">${esc(resultadoPaso(a.resultado_paso))}</dd>` : ''}
     <dt>Qué proponemos</dt><dd>${esc(a.propuesta)}</dd>
@@ -2038,6 +2110,50 @@ function ajusteHTML(a, enEtapa) {
     </div></article>`;
 }
 
+// Los expertos sintéticos que también revisan cada estudio (rostros de FairFace, CC BY 4.0: créditos en assets/expertos/creditos.json).
+const EXPERTOS = [
+  { nombre: 'Experta UX', capa: 'UX', foto: 'assets/expertos/experta-ux.jpg', foto_credito: 'FairFace (Kärkkäinen y Joo, 2021) · CC BY 4.0',
+    rol: 'Revisa la experiencia: si se entiende, si se encuentra y si se puede terminar cada tarea.',
+    revisa: ['Heurísticas de Nielsen y principios de Norman', 'Arquitectura de información y lenguaje', 'Leyes de UX y economía conductual'] },
+  { nombre: 'Experto UI', capa: 'UI', foto: 'assets/expertos/experto-ui.jpg', foto_credito: 'FairFace (Kärkkäinen y Joo, 2021) · CC BY 4.0',
+    rol: 'Revisa la interfaz: si se ve, se lee y se toca bien en computador y en celular.',
+    revisa: ['Accesibilidad WCAG 2.2', 'Contraste, tipografía y tamaños táctiles', 'Consistencia con tu sistema de diseño'] }
+];
+const iniciales2 = n => String(n || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+function rostroHTML(x) {
+  return `<span class="rostro">${x.foto ? `<img src="${esc(x.foto)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'${esc(iniciales2(x.nombre))}'}))"${x.foto_credito ? ` title="Rostro ilustrativo: ${esc(x.foto_credito)}"` : ''}>` : `<b>${esc(iniciales2(x.nombre))}</b>`}</span>`;
+}
+function planAgentesHTML(p, mp) {
+  const n = p.agentes || (p.fuentes || {}).agentes || Math.max(3, Math.min(5, (mp.perfiles || []).length || 3));
+  return `<div class="plan-agentes"><div><span class="kpi-ico" aria-hidden="true">${ICON.persona}</span><strong>${n}</strong><span>personas sintéticas</span></div>
+    <div><span class="kpi-ico" aria-hidden="true">${ICON.flujo}</span><strong>${n * 2}</strong><span>sesiones: cada una en computador y en celular</span></div>
+    <div><span class="kpi-ico" aria-hidden="true">${ICON.ok}</span><strong>2</strong><span>expertos (UX y UI), sin costo</span></div></div>`;
+}
+const HORIZONTE = {
+  ahora: { t: 'Prioriza ahora', d: 'Resuelven lo que más traba a tus clientes, con poco esfuerzo.', ico: ICON.rayo },
+  despues: { t: 'Más adelante', d: 'Valen la pena, pero piden más trabajo o pesan menos.', ico: ICON.reloj },
+  futuro: { t: 'A futuro', d: 'Ideas para seguir mejorando cuando lo anterior esté listo.', ico: ICON.estrella }
+};
+const ESFUERZO = { bajo: 'Esfuerzo bajo', medio: 'Esfuerzo medio', alto: 'Esfuerzo alto' };
+function propuestasHTML(p) {
+  const d = p.propuestas, i = d.indicadores || {};
+  const kpi = (ico, grande, txt, sub) => `<div class="indicador"><span class="ind-ico" aria-hidden="true">${ico}</span><strong>${grande}</strong><span>${txt}</span>${sub ? `<small>${sub}</small>` : ''}</div>`;
+  const flecha = (a, b, suf = '') => a == null || b == null ? '—' : `${a}${suf} <span aria-hidden="true">→</span><span class="sr"> pasa a </span> ${b}${suf}`;
+  const card = x => `<article class="propuesta"><div class="row" style="gap:6px"><span class="chip ${x.capa === 'UI' ? 'capa-ui' : 'capa-ux'}">${x.capa === 'UI' ? 'UI · interfaz' : 'UX · experiencia'}</span><span class="chip esf-${x.esfuerzo}">${ICON.herramienta}${ESFUERZO[x.esfuerzo]}</span>${x.tropiezos ? `<span class="chip">${ICON.tropiezo}${x.tropiezos} ${x.tropiezos === 1 ? 'tropiezo' : 'tropiezos'}</span>` : ''}</div>
+      <h4>${esc(x.titulo)}</h4>${x.gana ? `<p class="small">${esc(x.gana)}</p>` : ''}
+      ${(x.donde || []).length ? `<p class="small muted">Dónde: ${x.donde.map(esc).join(' · ')}${x.mas_lugares ? ` y ${x.mas_lugares} más` : ''}</p>` : ''}</article>`;
+  return `<div class="card"><h2>Qué gana tu producto</h2><p class="sub">Calculado con lo que vivieron los agentes en este estudio. Lo que dice «estimado» se confirma al rehacer el estudio después de tus cambios.</p>
+    <div class="indicadores">
+      ${kpi(ICON.tropiezo, `${i.resuelve_ahora_pct ?? '—'} %`, 'de los tropiezos desaparece con «Prioriza ahora»', `${i.resuelve_ahora_y_despues_pct ?? '—'} % si sumas «Más adelante»`)}
+      ${kpi(ICON.herramienta, `${i.resuelve_esfuerzo_bajo_pct ?? '—'} %`, 'se resuelve solo con cambios de esfuerzo bajo', `${i.propuestas_esfuerzo_bajo ?? 0} cambios de textos, estilos o tamaños`)}
+      ${kpi(ICON.ok, flecha(i.pasos_sin_tropiezo_hoy, i.pasos_sin_tropiezo_ahora, ' %'), 'de los pasos sin tropiezo', 'hoy → estimado con «Prioriza ahora»')}
+      ${kpi(ICON.sonrisa, flecha(i.csat_hoy, i.csat_ahora), 'satisfacción de 1 a 5', `hoy → estimado · ${i.agentes || '?'} agentes encuestados`)}
+    </div>
+    <details class="small muted" style="margin-top:10px"><summary>Cómo lo calculamos</summary><p style="margin-top:6px">${esc(i.metodo || '')}</p></details></div>
+    ${['ahora', 'despues', 'futuro'].map(h => { const xs = (d.propuestas || []).filter(x => x.horizonte === h); return xs.length ? `<div class="card horizonte-${h}">
+      <div class="row" style="gap:10px;align-items:center"><span class="hz-ico" aria-hidden="true">${HORIZONTE[h].ico}</span><div><h2>${HORIZONTE[h].t} <span class="muted small">· ${xs.length}</span></h2><p class="sub" style="margin:0">${HORIZONTE[h].d}</p></div></div>
+      <div class="grid2" style="margin-top:12px">${xs.map(card).join('')}</div></div>` : ''; }).join('')}`;
+}
 function motorEtapaHTML(p, e) {
   // En línea no está datos-motor.js: fuentes, cohorte y recorridos los publica el vigilante en p.motor_proyecto.
   const est = estudioDe(p); const mp = motorProyecto(p.motor.proyecto_id) || p.motor_proyecto;
@@ -2056,8 +2172,12 @@ function motorEtapaHTML(p, e) {
         <h3 style="margin-top:16px">Sumadas desde la plataforma</h3><table style="margin-top:4px"><tbody>${p.fuentes.nuevas.map(x => `<tr><td><strong>${esc(x.nombre)}</strong></td><td class="small muted">${x.enlace ? 'Enlace' : 'Archivo'} · ${fmtF(x.fecha)}</td></tr>`).join('')}</tbody></table>` : ''}</div>`;
   }
   if (e.n === 1) return `<div class="card"><h2>Quiénes evalúan tu producto</h2><p class="sub">Personas sintéticas armadas con tus documentos. Revisa que se parezcan a quienes de verdad usan tu producto.</p>
-    <div class="grid2" style="margin-top:12px">${mp.perfiles.map(x => `<div class="note-box" style="margin:0"><strong>${esc(x.nombre)}</strong>${x.edad ? ` <span class="muted small">· ${x.edad} años</span>` : ''}${x.dispositivo ? ` <span class="chip">${esc(x.dispositivo === 'movil' ? 'Celular' : 'Computador')}</span>` : ''}
-      <div class="small" style="margin-top:4px">${esc(x.rol || '')}</div>${(x.objetivos || []).length ? `<ul class="plain small" style="margin-top:6px">${x.objetivos.map(o => `<li>· ${esc(o)}</li>`).join('')}</ul>` : ''}</div>`).join('')}</div>
+    ${planAgentesHTML(p, mp)}
+    <div class="grid2" style="margin-top:12px">${mp.perfiles.map(x => `<div class="persona-card">${rostroHTML(x)}<div><strong>${esc(x.nombre)}</strong>${x.edad ? ` <span class="muted small">· ${x.edad} años</span>` : ''}${x.dispositivo ? ` <span class="chip">${esc(x.dispositivo === 'movil' ? 'Celular' : 'Computador')}</span>` : ''}
+      <div class="small" style="margin-top:4px">${esc(x.rol || '')}</div>${(x.objetivos || []).length ? `<ul class="plain small" style="margin-top:6px">${x.objetivos.map(o => `<li>${esc(o)}</li>`).join('')}</ul>` : ''}</div></div>`).join('')}</div>
+    <h2 style="margin-top:20px">También lo revisan dos expertos</h2><p class="sub">Agentes sintéticos expertos: no navegan como tus clientes, sino que revisan tu producto con los criterios de su oficio.</p>
+    <div class="grid2" style="margin-top:12px">${EXPERTOS.map(x => `<div class="persona-card experto">${rostroHTML(x)}<div><strong>${esc(x.nombre)}</strong> <span class="chip ${x.capa === 'UI' ? 'capa-ui' : 'capa-ux'}">${x.capa}</span>
+      <div class="small" style="margin-top:4px">${esc(x.rol)}</div><ul class="plain small" style="margin-top:6px">${x.revisa.map(o => `<li>${esc(o)}</li>`).join('')}</ul></div></div>`).join('')}</div>
     ${(mp.contextos || []).length ? `<p class="small muted" style="margin-top:10px">Situaciones en que las probamos: ${mp.contextos.map(esc).join(' · ')}.</p>` : ''}
     <h2 style="margin-top:20px">Qué intentarán hacer en tu producto</h2><p class="sub">Cada recorrido es una meta de una persona real, no una lista de clics.</p>
     <ul class="plain" style="margin-top:10px">${mp.recorridos.map(x => `<li style="margin-top:10px"><strong>${esc(x.nombre)}</strong><div class="small muted">${esc(x.descripcion || '')}</div></li>`).join('')}</ul></div>`;
@@ -2397,6 +2517,7 @@ function vistaNuevo() {
       <p class="small muted" id="w-palabras" style="margin-top:4px">${n ? `${n} palabras${n < 50 ? ' · perfecto si es una frase; entre 50 y 100 nos da más contexto' : n > 100 ? ' · con menos de 100 basta' : ' · muy bien'}` : 'Si no te gusta escribir, puedes saltarlo.'}</p>
       ${w.tipo !== 'completo' ? `<div style="margin-top:14px">${campo('url', 'URL del producto *', 'https://', 0, 'url')}</div>` : ''}
     </div>
+    ${w.tipo === 'sintetico' ? agentesHTML(w) : ''}
     ${w.tipo === 'sintetico' ? `<div class="card" style="max-width:780px"><h3>Acceso (si tu producto pide iniciar sesión)</h3>
       <div class="grid2" style="margin-top:10px">${campo('acceso_usuario', 'Usuario de prueba', 'usuario')}<label class="field"><span>Contraseña</span><input id="w-clave" type="password" autocomplete="new-password" placeholder="${w.acceso_clave ? 'Entregada: escribe otra para reemplazarla' : ''}"></label></div>
       <p class="small" style="margin-top:6px">Va aparte y cifrada: solo la ve el analista que ejecuta el estudio. <span class="muted">${NUBE ? 'Por seguridad no la guardamos aquí: el analista te la pide por un canal privado.' : 'En esta maqueta no se guarda.'}</span></p></div>` : ''}
@@ -2480,8 +2601,22 @@ function vistaNuevo() {
       <div class="row"><span class="small muted" id="w-motivo">${valido ? '' : motivoWizard(w)}</span><button class="btn primary" id="w-next" ${valido ? '' : 'disabled'}>${w.paso === 4 ? 'Enviar a Synthetica' : 'Continuar'}</button></div>
     </div>`;
 }
+const PRECIO = { base: 20, incluidos: 5, adicional: 10 };
+const precioEstudio = n => PRECIO.base + Math.max(0, (n || 3) - PRECIO.incluidos) * PRECIO.adicional;
+function agentesHTML(w) {
+  const n = w.agentes || 4, mas = n > 5;
+  return `<div class="card" style="max-width:780px"><h3>¿Con cuántas personas sintéticas probamos tu producto?</h3>
+    <p class="sub">Cada persona recorre tu producto en computador y en celular. Recomendamos de 3 a 5: cubren los perfiles principales.</p>
+    <div class="agentes-op" role="radiogroup" aria-label="Número de personas sintéticas">
+      ${[3, 4, 5].map(k => `<label class="agente-op ${n === k ? 'activa' : ''}"><input type="radio" name="w-agentes" value="${k}" ${n === k ? 'checked' : ''} class="sr"><strong>${k}</strong><span>personas</span><small>Incluido</small></label>`).join('')}
+      <label class="agente-op ${mas ? 'activa' : ''}"><input type="radio" name="w-agentes" value="mas" ${mas ? 'checked' : ''} class="sr"><strong>+</strong><span>Más personas</span><small>USD ${PRECIO.adicional} c/u</small></label>
+    </div>
+    ${mas ? `<label class="field" style="margin-top:10px;max-width:220px"><span>¿Cuántas en total? (6 a 20)</span><input type="number" id="w-agentes-n" min="6" max="20" value="${n}"></label>` : ''}
+    <div class="precio"><span>${ICON.ok}</span><div><strong>USD ${precioEstudio(n)}</strong> el análisis completo${mas ? ` · USD ${PRECIO.base} por las primeras 5 personas + ${n - 5} × USD ${PRECIO.adicional}` : ' · de 3 a 5 personas'}
+      <div class="small muted">Incluye sin costo a los expertos UX y UI, que también revisan tu producto.</div></div></div></div>`;
+}
 function fuentesDe(w) {
-  return { descripcion: w.descripcion.trim(), archivos: w.archivos, ignorados: w.ignorados, manual: w.manual, pegado: w.pegado,
+  return { agentes: w.tipo === 'sintetico' ? (w.agentes || 4) : undefined, descripcion: w.descripcion.trim(), archivos: w.archivos, ignorados: w.ignorados, manual: w.manual, pegado: w.pegado,
     enlaces: w.enlaces.split(/\n+/).map(x => x.trim()).filter(Boolean), detectado: detectar(w),
     entradas: { analizar: (w.analizar || '').trim(), esperas: (w.esperas || '').trim(), alcance: (w.alcance || '').trim(), storybook: (w.storybook || '').trim(), secciones: (w.secciones || '').trim(), objetivo: w.objetivo.trim(), intencion: w.intencion.trim(), flujo: w.flujo.trim(), github: w.github.trim(), enlaces: w.enlaces.trim(), competencia: w.competencia.trim() },
     acceso: w.acceso_url.trim() || w.acceso_usuario.trim() || w.acceso_clave ? { url: w.acceso_url.trim() || urlNormal(w.url), usuario: w.acceso_usuario.trim(), credencial: w.acceso_clave ? 'cifrada' : null } : null };
@@ -2596,6 +2731,8 @@ function wireWizard() {
     w.miembros.push({ persona: id, rol: $('#w-dir-rol').value }); save(); render(); toast(`Invitación enviada a ${n}.`);
   };
   document.querySelectorAll('[data-paso]').forEach(b => b.onclick = () => { sync(); w.paso = +b.dataset.paso; render(); $('#view').focus(); });
+  document.querySelectorAll('input[name="w-agentes"]').forEach(r => r.onchange = () => { sync(); w.agentes = r.value === 'mas' ? Math.max(6, w.agentes || 6) : +r.value; render(); });
+  const an = document.getElementById('w-agentes-n'); if (an) an.onchange = () => { sync(); w.agentes = Math.max(6, Math.min(20, parseInt(an.value, 10) || 6)); render(); };
   const cons = document.getElementById('w-consiente'); if (cons) cons.onchange = () => { w.consiente = cons.checked; $('#w-next').disabled = !validoWizard(w); $('#w-motivo').textContent = validoWizard(w) ? '' : motivoWizard(w); };
   document.querySelectorAll('[data-legal]').forEach(a => a.onclick = ev => { ev.preventDefault(); verLegal(a.dataset.legal); });
   $('#w-back').onclick = () => { sync(); if (w.paso === 1) salirDelAsistente('#/proyectos'); else { w.paso--; render(); } };
@@ -2737,6 +2874,11 @@ function wire(ruta) {
   const imp = document.getElementById('importar'); if (imp) imp.onchange = () => imp.files[0] && importarTodo(imp.files[0]);
   document.querySelectorAll('[data-borrar]').forEach(b => b.onclick = () => { Adjuntos.borrar(b.dataset.borrar); DB.borradores = DB.borradores.filter(x => x.id !== b.dataset.borrar); save(); render(); toast('Borrador eliminado.'); });
   document.querySelectorAll('[data-fg]').forEach(b => b.onclick = () => { const [k, g] = b.dataset.fg.split('|'); UI.filtros[k].g = g; UI.abiertos[k] = false; render(); });
+  document.querySelectorAll('[data-fcapa]').forEach(b => b.onclick = () => { const [k, c] = b.dataset.fcapa.split('|'); UI.filtros[k].c = c; UI.abiertos[k] = false; render(); });
+  document.querySelectorAll('[data-fbus]').forEach(x => x.oninput = () => {
+    const k = x.dataset.fbus; UI.filtros[k].q = x.value; UI.abiertos[k] = false; render();
+    const y = document.getElementById('fq-' + k); if (y) { y.focus(); y.setSelectionRange(y.value.length, y.value.length); }
+  });
   document.querySelectorAll('[data-fest]').forEach(x => x.onchange = () => { UI.filtros[x.dataset.fest].est = x.value; render(); });
   document.querySelectorAll('[data-fval]').forEach(x => x.onchange = () => { UI.filtros[x.dataset.fval].val = x.value; render(); });
   wireCanvas();
@@ -2775,6 +2917,7 @@ setInterval(() => {
   if (SERVIDOR) {
     try { const r = await fetch('api/base'); const b = r.ok ? await r.json() : null; if (b && b.version === DB.version) DB = b; } catch (e) {}
   }
+  normalizarProyectos();
   sincronizarMotor();
   render();
 })();

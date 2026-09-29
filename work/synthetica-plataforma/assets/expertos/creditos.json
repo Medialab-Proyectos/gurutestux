@@ -1,0 +1,18 @@
+{
+ "experta-ux": {
+  "autor": null,
+  "fuente": null,
+  "url": null,
+  "licencia": null,
+  "licencia_url": null,
+  "apariencia": null
+ },
+ "experto-ui": {
+  "autor": "FairFace, imagen 24456 (Kärkkäinen y Joo, 2021)",
+  "fuente": "FairFace en Hugging Face",
+  "url": "https://huggingface.co/datasets/HuggingFaceM4/FairFace",
+  "licencia": "CC BY 4.0",
+  "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
+  "apariencia": "hombre, 30-39 años, México"
+ }
+}
