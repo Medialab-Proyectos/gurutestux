@@ -158,6 +158,7 @@ a { color: var(--blue); }
 .indicador small { color: var(--muted); font-size: 12px; }
 .propuesta { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
 .propuesta h4 { margin: 8px 0 4px; font-size: 15px; }
+.capa-ico.hz-ahora { background: var(--soft-green); color: var(--green); } .capa-ico.hz-despues { background: var(--soft-orange); color: var(--orange); }
 .horizonte-ahora .hz-ico { background: var(--soft-green); color: var(--green); }
 .horizonte-despues .hz-ico { background: var(--soft-orange); color: var(--orange); }
 .chip.esf-bajo { background: var(--soft-green); } .chip.esf-alto { background: var(--soft-orange); }
@@ -506,10 +507,10 @@ const TIPOS = {
         hace: ['Recorridos con cada agente', 'KLM y tiempos por paso', 'Grabación y mirada simulada', 'Hallazgos con su evidencia'],
         entrega: 'Nada que validar: los agentes trabajan.' },
       { n: 3, nombre: 'Hallazgos', corto: 'Hallazgos', min: 60, modo: 'auto',
-        hace: ['Problemas de experiencia (UX) con su evidencia', 'Problemas de interfaz (UI) verificados', 'Revisión de los expertos'],
+        hace: ['Problemas de experiencia (UX) con su evidencia', 'Problemas de interfaz (UI) verificados', 'Qué gana tu producto si los corriges'],
         entrega: 'Auditas lo que encontramos.' },
-      { n: 4, nombre: 'Propuestas de mejora', corto: 'Mejoras', min: 60, modo: 'auto',
-        hace: ['Mejoras explicadas en tu lenguaje', 'Qué aplicar ahora, más adelante y a futuro', 'Cuánto mejora tu producto y con qué esfuerzo'],
+      { n: 4, nombre: 'Mejoras sobre lo que ya funciona', corto: 'Mejoras', min: 60, modo: 'auto',
+        hace: ['Oportunidades de experiencia (UX) y de interfaz (UI)', 'Qué aplicar ahora, más adelante y a futuro', 'Cuándo conviene cada una y de dónde sale'],
         entrega: 'Decides qué aplicar y cuándo.' }
     ]
   },
@@ -2130,12 +2131,37 @@ function planAgentesHTML(p, mp) {
     <div><span class="kpi-ico" aria-hidden="true">${ICON.ok}</span><strong>2</strong><span>expertos (UX y UI), sin costo</span></div></div>`;
 }
 const HORIZONTE = {
-  ahora: { t: 'Prioriza ahora', d: 'Resuelven lo que más traba a tus clientes, con poco esfuerzo.', ico: ICON.rayo },
-  despues: { t: 'Más adelante', d: 'Valen la pena, pero piden más trabajo o pesan menos.', ico: ICON.reloj },
+  ahora: { t: 'Prioriza ahora', d: 'Las que más le convienen a tu producto hoy: responden a lo que vivieron tus clientes.', ico: ICON.rayo },
+  despues: { t: 'Más adelante', d: 'Valen la pena, pero piden más trabajo o pesan menos en este momento.', ico: ICON.reloj },
   futuro: { t: 'A futuro', d: 'Ideas para seguir mejorando cuando lo anterior esté listo.', ico: ICON.estrella }
 };
 const ESFUERZO = { bajo: 'Esfuerzo bajo', medio: 'Esfuerzo medio', alto: 'Esfuerzo alto' };
+function gananciaHTML(i) {
+  const kpi = (ico, grande, txt, sub) => `<div class="indicador"><span class="ind-ico" aria-hidden="true">${ico}</span><strong>${grande}</strong><span>${txt}</span>${sub ? `<small>${sub}</small>` : ''}</div>`;
+  const flecha = (a, b, suf = '') => a == null || b == null ? '—' : `${a}${suf} <span aria-hidden="true">→</span><span class="sr"> pasa a </span> ${b}${suf}`;
+  return `<div class="card"><h2>Qué gana tu producto si corriges los hallazgos</h2><p class="sub">Calculado con lo que vivieron los agentes en este estudio. Lo que dice «estimado» se confirma al rehacer el estudio después de tus cambios.</p>
+    <div class="indicadores">
+      ${kpi(ICON.tropiezo, `${i.resuelve_graves_pct ?? '—'} %`, `de los tropiezos desaparece al corregir los ${i.graves ?? ''} hallazgos graves`, 'los críticos y los altos')}
+      ${kpi(ICON.herramienta, `${i.resuelve_esfuerzo_bajo_pct ?? '—'} %`, 'se resuelve solo con cambios de esfuerzo bajo', `${i.hallazgos_esfuerzo_bajo ?? 0} hallazgos: textos, estilos o tamaños`)}
+      ${kpi(ICON.ok, flecha(i.pasos_sin_tropiezo_hoy, i.pasos_sin_tropiezo_graves, ' %'), 'de los pasos sin tropiezo', 'hoy → estimado al corregir los graves')}
+      ${kpi(ICON.sonrisa, flecha(i.csat_hoy, i.csat_graves), 'satisfacción de 1 a 5', `hoy → estimado · ${i.agentes || '?'} agentes encuestados`)}
+    </div>
+    <details class="small muted" style="margin-top:10px"><summary>Cómo lo calculamos</summary><p style="margin-top:6px">${esc(i.metodo || '')}</p></details></div>`;
+}
+function oportunidadesHTML(d) {
+  const card = x => `<article class="propuesta"><div class="row" style="gap:6px"><span class="chip ${x.capa === 'UI' ? 'capa-ui' : 'capa-ux'}">${x.capa === 'UI' ? 'UI · interfaz' : 'UX · experiencia'}</span><span class="chip">${esc(x.sobre)}</span></div>
+      <h4>${esc(x.titulo)}</h4>${x.conviene ? `<p class="small"><strong>Conviene:</strong> ${esc(x.conviene)}</p>` : ''}${x.riesgo ? `<p class="small muted"><strong>A cuidar:</strong> ${esc(x.riesgo)}</p>` : ''}
+      ${(x.donde || []).length ? `<p class="small muted">Dónde: ${x.donde.map(esc).join(' · ')}${x.mas_lugares ? ` y ${x.mas_lugares} más` : ''}</p>` : ''}
+      ${x.fuente ? `<p class="small muted" style="margin-top:4px">Fuente: ${esc(x.fuente)}</p>` : ''}</article>`;
+  const ops = d.oportunidades || [];
+  return `<div class="card"><h2>Oportunidades sobre lo que ya funciona</h2><p class="sub">No son fallas: son formas de mejorar lo que tu producto ya hace bien, según cómo lo están resolviendo hoy los mejores productos. Las ordenamos por qué tanto conviene aplicarlas en el tuyo.</p>
+    <div class="capas" style="margin-top:12px">${['ahora', 'despues', 'futuro'].map(h => `<div class="capa" style="cursor:default"><span class="capa-ico hz-${h}" aria-hidden="true">${HORIZONTE[h].ico}</span><strong>${ops.filter(x => x.horizonte === h).length}</strong><span>${HORIZONTE[h].t}</span></div>`).join('')}</div></div>
+    ${['ahora', 'despues', 'futuro'].map(h => { const xs = ops.filter(x => x.horizonte === h); return xs.length ? `<div class="card horizonte-${h}">
+      <div class="row" style="gap:10px;align-items:center"><span class="hz-ico" aria-hidden="true">${HORIZONTE[h].ico}</span><div><h2>${HORIZONTE[h].t} <span class="muted small">· ${xs.length}</span></h2><p class="sub" style="margin:0">${HORIZONTE[h].d}</p></div></div>
+      <div class="grid2" style="margin-top:12px">${xs.map(card).join('')}</div></div>` : ''; }).join('')}`;
+}
 function propuestasHTML(p) {
+  if (p.propuestas && p.propuestas.oportunidades) return oportunidadesHTML(p.propuestas);
   const d = p.propuestas, i = d.indicadores || {};
   const kpi = (ico, grande, txt, sub) => `<div class="indicador"><span class="ind-ico" aria-hidden="true">${ico}</span><strong>${grande}</strong><span>${txt}</span>${sub ? `<small>${sub}</small>` : ''}</div>`;
   const flecha = (a, b, suf = '') => a == null || b == null ? '—' : `${a}${suf} <span aria-hidden="true">→</span><span class="sr"> pasa a </span> ${b}${suf}`;
@@ -2190,7 +2216,7 @@ function motorEtapaHTML(p, e) {
   const ult = (p.ejecuciones || []).slice(-1)[0];
   const aviso = ult && new Date(ult.fecha) > new Date(est.fecha_hora) ? `<div class="note-box orange" style="margin-bottom:12px">Pediste una ejecución con ${ult.agentes} ${ult.agentes === 1 ? 'agente' : 'agentes'} el ${fmtF(ult.fecha)}. Mientras el analista no traiga su estudio (con <code>conector_motor.py</code>), aquí sigues viendo el del ${fmtF(est.fecha_hora)}.</div>` : '';
   const todos = mp ? estudiosDe(mp.id).slice().reverse() : [est];
-  return `${aviso}<div class="card"><div class="row between"><div><h2>El estudio</h2><p class="sub">Estudio del ${fmtF(est.fecha_hora)} · ${est.agentes} agentes · ${est.recorridos} recorridos.</p></div>
+  return `${aviso}${est.indicadores ? gananciaHTML(est.indicadores) : ''}<div class="card"><div class="row between"><div><h2>El estudio</h2><p class="sub">Estudio del ${fmtF(est.fecha_hora)} · ${est.agentes} agentes · ${est.recorridos} recorridos.</p></div>
       <button class="btn primary" data-reporte="${p.id}">Descargar el reporte en PDF</button></div>
     <p class="small muted" style="margin-top:6px">Con la marca Synthetica: el resumen del estudio y los hallazgos para auditar, con el resultado de tu auditoría. Se abre para guardarlo como PDF.</p>
     ${est.recorrido ? `<div class="note-box" style="margin-top:18px"><div class="row between"><div><strong>Recorrido interactivo</strong><div class="small muted">Cómo le fue a cada agente en cada recorrido: por dónde pasó, qué decidió y dónde se quedó varado.</div></div>
