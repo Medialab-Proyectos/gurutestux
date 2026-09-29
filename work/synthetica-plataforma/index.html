@@ -177,6 +177,16 @@ a { color: var(--blue); }
 .semaforo.bien { background: var(--soft-green); color: var(--green); }
 .semaforo.mejorable { background: var(--soft-orange); color: var(--orange); }
 .semaforo.atencion { background: light-dark(#fde8e8, #4a1f24); color: var(--red); }
+.lateral { position: sticky; top: 16px; align-self: start; max-height: calc(100vh - 32px); overflow-y: auto; }
+@media (max-width: 900px) { .lateral { position: static; max-height: none; overflow: visible; } }
+.medidor svg { display: block; width: 100%; max-width: 220px; margin: 6px auto 0; }
+.medidor-riel, .medidor-valor { fill: none; stroke-width: 14; stroke-linecap: round; }
+.medidor-riel { stroke: var(--line); } .medidor-valor { stroke: var(--brand); }
+.medidor-num { font-size: 26px; font-weight: 800; fill: var(--ink); }
+.medidor-pie { text-align: center; margin-top: 2px; }
+.asesoria { background: var(--soft-blue); border-color: transparent; }
+.asesoria-ico { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--panel); color: var(--brand); margin-bottom: 8px; }
+.asesoria h3 { font-size: 16px; }
 .aviso-paso { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 18px; padding: 14px 16px; border: 1px solid var(--brand); border-radius: 12px; background: var(--soft-blue); font-size: 15px; line-height: 1.5; }
 .aviso-icono { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: #fff; font: 700 14px/1 Georgia, serif; }
 .archivos-elegidos { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
@@ -1430,7 +1440,7 @@ function guardarAuditoria(aid) {
 function pedirReejecucion(pid) {
   const p = proyecto(pid); const dlg = $('#dlg');
   const nuevos = { archivos: [], ignorados: [] };
-  dlg.innerHTML = `<div class="dlg-head"><div><h2 id="dlgTitle" style="font-size:17px;font-weight:800">Volver a ejecutar</h2><p class="sub">${esc(p.nombre)}</p></div><button class="btn small" id="dlgClose">Cerrar</button></div>
+  dlg.innerHTML = `<div class="dlg-head"><div><h2 id="dlgTitle" style="font-size:17px;font-weight:800">Volver a correr el estudio</h2><p class="sub">${esc(p.nombre)}</p></div><button class="btn small" id="dlgClose">Cerrar</button></div>
     <div class="dlg-body stack">
       <div><p><strong>¿Con cuántos agentes?</strong></p>
         <div class="row" style="margin-top:8px">${[1, 2, 3, 5].map(n => `<button class="chip" data-agn="${n}" style="cursor:pointer;padding:6px 14px;font-size:13px">${n}</button>`).join('')}
@@ -1443,7 +1453,7 @@ function pedirReejecucion(pid) {
       <label class="row" style="gap:8px;cursor:pointer"><input type="checkbox" id="re-inicio"> <strong>Empezar el estudio desde el inicio</strong></label>
       <p class="small muted" style="margin:4px 0 0 26px">Vuelve a leer las fuentes y a armar la cohorte y los recorridos. Úsalo si sumas fuentes o si el producto cambió mucho. Si no, se repite solo la ejecución con la misma cohorte y recorridos, y el informe nuevo se puede comparar con el anterior.</p>
       <p class="small muted">Un analista la lanza desde la consola; te avisamos cuando el informe nuevo esté listo para auditar.</p>
-      <div class="row" style="justify-content:flex-end"><button class="btn" id="re-no">Cancelar</button><button class="btn primary" id="re-si">Volver a ejecutar</button></div></div>`;
+      <div class="row" style="justify-content:flex-end"><button class="btn" id="re-no">Cancelar</button><button class="btn primary" id="re-si">Volver a correr el estudio</button></div></div>`;
   dlg.showModal();
   const marcar = n => { $('#re-n').value = n; document.querySelectorAll('[data-agn]').forEach(b => b.classList.toggle('blue', +b.dataset.agn === +n)); };
   document.querySelectorAll('[data-agn]').forEach(b => b.onclick = () => marcar(b.dataset.agn)); marcar(2);
@@ -1785,11 +1795,11 @@ function vistaProyecto(pid, nSel) {
       return `<button role="listitem" class="step ${x.estado} ${d.modo === 'humana' ? 'humana' : ''}" data-step="${x.n}" ${x.n === e.n ? 'aria-current="step"' : ''}><span class="n">${x.n}</span><strong>${esc(d.corto)}</strong><small class="st-ico">${ico} ${lab}</small></button>`;
     }).join('')}
     ${p.tipo === 'sintetico' ? (() => { const e3 = p.etapas.find(x => x.n === 3); const corriendo = !['revision', 'hecha'].includes(e3.estado) || !!p.cancelado;
-      return `<button role="listitem" class="step" data-reejecutar="${p.id}" ${corriendo ? 'disabled title="Ya hay una ejecución en curso"' : ''}><span class="n">${ICON.repetir}</span><strong>Rehacer</strong><small>${p.cancelado ? 'Proyecto cancelado' : corriendo ? 'Ejecución en curso' : 'Eliges cuántos agentes'}</small></button>`; })() : ''}</div>
+      return `<button role="listitem" class="step" data-reejecutar="${p.id}" ${corriendo ? 'disabled title="Ya hay una ejecución en curso"' : ''}><span class="n">${ICON.repetir}</span><strong>Volver a correr</strong><small>${p.cancelado ? 'Proyecto cancelado' : corriendo ? 'Ejecución en curso' : 'el estudio, tras tus cambios'}</small></button>`; })() : ''}</div>
     ${p.tipo === 'seguimiento' && e.estado === 'vivo' ? vistaSeguimiento(p) : `
     <div class="split" style="margin-top:8px">
       <div>${etapaHTML(p, e)}</div>
-      <aside class="stack">${notasHTML(p, e)}</aside>
+      <aside class="stack lateral">${lateralHTML(p, e)}</aside>
     </div>`}`;
 }
 
@@ -2151,9 +2161,46 @@ const nivelNPS = v => v == null ? null : v >= 30 ? 'bien' : v >= 0 ? 'mejorable'
 const nivelTLX = v => v == null ? null : v < 30 ? 'bien' : v <= 50 ? 'mejorable' : 'atencion';
 const SEMAFORO = { bien: ['Bien', ICON.ok], mejorable: ['Mejorable', ICON.alerta], atencion: ['Atención', ICON.no] };
 const semaforo = n => n ? `<span class="semaforo ${n}" title="${SEMAFORO[n][0]}"><span aria-hidden="true">${SEMAFORO[n][1]}</span>${SEMAFORO[n][0]}</span>` : '';
+function lateralHTML(p, e) {
+  const sint = p.tipo === 'sintetico', hallazgos = sint && e.n === 3, mejoras = sint && e.n === 4;
+  return `${hallazgos ? medidorAuditoriaHTML(p, e) : ''}${notasHTML(p, e)}${hallazgos || mejoras ? asesoriaHTML(p) : ''}`;
+}
+// Medidor de la auditoría: cuántos hallazgos de esta caja ya auditó la persona (un solo valor, en el color de marca).
+function medidorAuditoriaHTML(p, e) {
+  const ajs = ajustesDe(p.id, e.n), total = ajs.length, hechos = ajs.filter(a => a.auditoria).length;
+  if (!total) return '';
+  const pct = Math.round(100 * hechos / total);
+  const r = 70, largo = Math.PI * r, lleno = largo * hechos / total;
+  const faltan = total - hechos;
+  return `<section class="card medidor" aria-labelledby="medidor-t"><h3 id="medidor-t">Avance de tu auditoría</h3>
+    <svg viewBox="0 0 180 104" role="img" aria-label="${hechos} de ${total} hallazgos auditados, ${pct} %">
+      <path d="M20 94 A70 70 0 0 1 160 94" class="medidor-riel"/>
+      ${hechos ? `<path d="M20 94 A70 70 0 0 1 160 94" class="medidor-valor" stroke-dasharray="${lleno.toFixed(1)} ${largo.toFixed(1)}"/>` : ''}
+      <text x="90" y="80" text-anchor="middle" class="medidor-num">${pct} %</text>
+    </svg>
+    <p class="medidor-pie"><strong>${hechos} de ${total}</strong> hallazgos auditados</p>
+    <p class="small muted" style="text-align:center">${faltan ? `Te ${faltan === 1 ? 'falta 1' : `faltan ${faltan}`}. Tu auditoría se conserva en la próxima corrida.` : '¡Completaste la auditoría!'}</p></section>`;
+}
+// Contacto con el equipo: solo en Hallazgos y Mejoras. Avisa al equipo con los datos del proyecto.
+function asesoriaHTML(p) {
+  const pedida = p.asesoria;
+  return `<section class="card asesoria"><span class="asesoria-ico" aria-hidden="true">${ICON.persona}</span>
+    <h3>¿Quieres ayuda para mejorar tu producto?</h3>
+    <p class="small">Contacta a nuestro equipo para una asesoría personalizada: te ayudamos a priorizar y a aplicar las mejoras.</p>
+    ${pedida ? `<p class="small" style="margin-top:8px"><strong>Ya nos escribiste el ${fmtF(pedida.fecha)}.</strong> Te contactamos pronto.</p>`
+      : `<button class="btn primary" style="margin-top:10px;width:100%" data-asesoria="${p.id}">Contactar al equipo</button>`}</section>`;
+}
+function pedirAsesoria(pid) {
+  const p = proyecto(pid); if (!p || p.asesoria) return;
+  const cta = cuentaActual() || {};
+  p.asesoria = { fecha: new Date().toISOString(), cuenta: cta.id || null };
+  correoEquipo(p, `Asesoría solicitada: ${p.nombre}`, [`${cta.nombre || 'La cuenta'} <${cta.correo || ''}> pide una asesoría personalizada para mejorar su producto.`, '', ...fichaProyecto(p)]);
+  save(); render(); toast('Listo: avisamos al equipo. Te contactamos pronto.');
+}
 function gananciaHTML(i) {
   const kpi = (ico, grande, txt, sub) => `<div class="indicador"><span class="ind-ico" aria-hidden="true">${ico}</span><strong>${grande}</strong><span>${txt}</span>${sub ? `<small>${sub}</small>` : ''}</div>`;
-  const flecha = (a, b, suf = '') => a == null || b == null ? '—' : `${a}${suf} <span aria-hidden="true">→</span><span class="sr"> pasa a </span> ${b}${suf}`;
+  const coma = v => String(v).replace('.', ',');
+  const flecha = (a, b, suf = '') => a == null || b == null ? '—' : `${coma(a)}${suf} <span aria-hidden="true">→</span><span class="sr"> pasa a </span> ${coma(b)}${suf}`;
   return `<div class="card"><h2>Qué gana tu producto si corriges los hallazgos</h2><p class="sub">Calculado con lo que vivieron los agentes en este estudio. Lo que dice «estimado» se confirma al rehacer el estudio después de tus cambios.</p>
     <div class="indicadores">
       ${kpi(ICON.tropiezo, `${i.resuelve_graves_pct ?? '—'} %`, `de los tropiezos desaparece al corregir los ${i.graves ?? ''} hallazgos graves`, 'los críticos y los altos')}
@@ -2179,7 +2226,8 @@ function propuestasHTML(p) {
   if (p.propuestas && p.propuestas.oportunidades) return oportunidadesHTML(p.propuestas);
   const d = p.propuestas, i = d.indicadores || {};
   const kpi = (ico, grande, txt, sub) => `<div class="indicador"><span class="ind-ico" aria-hidden="true">${ico}</span><strong>${grande}</strong><span>${txt}</span>${sub ? `<small>${sub}</small>` : ''}</div>`;
-  const flecha = (a, b, suf = '') => a == null || b == null ? '—' : `${a}${suf} <span aria-hidden="true">→</span><span class="sr"> pasa a </span> ${b}${suf}`;
+  const coma = v => String(v).replace('.', ',');
+  const flecha = (a, b, suf = '') => a == null || b == null ? '—' : `${coma(a)}${suf} <span aria-hidden="true">→</span><span class="sr"> pasa a </span> ${coma(b)}${suf}`;
   const card = x => `<article class="propuesta"><div class="row" style="gap:6px"><span class="chip ${x.capa === 'UI' ? 'capa-ui' : 'capa-ux'}">${x.capa === 'UI' ? 'UI · interfaz' : 'UX · experiencia'}</span><span class="chip esf-${x.esfuerzo}">${ICON.herramienta}${ESFUERZO[x.esfuerzo]}</span>${x.tropiezos ? `<span class="chip">${ICON.tropiezo}${x.tropiezos} ${x.tropiezos === 1 ? 'tropiezo' : 'tropiezos'}</span>` : ''}</div>
       <h4>${esc(x.titulo)}</h4>${x.gana ? `<p class="small">${esc(x.gana)}</p>` : ''}
       ${(x.donde || []).length ? `<p class="small muted">Dónde: ${x.donde.map(esc).join(' · ')}${x.mas_lugares ? ` y ${x.mas_lugares} más` : ''}</p>` : ''}</article>`;
@@ -2900,6 +2948,7 @@ function wire(ruta) {
   document.querySelectorAll('[data-editar]').forEach(b => b.onclick = () => { UI.editando[b.dataset.editar] = true; render(); });
   document.querySelectorAll('[data-noeditar]').forEach(b => b.onclick = () => { delete UI.editando[b.dataset.noeditar]; render(); });
   document.querySelectorAll('[data-reejecutar]').forEach(b => b.onclick = () => pedirReejecucion(b.dataset.reejecutar));
+  document.querySelectorAll('[data-asesoria]').forEach(b => b.onclick = () => pedirAsesoria(b.dataset.asesoria));
   document.querySelectorAll('[data-cambiar-url]').forEach(b => b.onclick = () => cambiarUrl(b.dataset.cambiarUrl));
   document.querySelectorAll('[data-reporte]').forEach(b => b.onclick = () => reportePDF(b.dataset.reporte));
   document.querySelectorAll('[data-detener]').forEach(b => b.onclick = () => detener(b.dataset.detener));
