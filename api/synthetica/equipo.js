@@ -151,6 +151,15 @@ export default async function handler(req, res) {
         if (d.resultado && typeof d.resultado === 'object') p.resultado_motor = d.resultado;
         // Propuestas de mejora e indicadores (caja 4), ya pulidas por el analista.
         if (d.propuestas && typeof d.propuestas === 'object') p.propuestas = d.propuestas;
+        // Producto sintético: el prototipo navegable de la vuelta y la respuesta a las dudas de la vuelta anterior.
+        const et = (p.etapas || []).find(x => x.n === Number(d.n));
+        if (et && d.prototipo && typeof d.prototipo === 'object') {
+          et.prototipo = String(d.prototipo.nombre || 'Prototipo').slice(0, 200);
+          et.prototipo_href = /^publicado\/[\w./-]+$/.test(String(d.prototipo.href || '')) ? d.prototipo.href : null;
+        }
+        if (et && d.respuesta && Array.isArray(et.rondas) && et.rondas.length) {
+          et.rondas[Math.max(0, et.rondas.length - 2)].respuesta_equipo = String(d.respuesta).slice(0, 4000);
+        }
         // Fuentes, cohorte y recorridos del motor, para que el cliente los vea y los valide.
         if (d.proyecto_motor && typeof d.proyecto_motor === 'object' && JSON.stringify(d.proyecto_motor).length < 400_000) {
           p.motor_proyecto = d.proyecto_motor;

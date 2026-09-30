@@ -1346,6 +1346,8 @@ function continuar(pid) {
   save();
   delete UI.cv[pid];  // el canvas se vuelve a centrar en la caja nueva
   if (p.tipo === 'completo' && location.hash !== '#/p/' + pid) location.hash = '#/p/' + pid; else render();
+  if (p.tipo === 'completo') correoEquipo(p, sig ? `Escenario aprobado: ${p.nombre} · sigue «${defEtapa(p, sig.n).nombre}»` : `Proyecto terminado: ${p.nombre}`,
+    [`El cliente aprobó el escenario ${e.n} («${defEtapa(p, e.n).nombre}»).`, sig ? `Corre /synthetica-respuestas ${p.id}: te dice cómo seguir con el escenario ${sig.n} en el motor de creación.` : 'Era el último escenario.', '', ...fichaProyecto(p)]);
   toast(sig ? `Etapa aprobada. Empezamos «${defEtapa(p, sig.n).nombre}».` : 'Proyecto terminado.');
 }
 function leerOpinion(n) {
@@ -1373,6 +1375,8 @@ function otraVuelta(pid, n) {
   e.rondas.push({ n: r.n + 1, inicio: ahora, fin: null, min, respuestas: {} });
   Object.assign(e, { estado: 'pensando', inicio: ahora, fin: null });
   avisar(pid, 'equipo', `${p.nombre}: piden la vuelta ${r.n + 1} de «${d.nombre}»`);
+  correoEquipo(p, `Otra vuelta: ${p.nombre} · ${d.nombre}`, [`El cliente pidió la vuelta ${r.n + 1} del escenario ${n} («${d.nombre}»).`,
+    `Trae su opinión con /synthetica-respuestas ${p.id}: te dice qué darle al motor de creación.`, '', ...fichaProyecto(p)]);
   delete UI.cv[pid]; save();
   if (p.tipo === 'completo' && location.hash !== '#/p/' + pid) location.hash = '#/p/' + pid; else render();
   toast(`Pedimos la vuelta ${r.n + 1}. Tardará unas ${dur(min)}.`);
@@ -2869,6 +2873,15 @@ function wireWizard() {
 /* ---- Prototipo de prueba */
 function abrirPrototipo(pid, n) {
   const p = proyecto(pid); const e = p.etapas.find(x => x.n === +n);
+  if (e.prototipo_href) {
+    const dlg = $('#dlg');
+    dlg.innerHTML = `<div class="dlg-head"><div><h2 id="dlgTitle" style="font-size:17px;font-weight:800">${esc(e.prototipo)}</h2><p class="sub">${esc(p.nombre)} · navegable: pruébalo como lo usaría tu cliente</p></div><div class="row"><a class="btn small" href="${esc(e.prototipo_href)}" target="_blank" rel="noopener">Abrir en otra pestaña</a><button class="btn small" id="dlgClose">Cerrar</button></div></div>
+      <iframe src="${esc(e.prototipo_href)}" title="${esc(e.prototipo)}" style="display:block;width:100%;height:calc(92vh - 70px);border:0;background:#fff"></iframe>`;
+    dlg.classList.add('grande'); dlg.showModal();
+    $('#dlgClose').onclick = () => dlg.close();
+    dlg.addEventListener('close', () => dlg.classList.remove('grande'), { once: true });
+    return;
+  }
   const dlg = $('#dlg');
   dlg.innerHTML = `<div class="dlg-head"><div><h2 id="dlgTitle" style="font-size:17px;font-weight:800">${esc(e.prototipo)}</h2><p class="sub">${esc(p.nombre)} · ${esc(defEtapa(p, e.n).nombre)}</p></div><button class="btn small" id="dlgClose">Cerrar</button></div>
     <div class="dlg-body"><div style="display:grid;grid-template-columns:180px 1fr;min-height:320px;border:1px solid var(--line);border-radius:8px;overflow:hidden">
