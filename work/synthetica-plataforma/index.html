@@ -188,6 +188,7 @@ a { color: var(--blue); }
 .asesoria { background: var(--soft-blue); border-color: transparent; }
 .asesoria-ico { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--panel); color: var(--brand); margin-bottom: 8px; }
 .asesoria h3 { font-size: 16px; }
+.acceso-prueba { padding: 10px 12px; border-radius: 10px; background: var(--soft-blue); }
 .aviso-paso { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 18px; padding: 14px 16px; border: 1px solid var(--brand); border-radius: 12px; background: var(--soft-blue); font-size: 15px; line-height: 1.5; }
 .aviso-icono { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: #fff; font: 700 14px/1 Georgia, serif; }
 .archivos-elegidos { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
@@ -1185,7 +1186,8 @@ function fichaProyecto(p) {
     en.objetivo ? `Objetivo: ${en.objetivo}` : '', en.intencion ? `Intención y condiciones de negocio: ${en.intencion}` : '', en.flujo ? `Flujo actual: ${en.flujo}` : '',
     (f.archivos || []).length ? `Archivos: ${f.archivos.join(', ')}` : '', f.manual ? `Manual de marca: ${f.manual}` : '',
     en.github ? `Código: ${en.github}` : '', en.enlaces ? `Enlaces:\n${en.enlaces}` : '', en.competencia ? `Competencia y referentes:\n${en.competencia}` : '',
-    f.acceso ? `Acceso: ${f.acceso.url || p.url} · usuario ${f.acceso.usuario || '—'} · contraseña ${f.acceso.credencial ? 'entregada, cifrada en la plataforma (no va en este correo)' : 'no entregada'}` : '',
+    f.acceso ? `Acceso: ${f.acceso.url || p.url}${f.acceso.necesita_clave ? ' · pide usuario y contraseña' : ''} · usuario de prueba ${f.acceso.usuario || '—'} · contraseña ${f.acceso.credencial ? 'entregada, cifrada en la plataforma (no va en este correo)' : 'no entregada'}` : '',
+    f.acceso && f.acceso.notas ? `Notas del acceso: ${f.acceso.notas}` : '',
     p.consentimiento ? `Acuerdo de confidencialidad: aceptado por ${p.consentimiento.nombre} <${p.consentimiento.correo}> el ${fmtF(p.consentimiento.fecha)} (versión ${p.consentimiento.version})` : '',
     `Abrir en la plataforma: #/p/${p.id}`
   ];
@@ -1584,7 +1586,7 @@ function rehacer(pid) {
       paso: 2, tipo: p.tipo, nombre: `${p.nombre} (nueva versión)`, descripcion: f.descripcion || '', url: p.url || '', motor: (p.motor || {}).proyecto_id || '',
       analizar: en.analizar || '', esperas: en.esperas || '', objetivo: en.objetivo || '', intencion: en.intencion || '', flujo: en.flujo || '',
       alcance: en.alcance || '', storybook: en.storybook || '', secciones: en.secciones || '', github: en.github || '', enlaces: en.enlaces || '', competencia: en.competencia || '',
-      archivos: [...(f.archivos || [])], manual: f.manual || '', acceso_url: (f.acceso || {}).url || '', acceso_usuario: (f.acceso || {}).usuario || '',
+      archivos: [...(f.archivos || [])], manual: f.manual || '', acceso_url: (f.acceso || {}).url || '', acceso_usuario: (f.acceso || {}).usuario || '', acceso_necesita: !!(f.acceso || {}).necesita_clave, acceso_notas: (f.acceso || {}).notas || '',
       deriva: p.id
     });
     dlg.close(); location.hash = '#/nuevo';
@@ -2000,7 +2002,7 @@ function entradasHTML(p) {
     fila('Manual de marca', f.manual ? esc(f.manual) : ''),
     fila('Código', en.github ? `<a href="${esc(en.github)}" target="_blank" rel="noopener">${esc(en.github)}</a>` : ''),
     fila('Enlaces importantes', en.enlaces ? lista(en.enlaces) : ''), fila('Competencia y referentes', en.competencia ? lista(en.competencia) : ''),
-    fila('Plataforma actual', f.acceso ? `${esc(f.acceso.url || '')}${f.acceso.usuario ? ' · usuario ' + esc(f.acceso.usuario) : ''}${f.acceso.credencial ? ' · <span class="chip green">contraseña entregada, cifrada</span>' : ''}` : '')
+    fila('Plataforma actual', f.acceso ? `${esc(f.acceso.url || '')}${f.acceso.necesita_clave ? ' · pide usuario y contraseña' : ''}${f.acceso.usuario ? ' · usuario de prueba ' + esc(f.acceso.usuario) : ''}${f.acceso.notas ? ' · ' + esc(f.acceso.notas) : ''}${f.acceso.credencial ? ' · <span class="chip green">contraseña entregada, cifrada</span>' : ''}` : '')
   ].join('');
   const colores = p.paleta || PALETA_TEMPORAL;
   return `<table style="margin-top:10px"><tbody>${html || '<tr><td class="muted">Sin entradas registradas en la maqueta.</td></tr>'}
@@ -2542,7 +2544,7 @@ function listaArchivosWizard(w) {
 function nuevoWizard() {
   return { paso: 1, tipo: null, motor: '', cliente: '',
     nombre: '', descripcion: '', url: '', analizar: '', esperas: '', alcance: '', storybook: '', secciones: '', objetivo: '', intencion: '', flujo: '', github: '', enlaces: '', competencia: '',
-    archivos: [], ignorados: [], manual: '', pegado: '', acceso_url: '', acceso_usuario: '', acceso_clave: false,
+    archivos: [], ignorados: [], manual: '', pegado: '', acceso_url: '', acceso_usuario: '', acceso_clave: false, acceso_necesita: false, acceso_notas: '',
     miembros: [{ persona: 'p1', rol: 'responsable' }] };
 }
 const rolDefault = () => persona(UI.actor).org === 'Synthetica' ? 'synthetica' : 'responsable';
@@ -2565,13 +2567,16 @@ const urlNormal = u => { u = u.trim(); return !u || /^https?:\/\//i.test(u) ? u 
 function validoWizard(w) {
   if (w.paso === 1) return !!w.tipo;
   if (w.paso === 2) return !!(w.nombre.trim() && (w.tipo === 'completo' || urlValida(w.url)));
-  if (w.paso === 4) return !!w.consiente;
-  if (w.paso === 3) return w.tipo !== 'completo' || !!((w.alcance || '').trim() || (w.storybook || '').trim() || w.archivos.length || w.objetivo.trim() || w.intencion.trim() || w.flujo.trim() || w.github.trim() || w.enlaces.trim() || w.descripcion.trim());
+  if (w.paso === 4) return !!w.consiente && (w.tipo !== 'completo' || hayContexto(w));
+  if (w.paso === 3) return w.tipo !== 'completo' || hayContexto(w);
   return true;
 }
+// Todo es opcional, pero sin ningún contexto no se puede empezar: un documento o algo de lo que buscas.
+const hayContexto = w => !!(w.archivos.length || w.manual || w.objetivo.trim() || w.intencion.trim() || w.flujo.trim() || (w.alcance || '').trim() || palabras(w.descripcion) >= 12);
 function motivoWizard(w) {
   if (w.paso === 1) return 'Elige qué quieres hacer.';
   if (w.paso === 2) return !w.nombre.trim() ? 'Falta el nombre del proyecto.' : !w.url.trim() ? 'Falta la URL del producto.' : 'Revisa la URL: debe verse como tuproducto.com o https://tuproducto.com';
+  if (w.tipo === 'completo' && !hayContexto(w)) return 'Necesitamos un poco de contexto para empezar: sube al menos un documento o cuéntanos tu objetivo, la intención del producto o cómo funciona hoy.';
   if (w.paso === 4) return 'Acepta el acuerdo de confidencialidad para enviar el proyecto.';
   return 'Comparte al menos una cosa: un objetivo, un archivo o un enlace.';
 }
@@ -2633,8 +2638,8 @@ function vistaNuevo() {
   } else if (w.paso === 3) {
     body = `<div class="note-box" style="margin-bottom:16px"><strong>Solo leemos documentos de texto:</strong> Word, PDF, Excel, CSV y TXT. Si mandas un zip, dentro también leemos solo esos; imágenes, videos y demás se dejan de lado. Nombra la carpeta del contexto (por ejemplo, <em>01-contexto</em>) para encontrarla rápido.</div>
     <div class="grid2">
-      <div class="card" style="margin:0"><h3>Lo que buscas</h3><p class="sub">Todo opcional: responde lo que sepas.</p>
-        <div class="stack" style="margin-top:10px">${campo('objetivo', '¿Qué objetivo tienes?', 'Por ejemplo: que el ciudadano haga el trámite sin ir a la sede', 2)}${campo('intencion', 'Intención del producto y condiciones de negocio', 'Qué es (una herramienta, un servicio…), qué hace por las personas y con qué reglas de negocio funciona', 3)}${campo('alcance', '¿Qué partes del producto hacemos?', 'Si ya tienes un producto, lista solo las secciones que quieres que trabajemos', 2)}${campo('flujo', '¿Cómo funciona hoy?', 'El flujo actual, aunque sea a mano o en papel', 2)}</div></div>
+      <div class="card" style="margin:0"><h3>Lo que buscas</h3><p class="sub">Responde lo que sepas.</p><p class="small note-box" style="margin-top:8px">Puede que esto ya lo tengas en un documento: súbelo en «Tus archivos» y lo leemos. Si es así, estas preguntas complementan lo que nos envías. Si no tienes documentos de contexto, trabajamos con lo que nos cuentes aquí.</p>
+        <div class="stack" style="margin-top:10px">${campo('objetivo', '¿Qué objetivo tienes? (opcional)', 'Por ejemplo: que el ciudadano haga el trámite sin ir a la sede', 2)}${campo('intencion', 'Intención del producto y condiciones de negocio (opcional)', 'Qué es (una herramienta, un servicio…), qué hace por las personas y con qué reglas de negocio funciona', 3)}${campo('alcance', '¿Qué partes del producto hacemos o rehacemos? (opcional)', 'Si ya tienes un producto, lista solo las secciones que quieres que trabajemos', 2)}${campo('flujo', '¿Cómo funciona hoy? Si ya tienes un producto creado (opcional)', 'El flujo actual, aunque sea a mano o en papel', 2)}</div></div>
       <div class="card" style="margin:0"><h3>Tus archivos</h3><p class="sub">Contexto, investigación, reuniones de negocio, ejemplos del proyecto actual… Un zip con todo sirve.</p>
         <label class="drop" id="drop" style="margin-top:12px"><input type="file" id="w-files" multiple accept=".zip,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.md,.rtf,.odt,.ods" class="sr">
           <strong style="color:var(--blue)">Arrastra aquí o elige archivos</strong><span class="small">Word, PDF, Excel, CSV o TXT, sueltos o en un zip · hasta 10 MB entre todos</span></label>
@@ -2645,15 +2650,19 @@ function vistaNuevo() {
         <p class="small muted" style="margin-top:4px">${w.manual ? `Usaremos tus colores de <strong>${esc(w.manual)}</strong>. <button class="btn small" type="button" data-quitar-manual>Quitar</button>` : 'No diseñamos logos: si no tienes, usamos uno temporal para el proyecto.'}</p></div>
     </div>
     <div class="grid2" style="margin-top:16px">
-      <div class="card" style="margin:0"><h3>Lo que ya existe</h3><p class="sub">Puedes mandarnos el código fuente (en el zip), darnos acceso de lectura a GitHub, tu manual de marca, la estructura de diseño y tu sistema de diseño o Storybook. Mejor aún: <strong>lista solo las secciones que te parezcan útiles</strong>, así limitamos el trabajo a lo que importa.</p>
-        <div class="stack" style="margin-top:10px">${campo('github', 'Código (GitHub u otro repositorio)', 'https://github.com/… · te diremos a qué usuario dar acceso de lectura', 0, 'url')}
-          ${campo('storybook', 'Sistema de diseño o Storybook', 'https://…', 0, 'url')}
-          ${campo('secciones', 'Secciones útiles', 'Del código, del sistema de diseño o de la estructura: por ejemplo, componentes de formulario, tokens de color, módulo de pagos', 2)}
-          ${campo('enlaces', 'Enlaces importantes', 'Un enlace por línea, con un título: Documentación — https://…', 3)}
-          ${campo('competencia', 'Competencia y referentes', 'Competidor directo — https://…  ·  Me gustaría algo como — https://…', 3)}</div></div>
+      <div class="card" style="margin:0"><h3>Lo que ya existe</h3><p class="sub">Puedes darnos acceso de lectura a tu repositorio, tu sistema de diseño o Storybook y enlaces útiles. Mejor aún: <strong>lista solo las secciones que te parezcan útiles</strong>, así limitamos el trabajo a lo que importa.</p><p class="small note-box" style="margin-top:8px">Puede que esto ya lo tengas en un documento: súbelo en «Tus archivos» y lo leemos. Si es así, estas preguntas complementan lo que nos envías. Si no tienes documentos de contexto, trabajamos con lo que nos cuentes aquí.</p>
+        <div class="stack" style="margin-top:10px">${campo('github', 'Código: GitHub u otro repositorio (opcional)', 'https://github.com/… · te diremos a qué usuario dar acceso de lectura', 0, 'url')}
+          ${campo('storybook', 'Sistema de diseño o Storybook (opcional)', 'https://…', 0, 'url')}
+          ${campo('secciones', 'Secciones útiles (opcional)', 'Del código, del sistema de diseño o de la estructura: por ejemplo, componentes de formulario, tokens de color, módulo de pagos', 2)}
+          ${campo('enlaces', 'Enlaces importantes (opcional)', 'Un enlace por línea, con un título: Documentación — https://…', 3)}
+          ${campo('competencia', 'Competencia y referentes (opcional)', 'Competidor directo — https://…  ·  Me gustaría algo como — https://…', 3)}</div></div>
       <div class="card" style="margin:0"><h3>Plataforma actual (si existe)</h3><p class="sub">Si es un proyecto nuevo, sáltalo.</p>
-        <div class="stack" style="margin-top:10px">${campo('acceso_url', 'Dirección', 'https://', 0, 'url')}${campo('acceso_usuario', 'Usuario', 'usuario de prueba')}
-          <label class="field"><span>Contraseña</span><input id="w-clave" type="password" autocomplete="new-password" placeholder="${w.acceso_clave ? 'Entregada: escribe otra para reemplazarla' : ''}"></label></div>
+        <div class="stack" style="margin-top:10px">${campo('acceso_url', 'Dirección (opcional)', 'https://', 0, 'url')}
+          <label class="row small" style="gap:8px;cursor:pointer"><input type="checkbox" id="w-acceso-necesita" ${w.acceso_necesita ? 'checked' : ''}> Para entrar se necesita usuario y contraseña</label>
+          ${w.acceso_necesita ? `<div class="stack acceso-prueba"><p class="small"><strong>Danos un usuario de prueba de tu aplicación</strong>, no uno real: con él recorremos tu plataforma sin tocar datos de tus clientes.</p>
+            ${campo('acceso_usuario', 'Usuario de prueba', 'usuario o correo de prueba')}
+            <label class="field"><span>Contraseña de prueba</span><input id="w-clave" type="password" autocomplete="new-password" placeholder="${w.acceso_clave ? 'Entregada: escribe otra para reemplazarla' : ''}"></label></div>` : ''}
+          ${campo('acceso_notas', 'Notas (opcional)', 'Algo más que debamos saber: roles, un código de verificación, qué no tocar…', 2)}</div>
         <p class="small" style="margin-top:6px">${ICON.persona.replace('<svg', '<svg width="12" height="12"')} Va aparte y cifrada: solo la ve el analista que ejecuta el proyecto y nunca viaja dentro del zip. <span class="muted">${NUBE ? 'Por seguridad no la guardamos aquí: el analista te la pide por un canal privado.' : 'En esta maqueta no se guarda.'}</span></p></div>
     </div>
 `;
@@ -2664,7 +2673,8 @@ function vistaNuevo() {
       <div class="card" style="margin:0"><h3>${esc(w.nombre)}</h3><p class="sub">${t.nombre}${w.url ? ' · ' + esc(urlNormal(w.url)) : ''}</p>
         ${w.descripcion.trim() ? `<p style="margin-top:8px">${esc(w.descripcion)}</p>` : ''}
         <h3 style="margin-top:14px">Lo que compartes</h3><p class="small">${[w.analizar.trim() ? 'problemas que identificaste' : '', w.esperas.trim() ? 'qué esperas obtener' : '', w.acceso_usuario.trim() ? 'acceso' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : '', w.archivos.length ? w.archivos.length + ' archivo(s)' : '', w.manual ? 'manual de marca' : '', w.objetivo.trim() ? 'objetivo' : '', w.intencion.trim() ? 'intención' : '', w.flujo.trim() ? 'flujo actual' : '', w.github.trim() ? 'código' : '', w.enlaces.trim() ? 'enlaces' : '', w.competencia.trim() ? 'competencia' : '', w.acceso_url.trim() ? 'acceso a la plataforma actual' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : ''].filter(Boolean).join(', ') || 'Solo lo básico: arrancamos con eso.'}.</p>
-        ${w.tipo === 'completo' ? `<p class="small muted">Falta: ${CARPETAS.filter(([k]) => !det[k]).map(([, n]) => n.toLowerCase()).join(', ') || 'nada'}. Seguiremos con supuestos marcados como tales.</p>` : ''}
+        ${w.tipo === 'completo' ? (() => { const extra = CARPETAS.filter(([k]) => !det[k]).map(([, n]) => n.toLowerCase());
+          return `<p class="small muted">Con esto arrancamos.${extra.length ? ` Si más adelante tienes ${extra.join(', ')}, puedes sumarlo en cualquier escenario para afinar el trabajo.` : ''}</p>`; })() : ''}
 </div>
       <div class="card" style="margin:0"><h3>Qué pasa al enviarlo</h3>
         <ul class="checklist" style="margin-top:10px">${(w.tipo === 'completo'
@@ -2709,7 +2719,7 @@ function fuentesDe(w) {
   return { agentes: w.tipo === 'sintetico' ? (w.agentes || 4) : undefined, descripcion: w.descripcion.trim(), archivos: w.archivos, ignorados: w.ignorados, manual: w.manual, pegado: w.pegado,
     enlaces: w.enlaces.split(/\n+/).map(x => x.trim()).filter(Boolean), detectado: detectar(w),
     entradas: { analizar: (w.analizar || '').trim(), esperas: (w.esperas || '').trim(), alcance: (w.alcance || '').trim(), storybook: (w.storybook || '').trim(), secciones: (w.secciones || '').trim(), objetivo: w.objetivo.trim(), intencion: w.intencion.trim(), flujo: w.flujo.trim(), github: w.github.trim(), enlaces: w.enlaces.trim(), competencia: w.competencia.trim() },
-    acceso: w.acceso_url.trim() || w.acceso_usuario.trim() || w.acceso_clave ? { url: w.acceso_url.trim() || urlNormal(w.url), usuario: w.acceso_usuario.trim(), credencial: w.acceso_clave ? 'cifrada' : null } : null };
+    acceso: w.acceso_url.trim() || w.acceso_usuario.trim() || w.acceso_clave || (w.acceso_notas || '').trim() ? { url: w.acceso_url.trim() || urlNormal(w.url), necesita_clave: !!w.acceso_necesita, usuario: w.acceso_usuario.trim(), credencial: w.acceso_clave ? 'cifrada' : null, notas: (w.acceso_notas || '').trim() } : null };
 }
 /* ---- Borradores: salir del asistente no pierde lo escrito */
 const wizardSucio = w => !!w && !!(w.tipo || w.nombre.trim() || w.descripcion.trim() || w.url.trim() || w.archivos.length || w.analizar.trim() || w.objetivo.trim());
@@ -2756,7 +2766,7 @@ function wireWizard() {
   const sol = document.getElementById('sol-btn');
   if (sol) { sol.onclick = () => { DB.solicitudes.push({ org: w.cliente, persona: UI.actor, fecha: new Date().toISOString(), texto: $('#sol-txt').value.trim() }); save(); render(); toast('Solicitud enviada a mercadeo.'); }; return; }
   if (!document.getElementById('w-next')) return;
-  const CAMPOS = ['nombre', 'descripcion', 'url', 'analizar', 'esperas', 'alcance', 'storybook', 'secciones', 'objetivo', 'intencion', 'flujo', 'github', 'enlaces', 'competencia', 'acceso_url', 'acceso_usuario'];
+  const CAMPOS = ['nombre', 'descripcion', 'url', 'analizar', 'esperas', 'alcance', 'storybook', 'secciones', 'objetivo', 'intencion', 'flujo', 'github', 'enlaces', 'competencia', 'acceso_url', 'acceso_usuario', 'acceso_notas'];
   // La contraseña nunca se guarda en la maqueta: solo se registra que se entregó.
   const sync = () => { CAMPOS.forEach(k => { const el = document.getElementById('w-' + k); if (el) w[k] = el.value; }); const c = document.getElementById('w-clave'); if (c && c.value) { w.acceso_clave = true; c.value = ''; } };
   document.querySelectorAll('[data-tipo]').forEach(b => b.onclick = () => { w.tipo = b.dataset.tipo; render(); });
@@ -2823,6 +2833,7 @@ function wireWizard() {
   document.querySelectorAll('[data-paso]').forEach(b => b.onclick = () => { sync(); w.paso = +b.dataset.paso; render(); $('#view').focus(); });
   document.querySelectorAll('input[name="w-agentes"]').forEach(r => r.onchange = () => { sync(); w.agentes = r.value === 'mas' ? Math.max(6, w.agentes || 6) : +r.value; render(); });
   const an = document.getElementById('w-agentes-n'); if (an) an.onchange = () => { sync(); w.agentes = Math.max(6, Math.min(20, parseInt(an.value, 10) || 6)); render(); };
+  const nec = document.getElementById('w-acceso-necesita'); if (nec) nec.onchange = () => { sync(); w.acceso_necesita = nec.checked; render(); };
   const cons = document.getElementById('w-consiente'); if (cons) cons.onchange = () => { w.consiente = cons.checked; $('#w-next').disabled = !validoWizard(w); $('#w-motivo').textContent = validoWizard(w) ? '' : motivoWizard(w); };
   document.querySelectorAll('[data-legal]').forEach(a => a.onclick = ev => { ev.preventDefault(); verLegal(a.dataset.legal); });
   $('#w-back').onclick = () => { sync(); if (w.paso === 1) salirDelAsistente('#/proyectos'); else { w.paso--; render(); } };
