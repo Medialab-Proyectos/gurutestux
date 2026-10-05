@@ -34,6 +34,10 @@
       <h1 class="edoc-titulo">Documentos Recibidos</h1>
       <p class="edoc-subtitulo">Lo que llega por la red a nombre de tu empresa. Desde aquí lo apruebas, lo rechazas con un motivo o dejas constancia de que llegó.</p>
     </div>
+    <div class="edoc-titulo-barra__lado">
+      <span class="edoc-estado edoc-estado--info" id="sello-evolutivo" hidden>Vista evolutiva</span>
+      <button type="button" class="btn btn-edoc-terciario" id="ver-evolutivo">Ver la propuesta evolutiva</button>
+    </div>
   </div>
 
   <div class="nota nota--decidido">
@@ -64,14 +68,20 @@
             <label class="edoc-etiqueta" for="f-tipo">Tipo de documento</label>
             <select class="custom-select" id="f-tipo"><option value="">Todos</option></select>
           </div>
+          <!-- El mismo par que en Documentos Emitidos: primero la entidad y después
+               su estado. Aquí las entidades son dos, y una eres tú. -->
           <div class="col-12 col-md-6 col-xl-3">
-            <label class="edoc-etiqueta" for="f-respuesta">Tu respuesta</label>
-            <select class="custom-select" id="f-respuesta">
-              <option value="">Todas</option>
-              <option value="pendiente">Pendiente de responder</option>
-              <option value="aprobado">Aprobada · MLS AP</option>
-              <option value="rechazado">Rechazada · MLS RE</option>
-              <option value="acuse">Acuse de recibo · MLS AB</option>
+            <label class="edoc-etiqueta" for="f-esquina">Entidad</label>
+            <select class="custom-select" id="f-esquina">
+              <option value="">Cualquiera</option>
+              <option value="recepcion">Plataforma receptora (C3)</option>
+              <option value="respuesta">Destinatario (C4) · eres tú</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-esquina-estado">Estado de esa entidad</label>
+            <select class="custom-select" id="f-esquina-estado" disabled>
+              <option value="">Elige una entidad primero</option>
             </select>
           </div>
           <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
@@ -165,13 +175,13 @@
             <th scope="col" class="text-right">Base imponible</th>
             <th scope="col" class="text-right">IVA</th>
             <th scope="col" class="text-right">Total</th>
-            <th scope="col" class="separador-izq">Recepción en eDoc <span class="clave-corner">(C3)</span>
+            <th scope="col" class="separador-izq">Plataforma receptora <span class="clave-corner">(C3)</span>
               <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="bottom"
-                data-content="C3 es la plataforma que recibe el documento en tu nombre: somos nosotros, eDoc. Aquí ves si llegó bien por la red."
+                data-content="La misma esquina que ves en Documentos Emitidos. En esta pantalla la plataforma receptora somos nosotros, eDoc, porque el documento llega a tu nombre. Aquí ves si llegó bien por la red."
                 aria-label="Qué es C3">?</button></th>
-            <th scope="col">Tu respuesta <span class="clave-corner">(C4)</span>
+            <th scope="col">Destinatario <span class="clave-corner">(C4)</span>
               <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="bottom"
-                data-content="C4 eres tú, el destinatario. Aquí ves qué has respondido: aprobar, rechazar o confirmar la recepción."
+                data-content="La misma esquina que ves en Documentos Emitidos. Allí el destinatario es tu cliente; aquí eres tú. Puedes aprobar o rechazar, y mientras no respondas el emisor no sabe nada de ti."
                 aria-label="Qué es C4">?</button></th>
           </tr>
         </thead>
@@ -182,20 +192,22 @@
   </section>
 
   <div class="nota nota--decidido">
-    <span class="nota__sello">Decidido</span>
-    <strong>Tres respuestas posibles, y el acuse no es una aprobación.</strong>
-    <span class="edoc-estado edoc-estado--exito">Aprobada · MLS AP</span>
-    <span class="edoc-estado edoc-estado--error">Rechazada · MLS RE</span>
-    <span class="edoc-estado edoc-estado--advertencia">Acuse · MLS AB</span>
-    El acuse dice «llegó», no «estoy de acuerdo». Conviene que la interfaz no los pinte del mismo color ni los ponga al
-    mismo nivel, porque en la práctica se confunden. El rechazo pide siempre motivo tipificado.
+    <span class="nota__sello">Decidido · 5 de octubre</span>
+    <strong>Dos respuestas, y sin código prestado.</strong>
+    <span class="edoc-estado edoc-estado--exito">Aprobada</span>
+    <span class="edoc-estado edoc-estado--error">Rechazada</span>
+    Aquí respondes como comprador, y eso es una respuesta de negocio. No es un <span class="cifra">MLS</span>: el
+    MLS es técnico y va entre plataformas. En el estándar de Peppol esta respuesta es el
+    <span class="cifra">Invoice Response</span>, que tiene siete códigos —acuse, en proceso, aceptada, rechazada,
+    en consulta, aceptada con condiciones y pagada—, pero Emiratos todavía no lo documenta. Mientras tanto, dos:
+    aprobar y rechazar. El rechazo pide siempre motivo tipificado.
   </div>
 
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
     <strong>Bolivia distingue «Rechazar y notificar» de «Solo rechazar».</strong> Son dos botones distintos: uno avisa al
-    proveedor por correo y el otro solo deja el rechazo registrado. Aquí el rechazo viaja por la red como MLS RE, así que
-    el correo sería un canal alterno —el mismo asunto que bloquea «Reenviar al cliente»—. Hay que decidir si el rechazo
+    proveedor por correo y el otro solo deja el rechazo registrado. Aquí el rechazo se registra y se le comunica al
+    emisor, así que el correo sería un canal alterno —el mismo asunto que bloquea «Reenviar al cliente»—. Hay que decidir si el rechazo
     lleva aviso por correo o no; mientras tanto, esta maqueta ofrece una sola acción.
   </div>
 
@@ -227,7 +239,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>
         <div class="modal-body">
           <p class="mb-3">Vas a aprobar <strong id="ap-numero"></strong> de <strong id="ap-emisor"></strong>.
-          Se enviará por la red la respuesta <strong>MLS AP</strong>.</p>
+          Se le comunicará al emisor que la aprobaste.</p>
           <div class="edoc-aviso edoc-aviso--advertencia">
             <span data-icono="alerta" class="edoc-aviso__icono"></span>
             <div>La aprobación no se deshace desde el portal. Si después hay que corregir el documento, el emisor tiene que
@@ -236,7 +248,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-edoc-exito" id="confirmar-aprobar">Aprobar · MLS AP</button>
+          <button type="button" class="btn btn-edoc-exito" id="confirmar-aprobar">Aprobar</button>
         </div>
       </div>
     </div>
@@ -250,7 +262,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>
         <div class="modal-body">
           <p class="mb-3">Vas a rechazar <strong id="re-numero"></strong> de <strong id="re-emisor"></strong>.
-          Se enviará por la red la respuesta <strong>MLS RE</strong>.</p>
+          Se le comunicará al emisor, con el motivo que elijas.</p>
           <div class="mb-3">
             <label class="edoc-etiqueta" for="re-motivo">Motivo del rechazo<span class="obligatorio">*</span></label>
             <select class="custom-select" id="re-motivo" required>
@@ -265,30 +277,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-edoc-error" id="confirmar-rechazar">Rechazar · MLS RE</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== Modal · acuse ============================== -->
-  <div class="modal fade" id="modal-acuse" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header"><h5 class="modal-title">Confirmar recepción de la factura</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>
-        <div class="modal-body">
-          <p class="mb-3">Vas a confirmar que <strong id="ab-numero"></strong> llegó. Se enviará la respuesta
-          <strong>MLS AB</strong>.</p>
-          <div class="edoc-aviso edoc-aviso--advertencia">
-            <span data-icono="alerta" class="edoc-aviso__icono"></span>
-            <div><strong>Esto no aprueba, acepta ni paga la factura.</strong> Solo deja constancia de que
-            llegó. Sigues pudiendo aprobarla o rechazarla después.</div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Volver sin cambios</button>
-          <button type="button" class="btn btn-edoc-siguiente" id="confirmar-acuse">Confirmar recepción</button>
+          <button type="button" class="btn btn-edoc-error" id="confirmar-rechazar">Rechazar</button>
         </div>
       </div>
     </div>
@@ -392,23 +381,21 @@
 
   function respuestaPastilla(doc) {
     if (doc.respuesta === 'pendiente') return '<span class="edoc-estado edoc-estado--neutro">Pendiente</span>';
-    var mapa = { aprobado: ['exito', 'Aprobada · MLS AP'], rechazado: ['error', 'Rechazada · MLS RE'], acuse: ['advertencia', 'Acuse · MLS AB'] };
+    var mapa = { aprobado: ['exito', 'Aprobada'], rechazado: ['error', 'Rechazada'] };
     var m = mapa[doc.respuesta];
     var extra = doc.respuestaSello ? '<div class="edoc-secundario cifra mt-1">' + doc.respuestaSello + '</div>' : '';
     var motivo = doc.motivo ? '<div class="edoc-secundario mt-1">' + doc.motivo + '</div>' : '';
     return '<span class="edoc-estado edoc-estado--' + m[0] + '">' + m[1] + '</span>' + extra + motivo;
   }
 
-  /* Las acciones se habilitan según el estado de la fila. Responder con MLS AP
-     o MLS RE cierra el círculo: ya no se puede volver a responder. El acuse no
-     lo cierra, porque no es una aprobación.
+  /* Las acciones se habilitan según el estado de la fila. Aprobar o rechazar
+     cierra el círculo: ya no se puede volver a responder, y son las dos únicas
+     respuestas que ofrece el portal.
 
      Reparto pedido en la revisión del 2026-09-07: «dejaría las opciones
      principales o las más utilizadas y las otras debajo de este submenú».
-     Fuera quedan las tres del recorrido —mirar la factura y responderla—; en
-     el menú de los tres puntos, las ocasionales. El acuse gana con el cambio:
-     pasa de un icono que nadie descifra a un rótulo que dice en una línea que
-     no es una aprobación. */
+     Fuera quedan las del recorrido —mirar la factura y responderla—; en el menú
+     de los tres puntos, las ocasionales: descargar el PDF y el XML. */
   function acciones(doc, i) {
     var cerrado = doc.respuesta === 'aprobado' || doc.respuesta === 'rechazado';
     function boton(accion, iconoNombre, matiz, rotulo, permitido, razon) {
@@ -433,15 +420,13 @@
     return '<div class="edoc-acciones-fila">' +
       '<a class="edoc-accion edoc-accion--pdf" href="#" data-accion="visor" data-i="' + i + '" title="Abrir el visor de la factura" ' +
         'aria-label="Abrir el visor de ' + doc.numero + '">' + ico('ver') + '</a>' +
-      boton('aprobar',  'aprobar',  'exito', 'Aprobar · MLS AP',  !cerrado, 'Ya respondiste este documento') +
-      boton('rechazar', 'rechazar', 'error', 'Rechazar · MLS RE', !cerrado, 'Ya respondiste este documento') +
+      boton('aprobar',  'aprobar',  'exito', 'Aprobar',  !cerrado, 'Ya respondiste este documento') +
+      boton('rechazar', 'rechazar', 'error', 'Rechazar', !cerrado, 'Ya respondiste este documento') +
       '<div class="dropdown">' +
         '<button type="button" class="edoc-accion edoc-accion--gris" data-toggle="dropdown" ' +
           'title="Más acciones" aria-label="Más acciones para ' + doc.numero + '" ' +
           'aria-haspopup="true" aria-expanded="false">' + ico('puntos') + '</button>' +
         '<ul class="dropdown-menu dropdown-menu-right edoc-mas">' +
-          opcion('acuse', 'acuse', 'Confirmar recepción', 'MLS AB · deja constancia de que llegó, no la aprueba',
-                 !cerrado && doc.respuesta !== 'acuse', 'Ya dejaste constancia de que llegó') +
           opcion('pdf', 'pdf', 'Descargar PDF', 'La representación del documento', true, '') +
           opcion('xml', 'xml', 'Descargar XML', 'El documento original tal como llegó', true, '') +
         '</ul>' +
@@ -486,6 +471,31 @@
       order: [[3, 'desc']]
     });
   }
+
+
+  /* --- La vista evolutiva ------------------------------------------------
+     La pantalla que se entrega es la de hoy. Lo que proponemos se mira con el
+     botón, y se nota: sello arriba y dirección con ?evolutivo=1, para poder
+     enseñarla o enlazarla sin que nadie la confunda con lo que ya existe. */
+  function evolutivo() {
+    try { return new URLSearchParams(window.location.search).get('evolutivo') === '1'; }
+    catch (e) { return false; }
+  }
+  (function () {
+    var boton = document.getElementById('ver-evolutivo');
+    var sello = document.getElementById('sello-evolutivo');
+    if (!boton) return;
+    if (evolutivo()) {
+      boton.textContent = 'Volver a la vista actual';
+      if (sello) sello.hidden = false;
+    }
+    boton.addEventListener('click', function () {
+      var q = new URLSearchParams(window.location.search);
+      if (evolutivo()) q.delete('evolutivo'); else q.set('evolutivo', '1');
+      var cola = q.toString();
+      window.location.search = cola ? '?' + cola : '';
+    });
+  }());
 
   function abrirVisor(doc) {
     document.getElementById('visor-numero').textContent = doc.numero;
@@ -557,10 +567,6 @@
       document.getElementById('re-detalle').value = '';
       $('#modal-rechazar').modal('show');
     }
-    if (accion === 'acuse') {
-      document.getElementById('ab-numero').textContent = doc.numero;
-      $('#modal-acuse').modal('show');
-    }
   });
 
   document.getElementById('confirmar-aprobar').addEventListener('click', function () {
@@ -568,7 +574,7 @@
     docs[actual].respuestaSello = sello();
     $('#modal-aprobar').modal('hide');
     pintar();
-    window.edocAvisar('Enviamos la aprobación <strong>MLS AP</strong> de ' + docs[actual].numero + '.', 'exito');
+    window.edocAvisar('Aprobaste <strong>' + docs[actual].numero + '</strong>. Se lo comunicamos al emisor.', 'exito');
   });
 
   document.getElementById('confirmar-rechazar').addEventListener('click', function () {
@@ -579,18 +585,40 @@
     docs[actual].motivo = sel.options[sel.selectedIndex].text;
     $('#modal-rechazar').modal('hide');
     pintar();
-    window.edocAvisar('Enviamos el rechazo <strong>MLS RE</strong> de ' + docs[actual].numero + '.', 'error');
-  });
-
-  document.getElementById('confirmar-acuse').addEventListener('click', function () {
-    docs[actual].respuesta = 'acuse';
-    docs[actual].respuestaSello = sello();
-    $('#modal-acuse').modal('hide');
-    pintar();
-    window.edocAvisar('Dejamos constancia de que llegó · <strong>MLS AB</strong>. No es una aprobación.', 'advertencia');
+    window.edocAvisar('Rechazaste <strong>' + docs[actual].numero + '</strong>. Se lo comunicamos al emisor con el motivo.', 'error');
   });
 
   /* --- Buscar ------------------------------------------------------------ */
+  /* Entidad y estado, como en Emitidos. Los estados salen de los documentos,
+     así que no se ofrece nada que devuelva cero. Los del destinatario se dicen
+     en primera persona: esa esquina eres tú. */
+  var ROTULOS = {
+    recepcion: { aprobado: 'Llegó bien', rechazado: 'Rechazada en la recepción' },
+    respuesta: { pendiente: 'Todavía no respondes', aprobado: 'La aprobaste', rechazado: 'La rechazaste' }
+  };
+  (function () {
+    var entidad = document.getElementById('f-esquina');
+    var estado = document.getElementById('f-esquina-estado');
+    if (!entidad || !estado) return;
+    entidad.addEventListener('change', function () {
+      var campo = entidad.value;
+      if (!campo) {
+        estado.innerHTML = '<option value="">Elige una entidad primero</option>';
+        estado.disabled = true;
+        return;
+      }
+      var vistos = [];
+      docs.forEach(function (d) {
+        var e = d[campo];
+        if (e && vistos.indexOf(e) < 0) vistos.push(e);
+      });
+      estado.innerHTML = '<option value="">Cualquier estado</option>' + vistos.map(function (e) {
+        return '<option value="' + e + '">' + ((ROTULOS[campo] || {})[e] || e) + '</option>';
+      }).join('');
+      estado.disabled = false;
+    });
+  }());
+
   function filtroValor(id) { return document.getElementById(id).value.trim(); }
   function filtroContiene(texto, buscado) {
     return !buscado || String(texto || '').toLowerCase().indexOf(buscado.toLowerCase()) >= 0;
@@ -601,7 +629,8 @@
     leer: function () {
       return {
         desde: filtroValor('f-desde'), hasta: filtroValor('f-hasta'), tipo: filtroValor('f-tipo'),
-        respuesta: filtroValor('f-respuesta'), numero: filtroValor('f-numero'),
+        esquina: filtroValor('f-esquina'), esquinaEstado: filtroValor('f-esquina-estado'),
+        numero: filtroValor('f-numero'),
         trn: filtroValor('f-trn').replace(/\D/g, ''),
         proveedores: [].slice.call(document.querySelectorAll('#f-proveedor-lista input:checked'))
           .map(function (x) { return x.value; })
@@ -611,7 +640,8 @@
       var doc = docs[i];
       if (!doc) return true;
       return (!c.desde || doc.fecha >= c.desde) && (!c.hasta || doc.fecha <= c.hasta) &&
-        (!c.tipo || doc.tipo === c.tipo) && (!c.respuesta || doc.respuesta === c.respuesta) &&
+        (!c.tipo || doc.tipo === c.tipo) &&
+        (!c.esquina || !c.esquinaEstado || doc[c.esquina] === c.esquinaEstado) &&
         filtroContiene(doc.numero, c.numero) && filtroContiene(doc.trn, c.trn) &&
         (!c.proveedores.length || c.proveedores.indexOf(doc.emisorLatino) >= 0);
     }

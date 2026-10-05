@@ -2517,3 +2517,13 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
   margin-top: 14px; padding-top: 10px; border-top: 1px solid #e6e6e6;
   font-size: 12px; color: #5f6771;
 }
+
+/* El lado derecho de la barra de título: el sello de la vista evolutiva y su
+   botón. En móvil cae debajo del título, no al lado. */
+.edoc-titulo-barra__lado { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+@media (max-width: 767px) { .edoc-titulo-barra__lado { margin-top: 12px; } }
+
+/* Los otros dos campos de cada esquina: cuándo lo dijo y qué dijo. Van bajo el
+   estado, en gris, porque se leen después. */
+.corner__sello { font-size: 11.5px; color: #5f6771; margin-top: 4px; }
+.corner__mensaje { font-size: 12px; color: var(--edoc-negro); margin-top: 2px; line-height: 1.35; }

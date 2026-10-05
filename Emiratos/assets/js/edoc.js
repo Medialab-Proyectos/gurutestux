@@ -244,7 +244,23 @@
       'data-aviso="' + a.id + '">' + cuerpo + aspa + '</li>';
   }
 
+  /* 5 de octubre: la campana y las franjas de comunicados no entran en el MVP.
+     «¿Para qué, si es un MVP? Al gobierno no le interesa; no se compliquen con
+     eso ahorita, a no ser que haya una notificación del gobierno.» Se quedan
+     escritas y se encienden poniendo esto en true, o desde el simulacro para
+     poder enseñarlas. */
+  var AVISOS_EN_MVP = false;
+
+  /* El simulacro manda: si alguien fija un escenario a mano, es porque quiere
+     verlos. La barra de mantenimiento no pasa por aquí: no es un comunicado,
+     es el estado del portal. */
+  function forzado() {
+    var sim = window.EDOC_SIMULACRO;
+    return !!(sim && sim.forzado);
+  }
+
   function campana() {
+    if (!AVISOS_EN_MVP && !forzado()) return '';
     var avisos = avisosVivos();
     var sinLeer = avisos.filter(function (a) { return !a.leido; }).length;
 
@@ -386,6 +402,7 @@
      de marca reserva justo para esto. Se puede cerrar, y vuelve en la sesión
      siguiente: no es un aviso que convenga perder para siempre. */
   function franjaFija() {
+    if (!AVISOS_EN_MVP && !forzado()) return '';
     var sim = window.EDOC_SIMULACRO;
     if (sim && !sim.hayAvisos) return '';
     var avisos = (window.EDOC && window.EDOC.AVISOS) || [];

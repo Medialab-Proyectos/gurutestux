@@ -316,23 +316,6 @@
             <div class="edoc-ayuda">Quince cifras, tal como figura en tu registro fiscal.</div>
           </div>
           <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="e-regimen">Tratamiento de IVA habitual
-              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
-            <!-- La lista oficial de Emiratos: el código AETaxCat de PINT AE. Con
-                 valor propio, para que traducir el texto no cambie el valor. -->
-            <select class="custom-select" id="e-regimen">
-              <option value="">Selecciona una opción</option>
-              <option value="S">Tipo general · 5 %</option>
-              <option value="Z">Tipo cero · 0 %</option>
-              <option value="E">Exento</option>
-              <option value="AE">Inversión del sujeto pasivo</option>
-              <option value="O">No sujeto a IVA</option>
-              <option value="N">Régimen de margen</option>
-            </select>
-            <div class="edoc-ayuda">El que te proponemos al emitir. Cada línea de la factura puede llevar otro:
-            la misma empresa vende al 5 %, exporta al 0 % y puede facturar algo exento en el mismo documento.</div>
-          </div>
-          <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-ciudad">Ciudad
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
             <input class="form-control" id="e-ciudad" placeholder="Dubai">
@@ -556,16 +539,19 @@
     <span class="cifra">REG-2026-00918</span>, que es la que ya usa la bandeja del Office Manager.
   </div>
   <div class="nota nota--decidido">
-    <span class="nota__sello">Resuelto · 5 de octubre</span>
-    <strong>La lista de IVA de Emiratos es la de PINT AE.</strong> El código <span class="cifra">AETaxCat</span>:
-    tipo general del 5 %, tipo cero, exento, inversión del sujeto pasivo, no sujeto y régimen de margen. No hacía
-    falta deducirla del portal francés, estaba publicada.
+    <span class="nota__sello">Decidido · 5 de octubre</span>
+    <strong>El tratamiento de IVA sale del registro.</strong> Venía de Francia, donde sí decide: según el régimen
+    cambian las fechas de reporte y hay sanciones si no se reporta a tiempo. En Emiratos no decide nada, y el
+    tratamiento se declara en cada línea de la factura —<span class="cifra">AETaxCat</span>: 5 %, tipo cero,
+    exento, inversión del sujeto pasivo, no sujeto y margen—, no en la ficha de la empresa. Pedir en el alta un
+    dato que no se usa es lo que hace que un regulador pregunte para qué lo quieres.
   </div>
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
-    <strong>Y el tratamiento de IVA no es de la empresa, es de cada línea.</strong> La norma lo exige por línea
-    de factura, no en la ficha. Aquí se queda como el valor que se propone al emitir, y por eso es opcional. Si
-    la autoridad lo pide en el alta del proveedor, se marca obligatorio y se acabó; conviene preguntarlo.
+    <strong>Qué pide el negocio para el contrato.</strong> Los campos del registro no los decide la norma ni
+    desarrollo: los decide quien recibe a la empresa. Falta preguntarle a administración qué documentos necesita
+    de una empresa de Emiratos, y comparar lo que pedimos aquí con lo que el Ministerio ya pide en el onboarding,
+    para no pedir dos veces lo mismo.
   </div>
   <div class="nota nota--decidido">
     <span class="nota__sello">Quick Win de Francia</span>

@@ -30,16 +30,18 @@ window.EDOC = (function () {
      C5 tampoco es «el gobierno» a secas: es un concentrador, y detrás están
      Finanzas, el Ministerio y las demás entidades que fiscalizan. */
   var CORNERS = [
-    { clave: 'C1', nombre: 'Tu empresa',            quien: 'Quien emite el documento',
-      rama: 'entrega', rechazo: 'tecnico' },
+    /* 5 de octubre: «Tu empresa» (C1) ya no está. Si el documento salió es
+       porque la empresa lo aprobó, así que su estado no decía nada. Y el orden
+       es este: eDoc transmite y sale a la vez hacia la autoridad y hacia la
+       plataforma del comprador; el comprador es el último en enterarse. */
     { clave: 'C2', nombre: 'eDoc',                  quien: 'Tu proveedor de servicios en la red Peppol',
       rama: 'entrega', rechazo: 'tecnico' },
+    { clave: 'C5', nombre: 'Autoridad',             quien: 'Concentrador de la Federal Tax Authority · recibe el reporte fiscal',
+      rama: 'fiscal', rechazo: 'tecnico' },
     { clave: 'C3', nombre: 'Plataforma receptora',  quien: 'El ASP del comprador',
       rama: 'entrega', rechazo: 'tecnico' },
-    { clave: 'C4', nombre: 'Destinatario',          quien: 'El comprador · destinatario final',
-      rama: 'entrega', rechazo: 'comercial' },
-    { clave: 'C5', nombre: 'Autoridad',             quien: 'Concentrador de la Federal Tax Authority · recibe el reporte fiscal',
-      rama: 'fiscal', rechazo: 'tecnico' }
+    { clave: 'C4', nombre: 'Destinatario',          quien: 'La empresa que recibe el documento',
+      rama: 'entrega', rechazo: 'comercial' }
   ];
 
   /* Las dos clases de rechazo, con el nombre que se enseña y qué hacer. */
@@ -60,8 +62,12 @@ window.EDOC = (function () {
     rechazado: { rotulo: 'Rechazado',   clase: 'error' },
     entregado: { rotulo: 'Entregado',   clase: 'transito' },
     enviado:   { rotulo: 'Enviado',     clase: 'transito' },
-    acuse:     { rotulo: 'Acuse',       clase: 'advertencia' },
     pendiente: { rotulo: 'Pendiente',   clase: 'neutro' },
+    /* Le llegó y no ha dicho nada. Puede quedarse así para siempre: el comprador
+       solo ve el documento cuando se conecta a su plataforma. */
+    desconocido: { rotulo: '—',         clase: 'neutro' },
+    /* La rayita es «no sabemos»: el comprador puede no conectarse nunca a su
+       plataforma, y entonces su estado se queda así para siempre. */
     noaplica:  { rotulo: '—',           clase: 'neutro' }
   };
 
@@ -99,33 +105,33 @@ window.EDOC = (function () {
     { numero: 'INV-2026-004871', fecha: '2026-08-31', suministro: '2026-08-27', descuento: 400.00, tipo: 'Factura',
       receptorLatino: 'Al Futtaim Logistics LLC', receptorArabe: 'الفطيم للخدمات اللوجستية ذ.م.م',
       trn: '100234567800003', moneda: 'AED', base: 18000.00, iva: 900.00, total: 18900.00,
-      c1: 'aprobado', c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'aprobado' },
+      c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'aprobado' },
 
     { numero: 'INV-2026-004870', fecha: '2026-08-31', tipo: 'Factura',
       receptorLatino: 'Emirates Steel Arkan PJSC', receptorArabe: 'الإمارات للحديد والصلب أركان',
       trn: '100987654300003', moneda: 'AED', base: 6250.00, iva: 312.50, total: 6562.50,
-      c1: 'aprobado', c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'acuse' },
+      c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'desconocido' },
 
     { numero: 'INV-2026-004869', fecha: '2026-08-30', tipo: 'Nota de crédito',
       receptorLatino: 'Gulf Marine Services', receptorArabe: 'خدمات الخليج البحرية',
       trn: '100445566700003', moneda: 'AED', base: -1200.00, iva: -60.00, total: -1260.00,
-      c1: 'aprobado', c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'pendiente' },
+      c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'desconocido' },
 
     { numero: 'INV-2026-004868', fecha: '2026-08-30', tipo: 'Factura',
       receptorLatino: 'Dubai Investments PJSC', receptorArabe: 'دبي للاستثمار ش.م.ع',
       trn: '100112233400003', moneda: 'AED', base: 43900.00, iva: 2195.00, total: 46095.00,
-      c1: 'aprobado', c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'rechazado',
+      c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'rechazado',
       motivoC4: 'RE-02 · El importe no coincide con lo pactado' },
 
     { numero: 'INV-2026-004867', fecha: '2026-08-29', tipo: 'Factura de exportación',
       receptorLatino: 'Qatar Fuel Company', receptorArabe: 'شركة قطر للوقود',
       trn: '100778899100003', moneda: 'USD', base: 12750.00, iva: 0.00, total: 12750.00,
-      c1: 'aprobado', c2: 'aprobado', c5: 'aprobado', c3: 'entregado', c4: 'pendiente' },
+      c2: 'aprobado', c5: 'aprobado', c3: 'entregado', c4: 'noaplica' },
 
     { numero: 'INV-2026-004866', fecha: '2026-08-29', tipo: 'Factura',
       receptorLatino: 'Sharjah Cement Factory', receptorArabe: 'مصنع الشارقة للإسمنت',
       trn: '100556677800003', moneda: 'AED', base: 9800.00, iva: 490.00, total: 10290.00,
-      c1: 'aprobado', c2: 'aprobado', c5: 'rechazado', c3: 'noaplica', c4: 'noaplica',
+      c2: 'aprobado', c5: 'rechazado', c3: 'noaplica', c4: 'noaplica',
       motivoC5: 'Falta el número de registro fiscal del receptor · dato obligatorio' },
 
     /* La autofactura va con inversión del sujeto pasivo: el impuesto lo liquida
@@ -133,26 +139,68 @@ window.EDOC = (function () {
     { numero: 'INV-2026-004865', fecha: '2026-08-28', tipo: 'Autofactura', inversion: true,
       receptorLatino: 'Ras Al Khaimah Ceramics', receptorArabe: 'رأس الخيمة للسيراميك',
       trn: '100334455600003', moneda: 'AED', base: 3150.00, iva: 157.50, total: 3307.50,
-      c1: 'aprobado', c2: 'aprobado', c5: 'aprobado', c3: 'rechazado', c4: 'noaplica',
+      c2: 'aprobado', c5: 'aprobado', c3: 'rechazado', c4: 'noaplica',
       motivoC3: 'La firma del sobre de transmisión no valida · error técnico' },
 
     { numero: 'INV-2026-004864', fecha: '2026-08-28', tipo: 'Factura no comercial',
       receptorLatino: 'Mohammed Bin Saeed Trading', receptorArabe: 'محمد بن سعيد للتجارة',
       trn: '—', moneda: 'AED', base: 740.00, iva: 0.00, total: 740.00,
-      c1: 'aprobado', c2: 'aprobado', c5: 'aprobado', c3: 'entregado', c4: 'pendiente' },
+      c2: 'aprobado', c5: 'aprobado', c3: 'entregado', c4: 'noaplica' },
 
     { numero: 'INV-2026-004863', fecha: '2026-08-27', tipo: 'Factura',
       receptorLatino: 'Abu Dhabi Ports Company', receptorArabe: 'شركة موانئ أبوظبي',
       trn: '100223344500003', moneda: 'AED', base: 27500.00, iva: 1375.00, total: 28875.00,
-      c1: 'aprobado', c2: 'aprobado', c5: 'enviado', c3: 'pendiente', c4: 'pendiente' },
+      c2: 'aprobado', c5: 'enviado', c3: 'pendiente', c4: 'noaplica' },
 
     { numero: 'INV-2026-004862', fecha: '2026-08-27', tipo: 'Factura',
       receptorLatino: 'Etihad Rail PJSC', receptorArabe: 'الاتحاد للقطارات ش.م.ع',
       trn: '100667788900003', moneda: 'AED', base: 15200.00, iva: 760.00, total: 15960.00,
-      c1: 'aprobado', c2: 'rechazado', c5: 'noaplica', c3: 'noaplica', c4: 'noaplica',
+      c2: 'rechazado', c5: 'noaplica', c3: 'noaplica', c4: 'noaplica',
       motivoC2: 'El esquema del XML no valida contra la versión vigente' }
   ];
 
+
+  /* El grupito de campos de cada esquina: estado, cuándo lo dijo y qué dijo.
+     En producción vienen de la base de datos —hay una fecha y un mensaje por
+     esquina—; aquí se arman con la fecha del documento y una hora por esquina,
+     que es lo que hace falta para poder enseñarlo. El mensaje del rechazo sí es
+     el de verdad: viaja con el documento. */
+  var HORAS = { C2: '08:15', C5: '08:20', C3: '08:26', C4: '09:40' };
+  var MENSAJES = {
+    C2: { aprobado:  'Validado y transmitido a la red.',
+          rechazado: 'El XML no pasó nuestras validaciones.',
+          enviado:   'En cola de transmisión.',
+          pendiente: 'A la espera de procesar.' },
+    C5: { aprobado:  'Reporte fiscal aceptado por la autoridad.',
+          rechazado: 'La autoridad no aceptó el reporte fiscal.',
+          enviado:   'Reporte enviado, sin respuesta todavía.',
+          pendiente: 'A la espera del reporte fiscal.' },
+    C3: { aprobado:  'La plataforma del comprador lo validó y se lo entregó.',
+          entregado: 'Entregado a la plataforma del comprador.',
+          rechazado: 'La plataforma del comprador lo rechazó por validaciones técnicas.',
+          enviado:   'En camino hacia la plataforma del comprador.',
+          pendiente: 'A la espera de la plataforma del comprador.' },
+    C4: { aprobado:    'El destinatario lo aprobó.',
+          rechazado:   'El destinatario lo rechazó.',
+          desconocido: 'Le llegó, pero todavía no ha respondido. Puede no responder nunca: solo ve el documento cuando se conecta a su plataforma.' }
+  };
+
+  function sello(doc, clave) {
+    var estado = doc[clave.toLowerCase()];
+    if (!estado || estado === 'noaplica') {
+      return { estado: estado, fecha: '', mensaje: 'El documento se detuvo antes de llegar aquí.' };
+    }
+    /* El desconocido no tiene fecha: no hay nada que fechar. */
+    if (estado === 'desconocido') {
+      return { estado: estado, fecha: '', mensaje: MENSAJES[clave] && MENSAJES[clave].desconocido };
+    }
+    var propio = doc['motivo' + clave];
+    return {
+      estado: estado,
+      fecha: doc.fecha + ' ' + (HORAS[clave] || ''),
+      mensaje: propio || (MENSAJES[clave] && MENSAJES[clave][estado]) || ''
+    };
+  }
   /* --- Documentos recibidos ---------------------------------------------
      Aquí eDoc es el corner 3 y la empresa que entra al portal es el corner 4. */
   var RECIBIDOS = [
@@ -169,7 +217,7 @@ window.EDOC = (function () {
     { numero: 'CN-2026-0043', fecha: '2026-08-30', fechaEmision: '2026-08-28', tipo: 'Nota de crédito',
       emisorLatino: 'Jumeirah Facilities Management', emisorArabe: 'الجميرا لإدارة المرافق',
       trn: '100404505600003', moneda: 'AED', base: -960.00, iva: -48.00, total: -1008.00,
-      recepcion: 'aprobado', respuesta: 'acuse', respuestaSello: '2026-08-30 14:12' },
+      recepcion: 'aprobado', respuesta: 'pendiente', respuestaSello: '2026-08-30 14:12' },
 
     { numero: 'INV-55219', fecha: '2026-08-30', fechaEmision: '2026-08-29', tipo: 'Factura',
       emisorLatino: 'Union Coop', emisorArabe: 'جمعية الاتحاد التعاونية',
@@ -315,6 +363,7 @@ window.EDOC = (function () {
 
   return {
     CORNERS: CORNERS, RECHAZOS: RECHAZOS, ESTADOS: ESTADOS, TIPOS: TIPOS, MOTIVOS_RECHAZO: MOTIVOS_RECHAZO,
+    sello: sello,
     EMITIDOS: EMITIDOS, RECIBIDOS: RECIBIDOS, DETALLE: DETALLE, dinero: d,
     AVISOS: AVISOS, TIPOS_AVISO: TIPOS_AVISO, ESTADOS_SISTEMA: ESTADOS_SISTEMA
   };

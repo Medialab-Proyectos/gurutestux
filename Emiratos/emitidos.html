@@ -33,7 +33,11 @@
       <div class="edoc-miga"><span>Emisión</span><span>Reportes</span><span>Documentos Emitidos</span></div>
       <h1 class="edoc-titulo">Documentos Emitidos</h1>
       <p class="edoc-subtitulo">Lo que tu empresa ha emitido y en qué punto está: primero el camino
-      hasta el comprador, y aparte la respuesta de la autoridad.</p>
+      hasta el destinatario, y aparte la respuesta de la autoridad.</p>
+    </div>
+    <div class="edoc-titulo-barra__lado">
+      <span class="edoc-estado edoc-estado--info" id="sello-evolutivo" hidden>Vista evolutiva</span>
+      <button type="button" class="btn btn-edoc-terciario" id="ver-evolutivo">Ver la propuesta evolutiva</button>
     </div>
   </div>
 
@@ -71,16 +75,20 @@
             <label class="edoc-etiqueta" for="f-numero">Número de documento</label>
             <input type="text" class="form-control cifra" id="f-numero" placeholder="INV-2026-004871" inputmode="latin">
           </div>
+          <!-- Por esquina y después por su estado. Son dos campos que van juntos:
+               el segundo no significa nada sin el primero, y por eso nace
+               apagado y se llena con los estados que esa esquina tiene de
+               verdad en los documentos. -->
           <div class="col-12 col-md-6 col-xl-3">
-            <label class="edoc-etiqueta" for="f-estado">Estado del documento</label>
-            <select class="custom-select" id="f-estado">
-              <option value="">Todos los estados</option>
-              <option value="aprobado">Aprobado</option>
-              <option value="rechazado">Rechazado</option>
-              <option value="entregado">Entregado</option>
-              <option value="enviado">Enviado</option>
-              <option value="acuse">Acuse</option>
-              <option value="pendiente">Pendiente</option>
+            <label class="edoc-etiqueta" for="f-esquina">Entidad</label>
+            <select class="custom-select" id="f-esquina">
+              <option value="">Cualquiera</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-esquina-estado">Estado de esa entidad</label>
+            <select class="custom-select" id="f-esquina-estado" disabled>
+              <option value="">Elige una entidad primero</option>
             </select>
           </div>
           <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
@@ -106,6 +114,23 @@
           <span class="nota__sello">Decidido</span>
           <strong>Buscar no es una pantalla.</strong> Es el banner de esta misma página. «Documentos por criterios», con los
           filtros ampliados, queda para una segunda versión: el MVP arranca con el reporte por rango de fechas.
+        </div>
+        <div class="nota nota--decidido">
+          <span class="nota__sello">Corregido · 5 de octubre</span>
+          <strong>El MLS es de la plataforma receptora, no del comprador.</strong> Lo teníamos puesto al revés: el
+          Message Level Status viaja de C3 a C2 y es técnico —<span class="cifra">AB</span> validada,
+          <span class="cifra">AP</span> validada y entregada, <span class="cifra">RE</span> rechazada—. Lo que dice el
+          comprador es otra cosa: la respuesta de negocio, que en el estándar de Peppol es el
+          <span class="cifra">Invoice Response</span>, con siete códigos. Emiratos documenta el MLS y no documenta
+          todavía el Invoice Response, así que aquí el comprador aprueba o rechaza, sin ponerle un código prestado.
+        </div>
+        <div class="nota nota--decidido">
+          <span class="nota__sello">Decidido · 5 de octubre</span>
+          <strong>«Tu empresa» ya no es una esquina, y el orden cambió.</strong> Si el documento salió, es porque la
+          empresa lo aprobó: enseñar su estado era decir que el agua moja. Y el recorrido va
+          <span class="cifra">C2 · C5 · C3 · C4</span>: eDoc transmite y sale a la vez hacia la autoridad y hacia la
+          plataforma del comprador; el comprador es el último en enterarse, porque solo lo ve cuando se conecta a su
+          plataforma. Puede no conectarse nunca, y entonces su estado se queda en la rayita para siempre.
         </div>
         <div class="nota nota--decidido">
           <span class="nota__sello">Decidido · sesión del 7 de septiembre</span>
@@ -160,9 +185,9 @@
         <thead>
           <tr>
             <th colspan="9" style="background:#fff;border-bottom-color:#fff"></th>
-            <th colspan="5" class="agrupador">Estado por entidad
+            <th colspan="4" class="agrupador">Estado por entidad
               <button type="button" class="agrupador__ayuda" data-toggle="modal" data-target="#modal-corners"
-                      aria-label="Qué son C1, C2, C3, C4 y C5">?</button>
+                      aria-label="Qué son C2, C5, C3 y C4">?</button>
             </th>
           </tr>
           <tr>
@@ -175,11 +200,10 @@
             <th scope="col" class="text-right">Base imponible</th>
             <th scope="col" class="text-right">IVA</th>
             <th scope="col" class="text-right">Total</th>
-            <th scope="col" class="separador-izq">Tu empresa <span class="clave-corner">(C1)</span></th>
-            <th scope="col">eDoc <span class="clave-corner">(C2)</span></th>
+            <th scope="col" class="separador-izq">eDoc <span class="clave-corner">(C2)</span></th>
+            <th scope="col">Autoridad <span class="clave-corner">(C5)</span></th>
             <th scope="col">Plataforma receptora <span class="clave-corner">(C3)</span></th>
             <th scope="col">Destinatario <span class="clave-corner">(C4)</span></th>
-            <th scope="col" class="separador-izq">Autoridad <span class="clave-corner">(C5)</span></th>
           </tr>
         </thead>
         <tbody id="cuerpo-emitidos"></tbody>
@@ -223,22 +247,25 @@
           <strong>La factura recorre un camino</strong> —de ti al comprador— y, aparte,
           <strong>se le reporta a la autoridad</strong> un documento fiscal distinto.</p>
 
+          <div class="edoc-aviso edoc-aviso--info mb-4">
+            <span data-icono="info" class="edoc-aviso__icono"></span>
+            <div><strong>Son las mismas esquinas en todo el portal.</strong> Lo que cambia es dónde estás tú. En esta pantalla tú emites: el destinatario (C4) es tu cliente y la plataforma receptora (C3) es la suya. En Documentos Recibidos es al revés: el destinatario eres tú y la plataforma receptora somos nosotros, porque el documento llega a tu nombre. No son columnas distintas: es la misma red mirada desde el otro lado.</div>
+          </div>
+
           <h3 class="edoc-tablero__titulo mb-2" style="font-size:15px">El camino de la factura</h3>
           <div class="edoc-tabla-envoltura mb-4">
             <table class="edoc-tabla">
               <thead><tr><th scope="col">Esquina</th><th scope="col">Quién es</th><th scope="col">Qué puede responder</th></tr></thead>
               <tbody>
-                <tr><td>Tu empresa <span class="clave-corner">(C1)</span></td><td>Tú, quien emite el documento.</td>
-                    <td>Lo entrega a eDoc para que lo transmita.</td></tr>
                 <tr><td>eDoc <span class="clave-corner">(C2)</span></td><td>Tu proveedor de servicios en la red Peppol. Es quien transmite el documento.</td>
                     <td>Aprueba el documento o lo rechaza si el XML no valida.</td></tr>
-                <tr><td>Plataforma receptora <span class="clave-corner">(C3)</span></td><td>El proveedor de servicios del comprador.</td>
-                    <td>Entrega o rechaza por validaciones técnicas.
+                <tr><td>Plataforma receptora <span class="clave-corner">(C3)</span></td><td>El proveedor de servicios del comprador. En Documentos Recibidos, esta esquina somos nosotros.</td>
+                    <td>Valida y entrega. Su respuesta nos llega como MLS: AB validada pero sin poder confirmar que se la pasó al comprador, AP validada y entregada, RE rechazada.
                     <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="left"
-                      data-content="Un Aprobado aquí significa que la plataforma del otro lado recibió el documento sin errores técnicos. No es la aceptación del comprador: esa es la de C4."
-                      aria-label="Qué significa Aprobado en esta esquina">?</button></td></tr>
-                <tr><td>Destinatario <span class="clave-corner">(C4)</span></td><td>El comprador, la empresa que recibe.</td>
-                    <td>Aprueba, rechaza con motivo o solo acusa recibo.</td></tr>
+                      data-content="El MLS es técnico y va de la plataforma del comprador a la nuestra. Dice si el documento llegó y validó, no si el comprador está de acuerdo: eso es la respuesta de C4."
+                      aria-label="Qué significa el MLS en esta esquina">?</button></td></tr>
+                <tr><td>Destinatario <span class="clave-corner">(C4)</span></td><td>La empresa que recibe el documento. En Documentos Recibidos, esta esquina eres tú.</td>
+                    <td>Aprueba o rechaza con motivo. Es una respuesta de negocio, no un MLS.</td></tr>
               </tbody>
             </table>
           </div>
@@ -380,11 +407,28 @@
 
   /* La pastilla nombra siempre a su entidad. El sentido de la reunión es que
      «aprobado» no puede quedarse sin decir quién aprobó. */
-  function pastilla(estado, corner) {
+  /* En la tabla, el estado a secas. La fecha solo cuando hay rechazo: es la
+     única fila donde alguien tiene que hacer algo, y saber cuándo pasó cambia
+     lo que hace. El mensaje entero está en «Ver estados». */
+  function pastilla(estado, corner, doc) {
+    if (doc && estado === 'rechazado') {
+      var s = D.sello(doc, corner);
+      return pastillaBase(estado, corner) +
+        (s.fecha ? '<div class="edoc-secundario cifra mt-1">' + s.fecha + '</div>' : '');
+    }
+    return pastillaBase(estado, corner);
+  }
+
+  function pastillaBase(estado, corner) {
     var e = D.ESTADOS[estado] || D.ESTADOS.pendiente;
     var c = corner ? D.CORNERS.filter(function (x) { return x.clave === corner; })[0] : null;
     if (estado === 'noaplica') {
       return '<span class="edoc-secundario" title="El documento se detuvo antes de llegar a esta entidad">—</span>';
+    }
+    /* La otra rayita: le llegó y no ha dicho nada. No es lo mismo, aunque se
+       dibuje igual: aquí sí hay a quién llamar. */
+    if (estado === 'desconocido') {
+      return '<span class="edoc-secundario" title="Le llegó, pero todavía no ha respondido. Puede no responder nunca.">—</span>';
     }
     var titulo = c ? (e.rotulo + ' por ' + c.nombre + ' · ' + c.quien) : e.rotulo;
     return '<span class="edoc-estado edoc-estado--' + e.clase + '" title="' + titulo + '">' +
@@ -433,11 +477,10 @@
       '<td class="cifra cifra-der font-weight-bold"' + negativo + '>' + D.dinero(doc.total) + '</td>' +
       /* La cadena de entrega primero, y la autoridad al final tras un
          separador: es una rama aparte, no el siguiente paso. */
-      '<td class="separador-izq">' + pastilla(doc.c1, 'C1') + '</td>' +
-      '<td>' + pastilla(doc.c2, 'C2') + '</td>' +
-      '<td>' + pastilla(doc.c3, 'C3') + '</td>' +
-      '<td>' + pastilla(doc.c4, 'C4') + '</td>' +
-      '<td class="separador-izq">' + pastilla(doc.c5, 'C5') + '</td>' +
+      '<td class="separador-izq">' + pastilla(doc.c2, 'C2', doc) + '</td>' +
+      '<td>' + pastilla(doc.c5, 'C5', doc) + '</td>' +
+      '<td>' + pastilla(doc.c3, 'C3', doc) + '</td>' +
+      '<td>' + pastilla(doc.c4, 'C4', doc) + '</td>' +
     '</tr>';
   }
 
@@ -467,10 +510,6 @@
   function sucesos(doc, clave) {
     var c = doc[clave.toLowerCase()];
     var mapa = {
-      c1: [
-        { t: 'Documento generado', d: 'Tu sistema crea la factura y la deja lista para enviar.', s: '08:12', e: 'hecho' },
-        { t: 'Entregado a eDoc',   d: 'Sale de tu sistema hacia tu proveedor de servicios.',      s: '08:14', e: 'hecho' }
-      ],
       c2: [
         { t: 'Recepción del documento', d: 'El sistema del cliente entrega el XML a eDoc.', s: '08:14', e: 'hecho' },
         { t: 'Validación de esquema',   d: 'Estructura y campos obligatorios.',              s: '08:14', e: c === 'rechazado' ? 'fallo' : 'hecho' },
@@ -488,13 +527,13 @@
         { t: 'Aprobado',                  d: 'Validado. La autoridad tiene diez minutos como máximo para responder.',        s: '08:22', e: 'hecho' }
       ],
       c3: [
-        { t: 'Envío',      d: 'Transmitido por la red a la plataforma del comprador.', s: '08:23', e: 'hecho' },
-        { t: 'Entregado',  d: 'La plataforma receptora confirma la entrega.',          s: '08:24', e: 'hecho' },
-        { t: 'Aprobado',   d: 'Validaciones técnicas superadas.',                      s: '08:26', e: 'hecho' }
+        { t: 'Envío',          d: 'Transmitido por la red a la plataforma del comprador.',              s: '08:23', e: 'hecho' },
+        { t: 'Validada · MLS AB', d: 'Pasó las validaciones técnicas de la plataforma del comprador.',  s: '08:24', e: 'hecho' },
+        { t: 'Entregada · MLS AP', d: 'La plataforma confirma que se la pasó al comprador.',            s: '08:26', e: 'hecho' }
       ],
       c4: [
         { t: 'Puesto a disposición', d: 'El documento queda visible para el comprador.', s: '08:26', e: 'hecho' },
-        { t: 'Respuesta',            d: 'El comprador responde al documento.',           s: '09:40', e: 'hecho' }
+        { t: 'Respuesta',            d: 'El comprador lo aprueba o lo rechaza. Es una respuesta de negocio, no un MLS.', s: '09:40', e: 'hecho' }
       ]
     }[clave.toLowerCase()];
 
@@ -516,11 +555,6 @@
     if (c === 'pendiente') {
       return mapa.slice(0, 1).concat([{ t: 'A la espera de respuesta', d: 'Esta entidad todavía no ha respondido.', s: '', e: 'espera' }]);
     }
-    if (c === 'acuse') {
-      var l2 = mapa.slice(0, mapa.length - 1);
-      l2.push({ t: 'Acuse de recibo · MLS AB', d: 'El comprador confirma que le llegó. No es una aprobación.', s: '09:40', e: 'hecho' });
-      return l2;
-    }
     if (c === 'enviado' || c === 'entregado') return mapa.slice(0, 2);
     return mapa;
   }
@@ -529,7 +563,7 @@
      quién tiene que moverlo y qué sigue. Las cinco líneas de tiempo quedan
      debajo, para quien quiera el detalle. No cambia el nombre de ningún estado:
      ese vocabulario sigue abierto con la hoja «ESTADOS MVP». */
-  var ORDEN_FLUJO = ['C1', 'C2', 'C5', 'C3', 'C4'];
+  var ORDEN_FLUJO = ['C2', 'C5', 'C3', 'C4'];
   function resumenEstados(doc) {
     function ficha(k) { return D.CORNERS.filter(function (x) { return x.clave === k; })[0]; }
     function estadoDe(k) { return doc[k.toLowerCase()]; }
@@ -543,9 +577,6 @@
     } else if (espera) {
       chip = estadoDe(espera); donde = espera; quien = ficha(espera).nombre;
       sigue = 'No tienes que hacer nada: esperamos su respuesta.';
-    } else if (estadoDe('C4') === 'acuse') {
-      chip = 'acuse'; donde = 'C4'; quien = ficha('C4').nombre;
-      sigue = 'El comprador confirmó que le llegó. Todavía puede aprobarlo o rechazarlo.';
     } else {
       chip = 'aprobado'; donde = 'C4'; quien = 'Nadie';
       sigue = 'No tienes que hacer nada.';
@@ -581,15 +612,20 @@
         '</li>';
       }).join('');
       var e = D.ESTADOS[estado] || D.ESTADOS.pendiente;
+      var s = D.sello(doc, c.clave);
       return '<article class="corner">' +
         '<div class="corner__cabecera">' +
           '<div class="corner__nombre">' + c.nombre +
             ' <span class="clave-corner">(' + c.clave + ')</span></div>' +
           '<div class="corner__quien">' + c.quien + '</div>' +
-          '<div class="mt-2">' + (estado === 'noaplica' ? '<span class="edoc-secundario">Sin actuación</span>' :
+          '<div class="mt-2">' + (estado === 'noaplica' ? '<span class="edoc-secundario">No le llegó</span>' :
+            estado === 'desconocido' ? '<span class="edoc-secundario">Sin respuesta todavía</span>' :
             '<span class="edoc-estado edoc-estado--' + e.clase + '">' + e.rotulo + '</span>') +
             (estado === 'rechazado'
-              ? '<div class="edoc-secundario mt-1">' + D.RECHAZOS[c.rechazo].rotulo + '</div>' : '') + '</div>' +
+              ? '<div class="edoc-secundario mt-1">' + D.RECHAZOS[c.rechazo].rotulo + '</div>' : '') +
+            /* Los otros dos campos de la esquina: cuándo lo dijo y qué dijo. */
+            (s.fecha ? '<div class="corner__sello cifra">' + s.fecha + '</div>' : '') +
+            (s.mensaje ? '<div class="corner__mensaje">' + s.mensaje + '</div>' : '') + '</div>' +
         '</div>' +
         '<div class="corner__cuerpo"><ul class="linea-tiempo">' + items + '</ul></div>' +
       '</article>';
@@ -598,6 +634,31 @@
     window.edocPrepararTablas(document.getElementById('modal-estados'));
     $('#modal-estados').modal('show');
   }
+
+
+  /* --- La vista evolutiva ------------------------------------------------
+     La pantalla que se entrega es la de hoy. Lo que proponemos se mira con el
+     botón, y se nota: sello arriba y dirección con ?evolutivo=1, para poder
+     enseñarla o enlazarla sin que nadie la confunda con lo que ya existe. */
+  function evolutivo() {
+    try { return new URLSearchParams(window.location.search).get('evolutivo') === '1'; }
+    catch (e) { return false; }
+  }
+  (function () {
+    var boton = document.getElementById('ver-evolutivo');
+    var sello = document.getElementById('sello-evolutivo');
+    if (!boton) return;
+    if (evolutivo()) {
+      boton.textContent = 'Volver a la vista actual';
+      if (sello) sello.hidden = false;
+    }
+    boton.addEventListener('click', function () {
+      var q = new URLSearchParams(window.location.search);
+      if (evolutivo()) q.delete('evolutivo'); else q.set('evolutivo', '1');
+      var cola = q.toString();
+      window.location.search = cola ? '?' + cola : '';
+    });
+  }());
 
   /* --- Visor ------------------------------------------------------------ */
   /* El artículo 59 del Reglamento Ejecutivo exige que las palabras «factura
@@ -637,7 +698,7 @@
             '<div class="visor-bloque__rotulo">' + doc.tipo + '</div>' +
             '<div class="edoc-clave-doc" style="font-size:16px">' + doc.numero + '</div>' +
             '<div class="edoc-secundario cifra">Emisión ' + doc.fecha + '</div>' +
-            (doc.suministro ? '<div class="edoc-secundario cifra">Suministro ' + doc.suministro + '</div>' : '') +
+            (evolutivo() && doc.suministro ? '<div class="edoc-secundario cifra">Suministro ' + doc.suministro + '</div>' : '') +
             '<div class="edoc-secundario cifra">Vencimiento ' + det.vencimiento + '</div>' +
           '</div>' +
         '</div>' +
@@ -666,6 +727,9 @@
         '</table>' +
 
         '<div class="visor-totales mt-3">' +
+          /* El descuento se queda en las dos vistas: el artículo 59 obliga a
+             declararlo, y sin él la hoja no cuadra —las líneas suman más que la
+             base—, que es peor que no enseñarlo. */
           (doc.descuento ? '<div class="fila"><span>Suma de las líneas</span><span class="cifra">' +
             doc.moneda + ' ' + D.dinero(doc.base + doc.descuento) + '</span></div>' +
             '<div class="fila"><span>Descuento</span><span class="cifra">− ' + doc.moneda + ' ' +
@@ -674,7 +738,7 @@
           '<div class="fila"><span>IVA</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.iva) + '</span></div>' +
           '<div class="fila total"><span>Total</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.total) + '</span></div>' +
         '</div>' +
-        (doc.inversion ? '<div class="visor-leyenda">El receptor es quien debe liquidar el impuesto, ' +
+        (evolutivo() && doc.inversion ? '<div class="visor-leyenda">El receptor es quien debe liquidar el impuesto, ' +
           'conforme al artículo 48 del Decreto-Ley del IVA.</div>' : '') +
       '</div>';
 
@@ -696,19 +760,53 @@
   });
 
   /* --- Buscar ------------------------------------------------------------ */
-  /* Los filtros filtran los documentos de muestra de verdad. El estado es el
-     del documento entero, con la misma regla que el resumen de estados: manda
-     el primer rechazo; si no hay, la primera entidad que falta por responder;
-     si ya respondieron todas, el acuse o la aprobación. */
+  /* Dónde está el documento, con una sola regla: manda el primer rechazo; si no
+     hay, la primera entidad que falta por responder; y si ya respondieron todas,
+     aprobado. Lo usa el resumen de «Ver estados». Filtrar ya no pasa por aquí:
+     se filtra por esquina y por el estado de esa esquina. */
   function estadoDelDocumento(doc) {
-    var orden = ['c1', 'c2', 'c5', 'c3', 'c4'];
+    var orden = ['c2', 'c5', 'c3', 'c4'];
     var k;
     for (k = 0; k < orden.length; k++) if (doc[orden[k]] === 'rechazado') return 'rechazado';
     for (k = 0; k < orden.length; k++) {
       if (['pendiente', 'enviado', 'entregado'].indexOf(doc[orden[k]]) >= 0) return doc[orden[k]];
     }
-    return doc.c4 === 'acuse' ? 'acuse' : 'aprobado';
+    return 'aprobado';
   }
+  /* Los dos desplegables que van juntos: la entidad y su estado. El de estados
+     se llena con lo que esa entidad tiene en los documentos de verdad, así que
+     nunca ofrece una combinación que no devuelva nada. */
+  var ROTULOS_ESTADO = {
+    desconocido: 'Sin respuesta todavía',
+    noaplica: 'No le llegó'
+  };
+  (function () {
+    var entidad = document.getElementById('f-esquina');
+    var estado = document.getElementById('f-esquina-estado');
+    if (!entidad || !estado) return;
+    entidad.innerHTML = '<option value="">Cualquiera</option>' + D.CORNERS.map(function (c) {
+      return '<option value="' + c.clave + '">' + c.nombre + ' (' + c.clave + ')</option>';
+    }).join('');
+    entidad.addEventListener('change', function () {
+      var k = entidad.value;
+      if (!k) {
+        estado.innerHTML = '<option value="">Elige una entidad primero</option>';
+        estado.disabled = true;
+        return;
+      }
+      var vistos = [];
+      D.EMITIDOS.forEach(function (d) {
+        var e = d[k.toLowerCase()];
+        if (e && vistos.indexOf(e) < 0) vistos.push(e);
+      });
+      estado.innerHTML = '<option value="">Cualquier estado</option>' + vistos.map(function (e) {
+        var r = ROTULOS_ESTADO[e] || ((D.ESTADOS[e] || {}).rotulo) || e;
+        return '<option value="' + e + '">' + r + '</option>';
+      }).join('');
+      estado.disabled = false;
+    });
+  }());
+
   function filtroValor(id) { return document.getElementById(id).value.trim(); }
   function filtroContiene(texto, buscado) {
     return !buscado || String(texto || '').toLowerCase().indexOf(buscado.toLowerCase()) >= 0;
@@ -719,7 +817,8 @@
     leer: function () {
       return {
         desde: filtroValor('f-desde'), hasta: filtroValor('f-hasta'), tipo: filtroValor('f-tipo'),
-        numero: filtroValor('f-numero'), estado: filtroValor('f-estado'),
+        numero: filtroValor('f-numero'),
+        esquina: filtroValor('f-esquina'), esquinaEstado: filtroValor('f-esquina-estado'),
         trn: filtroValor('f-trn').replace(/\D/g, ''), receptor: filtroValor('f-receptor')
       };
     },
@@ -728,7 +827,8 @@
       if (!doc) return true;
       return (!c.desde || doc.fecha >= c.desde) && (!c.hasta || doc.fecha <= c.hasta) &&
         (!c.tipo || doc.tipo === c.tipo) && filtroContiene(doc.numero, c.numero) &&
-        (!c.estado || estadoDelDocumento(doc) === c.estado) && filtroContiene(doc.trn, c.trn) &&
+        (!c.esquina || !c.esquinaEstado || doc[c.esquina.toLowerCase()] === c.esquinaEstado) &&
+        filtroContiene(doc.trn, c.trn) &&
         (filtroContiene(doc.receptorLatino, c.receptor) || filtroContiene(doc.receptorArabe, c.receptor));
     }
   });
