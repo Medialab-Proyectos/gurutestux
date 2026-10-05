@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuadro de mando · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+</head>
+<!--
+  Cuadro de mando, para la sesión de certificación.
+
+  Lo que se pidió en la reunión del 2 de octubre: la autoridad quiere ver el
+  portal y «los dashboards», y aquí no había ninguno. Se maqueta copiando el
+  sentido del de Francia: lo que la empresa necesita saber de un vistazo cuando
+  entra, sin convertirlo en un informe.
+
+  Qué se enseña y por qué: TODO sale de los documentos que ya tiene la maqueta.
+  No hay ni una cifra inventada: los contadores, los importes y los estados se
+  calculan de EMITIDOS y RECIBIDOS. Por eso no hay serie de meses: con los datos
+  de un periodo, una curva de doce meses sería un dibujo, no un dato.
+
+  Ojo con la decisión anterior: para el MVP se dijo que el inicio es solo la
+  imagen, sin cuadro de mando, porque todos los usuarios lo consultarían al
+  entrar y castigaría la base de datos. Esto no la contradice: es una vista
+  aparte para la demo, y sigue pendiente decidir si entra, y con qué datos.
+-->
+<body data-seccion="inicio" data-pagina="tablero.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Inicio</span><span>Cuadro de mando</span></div>
+      <h1 class="edoc-titulo">Cuadro de mando</h1>
+      <p class="edoc-subtitulo">Lo que pasó con tus documentos y con tu conexión a la autoridad. Cada cifra
+      lleva a la pantalla donde se ve el detalle.</p>
+    </div>
+    <div class="edoc-secundario" id="periodo"></div>
+  </div>
+
+  <!-- Las cifras de arriba: lo que se mira primero. Cada una es un enlace. -->
+  <section class="tablero-cifras" id="cifras"></section>
+
+  <div class="row rejilla">
+    <div class="col-12 col-lg-7">
+      <section class="edoc-tablero">
+        <div class="edoc-tablero__cabecera">
+          <h2 class="edoc-tablero__titulo">Lo que emitiste, por estado</h2>
+          <a class="edoc-secundario" href="emitidos.html">Ver emitidos ›</a>
+        </div>
+        <div class="edoc-tablero__cuerpo">
+          <p class="edoc-secundario">Un documento pasa por varias manos; aquí está en cuál se quedó. Lo
+          rechazado es lo que hay que mirar hoy.</p>
+          <div id="barras-emitidos"></div>
+        </div>
+      </section>
+
+      <section class="edoc-tablero">
+        <div class="edoc-tablero__cabecera">
+          <h2 class="edoc-tablero__titulo">Lo que recibiste, por respuesta</h2>
+          <a class="edoc-secundario" href="recibidos.html">Ver recibidos ›</a>
+        </div>
+        <div class="edoc-tablero__cuerpo">
+          <p class="edoc-secundario">Lo pendiente es lo que tu empresa todavía no ha contestado a sus
+          proveedores.</p>
+          <div id="barras-recibidos"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <section class="edoc-tablero">
+        <div class="edoc-tablero__cabecera">
+          <h2 class="edoc-tablero__titulo">Conexión con la autoridad</h2>
+          <span class="edoc-estado edoc-estado--exito">Activa</span>
+        </div>
+        <div class="edoc-tablero__cuerpo">
+          <div class="edoc-perfil-dato">
+            <div class="edoc-etiqueta">Proveedor nombrado en EmaraTax</div>
+            <div>GuruSoft S.A. · eDoc</div>
+          </div>
+          <div class="edoc-perfil-dato">
+            <div class="edoc-etiqueta">Participant ID</div>
+            <div class="cifra">0235:100776655400003</div>
+          </div>
+          <div class="edoc-perfil-dato">
+            <div class="edoc-etiqueta">Asociación confirmada</div>
+            <div class="cifra">2026-09-02 10:41</div>
+          </div>
+          <a class="btn btn-edoc-terciario btn-sm mt-3" href="admin-empresa.html">Ver la identificación fiscal</a>
+        </div>
+      </section>
+
+      <section class="edoc-tablero">
+        <div class="edoc-tablero__cabecera">
+          <h2 class="edoc-tablero__titulo">Últimos documentos</h2>
+        </div>
+        <div class="edoc-tablero__cuerpo">
+          <div class="edoc-tabla-envoltura">
+            <table class="edoc-tabla">
+              <thead><tr><th scope="col">Documento</th><th scope="col">Quién</th>
+                <th scope="col" class="n">Total</th><th scope="col">Estado</th></tr></thead>
+              <tbody id="ultimos"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">De la reunión del 2 de octubre</span>
+    <strong>Esta vista nace para la sesión de certificación.</strong> Se pidió enseñar el portal y sus cuadros de
+    mando, y no había ninguno; se maqueta copiando el sentido del de Francia en lugar de inventar otro.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · pendiente de decidir</span>
+    <strong>Si entra en el MVP, y con qué datos.</strong> Para el MVP se había decidido que el inicio es solo la
+    imagen, sin cuadro de mando, porque todos los usuarios lo consultarían al entrar y eso castiga la base de
+    datos. Si esta vista se queda, hay que resolver de dónde salen las cifras —una copia en caché, no una
+    consulta en vivo— y cada cuánto se refrescan.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Falta el histórico.</strong> Aquí no hay evolución por meses a propósito: con los documentos de un
+    solo periodo, una curva sería un dibujo y no un dato. Cuando haya histórico se decide qué comparar —mes
+    contra mes, o contra el mismo mes del año anterior— y si se enseña importe o número de documentos.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+  var D = window.EDOC;
+  var EMI = D.EMITIDOS, REC = D.RECIBIDOS;
+
+  /* El periodo es el de los documentos que hay, no el de hoy: si la maqueta
+     enseña agosto, decir «octubre» sería mentir. */
+  var fechas = EMI.concat(REC).map(function (d) { return d.fecha; }).sort();
+  document.getElementById('periodo').textContent =
+    'Del ' + fechas[0] + ' al ' + fechas[fechas.length - 1];
+
+  function cuantos(lista, prueba) { return lista.filter(prueba).length; }
+  function dinero(n) { return D.dinero ? D.dinero(n) : n.toLocaleString('en-AE'); }
+
+  /* Lo rechazado es lo que pide acción: basta con que una mano lo haya
+     rechazado para que el documento cuente como rechazado. */
+  function rechazado(d) { return ['c1', 'c2', 'c3', 'c4', 'c5'].some(function (c) { return d[c] === 'rechazado'; }); }
+  function enCamino(d) { return !rechazado(d) && ['c1', 'c2', 'c3', 'c4', 'c5'].some(function (c) {
+    return d[c] && d[c] !== 'aprobado'; }); }
+
+  var facturado = EMI.reduce(function (a, d) { return a + d.total; }, 0);
+  var CIFRAS = [
+    { n: EMI.length, r: 'Documentos emitidos', p: 'En el periodo', url: 'emitidos.html' },
+    { n: REC.length, r: 'Documentos recibidos', p: 'De tus proveedores', url: 'recibidos.html' },
+    { n: cuantos(EMI, rechazado), r: 'Emitidos con rechazo', p: 'Hay que corregirlos y volver a enviarlos',
+      url: 'emitidos.html?estado=rechazado', alerta: true },
+    { n: cuantos(REC, function (d) { return d.respuesta === 'pendiente'; }), r: 'Recibidos sin responder',
+      p: 'Esperan tu aprobación o tu rechazo', url: 'recibidos.html', alerta: true },
+    { n: dinero(facturado), r: 'Facturado', p: 'Suma de lo emitido en el periodo', url: 'emitidos.html' }
+  ];
+  document.getElementById('cifras').innerHTML = CIFRAS.map(function (c) {
+    return '<a class="tablero-cifra' + (c.alerta && c.n ? ' tablero-cifra--ojo' : '') + '" href="' + c.url + '">' +
+      '<span class="tablero-cifra__n cifra">' + c.n + '</span>' +
+      '<span class="tablero-cifra__r">' + c.r + '</span>' +
+      '<span class="tablero-cifra__p">' + c.p + '</span></a>';
+  }).join('');
+
+  /* Barras: una fila por estado, con su número al final. Sin biblioteca; es una
+     división con un ancho, que es lo que esto necesita. */
+  function barras(donde, filas) {
+    var tope = Math.max.apply(null, filas.map(function (f) { return f.n; }).concat([1]));
+    document.getElementById(donde).innerHTML = filas.map(function (f) {
+      return '<div class="tablero-barra">' +
+        '<span class="tablero-barra__r">' + f.r + '</span>' +
+        '<span class="tablero-barra__pista"><i style="width:' + Math.round(f.n / tope * 100) + '%;' +
+          'background:' + f.color + '"></i></span>' +
+        '<span class="tablero-barra__n cifra">' + f.n + '</span></div>';
+    }).join('');
+  }
+
+  barras('barras-emitidos', [
+    { r: 'Aprobado por todos', n: cuantos(EMI, function (d) { return !rechazado(d) && !enCamino(d); }), color: 'var(--edoc-verde)' },
+    { r: 'En camino', n: cuantos(EMI, enCamino), color: 'var(--azul-2)' },
+    { r: 'Rechazado', n: cuantos(EMI, rechazado), color: 'var(--rojo-1)' }
+  ]);
+  barras('barras-recibidos', [
+    { r: 'Aprobado', n: cuantos(REC, function (d) { return d.respuesta === 'aprobado'; }), color: 'var(--edoc-verde)' },
+    { r: 'Acuse de recibo', n: cuantos(REC, function (d) { return d.respuesta === 'acuse'; }), color: 'var(--naranja-1)' },
+    { r: 'Rechazado', n: cuantos(REC, function (d) { return d.respuesta === 'rechazado'; }), color: 'var(--rojo-1)' },
+    { r: 'Sin responder', n: cuantos(REC, function (d) { return d.respuesta === 'pendiente'; }), color: 'var(--gris-2)' }
+  ]);
+
+  /* Los últimos cinco, mezclando emitidos y recibidos: es lo que pasó, no lo
+     que está en cada bandeja. */
+  var ultimos = EMI.map(function (d) {
+    return { fecha: d.fecha, numero: d.numero, quien: d.receptorLatino, total: d.total,
+             estado: rechazado(d) ? 'rechazado' : (enCamino(d) ? 'entregado' : 'aprobado'), salida: true };
+  }).concat(REC.map(function (d) {
+    return { fecha: d.fecha, numero: d.numero, quien: d.emisorLatino, total: d.total,
+             estado: d.respuesta, salida: false };
+  })).sort(function (a, b) { return a.fecha < b.fecha ? 1 : -1; }).slice(0, 5);
+
+  document.getElementById('ultimos').innerHTML = ultimos.map(function (d) {
+    var e = D.ESTADOS[d.estado] || { rotulo: d.estado, clase: 'neutro' };
+    return '<tr><td><strong class="cifra">' + d.numero + '</strong>' +
+      '<div class="edoc-secundario">' + (d.salida ? 'Emitido' : 'Recibido') + ' · ' + d.fecha + '</div></td>' +
+      '<td>' + d.quien + '</td>' +
+      '<td class="n cifra">' + dinero(d.total) + '</td>' +
+      '<td><span class="edoc-estado edoc-estado--' + e.clase + '">' + e.rotulo + '</span></td></tr>';
+  }).join('');
+}());
+</script>
+</body>
+</html>

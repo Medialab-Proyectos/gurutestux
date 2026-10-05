@@ -120,7 +120,7 @@
             </div>
             <div class="edoc-perfil-dato">
               <label class="edoc-etiqueta" for="c2">Contraseña nueva<span class="obligatorio">*</span></label>
-              <input type="password" class="form-control" id="c2" autocomplete="new-password">
+              <input type="password" class="form-control" id="c2" autocomplete="new-password" aria-describedby="c-reglas c-fuerza">
               <div class="edoc-ayuda" id="c-reglas">Al menos diez caracteres, con una mayúscula, un número y un símbolo.</div>
               <ul class="edoc-lista-simple mt-2" id="c-fuerza" hidden></ul>
             </div>
@@ -313,7 +313,8 @@
     caja.hidden = false;
     caja.innerHTML = REGLAS.map(function (r) {
       var ok = r.pasa(v);
-      return '<li style="color:' + (ok ? 'var(--edoc-verde)' : '#8a8a8a') + '">' +
+      // El verde de marca sobre blanco se queda en 1,95:1; este es el verde del sistema para texto.
+      return '<li style="color:' + (ok ? '#4d6b12' : '#666666') + '">' +
         (ok ? '✓ ' : '· ') + r.texto + '</li>';
     }).join('');
   });

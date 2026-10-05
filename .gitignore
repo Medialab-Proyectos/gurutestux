@@ -59,6 +59,15 @@ work/synthetica-plataforma/.operador/
 # Exportaciones de la plataforma (datos y archivos en base64).
 synthetica-exportacion-*.json
 
+# --- Material interno que apareció con el trabajo de octubre ----------------
+# Respaldos del motor de agentes (71 MB), documentos de Synthetica, salidas de
+# ejecuciones y archivos temporales. Nada de esto es del portal.
+Sintetica/
+_respaldos/
+outputs/
+test-results/
+tmp/
+
 # --- Ruido del sistema ------------------------------------------------------
 node_modules/
 .vercel/
@@ -75,3 +84,7 @@ agentes_ux/settings.local.json
 .vercel
 .env*
 __pycache__/
+_creacion_productos/.modelos/
+
+# Capturas para presentaciones: pesan y se regeneran con el script. No van al repositorio.
+_revision/capturas-certificacion/

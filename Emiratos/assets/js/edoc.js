@@ -93,6 +93,10 @@
      gris, para no tenderle una trampa a quien tiene clientes esperando. */
   var MENU = [
     { id: 'inicio', rotulo: 'Inicio', icono: 'inicio', url: 'inicio.html' },
+    /* El cuadro de mando NO va en el menú: se decidió el 2 de octubre, después
+       de ver que Francia tampoco lo tiene. La pantalla sigue existiendo en
+       tablero.html para enseñarla en la certificación como propuesta, y entra
+       al menú solo si gerencia la acepta. */
     /* «Cambiar Contraseña» ya no cuelga de aquí. De la reunión del 15 de
        septiembre: Administración es de la empresa —sus roles, sus usuarios, sus
        datos—, y lo mío va en el avatar, que es donde lo busca cualquiera que
@@ -399,26 +403,6 @@
           'aria-label="Cerrar este aviso">&times;</button>' +
       '</div>';
     }).join('');
-  }
-
-  /* Lo que ve quien entra a una función que está caída por el mantenimiento.
-     Se diferencia de «En construcción» a propósito: aquello no existe todavía,
-     esto existe y vuelve solo. */
-  function pantallaMantenimiento(motivo, hasta) {
-    return '' +
-    '<div class="edoc-obra">' +
-      '<div class="edoc-obra__tarjeta">' +
-        '<div class="edoc-obra__marca edoc-obra__marca--mantenimiento">' + icono('alerta') + '</div>' +
-        '<h1 class="edoc-obra__titulo">Esta función está en mantenimiento</h1>' +
-        '<p class="edoc-obra__rotulo">Vuelve sola ' + hasta + '</p>' +
-        '<p class="edoc-obra__texto">' + motivo + ' No hace falta que hagas nada: en cuanto termine, ' +
-        'esta pantalla vuelve a funcionar. El resto del portal sigue disponible.</p>' +
-        '<div class="edoc-obra__botones">' +
-          '<a class="btn btn-edoc-primario" href="inicio.html">Volver al inicio</a>' +
-          '<a class="btn btn-edoc-secundario" href="#" data-sin-destino>Escribir a soporte</a>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
   }
 
   /* --- Encabezado reducido -----------------------------------------------
@@ -733,16 +717,22 @@
       window.edocEnObra = true;
     }
 
-    /* Y si esa pantalla está caída por el mantenimiento, lo mismo pero con otro
-       motivo. Va después, para que «no entra en el MVP» gane: si algo no
-       existe, da igual que además esté en mantenimiento. */
+    /* Y si esa pantalla está caída por el mantenimiento, se dice dentro de la
+       pantalla y nada más: lo pidió el cliente el 5 de octubre, porque cambiar
+       todo el contenido por un cartel impedía ver la vista, y lo que hay que
+       poder enseñar es la vista. Va después de «no entra en el MVP», que sí
+       tapa: si algo no existe, da igual que además esté en mantenimiento. */
     if (soporte && sim && !window.edocEnObra) {
       var motivo = sim.bloqueada(pagina);
       if (motivo) {
-        soporte.innerHTML = pantallaMantenimiento(motivo, sim.hasta());
-        soporte.classList.add('edoc-pagina--obra');
-        document.title = 'En mantenimiento · eDoc Emiratos';
-        window.edocEnObra = true;
+        var cabecera = soporte.querySelector('.edoc-titulo-barra');
+        var franja = '<div class="edoc-aviso edoc-aviso--advertencia mb-3"><div>' +
+          '<strong>Esta función está en mantenimiento.</strong> ' +
+          '<span>' + motivo + ' Puedes verla, pero lo que hagas aquí no se guardará.</span> ' +
+          '<span class="d-block">Vuelve sola ' + sim.hasta() + '</span>' +
+          '</div></div>';
+        if (cabecera) cabecera.insertAdjacentHTML('afterend', franja);
+        else soporte.insertAdjacentHTML('afterbegin', franja);
       }
     }
 

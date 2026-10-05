@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verificación desde EmaraTax · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+</head>
+<!--
+  La otra cara de la asociación, la que exige la certificación de Emiratos
+  (reunión del 30 de septiembre).
+
+  Quién llega aquí: alguien que estaba en EmaraTax, nos eligió de la lista de
+  proveedores y pulsó continuar. La autoridad lo manda a una página NUESTRA con
+  un formulario que ella define: correo del administrador tal como está
+  registrado en EmaraTax, país, teléfono —opcional— y su identificador fiscal.
+  Al pulsar verificar, consultamos el servicio de la autoridad; si cuadra,
+  enseñamos lo que nos devuelve SIN dejar editarlo, la persona declara que es
+  verdad y se envía la asociación.
+
+  Qué NO se puede tocar: los campos y el orden son de la norma. Lo que sí es
+  nuestro: la marca, la explicación de qué está pasando y qué sigue después.
+  Cambiar el formulario por nuestra cuenta puede costar una sanción.
+
+  Por qué se piden datos que ya nos dio: porque el correo que tiene en
+  impuestos puede no ser el que usó con nosotros, y solo la autoridad sabe
+  cuál es el bueno. El identificador fiscal sí es el mismo en los dos lados.
+-->
+<body data-seccion="" data-pagina="emaratax-verificacion.html" data-armazon="reducido" data-quien="">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Fuera de la sesión</span><span>Verificación desde EmaraTax</span></div>
+      <h1 class="edoc-titulo">Confirma tu asociación con GuruSoft</h1>
+      <p class="edoc-subtitulo">Vienes del portal de la Federal Tax Authority, donde nos elegiste como tu
+      proveedor de facturación electrónica. Aquí se comprueba que eres quien dice el registro fiscal y se
+      completa la asociación.</p>
+    </div>
+  </div>
+
+  <div class="reg">
+    <aside class="reg__lado">
+      <div class="reg__cabecera">
+        <div class="reg__rotulo">Portal consulta</div>
+        <div class="reg__nombre">Asociación en EmaraTax</div>
+        <div class="reg__folio">
+          <span class="edoc-secundario" style="font-size:11.5px">Proveedor</span>
+          <span class="edoc-estado edoc-estado--exito" style="font-size:10px">GuruSoft S.A.</span>
+        </div>
+        <div class="reg__folio-etiqueta">Referencia de EmaraTax</div>
+        <div class="reg__folio-cod" id="referencia">EMT-ONB-2026-00918</div>
+      </div>
+      <ul class="reg__pasos" id="pasos">
+        <li class="reg__paso reg__paso--puede" id="paso-1">
+          <span class="reg__paso-icono" data-icono="perfil"></span>
+          <span><span class="reg__paso-t">Tus datos en impuestos</span>
+            <span class="reg__paso-s">Los que la autoridad tiene registrados.</span>
+            <span class="reg__paso-chip reg__paso-chip--requerido">En curso</span></span>
+          <span class="reg__paso-n">1/3</span>
+          <span class="reg__tic" aria-hidden="true">✓</span>
+        </li>
+        <li class="reg__paso" id="paso-2">
+          <span class="reg__paso-icono" data-icono="empresa"></span>
+          <span><span class="reg__paso-t">Lo que responde la autoridad</span>
+            <span class="reg__paso-s">Se enseña tal cual, sin poder cambiarlo.</span>
+            <span class="reg__paso-chip reg__paso-chip--opcional">Después</span></span>
+          <span class="reg__paso-n">2/3</span>
+          <span class="reg__tic" aria-hidden="true">✓</span>
+        </li>
+        <li class="reg__paso" id="paso-3">
+          <span class="reg__paso-icono" data-icono="estados"></span>
+          <span><span class="reg__paso-t">Asociación enviada</span>
+            <span class="reg__paso-s">Queda registrada en EmaraTax.</span>
+            <span class="reg__paso-chip reg__paso-chip--opcional">Después</span></span>
+          <span class="reg__paso-n">3/3</span>
+          <span class="reg__tic" aria-hidden="true">✓</span>
+        </li>
+      </ul>
+    </aside>
+
+    <section class="reg__cuerpo">
+      <!-- ============================ 1 · los datos ============================ -->
+      <div id="cuerpo-1">
+        <div class="reg__eyebrow">Asociación · paso 1 de 3</div>
+        <div class="reg__titulo-fila">
+          <span class="reg__titulo-icono" data-icono="perfil"></span>
+          <h2 class="reg__titulo">Tus datos en impuestos</h2>
+        </div>
+        <div class="reg__sub">Como están registrados en EmaraTax</div>
+
+        <div class="edoc-aviso edoc-aviso--info mb-3">
+          <div><strong>Por qué te los pedimos otra vez.</strong> Esta comprobación la define la autoridad y la
+          hacemos contra su sistema. El correo que tienes en impuestos puede no ser el que usas con nosotros, y
+          solo ella sabe cuál es el bueno. Nada de lo que escribas aquí cambia tus datos en eDoc.</div>
+        </div>
+
+        <label class="edoc-etiqueta" for="v-correo">Correo del administrador
+          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+        <input type="email" class="form-control" id="v-correo" autocomplete="email"
+          placeholder="El que consta en EmaraTax" style="max-width:420px">
+        <div class="edoc-ayuda" id="ayuda-correo">Tiene que ser el mismo que figura en tu cuenta de EmaraTax.</div>
+
+        <div class="row rejilla mt-3">
+          <div class="col-12 col-md-5">
+            <label class="edoc-etiqueta" for="v-pais">País
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <select class="custom-select" id="v-pais">
+              <option value="AE" selected>Emiratos Árabes Unidos</option>
+              <option value="SA">Arabia Saudí</option>
+              <option value="OM">Omán</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-7">
+            <label class="edoc-etiqueta" for="v-tel">Teléfono
+              <span class="marca-campo">Opcional</span></label>
+            <input class="form-control cifra" id="v-tel" inputmode="tel" autocomplete="tel"
+              placeholder="Con el prefijo del país">
+          </div>
+        </div>
+
+        <label class="edoc-etiqueta mt-3" for="v-trn">Identificador fiscal · TRN
+          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+        <input class="form-control cifra" id="v-trn" inputmode="numeric" maxlength="15"
+          placeholder="15 dígitos" style="max-width:280px">
+        <div class="edoc-ayuda" id="ayuda-trn">Este número sí es el mismo en impuestos y aquí.</div>
+
+        <div class="edoc-aviso edoc-aviso--error mt-3" id="error-datos" hidden>
+          <div id="error-texto">Revisa lo que está marcado en rojo.</div>
+        </div>
+
+        <div class="reg__nav">
+          <a class="btn btn-edoc-terciario" href="https://eservices.tax.gov.ae/en-us/#/Logon" target="_blank" rel="noopener">Volver a EmaraTax</a>
+          <button class="btn btn-edoc-primario" type="button" id="verificar">Verificar mis datos</button>
+        </div>
+
+        <!-- Fuera de la capa de notas: hace falta para recorrer la maqueta. -->
+        <div class="onboarding-maqueta mt-4">
+          <p class="edoc-secundario">Aquí no se consulta de verdad a la autoridad. Estos botones enseñan las dos
+          respuestas posibles.</p>
+          <div class="d-flex hueco-2 flex-wrap">
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-ok">Simular que cuadra</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-no">Simular que no cuadra</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================ 2 · la respuesta ============================ -->
+      <div id="cuerpo-2" hidden>
+        <div class="reg__eyebrow">Asociación · paso 2 de 3</div>
+        <div class="reg__titulo-fila">
+          <span class="reg__titulo-icono" data-icono="empresa"></span>
+          <h2 class="reg__titulo">Lo que responde la autoridad</h2>
+        </div>
+        <div class="reg__sub">Estos datos vienen de EmaraTax y no se pueden cambiar</div>
+
+        <div class="edoc-aviso edoc-aviso--exito mb-3">
+          <div><strong>Tus datos cuadran con el registro fiscal.</strong> Esto es lo que nos devuelve la
+          autoridad. Si algo está mal, se corrige en EmaraTax, no aquí.</div>
+        </div>
+
+        <!-- Datos, no campos: lo que devuelve la autoridad no se edita. -->
+        <div class="row rejilla">
+          <div class="col-12 col-md-6">
+            <div class="edoc-etiqueta">Razón social</div>
+            <div class="reg__dato-autoridad" id="r-empresa">Al Noor Trading LLC</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="edoc-etiqueta">Razón social en árabe</div>
+            <div class="reg__dato-autoridad" id="r-nativo" dir="rtl" lang="ar">النور للتجارة ذ.م.م</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="edoc-etiqueta">Identificador fiscal · TRN</div>
+            <div class="reg__dato-autoridad cifra" id="r-trn">100776655400003</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="edoc-etiqueta">Correo del administrador</div>
+            <div class="reg__dato-autoridad" id="r-correo">f.almarzooqi@alnoor.ae</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="edoc-etiqueta">Proveedor que estás nombrando</div>
+            <div class="reg__dato-autoridad" id="r-proveedor">GuruSoft S.A. · eDoc</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="edoc-etiqueta">Alcance</div>
+            <div class="reg__dato-autoridad" id="r-alcance">Emisión y recepción</div>
+          </div>
+        </div>
+
+        <div class="edoc-separador"></div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="declaro">
+          <label class="form-check-label" for="declaro">Declaro que la información es verdadera y que autorizo a
+          <strong>GuruSoft S.A.</strong> a emitir y recibir documentos fiscales en nombre de esta empresa.</label>
+          <div class="invalid-feedback edoc-error-campo" id="declaro-error" hidden>Marca la casilla para poder
+          enviar la asociación.</div>
+        </div>
+
+        <div class="reg__nav">
+          <button class="btn btn-edoc-terciario" type="button" id="volver-1">Volver</button>
+          <button class="btn btn-edoc-primario" type="button" id="enviar">Enviar la asociación</button>
+        </div>
+      </div>
+
+      <!-- ============================ 2b · no cuadra ============================ -->
+      <div id="cuerpo-no" hidden>
+        <div class="reg__eyebrow">Asociación · paso 2 de 3</div>
+        <div class="reg__titulo-fila">
+          <span class="reg__titulo-icono" data-icono="alerta"></span>
+          <h2 class="reg__titulo">La autoridad no reconoce estos datos</h2>
+        </div>
+        <div class="reg__sub">La asociación no se puede enviar todavía</div>
+
+        <div class="edoc-aviso edoc-aviso--error mb-3">
+          <div><strong>El correo y el registro fiscal no coinciden con lo que consta en EmaraTax.</strong>
+          No podemos enviar la asociación hasta que cuadren: es la autoridad la que decide, no nosotros.</div>
+        </div>
+
+        <div class="edoc-etiqueta mb-2">Lo más habitual</div>
+        <ul class="linea-tiempo mb-4">
+          <li>
+            <div class="linea-tiempo__titulo">El correo es otro</div>
+            <div class="linea-tiempo__detalle">El administrador que consta en impuestos puede no ser quien está
+            haciendo esto. Pregúntale cuál es su correo allí.</div>
+          </li>
+          <li>
+            <div class="linea-tiempo__titulo">El registro fiscal tiene una cifra de más o de menos</div>
+            <div class="linea-tiempo__detalle">Son quince dígitos, sin espacios ni guiones.</div>
+          </li>
+          <li>
+            <div class="linea-tiempo__titulo">La empresa está en otro país</div>
+            <div class="linea-tiempo__detalle">Esta comprobación es de Emiratos Árabes Unidos.</div>
+          </li>
+        </ul>
+
+        <div class="reg__nav">
+          <a class="btn btn-edoc-terciario" href="https://eservices.tax.gov.ae/en-us/#/Logon" target="_blank" rel="noopener">Revisar en EmaraTax</a>
+          <button class="btn btn-edoc-primario" type="button" id="reintentar">Corregir y volver a verificar</button>
+        </div>
+      </div>
+
+      <!-- ============================ 3 · enviada ============================ -->
+      <div id="cuerpo-3" hidden>
+        <div class="reg__eyebrow">Asociación · paso 3 de 3</div>
+        <div class="reg__titulo-fila">
+          <span class="reg__titulo-icono" data-icono="aprobar"></span>
+          <h2 class="reg__titulo">Asociación enviada</h2>
+        </div>
+        <div class="reg__sub">Ya consta en EmaraTax que somos tu proveedor</div>
+
+        <div class="edoc-aviso edoc-aviso--exito mb-3">
+          <div><strong>Hecho.</strong> En el panel de EmaraTax aparecerás con <strong>GuruSoft S.A.</strong> como
+          proveedor nombrado. Suele verse en unos minutos.</div>
+        </div>
+
+        <div class="edoc-etiqueta mb-2">Qué sigue</div>
+        <ul class="linea-tiempo mb-4">
+          <li class="hecho">
+            <div class="linea-tiempo__titulo">Ya nos elegiste</div>
+            <div class="linea-tiempo__detalle">La autoridad nos lo confirma; no tienes que avisarnos.</div>
+          </li>
+          <li class="espera" id="sigue-registro">
+            <div class="linea-tiempo__titulo">Si todavía no tienes cuenta con nosotros</div>
+            <div class="linea-tiempo__detalle">Regístrate para que podamos darte acceso al portal. Es el
+            formulario de siempre, y algunos datos ya vendrán puestos.</div>
+          </li>
+          <li class="espera">
+            <div class="linea-tiempo__titulo">Emitir y recibir</div>
+            <div class="linea-tiempo__detalle">Con la asociación confirmada y tus credenciales, el portal queda
+            activo para tu empresa.</div>
+          </li>
+        </ul>
+
+        <div class="reg__nav">
+          <a class="btn btn-edoc-terciario" href="index.html">Ir al acceso</a>
+          <a class="btn btn-edoc-primario" href="registro.html">Registrar mi empresa</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">De la reunión del 30 de septiembre</span>
+    <strong>Esta pantalla la exige la certificación, y sus campos no son nuestros.</strong> El recorrido es el
+    de la guía de Emiratos: la empresa nos elige en EmaraTax, la autoridad la manda a una página nuestra con
+    este formulario, se verifica contra su servicio, se enseña lo que responde sin dejar editarlo, se declara
+    que es verdad y se envía. Cambiar los campos por nuestra cuenta puede costar una sanción. Lo que sí es
+    nuestro es la marca, decir que se está nombrando a GuruSoft y explicar qué pasa después.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · para desarrollo</span>
+    <strong>Qué nos manda la autoridad y por dónde.</strong> Falta confirmar con qué llega el cliente a esta
+    dirección —si trae una referencia, un código de un solo uso o nada—, qué servicio se consulta al verificar y
+    qué campos devuelve. Aquí se enseñan los que la empresa reconoce; la lista real la fija la integración.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Quien llega sin tener cuenta con nosotros.</strong> Puede asociarnos en EmaraTax sin haberse
+    registrado antes. Hoy esta pantalla lo manda al registro al terminar. Falta decidir si además se le abre
+    una cuenta con lo que la autoridad nos devuelve, para no pedirle dos veces lo mismo.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>Reverificar y desvincular.</strong> El proceso de Emiratos las contempla y esta pantalla todavía no.
+    Hay que decidir quién puede hacerlas, desde dónde y qué pasa con los documentos en curso.
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Maqueta</span>
+    Aquí no se consulta a la autoridad. Con <span class="cifra">?resultado=no</span> se abre directamente la
+    respuesta de que los datos no cuadran, y con <span class="cifra">?resultado=ok</span> la buena.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var val = function (id) { return ($(id).value || '').trim(); };
+
+  /* Los tres momentos del panel. «no cuadra» no es un paso más: es el mismo
+     paso 2 con otra respuesta. */
+  function ir(cual) {
+    ['1', '2', '3', 'no'].forEach(function (c) { $('cuerpo-' + c).hidden = true; });
+    $('cuerpo-' + cual).hidden = false;
+    var orden = { '1': 1, '2': 2, 'no': 2, '3': 3 }[cual];
+    [1, 2, 3].forEach(function (n) {
+      var paso = $('paso-' + n);
+      paso.classList.toggle('reg__paso--puede', n <= orden);
+      paso.classList.toggle('reg__paso--hecho', n < orden);
+      var chip = paso.querySelector('.reg__paso-chip');
+      chip.className = 'reg__paso-chip reg__paso-chip--' +
+        (n < orden ? 'completado' : n === orden ? 'requerido' : 'opcional');
+      chip.textContent = n < orden ? 'Hecho' : n === orden ? 'En curso' : 'Después';
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* Verificar: lo que aquí se comprueba de forma tonta, en el portal real lo
+     responde el servicio de la autoridad. */
+  function correoValido(c) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c); }
+
+  function fallo() {
+    var correo = $('v-correo'), trn = $('v-trn');
+    [correo, trn].forEach(function (e) { e.classList.remove('is-invalid'); });
+    if (!correoValido(val('v-correo'))) {
+      return { campo: correo, texto: 'Escribe el correo del administrador, tal como consta en EmaraTax.' };
+    }
+    if (!/^\d{15}$/.test(val('v-trn').replace(/\s/g, ''))) {
+      return { campo: trn, texto: 'El registro fiscal son quince dígitos, sin espacios ni guiones.' };
+    }
+    return null;
+  }
+
+  function verificar(respuesta) {
+    var f = fallo();
+    if (f) {
+      f.campo.classList.add('is-invalid');
+      $('error-texto').textContent = f.texto;
+      $('error-datos').hidden = false;
+      f.campo.focus();
+      return;
+    }
+    $('error-datos').hidden = true;
+    if (respuesta === 'no') { ir('no'); return; }
+    // Lo que devuelve la autoridad se enseña tal cual; lo escrito no lo pisa.
+    $('r-correo').textContent = val('v-correo');
+    if (val('v-trn')) $('r-trn').textContent = val('v-trn');
+    ir('2');
+  }
+
+  $('verificar').addEventListener('click', function () { verificar('ok'); });
+  $('reintentar').addEventListener('click', function () { ir('1'); });
+  $('volver-1').addEventListener('click', function () { ir('1'); });
+
+  $('enviar').addEventListener('click', function () {
+    var caja = $('declaro');
+    if (!caja.checked) {
+      caja.classList.add('is-invalid');
+      $('declaro-error').hidden = false;
+      caja.focus();
+      return;
+    }
+    caja.classList.remove('is-invalid');
+    $('declaro-error').hidden = true;
+    /* En la maqueta, la asociación queda anotada: el portal enseña la conexión
+       como activa y el inicio deja de pedir el paso. */
+    try { window.sessionStorage.setItem('edoc-asociada', '1'); } catch (error) { /* nada */ }
+    ir('3');
+    window.edocAvisar('Asociación enviada. En EmaraTax aparecemos como tu proveedor nombrado.', 'exito');
+  });
+
+  // Los dos botones de la maqueta, para ver las dos respuestas.
+  $('sim-ok').addEventListener('click', function () {
+    if (!val('v-correo')) $('v-correo').value = 'f.almarzooqi@alnoor.ae';
+    if (!val('v-trn')) $('v-trn').value = '100776655400003';
+    verificar('ok');
+  });
+  $('sim-no').addEventListener('click', function () {
+    if (!val('v-correo')) $('v-correo').value = 'otro.correo@alnoor.ae';
+    if (!val('v-trn')) $('v-trn').value = '100776655400003';
+    verificar('no');
+  });
+
+  var pedido = new URLSearchParams(window.location.search).get('resultado');
+  if (pedido === 'no') { $('sim-no').click(); }
+  else if (pedido === 'ok') { $('sim-ok').click(); }
+  else { ir('1'); }
+}());
+</script>
+</body>
+</html>

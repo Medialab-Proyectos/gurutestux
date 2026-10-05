@@ -37,6 +37,7 @@ window.EDOC_ALCANCE = (function () {
      textos legales, las dos marcadas como no negociables. */
   var VISTAS = [
     { archivo: 'inicio.html',              rotulo: 'Inicio',                                     grupo: 'Portal',             entrega: true  },
+    { archivo: 'tablero.html',             rotulo: 'Cuadro de mando · para la certificación',    grupo: 'Portal',             entrega: true  },
     { archivo: 'emitidos.html',            rotulo: 'Documentos Emitidos',                        grupo: 'Portal',             entrega: true  },
     { archivo: 'recibidos.html',           rotulo: 'Documentos Recibidos',                       grupo: 'Portal',             entrega: true  },
     { archivo: 'reportes-generados.html',  rotulo: 'Reportes generados',                         grupo: 'Portal',             entrega: false },
@@ -55,6 +56,7 @@ window.EDOC_ALCANCE = (function () {
     { archivo: 'clave-primer-ingreso.html', rotulo: 'Cambio de contraseña del primer ingreso',   grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'legales.html',             rotulo: 'Textos legales y tratamiento de datos',      grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'onboarding.html',          rotulo: 'Asociarnos en EmaraTax · tras la aprobación', grupo: 'Fuera de la sesión', entrega: true  },
+    { archivo: 'emaratax-verificacion.html', rotulo: 'Verificación desde EmaraTax',              grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'registro.html',            rotulo: 'Registro de la empresa',                     grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'aprobacion-registro.html', rotulo: 'Aprobación del registro',                    grupo: 'Fuera de la sesión', entrega: true  }
   ];

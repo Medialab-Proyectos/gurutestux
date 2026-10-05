@@ -20,7 +20,9 @@
 
      nada           no sale ningún mensaje
      alertas        la campana trae avisos sin leer, y salta un aviso al entrar
-     mantenimiento  barra fija que no se cierra, y algunas funciones bloqueadas
+     mantenimiento  barra fija que no se cierra, y un aviso dentro de las pantallas
+                    que dependen de un sistema de por medio. La vista se sigue viendo:
+                    lo pidió el cliente el 5 de octubre.
      todo           las dos cosas a la vez
 
    El escenario se decide una vez por sesión: al recargar no cambia, para que
@@ -50,9 +52,10 @@
     { clave: 'todo',          peso: 12 }
   ];
 
-  /* Qué deja de funcionar mientras hay mantenimiento. No es aleatorio: son las
-     funciones que de verdad dependen de un sistema de por medio —el servidor
-     de identidades y la red— y por eso son las que se caerían. */
+  /* Qué avisa mientras hay mantenimiento. No es aleatorio: son las funciones
+     que de verdad dependen de un sistema de por medio —el servidor de
+     identidades y la red— y por eso son las que se caerían. La pantalla no se
+     tapa: se ve entera y el aviso va dentro. */
   var EN_MANTENIMIENTO = {
     'admin-credenciales.html': 'Crear y rotar credenciales toca el servidor de identidades, que es ' +
       'justo lo que estamos actualizando.',

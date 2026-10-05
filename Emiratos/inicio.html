@@ -30,12 +30,21 @@
     <!-- 16 de septiembre: el inicio estaba desaprovechado. Mientras la empresa no
          nos haya asociado en EmaraTax, aquí se le recuerda, sin bloquearle el
          portal: el acuerdo comercial ya está firmado. -->
+    <!-- 30 de septiembre: la tarjeta se cierra —si no, se queda ahí para
+         siempre— y deja decir que ya se hizo. Quien lo dice no decide: lo
+         comprobamos con la autoridad, que es quien lo sabe. -->
     <aside class="edoc-pendiente" id="falta-asociar" hidden>
+      <button type="button" class="edoc-pendiente__x" id="cerrar-pendiente"
+        aria-label="Cerrar este aviso">&times;</button>
       <span class="edoc-estado edoc-estado--advertencia">Falta un paso</span>
       <h2 class="edoc-pendiente__titulo">Asócianos en EmaraTax</h2>
       <p>Tu empresa ya está aprobada y puedes usar el portal. Para que la autoridad sepa que facturamos por ti,
       elígenos como proveedor en EmaraTax. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.</p>
-      <a class="btn btn-edoc-primario" href="onboarding.html">Cómo asociarnos</a>
+      <div class="d-flex hueco-2 flex-wrap">
+        <a class="btn btn-edoc-primario" href="onboarding.html">Cómo asociarnos</a>
+        <button class="btn btn-edoc-terciario" type="button" id="ya-asociado">Ya lo hice</button>
+      </div>
+      <p class="edoc-pendiente__pie" id="pendiente-pie" hidden>Lo estamos comprobando con la autoridad.</p>
     </aside>
     <div class="edoc-bienvenida__texto">
       <img src="assets/img/edoc-logo-neg.svg" alt="eDoc">
@@ -45,6 +54,9 @@
         <span>Proveedor de facturación electrónica</span><span>·</span><span>Red Peppol</span><span>·</span><span>GuruSoft S.A.</span>
       </div>
     </div>
+    <!-- 2 de octubre: los cinco atajos del inicio de Francia, con nuestros
+         nombres y nuestras pantallas. Van sobre la imagen, como allá. -->
+    <nav class="edoc-atajos" id="atajos" aria-label="Atajos"></nav>
   </section>
 
   <div class="nota nota--decidido">
@@ -55,15 +67,30 @@
     asociación la quita; <span class="cifra">?asociada=0</span> la vuelve a poner.
   </div>
   <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · 30 de septiembre</span>
+    <strong>Qué más va en este espacio.</strong> En la reunión se propuso aprovechar el lienzo del inicio para los
+    avisos, y no solo para esta tarjeta. Quedó anotado a propósito: los avisos son de la fase 2, y abrirlo ahora
+    trae la pregunta de de dónde salen, quién los escribe y cómo se cierran.
+  </div>
+  <div class="nota nota--abierto">
     <span class="nota__sello">Abierto · gerencia</span>
     <strong>O no dejarle entrar hasta que nos asocie.</strong> Es la otra forma de verlo, y puede que gerencia la
     prefiera. Lo que no vale es mandarle credenciales que no puede usar: sería un correo fantasma.
   </div>
   <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 2 de octubre</span>
+    <strong>El inicio sí lleva atajos, como Francia.</strong> Se había decidido dejarlo solo con la imagen, porque la
+    botonera repetiría el menú de arriba. En la reunión se pidió traer «el cuadro de mando de Francia»; al abrir ese
+    portal resultó que no tiene cuadro de mando: su inicio es una imagen con cinco atajos en tarjeta. Son los mismos
+    cinco de aquí, con nuestros nombres. Repetir el menú deja de ser un defecto cuando es lo que la gente ya conoce
+    de los otros países.
+  </div>
+  <div class="nota nota--decidido">
     <span class="nota__sello">Decidido</span>
-    <strong>Para el MVP, el inicio es solo la imagen.</strong> Sin botonera de accesos rápidos, porque repetiría el menú que
-    ya está arriba. Sin cuadro de mando, porque todos los usuarios entrarían a consultarlo cada vez que abren sesión y
-    castigaría la base de datos sin que nadie tome una decisión con él.
+    <strong>El inicio no lleva cifras.</strong> Todos los usuarios entrarían a consultarlas cada vez que abren sesión y
+    castigaría la base de datos sin que nadie tome una decisión con ellas. Si algún día las lleva, tendrían que venir de
+    una copia en caché y no de una consulta en vivo. Las cifras viven en el cuadro de mando, que es otra pantalla y se
+    abre solo cuando alguien quiere mirarlas.
   </div>
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
@@ -81,6 +108,26 @@
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
 <script>
+  /* Los atajos: los mismos cinco de Francia, en el mismo orden. Son enlaces
+     de verdad, así que funcionan con el teclado y se pueden abrir aparte. */
+  (function () {
+    var ATAJOS = [
+      { icono: 'perfil',    rotulo: 'Mi perfil',               url: 'mi-perfil.html' },
+      { icono: 'admin',     rotulo: 'Gestión de usuarios',     url: 'admin-usuarios.html' },
+      { icono: 'emision',   rotulo: 'Documentos emitidos',     url: 'emitidos.html' },
+      { icono: 'recepcion', rotulo: 'Documentos recibidos',    url: 'recibidos.html' },
+      { icono: 'empresa',   rotulo: 'Los datos de mi empresa',    url: 'admin-empresa.html' }
+    ];
+    var caja = document.getElementById('atajos');
+    if (!caja || !window.edocIcono) return;
+    caja.innerHTML = ATAJOS.map(function (a) {
+      return '<a class="edoc-atajo" href="' + a.url + '">' +
+             '<span class="edoc-atajo__icono">' + window.edocIcono(a.icono) + '</span>' +
+             '<span class="edoc-atajo__rotulo">' + a.rotulo + '</span>' +
+             '<span class="edoc-atajo__flecha" aria-hidden="true">›</span></a>';
+    }).join('');
+  }());
+
   (function () {
     var q = new URLSearchParams(location.search);
     var asociada = false;
@@ -90,7 +137,27 @@
       asociada = window.sessionStorage.getItem('edoc-asociada') === '1';
     } catch (error) { asociada = false; }
     var tarjeta = document.getElementById('falta-asociar');
-    if (tarjeta) tarjeta.hidden = asociada;
+    var cerrada = false;
+    try { cerrada = window.sessionStorage.getItem('edoc-tarjeta-cerrada') === '1'; } catch (error) { cerrada = false; }
+    if (tarjeta) tarjeta.hidden = asociada || cerrada;
+
+    /* Cerrar es solo dejar de verla esta visita: el paso sigue pendiente y se
+       vuelve a ver al entrar de nuevo. */
+    document.getElementById('cerrar-pendiente').addEventListener('click', function () {
+      tarjeta.hidden = true;
+      try { window.sessionStorage.setItem('edoc-tarjeta-cerrada', '1'); } catch (error) { /* nada */ }
+      window.edocAvisar('Aviso cerrado por esta visita. El paso sigue pendiente y lo verás al volver a entrar.');
+    });
+
+    /* «Ya lo hice» no marca nada por sí solo: en Emiratos la autoridad nos lo
+       confirma, y hasta que llegue esa confirmación el aviso se queda. En Omán
+       no hay confirmación automática y habrá que mirarlo a mano. */
+    document.getElementById('ya-asociado').addEventListener('click', function () {
+      document.getElementById('pendiente-pie').hidden = false;
+      document.getElementById('ya-asociado').disabled = true;
+      window.edocAvisar('Vamos a comprobarlo con la autoridad. Si ya nos elegiste, el aviso desaparece solo ' +
+        'y la conexión aparece activa en <strong>Actualización de identificación fiscal</strong>.');
+    });
   }());
 </script>
 </body>

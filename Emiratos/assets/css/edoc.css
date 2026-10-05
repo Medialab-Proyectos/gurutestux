@@ -414,7 +414,7 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .rev__puntos { margin-left: auto; display: flex; gap: 4px; }
 .rev__puntos i { width: 6px; height: 6px; border-radius: 50%; background: #dcdcdc; }
 .rev__puntos i.lleno { background: var(--edoc-verde); }
-.rev__rotulo { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #a0a0a0;
+.rev__rotulo { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #6b6b6b;
                font-family: var(--fuente-titulos, inherit); font-weight: 600; }
 .rev__nombre { font-family: var(--fuente-titulos, inherit); font-size: 17px; font-weight: 600;
                color: #22252e; line-height: 1.2; }
@@ -438,6 +438,9 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
   width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
   background: none; border: 0; border-radius: 6px; color: #6f7686; cursor: pointer; padding: 0;
 }
+/* El mismo ojo en todas las pantallas: con el armazón cargado el icono viene
+   del juego del portal y sin tamaño propio, y se estiraba al del botón. */
+.edoc-clave-ojo svg { width: 18px; height: 18px; }
 .edoc-clave-ojo:hover { background: #f0f2f7; color: var(--edoc-azul); }
 .edoc-clave-ojo[aria-pressed="true"] { color: var(--edoc-azul); }
 .edoc-clave-ojo:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 1px; }
@@ -533,7 +536,7 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .edoc-franja__texto { flex: 1; }
 .edoc-franja__texto strong { color: #59360a; }
 .edoc-franja__cerrar {
-  background: none; border: 0; color: #a1793f; font-size: 21px; line-height: 1;
+  background: none; border: 0; color: #7a5a2c; font-size: 21px; line-height: 1;
   padding: 0 4px; cursor: pointer; flex: none; border-radius: 5px;
 }
 .edoc-franja__cerrar:hover { background: #fbe9d2; color: #59360a; }
@@ -1021,7 +1024,13 @@ body.con-notas .edoc-pagina.edoc-pagina--lienzo { padding-bottom: var(--alto-pie
   padding: 20px 22px; box-shadow: 0 12px 32px rgba(0, 10, 60, .28);
   display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
 }
-.edoc-pendiente__titulo { font-family: var(--fuente-titulos); font-size: 19px; font-weight: 600; color: var(--edoc-azul); margin: 4px 0 0; }
+.edoc-pendiente__titulo { font-family: var(--fuente-titulos); font-size: 19px; font-weight: 600; color: var(--edoc-azul); margin: 4px 0 0; padding-right: 24px; }
+.edoc-pendiente__x {
+  position: absolute; top: 8px; right: 10px; background: none; border: 0; padding: 4px 8px;
+  font-size: 20px; line-height: 1; color: #5f6771; cursor: pointer; border-radius: 6px;
+}
+.edoc-pendiente__x:hover { background: #f0f2f7; color: var(--edoc-azul); }
+.edoc-pendiente__pie { font-size: 12.5px; color: #5f6771; margin: 4px 0 0; }
 .edoc-pendiente p { margin: 0 0 6px; font-size: 13.5px; line-height: 1.5; }
 @media (max-width: 991px) {
   .edoc-bienvenida { flex-direction: column; align-items: stretch; justify-content: flex-end; gap: 24px; }
@@ -1485,7 +1494,7 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
    detrás y en gris, como ayuda y no como titular.                           */
 .clave-corner {
   font-family: var(--fuente-cifras); font-weight: 400; font-size: .92em;
-  color: #7d8590; letter-spacing: 0;
+  color: #5f6771; letter-spacing: 0;   /* 5,9:1; antes 3,6:1 fuera de la cabecera */
 }
 .edoc-tabla thead th .clave-corner { color: #555c67; }
 .corner__nombre .clave-corner { font-size: .82em; }
@@ -1507,6 +1516,14 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 .reg__paso--hito .reg__paso-n { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
 /* Un dato que nos dio la autoridad: se ve, pero no se reescribe. */
 .reg__campo-autoridad { background: #f4f7ef; border-color: #cfe0a8; }
+
+/* Lo que devuelve la autoridad: se lee, no se escribe. Mismo aspecto que el
+   campo traído de fuera, pero sin ser un campo. */
+.reg__dato-autoridad {
+  background: #f4f7ef; border: 1px solid #cfe0a8; border-radius: var(--radio-chico, 6px);
+  padding: 8px 12px; min-height: 38px; font-size: 13.5px; color: var(--edoc-negro, #212121);
+  display: flex; align-items: center; word-break: break-word;
+}
 
 /* Las utilidades de Bootstrap como d-flex llevan !important y pisaban el
    atributo hidden: el bloque se veía aunque estuviera oculto. */
@@ -1944,7 +1961,7 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
 .modo-permisos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
                  gap: 4px 20px; margin-bottom: 14px; }
 .edoc-permiso-cod {
-  font-family: var(--fuente-cifras); font-size: 11px; color: #7b8794;
+  font-family: var(--fuente-cifras); font-size: 11px; color: #5c6570;
   margin-left: 8px; letter-spacing: -.01em;
 }
 .form-check--grupo { margin-bottom: 4px; }
@@ -2053,6 +2070,9 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
   .form-control, .custom-select { min-height: 44px; font-size: 16px; }
   /* Los enlaces de texto del acceso: la línea de texto medía 21 px de alto. */
   .edoc-acceso a:not(.btn) { display: inline-block; padding-block: 11px; }
+  /* Menos la tarjeta de «Registrar mi empresa», que ya mide más de 44 px: la
+     regla de arriba le quitaba el flex y la flecha caía debajo del texto. */
+  .edoc-acceso a.edoc-acceso__via { display: flex; padding-block: 9px; }
   /* Dos acciones de fila con 4 px entre ellas: sus áreas de 44 se pisaban y el
      dedo acababa en la de al lado. Con 16 px entre iconos, cada una tiene la
      suya. */
@@ -2419,3 +2439,69 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
 }
 /* Registro · el aviso de que se retomó, fijo hasta cambiar de paso. */
 .reg__retomado { margin-bottom: 14px; }
+
+/* Estudio del 21 sep: un campo marcado en rojo tiene que decir qué le falta.
+   Las pantallas ya escriben el motivo en la ayuda de debajo; aquí esa ayuda
+   pasa a leerse como error mientras el campo lo esté. Sin tocar la validación. */
+.form-control.is-invalid + .edoc-ayuda,
+.edoc-clave-caja:has(> .is-invalid) + .edoc-ayuda { color: #b52f0e; }
+
+/* La «?» de ayuda: se ve igual de pequeña, se toca en un área mayor también en
+   escritorio (24 px como mínimo, WCAG 2.5.8). En móvil ya lleva 44. */
+.edoc-ayuda-que { position: relative; }
+@media (min-width: 768px) { .edoc-ayuda-que::after { content: ""; position: absolute; inset: -4px; } }
+
+@media (max-width: 767px) {
+  /* «Reenviar código» en el registro, tocable con el dedo. */
+  #reenviar-codigo { display: inline-flex; align-items: center; min-height: 44px; }
+}
+
+/* Los cuatro estados por los que pasa la asociación con la autoridad. El
+   vigente se marca; los demás se ven, para saber qué falta y qué vino antes. */
+.edoc-estados-linea { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 6px; }
+.edoc-estado-paso {
+  font-size: 11.5px; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid #d7dade; color: #5f6771; background: #fff;
+}
+.edoc-estado-paso--activo {
+  border-color: var(--edoc-azul); background: var(--edoc-azul); color: #fff; font-weight: 600;
+}
+
+/* En móvil la tarjeta del inicio deja de estar flotando, pero su × sigue
+   colocándose respecto a ella. */
+@media (max-width: 991px) { .edoc-pendiente { position: relative; } }
+
+/* Cuadro de mando: las cifras de arriba y las barras de estado. Sin biblioteca
+   de gráficos: son cajas con un ancho, y así pesa lo que tiene que pesar. */
+.tablero-cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.tablero-cifra {
+  display: flex; flex-direction: column; gap: 2px; text-decoration: none;
+  background: #fff; border: 1px solid #e6e6e6; border-radius: var(--radio); padding: 14px 16px;
+  box-shadow: var(--sombra-tablero);
+}
+.tablero-cifra:hover { border-color: var(--edoc-azul); text-decoration: none; }
+.tablero-cifra--ojo { box-shadow: inset 3px 0 0 var(--senal-advertencia), var(--sombra-tablero); }
+.tablero-cifra__n { font-family: var(--fuente-cifras); font-size: 26px; font-weight: 500; color: var(--edoc-azul); line-height: 1.1; }
+.tablero-cifra__r { font-size: 13px; font-weight: 600; color: var(--edoc-negro); }
+.tablero-cifra__p { font-size: 11.5px; color: #5f6771; line-height: 1.35; }
+.tablero-barra { display: grid; grid-template-columns: 150px 1fr 40px; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 13px; }
+.tablero-barra__pista { background: #f0f2f2; border-radius: 999px; height: 12px; overflow: hidden; }
+.tablero-barra__pista i { display: block; height: 100%; border-radius: 999px; }
+.tablero-barra__n { text-align: right; color: var(--edoc-negro); }
+@media (max-width: 575px) { .tablero-barra { grid-template-columns: 1fr 1fr 34px; } }
+
+/* Atajos del inicio: tarjetas blancas sobre la imagen, como en el portal de
+   Francia. Se envuelven solas y en el móvil quedan una debajo de otra. */
+.edoc-atajos { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.edoc-atajo {
+  display: flex; align-items: center; gap: 10px; min-width: 232px; flex: 0 1 auto;
+  background: #fff; border-radius: var(--radio); padding: 14px 16px;
+  box-shadow: inset 3px 0 0 var(--edoc-azul), 0 6px 18px rgba(0, 0, 0, .18);
+  color: var(--edoc-negro); font-size: 14px; text-decoration: none;
+}
+.edoc-atajo:hover, .edoc-atajo:focus { color: var(--edoc-azul); text-decoration: none; transform: translateY(-1px); }
+.edoc-atajo__icono { display: inline-flex; color: var(--edoc-azul); }
+.edoc-atajo__icono svg { width: 20px; height: 20px; }
+.edoc-atajo__rotulo { flex: 1 1 auto; }
+.edoc-atajo__flecha { color: var(--edoc-azul); font-size: 18px; line-height: 1; }
+@media (max-width: 575px) { .edoc-atajo { min-width: 0; width: 100%; } }

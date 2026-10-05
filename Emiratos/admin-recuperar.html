@@ -101,13 +101,17 @@
       <section class="edoc-tablero" id="paso-3" hidden>
         <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Paso 3 · La contraseña nueva</h2></div>
         <div class="edoc-tablero__cuerpo">
+          <!-- El ancho va en el bloque y no en el campo: el ojo de «mostrar» se
+               coloca al borde de su caja, y con el ancho en el campo quedaba fuera. -->
+          <div style="max-width:380px">
           <label class="edoc-etiqueta" for="clave-1">Contraseña nueva<span class="obligatorio">*</span></label>
-          <input class="form-control" id="clave-1" type="password" style="max-width:380px" autocomplete="new-password">
-          <div class="edoc-ayuda">Al menos doce caracteres, con mayúsculas, minúsculas y un número.</div>
+          <input class="form-control" id="clave-1" type="password" autocomplete="new-password" aria-describedby="ayuda-clave-1">
+          <div class="edoc-ayuda" id="ayuda-clave-1">Al menos doce caracteres, con mayúsculas, minúsculas y un número.</div>
 
           <label class="edoc-etiqueta mt-3" for="clave-2">Repítela<span class="obligatorio">*</span></label>
-          <input class="form-control" id="clave-2" type="password" style="max-width:380px" autocomplete="new-password">
+          <input class="form-control" id="clave-2" type="password" autocomplete="new-password" aria-describedby="ayuda-3">
           <div class="edoc-ayuda" id="ayuda-3">Las dos tienen que coincidir.</div>
+          </div>
 
           <div class="edoc-aviso edoc-aviso--advertencia mt-3">
             <div>Al cambiarla <strong>se cierran las sesiones abiertas</strong> en otros navegadores. Es
@@ -289,9 +293,15 @@
     var a = document.getElementById('clave-1');
     var b = document.getElementById('clave-2');
     var ayuda = document.getElementById('ayuda-3');
+    a.classList.remove('is-invalid');
+    b.classList.remove('is-invalid');
+    // Cada intento empieza con las ayudas de siempre; el motivo se pone solo donde falla.
+    document.getElementById('ayuda-clave-1').textContent = 'Al menos doce caracteres, con mayúsculas, minúsculas y un número.';
+    ayuda.textContent = 'Las dos tienen que coincidir.';
     if (a.value.length < 12) {
       a.classList.add('is-invalid');
-      ayuda.textContent = 'La contraseña necesita al menos doce caracteres.';
+      // El motivo, debajo del campo que falla y no del de repetir.
+      document.getElementById('ayuda-clave-1').textContent = 'La contraseña necesita al menos doce caracteres.';
       a.focus();
       return;
     }

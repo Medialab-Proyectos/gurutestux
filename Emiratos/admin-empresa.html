@@ -47,7 +47,9 @@
           <div class="edoc-ayuda">Solo puede haber uno, y cubre lo que emites y lo que recibes.</div>
         </div>
         <div class="col-12 col-md-4">
-          <div class="edoc-etiqueta">Tu dirección en la red</div>
+          <!-- «Participant ID» es como lo llama la red y como lo van a nombrar
+               soporte y la autoridad (reunión del 30 de septiembre). -->
+          <div class="edoc-etiqueta">Participant ID · tu dirección en la red</div>
           <div class="cifra">0235:100776655400003</div>
           <div class="edoc-ayuda">Aquí te llegan las facturas de tus proveedores.</div>
         </div>
@@ -56,8 +58,33 @@
           <div class="cifra">2026-09-02 10:41</div>
           <div class="edoc-ayuda">Desde esa fecha podemos emitir y recibir a tu nombre.</div>
         </div>
+        <div class="col-12">
+          <!-- El estado no puede vivir solo en la tarjeta del inicio, que se
+               cierra: aquí está siempre, con los cuatro valores posibles. -->
+          <div class="edoc-etiqueta">Estado de la asociación</div>
+          <div class="edoc-estados-linea" id="linea-asociacion">
+            <span class="edoc-estado-paso" data-estado="ninguna">Sin asociar</span>
+            <span class="edoc-estado-paso" data-estado="pendiente">Pendiente de confirmar</span>
+            <span class="edoc-estado-paso" data-estado="prueba">En pruebas</span>
+            <span class="edoc-estado-paso" data-estado="activa">Activa</span>
+          </div>
+          <div class="edoc-ayuda" id="ayuda-asociacion">Nos consta que nos elegiste como proveedor; podemos emitir
+          y recibir a tu nombre.</div>
+        </div>
       </div>
 
+      <div class="nota nota--abierto mt-3">
+        <span class="nota__sello">Abierto · 30 de septiembre</span>
+        <strong>En Omán este bloque enseña menos.</strong> Allí la asociación vive en el portal de la autoridad y
+        no nos llega por ningún servicio: solo podríamos enseñar el proveedor y la dirección, no la confirmación
+        ni la fecha, y el estado habría que ponerlo a mano. Cuando se maquete Omán, este bloque cambia.
+      </div>
+      <div class="nota nota--abierto mt-3">
+        <span class="nota__sello">Abierto · 30 de septiembre</span>
+        <strong>Reverificar y desvincular.</strong> El proceso de Emiratos las contempla: volver a comprobar los
+        datos con la autoridad y deshacer la asociación. Falta decidir si el cliente las hace desde aquí, qué
+        pasa con los documentos en curso y quién puede hacerlo.
+      </div>
       <div class="nota nota--abierto mt-3">
         <span class="nota__sello">Abierto · pendiente de confirmar con la autoridad</span>
         <strong>El identificador y el momento en que se confirma.</strong> El proceso público de Emiratos dice que
@@ -193,6 +220,33 @@
     un dato sensible, y el documento de doble factor obliga a pedir el código otra vez en «cambios de
     datos sensibles del usuario». Falta decidir si la empresa cuenta como dato sensible.
   </div>
+  <script>
+  /* El estado de la asociación. En la maqueta sale de lo mismo que la tarjeta
+     del inicio; en el portal real lo dice la autoridad. */
+  (function () {
+    var LINEA = document.getElementById('linea-asociacion');
+    if (!LINEA) return;
+    var AYUDAS = {
+      ninguna: 'Todavía no nos has elegido como proveedor en EmaraTax. Hasta entonces no podemos emitir ni recibir a tu nombre.',
+      pendiente: 'Nos elegiste y estamos esperando la confirmación de la autoridad. Suele tardar minutos.',
+      prueba: 'La conexión existe, pero está en el entorno de pruebas de la autoridad: lo que se emita aquí no tiene valor fiscal.',
+      activa: 'Nos consta que nos elegiste como proveedor; podemos emitir y recibir a tu nombre.'
+    };
+    // La empresa de muestra ya está asociada; ?asociacion=ninguna|pendiente|prueba enseña los otros estados.
+    var q = new URLSearchParams(window.location.search);
+    var cual = q.get('asociacion') || 'activa';
+    if (!AYUDAS[cual]) cual = 'activa';
+    LINEA.querySelectorAll('[data-estado]').forEach(function (p) {
+      p.classList.toggle('edoc-estado-paso--activo', p.dataset.estado === cual);
+    });
+    document.getElementById('ayuda-asociacion').textContent = AYUDAS[cual];
+    var chip = document.getElementById('estado-conexion');
+    var ROTULOS = { ninguna: ['Sin asociar', 'neutro'], pendiente: ['Pendiente', 'advertencia'],
+                    prueba: ['En pruebas', 'transito'], activa: ['Activa', 'exito'] };
+    chip.textContent = ROTULOS[cual][0];
+    chip.className = 'edoc-estado edoc-estado--' + ROTULOS[cual][1];
+  }());
+  </script>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
