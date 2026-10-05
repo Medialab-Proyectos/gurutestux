@@ -99,40 +99,49 @@
   <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Identificación</h2></div>
     <div class="edoc-tablero__cuerpo">
+      <p class="edoc-parrafo">Estos son los datos que viajan dentro de cada documento. Están aquí los que
+      exige la reglamentación de los Emiratos, y nada más: lo que no pide la autoridad no se guarda.</p>
       <div class="row rejilla">
         <div class="col-12 col-md-6">
           <label class="edoc-etiqueta" for="e1">Nombre legal en inglés<span class="obligatorio">*</span></label>
-          <input class="form-control" id="e1" value="Al Noor Trading LLC" required></div>
+          <input class="form-control" id="e1" value="Al Noor Trading LLC" required>
+          <div class="edoc-ayuda">Tal como está en tu licencia comercial. No se traduce.</div></div>
         <div class="col-12 col-md-6">
           <label class="edoc-etiqueta" for="e2">Nombre legal en árabe</label>
           <input class="form-control" id="e2" dir="rtl" lang="ar" value="النور للتجارة ذ.م.م">
           <div class="edoc-ayuda">Campo aparte, en un solo alfabeto. Nunca se traduce el nombre de una empresa.</div></div>
         <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e3">Registro fiscal · TRN<span class="obligatorio">*</span></label>
-          <input class="form-control cifra" id="e3" value="100776655400003" inputmode="numeric" required></div>
+          <label class="edoc-etiqueta" for="e10">Tipo de registro legal<span class="obligatorio">*</span></label>
+          <select class="custom-select" id="e10">
+            <option>Licencia comercial</option><option>Registro mercantil</option>
+            <option>Licencia de zona franca</option></select>
+          <div class="edoc-ayuda">Qué documento es el número de abajo.</div></div>
         <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e4">Licencia comercial</label>
-          <input class="form-control cifra" id="e4" value="CN-1183042"></div>
+          <label class="edoc-etiqueta" for="e4">Número del registro legal<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="e4" value="CN-1183042" required></div>
         <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e3">Registro fiscal · TRN</label>
+          <input class="form-control cifra" id="e3" value="100776655400003" inputmode="numeric">
+          <div class="edoc-ayuda">Obligatorio si tu empresa está registrada en IVA. Si no lo está, se deja vacío.</div></div>
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e8">Nombre comercial</label>
+          <input class="form-control" id="e8" value="Al Noor">
+          <div class="edoc-ayuda">El nombre con el que se conoce a tu empresa, aunque la razón social
+          sea otra. Lo pide la reglamentación solo si lo usas.</div></div>
+        <div class="col-12">
+          <label class="edoc-etiqueta" for="e7">Calle y edificio</label>
+          <input class="form-control" id="e7" value="Jebel Ali Free Zone, Warehouse 44"></div>
+        <div class="col-12 col-md-4">
+          <label class="edoc-etiqueta" for="e11">Ciudad</label>
+          <input class="form-control" id="e11" value="Dubai"></div>
+        <div class="col-12 col-md-4">
           <label class="edoc-etiqueta" for="e5">Emirato</label>
           <select class="custom-select" id="e5"><option>Dubái</option><option>Abu Dabi</option><option>Sharja</option>
             <option>Ajmán</option><option>Ras al-Jaima</option><option>Fujaira</option><option>Umm al-Qaywayn</option></select></div>
-        <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e8">Nombre comercial<span class="obligatorio">*</span></label>
-          <input class="form-control" id="e8" value="Al Noor">
-          <div class="edoc-ayuda">El nombre con el que se conoce a tu empresa, aunque la razón social
-          sea otra.</div></div>
-        <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e9">Teléfono<span class="obligatorio">*</span></label>
-          <input class="form-control cifra" id="e9" value="+971 4 555 0100" inputmode="tel">
-          <div class="edoc-ayuda">El de la empresa, no el de una persona. El de cada contacto va en
-          «Actualización de contactos».</div></div>
-        <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e6">Actividad</label>
-          <input class="form-control" id="e6" value="Comercio al por mayor"></div>
-        <div class="col-12">
-          <label class="edoc-etiqueta" for="e7">Dirección</label>
-          <input class="form-control" id="e7" value="Jebel Ali Free Zone, Warehouse 44 · Dubái"></div>
+        <div class="col-12 col-md-4">
+          <div class="edoc-etiqueta">País<span class="obligatorio">*</span></div>
+          <div class="reg__dato-autoridad">Emiratos Árabes Unidos · AE</div>
+          <div class="edoc-ayuda">Fijo: este portal emite desde los Emiratos.</div></div>
       </div>
     </div>
   </section>
@@ -247,6 +256,31 @@
     chip.className = 'edoc-estado edoc-estado--' + ROTULOS[cual][1];
   }());
   </script>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 5 de octubre</span>
+    <strong>En esta pantalla solo van los datos que pide la reglamentación.</strong> La referencia es la
+    especificación PINT AE y el documento de campos obligatorios del Ministerio de Finanzas. Obligatorios:
+    nombre legal <span class="cifra">IBT-027</span>, número de registro legal y su tipo
+    <span class="cifra">IBT-030</span> y <span class="cifra">BTAE-15</span>, dirección electrónica
+    <span class="cifra">IBT-034</span> —el Participant ID con el esquema 0235, que está arriba— y país
+    <span class="cifra">IBT-040</span>. El TRN <span class="cifra">IBT-031</span> es condicional: solo si la
+    empresa está registrada en IVA. Calle y ciudad <span class="cifra">IBT-035</span> y
+    <span class="cifra">IBT-037</span> son condicionales, y el emirato <span class="cifra">IBT-039</span> es
+    opcional. Se fueron «Actividad» y «Teléfono»: no están en el documento, y el teléfono ya vive en
+    «Actualización de contactos».
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>La lista de tipos de registro legal.</strong> Aquí van tres —licencia comercial, registro mercantil
+    y licencia de zona franca— para poder enseñar el campo. La lista buena sale del catálogo de la autoridad y
+    hay que pedirla antes de construir.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>El nombre en árabe no lo pide la reglamentación.</strong> Se queda porque el portal enseña el nombre
+    nativo, que se decidió en revisión. Si gerencia prefiere quedarse solo con lo que exige la autoridad, se
+    quita este campo y con él el botón «Nombre nativo».
+  </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
