@@ -316,12 +316,21 @@
             <div class="edoc-ayuda">Quince cifras, tal como figura en tu registro fiscal.</div>
           </div>
           <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="e-regimen">Régimen de IVA
-              <span class="marca-campo marca-campo--opcional">Pendiente</span></label>
-            <select class="custom-select" id="e-regimen" disabled>
-              <option value="">Pendiente de la lista de Emiratos</option>
+            <label class="edoc-etiqueta" for="e-regimen">Tratamiento de IVA habitual
+              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
+            <!-- La lista oficial de Emiratos: el código AETaxCat de PINT AE. Con
+                 valor propio, para que traducir el texto no cambie el valor. -->
+            <select class="custom-select" id="e-regimen">
+              <option value="">Selecciona una opción</option>
+              <option value="S">Tipo general · 5 %</option>
+              <option value="Z">Tipo cero · 0 %</option>
+              <option value="E">Exento</option>
+              <option value="AE">Inversión del sujeto pasivo</option>
+              <option value="O">No sujeto a IVA</option>
+              <option value="N">Régimen de margen</option>
             </select>
-            <div class="edoc-ayuda">Se habilitará cuando la lista de regímenes esté publicada.</div>
+            <div class="edoc-ayuda">El que te proponemos al emitir. Cada línea de la factura puede llevar otro:
+            la misma empresa vende al 5 %, exporta al 0 % y puede facturar algo exento en el mismo documento.</div>
           </div>
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-ciudad">Ciudad
@@ -546,10 +555,17 @@
     Con soporte de por medio conviene decidir si se le añade una referencia corta y legible del tipo
     <span class="cifra">REG-2026-00918</span>, que es la que ya usa la bandeja del Office Manager.
   </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Resuelto · 5 de octubre</span>
+    <strong>La lista de IVA de Emiratos es la de PINT AE.</strong> El código <span class="cifra">AETaxCat</span>:
+    tipo general del 5 %, tipo cero, exento, inversión del sujeto pasivo, no sujeto y régimen de margen. No hacía
+    falta deducirla del portal francés, estaba publicada.
+  </div>
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
-    <strong>Falta la lista de regímenes de IVA de Emiratos.</strong> Sin ella el paso 3 queda incompleto,
-    y no es algo que se pueda deducir del portal francés.
+    <strong>Y el tratamiento de IVA no es de la empresa, es de cada línea.</strong> La norma lo exige por línea
+    de factura, no en la ficha. Aquí se queda como el valor que se propone al emitir, y por eso es opcional. Si
+    la autoridad lo pide en el alta del proveedor, se marca obligatorio y se acabó; conviene preguntarlo.
   </div>
   <div class="nota nota--decidido">
     <span class="nota__sello">Quick Win de Francia</span>
