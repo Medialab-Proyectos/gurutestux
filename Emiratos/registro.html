@@ -296,15 +296,41 @@
             <input class="form-control" id="e-nativo" dir="rtl" placeholder="النور للتجارة ذ.م.م">
             <div class="edoc-ayuda">Un solo alfabeto por campo: aquí el árabe, arriba el latino.</div>
           </div>
+          <!-- La pregunta del IVA va antes que el TRN: el número solo se pide a
+               quien está registrado, y preguntarlo después es pedir un dato que
+               puede no existir. -->
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-sujeta">Empresa sujeta a IVA
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <select class="custom-select" id="e-sujeta">
+              <option value="">Selecciona una opción</option>
+              <!-- Con valor propio: el traductor cambia el texto de la opción, y con él
+                   cambiaría el valor. La condición del TRN se lee de aquí. -->
+              <option value="si">Sí</option><option value="no">No</option>
+            </select>
+          </div>
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-trn">Número de registro fiscal · TRN
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+              <span class="marca-campo marca-campo--opcional" id="marca-trn">Si estás sujeta a IVA</span></label>
             <input class="form-control cifra" id="e-trn" inputmode="numeric" maxlength="15" placeholder="15 dígitos">
             <div class="edoc-ayuda">Quince cifras, tal como figura en tu registro fiscal.</div>
           </div>
           <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="e-emirato">Emirato
+            <label class="edoc-etiqueta" for="e-regimen">Régimen de IVA
+              <span class="marca-campo marca-campo--opcional">Pendiente</span></label>
+            <select class="custom-select" id="e-regimen" disabled>
+              <option value="">Pendiente de la lista de Emiratos</option>
+            </select>
+            <div class="edoc-ayuda">Se habilitará cuando la lista de regímenes esté publicada.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-ciudad">Ciudad
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input class="form-control" id="e-ciudad" placeholder="Dubai">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-emirato">Emirato
+              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
             <select class="custom-select" id="e-emirato">
               <option value="">Selecciona una opción</option>
               <option>Abu Dabi</option><option>Dubái</option><option>Sharjah</option>
@@ -312,27 +338,11 @@
               <option>Ras Al Jaima</option><option>Fujairah</option>
             </select>
           </div>
-          <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="e-sujeta">Empresa sujeta a IVA
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <select class="custom-select" id="e-sujeta">
-              <option value="">Selecciona una opción</option>
-              <option>Sí</option><option>No</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="e-regimen">Régimen de IVA
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <select class="custom-select" id="e-regimen" disabled>
-              <option value="">Pendiente de la lista de Emiratos</option>
-            </select>
-            <div class="edoc-ayuda">Se habilitará cuando la lista de regímenes esté publicada.</div>
-          </div>
         </div>
 
-        <label class="edoc-etiqueta mt-3" for="e-dir">Dirección
+        <label class="edoc-etiqueta mt-3" for="e-dir">Calle y edificio
           <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control" id="e-dir" placeholder="Calle, edificio y ciudad">
+        <input class="form-control" id="e-dir" placeholder="Jebel Ali Free Zone, Warehouse 44">
       </div>
 
       <!-- ------------------------------------- 4 · documento legal -->
@@ -362,6 +372,13 @@
 
         <div class="row rejilla mt-3">
           <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="d-tipo">Tipo de registro legal
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <select class="custom-select mb-3" id="d-tipo">
+              <option value="">Selecciona una opción</option>
+              <option>Licencia comercial</option><option>Registro mercantil</option>
+              <option>Licencia de zona franca</option>
+            </select>
             <label class="edoc-etiqueta" for="d-numero">Número de licencia
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
             <input class="form-control cifra" id="d-numero" placeholder="Como figura en la licencia">
@@ -701,6 +718,29 @@
     { n: 6, icono: 'aprobar', rotulo: 'Revisión final',             sub: 'Verifica antes de enviar' }
   ];
 
+  /* La marca del TRN dice la verdad en cada momento: obligatorio en cuanto
+     dice que está sujeta a IVA, y «si estás sujeta» mientras no lo diga. */
+  (function () {
+    var sujeta = $('e-sujeta');
+    var marca = $('marca-trn');
+    if (!sujeta || !marca) return;
+    sujeta.addEventListener('change', function () {
+      var si = sujeta.value === 'si';
+      marca.textContent = si ? 'Obligatorio' : 'Si estás sujeta a IVA';
+      marca.className = 'marca-campo marca-campo--' + (si ? 'obligatorio' : 'opcional');
+    });
+  }());
+
+  /* El emirato es opcional y el TRN solo se pide a quien está sujeta a IVA:
+     así lo dice la reglamentación de Emiratos. La lista cambia con la
+     respuesta, y por eso se calcula en vez de estar escrita. */
+  function datosEmpresa() {
+    var lista = [['e-legal', 'Razón social'], ['e-sujeta', 'Sujeta a IVA'],
+                 ['e-dir', 'Calle y edificio'], ['e-ciudad', 'Ciudad']];
+    if (val('e-sujeta') === 'si') lista.splice(2, 0, ['e-trn', 'Registro fiscal']);
+    return lista;
+  }
+
   /* Qué campos mira cada paso: sirve para el estado de la tarjeta y para los
      puntos de la revisión, sin contar nada a mano. */
   function campos(paso) {
@@ -711,9 +751,9 @@
     }
     return ({
       2: [['a-nombre', 'Nombre'], ['a-cargo', 'Cargo'], ['a-tel', 'Teléfono']],
-      3: [['e-legal', 'Razón social'], ['e-trn', 'Registro fiscal'], ['e-emirato', 'Emirato'],
-          ['e-sujeta', 'Sujeta a IVA'], ['e-dir', 'Dirección']],
-      4: [['d-archivo', 'Archivo'], ['d-numero', 'Número de licencia'], ['d-caduca', 'Válida hasta']],
+      3: datosEmpresa(),
+      4: [['d-archivo', 'Archivo'], ['d-tipo', 'Tipo de registro legal'],
+          ['d-numero', 'Número de licencia'], ['d-caduca', 'Válida hasta']],
       5: [['r-com', 'Contacto comercial'], ['r-com-c', 'Correo comercial'],
           ['r-cob', 'Contacto de cobros'], ['r-cob-c', 'Correo de cobros']],
       6: [['l-privacidad', 'Política de privacidad'], ['l-condiciones', 'Términos de servicio'],
@@ -764,8 +804,13 @@
     if (paso === 2 && !/^[\d\s]{7,}$/.test(val('a-tel'))) {
       return { id: 'a-tel', texto: 'El teléfono son solo cifras, sin el código de país.' };
     }
-    if (paso === 3 && !/^\d{15}$/.test(val('e-trn'))) {
+    if (paso === 3 && val('e-sujeta') === 'si' && !/^\d{15}$/.test(val('e-trn'))) {
       return { id: 'e-trn', texto: 'El registro fiscal son quince cifras.' };
+    }
+    /* Quien no está sujeta a IVA no tiene TRN: si lo escribe igual, al menos
+       que esté bien escrito. */
+    if (paso === 3 && val('e-sujeta') === 'no' && val('e-trn') && !/^\d{15}$/.test(val('e-trn'))) {
+      return { id: 'e-trn', texto: 'Si pones el registro fiscal, son quince cifras.' };
     }
     if (paso === 4 && val('d-caduca') && val('d-caduca') < hoy()) {
       return { id: 'd-caduca', texto: 'La licencia está caducada. Sube la vigente y pon su nueva fecha.' };
