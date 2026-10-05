@@ -600,6 +600,16 @@
   }
 
   /* --- Visor ------------------------------------------------------------ */
+  /* El artículo 59 del Reglamento Ejecutivo exige que las palabras «factura
+     fiscal» se vean claramente, y la autofactura tiene su propia fórmula:
+     «factura fiscal emitida por el comprador». El tipo comercial —exportación,
+     no comercial— se queda debajo, en pequeño: dice otra cosa. */
+  function rotuloFiscal(doc) {
+    if (doc.tipo === 'Autofactura') return 'Factura fiscal emitida por el comprador';
+    if (String(doc.tipo).indexOf('Nota de crédito') === 0) return 'Nota de crédito fiscal';
+    return 'Factura fiscal';
+  }
+
   function abrirVisor(doc) {
     document.getElementById('visor-numero').textContent = doc.numero;
     var det = D.DETALLE[doc.numero] || D.DETALLE['INV-2026-004871'];
@@ -623,9 +633,11 @@
             '<div class="edoc-secundario">Registro fiscal <span class="cifra">' + det.emisorTrn + '</span></div>' +
           '</div>' +
           '<div class="text-right">' +
+            '<div class="visor-fiscal">' + rotuloFiscal(doc) + '</div>' +
             '<div class="visor-bloque__rotulo">' + doc.tipo + '</div>' +
             '<div class="edoc-clave-doc" style="font-size:16px">' + doc.numero + '</div>' +
             '<div class="edoc-secundario cifra">Emisión ' + doc.fecha + '</div>' +
+            (doc.suministro ? '<div class="edoc-secundario cifra">Suministro ' + doc.suministro + '</div>' : '') +
             '<div class="edoc-secundario cifra">Vencimiento ' + det.vencimiento + '</div>' +
           '</div>' +
         '</div>' +
@@ -654,10 +666,16 @@
         '</table>' +
 
         '<div class="visor-totales mt-3">' +
+          (doc.descuento ? '<div class="fila"><span>Suma de las líneas</span><span class="cifra">' +
+            doc.moneda + ' ' + D.dinero(doc.base + doc.descuento) + '</span></div>' +
+            '<div class="fila"><span>Descuento</span><span class="cifra">− ' + doc.moneda + ' ' +
+            D.dinero(doc.descuento) + '</span></div>' : '') +
           '<div class="fila"><span>Base imponible</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.base) + '</span></div>' +
           '<div class="fila"><span>IVA</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.iva) + '</span></div>' +
           '<div class="fila total"><span>Total</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.total) + '</span></div>' +
         '</div>' +
+        (doc.inversion ? '<div class="visor-leyenda">El receptor es quien debe liquidar el impuesto, ' +
+          'conforme al artículo 48 del Decreto-Ley del IVA.</div>' : '') +
       '</div>';
 
     window.edocPintarNombres();

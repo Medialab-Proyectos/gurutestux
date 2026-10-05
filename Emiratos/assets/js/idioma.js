@@ -1070,6 +1070,15 @@
       "Archivo": "File",
       "Antes de entrar": "Before you go in",
       "Mi perfil": "My profile",
+      "Aquí te llegan las facturas de tus proveedores. Son las diez primeras cifras de tu TRN: eso es el TIN. El TRN entero va dentro de la factura, no en la dirección.": "This is where your suppliers’ invoices arrive. It is the first ten digits of your TRN: that is the TIN. The full TRN goes inside the invoice, not in the address.",
+      "Te registramos en la red con tu identificador 0235:<tu TIN>, que son las diez primeras cifras de tu TRN. Es la dirección a la que te llegarán las facturas de tus proveedores: si la ves, estás dentro.": "We register you on the network with your identifier 0235:<your TIN>, which is the first ten digits of your TRN. It is the address your suppliers’ invoices will arrive at: if you can see it, you are in.",
+      "Factura fiscal": "Tax Invoice",
+      "Factura fiscal emitida por el comprador": "Tax Invoice raised by buyer",
+      "Nota de crédito fiscal": "Tax Credit Note",
+      "Suministro": "Supply",
+      "Suma de las líneas": "Sum of the lines",
+      "Descuento": "Discount",
+      "El receptor es quien debe liquidar el impuesto, conforme al artículo 48 del Decreto-Ley del IVA.": "The recipient is required to account for the tax, in accordance with Article 48 of the VAT Decree-Law.",
       "Si estás sujeta a IVA": "If you are VAT-registered",
       "Si pones el registro fiscal, son quince cifras.": "If you enter the tax registration, it is fifteen digits.",
       "Jebel Ali Free Zone, Warehouse 44": "Jebel Ali Free Zone, Warehouse 44",
@@ -1604,8 +1613,9 @@
     [/^Registro de empresa · Paso (\d+) de (\d+)$/, 'Company registration · Step $1 of $2'],
     [/^Falta (\d+)$/, 'Missing $1'],
     // El visor: «Emisión 2026-08-31», y las direcciones que acaban en el país.
-    [/^(Emisión|Recepción|Vencimiento) (\d{4}-\d{2}-\d{2})$/, function (m, q, f) {
-      return { 'Emisión': 'Issued', 'Recepción': 'Received', 'Vencimiento': 'Due' }[q] + ' ' + f;
+    [/^(Emisión|Recepción|Vencimiento|Suministro) (\d{4}-\d{2}-\d{2})$/, function (m, q, f) {
+      return { 'Emisión': 'Issued', 'Recepción': 'Received', 'Vencimiento': 'Due',
+               'Suministro': 'Supply' }[q] + ' ' + f;
     }],
     [/^(.+) · Emiratos Árabes Unidos$/, '$1 · United Arab Emirates'],
     // Nombre accesible de los botones de fila de Recibidos.

@@ -93,9 +93,12 @@ window.EDOC = (function () {
 
   /* --- Documentos emitidos ---------------------------------------------- */
   var EMITIDOS = [
-    { numero: 'INV-2026-004871', fecha: '2026-08-31', tipo: 'Factura',
+    /* Lleva descuento y una fecha de suministro anterior a la emisión: son los
+       dos casos que el artículo 59 obliga a declarar y que la maqueta tiene que
+       poder enseñar. La base ya va con el descuento descontado. */
+    { numero: 'INV-2026-004871', fecha: '2026-08-31', suministro: '2026-08-27', descuento: 400.00, tipo: 'Factura',
       receptorLatino: 'Al Futtaim Logistics LLC', receptorArabe: 'الفطيم للخدمات اللوجستية ذ.م.م',
-      trn: '100234567800003', moneda: 'AED', base: 18400.00, iva: 920.00, total: 19320.00,
+      trn: '100234567800003', moneda: 'AED', base: 18000.00, iva: 900.00, total: 18900.00,
       c1: 'aprobado', c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'aprobado' },
 
     { numero: 'INV-2026-004870', fecha: '2026-08-31', tipo: 'Factura',
@@ -125,7 +128,9 @@ window.EDOC = (function () {
       c1: 'aprobado', c2: 'aprobado', c5: 'rechazado', c3: 'noaplica', c4: 'noaplica',
       motivoC5: 'Falta el número de registro fiscal del receptor · dato obligatorio' },
 
-    { numero: 'INV-2026-004865', fecha: '2026-08-28', tipo: 'Autofactura',
+    /* La autofactura va con inversión del sujeto pasivo: el impuesto lo liquida
+       quien recibe, y eso tiene que decirlo el propio documento. */
+    { numero: 'INV-2026-004865', fecha: '2026-08-28', tipo: 'Autofactura', inversion: true,
       receptorLatino: 'Ras Al Khaimah Ceramics', receptorArabe: 'رأس الخيمة للسيراميك',
       trn: '100334455600003', moneda: 'AED', base: 3150.00, iva: 157.50, total: 3307.50,
       c1: 'aprobado', c2: 'aprobado', c5: 'aprobado', c3: 'rechazado', c4: 'noaplica',
