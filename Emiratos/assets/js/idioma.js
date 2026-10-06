@@ -1074,6 +1074,8 @@
       "Archivo": "File",
       "Antes de entrar": "Before you go in",
       "Mi perfil": "My profile",
+      "La confirma la autoridad": "The authority confirms it",
+      "La asociación se hace y se consulta en EmaraTax. Cuando nos elijas allí, aquí podrás emitir y recibir; si algo no sale, escríbenos.": "The association is made and checked in EmaraTax. Once you choose us there, you will be able to issue and receive here; if something does not work, write to us.",
       "Clasificación": "Classification",
       "Mostrar la clasificación": "Show the classification",
       "Ocultar la clasificación": "Hide the classification",

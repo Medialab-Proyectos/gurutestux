@@ -55,13 +55,15 @@
           de tu TRN: eso es el TIN. El TRN entero va dentro de la factura, no en la dirección.</div>
         </div>
         <div class="col-12 col-md-4">
-          <div class="edoc-etiqueta">Asociación confirmada</div>
-          <div class="cifra">2026-09-02 10:41</div>
-          <div class="edoc-ayuda">Desde esa fecha podemos emitir y recibir a tu nombre.</div>
+          <div class="edoc-etiqueta">Asociación en EmaraTax</div>
+          <div>La confirma la autoridad</div>
+          <div class="edoc-ayuda">La asociación se hace y se consulta en EmaraTax. Cuando nos elijas allí, aquí
+          podrás emitir y recibir; si algo no sale, escríbenos.</div>
         </div>
-        <div class="col-12">
-          <!-- El estado no puede vivir solo en la tarjeta del inicio, que se
-               cierra: aquí está siempre, con los cuatro valores posibles. -->
+        <!-- La fecha de confirmación y los cuatro estados viven detrás de
+             ?asociacion=, para la versión en que la autoridad nos avise. Hoy no
+             nos avisa: enseñarlos sería inventarse el dato. -->
+        <div class="col-12" id="caja-estado-asociacion" hidden>
           <div class="edoc-etiqueta">Estado de la asociación</div>
           <div class="edoc-estados-linea" id="linea-asociacion">
             <span class="edoc-estado-paso" data-estado="ninguna">Sin asociar</span>
@@ -74,6 +76,17 @@
         </div>
       </div>
 
+      <div class="nota nota--decidido mt-3">
+        <span class="nota__sello">Fuera del MVP · 6 de octubre</span>
+        <strong>La fecha de la asociación y sus estados no se enseñan: no los tenemos.</strong> En la
+        capacitación del 16 de septiembre, preguntado cómo sabríamos que el cliente nos asoció, quedó dicho:
+        «no dicen explícitamente, porque eso es lo que estoy buscando, pero <em>sospecho</em> que nos van a
+        hacer un callback». Una sospecha no es un dato, y enseñar «Asociación confirmada · 2026-09-02 10:41»
+        delante de la autoridad invita a la pregunta de dónde sale esa fecha —hoy, de ninguna parte—. Se queda
+        lo que sí sabemos: que el proveedor somos nosotros y el Participant ID, que se deriva del TRN. El resto
+        sigue construido y se enseña con <span class="cifra">?asociacion=activa</span> para cuando el aviso de
+        la autoridad exista.
+      </div>
       <div class="nota nota--abierto mt-3">
         <span class="nota__sello">Abierto · 30 de septiembre</span>
         <strong>En Omán este bloque enseña menos.</strong> Allí la asociación vive en el portal de la autoridad y
@@ -149,10 +162,23 @@
     </div>
   </section>
 
-  <!-- Sección que Bolivia tiene dentro de «Actualización datos empresa» y que
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Fuera por ahora · 6 de octubre</span>
+    <strong>La facturación del servicio sale de esta pantalla.</strong> Estaba aquí el correo con el que te
+    facturamos, el día del mes, la orden de compra y las observaciones. No es identificación fiscal: es nuestro
+    contrato comercial, no viaja en ningún documento y no lo pide la norma de Emiratos. Y además estaba
+    duplicado, porque el correo de facturación es el del contacto de <strong>Cobros</strong>, que ya es
+    obligatorio en «Actualización de contactos». Su sitio es esa pantalla o una de facturación del servicio;
+    mientras se decide, no se enseña. El código sigue en el archivo, comentado, para no rehacerlo.
+  </div>
+
+  <!-- FUERA DEL MVP · 6 de octubre · facturación del servicio. Ver la nota de
+       arriba: esto no es identificación fiscal y además duplica el contacto
+       de Cobros. Se deja comentado para no rehacerlo.
+  <! - - Sección que Bolivia tiene dentro de «Actualización datos empresa» y que
        aquí faltaba entera: con qué correo y en qué condiciones se le factura a
        la empresa el servicio de eDoc. No es la factura del cliente: es la
-       nuestra. -->
+       nuestra. - - >
   <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Indicaciones de facturación para cobro del producto eDoc</h2>
@@ -193,6 +219,7 @@
 
     </div>
   </section>
+  -->
 
   <!-- Un solo botón al pie de toda la pantalla, fuera de los paneles: es
        exactamente como guarda Bolivia, y cumple la regla de un primario por
@@ -301,10 +328,6 @@
 
   var $ = function (id) { return document.getElementById(id); };
 
-  // La orden de compra solo pide número si de verdad hace falta.
-  $('f-orden').addEventListener('change', function () {
-    $('caja-orden').hidden = !this.checked;
-  });
 
   function mal(id, texto, ayuda) {
     document.querySelectorAll('.is-invalid').forEach(function (e) { e.classList.remove('is-invalid'); });
@@ -339,22 +362,9 @@
   document.querySelector('main').addEventListener('input', resumen);
   document.querySelector('main').addEventListener('change', resumen);
 
-  /* Guarda la pantalla entera, que es como lo hace Bolivia. Se comprueban las
-     dos secciones antes de confirmar nada: no tiene sentido dar por buenos los
-     datos fiscales y dejar el correo de facturación mal escrito. */
+  /* Guarda la pantalla entera, que es como lo hace Bolivia. Con la facturación
+     del servicio fuera, aquí solo se comprueban los datos fiscales. */
   $('guardar-todo').addEventListener('click', function () {
-    var correo = $('f-correo').value.trim();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) {
-      return mal('f-correo', 'Ese correo no tiene buena pinta.', 'f-ayuda');
-    }
-    var dia = Number($('f-dia').value);
-    if (!(dia >= 1 && dia <= 28)) {
-      return mal('f-dia', 'El día tiene que estar entre 1 y 28: los meses cortos no llegan a 31.',
-                 'f-dia-ayuda');
-    }
-    if ($('f-orden').checked && !$('f-orden-num').value.trim()) {
-      return mal('f-orden-num', 'Has marcado que requiere orden de compra: pon el número.');
-    }
     document.querySelectorAll('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
     var lista = cambiados();
     if (!lista.length) return window.edocAvisar('No hay cambios que guardar.');
@@ -377,6 +387,17 @@
     window.edocAvisar('Se descartaron los cambios sin guardar.');
   });
 }());
+</script>
+<script>
+  /* El estado de la asociación solo si se pide por la dirección: hoy no hay
+     servicio que nos lo diga, así que por defecto no se enseña. */
+  (function () {
+    var caja = document.getElementById('caja-estado-asociacion');
+    if (!caja) return;
+    try {
+      if (new URLSearchParams(window.location.search).has('asociacion')) caja.hidden = false;
+    } catch (e) { /* nada */ }
+  }());
 </script>
 </body>
 </html>
