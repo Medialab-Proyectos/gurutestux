@@ -66,6 +66,10 @@ window.EDOC = (function () {
     /* Le llegó y no ha dicho nada. Puede quedarse así para siempre: el comprador
        solo ve el documento cuando se conecta a su plataforma. */
     desconocido: { rotulo: '—',         clase: 'neutro' },
+    /* Este documento no se entrega nunca: no tiene destinatario. El endpoint
+       lleva un número predefinido y nadie va a responder. Decirlo así evita que
+       el vacío parezca un fallo nuestro. */
+    nosentrega:  { rotulo: 'No se entrega', clase: 'neutro' },
     /* La rayita es «no sabemos»: el comprador puede no conectarse nunca a su
        plataforma, y entonces su estado se queda así para siempre. */
     noaplica:  { rotulo: '—',           clase: 'neutro' }
@@ -82,12 +86,35 @@ window.EDOC = (function () {
     'Nota de crédito'
   ];
 
-  var MARCAS = [
-    'No comercial',
-    'Exportación',
-    'Autofacturada',
-    'Zona franca'
+  /* El transaction type: así lo llama el gobierno, y así se llama aquí. Viaja
+     como un binario de ocho posiciones y una factura puede llevar varias
+     posiciones en uno a la vez. Al cliente se le dicen por su nombre; el
+     binario es cosa del XML.
+
+     Falta la lista completa y sus nombres exactos —son unas ocho—: está
+     pendiente de José. Estas son las que la maqueta puede enseñar hoy. */
+  /* Las ocho clasificaciones del campo BTAE-02, en el orden de sus posiciones.
+     Viaja en ProfileExecutionID como una cadena de ocho ceros y unos, y es
+     obligatoria: «10000001» es zona franca y exportación a la vez. Al cliente
+     se le dicen por su nombre; el binario se enseña en el detalle del
+     documento, que es donde lo busca un auditor. */
+  var TRANSACCION = [
+    'Zona franca',
+    'Entrega asimilada',
+    'Margen de ganancia',
+    'Factura resumen',
+    'Suministro continuo',
+    'Facturación por agente',
+    'Comercio electrónico',
+    'Exportación'
   ];
+
+  /* El binario, tal como lo quiere la autoridad. */
+  function transaccionBinaria(doc) {
+    return TRANSACCION.map(function (t) {
+      return (doc.transaccion || []).indexOf(t) >= 0 ? '1' : '0';
+    }).join('');
+  }
 
   /* Motivos tipificados de rechazo. En Emiratos el rechazo pide motivo;
      el texto libre es opcional y va aparte. */
@@ -129,10 +156,10 @@ window.EDOC = (function () {
       c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'rechazado',
       motivoC4: 'RE-02 · El importe no coincide con lo pactado' },
 
-    { numero: 'INV-2026-004867', fecha: '2026-08-29', tipo: 'Factura', marcas: ['Exportación', 'Zona franca'],
+    { numero: 'INV-2026-004867', fecha: '2026-08-29', tipo: 'Factura', transaccion: ['Zona franca', 'Exportación'],
       receptorLatino: 'Qatar Fuel Company', receptorArabe: 'شركة قطر للوقود',
       trn: '100778899100003', moneda: 'USD', base: 12750.00, iva: 0.00, total: 12750.00,
-      c2: 'aprobado', c5: 'aprobado', c3: 'entregado', c4: 'noaplica' },
+      c2: 'aprobado', c5: 'aprobado', c3: 'nosentrega', c4: 'nosentrega', endpoint: '99' },
 
     { numero: 'INV-2026-004866', fecha: '2026-08-29', tipo: 'Factura',
       receptorLatino: 'Sharjah Cement Factory', receptorArabe: 'مصنع الشارقة للإسمنت',
@@ -142,13 +169,13 @@ window.EDOC = (function () {
 
     /* La autofactura va con inversión del sujeto pasivo: el impuesto lo liquida
        quien recibe, y eso tiene que decirlo el propio documento. */
-    { numero: 'INV-2026-004865', fecha: '2026-08-28', tipo: 'Factura', marcas: ['Autofacturada'], inversion: true,
+    { numero: 'INV-2026-004865', fecha: '2026-08-28', tipo: 'Factura', autofacturada: true, inversion: true,
       receptorLatino: 'Ras Al Khaimah Ceramics', receptorArabe: 'رأس الخيمة للسيراميك',
       trn: '100334455600003', moneda: 'AED', base: 3150.00, iva: 157.50, total: 3307.50,
       c2: 'aprobado', c5: 'aprobado', c3: 'rechazado', c4: 'noaplica',
       motivoC3: 'La firma del sobre de transmisión no valida · error técnico' },
 
-    { numero: 'INV-2026-004864', fecha: '2026-08-28', tipo: 'Factura', marcas: ['No comercial'],
+    { numero: 'INV-2026-004864', fecha: '2026-08-28', tipo: 'Factura', codigo: '480',
       receptorLatino: 'Mohammed Bin Saeed Trading', receptorArabe: 'محمد بن سعيد للتجارة',
       trn: '—', moneda: 'AED', base: 740.00, iva: 0.00, total: 740.00,
       c2: 'aprobado', c5: 'aprobado', c3: 'entregado', c4: 'noaplica' },
@@ -181,12 +208,14 @@ window.EDOC = (function () {
           rechazado: 'La autoridad no aceptó el reporte fiscal.',
           enviado:   'Reporte enviado, sin respuesta todavía.',
           pendiente: 'A la espera del reporte fiscal.' },
-    C3: { aprobado:  'La plataforma del comprador lo validó y se lo entregó.',
+    C3: { nosentrega: 'No se entrega: este documento no tiene destinatario, así que no pasa por una plataforma receptora.',
+          aprobado:  'La plataforma del comprador lo validó y se lo entregó.',
           entregado: 'Entregado a la plataforma del comprador.',
           rechazado: 'La plataforma del comprador lo rechazó por validaciones técnicas.',
           enviado:   'En camino hacia la plataforma del comprador.',
           pendiente: 'A la espera de la plataforma del comprador.' },
-    C4: { aprobado:    'El destinatario lo aprobó.',
+    C4: { nosentrega:  'No se entrega: la factura no tiene destinatario —traslado interno, exportación o fuera del ámbito—, y el endpoint lleva un número predefinido.',
+          aprobado:    'El destinatario lo aprobó.',
           rechazado:   'El destinatario lo rechazó.',
           desconocido: 'Le llegó, pero todavía no ha respondido. Puede no responder nunca: solo ve el documento cuando se conecta a su plataforma.' }
   };
@@ -196,9 +225,11 @@ window.EDOC = (function () {
     if (!estado || estado === 'noaplica') {
       return { estado: estado, fecha: '', mensaje: 'El documento se detuvo antes de llegar aquí.' };
     }
-    /* El desconocido no tiene fecha: no hay nada que fechar. */
-    if (estado === 'desconocido') {
-      return { estado: estado, fecha: '', mensaje: MENSAJES[clave] && MENSAJES[clave].desconocido };
+    /* Ni el desconocido ni el que no se entrega tienen fecha: no hay nada que
+       fechar. El primero puede cambiar algún día; el segundo, nunca. */
+    if (estado === 'desconocido' || estado === 'nosentrega') {
+      return { estado: estado, fecha: '',
+               mensaje: (MENSAJES[clave] || {})[estado] || '' };
     }
     var propio = doc['motivo' + clave];
     return {
@@ -236,12 +267,12 @@ window.EDOC = (function () {
       recepcion: 'aprobado', respuesta: 'rechazado', respuestaSello: '2026-08-29 16:05',
       motivo: 'RE-03 · Bienes o servicios no recibidos' },
 
-    { numero: 'INV-2026-00917', fecha: '2026-08-29', fechaEmision: '2026-08-26', tipo: 'Factura', marcas: ['Exportación'],
+    { numero: 'INV-2026-00917', fecha: '2026-08-29', fechaEmision: '2026-08-26', tipo: 'Factura', transaccion: ['Exportación'],
       emisorLatino: 'Oman National Transport', emisorArabe: 'النقل الوطنية العمانية',
       trn: '100303404500003', moneda: 'USD', base: 7600.00, iva: 0.00, total: 7600.00,
       recepcion: 'aprobado', respuesta: 'pendiente' },
 
-    { numero: 'INV-71044', fecha: '2026-08-28', fechaEmision: '2026-08-27', tipo: 'Factura', marcas: ['No comercial'],
+    { numero: 'INV-71044', fecha: '2026-08-28', fechaEmision: '2026-08-27', tipo: 'Factura', codigo: '480',
       emisorLatino: 'Ahmed Al Suwaidi Services', emisorArabe: 'أحمد السويدي للخدمات',
       trn: '—', moneda: 'AED', base: 520.00, iva: 0.00, total: 520.00,
       recepcion: 'aprobado', respuesta: 'pendiente' },
@@ -368,7 +399,8 @@ window.EDOC = (function () {
   };
 
   return {
-    CORNERS: CORNERS, RECHAZOS: RECHAZOS, ESTADOS: ESTADOS, TIPOS: TIPOS, MARCAS: MARCAS,
+    CORNERS: CORNERS, RECHAZOS: RECHAZOS, ESTADOS: ESTADOS, TIPOS: TIPOS, TRANSACCION: TRANSACCION,
+    transaccionBinaria: transaccionBinaria,
     MOTIVOS_RECHAZO: MOTIVOS_RECHAZO,
     sello: sello,
     EMITIDOS: EMITIDOS, RECIBIDOS: RECIBIDOS, DETALLE: DETALLE, dinero: d,

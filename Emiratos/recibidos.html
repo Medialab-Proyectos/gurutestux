@@ -34,10 +34,15 @@
       <h1 class="edoc-titulo">Documentos Recibidos</h1>
       <p class="edoc-subtitulo">Lo que llega por la red a nombre de tu empresa. Desde aquí lo apruebas, lo rechazas con un motivo o dejas constancia de que llegó.</p>
     </div>
-    <div class="edoc-titulo-barra__lado">
-      <span class="edoc-estado edoc-estado--info" id="sello-evolutivo" hidden>Vista evolutiva</span>
-      <button type="button" class="btn btn-edoc-terciario" id="ver-evolutivo">Ver la propuesta evolutiva</button>
-    </div>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 6 de octubre</span>
+    <strong>Fechas, tipo y proveedor. El proveedor aquí no es un lujo.</strong> En emisión la búsqueda básica se
+    queda en fechas y tipo, pero en recepción el tercero va de fábrica: «si yo tengo mil facturas recibidas,
+    ¿dónde está el tercero? Eso es lo básico». Quien emite busca por rango de fechas; quien recibe busca por
+    quién le mandó. Lo demás —número, registro fiscal, clasificación, estado por entidad— es búsqueda por
+    criterios, que es otra pantalla y otro procedimiento en la base de datos.
   </div>
 
   <div class="nota nota--decidido">
@@ -67,34 +72,6 @@
           <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
             <label class="edoc-etiqueta" for="f-tipo">Tipo de documento</label>
             <select class="custom-select" id="f-tipo"><option value="">Todos</option></select>
-          </div>
-          <!-- El mismo par que en Documentos Emitidos: primero la entidad y después
-               su estado. Aquí las entidades son dos, y una eres tú. -->
-          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
-            <label class="edoc-etiqueta" for="f-marca">Marca del documento</label>
-            <select class="custom-select" id="f-marca"><option value="">Cualquiera</option></select>
-          </div>
-          <div class="col-12 col-md-6 col-xl-3">
-            <label class="edoc-etiqueta" for="f-esquina">Entidad</label>
-            <select class="custom-select" id="f-esquina">
-              <option value="">Cualquiera</option>
-              <option value="recepcion">Plataforma receptora (C3)</option>
-              <option value="respuesta">Destinatario (C4) · eres tú</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-6 col-xl-3">
-            <label class="edoc-etiqueta" for="f-esquina-estado">Estado de esa entidad</label>
-            <select class="custom-select" id="f-esquina-estado" disabled>
-              <option value="">Elige una entidad primero</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
-            <label class="edoc-etiqueta" for="f-numero">Número de documento</label>
-            <input type="text" class="form-control cifra" id="f-numero" placeholder="INV-882301">
-          </div>
-          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
-            <label class="edoc-etiqueta" for="f-trn">Registro fiscal del emisor</label>
-            <input type="text" class="form-control cifra" id="f-trn" placeholder="100908070600003" inputmode="numeric">
           </div>
           <!-- El MVP lo pide como «Filtrar por proveedor», y viene del feedback
                de Francia: escribir el nombre a mano no sirve cuando llegan
@@ -448,7 +425,7 @@
           'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
         '<td class="cifra">' + doc.fechaEmision + '</td>' +
         '<td class="cifra">' + doc.fecha + '</td>' +
-        '<td>' + doc.tipo + marcasHTML(doc) + '</td>' +
+        '<td>' + doc.tipo + '</td>' +
         '<td><span data-nombre-latino="' + doc.emisorLatino + '" data-nombre-arabe="' + doc.emisorArabe + '"></span>' +
           '<div class="edoc-secundario cifra">' + doc.trn + '</div></td>' +
         '<td class="cifra">' + doc.moneda + '</td>' +
@@ -478,28 +455,14 @@
 
 
   /* --- La vista evolutiva ------------------------------------------------
-     La pantalla que se entrega es la de hoy. Lo que proponemos se mira con el
-     botón, y se nota: sello arriba y dirección con ?evolutivo=1, para poder
-     enseñarla o enlazarla sin que nadie la confunda con lo que ya existe. */
+     La pantalla que se entrega es la de hoy. Lo que proponemos se mira solo si
+     se pide: el botón salió del producto el 6 de octubre, y la propuesta sigue
+     viva en la dirección con ?evolutivo=1 para poder enseñarla sin que ocupe
+     sitio ni se confunda con lo entregado. */
   function evolutivo() {
     try { return new URLSearchParams(window.location.search).get('evolutivo') === '1'; }
     catch (e) { return false; }
   }
-  (function () {
-    var boton = document.getElementById('ver-evolutivo');
-    var sello = document.getElementById('sello-evolutivo');
-    if (!boton) return;
-    if (evolutivo()) {
-      boton.textContent = 'Volver a la vista actual';
-      if (sello) sello.hidden = false;
-    }
-    boton.addEventListener('click', function () {
-      var q = new URLSearchParams(window.location.search);
-      if (evolutivo()) q.delete('evolutivo'); else q.set('evolutivo', '1');
-      var cola = q.toString();
-      window.location.search = cola ? '?' + cola : '';
-    });
-  }());
 
   function abrirVisor(doc) {
     document.getElementById('visor-numero').textContent = doc.numero;
@@ -514,7 +477,8 @@
           '</div>' +
           '<div class="text-right">' +
             '<div class="visor-bloque__rotulo">' + doc.tipo +
-              ((doc.marcas || []).length ? ' · ' + doc.marcas.join(' · ') : '') + '</div>' +
+              (doc.autofacturada ? ' · Autofacturada' : '') +
+              ((doc.transaccion || []).length ? ' · ' + doc.transaccion.join(' · ') : '') + '</div>' +
             '<div class="edoc-clave-doc" style="font-size:16px">' + doc.numero + '</div>' +
             '<div class="edoc-secundario cifra">Emisión ' + doc.fechaEmision + '</div>' +
             '<div class="edoc-secundario cifra">Recepción ' + doc.fecha + '</div>' +
@@ -594,47 +558,25 @@
   });
 
   /* --- Buscar ------------------------------------------------------------ */
-  /* Entidad y estado, como en Emitidos. Los estados salen de los documentos,
-     así que no se ofrece nada que devuelva cero. Los del destinatario se dicen
-     en primera persona: esa esquina eres tú. */
-  var ROTULOS = {
-    recepcion: { aprobado: 'Llegó bien', rechazado: 'Rechazada en la recepción' },
-    respuesta: { pendiente: 'Todavía no respondes', aprobado: 'La aprobaste', rechazado: 'La rechazaste' }
-  };
-  (function () {
-    var entidad = document.getElementById('f-esquina');
-    var estado = document.getElementById('f-esquina-estado');
-    if (!entidad || !estado) return;
-    entidad.addEventListener('change', function () {
-      var campo = entidad.value;
-      if (!campo) {
-        estado.innerHTML = '<option value="">Elige una entidad primero</option>';
-        estado.disabled = true;
-        return;
-      }
-      var vistos = [];
-      docs.forEach(function (d) {
-        var e = d[campo];
-        if (e && vistos.indexOf(e) < 0) vistos.push(e);
-      });
-      estado.innerHTML = '<option value="">Cualquier estado</option>' + vistos.map(function (e) {
-        return '<option value="' + e + '">' + ((ROTULOS[campo] || {})[e] || e) + '</option>';
-      }).join('');
-      estado.disabled = false;
-    });
-  }());
 
-  /* Las marcas van bajo el tipo, en pastillas: un documento puede llevar varias
-     —exportación y zona franca a la vez— y en el XML eso viaja como banderas.
-     Aquí se dicen por su nombre, no en binario. */
-  function marcasHTML(doc) {
-    if (!doc.marcas || !doc.marcas.length) return '';
-    return '<div class="edoc-marcas">' + doc.marcas.map(function (m) {
-      return '<span class="edoc-marca">' + m + '</span>';
+  /* El transaction type va bajo el tipo, en pastillas: un documento puede
+     llevar varias clasificaciones a la vez —exportación y zona franca— y en el
+     XML viajan como un binario de ocho posiciones. Aquí se dicen por su nombre:
+     el binario no significa nada para quien lo lee. */
+  function transaccionHTML(doc) {
+    if (!doc.transaccion || !doc.transaccion.length) return '';
+    return '<div class="edoc-transaccion">' + doc.transaccion.map(function (m) {
+      return '<span class="edoc-transaccion__tipo">' + m + '</span>';
     }).join('') + '</div>';
   }
 
-  function filtroValor(id) { return document.getElementById(id).value.trim(); }
+  /* Si la pantalla está fuera de la entrega, su contenido se cambió por el
+     aviso de «En construcción» y los campos ya no existen. El guion sigue
+     corriendo, así que sin esto revienta en la consola. */
+  function filtroValor(id) {
+    var e = document.getElementById(id);
+    return e ? e.value.trim() : '';
+  }
   function filtroContiene(texto, buscado) {
     return !buscado || String(texto || '').toLowerCase().indexOf(buscado.toLowerCase()) >= 0;
   }
@@ -644,10 +586,6 @@
     leer: function () {
       return {
         desde: filtroValor('f-desde'), hasta: filtroValor('f-hasta'), tipo: filtroValor('f-tipo'),
-        marca: filtroValor('f-marca'),
-        esquina: filtroValor('f-esquina'), esquinaEstado: filtroValor('f-esquina-estado'),
-        numero: filtroValor('f-numero'),
-        trn: filtroValor('f-trn').replace(/\D/g, ''),
         proveedores: [].slice.call(document.querySelectorAll('#f-proveedor-lista input:checked'))
           .map(function (x) { return x.value; })
       };
@@ -657,9 +595,6 @@
       if (!doc) return true;
       return (!c.desde || doc.fecha >= c.desde) && (!c.hasta || doc.fecha <= c.hasta) &&
         (!c.tipo || doc.tipo === c.tipo) &&
-        (!c.marca || (doc.marcas || []).indexOf(c.marca) >= 0) &&
-        (!c.esquina || !c.esquinaEstado || doc[c.esquina] === c.esquinaEstado) &&
-        filtroContiene(doc.numero, c.numero) && filtroContiene(doc.trn, c.trn) &&
         (!c.proveedores.length || c.proveedores.indexOf(doc.emisorLatino) >= 0);
     }
   });

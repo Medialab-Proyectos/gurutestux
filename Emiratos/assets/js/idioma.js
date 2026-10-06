@@ -1074,6 +1074,25 @@
       "Archivo": "File",
       "Antes de entrar": "Before you go in",
       "Mi perfil": "My profile",
+      "0235:<tu TIN>": "0235:<your TIN>",
+      "Te registramos en la red con tu identificador, que es 0235 más las diez primeras cifras de tu TRN. Es la dirección a la que te llegarán las facturas de tus proveedores: si la ves, estás dentro.": "We register you on the network with your identifier, which is 0235 plus the first ten digits of your TRN. It is the address your suppliers’ invoices will arrive at: if you can see it, you are in.",
+      "El registro fiscal no coincide con el de la licencia comercial.": "The tax registration does not match the one on the trade licence.",
+      "Cambiar Contraseña · ahora dentro de Mi perfil": "Change password · now inside My profile",
+      "Entrega asimilada": "Deemed supply",
+      "Margen de ganancia": "Profit margin scheme",
+      "Factura resumen": "Summary invoice",
+      "Suministro continuo": "Continuous supply",
+      "Facturación por agente": "Agent billing",
+      "Comercio electrónico": "E-commerce",
+      "Transaction type": "Transaction type",
+      "Endpoint": "Endpoint",
+      "Búsqueda por criterios": "Search by criteria",
+      "Búsqueda por criterios ›": "Search by criteria ›",
+      "Tipo de transacción": "Transaction type",
+      "Para cuando ya sabes qué buscas: el número, el receptor, su registro fiscal, la clasificación del documento o lo que respondió una entidad concreta.": "For when you already know what you are looking for: the number, the recipient, their tax registration, the document classification or what a particular party answered.",
+      "No se entrega": "Not delivered",
+      "No se entrega: este documento no tiene destinatario, así que no pasa por una plataforma receptora.": "Not delivered: this document has no recipient, so it does not go through a receiving platform.",
+      "No se entrega: la factura no tiene destinatario —traslado interno, exportación o fuera del ámbito—, y el endpoint lleva un número predefinido.": "Not delivered: the invoice has no recipient —internal transfer, export or out of scope— and the endpoint carries a predefined number.",
       "vale hasta": "valid until",
       "Secreto nuevo generado. El anterior sigue valiendo": "New secret generated. The previous one is still valid for",
       "horas, así que nada se rompe: cambia el secreto en tu sistema y, cuando lo tengas puesto, retira el anterior.": "hours, so nothing breaks: change the secret in your system and, once it is in place, retire the previous one.",
@@ -1712,6 +1731,18 @@
     [/^Descargar (.+)$/, function (m, t) { return 'Download ' + (aIngles(t) || t); }],
     [/^Registro de empresa · Paso (\d+) de (\d+)$/, 'Company registration · Step $1 of $2'],
     [/^Falta (\d+)$/, 'Missing $1'],
+    /* El tipo del documento con sus clasificaciones: «Factura · Zona franca ·
+       Exportación». Se traduce pieza por pieza, porque la combinación no está
+       —ni puede estar— en el diccionario. */
+    [/^[^·]+( · [^·]+)+$/, function (m) {
+      // m es la cadena entera que casó, no un arreglo.
+      var partes = m.split(' · ');
+      var hechas = partes.map(function (t) { return aIngles(t.trim()) || t.trim(); });
+      // Si no se tradujo ninguna, se deja como está: no es una lista nuestra.
+      var cambio = hechas.some(function (t, i) { return t !== partes[i].trim(); });
+      // Si no cambia nada se devuelve igual: el traductor lo deja en paz.
+      return cambio ? hechas.join(' · ') : m;
+    }],
     // El visor: «Emisión 2026-08-31», y las direcciones que acaban en el país.
     [/^(Emisión|Recepción|Vencimiento|Suministro) (\d{4}-\d{2}-\d{2})$/, function (m, q, f) {
       return { 'Emisión': 'Issued', 'Recepción': 'Received', 'Vencimiento': 'Due',

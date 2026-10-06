@@ -2528,10 +2528,10 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
 .corner__sello { font-size: 11.5px; color: #5f6771; margin-top: 4px; }
 .corner__mensaje { font-size: 12px; color: var(--edoc-negro); margin-top: 2px; line-height: 1.35; }
 
-/* Las marcas del documento: pastillas pequeñas bajo el tipo. Un documento puede
-   llevar varias, así que se envuelven. */
-.edoc-marcas { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-.edoc-marca {
+/* El transaction type del documento: pastillas pequeñas bajo el tipo. Un
+   documento puede llevar varias clasificaciones, así que se envuelven. */
+.edoc-transaccion { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.edoc-transaccion__tipo {
   display: inline-block; font-size: 10.5px; line-height: 1.5; padding: 0 6px;
   border-radius: 999px; background: #eef1f6; color: #4b5563; white-space: nowrap;
 }
@@ -2565,4 +2565,12 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
     max-width: none !important; margin: 0 !important; border: 0 !important; box-shadow: none !important; }
   body.imprimiendo-visor .modal-backdrop { display: none !important; }
   @page { margin: 14mm; }
+}
+
+/* El pie técnico del documento: lo que la autoridad busca —el código del tipo y
+   el transaction type en binario—. Va al final y en pequeño, porque no es lo
+   que lee quien cobra. */
+.visor-tecnico {
+  margin-top: 14px; padding-top: 10px; border-top: 1px solid #e6e6e6;
+  font-size: 11.5px; color: #5f6771;
 }

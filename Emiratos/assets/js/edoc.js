@@ -117,7 +117,8 @@
     { id: 'emision', rotulo: 'Emisión', icono: 'emision', grupos: [
         { titulo: 'Reportes', enlaces: [
             { rotulo: 'Documentos Emitidos', url: 'emitidos.html' },
-            { rotulo: 'Documentos por criterios', fase: 3 } ] }
+            // Construida, pero fuera del MVP: se decidió el 6 de octubre.
+            { rotulo: 'Búsqueda por criterios', fase: 3 } ] }
       ] },
     { id: 'recepcion', rotulo: 'Recepción', icono: 'recepcion', grupos: [
         { titulo: 'Reportes', enlaces: [ { rotulo: 'Documentos Recibidos', url: 'recibidos.html' } ] },

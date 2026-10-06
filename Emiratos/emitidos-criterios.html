@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Documentos Emitidos · eDoc Emiratos</title>
+<title>Búsqueda por criterios · eDoc Emiratos</title>
 <link rel="icon" href="assets/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,56 +23,34 @@
       })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
   </script>
 </head>
-<body data-seccion="emision" data-pagina="emitidos.html">
+<body data-seccion="emision" data-pagina="emitidos-criterios.html">
 
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
 
   <div class="edoc-titulo-barra">
     <div>
-      <div class="edoc-miga"><span>Emisión</span><span>Reportes</span><span>Documentos Emitidos</span></div>
-      <h1 class="edoc-titulo">Documentos Emitidos</h1>
-      <p class="edoc-subtitulo">Lo que tu empresa ha emitido y en qué punto está: primero el camino
-      hasta el destinatario, y aparte la respuesta de la autoridad.</p>
+      <div class="edoc-miga"><span>Emisión</span><span>Reportes</span><span>Búsqueda por criterios</span></div>
+      <h1 class="edoc-titulo">Búsqueda por criterios</h1>
+      <p class="edoc-subtitulo">Para cuando ya sabes qué buscas: el número, el receptor, su registro fiscal,
+      la clasificación del documento o lo que respondió una entidad concreta.</p>
     </div>
   </div>
-
-  <div class="nota nota--decidido">
-    <span class="nota__sello">Decidido · 6 de octubre</span>
-    <strong>Las clasificaciones no van en la lista.</strong> El transaction type puede traer hasta ocho
-    clasificaciones a la vez y con nombres largos: en la tabla «le va a quedar un revuelto ahí de cosas y el
-    cliente no va a entender». Van donde informan una decisión —en el visor del documento, y en la búsqueda por
-    criterios, que es donde alguien las fue a buscar a propósito—, no en la lista de todos los días. En la misma
-    sesión quedó dicho dónde sí importan: «cuando recibe una factura puede que le interese si es de
-    exportación, pero ya viendo los detalles».
-    <br><br>
-    El estado del arte coincide. <em>Progressive disclosure</em> (Nielsen, 1995) funciona mientras la lista
-    principal se quede pequeña, y deja de funcionar si uno recoloca la complejidad en vez de reducirla. Y la
-    prueba de Baymard sobre listas y filtros —19 sitios, más de 700 problemas registrados— encuentra que el daño
-    no lo hace la cantidad de datos sino que la lista cueste de escanear y de predecir. Además, este dato
-    «parece que es más importante para el Ministerio que para los clientes», y para el Ministerio ya está: en el
-    pie técnico del documento, con su binario de ocho posiciones.
-  </div>
-  <div class="nota nota--abierto">
-    <span class="nota__sello">Fuera del MVP · 6 de octubre</span>
-    <strong>La búsqueda por criterios queda construida, pero no entra.</strong> El botón salió de esta pantalla
-    y la vista está fuera de la entrega: quien abra su dirección ve «En construcción». El trabajo no se tira
-    —sirve de referencia para cuando se planifique—, pero no se enseña como si estuviera.
   </div>
 
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido · 6 de octubre</span>
-    <strong>Aquí solo fechas y tipo de documento.</strong> Es el filtro rápido: la consulta en masa de todos los
-    días —«¿qué emití esta semana?»— y en la base de datos es un procedimiento que responde sin pelear. Todo lo
-    demás pasó a <a href="emitidos-criterios.html">Búsqueda por criterios</a>, que es otra pantalla y otro
-    procedimiento, porque «cada campo que se ponga tiene una consecuencia»: índices, tablas temporales y
-    consultas que pueden castigar a los demás clientes.
+    <strong>Son dos búsquedas, y esta es la especializada.</strong> La de todos los días —Documentos Emitidos—
+    se queda con fecha desde, fecha hasta y tipo de documento, y nada más: es el filtro rápido con el que se
+    consulta en masa, y en la base de datos es un procedimiento distinto del de aquí. Esta pantalla es la que
+    acepta número, receptor, registro fiscal, clasificación y estado por entidad, y exige índices y tablas
+    temporales: «cada campo que se ponga tiene una consecuencia».
     <br><br>
-    Y hay respaldo además del operativo: <em>progressive disclosure</em>, de Nielsen, dice que arriba va lo que
-    se necesita a menudo y lo demás un nivel más adentro —mejora aprendizaje, eficiencia y errores—, siempre que
-    la lista principal se quede pequeña. La prueba de Baymard sobre filtros añade que el daño no lo hace el
-    número sino que cuesten de escanear y de predecir, y que una cuarta parte de los sitios pierde a la gente
-    con rótulos poco claros.
+    El respaldo no es solo de negocio. Es <em>progressive disclosure</em>, de Nielsen: arriba lo que se necesita
+    a menudo y un nivel más adentro lo demás, que mejora el aprendizaje, la eficiencia y la tasa de error
+    siempre que la lista principal se quede pequeña. Y la prueba de Baymard sobre listas y filtros —19 sitios,
+    más de 700 problemas— dice que lo que hace daño no es el número de filtros sino que cuesten de escanear y
+    de predecir.
   </div>
 
   <div class="nota nota--decidido">
@@ -105,8 +83,41 @@
             <label class="edoc-etiqueta" for="f-tipo">Tipo de documento</label>
             <select class="custom-select" id="f-tipo"><option value="">Todos</option></select>
           </div>
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
+            <label class="edoc-etiqueta" for="f-numero">Número de documento</label>
+            <input type="text" class="form-control cifra" id="f-numero" placeholder="INV-2026-004871" inputmode="latin">
+          </div>
+          <!-- Por esquina y después por su estado. Son dos campos que van juntos:
+               el segundo no significa nada sin el primero, y por eso nace
+               apagado y se llena con los estados que esa esquina tiene de
+               verdad en los documentos. -->
           <!-- Por marca, porque es como se busca: «enséñame lo de zona franca»,
                sin tener que saber con qué otras marcas viene combinada. -->
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
+            <label class="edoc-etiqueta" for="f-marca">Tipo de transacción</label>
+            <select class="custom-select" id="f-marca"><option value="">Cualquiera</option></select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-esquina">Entidad</label>
+            <select class="custom-select" id="f-esquina">
+              <option value="">Cualquiera</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <label class="edoc-etiqueta" for="f-esquina-estado">Estado de esa entidad</label>
+            <select class="custom-select" id="f-esquina-estado" disabled>
+              <option value="">Elige una entidad primero</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
+            <label class="edoc-etiqueta" for="f-trn">Registro fiscal del receptor</label>
+            <input type="text" class="form-control cifra" id="f-trn" placeholder="100234567800003" inputmode="numeric">
+          </div>
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
+            <label class="edoc-etiqueta" for="f-receptor">Receptor</label>
+            <input type="text" class="form-control" id="f-receptor" placeholder="Nombre del receptor">
+            <div class="edoc-ayuda">Busca por el nombre tal como llega, en el alfabeto que llegue.</div>
+          </div>
         </div>
 
         <button type="button" class="btn btn-edoc-terciario edoc-filtros-mas mt-3" data-filtros-mas
@@ -492,7 +503,7 @@
       '<td><a class="edoc-clave-doc" href="#" data-accion="visor" data-i="' + i + '" ' +
         'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
       '<td class="cifra">' + doc.fecha + '</td>' +
-      '<td>' + doc.tipo + '</td>' +
+      '<td>' + doc.tipo + transaccionHTML(doc) + '</td>' +
       '<td><span data-nombre-latino="' + doc.receptorLatino + '" data-nombre-arabe="' + doc.receptorArabe + '"></span>' +
         '<div class="edoc-secundario cifra">' + doc.trn + '</div></td>' +
       '<td class="cifra">' + doc.moneda + '</td>' +
@@ -793,6 +804,39 @@
     }
     return 'aprobado';
   }
+  /* Los dos desplegables que van juntos: la entidad y su estado. El de estados
+     se llena con lo que esa entidad tiene en los documentos de verdad, así que
+     nunca ofrece una combinación que no devuelva nada. */
+  var ROTULOS_ESTADO = {
+    desconocido: 'Sin respuesta todavía',
+    noaplica: 'No le llegó'
+  };
+  (function () {
+    var entidad = document.getElementById('f-esquina');
+    var estado = document.getElementById('f-esquina-estado');
+    if (!entidad || !estado) return;
+    entidad.innerHTML = '<option value="">Cualquiera</option>' + D.CORNERS.map(function (c) {
+      return '<option value="' + c.clave + '">' + c.nombre + ' (' + c.clave + ')</option>';
+    }).join('');
+    entidad.addEventListener('change', function () {
+      var k = entidad.value;
+      if (!k) {
+        estado.innerHTML = '<option value="">Elige una entidad primero</option>';
+        estado.disabled = true;
+        return;
+      }
+      var vistos = [];
+      D.EMITIDOS.forEach(function (d) {
+        var e = d[k.toLowerCase()];
+        if (e && vistos.indexOf(e) < 0) vistos.push(e);
+      });
+      estado.innerHTML = '<option value="">Cualquier estado</option>' + vistos.map(function (e) {
+        var r = ROTULOS_ESTADO[e] || ((D.ESTADOS[e] || {}).rotulo) || e;
+        return '<option value="' + e + '">' + r + '</option>';
+      }).join('');
+      estado.disabled = false;
+    });
+  }());
 
   /* Si la pantalla está fuera de la entrega, su contenido se cambió por el
      aviso de «En construcción» y los campos ya no existen. El guion sigue
@@ -809,14 +853,21 @@
     fechas: ['f-desde', 'f-hasta'],
     leer: function () {
       return {
-        desde: filtroValor('f-desde'), hasta: filtroValor('f-hasta'), tipo: filtroValor('f-tipo')
+        desde: filtroValor('f-desde'), hasta: filtroValor('f-hasta'), tipo: filtroValor('f-tipo'),
+        numero: filtroValor('f-numero'), marca: filtroValor('f-marca'),
+        esquina: filtroValor('f-esquina'), esquinaEstado: filtroValor('f-esquina-estado'),
+        trn: filtroValor('f-trn').replace(/\D/g, ''), receptor: filtroValor('f-receptor')
       };
     },
     cumple: function (c, tr, i) {
       var doc = D.EMITIDOS[i];
       if (!doc) return true;
       return (!c.desde || doc.fecha >= c.desde) && (!c.hasta || doc.fecha <= c.hasta) &&
-        (!c.tipo || doc.tipo === c.tipo);
+        (!c.tipo || doc.tipo === c.tipo) &&
+        (!c.marca || (doc.transaccion || []).indexOf(c.marca) >= 0) && filtroContiene(doc.numero, c.numero) &&
+        (!c.esquina || !c.esquinaEstado || doc[c.esquina.toLowerCase()] === c.esquinaEstado) &&
+        filtroContiene(doc.trn, c.trn) &&
+        (filtroContiene(doc.receptorLatino, c.receptor) || filtroContiene(doc.receptorArabe, c.receptor));
     }
   });
 
