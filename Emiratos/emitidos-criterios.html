@@ -439,10 +439,20 @@
      XML viajan como un binario de ocho posiciones. Aquí se dicen por su nombre:
      el binario no significa nada para quien lo lee. */
   function transaccionHTML(doc) {
-    if (!doc.transaccion || !doc.transaccion.length) return '';
-    return '<div class="edoc-transaccion">' + doc.transaccion.map(function (m) {
-      return '<span class="edoc-transaccion__tipo">' + m + '</span>';
-    }).join('') + '</div>';
+    var todas = doc.transaccion || [];
+    if (!todas.length) return '';
+    /* Dos y un contador. Con las seis a la vista la fila crece al doble y la
+       tabla deja de escanearse: el patrón de «+N» mantiene la fila en una línea
+       y lo demás se lee en el documento, que es donde decide. */
+    var VISIBLES = 2;
+    var primeras = todas.slice(0, VISIBLES);
+    var resto = todas.length - primeras.length;
+    return '<div class="edoc-transaccion" title="' + todas.join(' · ') + '">' +
+      primeras.map(function (m) {
+        return '<span class="edoc-transaccion__tipo">' + m + '</span>';
+      }).join('') +
+      (resto > 0 ? '<span class="edoc-transaccion__tipo edoc-transaccion__mas">+' + resto + '</span>' : '') +
+      '</div>';
   }
 
   function pastilla(estado, corner, doc) {

@@ -2530,7 +2530,9 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
 
 /* El transaction type del documento: pastillas pequeñas bajo el tipo. Un
    documento puede llevar varias clasificaciones, así que se envuelven. */
-.edoc-transaccion { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+/* En una sola línea: si envuelve, la fila crece y la tabla deja de leerse. */
+.edoc-transaccion { display: flex; flex-wrap: nowrap; gap: 4px; margin-top: 3px; }
+.edoc-transaccion__mas { background: #dde3ec; font-weight: 600; cursor: default; }
 .edoc-transaccion__tipo {
   display: inline-block; font-size: 10.5px; line-height: 1.5; padding: 0 6px;
   border-radius: 999px; background: #eef1f6; color: #4b5563; white-space: nowrap;

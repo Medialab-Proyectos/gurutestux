@@ -33,6 +33,7 @@
       <div class="edoc-miga"><span>Recepción</span><span>Reportes</span><span>Documentos Recibidos</span></div>
       <h1 class="edoc-titulo">Documentos Recibidos</h1>
       <p class="edoc-subtitulo">Lo que llega por la red a nombre de tu empresa. Desde aquí lo apruebas, lo rechazas con un motivo o dejas constancia de que llegó.</p>
+    </div>
     <div class="edoc-titulo-barra__lado">
       <span class="edoc-estado edoc-estado--info" id="sello-clasificacion" hidden>Con clasificación</span>
       <button type="button" class="btn btn-edoc-terciario" id="ver-clasificacion">Mostrar la clasificación</button>
@@ -624,10 +625,20 @@
      XML viajan como un binario de ocho posiciones. Aquí se dicen por su nombre:
      el binario no significa nada para quien lo lee. */
   function transaccionHTML(doc) {
-    if (!doc.transaccion || !doc.transaccion.length) return '';
-    return '<div class="edoc-transaccion">' + doc.transaccion.map(function (m) {
-      return '<span class="edoc-transaccion__tipo">' + m + '</span>';
-    }).join('') + '</div>';
+    var todas = doc.transaccion || [];
+    if (!todas.length) return '';
+    /* Dos y un contador. Con las seis a la vista la fila crece al doble y la
+       tabla deja de escanearse: el patrón de «+N» mantiene la fila en una línea
+       y lo demás se lee en el documento, que es donde decide. */
+    var VISIBLES = 2;
+    var primeras = todas.slice(0, VISIBLES);
+    var resto = todas.length - primeras.length;
+    return '<div class="edoc-transaccion" title="' + todas.join(' · ') + '">' +
+      primeras.map(function (m) {
+        return '<span class="edoc-transaccion__tipo">' + m + '</span>';
+      }).join('') +
+      (resto > 0 ? '<span class="edoc-transaccion__tipo edoc-transaccion__mas">+' + resto + '</span>' : '') +
+      '</div>';
   }
 
   /* Si la pantalla está fuera de la entrega, su contenido se cambió por el
