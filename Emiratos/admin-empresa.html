@@ -34,7 +34,12 @@
   <!-- Lo primero de esta pantalla es si la empresa está habilitada, porque es
        lo que decide si el portal sirve para algo. El dato de verdad no es un
        cartel nuestro: es la dirección con la que la empresa existe en la red. -->
-  <section class="edoc-tablero">
+  <!-- MVP2 · 6 de octubre. La conexión con la autoridad sale de la entrega:
+       la mitad de lo que enseña —la confirmación y el estado— depende de un
+       aviso que la autoridad todavía no nos manda, y la otra mitad no hace
+       falta para cerrar el MVP. Se enseña con ?conexion=1 y está apuntada en
+       el informe para gerencia. -->
+  <section class="edoc-tablero" id="bloque-conexion" hidden>
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Conexión con la autoridad</h2>
       <span class="edoc-estado edoc-estado--exito" id="estado-conexion">Activa</span>
@@ -111,6 +116,16 @@
       </div>
     </div>
   </section>
+
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">MVP2 · 6 de octubre</span>
+    <strong>La conexión con la autoridad se va al MVP2.</strong> Enseñaba el proveedor nombrado en EmaraTax, el
+    Participant ID y la asociación. Sale entera: la confirmación y el estado dependen de un aviso de la
+    autoridad que hoy no existe —«sospecho que nos van a hacer un callback»—, y lo demás no hace falta para
+    cerrar el MVP. Queda construida y se enseña con <span class="cifra">?conexion=1</span>. Está apuntada en el
+    informe para gerencia como pendiente del MVP2, con su razón, para que no se pierda.
+  </div>
 
   <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Identificación</h2></div>
@@ -392,6 +407,12 @@
   /* El estado de la asociación solo si se pide por la dirección: hoy no hay
      servicio que nos lo diga, así que por defecto no se enseña. */
   (function () {
+    /* La conexión con la autoridad es del MVP2: se enseña solo si se pide. */
+    var bloque = document.getElementById('bloque-conexion');
+    try {
+      if (bloque && new URLSearchParams(window.location.search).has('conexion')) bloque.hidden = false;
+    } catch (e) { /* nada */ }
+
     var caja = document.getElementById('caja-estado-asociacion');
     if (!caja) return;
     try {
