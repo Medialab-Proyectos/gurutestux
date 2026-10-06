@@ -1074,6 +1074,8 @@
       "Archivo": "File",
       "Antes de entrar": "Before you go in",
       "Mi perfil": "My profile",
+      "Razón social, TRN y dirección": "Registered name, TRN and address",
+      "Como figura en tu certificado": "As shown on your certificate",
       "Está en el mismo certificado de la Federal Tax Authority, más abajo, en la lista de establecimientos, como «License Number». Con el número basta: el archivo de arriba es el soporte y de ahí sale la fecha de vencimiento, no hace falta escribirla.": "It is on the same Federal Tax Authority certificate, further down, in the list of establishments, as «License Number». The number is enough: the file above is the supporting document and the expiry date comes from it, you do not need to type it.",
       "Con el certificado de la Federal Tax Authority tienes todo lo que te pedimos.": "Your Federal Tax Authority certificate has everything we ask for.",
       "Arriba está tu registro fiscal y más abajo el número de licencia: son las dos cosas que necesitamos para el contrato.": "Your tax registration is at the top and the licence number further down: those are the two things we need for the contract.",
