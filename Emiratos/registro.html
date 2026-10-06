@@ -296,24 +296,16 @@
             <input class="form-control" id="e-nativo" dir="rtl" placeholder="النور للتجارة ذ.م.م">
             <div class="edoc-ayuda">Un solo alfabeto por campo: aquí el árabe, arriba el latino.</div>
           </div>
-          <!-- La pregunta del IVA va antes que el TRN: el número solo se pide a
-               quien está registrado, y preguntarlo después es pedir un dato que
-               puede no existir. -->
-          <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="e-sujeta">Empresa sujeta a IVA
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <select class="custom-select" id="e-sujeta">
-              <option value="">Selecciona una opción</option>
-              <!-- Con valor propio: el traductor cambia el texto de la opción, y con él
-                   cambiaría el valor. La condición del TRN se lee de aquí. -->
-              <option value="si">Sí</option><option value="no">No</option>
-            </select>
-          </div>
+          <!-- Administración, 6 de octubre: el TRN es obligatorio. Sin TRN no hay
+               TIN, y sin TIN no hay dirección en la red: la plataforma es para
+               empresas registradas en IVA. Por eso ya no se pregunta si lo está:
+               tener TRN lo responde. -->
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-trn">Número de registro fiscal · TRN
-              <span class="marca-campo marca-campo--opcional" id="marca-trn">Si estás sujeta a IVA</span></label>
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
             <input class="form-control cifra" id="e-trn" inputmode="numeric" maxlength="15" placeholder="15 dígitos">
-            <div class="edoc-ayuda">Quince cifras, tal como figura en tu registro fiscal.</div>
+            <div class="edoc-ayuda">Quince cifras, tal como figura en tu registro fiscal. Tus diez primeras
+            cifras son tu TIN, que es la dirección a la que te llegarán las facturas.</div>
           </div>
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-ciudad">Ciudad
@@ -352,7 +344,7 @@
               <path d="M10 13.5V4"/><path d="M6.4 7.6L10 4l3.6 3.6"/><path d="M3.5 13.5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2"/>
             </svg>
           </span>
-          <span class="reg__subir-t" id="subir-t">Licencia comercial</span>
+          <span class="reg__subir-t" id="subir-t">Licencia comercial · opcional</span>
           <span class="reg__subir-s" id="subir-s">Haz clic para subir un archivo</span>
           <span class="reg__subir-f">Formatos permitidos: PDF, PNG o JPG · Máximo 10&nbsp;MB por archivo</span>
         </label>
@@ -363,22 +355,17 @@
         </div>
 
         <div class="row rejilla mt-3">
+          <!-- Administración, 6 de octubre: el documento es el registro comercial
+               y «el único es licencia comercial, no vamos con otro más», así que
+               no hay tipo que elegir. Del resto: «el número, no necesitamos el
+               archivo», y la caducidad no se escribe —va en el archivo que
+               suba—. Menos campos, menos fricción. -->
           <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="d-tipo">Tipo de registro legal
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <select class="custom-select mb-3" id="d-tipo">
-              <option value="">Selecciona una opción</option>
-              <option>Licencia comercial</option><option>Registro mercantil</option>
-              <option>Licencia de zona franca</option>
-            </select>
-            <label class="edoc-etiqueta" for="d-numero">Número de licencia
+            <label class="edoc-etiqueta" for="d-numero">Número de la licencia comercial
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
             <input class="form-control cifra" id="d-numero" placeholder="Como figura en la licencia">
-          </div>
-          <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="d-caduca">Válida hasta
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <input type="date" class="form-control" id="d-caduca" value="2027-06-30">
+            <div class="edoc-ayuda">Con el número basta. El archivo de arriba es el soporte, y de ahí sale la
+            fecha de vencimiento: no hace falta escribirla.</div>
           </div>
         </div>
       </div>
@@ -538,6 +525,22 @@
     Con soporte de por medio conviene decidir si se le añade una referencia corta y legible del tipo
     <span class="cifra">REG-2026-00918</span>, que es la que ya usa la bandeja del Office Manager.
   </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Respondido por administración · 6 de octubre</span>
+    <strong>Lo que de verdad se pide para el contrato.</strong> Preguntado a administración, que es quien recibe
+    a la empresa:
+    <br>· <strong>El documento es el registro comercial</strong>, y de tipos «el único es licencia comercial, no
+    vamos con otro más»: fuera el desplegable, siempre es esa.
+    <br>· <strong>«El número, no necesitamos el archivo»</strong>, y la fecha de vencimiento no se escribe
+    —sale del archivo que suba—. El archivo queda como soporte opcional: menos campos, menos fricción.
+    <br>· <strong>El TRN es obligatorio.</strong> Sin TRN no hay TIN, y sin TIN no hay dirección en la red: la
+    plataforma es para empresas registradas en IVA. Por eso sale la pregunta de si está sujeta a IVA, que tener
+    TRN ya responde. Esto revierte lo que se puso el 5 de octubre, cuando se dejó condicional por la norma: en
+    el documento sí es condicional (<span class="cifra">IBT-031</span>), pero para entrar a la plataforma no.
+    <br>· <strong>Falta un contacto más</strong> además de comercial y cobros. En la grabación no se oye cuál,
+    así que queda abierto: no se adivina.
+  </div>
+
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido · 5 de octubre</span>
     <strong>El tratamiento de IVA sale del registro.</strong> Venía de Francia, donde sí decide: según el régimen
@@ -720,27 +723,13 @@
     { n: 6, icono: 'aprobar', rotulo: 'Revisión final',             sub: 'Verifica antes de enviar' }
   ];
 
-  /* La marca del TRN dice la verdad en cada momento: obligatorio en cuanto
-     dice que está sujeta a IVA, y «si estás sujeta» mientras no lo diga. */
-  (function () {
-    var sujeta = $('e-sujeta');
-    var marca = $('marca-trn');
-    if (!sujeta || !marca) return;
-    sujeta.addEventListener('change', function () {
-      var si = sujeta.value === 'si';
-      marca.textContent = si ? 'Obligatorio' : 'Si estás sujeta a IVA';
-      marca.className = 'marca-campo marca-campo--' + (si ? 'obligatorio' : 'opcional');
-    });
-  }());
 
   /* El emirato es opcional y el TRN solo se pide a quien está sujeta a IVA:
      así lo dice la reglamentación de Emiratos. La lista cambia con la
      respuesta, y por eso se calcula en vez de estar escrita. */
   function datosEmpresa() {
-    var lista = [['e-legal', 'Razón social'], ['e-sujeta', 'Sujeta a IVA'],
-                 ['e-dir', 'Calle y edificio'], ['e-ciudad', 'Ciudad']];
-    if (val('e-sujeta') === 'si') lista.splice(2, 0, ['e-trn', 'Registro fiscal']);
-    return lista;
+    return [['e-legal', 'Razón social'], ['e-trn', 'Registro fiscal'],
+            ['e-dir', 'Calle y edificio'], ['e-ciudad', 'Ciudad']];
   }
 
   /* Qué campos mira cada paso: sirve para el estado de la tarjeta y para los
@@ -754,8 +743,7 @@
     return ({
       2: [['a-nombre', 'Nombre'], ['a-cargo', 'Cargo'], ['a-tel', 'Teléfono']],
       3: datosEmpresa(),
-      4: [['d-archivo', 'Archivo'], ['d-tipo', 'Tipo de registro legal'],
-          ['d-numero', 'Número de licencia'], ['d-caduca', 'Válida hasta']],
+      4: [['d-numero', 'Número de la licencia comercial']],
       5: [['r-com', 'Contacto comercial'], ['r-com-c', 'Correo comercial'],
           ['r-cob', 'Contacto de cobros'], ['r-cob-c', 'Correo de cobros']],
       6: [['l-privacidad', 'Política de privacidad'], ['l-condiciones', 'Términos de servicio'],
@@ -806,17 +794,10 @@
     if (paso === 2 && !/^[\d\s]{7,}$/.test(val('a-tel'))) {
       return { id: 'a-tel', texto: 'El teléfono son solo cifras, sin el código de país.' };
     }
-    if (paso === 3 && val('e-sujeta') === 'si' && !/^\d{15}$/.test(val('e-trn'))) {
+    if (paso === 3 && !/^\d{15}$/.test(val('e-trn'))) {
       return { id: 'e-trn', texto: 'El registro fiscal son quince cifras.' };
     }
-    /* Quien no está sujeta a IVA no tiene TRN: si lo escribe igual, al menos
-       que esté bien escrito. */
-    if (paso === 3 && val('e-sujeta') === 'no' && val('e-trn') && !/^\d{15}$/.test(val('e-trn'))) {
-      return { id: 'e-trn', texto: 'Si pones el registro fiscal, son quince cifras.' };
-    }
-    if (paso === 4 && val('d-caduca') && val('d-caduca') < hoy()) {
-      return { id: 'd-caduca', texto: 'La licencia está caducada. Sube la vigente y pon su nueva fecha.' };
-    }
+
     if (paso === 5) {
       var correos = [['r-com-c', 'comercial'], ['r-cob-c', 'cobros']];
       for (var j = 0; j < correos.length; j++) {

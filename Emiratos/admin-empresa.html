@@ -142,18 +142,14 @@
           <input class="form-control" id="e2" dir="rtl" lang="ar" value="النور للتجارة ذ.م.م">
           <div class="edoc-ayuda">Campo aparte, en un solo alfabeto. Nunca se traduce el nombre de una empresa.</div></div>
         <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e10">Tipo de registro legal<span class="obligatorio">*</span></label>
-          <select class="custom-select" id="e10">
-            <option>Licencia comercial</option><option>Registro mercantil</option>
-            <option>Licencia de zona franca</option></select>
-          <div class="edoc-ayuda">Qué documento es el número de abajo.</div></div>
+          <label class="edoc-etiqueta" for="e4">Número de la licencia comercial<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="e4" value="CN-1183042" required>
+          <div class="edoc-ayuda">Es el documento que pide administración para el contrato. No hay otro tipo.</div></div>
         <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e4">Número del registro legal<span class="obligatorio">*</span></label>
-          <input class="form-control cifra" id="e4" value="CN-1183042" required></div>
-        <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e3">Registro fiscal · TRN</label>
-          <input class="form-control cifra" id="e3" value="100776655400003" inputmode="numeric">
-          <div class="edoc-ayuda">Obligatorio si tu empresa está registrada en IVA. Si no lo está, se deja vacío.</div></div>
+          <label class="edoc-etiqueta" for="e3">Registro fiscal · TRN<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="e3" value="100776655400003" inputmode="numeric" required>
+          <div class="edoc-ayuda">Tus diez primeras cifras son tu TIN, que es tu dirección en la red. Sin TRN no
+          hay dirección, así que la plataforma lo pide siempre.</div></div>
         <div class="col-12 col-md-6">
           <label class="edoc-etiqueta" for="e8">Nombre comercial</label>
           <input class="form-control" id="e8" value="Al Noor">
