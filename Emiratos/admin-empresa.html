@@ -148,8 +148,9 @@
         <div class="col-12 col-md-6">
           <label class="edoc-etiqueta" for="e3">Registro fiscal · TRN<span class="obligatorio">*</span></label>
           <input class="form-control cifra" id="e3" value="100776655400003" inputmode="numeric" required>
-          <div class="edoc-ayuda">Tus diez primeras cifras son tu TIN, que es tu dirección en la red. Sin TRN no
-          hay dirección, así que la plataforma lo pide siempre.</div></div>
+          <div class="edoc-ayuda">Está en tu certificado de la Federal Tax Authority, como «Tax Registration
+          Number». Sus diez primeras cifras son tu TIN, que es tu dirección en la red: sin TRN no hay dirección,
+          así que la plataforma lo pide siempre.</div></div>
         <div class="col-12 col-md-6">
           <label class="edoc-etiqueta" for="e8">Nombre comercial</label>
           <input class="form-control" id="e8" value="Al Noor">
@@ -297,6 +298,21 @@
     chip.className = 'edoc-estado edoc-estado--' + ROTULOS[cual][1];
   }());
   </script>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Contrastado con el certificado · 6 de octubre</span>
+    <strong>El certificado de la autoridad trae justo lo que pedimos.</strong> Llegó un certificado de registro
+    de la Federal Tax Authority y los campos coinciden uno a uno: Tax Registration Number, nombre legal en
+    inglés, nombre legal en árabe y dirección registrada. Dos consecuencias: el nombre en árabe tiene fuente
+    oficial —el cliente lo copia de ahí, no lo escribe de memoria— y la dirección viene por partes, como la
+    pedimos. Por eso las ayudas dicen ahora de dónde sacar cada dato.
+    <br><br>
+    Y abre dos preguntas para la autoridad, anotadas en el informe: ese certificado es de <strong>Impuesto de
+    Sociedades</strong>, no de IVA —su TRN termina en <span class="cifra">00001</span> y los de IVA terminan en
+    <span class="cifra">00003</span>—, así que hay que confirmar que las diez primeras cifras, el TIN, son las
+    mismas en los dos; y que quien no está registrado en ningún impuesto pero entra en el mandato obtiene un TIN
+    en EmaraTax, o sea que puede haber TIN sin TRN de IVA.
+  </div>
+
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido · 5 de octubre</span>
     <strong>En esta pantalla solo van los datos que pide la reglamentación.</strong> La referencia es la
