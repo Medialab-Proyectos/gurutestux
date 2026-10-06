@@ -1074,6 +1074,7 @@
       "Archivo": "File",
       "Antes de entrar": "Before you go in",
       "Mi perfil": "My profile",
+      "Clasificación": "Classification",
       "Mostrar la clasificación": "Show the classification",
       "Ocultar la clasificación": "Hide the classification",
       "Con clasificación": "With classification",

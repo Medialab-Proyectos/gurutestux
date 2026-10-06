@@ -2530,9 +2530,14 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
 
 /* El transaction type del documento: pastillas pequeñas bajo el tipo. Un
    documento puede llevar varias clasificaciones, así que se envuelven. */
-/* En una sola línea: si envuelve, la fila crece y la tabla deja de leerse. */
-.edoc-transaccion { display: flex; flex-wrap: nowrap; gap: 4px; margin-top: 3px; }
-.edoc-transaccion__mas { background: #dde3ec; font-weight: 600; cursor: default; }
+/* Una debajo de otra, todas a la vista: la columna es estrecha y el dato se
+   lee sin pasar el ratón por encima. */
+.edoc-transaccion { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+
+/* La columna solo se enseña con el interruptor. Se esconde por CSS y no
+   quitándola del HTML, para que la tabla no haya que volver a montarla. */
+.col-clasificacion { display: none; }
+body.con-clasificacion .col-clasificacion { display: table-cell; }
 .edoc-transaccion__tipo {
   display: inline-block; font-size: 10.5px; line-height: 1.5; padding: 0 6px;
   border-radius: 999px; background: #eef1f6; color: #4b5563; white-space: nowrap;

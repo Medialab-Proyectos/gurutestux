@@ -222,7 +222,7 @@
       <table class="edoc-tabla" id="tabla-emitidos">
         <thead>
           <tr>
-            <th colspan="9" style="background:#fff;border-bottom-color:#fff"></th>
+            <th colspan="10" style="background:#fff;border-bottom-color:#fff"></th>
             <th colspan="4" class="agrupador">Estado por entidad
               <button type="button" class="agrupador__ayuda" data-toggle="modal" data-target="#modal-corners"
                       aria-label="Qué son C2, C5, C3 y C4">?</button>
@@ -233,6 +233,9 @@
             <th scope="col">Número de documento</th>
             <th scope="col">Fecha de emisión</th>
             <th scope="col">Tipo de documento</th>
+            <!-- Existe siempre; se enseña con el interruptor. Así la tabla no se
+                 vuelve a montar y el orden y la paginación no se enteran. -->
+            <th scope="col" class="col-clasificacion">Clasificación</th>
             <th scope="col">Receptor</th>
             <th scope="col">Moneda</th>
             <th scope="col" class="text-right">Base imponible</th>
@@ -458,21 +461,15 @@
      llevar varias clasificaciones a la vez —exportación y zona franca— y en el
      XML viajan como un binario de ocho posiciones. Aquí se dicen por su nombre:
      el binario no significa nada para quien lo lee. */
+  /* Una clasificación por línea, todas a la vista. Sin «+N»: esconder cuatro
+     detrás del ratón no sirve en el móvil ni con teclado, y el dato o se ve o
+     no se pone. La columna se enseña con el interruptor. */
   function transaccionHTML(doc) {
     var todas = doc.transaccion || [];
-    if (!todas.length) return '';
-    /* Dos y un contador. Con las seis a la vista la fila crece al doble y la
-       tabla deja de escanearse: el patrón de «+N» mantiene la fila en una línea
-       y lo demás se lee en el documento, que es donde decide. */
-    var VISIBLES = 2;
-    var primeras = todas.slice(0, VISIBLES);
-    var resto = todas.length - primeras.length;
-    return '<div class="edoc-transaccion" title="' + todas.join(' · ') + '">' +
-      primeras.map(function (m) {
-        return '<span class="edoc-transaccion__tipo">' + m + '</span>';
-      }).join('') +
-      (resto > 0 ? '<span class="edoc-transaccion__tipo edoc-transaccion__mas">+' + resto + '</span>' : '') +
-      '</div>';
+    if (!todas.length) return '<span class="edoc-secundario">—</span>';
+    return '<div class="edoc-transaccion">' + todas.map(function (m) {
+      return '<span class="edoc-transaccion__tipo">' + m + '</span>';
+    }).join('') + '</div>';
   }
 
   function pastilla(estado, corner, doc) {
@@ -533,7 +530,8 @@
       '<td><a class="edoc-clave-doc" href="#" data-accion="visor" data-i="' + i + '" ' +
         'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
       '<td class="cifra">' + doc.fecha + '</td>' +
-      '<td>' + doc.tipo + (conClasificacion() ? transaccionHTML(doc) : '') + '</td>' +
+      '<td>' + doc.tipo + '</td>' +
+      '<td class="col-clasificacion">' + transaccionHTML(doc) + '</td>' +
       '<td><span data-nombre-latino="' + doc.receptorLatino + '" data-nombre-arabe="' + doc.receptorArabe + '"></span>' +
         '<div class="edoc-secundario cifra">' + doc.trn + '</div></td>' +
       '<td class="cifra">' + doc.moneda + '</td>' +
@@ -741,11 +739,12 @@
       if (sello) sello.hidden = !puesta;
     }
     pintarEstado();
+    document.body.classList.toggle('con-clasificacion', conClasificacion());
     boton.addEventListener('click', function () {
       try { window.sessionStorage.setItem('edoc-clasificacion', conClasificacion() ? '0' : '1'); }
       catch (e) { /* nada */ }
       pintarEstado();
-      window.edocRepintarTabla();
+      document.body.classList.toggle('con-clasificacion', conClasificacion());
     });
   }());
 
