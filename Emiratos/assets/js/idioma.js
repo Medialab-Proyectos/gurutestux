@@ -1074,6 +1074,8 @@
       "Archivo": "File",
       "Antes de entrar": "Before you go in",
       "Mi perfil": "My profile",
+      "Certificado fiscal · Tax Certificate": "Tax Certificate",
+      "Es el documento del que salen los dos números. Haz clic para subirlo.": "It is the document both numbers come from. Click to upload it.",
       "Razón social, TRN y dirección": "Registered name, TRN and address",
       "Como figura en tu certificado": "As shown on your certificate",
       "Está en el mismo certificado de la Federal Tax Authority, más abajo, en la lista de establecimientos, como «License Number». Con el número basta: el archivo de arriba es el soporte y de ahí sale la fecha de vencimiento, no hace falta escribirla.": "It is on the same Federal Tax Authority certificate, further down, in the list of establishments, as «License Number». The number is enough: the file above is the supporting document and the expiry date comes from it, you do not need to type it.",

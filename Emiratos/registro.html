@@ -347,8 +347,8 @@
               <path d="M10 13.5V4"/><path d="M6.4 7.6L10 4l3.6 3.6"/><path d="M3.5 13.5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2"/>
             </svg>
           </span>
-          <span class="reg__subir-t" id="subir-t">Licencia comercial · opcional</span>
-          <span class="reg__subir-s" id="subir-s">Haz clic para subir un archivo</span>
+          <span class="reg__subir-t" id="subir-t">Certificado fiscal · Tax Certificate</span>
+          <span class="reg__subir-s" id="subir-s">Es el documento del que salen los dos números. Haz clic para subirlo.</span>
           <span class="reg__subir-f">Formatos permitidos: PDF, PNG o JPG · Máximo 10&nbsp;MB por archivo</span>
         </label>
         <div class="nota nota--decidido">
@@ -529,22 +529,35 @@
     Con soporte de por medio conviene decidir si se le añade una referencia corta y legible del tipo
     <span class="cifra">REG-2026-00918</span>, que es la que ya usa la bandeja del Office Manager.
   </div>
-  <div class="nota nota--decidido">
-    <span class="nota__sello">Respondido por administración · 6 de octubre</span>
-    <strong>Lo que de verdad se pide para el contrato.</strong> Preguntado a administración, que es quien recibe
-    a la empresa:
-    <br>· <strong>El documento es el registro comercial</strong>, y de tipos «el único es licencia comercial, no
-    vamos con otro más»: fuera el desplegable, siempre es esa.
-    <br>· <strong>«El número, no necesitamos el archivo»</strong>, y la fecha de vencimiento no se escribe
-    —sale del archivo que suba—. El archivo queda como soporte opcional: menos campos, menos fricción.
-    <br>· <strong>El TRN es obligatorio.</strong> Sin TRN no hay TIN, y sin TIN no hay dirección en la red: la
-    plataforma es para empresas registradas en IVA. Por eso sale la pregunta de si está sujeta a IVA, que tener
-    TRN ya responde. Esto revierte lo que se puso el 5 de octubre, cuando se dejó condicional por la norma: en
-    el documento sí es condicional (<span class="cifra">IBT-031</span>), pero para entrar a la plataforma no.
-    <br>· <strong>Falta un contacto más</strong> además de comercial y cobros. En la grabación no se oye cuál,
-    así que queda abierto: no se adivina.
-  </div>
-
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · 6 de octubre</span>
+    <strong>El archivo que se adjunta es el certificado fiscal, no la licencia.</strong> Decía «licencia
+    comercial» porque así empezó, pero los dos datos que pedimos —el registro fiscal y el número de licencia—
+    salen del <em>Tax Certificate</em> de la autoridad. Pedir otra cosa manda al cliente a buscar un segundo
+    papel que no necesitamos. Ya está cambiado.
+    <br><br>
+    Queda por decidir si <strong>pasa a obligatorio</strong>. Hoy es opcional porque administración dijo «el
+    número, no necesitamos el archivo». Pero si el certificado es la prueba de los dos números, y el cliente
+    acaba de descargarlo para poder llegar hasta aquí, pedirlo no añade fricción y nos ahorra comprobarlos a
+    mano. Es decisión de administración, de una línea.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Respondido por administración · 6 de octubre</span>
+    <strong>Lo que de verdad se pide para el contrato.</strong> Preguntado a administración, que es quien recibe
+    a la empresa:
+    <br>· <strong>El documento es el registro comercial</strong>, y de tipos «el único es licencia comercial, no
+    vamos con otro más»: fuera el desplegable, siempre es esa.
+    <br>· <strong>«El número, no necesitamos el archivo»</strong>, y la fecha de vencimiento no se escribe
+    —sale del archivo que suba—. El archivo queda como soporte opcional: menos campos, menos fricción.
+    <br>· <strong>El TRN es obligatorio.</strong> Sin TRN no hay TIN, y sin TIN no hay dirección en la red: la
+    plataforma es para empresas registradas en IVA. Por eso sale la pregunta de si está sujeta a IVA, que tener
+    TRN ya responde. Esto revierte lo que se puso el 5 de octubre, cuando se dejó condicional por la norma: en
+    el documento sí es condicional (<span class="cifra">IBT-031</span>), pero para entrar a la plataforma no.
+    <br>· <strong>Falta un contacto más</strong> además de comercial y cobros. En la grabación no se oye cuál,
+    así que queda abierto: no se adivina.
+  </div>
+
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido · 5 de octubre</span>
     <strong>El tratamiento de IVA sale del registro.</strong> Venía de Francia, donde sí decide: según el régimen
@@ -1388,7 +1401,7 @@
   $('d-archivo').addEventListener('change', function () {
     var hay = this.files.length > 0;
     $('zona-subir').classList.toggle('reg__subir--lleno', hay);
-    $('subir-t').textContent = hay ? this.files[0].name : 'Licencia comercial';
+    $('subir-t').textContent = hay ? this.files[0].name : 'Certificado fiscal · Tax Certificate';
     $('subir-s').textContent = hay
       ? 'Archivo cargado. Haz clic para cambiarlo.'
       : 'Haz clic para subir un archivo';
