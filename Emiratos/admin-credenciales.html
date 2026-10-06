@@ -138,19 +138,23 @@
       <ul class="linea-tiempo mb-4">
         <li>
           <div class="linea-tiempo__titulo">1 · Pide un token</div>
-          <div class="linea-tiempo__detalle">Con el identificador y el secreto de la aplicación, contra el
-          servicio de autenticación.</div>
+          <div class="linea-tiempo__detalle">Un POST al servicio de autenticación con
+          grant_type=client_credentials. El identificador y el secreto van en la cabecera Authorization como
+          Basic, que es la forma que el estándar recomienda; mandarlos en el cuerpo también funciona, pero no
+          es la recomendada. Puedes pedir en scope solo los permisos que vas a usar en esa llamada.</div>
         </li>
         <li>
           <div class="linea-tiempo__titulo">2 · Llama con el token</div>
-          <div class="linea-tiempo__detalle">Va en la cabecera <span class="cifra">Authorization</span> de cada
-          petición, como <span class="cifra">Bearer</span>. Solo funcionará con los permisos que le diste a
-          esa aplicación.</div>
+          <div class="linea-tiempo__detalle">Va en la cabecera Authorization de cada petición, como Bearer.
+          Solo funcionará con los permisos que le diste a esa aplicación: en el estándar, esos permisos son
+          los scopes, y la respuesta del token te dice cuáles concedió.</div>
         </li>
         <li>
-          <div class="linea-tiempo__titulo">3 · Pide otro cuando caduque</div>
-          <div class="linea-tiempo__detalle">El token dura <strong>una hora</strong>. Tu sistema lo renueva
-          solo; no hace falta que nadie entre aquí a tocar nada.</div>
+          <div class="linea-tiempo__titulo">3 · Guárdalo y pide otro cuando caduque</div>
+          <div class="linea-tiempo__detalle">El token dura una hora. Guárdalo y reúsalo hasta que falte un
+          minuto para que caduque; pedir uno en cada llamada es el error más común al integrar. En este flujo
+          no hay refresh token —el estándar dice que no debe incluirse—, así que renovar es volver a pedir con
+          el paso 1. No hay un cuarto paso.</div>
         </li>
       </ul>
 
@@ -162,11 +166,20 @@
         <table class="edoc-tabla">
           <thead><tr><th scope="col">Respuesta</th><th scope="col">Qué quiere decir</th><th scope="col">Qué hacer</th></tr></thead>
           <tbody>
-            <tr><td class="cifra">401</td><td>El token no vale: caducó o el identificador o el secreto no son
-              los de la aplicación.</td><td>Pide un token nuevo. Si sigue, comprueba que el secreto es el
-              vigente: sus últimos cuatro caracteres están en la lista de aplicaciones.</td></tr>
-            <tr><td class="cifra">403</td><td>El token es bueno, pero la aplicación no tiene permiso para esa
-              llamada.</td><td>Añádeselo desde <strong>Permisos</strong>, en la fila de la aplicación.</td></tr>
+            <tr><td class="cifra">400</td><td>La petición del token está mal armada, o pediste un permiso que
+              esta aplicación no tiene. El cuerpo lo dice: invalid_request o invalid_scope.</td>
+              <td>Revisa el grant_type y que los permisos que pides en scope sean los que tiene la
+              aplicación.</td></tr>
+            <tr><td class="cifra">401</td><td>El token no vale: caducó, o el identificador y el secreto no son
+              los de la aplicación. Al pedir el token, el estándar lo llama invalid_client.</td>
+              <td>Pide un token nuevo. Si sigue, comprueba que el secreto es el vigente: sus últimos cuatro
+              caracteres están en la lista de aplicaciones.</td></tr>
+            <tr><td class="cifra">403</td><td>El token es bueno, pero a la aplicación le falta el permiso de
+              esa llamada. El estándar lo llama insufficient_scope.</td>
+              <td>Añádeselo desde <strong>Permisos</strong>, en la fila de la aplicación.</td></tr>
+            <tr><td class="cifra">429</td><td>Demasiadas llamadas seguidas.</td>
+              <td>Espera lo que diga la cabecera Retry-After y reintenta separando cada vez más. No pidas un
+              token nuevo: el que tienes sigue valiendo.</td></tr>
           </tbody>
         </table>
       </div>
@@ -187,22 +200,37 @@
       <a href="https://wikiedoc.guru-soft.com/integraciones-y-servicios/rest" target="_blank" rel="noopener">documentación técnica</a>.</p>
 
       <div class="edoc-etiqueta mb-2">Ejemplo, para copiar tal cual</div>
-      <pre class="edoc-codigo"><code>curl -X POST https://auth.edoc.ae/auth/realms/ae/protocol/openid-connect/token \
+      <pre class="edoc-codigo"><code># 1 · The token. Client ID and secret go in Basic, the recommended form.
+#     In scope, only the permissions you are going to use.
+curl -X POST https://auth.edoc.ae/auth/realms/ae/protocol/openid-connect/token \
+  -u "alnoor-erp-sap:YOUR_APPLICATION_SECRET" \
   -d "grant_type=client_credentials" \
-  -d "client_id=alnoor-erp-sap" \
-  -d "client_secret=EL_SECRETO_DE_TU_APLICACION"
+  -d "scope=emision:enviar emision:estados"
 
-# Respuesta
-{ "access_token": "eyJhbGciOi...", "token_type": "Bearer", "expires_in": 3600 }
+# Response: no refresh token, because this flow does not carry one.
+{ "access_token": "eyJhbGciOi...", "token_type": "Bearer", "expires_in": 3600,
+  "scope": "emision:enviar emision:estados" }
 
-# Y a partir de ahí, en cada llamada
+# 2 · Every call, with the token. The same token for all of them.
 curl https://api.edoc.ae/api/ae/emision/v1/documentos \
-  -H "Authorization: Bearer eyJhbGciOi..."</code></pre>
+  -H "Authorization: Bearer eyJhbGciOi..."
+
+# 3 · A minute before the 3600 seconds run out, go back to step 1.</code></pre>
 
       <!-- Pedido en la sesión técnica del 8: «aquí será muy práctico tener un
            hipervínculo, un enlace que me lleve directamente a la wiki». Hoy el
            enlace llega por correo o por otro lado, y el desarrollador tiene que
            salir a buscarlo. -->
+      <div class="edoc-aviso edoc-aviso--info mb-3">
+        <div><strong>Esto no lo inventamos nosotros.</strong> Es el flujo «client credentials» del estándar
+        OAuth 2.0 —RFC 6749, apartado 4.4— con el token portador de la RFC 6750. Tres pasos: pedir el token,
+        llamar con él y volver a pedirlo al caducar. Ni uno más: en este flujo no hay refresh token ni
+        intervención de una persona, porque no hay nadie delante. Ni uno menos: el secreto no viaja en las
+        llamadas, solo al pedir el token. Los códigos por correo de esta pantalla son del portal, para la
+        persona que administra: ver el secreto, cambiar permisos o retirar una aplicación. El sistema que
+        llama no pide códigos nunca, y el flujo de arriba no cambia por ellos.</div>
+      </div>
+
       <div class="edoc-aviso edoc-aviso--info mb-0">
         <div><strong>El detalle de cada llamada está en la wiki.</strong> Cuerpos, errores, códigos y
         ejemplos completos.
@@ -337,6 +365,15 @@ curl https://api.edoc.ae/api/ae/emision/v1/documentos \
     Recepción. Queda por confirmar si la lista crece cuando se añadan servicios; con muchos más, esta pantalla
     cambia de comportamiento —alto del diálogo, desplazamiento y la columna de permisos de la tabla— y conviene
     probarla con el volumen real antes de programarla.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 6 de octubre</span>
+    <strong>Rotar el secreto no corta la integración.</strong> Teníamos el anterior muriendo en el acto, y eso
+    obliga a desplegar el secreto nuevo en el mismo minuto o las llamadas devuelven 401. Lo que hace el mercado
+    —y lo que el servidor de identidades ya sabe hacer— es dejar los dos vivos una ventana: el nuevo desde ya y
+    el anterior hasta que caduque o hasta que lo retires, cuando el sistema ya use el nuevo. No se inventa
+    nada: es lo que espera cualquiera que haya rotado un secreto en producción, y adoptarlo no cuesta porque el
+    comportamiento es del propio Keycloak. Retirar el anterior no pide código: quita acceso, no lo da.
   </div>
   <div class="nota nota--decidido">
     <span class="nota__sello">De la sesión técnica del 17 de septiembre</span>
@@ -593,6 +630,17 @@ curl https://api.edoc.ae/api/ae/emision/v1/documentos \
 
   function activas() { return APPS.filter(function (a) { return a.estado === 'activa'; }).length; }
 
+  /* Cuánto sigue valiendo el secreto anterior después de rotar. En el portal
+     real es un parámetro del servidor de identidades. */
+  var VENTANA_ANTERIOR = 24;
+
+  function dentroDe(horas) {
+    var d = new Date(Date.now() + horas * 3600 * 1000);
+    function dos(n) { return (n < 10 ? '0' : '') + n; }
+    return d.getFullYear() + '-' + dos(d.getMonth() + 1) + '-' + dos(d.getDate()) +
+      ' ' + dos(d.getHours()) + ':' + dos(d.getMinutes());
+  }
+
   function pintar() {
     document.getElementById('cuerpo-apps').innerHTML = APPS.map(function (a, i) {
       var viva = a.estado === 'activa';
@@ -613,7 +661,19 @@ curl https://api.edoc.ae/api/ae/emision/v1/documentos \
         '<td><strong>' + a.nombre + '</strong>' +
           '<div class="edoc-secundario">' + a.desc + '</div></td>' +
         '<td class="cifra">' + a.id + '</td>' +
-        '<td class="cifra" style="white-space:nowrap" title="Solo se guardan los últimos cuatro caracteres">•••• ' + a.fin + '</td>' +
+        '<td style="white-space:nowrap">' +
+          '<span class="cifra" title="Solo se guardan los últimos cuatro caracteres">•••• ' + a.fin + '</span>' +
+          /* Mientras el anterior siga vivo se dice, con su hora de caducidad y
+             el botón para retirarlo en cuanto el sistema use el nuevo. */
+          (viva && a.anterior
+            ? '<div class="edoc-secreto-anterior">' +
+                '<span>Anterior <span class="cifra">•••• ' + a.anterior.fin + '</span> vale hasta ' +
+                '<span class="cifra">' + a.anterior.hasta + '</span></span>' +
+                '<button type="button" class="edoc-enlace-accion" data-retirar-anterior="' + i + '" ' +
+                  'title="Dejar de aceptar el secreto anterior">Retirarlo ya</button>' +
+              '</div>'
+            : '') +
+        '</td>' +
         '<td>' + (a.cods.length
             ? etiquetas(a.cods).map(function (p) { return '<span class="edoc-permiso">' + p + '</span>'; }).join('')
             : '<span class="edoc-estado edoc-estado--advertencia">Sin permisos</span>') + '</td>' +
@@ -802,14 +862,22 @@ curl https://api.edoc.ae/api/ae/emision/v1/documentos \
     var tipo = enCurso.tipo, app = enCurso.app, hecho = enCurso.alConfirmar;
     if (tipo === 'ver' || tipo === 'rotar') {
       var s = cadena(44);
-      if (tipo === 'rotar') { app.fin = s.slice(-4); pintar(); }
+      if (tipo === 'rotar') {
+        /* Rotación sin corte: el anterior sigue valiendo una ventana, que es
+           como funciona el servidor de identidades y lo que espera cualquiera
+           que haya rotado un secreto en producción. */
+        app.anterior = { fin: app.fin, hasta: dentroDe(VENTANA_ANTERIOR) };
+        app.fin = s.slice(-4);
+        pintar();
+      }
       document.getElementById('ver-secreto').textContent = s;
       verCodigo.hidden = true; verSecreto.hidden = false;
       verConfirmar.textContent = 'Cerrar';
       verConfirmar.className = 'btn btn-edoc-primario';
       if (tipo === 'rotar') {
-        window.edocAvisar('Secreto nuevo generado. El anterior deja de valer ahora mismo: ' +
-          'acuérdate de cambiarlo en el sistema que lo usa.', 'exito');
+        window.edocAvisar('Secreto nuevo generado. El anterior sigue valiendo ' + VENTANA_ANTERIOR +
+          ' horas, así que nada se rompe: cambia el secreto en tu sistema y, cuando lo tengas puesto, ' +
+          'retira el anterior.', 'exito');
       }
       return;
     }
@@ -934,6 +1002,16 @@ curl https://api.edoc.ae/api/ae/emision/v1/documentos \
     var q = e.target.closest('[data-retirar]');
     if (v) pedirCodigo('ver', APPS[+v.dataset.ver]);
     if (r) pedirCodigo('rotar', APPS[+r.dataset.regenerar]);
+    /* Retirar el anterior no pide código: quita acceso, no lo da. Es la acción
+       que cierra la rotación y conviene que cueste un solo clic. */
+    var ra = e.target.closest('[data-retirar-anterior]');
+    if (ra) {
+      var app = APPS[+ra.dataset.retirarAnterior];
+      app.anterior = null;
+      pintar();
+      window.edocAvisar('El secreto anterior deja de valer. Si algún sistema seguía usándolo, ' +
+        'sus llamadas devolverán 401.', 'exito');
+    }
     if (p) abrirPermisos(APPS[+p.dataset.permisosApp]);
     if (q) {
       var a = APPS[+q.dataset.retirar];

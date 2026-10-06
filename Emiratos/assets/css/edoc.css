@@ -2535,3 +2535,12 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
   display: inline-block; font-size: 10.5px; line-height: 1.5; padding: 0 6px;
   border-radius: 999px; background: #eef1f6; color: #4b5563; white-space: nowrap;
 }
+
+/* El secreto anterior mientras sigue vivo: debajo del vigente, en gris, con su
+   caducidad y el enlace para retirarlo. */
+.edoc-secreto-anterior { margin-top: 4px; font-size: 11.5px; color: #5f6771; display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+.edoc-enlace-accion {
+  background: none; border: 0; padding: 0; font-size: 11.5px; color: var(--edoc-azul);
+  text-decoration: underline; cursor: pointer;
+}
+.edoc-enlace-accion:hover { text-decoration: none; }
