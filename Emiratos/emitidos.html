@@ -34,9 +34,39 @@
       <h1 class="edoc-titulo">Documentos Emitidos</h1>
       <p class="edoc-subtitulo">Lo que tu empresa ha emitido y en qué punto está: primero el camino
       hasta el destinatario, y aparte la respuesta de la autoridad.</p>
+    <div class="edoc-titulo-barra__lado">
+      <span class="edoc-estado edoc-estado--info" id="sello-clasificacion" hidden>Con clasificación</span>
+      <button type="button" class="btn btn-edoc-terciario" id="ver-clasificacion">Mostrar la clasificación</button>
     </div>
   </div>
 
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Verificado · 6 de octubre</span>
+    <strong>Por qué las clasificaciones van en el documento y no en la lista.</strong> En la reunión quedó como
+    corazonada —«parece que son más importantes para el Ministerio que para los clientes»—, así que se comprobó
+    contra las tres fuentes que deciden.
+    <br><br>
+    <strong>La norma.</strong> No obliga a enseñarlas en ninguna lista. Sí obliga a declarar una de ellas dentro
+    del documento: quien cobra el impuesto con referencia al margen de ganancia debe emitir una factura que lo
+    diga claramente, y sin el importe del impuesto —Reglamento Ejecutivo del IVA—. Por eso el visor lleva ahora
+    esa leyenda cuando la clasificación aplica. Y la entrega asimilada confirma el estado «No se entrega»: se
+    emite la factura y se entrega al receptor «si existe», y si no, se guarda en los registros.
+    <br><br>
+    <strong>El estado del arte.</strong> El costo de ponerlas en la tabla es medible: en búsqueda visual el
+    tiempo crece de forma lineal con el número de elementos —del orden de 60 ms por elemento cuando el objetivo
+    está, y entre 250 y 350 ms por elemento cuando no está—, y las medidas de saturación visual de Rosenholtz
+    predicen esa dificultad y se usan como sustituto del número de elementos en escenas complejas. Ocho
+    pastillas posibles por fila multiplican los elementos que hay que descartar para encontrar una factura.
+    Además, NN/g —«Data Tables: Four Major User Tasks»— dice que el orden y el contenido de las columnas deben
+    reflejar la importancia del dato <em>para el usuario</em>, y que el detalle de un registro va en un panel
+    aparte, no ensanchando la tabla.
+    <br><br>
+    <strong>Los clientes.</strong> Aquí no hay evidencia propia: no tenemos investigación con contribuyentes de
+    Emiratos sobre esta pantalla. La clasificación no participa en ninguna de las cuatro tareas que una tabla
+    sirve —encontrar, comparar, abrir un registro y actuar sobre él— para quien entra a cobrar, pero eso es un
+    <strong>supuesto a calibrar</strong>, no un dato. Queda como pregunta para la primera ronda con clientes
+    reales.
+  </div>
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido · 6 de octubre</span>
     <strong>Las clasificaciones no van en la lista.</strong> El transaction type puede traer hasta ocho
@@ -492,7 +522,7 @@
       '<td><a class="edoc-clave-doc" href="#" data-accion="visor" data-i="' + i + '" ' +
         'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
       '<td class="cifra">' + doc.fecha + '</td>' +
-      '<td>' + doc.tipo + '</td>' +
+      '<td>' + doc.tipo + (conClasificacion() ? transaccionHTML(doc) : '') + '</td>' +
       '<td><span data-nombre-latino="' + doc.receptorLatino + '" data-nombre-arabe="' + doc.receptorArabe + '"></span>' +
         '<div class="edoc-secundario cifra">' + doc.trn + '</div></td>' +
       '<td class="cifra">' + doc.moneda + '</td>' +
@@ -509,6 +539,16 @@
   }
 
   var cuerpo = document.getElementById('cuerpo-emitidos');
+
+  /* Repintar sin recargar: lo usa el interruptor de la clasificación. */
+  window.edocRepintarTabla = function () {
+    window.edocDestruirTabla('#tabla-emitidos');
+    cuerpo.innerHTML = D.EMITIDOS.map(fila).join('');
+    window.edocPintarNombres();
+    window.edocPintarIconos();
+    window.edocPrepararTablas(document);
+  };
+
   cuerpo.innerHTML = D.EMITIDOS.map(fila).join('');
   window.edocPintarNombres();
   window.edocPintarIconos();
@@ -670,6 +710,34 @@
     catch (e) { return false; }
   }
 
+
+  /* --- El interruptor de la clasificación ---------------------------------
+     Apagado por defecto: lo que se entrega es la tabla limpia. Se enciende para
+     enseñar en una reunión cómo quedaría, y la elección dura la sesión para
+     poder recorrer el portal con ella puesta. Que se pueda ver evita discutirlo
+     de palabra. */
+  function conClasificacion() {
+    try { return window.sessionStorage.getItem('edoc-clasificacion') === '1'; }
+    catch (e) { return false; }
+  }
+  (function () {
+    var boton = document.getElementById('ver-clasificacion');
+    var sello = document.getElementById('sello-clasificacion');
+    if (!boton) return;
+    function pintarEstado() {
+      var puesta = conClasificacion();
+      boton.textContent = puesta ? 'Ocultar la clasificación' : 'Mostrar la clasificación';
+      if (sello) sello.hidden = !puesta;
+    }
+    pintarEstado();
+    boton.addEventListener('click', function () {
+      try { window.sessionStorage.setItem('edoc-clasificacion', conClasificacion() ? '0' : '1'); }
+      catch (e) { /* nada */ }
+      pintarEstado();
+      window.edocRepintarTabla();
+    });
+  }());
+
   /* --- Visor ------------------------------------------------------------ */
   /* El artículo 59 del Reglamento Ejecutivo exige que las palabras «factura
      fiscal» se vean claramente, y la autofactura tiene su propia fórmula:
@@ -750,6 +818,13 @@
           '<div class="fila"><span>IVA</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.iva) + '</span></div>' +
           '<div class="fila total"><span>Total</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.total) + '</span></div>' +
         '</div>' +
+        /* Leyenda obligatoria: el Reglamento Ejecutivo exige que la factura
+           declare que el impuesto se cobró con referencia al margen de
+           ganancia. No es un adorno de la clasificación, es texto que la ley
+           pide dentro del documento. */
+        ((doc.transaccion || []).indexOf('Margen de ganancia') >= 0
+          ? '<div class="visor-leyenda">El impuesto se cobró con referencia al margen de ganancia.</div>' : '') +
+
         /* Lo que la autoridad busca en un documento: su código y el transaction
            type con sus ocho posiciones. El cliente lee los nombres de arriba;
            esto es para quien audita. */

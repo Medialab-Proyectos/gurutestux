@@ -761,6 +761,13 @@
           '<div class="fila"><span>IVA</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.iva) + '</span></div>' +
           '<div class="fila total"><span>Total</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.total) + '</span></div>' +
         '</div>' +
+        /* Leyenda obligatoria: el Reglamento Ejecutivo exige que la factura
+           declare que el impuesto se cobró con referencia al margen de
+           ganancia. No es un adorno de la clasificación, es texto que la ley
+           pide dentro del documento. */
+        ((doc.transaccion || []).indexOf('Margen de ganancia') >= 0
+          ? '<div class="visor-leyenda">El impuesto se cobró con referencia al margen de ganancia.</div>' : '') +
+
         /* Lo que la autoridad busca en un documento: su código y el transaction
            type con sus ocho posiciones. El cliente lee los nombres de arriba;
            esto es para quien audita. */

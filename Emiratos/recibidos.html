@@ -33,9 +33,25 @@
       <div class="edoc-miga"><span>Recepción</span><span>Reportes</span><span>Documentos Recibidos</span></div>
       <h1 class="edoc-titulo">Documentos Recibidos</h1>
       <p class="edoc-subtitulo">Lo que llega por la red a nombre de tu empresa. Desde aquí lo apruebas, lo rechazas con un motivo o dejas constancia de que llegó.</p>
+    <div class="edoc-titulo-barra__lado">
+      <span class="edoc-estado edoc-estado--info" id="sello-clasificacion" hidden>Con clasificación</span>
+      <button type="button" class="btn btn-edoc-terciario" id="ver-clasificacion">Mostrar la clasificación</button>
     </div>
   </div>
 
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 6 de octubre</span>
+    <strong>La clasificación del documento sirve aquí, y no en emisión.</strong> La pregunta de diseño es si el
+    dato es útil, no a quién le interesa. Para quien emite no lo es: este portal consulta, no emite, y la
+    clasificación la decidió su propio sistema —ver en la lista un dato que uno mismo puso no cambia nada—. Para
+    quien recibe sí: una factura de margen de ganancia llega <strong>sin importe de impuesto</strong> y una de
+    exportación llega a tipo cero, y eso cambia qué se puede deducir y cómo se registra. Es decisión, no
+    curiosidad.
+    <br><br>
+    Por eso el aviso aparece aquí, junto a los totales, que es donde el dato duele. No en la lista: el dato no
+    ayuda a <em>encontrar</em> una factura, que es para lo que se recorre una tabla, y cada elemento de más en
+    una fila se paga en tiempo de búsqueda.
+  </div>
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido · 6 de octubre</span>
     <strong>Fechas, tipo y proveedor. El proveedor aquí no es un lujo.</strong> En emisión la búsqueda básica se
@@ -415,6 +431,36 @@
     '</div>';
   }
 
+
+  /* --- El interruptor de la clasificación ---------------------------------
+     Apagado por defecto: lo que se entrega es la tabla limpia. Se enciende para
+     enseñar en una reunión cómo quedaría, y la elección dura la sesión para
+     poder recorrer el portal con ella puesta. Que se pueda ver evita discutirlo
+     de palabra. */
+  function conClasificacion() {
+    try { return window.sessionStorage.getItem('edoc-clasificacion') === '1'; }
+    catch (e) { return false; }
+  }
+  (function () {
+    var boton = document.getElementById('ver-clasificacion');
+    var sello = document.getElementById('sello-clasificacion');
+    if (!boton) return;
+    function pintarEstado() {
+      var puesta = conClasificacion();
+      boton.textContent = puesta ? 'Ocultar la clasificación' : 'Mostrar la clasificación';
+      if (sello) sello.hidden = !puesta;
+    }
+    pintarEstado();
+    boton.addEventListener('click', function () {
+      try { window.sessionStorage.setItem('edoc-clasificacion', conClasificacion() ? '0' : '1'); }
+      catch (e) { /* nada */ }
+      pintarEstado();
+      window.edocRepintarTabla();
+    });
+  }());
+
+  window.edocRepintarTabla = function () { pintar(); };
+
   function pintar() {
     window.edocDestruirTabla('#tabla-recibidos');
     document.getElementById('cuerpo-recibidos').innerHTML = docs.map(function (doc, i) {
@@ -425,7 +471,7 @@
           'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
         '<td class="cifra">' + doc.fechaEmision + '</td>' +
         '<td class="cifra">' + doc.fecha + '</td>' +
-        '<td>' + doc.tipo + '</td>' +
+        '<td>' + doc.tipo + (conClasificacion() ? transaccionHTML(doc) : '') + '</td>' +
         '<td><span data-nombre-latino="' + doc.emisorLatino + '" data-nombre-arabe="' + doc.emisorArabe + '"></span>' +
           '<div class="edoc-secundario cifra">' + doc.trn + '</div></td>' +
         '<td class="cifra">' + doc.moneda + '</td>' +
@@ -500,6 +546,20 @@
           '<div class="fila"><span>Base imponible</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.base) + '</span></div>' +
           '<div class="fila"><span>IVA</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.iva) + '</span></div>' +
           '<div class="fila total"><span>Total</span><span class="cifra">' + doc.moneda + ' ' + D.dinero(doc.total) + '</span></div>' +
+        '</div>' +
+        /* Para quien recibe, la clasificación no es un dato de archivo: cambia
+           lo que puede deducir. El margen de ganancia llega sin importe de
+           impuesto, y la exportación o lo que está fuera del ámbito llegan a
+           tipo cero. Se dice junto a los totales, que es donde duele. */
+        ((doc.transaccion || []).indexOf('Margen de ganancia') >= 0
+          ? '<div class="visor-leyenda">El emisor cobró el impuesto con referencia al margen de ganancia, ' +
+            'así que esta factura no trae importe de impuesto que puedas deducir.</div>' : '') +
+        ((doc.transaccion || []).indexOf('Exportación') >= 0
+          ? '<div class="visor-leyenda">Factura de exportación: va a tipo cero, así que no hay impuesto ' +
+            'soportado que deducir.</div>' : '') +
+        '<div class="visor-tecnico">' +
+          'Tipo de documento <span class="cifra">' + (doc.codigo || (doc.tipo === 'Nota de crédito' ? '381' : '380')) + '</span>' +
+          ' · Transaction type <span class="cifra">' + D.transaccionBinaria(doc) + '</span>' +
         '</div>' +
       '</div>';
     window.edocPintarNombres();

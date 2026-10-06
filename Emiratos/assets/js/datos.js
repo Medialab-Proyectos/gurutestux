@@ -161,7 +161,7 @@ window.EDOC = (function () {
       trn: '100778899100003', moneda: 'USD', base: 12750.00, iva: 0.00, total: 12750.00,
       c2: 'aprobado', c5: 'aprobado', c3: 'nosentrega', c4: 'nosentrega', endpoint: '99' },
 
-    { numero: 'INV-2026-004866', fecha: '2026-08-29', tipo: 'Factura',
+    { numero: 'INV-2026-004866', fecha: '2026-08-29', tipo: 'Factura', transaccion: ['Margen de ganancia'],
       receptorLatino: 'Sharjah Cement Factory', receptorArabe: 'مصنع الشارقة للإسمنت',
       trn: '100556677800003', moneda: 'AED', base: 9800.00, iva: 490.00, total: 10290.00,
       c2: 'aprobado', c5: 'rechazado', c3: 'noaplica', c4: 'noaplica',
@@ -180,7 +180,8 @@ window.EDOC = (function () {
       trn: '—', moneda: 'AED', base: 740.00, iva: 0.00, total: 740.00,
       c2: 'aprobado', c5: 'aprobado', c3: 'entregado', c4: 'noaplica' },
 
-    { numero: 'INV-2026-004863', fecha: '2026-08-27', tipo: 'Factura',
+    { numero: 'INV-2026-004863', fecha: '2026-08-27', tipo: 'Factura', transaccion: ['Zona franca', 'Margen de ganancia', 'Factura resumen',
+        'Suministro continuo', 'Comercio electrónico', 'Exportación'],
       receptorLatino: 'Abu Dhabi Ports Company', receptorArabe: 'شركة موانئ أبوظبي',
       trn: '100223344500003', moneda: 'AED', base: 27500.00, iva: 1375.00, total: 28875.00,
       c2: 'aprobado', c5: 'enviado', c3: 'pendiente', c4: 'noaplica' },
@@ -246,7 +247,7 @@ window.EDOC = (function () {
       trn: '100908070600003', moneda: 'AED', base: 2400.00, iva: 120.00, total: 2520.00,
       recepcion: 'aprobado', respuesta: 'pendiente' },
 
-    { numero: 'INV-2026-77120', fecha: '2026-08-31', fechaEmision: '2026-08-30', tipo: 'Factura',
+    { numero: 'INV-2026-77120', fecha: '2026-08-31', fechaEmision: '2026-08-30', tipo: 'Factura', transaccion: ['Margen de ganancia'],
       emisorLatino: 'Emirates Global Aluminium', emisorArabe: 'الإمارات العالمية للألمنيوم',
       trn: '100101202300003', moneda: 'AED', base: 88500.00, iva: 4425.00, total: 92925.00,
       recepcion: 'aprobado', respuesta: 'pendiente' },
