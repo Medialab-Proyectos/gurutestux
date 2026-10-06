@@ -460,6 +460,41 @@
     '</header>';
   }
 
+  /* --- Descargar el documento --------------------------------------------
+     El PDF se imprime del propio visor: lo que se ve es lo que sale, sin
+     librerías ni una plantilla aparte que luego se desincroniza. El estilo de
+     impresión deja en la hoja solo el documento.
+
+     El XML entrega el ejemplo oficial de factura fiscal de Emiratos —UBL con el
+     perfil PINT AE, el que vino en la documentación técnica—. La maqueta no
+     tiene documentos detrás, así que se dice que es el ejemplo. */
+  window.edocImprimirVisor = function (numero) {
+    var hoja = document.querySelector('.modal.show .visor-hoja') || document.querySelector('.visor-hoja');
+    if (!hoja) return;
+    document.body.classList.add('imprimiendo-visor');
+    var antes = document.title;
+    if (numero) document.title = numero;           // el nombre que propone el navegador
+    function limpiar() {
+      document.body.classList.remove('imprimiendo-visor');
+      document.title = antes;
+      window.removeEventListener('afterprint', limpiar);
+    }
+    window.addEventListener('afterprint', limpiar);
+    window.setTimeout(function () { window.print(); }, 60);
+  };
+
+  window.edocDescargarXML = function (numero) {
+    var a = document.createElement('a');
+    a.href = 'assets/ejemplos/factura-fiscal-pint-ae.xml';
+    a.download = (numero ? numero + ' · ' : '') + 'ejemplo factura fiscal PINT AE.xml';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.edocAvisar('Descargado el <strong>ejemplo oficial</strong> de factura fiscal de Emiratos, en UBL ' +
+      'con el perfil PINT AE. La maqueta no tiene documentos de verdad detrás: este es el ejemplo de la ' +
+      'documentación técnica.', 'info');
+  };
+
   /* --- Encabezado ---------------------------------------------------------
      Izquierda: información de contexto —en qué ambiente estoy, con qué empresa
      y con qué usuario—. Derecha: herramientas. Centro: la marca.

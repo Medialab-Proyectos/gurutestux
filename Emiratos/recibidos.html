@@ -557,8 +557,8 @@
     var accion = a.dataset.accion;
 
     if (accion === 'visor') return abrirVisor(doc);
-    if (accion === 'xml') return window.edocAvisar('Se descargaría el XML de <strong>' + doc.numero + '</strong>.');
-    if (accion === 'pdf') return window.edocAvisar('Se descargaría el PDF de <strong>' + doc.numero + '</strong>.');
+    if (accion === 'xml') return window.edocDescargarXML(doc.numero);
+    if (accion === 'pdf') { abrirVisor(doc); return window.edocImprimirVisor(doc.numero); }
 
     if (accion === 'aprobar') {
       document.getElementById('ap-numero').textContent = doc.numero;
@@ -671,7 +671,12 @@
     });
   });
   document.querySelectorAll('[data-descargar]').forEach(function (b) {
-    b.addEventListener('click', function () { window.edocAvisar('Se descargaría el ' + b.dataset.descargar + '.'); });
+    b.addEventListener('click', function () {
+      var n = document.getElementById('visor-numero');
+      n = n ? n.textContent.trim() : '';
+      if (b.dataset.descargar === 'XML') window.edocDescargarXML(n);
+      else window.edocImprimirVisor(n);
+    });
   });
 
   pintar();

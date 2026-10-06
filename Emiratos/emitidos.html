@@ -779,8 +779,8 @@
     var doc = D.EMITIDOS[+a.dataset.i];
     if (a.dataset.accion === 'estados') abrirEstados(doc);
     if (a.dataset.accion === 'visor') abrirVisor(doc);
-    if (a.dataset.accion === 'xml') window.edocAvisar('Se descargaría el XML de <strong>' + doc.numero + '</strong>. En la maqueta no hay archivo detrás.');
-    if (a.dataset.accion === 'pdf') window.edocAvisar('Se descargaría el PDF de <strong>' + doc.numero + '</strong>. En la maqueta no hay archivo detrás.');
+    if (a.dataset.accion === 'xml') window.edocDescargarXML(doc.numero);
+    if (a.dataset.accion === 'pdf') { abrirVisor(doc); window.edocImprimirVisor(doc.numero); }
   });
 
   /* --- Buscar ------------------------------------------------------------ */
@@ -867,7 +867,10 @@
   });
   document.querySelectorAll('[data-descargar]').forEach(function (b) {
     b.addEventListener('click', function () {
-      window.edocAvisar('Se descargaría el ' + b.dataset.descargar + ' del documento abierto.');
+      var n = document.getElementById('visor-numero');
+      n = n ? n.textContent.trim() : '';
+      if (b.dataset.descargar === 'XML') window.edocDescargarXML(n);
+      else window.edocImprimirVisor(n);
     });
   });
 })();

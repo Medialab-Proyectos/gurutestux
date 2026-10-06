@@ -2544,3 +2544,25 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
   text-decoration: underline; cursor: pointer;
 }
 .edoc-enlace-accion:hover { text-decoration: none; }
+
+/* Imprimir el documento: en la hoja queda solo el visor, sin armazón, sin
+   diálogo y sin botones, para que el PDF que guarda el navegador sea
+   exactamente el documento que se está viendo. Se hace con «visibility» y no
+   con «display» porque el diálogo cuelga de sitios distintos en cada pantalla:
+   así no depende del árbol. */
+@media print {
+  body.imprimiendo-visor * { visibility: hidden !important; }
+  body.imprimiendo-visor .visor-hoja,
+  body.imprimiendo-visor .visor-hoja * { visibility: visible !important; }
+  body.imprimiendo-visor .visor-hoja {
+    position: absolute !important; left: 0; top: 0; width: 100%;
+    box-shadow: none !important; border: 0 !important; padding: 0 !important; margin: 0 !important;
+  }
+  body.imprimiendo-visor .modal,
+  body.imprimiendo-visor .modal-dialog,
+  body.imprimiendo-visor .modal-content,
+  body.imprimiendo-visor .modal-body { position: static !important; overflow: visible !important;
+    max-width: none !important; margin: 0 !important; border: 0 !important; box-shadow: none !important; }
+  body.imprimiendo-visor .modal-backdrop { display: none !important; }
+  @page { margin: 14mm; }
+}
