@@ -2527,3 +2527,11 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
    estado, en gris, porque se leen después. */
 .corner__sello { font-size: 11.5px; color: #5f6771; margin-top: 4px; }
 .corner__mensaje { font-size: 12px; color: var(--edoc-negro); margin-top: 2px; line-height: 1.35; }
+
+/* Las marcas del documento: pastillas pequeñas bajo el tipo. Un documento puede
+   llevar varias, así que se envuelven. */
+.edoc-marcas { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.edoc-marca {
+  display: inline-block; font-size: 10.5px; line-height: 1.5; padding: 0 6px;
+  border-radius: 999px; background: #eef1f6; color: #4b5563; white-space: nowrap;
+}

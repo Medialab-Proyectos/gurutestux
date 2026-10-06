@@ -43,6 +43,7 @@
       <div class="edoc-tablero">
         <div class="edoc-acceso__cabecera">
           <span class="edoc-acceso__cabecera-rotulo">Cambio de contraseña</span>
+          <span id="caja-idioma"></span>
         </div>
         <div class="edoc-tablero__cuerpo">
           <h2 class="edoc-titulo mb-1" style="font-size:20px">Cambia tu contraseña para entrar</h2>
@@ -165,6 +166,17 @@
     location.href = A ? A.conVistas('inicio.html') : 'inicio.html';
   });
 }());
+</script>
+<script>
+  /* El selector del portal, también aquí: el mismo código y la misma elección,
+     que viaja con el usuario cuando entra. */
+  (function () {
+    var caja = document.getElementById('caja-idioma');
+    if (caja && window.edocSelectorIdioma) {
+      caja.innerHTML = window.edocSelectorIdioma('claro');
+      if (window.edocPintarIdioma) window.edocPintarIdioma();
+    }
+  }());
 </script>
 </body>
 </html>

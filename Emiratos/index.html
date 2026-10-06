@@ -43,6 +43,7 @@
       <div class="edoc-tablero">
         <div class="edoc-acceso__cabecera">
           <span class="edoc-acceso__cabecera-rotulo">Acceso al portal</span>
+          <span id="caja-idioma"></span>
           <!-- El mismo selector que lleva la barra superior del portal: misma
                lista, mismo código y la elección viaja con el usuario. -->
         </div>
@@ -538,6 +539,17 @@
   /* Los dos ya tienen pantalla: el MVP las lista como no negociables. Antes
      avisaban de que no llevaban a ninguna parte, que era lo honesto mientras
      no existían; ahora llevan. */
+</script>
+<script>
+  /* El selector del portal, también aquí: el mismo código y la misma elección,
+     que viaja con el usuario cuando entra. */
+  (function () {
+    var caja = document.getElementById('caja-idioma');
+    if (caja && window.edocSelectorIdioma) {
+      caja.innerHTML = window.edocSelectorIdioma('claro');
+      if (window.edocPintarIdioma) window.edocPintarIdioma();
+    }
+  }());
 </script>
 </body>
 </html>

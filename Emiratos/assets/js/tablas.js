@@ -108,6 +108,11 @@
      o.fechas                 [desde, hasta], para no aceptar un rango al revés
      o.unidad                 ['documento', 'documentos'], para el aviso */
   window.edocFiltrar = function (selector, forma, o) {
+    /* Si la pantalla no entra en la entrega, su contenido se cambió por el
+       aviso de «en construcción» y el formulario ya no existe. El guion de la
+       pantalla se sigue ejecutando, así que sin esto revienta con un null en la
+       consola: pasaba en Clientes y proveedores. */
+    if (!forma) return;
     var $ = window.jQuery;
     var criterios = null;
     $.fn.dataTable.ext.search.push(function (settings, datos, i) {

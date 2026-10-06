@@ -441,6 +441,9 @@
         '<img src="assets/img/edoc-logo-neg-compacto.svg" alt="eDoc · Electronic Invoicing">' +
       '</a>' +
       '<div class="edoc-encabezado__util">' +
+        // Aquí también: el registro y la recuperación se usan sin haber entrado,
+        // y son las pantallas donde el idioma más falta hace.
+        (window.edocSelectorIdioma ? window.edocSelectorIdioma() : '') +
         '<button type="button" class="edoc-btn-util" data-alterna-arabe title="Muestra el nombre de la empresa tal como llega, en árabe">' +
           icono('alfabeto') + '<span class="edoc-btn-util__texto">Nombre nativo</span></button>' +
         (herramientaNotas()
@@ -496,7 +499,10 @@
             icono('info') + '<span class="edoc-btn-util__texto">Notas de diseño</span></button>'
           : '') +
         '<span class="edoc-encabezado__separador"></span>' +
-        // Sin selector de idioma: el portal va solo en inglés (17 de septiembre).
+        /* El selector vuelve el 5 de octubre: «solo en inglés» no quería decir
+           «sin multilenguaje». Inglés es el idioma del portal y el español se
+           ofrece además. */
+        (window.edocSelectorIdioma ? window.edocSelectorIdioma() : '') +
         '<a class="edoc-btn-util edoc-btn-util--icono edoc-solo-ancho" href="#" data-sin-destino ' +
           'title="Emiratos Árabes Unidos · cambiar de portal">' + bandera() + '</a>' +
         campana() +

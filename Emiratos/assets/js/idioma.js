@@ -37,10 +37,12 @@
   /* El portal arranca en INGLÉS, que es su idioma estándar: el primero de la
      lista es el que se usa cuando nadie ha elegido nada. El español se queda
      para quien lo elija, y la elección se recuerda. */
+  /* Dos, y los dos funcionan. El árabe no está: pide lectura de derecha a
+     izquierda, que es maquetación y no traducción, y ofrecerlo para acabar
+     enseñando inglés era peor que no ofrecerlo. */
   var IDIOMAS = [
     { codigo: 'EN', nombre: 'English', dir: 'ltr' },
-    { codigo: 'ES', nombre: 'Español', dir: 'ltr' },
-    { codigo: 'AR', nombre: 'العربية', dir: 'rtl' }
+    { codigo: 'ES', nombre: 'Español', dir: 'ltr' }
   ];
   window.EDOC_IDIOMAS = IDIOMAS;
 
@@ -1072,6 +1074,11 @@
       "Archivo": "File",
       "Antes de entrar": "Before you go in",
       "Mi perfil": "My profile",
+      "Marca del documento": "Document mark",
+      "No comercial": "Non-commercial",
+      "Exportación": "Export",
+      "Autofacturada": "Self-billed",
+      "Zona franca": "Free zone",
       "Destinatario (C4) · eres tú": "Recipient (C4) · that’s you",
       "Entidad": "Party",
       "Estado de esa entidad": "Status of that party",

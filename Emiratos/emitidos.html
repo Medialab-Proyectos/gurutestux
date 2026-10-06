@@ -79,6 +79,12 @@
                el segundo no significa nada sin el primero, y por eso nace
                apagado y se llena con los estados que esa esquina tiene de
                verdad en los documentos. -->
+          <!-- Por marca, porque es como se busca: «enséñame lo de zona franca»,
+               sin tener que saber con qué otras marcas viene combinada. -->
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
+            <label class="edoc-etiqueta" for="f-marca">Marca del documento</label>
+            <select class="custom-select" id="f-marca"><option value="">Cualquiera</option></select>
+          </div>
           <div class="col-12 col-md-6 col-xl-3">
             <label class="edoc-etiqueta" for="f-esquina">Entidad</label>
             <select class="custom-select" id="f-esquina">
@@ -404,12 +410,28 @@
   var sel = document.getElementById('f-tipo');
   // Con value: sin él, el valor sería el texto y cambiaría al traducir la página.
   D.TIPOS.forEach(function (t) { sel.insertAdjacentHTML('beforeend', '<option value="' + t + '">' + t + '</option>'); });
+  var selMarca = document.getElementById('f-marca');
+  if (selMarca) {
+    D.MARCAS.forEach(function (m) {
+      selMarca.insertAdjacentHTML('beforeend', '<option value="' + m + '">' + m + '</option>');
+    });
+  }
 
   /* La pastilla nombra siempre a su entidad. El sentido de la reunión es que
      «aprobado» no puede quedarse sin decir quién aprobó. */
   /* En la tabla, el estado a secas. La fecha solo cuando hay rechazo: es la
      única fila donde alguien tiene que hacer algo, y saber cuándo pasó cambia
      lo que hace. El mensaje entero está en «Ver estados». */
+  /* Las marcas van bajo el tipo, en pastillas: un documento puede llevar varias
+     —exportación y zona franca a la vez— y en el XML eso viaja como banderas.
+     Aquí se dicen por su nombre, no en binario. */
+  function marcasHTML(doc) {
+    if (!doc.marcas || !doc.marcas.length) return '';
+    return '<div class="edoc-marcas">' + doc.marcas.map(function (m) {
+      return '<span class="edoc-marca">' + m + '</span>';
+    }).join('') + '</div>';
+  }
+
   function pastilla(estado, corner, doc) {
     if (doc && estado === 'rechazado') {
       var s = D.sello(doc, corner);
@@ -468,7 +490,7 @@
       '<td><a class="edoc-clave-doc" href="#" data-accion="visor" data-i="' + i + '" ' +
         'title="Abrir el visor de la factura">' + doc.numero + '</a></td>' +
       '<td class="cifra">' + doc.fecha + '</td>' +
-      '<td>' + doc.tipo + '</td>' +
+      '<td>' + doc.tipo + marcasHTML(doc) + '</td>' +
       '<td><span data-nombre-latino="' + doc.receptorLatino + '" data-nombre-arabe="' + doc.receptorArabe + '"></span>' +
         '<div class="edoc-secundario cifra">' + doc.trn + '</div></td>' +
       '<td class="cifra">' + doc.moneda + '</td>' +
@@ -666,7 +688,8 @@
      «factura fiscal emitida por el comprador». El tipo comercial —exportación,
      no comercial— se queda debajo, en pequeño: dice otra cosa. */
   function rotuloFiscal(doc) {
-    if (doc.tipo === 'Autofactura') return 'Factura fiscal emitida por el comprador';
+    var marcas = doc.marcas || [];
+    if (marcas.indexOf('Autofacturada') >= 0) return 'Factura fiscal emitida por el comprador';
     if (String(doc.tipo).indexOf('Nota de crédito') === 0) return 'Nota de crédito fiscal';
     return 'Factura fiscal';
   }
@@ -695,7 +718,8 @@
           '</div>' +
           '<div class="text-right">' +
             '<div class="visor-fiscal">' + rotuloFiscal(doc) + '</div>' +
-            '<div class="visor-bloque__rotulo">' + doc.tipo + '</div>' +
+            '<div class="visor-bloque__rotulo">' + doc.tipo +
+              ((doc.marcas || []).length ? ' · ' + doc.marcas.join(' · ') : '') + '</div>' +
             '<div class="edoc-clave-doc" style="font-size:16px">' + doc.numero + '</div>' +
             '<div class="edoc-secundario cifra">Emisión ' + doc.fecha + '</div>' +
             (evolutivo() && doc.suministro ? '<div class="edoc-secundario cifra">Suministro ' + doc.suministro + '</div>' : '') +
@@ -817,7 +841,7 @@
     leer: function () {
       return {
         desde: filtroValor('f-desde'), hasta: filtroValor('f-hasta'), tipo: filtroValor('f-tipo'),
-        numero: filtroValor('f-numero'),
+        numero: filtroValor('f-numero'), marca: filtroValor('f-marca'),
         esquina: filtroValor('f-esquina'), esquinaEstado: filtroValor('f-esquina-estado'),
         trn: filtroValor('f-trn').replace(/\D/g, ''), receptor: filtroValor('f-receptor')
       };
@@ -826,7 +850,8 @@
       var doc = D.EMITIDOS[i];
       if (!doc) return true;
       return (!c.desde || doc.fecha >= c.desde) && (!c.hasta || doc.fecha <= c.hasta) &&
-        (!c.tipo || doc.tipo === c.tipo) && filtroContiene(doc.numero, c.numero) &&
+        (!c.tipo || doc.tipo === c.tipo) &&
+        (!c.marca || (doc.marcas || []).indexOf(c.marca) >= 0) && filtroContiene(doc.numero, c.numero) &&
         (!c.esquina || !c.esquinaEstado || doc[c.esquina.toLowerCase()] === c.esquinaEstado) &&
         filtroContiene(doc.trn, c.trn) &&
         (filtroContiene(doc.receptorLatino, c.receptor) || filtroContiene(doc.receptorArabe, c.receptor));
