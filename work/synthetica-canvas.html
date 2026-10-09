@@ -1,0 +1,1171 @@
+<div id="synthetica-canvas">
+  <style>
+    #synthetica-canvas {
+      --ac-brand: #7156D9;
+      --ac-blue: light-dark(#5C43C5, #B8ACFF);
+      --ac-blue-2: light-dark(#7156D9, #A997FF);
+      --ac-sky: light-dark(#8D7AE6, #B8ACFF);
+      --ac-green: light-dark(#247A61, #63D2AC);
+      --ac-red: light-dark(#C93F4F, #FF8993);
+      --ac-orange: light-dark(#B96A16, #FFB56D);
+      --ac-ink: light-dark(#242327, #F7F5FC);
+      --ac-muted: light-dark(#66616F, #B9B2C8);
+      --ac-bg: light-dark(#F4F2F8, #12101A);
+      --ac-board: light-dark(#FFFFFF, #1A1724);
+      --ac-panel: light-dark(#FAF9FC, #231F30);
+      --ac-line: light-dark(#DDD8E7, #443D56);
+      --ac-soft-blue: light-dark(#F0ECFF, #2B2446);
+      --ac-soft-green: light-dark(#EAF6F1, #21362F);
+      --ac-soft-orange: light-dark(#FFF3E7, #3C2B1D);
+      width: 100%;
+      color: var(--ac-ink);
+      font-family: Manrope, "DM Sans", Arial, Helvetica, sans-serif;
+      color-scheme: light dark;
+    }
+    #synthetica-canvas * { box-sizing: border-box; }
+    #synthetica-canvas button,
+    #synthetica-canvas select { font: inherit; }
+    #synthetica-canvas button:focus-visible,
+    #synthetica-canvas select:focus-visible { outline: 3px solid var(--ac-sky); outline-offset: 3px; }
+    #synthetica-canvas h1,
+    #synthetica-canvas h2,
+    #synthetica-canvas h3,
+    #synthetica-canvas p { margin: 0; }
+
+    #synthetica-canvas .ac-app {
+      position: relative;
+      overflow: hidden;
+      background: var(--ac-bg);
+      border: 1px solid var(--ac-line);
+      border-radius: 16px;
+      box-shadow: 0 12px 30px color-mix(in srgb, var(--ac-blue), transparent 90%);
+    }
+    #synthetica-canvas .ac-context-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 44px;
+      padding: 8px 18px;
+      background: var(--ac-board);
+      border-bottom: 1px solid var(--ac-line);
+      color: var(--ac-blue);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    #synthetica-canvas .ac-context-strip span { min-width: 0; }
+    #synthetica-canvas .ac-engine { display: flex; align-items: center; gap: 8px; }
+    #synthetica-canvas .ac-engine-mark { width: 25px; height: 25px; display: block; flex: none; }
+    #synthetica-canvas .ac-product { color: var(--ac-muted); }
+    #synthetica-canvas .ac-is-hidden { display: none !important; }
+
+    #synthetica-canvas .ac-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      min-height: 62px;
+      padding: 10px 20px;
+      background: #FFFFFF;
+      color: #242327;
+      border-bottom: 1px solid var(--ac-line);
+    }
+    #synthetica-canvas .ac-brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    #synthetica-canvas .ac-header-logo { display: block; width: 136px; height: 25px; flex: none; }
+    #synthetica-canvas .ac-brand p { color: #66616F; font-size: 12px; }
+    #synthetica-canvas .ac-top-actions { display: flex; align-items: center; gap: 12px; }
+    #synthetica-canvas .ac-live { display: flex; align-items: center; gap: 8px; white-space: nowrap; font-size: 12px; }
+    #synthetica-canvas .ac-live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ac-green); box-shadow: 0 0 0 5px #a8c63433; }
+    #synthetica-canvas .ac-new-project { min-height: 38px; padding: 7px 12px; border: 1px solid var(--ac-brand); border-radius: 4px; background: var(--ac-brand); color: white; font-weight: 800; }
+    #synthetica-canvas .ac-top-link { min-height: 36px; padding: 6px 9px; border: 1px solid #D8D1EA; border-radius: 4px; background: #FFFFFF; color: #4E3A9E; font-size: 11px; font-weight: 700; }
+
+    #synthetica-canvas .ac-home { min-height: 760px; padding: 34px 38px 42px; background: var(--ac-board); }
+    #synthetica-canvas .ac-home-intro { max-width: 780px; }
+    #synthetica-canvas .ac-home-kicker { color: var(--ac-blue-2); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    #synthetica-canvas .ac-home h2 { margin-top: 6px; color: var(--ac-blue); font: 700 28px/1.15 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-home-intro p { margin-top: 9px; color: var(--ac-muted); font-size: 13px; line-height: 1.55; }
+    #synthetica-canvas .ac-home-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr); gap: 26px; margin-top: 28px; }
+    #synthetica-canvas .ac-home-section h3 { color: var(--ac-blue); font: 700 15px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-work-types { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 12px; }
+    #synthetica-canvas .ac-work-type { display: grid; align-content: start; min-height: 245px; padding: 20px; border: 1px solid var(--ac-line); border-top: 6px solid var(--ac-blue-2); border-radius: 8px; background: var(--ac-panel); }
+    #synthetica-canvas .ac-work-type.full { border-top-color: var(--ac-brand); }
+    #synthetica-canvas .ac-work-type-label { color: var(--ac-muted); font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    #synthetica-canvas .ac-synthetica-logo { display: block; width: 136px; height: 25px; object-fit: contain; object-position: left center; }
+    #synthetica-canvas .ac-synthetica-mark { width: 25px; height: 25px; flex: none; }
+    #synthetica-canvas .ac-brand-asset { width: max-content; margin-bottom: 10px; padding: 4px 6px; border-radius: 4px; background: light-dark(transparent, #FFFFFF); }
+    #synthetica-canvas .ac-project-name-with-mark { display: flex; align-items: center; gap: 8px; }
+    #synthetica-canvas .ac-work-type h4 { margin: 8px 0 0; color: var(--ac-blue); font: 700 17px/1.3 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-work-type p { margin-top: 8px; color: var(--ac-muted); font-size: 12px; line-height: 1.5; }
+    #synthetica-canvas .ac-work-type ul { margin: 12px 0 18px; padding-left: 18px; color: var(--ac-muted); font-size: 11px; line-height: 1.55; }
+    #synthetica-canvas .ac-work-type button { align-self: end; min-height: 42px; padding: 8px 12px; border: 1px solid var(--ac-blue); border-radius: 4px; background: var(--ac-blue); color: white; font-weight: 800; }
+    #synthetica-canvas .ac-work-type.full button { border-color: var(--ac-brand); background: var(--ac-brand); color: white; }
+    #synthetica-canvas .ac-tutorial { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+    #synthetica-canvas .ac-tutorial-step { padding: 13px; border-left: 4px solid var(--ac-sky); background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-tutorial-step strong { display: block; color: var(--ac-blue); font: 700 11px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-tutorial-step span { display: block; margin-top: 5px; color: var(--ac-muted); font-size: 11px; line-height: 1.45; }
+    #synthetica-canvas .ac-project-list { margin-top: 12px; border-top: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-project-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-project-row strong { display: block; color: var(--ac-blue); font-size: 12px; }
+    #synthetica-canvas .ac-project-row span { display: block; margin-top: 4px; color: var(--ac-muted); font-size: 10px; }
+    #synthetica-canvas .ac-project-row button { min-height: 36px; padding: 6px 10px; border: 1px solid var(--ac-line); border-radius: 4px; background: var(--ac-board); color: var(--ac-blue); font-weight: 800; }
+    #synthetica-canvas .ac-history-note { margin-top: 14px; color: var(--ac-muted); font-size: 11px; line-height: 1.5; }
+
+    #synthetica-canvas .ac-hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px 15px;
+      background: var(--ac-board);
+      border-bottom: 1px solid var(--ac-line);
+    }
+    #synthetica-canvas .ac-kicker { color: var(--ac-blue-2); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    #synthetica-canvas .ac-hero h2 { margin-top: 4px; color: var(--ac-blue); font: 700 24px/1.12 Manrope, Arial, sans-serif; letter-spacing: -.02em; }
+    #synthetica-canvas .ac-hero p { max-width: 780px; margin-top: 7px; color: var(--ac-muted); font-size: 12px; line-height: 1.5; }
+    #synthetica-canvas .ac-run-summary { display: flex; gap: 18px; flex: none; }
+    #synthetica-canvas .ac-run-summary div { min-width: 58px; }
+    #synthetica-canvas .ac-run-summary strong { display: block; color: var(--ac-blue); font: 700 16px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-run-summary span { color: var(--ac-muted); font-size: 10px; }
+
+    #synthetica-canvas .ac-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      background: var(--ac-board);
+      border-bottom: 1px solid var(--ac-line);
+    }
+    #synthetica-canvas .ac-stage-jumps,
+    #synthetica-canvas .ac-view-tools { display: flex; align-items: center; gap: 6px; }
+    #synthetica-canvas .ac-stage-jumps { flex-wrap: wrap; }
+    #synthetica-canvas .ac-jump,
+    #synthetica-canvas .ac-icon-button,
+    #synthetica-canvas .ac-detail-button,
+    #synthetica-canvas .ac-drawer-close {
+      appearance: none;
+      border: 1px solid var(--ac-line);
+      background: var(--ac-board);
+      color: var(--ac-blue);
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    #synthetica-canvas .ac-jump { min-width: 34px; min-height: 34px; padding: 5px 9px; font-size: 11px; }
+    #synthetica-canvas .ac-jump[aria-pressed="true"] { border-color: var(--ac-blue-2); background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-icon-button { min-width: 40px; height: 40px; display: grid; place-items: center; padding: 0 12px; font-size: 13px; }
+    #synthetica-canvas .ac-icon-button.ac-fit-button { min-width: 72px; }
+    #synthetica-canvas .ac-zoom-value { min-width: 48px; text-align: center; color: var(--ac-muted); font: 600 11px Manrope, Arial, sans-serif; }
+
+    #synthetica-canvas .ac-viewport {
+      position: relative;
+      height: 690px;
+      overflow: hidden;
+      background-color: var(--ac-board);
+      background-image: radial-gradient(color-mix(in srgb, var(--ac-muted), transparent 60%) 1px, transparent 1px);
+      background-size: 20px 20px;
+      touch-action: none;
+      user-select: none;
+    }
+    #synthetica-canvas .ac-viewport.is-dragging { cursor: grabbing; }
+    #synthetica-canvas .ac-world { position: absolute; left: 0; top: 0; width: 6900px; height: 650px; transform-origin: 0 0; }
+
+    #synthetica-canvas .ac-phase-band {
+      position: absolute;
+      top: 10px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-left: 5px solid var(--ac-blue-2);
+      background: var(--ac-soft-blue);
+      color: var(--ac-blue);
+      font: 700 11px Manrope, Arial, sans-serif;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    #synthetica-canvas .ac-phase-band.mass { border-left-color: var(--ac-orange); background: var(--ac-soft-orange); }
+    #synthetica-canvas .ac-phase-band.human { border-left-color: var(--ac-sky); }
+    #synthetica-canvas .ac-stage {
+      position: absolute;
+      top: 62px;
+      width: 560px;
+      height: 520px;
+      padding: 0;
+      background: var(--ac-board);
+      border: 2px solid var(--ac-line);
+      border-radius: 10px;
+      box-shadow: 0 10px 24px color-mix(in srgb, var(--ac-blue), transparent 91%);
+    }
+    #synthetica-canvas .ac-stage[data-state="completed"] { border-color: var(--ac-green); }
+    #synthetica-canvas .ac-stage[data-state="active"] { border: 4px solid var(--ac-blue-2); box-shadow: 0 0 0 6px #7156D918, 0 12px 26px #7156D922; }
+    #synthetica-canvas .ac-stage[data-mode="human"] { border-color: var(--ac-sky); }
+    #synthetica-canvas .ac-stage[data-mode="human"] .ac-stage-number { background: var(--ac-sky); }
+    #synthetica-canvas .ac-stage[data-mode="recommendations"] { border-color: var(--ac-orange); border-style: dashed; }
+    #synthetica-canvas .ac-stage[data-mode="recommendations"] .ac-stage-number { background: var(--ac-orange); }
+    #synthetica-canvas .ac-stage-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 15px 12px;
+      border-bottom: 1px solid var(--ac-line);
+      background: var(--ac-panel);
+      border-radius: 8px 8px 0 0;
+    }
+    #synthetica-canvas .ac-stage-number {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      flex: none;
+      border-radius: 50%;
+      background: var(--ac-blue);
+      color: white;
+      font: 700 13px Manrope, Arial, sans-serif;
+    }
+    #synthetica-canvas .ac-stage[data-state="completed"] .ac-stage-number { background: var(--ac-green); color: #1C1C1C; }
+    #synthetica-canvas .ac-stage-copy { flex: 1; min-width: 0; }
+    #synthetica-canvas .ac-stage-copy h3 { color: var(--ac-blue); font: 650 15px/1.25 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-stage-copy p { margin-top: 3px; color: var(--ac-muted); font-size: 10px; }
+    #synthetica-canvas .ac-state {
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--ac-line), transparent 55%);
+      color: var(--ac-muted);
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    #synthetica-canvas .ac-stage[data-state="completed"] .ac-state { background: var(--ac-soft-green); color: #607500; }
+    #synthetica-canvas .ac-stage[data-state="active"] .ac-state { background: var(--ac-soft-blue); color: var(--ac-blue); }
+    #synthetica-canvas .ac-stage[data-mode="human"] .ac-evaluation { border-color: var(--ac-sky); background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-stage[data-mode="recommendations"] .ac-evaluation { border-style: dashed; }
+
+    #synthetica-canvas .ac-stage-body { position: relative; height: 402px; padding: 15px; }
+    #synthetica-canvas .ac-input-node,
+    #synthetica-canvas .ac-principles,
+    #synthetica-canvas .ac-prototype,
+    #synthetica-canvas .ac-evaluation {
+      position: absolute;
+      z-index: 2;
+      background: var(--ac-board);
+    }
+    #synthetica-canvas .ac-input-node {
+      left: 18px;
+      top: 20px;
+      width: 120px;
+      min-height: 54px;
+      display: grid;
+      place-items: center;
+      padding: 8px;
+      border: 2px solid var(--ac-blue-2);
+      border-radius: 4px;
+      color: var(--ac-blue);
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    #synthetica-canvas .ac-principles {
+      left: 158px;
+      top: 16px;
+      width: 225px;
+      min-height: 228px;
+      padding: 12px;
+      border: 1px solid var(--ac-line);
+      border-left: 5px solid var(--ac-blue-2);
+      border-radius: 4px;
+    }
+    #synthetica-canvas .ac-principles strong { display: block; color: var(--ac-blue); font: 650 11px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-principles ul { margin: 8px 0 0; padding-left: 16px; color: var(--ac-muted); font-size: 10px; line-height: 1.55; }
+    #synthetica-canvas .ac-prototype {
+      left: 405px;
+      top: 26px;
+      width: 120px;
+      min-height: 112px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      padding: 10px;
+      border: 3px solid var(--ac-green);
+      border-radius: 4px;
+      text-align: center;
+    }
+    #synthetica-canvas .ac-prototype-token,
+    #synthetica-canvas .ac-evaluator-token,
+    #synthetica-canvas .ac-output-token {
+      display: inline-grid;
+      place-items: center;
+      min-width: 38px;
+      min-height: 24px;
+      margin-bottom: 6px;
+      padding: 4px 7px;
+      border-radius: 4px;
+      background: var(--ac-soft-green);
+      color: var(--ac-blue);
+      font: 800 9px Manrope, Arial, sans-serif;
+      letter-spacing: .04em;
+    }
+    #synthetica-canvas .ac-prototype strong { color: var(--ac-blue); font: 650 10px/1.35 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-prototype span { margin-top: 4px; color: var(--ac-muted); font-size: 9px; }
+    #synthetica-canvas .ac-evaluation {
+      left: 396px;
+      top: 180px;
+      width: 140px;
+      height: 140px;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      border: 4px solid var(--ac-orange);
+      border-radius: 50%;
+      background: var(--ac-soft-orange);
+      text-align: center;
+    }
+    #synthetica-canvas .ac-evaluation strong { color: var(--ac-blue); font: 650 10px/1.35 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-evaluation span { display: block; margin-top: 4px; color: var(--ac-muted); font-size: 9px; }
+    #synthetica-canvas .ac-agent-dots { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
+    #synthetica-canvas .ac-agent-dots i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--ac-board); background: var(--ac-blue-2); }
+    #synthetica-canvas .ac-agent-dots i:nth-child(2) { background: var(--ac-sky); }
+    #synthetica-canvas .ac-agent-dots i:nth-child(3) { background: var(--ac-green); }
+    #synthetica-canvas .ac-evaluator-token { margin-inline: auto; background: var(--ac-soft-blue); }
+
+    #synthetica-canvas .ac-stage-footer {
+      position: absolute;
+      left: 15px;
+      right: 15px;
+      bottom: 13px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+    #synthetica-canvas .ac-stage-footer div { padding: 7px 8px; border-radius: 4px; background: var(--ac-panel); }
+    #synthetica-canvas .ac-stage-footer span { display: block; color: var(--ac-muted); font-size: 8px; }
+    #synthetica-canvas .ac-stage-footer strong { display: block; margin-top: 2px; color: var(--ac-blue); font-size: 10px; }
+    #synthetica-canvas .ac-detail-button {
+      position: absolute;
+      left: 18px;
+      top: 278px;
+      min-height: 38px;
+      padding: 7px 10px;
+      font-size: 10px;
+    }
+    #synthetica-canvas .ac-live-button {
+      position: absolute;
+      left: 153px;
+      top: 278px;
+      min-height: 38px;
+      padding: 7px 10px;
+      border: 1px solid var(--ac-blue);
+      border-radius: 4px;
+      background: var(--ac-blue);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    #synthetica-canvas .ac-stage-flow { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+    #synthetica-canvas .ac-stage-flow path { fill: none; stroke: var(--ac-muted); stroke-width: 2; }
+    #synthetica-canvas .ac-stage-flow .ac-loop-path { stroke: var(--ac-orange); stroke-dasharray: 6 5; }
+    #synthetica-canvas .ac-stage-flow text { fill: var(--ac-muted); font: 9px "Open Sans", Arial, sans-serif; }
+    #synthetica-canvas .ac-stage-flow .ac-loop-label { fill: var(--ac-orange); font-weight: 700; }
+
+    #synthetica-canvas .ac-next {
+      position: absolute;
+      top: 300px;
+      width: 150px;
+      height: 4px;
+      background: var(--ac-line);
+    }
+    #synthetica-canvas .ac-next::after {
+      content: "";
+      position: absolute;
+      right: -1px;
+      top: -5px;
+      border-left: 12px solid var(--ac-line);
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+    }
+    #synthetica-canvas .ac-next.completed { background: var(--ac-green); }
+    #synthetica-canvas .ac-next.completed::after { border-left-color: var(--ac-green); }
+    #synthetica-canvas .ac-next span { position: absolute; top: -23px; left: 21px; color: var(--ac-muted); font-size: 9px; white-space: nowrap; }
+
+    #synthetica-canvas .ac-canvas-hint,
+    #synthetica-canvas .ac-live-event {
+      position: absolute;
+      z-index: 8;
+      bottom: 14px;
+      background: var(--ac-board);
+      border: 1px solid var(--ac-line);
+      border-radius: 4px;
+      box-shadow: 0 8px 20px #7156D916;
+      font-size: 11px;
+    }
+    #synthetica-canvas .ac-canvas-hint { left: 14px; padding: 9px 11px; color: var(--ac-muted); }
+    #synthetica-canvas .ac-live-event { right: 14px; max-width: 330px; padding: 10px 12px; }
+    #synthetica-canvas .ac-live-event strong { display: block; color: var(--ac-blue); font: 650 11px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-live-event span { display: block; margin-top: 3px; color: var(--ac-muted); font-size: 10px; }
+
+    #synthetica-canvas .ac-human-output {
+      position: absolute;
+      left: 6480px;
+      top: 230px;
+      width: 300px;
+      min-height: 180px;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+      padding: 20px;
+      border: 3px dashed var(--ac-blue-2);
+      border-radius: 10px;
+      background: var(--ac-board);
+      color: var(--ac-blue);
+      text-align: center;
+    }
+    #synthetica-canvas .ac-human-output .ac-output-token { margin: 0 auto; background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-human-output strong { font: 700 14px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-human-output span { color: var(--ac-muted); font-size: 11px; line-height: 1.45; }
+    #synthetica-canvas .ac-final-connector { position: absolute; left: 6320px; top: 310px; width: 160px; height: 4px; background: var(--ac-blue-2); }
+    #synthetica-canvas .ac-final-connector::after { content: ""; position: absolute; right: -1px; top: -5px; border-left: 12px solid var(--ac-blue-2); border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+
+    #synthetica-canvas .ac-drawer {
+      position: absolute;
+      z-index: 30;
+      top: 44px;
+      right: 0;
+      bottom: 0;
+      width: min(470px, 94%);
+      padding: 18px;
+      overflow-y: auto;
+      background: var(--ac-board);
+      box-shadow: -10px 0 30px #0003;
+      transform: translateX(105%);
+      transition: transform .2s ease;
+    }
+    #synthetica-canvas .ac-drawer.is-open { transform: none; }
+    #synthetica-canvas .ac-drawer-close { float: right; min-height: 40px; padding: 7px 11px; }
+    #synthetica-canvas .ac-drawer-kicker { color: var(--ac-blue-2); font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    #synthetica-canvas .ac-drawer h2 { padding-right: 74px; margin-top: 5px; color: var(--ac-blue); font: 700 20px/1.2 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-drawer-lede { margin-top: 8px; color: var(--ac-muted); font-size: 12px; line-height: 1.5; }
+    #synthetica-canvas .ac-detail-section { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-detail-section h3 { color: var(--ac-blue); font: 650 13px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-detail-section ul { margin: 8px 0 0; padding-left: 18px; color: var(--ac-muted); font-size: 12px; line-height: 1.55; }
+    #synthetica-canvas .ac-detail-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 12px; }
+    #synthetica-canvas .ac-detail-metrics div { padding: 9px; background: var(--ac-panel); border-radius: 4px; }
+    #synthetica-canvas .ac-detail-metrics span { display: block; color: var(--ac-muted); font-size: 9px; }
+    #synthetica-canvas .ac-detail-metrics strong { display: block; margin-top: 3px; color: var(--ac-blue); font-size: 12px; }
+    #synthetica-canvas .ac-prototype-preview { margin-top: 9px; overflow: hidden; border: 1px solid var(--ac-line); border-radius: 7px; background: var(--ac-panel); }
+    #synthetica-canvas .ac-preview-chrome { display: flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-bottom: 1px solid var(--ac-line); background: var(--ac-board); }
+    #synthetica-canvas .ac-preview-chrome i { width: 6px; height: 6px; border-radius: 50%; background: var(--ac-line); }
+    #synthetica-canvas .ac-preview-chrome i:first-child { background: var(--ac-red); }
+    #synthetica-canvas .ac-preview-chrome i:nth-child(2) { background: var(--ac-orange); }
+    #synthetica-canvas .ac-preview-chrome i:nth-child(3) { background: var(--ac-green); }
+    #synthetica-canvas .ac-preview-screen { display: grid; grid-template-columns: 72px 1fr; gap: 9px; min-height: 118px; padding: 11px; background: var(--ac-board); }
+    #synthetica-canvas .ac-preview-nav { border-radius: 4px; background: var(--ac-blue); opacity: .9; }
+    #synthetica-canvas .ac-preview-content { display: grid; grid-template-rows: 20px 38px 1fr; gap: 8px; }
+    #synthetica-canvas .ac-preview-content span { display: block; border-radius: 3px; background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-preview-content span:nth-child(2) { background: var(--ac-soft-green); }
+    #synthetica-canvas .ac-preview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+    #synthetica-canvas .ac-preview-grid i { border-radius: 3px; background: var(--ac-panel); border: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-preview-meta { display: flex; justify-content: space-between; gap: 10px; padding: 9px 11px; border-top: 1px solid var(--ac-line); font-size: 10px; }
+    #synthetica-canvas .ac-preview-meta strong { color: var(--ac-blue); }
+    #synthetica-canvas .ac-preview-meta span { color: var(--ac-muted); text-align: right; }
+    #synthetica-canvas .ac-decision { margin-top: 9px; padding: 10px; border-left: 5px solid var(--ac-orange); background: var(--ac-soft-orange); color: var(--ac-muted); font-size: 11px; line-height: 1.45; }
+
+    #synthetica-canvas .ac-modal-layer {
+      position: absolute;
+      z-index: 60;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 22px;
+      background: color-mix(in srgb, var(--ac-blue), transparent 34%);
+    }
+    #synthetica-canvas .ac-modal-layer.is-open { display: grid; }
+    #synthetica-canvas .ac-modal {
+      width: min(820px, 96%);
+      max-height: 88%;
+      overflow-y: auto;
+      border: 1px solid var(--ac-line);
+      border-radius: 10px;
+      background: var(--ac-board);
+      box-shadow: 0 20px 60px #0005;
+    }
+    #synthetica-canvas .ac-modal-header { display: flex; justify-content: space-between; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-modal-header h2 { color: var(--ac-blue); font: 700 20px/1.2 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-modal-header p { margin-top: 5px; color: var(--ac-muted); font-size: 12px; }
+    #synthetica-canvas .ac-modal-close { align-self: flex-start; min-height: 38px; padding: 7px 11px; border: 1px solid var(--ac-line); border-radius: 4px; background: var(--ac-board); color: var(--ac-blue); font-weight: 800; }
+    #synthetica-canvas .ac-modal-body { padding: 18px 20px 20px; }
+    #synthetica-canvas .ac-project-fields { display: grid; gap: 12px; }
+    #synthetica-canvas .ac-synthetic-only,
+    #synthetica-canvas .ac-full-only { display: grid; gap: 12px; }
+    #synthetica-canvas .ac-project-field { display: grid; grid-template-columns: 170px 1fr auto; align-items: center; gap: 10px; }
+    #synthetica-canvas .ac-project-field label { color: var(--ac-blue); font-size: 11px; font-weight: 800; }
+    #synthetica-canvas .ac-project-field input,
+    #synthetica-canvas .ac-project-field select { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid var(--ac-line); border-radius: 4px; background: var(--ac-panel); color: var(--ac-ink); font-size: 12px; }
+    #synthetica-canvas .ac-folder-button { min-height: 40px; padding: 7px 10px; border: 1px solid var(--ac-blue-2); border-radius: 4px; background: var(--ac-board); color: var(--ac-blue); font-weight: 800; }
+    #synthetica-canvas .ac-source-note { margin-top: 14px; padding: 12px; border-left: 5px solid var(--ac-green); background: var(--ac-soft-green); color: var(--ac-muted); font-size: 11px; line-height: 1.5; }
+    #synthetica-canvas .ac-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+    #synthetica-canvas .ac-primary-action,
+    #synthetica-canvas .ac-secondary-action { min-height: 40px; padding: 8px 13px; border-radius: 4px; font-weight: 800; }
+    #synthetica-canvas .ac-primary-action { border: 1px solid var(--ac-blue); background: var(--ac-blue); color: white; }
+    #synthetica-canvas .ac-secondary-action { border: 1px solid var(--ac-line); background: var(--ac-board); color: var(--ac-blue); }
+    #synthetica-canvas .ac-config-status { display: none; margin-top: 12px; color: #607500; font-size: 12px; font-weight: 800; }
+    #synthetica-canvas .ac-config-status.is-visible { display: block; }
+    #synthetica-canvas .ac-selected-type { margin-bottom: 14px; padding: 11px 12px; border-left: 5px solid var(--ac-blue-2); background: var(--ac-soft-blue); color: var(--ac-blue); font-size: 12px; font-weight: 800; }
+    #synthetica-canvas .ac-modal-synthetica-brand { display: none; align-items: center; gap: 10px; margin-bottom: 12px; }
+    #synthetica-canvas .ac-modal-synthetica-brand.is-visible { display: flex; }
+    #synthetica-canvas .ac-modal-synthetica-brand span { color: var(--ac-muted); font-size: 11px; }
+    #synthetica-canvas .ac-form-group { display: grid; gap: 10px; padding-top: 13px; border-top: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-form-group:first-child { padding-top: 0; border-top: 0; }
+    #synthetica-canvas .ac-form-group h3 { color: var(--ac-blue); font: 700 12px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-checkbox-row { display: flex; align-items: center; gap: 9px; padding: 10px 12px; background: var(--ac-panel); color: var(--ac-blue); font-size: 11px; font-weight: 700; }
+    #synthetica-canvas .ac-checkbox-row input { width: 17px; height: 17px; }
+    #synthetica-canvas .ac-after-save { display: none; margin-top: 14px; padding: 14px; border-left: 5px solid var(--ac-green); background: var(--ac-soft-green); }
+    #synthetica-canvas .ac-after-save.is-visible { display: block; }
+    #synthetica-canvas .ac-after-save h3 { color: var(--ac-blue); font: 700 14px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-after-save p { margin-top: 5px; color: var(--ac-muted); font-size: 11px; line-height: 1.5; }
+    #synthetica-canvas .ac-command-list { display: grid; gap: 6px; margin-top: 10px; }
+    #synthetica-canvas .ac-command-list code { display: block; padding: 8px 10px; border-radius: 3px; background: var(--ac-board); color: var(--ac-blue); font-size: 11px; font-weight: 800; }
+    #synthetica-canvas .ac-open-last { margin-top: 12px; min-height: 40px; padding: 8px 12px; border: 1px solid var(--ac-blue); border-radius: 4px; background: var(--ac-blue); color: white; font-weight: 800; }
+
+    #synthetica-canvas .ac-synthetic-index { min-height: 760px; padding: 30px 38px 40px; background: var(--ac-board); }
+    #synthetica-canvas .ac-synthetic-header { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; padding-bottom: 18px; border-bottom: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-synthetic-header h2 { color: var(--ac-blue); font: 700 24px/1.2 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-synthetic-header p { margin-top: 7px; color: var(--ac-muted); font-size: 12px; }
+    #synthetica-canvas .ac-light-status { padding: 9px 11px; border-left: 5px solid var(--ac-green); background: var(--ac-soft-green); color: var(--ac-blue); font-size: 11px; font-weight: 800; white-space: nowrap; }
+    #synthetica-canvas .ac-synthetic-body { display: grid; grid-template-columns: minmax(300px, .8fr) minmax(480px, 1.2fr); gap: 24px; margin-top: 22px; }
+    #synthetica-canvas .ac-synthetic-panel h3 { color: var(--ac-blue); font: 700 15px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-synthetic-panel > p { margin-top: 5px; color: var(--ac-muted); font-size: 11px; line-height: 1.5; }
+    #synthetica-canvas .ac-light-agent-list { display: grid; gap: 8px; margin-top: 12px; }
+    #synthetica-canvas .ac-light-agent { padding: 12px; border-left: 5px solid var(--ac-sky); background: var(--ac-panel); }
+    #synthetica-canvas .ac-light-agent strong { display: block; color: var(--ac-blue); font-size: 12px; }
+    #synthetica-canvas .ac-light-agent span { display: block; margin-top: 4px; color: var(--ac-muted); font-size: 11px; }
+    #synthetica-canvas .ac-severity-table { width: 100%; margin-top: 12px; border-collapse: collapse; font-size: 11px; }
+    #synthetica-canvas .ac-severity-table th,
+    #synthetica-canvas .ac-severity-table td { padding: 10px 8px; border-bottom: 1px solid var(--ac-line); text-align: left; vertical-align: top; }
+    #synthetica-canvas .ac-severity-table th { color: var(--ac-blue); font-weight: 800; }
+    #synthetica-canvas .ac-severity-table td { color: var(--ac-muted); }
+    #synthetica-canvas .ac-severity { display: inline-block; min-width: 56px; padding: 3px 6px; border-radius: 999px; background: var(--ac-soft-orange); color: var(--ac-red); font-weight: 800; text-align: center; }
+    #synthetica-canvas .ac-severity.medium { background: var(--ac-soft-blue); color: var(--ac-blue); }
+    #synthetica-canvas .ac-index-actions { margin-top: 18px; }
+    #synthetica-canvas .ac-index-actions button { min-height: 40px; padding: 8px 12px; border: 1px solid var(--ac-line); border-radius: 4px; background: var(--ac-board); color: var(--ac-blue); font-weight: 800; }
+
+    #synthetica-canvas .ac-live-browser { overflow: hidden; border: 1px solid var(--ac-line); border-radius: 7px; background: var(--ac-panel); }
+    #synthetica-canvas .ac-live-browser-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 42px; padding: 7px 11px; border-bottom: 1px solid var(--ac-line); background: var(--ac-board); }
+    #synthetica-canvas .ac-live-browser-bar strong { color: var(--ac-blue); font-size: 11px; }
+    #synthetica-canvas .ac-running { color: #607500; font-size: 10px; font-weight: 800; }
+    #synthetica-canvas .ac-live-screen { display: grid; grid-template-columns: 150px 1fr; min-height: 330px; background: var(--ac-board); }
+    #synthetica-canvas .ac-live-nav { padding: 18px 12px; background: var(--ac-blue); color: white; }
+    #synthetica-canvas .ac-live-nav strong { display: block; margin-bottom: 18px; font: 700 14px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-live-nav button { width: 100%; margin-bottom: 7px; padding: 9px; border: 1px solid #ffffff55; border-radius: 4px; background: transparent; color: white; text-align: left; font-size: 11px; }
+    #synthetica-canvas .ac-live-nav button[aria-pressed="true"] { background: white; color: var(--ac-blue); }
+    #synthetica-canvas .ac-live-content { padding: 22px; }
+    #synthetica-canvas .ac-live-content h3 { color: var(--ac-blue); font: 700 18px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-live-content p { margin-top: 6px; color: var(--ac-muted); font-size: 12px; }
+    #synthetica-canvas .ac-live-demo-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; margin-top: 20px; }
+    #synthetica-canvas .ac-live-demo-block { min-height: 112px; padding: 14px; border-radius: 5px; background: var(--ac-soft-blue); color: var(--ac-blue); font-size: 11px; }
+    #synthetica-canvas .ac-live-demo-block.ac-accent { background: var(--ac-soft-green); }
+
+    @media (max-width: 720px) {
+      #synthetica-canvas .ac-context-strip,
+      #synthetica-canvas .ac-topbar,
+      #synthetica-canvas .ac-hero,
+      #synthetica-canvas .ac-toolbar { align-items: flex-start; flex-direction: column; }
+      #synthetica-canvas .ac-run-summary { width: 100%; justify-content: space-between; }
+      #synthetica-canvas .ac-view-tools { align-self: stretch; justify-content: flex-end; }
+      #synthetica-canvas .ac-top-actions { width: 100%; justify-content: space-between; }
+      #synthetica-canvas .ac-home { padding: 24px 18px 30px; }
+      #synthetica-canvas .ac-home-layout,
+      #synthetica-canvas .ac-work-types,
+      #synthetica-canvas .ac-tutorial { grid-template-columns: 1fr; }
+      #synthetica-canvas .ac-project-field { grid-template-columns: 1fr; }
+      #synthetica-canvas .ac-live-screen { grid-template-columns: 1fr; }
+      #synthetica-canvas .ac-live-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+      #synthetica-canvas .ac-live-nav strong { width: 100%; margin-bottom: 4px; }
+      #synthetica-canvas .ac-live-nav button { width: auto; margin: 0; }
+      #synthetica-canvas .ac-synthetic-body { grid-template-columns: 1fr; }
+      #synthetica-canvas .ac-synthetic-index { padding: 24px 18px 30px; }
+      #synthetica-canvas .ac-synthetic-header { flex-direction: column; }
+      #synthetica-canvas .ac-viewport { height: 650px; }
+      #synthetica-canvas .ac-product { display: none; }
+      #synthetica-canvas .ac-live-event { left: 14px; max-width: none; }
+      #synthetica-canvas .ac-canvas-hint { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #synthetica-canvas .ac-drawer { transition: none; }
+    }
+  </style>
+
+  <section class="ac-app" aria-label="Synthetica, canvas del framework de experiencia">
+    <div class="ac-context-strip">
+      <span class="ac-engine"><img class="ac-engine-mark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNSIgdmlld0JveD0iMCAwIDI1IDI1IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlN5bnRoZXRpY2EiPgogIDxnIHRyYW5zZm9ybT0icm90YXRlKC02IDEyLjUgMTIuNSkiIGZpbGw9IiM3MTU2ZDkiPgogICAgPHJlY3QgeD0iNCIgeT0iMTEiIHdpZHRoPSI1IiBoZWlnaHQ9IjEwIiByeD0iMi41Ii8+CiAgICA8cmVjdCB4PSIxMSIgeT0iMyIgd2lkdGg9IjUiIGhlaWdodD0iMTgiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjE4IiB5PSI3IiB3aWR0aD0iNSIgaGVpZ2h0PSIxNCIgcng9IjIuNSIvPgogIDwvZz4KPC9zdmc+Cg==" alt="">Synthetica · motor de diseño y evaluación</span>
+      <span>Estudio del 22 de septiembre de 2026 · 10:42</span>
+      <span class="ac-product" id="ac-current-project">Sin proyecto abierto</span>
+    </div>
+    <header class="ac-topbar">
+      <div class="ac-brand"><img class="ac-header-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAxMzYgMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iU3ludGhldGljYSI+CiAgPHN0eWxlPkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU1hbnJvcGU6d2dodEA3MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTYgMTIuNSAxMi41KSIgZmlsbD0iIzcxNTZkOSI+CiAgICA8cmVjdCB4PSI0IiB5PSIxMSIgd2lkdGg9IjUiIGhlaWdodD0iMTAiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjExIiB5PSIzIiB3aWR0aD0iNSIgaGVpZ2h0PSIxOCIgcng9IjIuNSIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjciIHdpZHRoPSI1IiBoZWlnaHQ9IjE0IiByeD0iMi41Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjM1IiB5PSIxOSIgZmlsbD0iIzI0MjMyNyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsICdETSBTYW5zJywgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSItMC42Ij5zeW50aGV0aWNhPC90ZXh0Pgo8L3N2Zz4K" alt="Synthetica"><p>Estudios sintéticos y construcción completa de productos digitales</p></div>
+      <div class="ac-top-actions"><button class="ac-top-link cursor-interaction" id="ac-go-home" type="button">Inicio</button><button class="ac-top-link cursor-interaction" id="ac-go-projects" type="button">Proyectos evaluados</button><button class="ac-new-project cursor-interaction" id="ac-new-project" type="button">Nuevo proyecto</button><div class="ac-live ac-run-status ac-is-hidden"><span class="ac-live-dot" aria-hidden="true"></span><span>En ejecución · caja 3 · ciclo 2</span></div></div>
+    </header>
+
+    <main class="ac-home" id="ac-home">
+      <div class="ac-home-intro"><div class="ac-home-kicker">No hay un proyecto abierto</div><h2>¿Qué quieres hacer con Synthetica?</h2><p>Puedes evaluar rápidamente un producto que ya existe con agentes sintéticos o construir un producto digital completo recorriendo las nueve cajas del framework.</p></div>
+      <div class="ac-home-layout">
+        <section class="ac-home-section" aria-labelledby="ac-create-heading">
+          <h3 id="ac-create-heading">Crear un trabajo nuevo</h3>
+          <div class="ac-work-types">
+            <article class="ac-work-type"><div class="ac-brand-asset"><img class="ac-synthetica-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAxMzYgMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iU3ludGhldGljYSI+CiAgPHN0eWxlPkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU1hbnJvcGU6d2dodEA3MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTYgMTIuNSAxMi41KSIgZmlsbD0iIzcxNTZkOSI+CiAgICA8cmVjdCB4PSI0IiB5PSIxMSIgd2lkdGg9IjUiIGhlaWdodD0iMTAiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjExIiB5PSIzIiB3aWR0aD0iNSIgaGVpZ2h0PSIxOCIgcng9IjIuNSIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjciIHdpZHRoPSI1IiBoZWlnaHQ9IjE0IiByeD0iMi41Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjM1IiB5PSIxOSIgZmlsbD0iIzI0MjMyNyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsICdETSBTYW5zJywgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSItMC42Ij5zeW50aGV0aWNhPC90ZXh0Pgo8L3N2Zz4K" alt="Synthetica"></div><span class="ac-work-type-label">Alcance corto</span><h4>Estudio de agentes sintéticos</h4><p>Audita una URL o un flujo existente sin ejecutar todo el framework de construcción.</p><ul><li>Indica la URL y el entorno</li><li>Configura 3–5 agentes ligeros</li><li>Obtén problemas, dudas y severidad</li><li>Entrega correcciones comunes y backlog</li></ul><button class="cursor-interaction" type="button" data-create-kind="synthetic">Crear estudio sintético</button></article>
+            <article class="ac-work-type full"><span class="ac-work-type-label">Framework completo</span><h4>Proyecto completo de producto</h4><p>Parte del contexto y construye el producto a través de las nueve cajas hasta el cierre humano y consciente.</p><ul><li>Lee todas las fuentes iniciales</li><li>Construye y refina prototipos HTML</li><li>Ejecuta gates y ciclos automáticos</li><li>Entrega diseño funcional y backlog</li></ul><button class="cursor-interaction" type="button" data-create-kind="full">Crear producto completo</button></article>
+          </div>
+          <div class="ac-tutorial" aria-label="Cómo funciona"><div class="ac-tutorial-step"><strong>1 · Elige el alcance</strong><span>Estudio sintético puntual o proyecto completo de nueve cajas.</span></div><div class="ac-tutorial-step"><strong>2 · Vincula las fuentes</strong><span>Selecciona las carpetas de contexto, población e investigación.</span></div><div class="ac-tutorial-step"><strong>3 · Ejecuta desde consola</strong><span>Synthetica procesa, aprende, itera y reporta el avance aquí.</span></div></div>
+        </section>
+        <section class="ac-home-section" id="ac-evaluated-projects" aria-labelledby="ac-projects-heading">
+          <h3 id="ac-projects-heading">Proyectos evaluados</h3>
+          <div class="ac-project-list">
+            <div class="ac-project-row"><div><strong>Portal de servicios ciudadanos</strong><span>Proyecto completo · Ejecución #007 · En curso · Caja 3</span></div><button class="cursor-interaction" type="button" data-open-project="Portal de servicios ciudadanos" data-project-kind="full">Abrir</button></div>
+            <div class="ac-project-row"><div><strong class="ac-project-name-with-mark"><img class="ac-synthetica-mark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNSIgdmlld0JveD0iMCAwIDI1IDI1IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlN5bnRoZXRpY2EiPgogIDxnIHRyYW5zZm9ybT0icm90YXRlKC02IDEyLjUgMTIuNSkiIGZpbGw9IiM3MTU2ZDkiPgogICAgPHJlY3QgeD0iNCIgeT0iMTEiIHdpZHRoPSI1IiBoZWlnaHQ9IjEwIiByeD0iMi41Ii8+CiAgICA8cmVjdCB4PSIxMSIgeT0iMyIgd2lkdGg9IjUiIGhlaWdodD0iMTgiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjE4IiB5PSI3IiB3aWR0aD0iNSIgaGVpZ2h0PSIxNCIgcng9IjIuNSIvPgogIDwvZz4KPC9zdmc+Cg==" alt=""><span id="ac-synthetic-project-name">Checkout comercio digital</span></strong><span id="ac-synthetic-project-meta">Estudio sintético · Estudio #024 · Finalizado · 14 hallazgos</span></div><button class="cursor-interaction" id="ac-open-synthetic-project" type="button" data-open-project="Checkout comercio digital" data-project-kind="synthetic">Ver resultados</button></div>
+            <div class="ac-project-row"><div><strong>App de citas médicas</strong><span>Proyecto completo · Ejecución #003 · Finalizado · 9 cajas</span></div><button class="cursor-interaction" type="button" data-open-project="App de citas médicas" data-project-kind="full">Ver resultados</button></div>
+          </div>
+          <p class="ac-history-note">Aquí se conservan el recorrido, los ciclos, las tablas de severidad, las dudas, los prototipos y las decisiones de cada evaluación.</p>
+        </section>
+      </div>
+    </main>
+
+    <section class="ac-synthetic-index ac-is-hidden" id="ac-synthetic-index" aria-labelledby="ac-synthetic-title">
+      <header class="ac-synthetic-header"><div><div class="ac-brand-asset"><img class="ac-synthetica-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAxMzYgMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iU3ludGhldGljYSI+CiAgPHN0eWxlPkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU1hbnJvcGU6d2dodEA3MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTYgMTIuNSAxMi41KSIgZmlsbD0iIzcxNTZkOSI+CiAgICA8cmVjdCB4PSI0IiB5PSIxMSIgd2lkdGg9IjUiIGhlaWdodD0iMTAiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjExIiB5PSIzIiB3aWR0aD0iNSIgaGVpZ2h0PSIxOCIgcng9IjIuNSIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjciIHdpZHRoPSI1IiBoZWlnaHQ9IjE0IiByeD0iMi41Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjM1IiB5PSIxOSIgZmlsbD0iIzI0MjMyNyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsICdETSBTYW5zJywgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSItMC42Ij5zeW50aGV0aWNhPC90ZXh0Pgo8L3N2Zz4K" alt="Synthetica"></div><div class="ac-home-kicker">Índice de Agentes Sintéticos · último estudio</div><h2 id="ac-synthetic-title">Estudio #024 · Checkout comercio digital</h2><p><span id="ac-index-url">https://checkout.ejemplo/</span> · <span id="ac-index-agent-count">4 agentes ligeros</span> · finalizado</p></div><div class="ac-light-status">Sin KLM · sin video · evaluación ligera</div></header>
+      <div class="ac-synthetic-body">
+        <section class="ac-synthetic-panel"><h3>Quiénes evaluaron</h3><p>Perfiles creados con la misma tecnología de población sintética, simplificados para Synthetica.</p><div class="ac-light-agent-list" id="ac-light-agent-list"></div></section>
+        <section class="ac-synthetic-panel"><h3>Tabla de severidad encontrada</h3><p>Hallazgos coincidentes priorizados. Las particularidades no críticas permanecen en backlog.</p><table class="ac-severity-table"><thead><tr><th>#</th><th>Hallazgo</th><th>Severidad</th><th>Coincidencia</th></tr></thead><tbody><tr><td>01</td><td>El costo total aparece demasiado tarde en el flujo.</td><td><span class="ac-severity">Alta</span></td><td>4/4</td></tr><tr><td>02</td><td>La recuperación después de un error no indica qué dato corregir.</td><td><span class="ac-severity">Alta</span></td><td>3/4</td></tr><tr><td>03</td><td>El texto del botón final no anticipa la confirmación.</td><td><span class="ac-severity medium">Media</span></td><td>3/4</td></tr><tr><td>04</td><td>Preferencia individual sobre el orden de métodos de pago.</td><td><span class="ac-severity medium">Backlog</span></td><td>1/4</td></tr></tbody></table></section>
+      </div>
+      <div class="ac-index-actions"><button class="cursor-interaction" id="ac-back-projects" type="button">Volver a proyectos evaluados</button></div>
+    </section>
+
+    <div class="ac-workspace-section ac-is-hidden" id="ac-workspace-section">
+    <section class="ac-hero">
+      <div><div class="ac-kicker">Canvas de trabajo</div><h2>Del contexto al producto consciente</h2><p>Arrastra el lienzo de derecha a izquierda. Las cajas 1–7 automatizan la construcción; la 8 entrega el producto al diseño humano y la 9 consolida recomendaciones éticas y Zero UI.</p></div>
+      <div class="ac-run-summary" aria-label="Estado del estudio"><div><strong>3/9</strong><span>Caja actual</span></div><div><strong>6</strong><span>Prototipos</span></div><div><strong>7</strong><span>Ciclos</span></div></div>
+    </section>
+    <div class="ac-toolbar">
+      <div class="ac-stage-jumps" id="ac-stage-jumps" aria-label="Ir a una caja"></div>
+      <div class="ac-view-tools">
+        <button class="ac-icon-button cursor-interaction" type="button" id="ac-zoom-out" aria-label="Alejar">−</button>
+        <span class="ac-zoom-value" id="ac-zoom-value">90%</span>
+        <button class="ac-icon-button cursor-interaction" type="button" id="ac-zoom-in" aria-label="Acercar">+</button>
+        <button class="ac-icon-button ac-fit-button cursor-interaction" type="button" id="ac-fit" aria-label="Ver todo">Ajustar</button>
+      </div>
+    </div>
+
+    <div class="ac-viewport" id="ac-viewport" aria-label="Canvas horizontal navegable">
+      <div class="ac-world" id="ac-world"></div>
+      <div class="ac-canvas-hint"><strong>Arrastra para recorrer</strong> · rueda para desplazarte · Ctrl + rueda para zoom</div>
+      <div class="ac-live-event" aria-live="polite"><strong>Ahora · agente S-03</strong><span>Valida el resumen de errores del prototipo v0.6 contra WCAG 2.2.</span></div>
+    </div>
+    <aside class="ac-drawer" id="ac-drawer" aria-live="polite" aria-label="Detalle de la caja seleccionada">
+      <button class="ac-drawer-close cursor-interaction" id="ac-drawer-close" type="button">Cerrar</button>
+      <div class="ac-drawer-kicker" id="ac-drawer-kicker">Caja 3 · en curso</div>
+      <h2 id="ac-drawer-title">Usabilidad técnica</h2>
+      <p class="ac-drawer-lede" id="ac-drawer-lede"></p>
+      <section class="ac-detail-section"><h3>Prototipo de entrada</h3><div class="ac-prototype-preview"><div class="ac-preview-chrome" aria-hidden="true"><i></i><i></i><i></i></div><div class="ac-preview-screen" aria-hidden="true"><div class="ac-preview-nav"></div><div class="ac-preview-content"><span></span><span></span><div class="ac-preview-grid"><i></i><i></i></div></div></div><div class="ac-preview-meta"><strong id="ac-prev-name"></strong><span id="ac-prev-origin"></span></div></div></section>
+      <div class="ac-detail-metrics" id="ac-detail-metrics"></div>
+      <section class="ac-detail-section"><h3>Principios y procesos</h3><ul id="ac-detail-principles"></ul></section>
+      <section class="ac-detail-section"><h3>Qué generó</h3><ul id="ac-detail-output"></ul></section>
+      <section class="ac-detail-section"><h3>Evaluación</h3><ul id="ac-detail-evaluation"></ul><div class="ac-decision" id="ac-detail-decision"></div></section>
+    </aside>
+    </div>
+
+    <div class="ac-modal-layer" id="ac-project-layer" role="dialog" aria-modal="true" aria-labelledby="ac-project-title">
+      <section class="ac-modal">
+        <header class="ac-modal-header"><div><h2 id="ac-project-title">Iniciar un proyecto</h2><p>Indica dónde están las fuentes iniciales. Synthetica revisará todos los archivos compatibles de cada carpeta.</p></div><button class="ac-modal-close cursor-interaction" type="button" data-close-modal="project">Cerrar</button></header>
+        <div class="ac-modal-body">
+          <div class="ac-modal-synthetica-brand" id="ac-modal-synthetica-brand"><div class="ac-brand-asset"><img class="ac-synthetica-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAxMzYgMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iU3ludGhldGljYSI+CiAgPHN0eWxlPkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU1hbnJvcGU6d2dodEA3MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTYgMTIuNSAxMi41KSIgZmlsbD0iIzcxNTZkOSI+CiAgICA8cmVjdCB4PSI0IiB5PSIxMSIgd2lkdGg9IjUiIGhlaWdodD0iMTAiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjExIiB5PSIzIiB3aWR0aD0iNSIgaGVpZ2h0PSIxOCIgcng9IjIuNSIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjciIHdpZHRoPSI1IiBoZWlnaHQ9IjE0IiByeD0iMi41Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjM1IiB5PSIxOSIgZmlsbD0iIzI0MjMyNyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsICdETSBTYW5zJywgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSItMC42Ij5zeW50aGV0aWNhPC90ZXh0Pgo8L3N2Zz4K" alt="Synthetica"></div><span>Motor de población y evaluación sintética</span></div>
+          <div class="ac-selected-type" id="ac-project-type">Proyecto completo de producto · nueve cajas</div>
+          <div class="ac-project-fields">
+            <div class="ac-project-field"><label for="ac-project-name" id="ac-project-name-label">Nombre del proyecto</label><input id="ac-project-name" value="Portal de servicios ciudadanos"></div>
+            <div class="ac-synthetic-only ac-is-hidden">
+              <section class="ac-form-group"><h3>Producto y población</h3>
+                <div class="ac-project-field"><label for="ac-project-id">Identificador *</label><input id="ac-project-id" value="nuevo-estudio"></div>
+                <div class="ac-project-field"><label for="ac-study-url">URL del producto *</label><input id="ac-study-url" type="url" value="https://producto.ejemplo/"></div>
+                <div class="ac-project-field"><label for="ac-study-environment">Entorno *</label><select id="ac-study-environment"><option>Maqueta</option><option selected>QA</option><option>Producción controlada</option></select></div>
+                <div class="ac-project-field"><label for="ac-agent-count">Agentes sintéticos *</label><select id="ac-agent-count"><option value="3">3 agentes</option><option value="4" selected>4 agentes</option><option value="5">5 agentes</option></select></div>
+                <div class="ac-project-field"><label for="ac-study-audience">Población objetivo *</label><input id="ac-study-audience" value="Personas que completan la tarea principal"></div>
+              </section>
+              <section class="ac-form-group"><h3>Fuentes y motor existente</h3>
+                <div class="ac-project-field"><label for="ac-engine-root">Raíz de Agentes Sintéticos *</label><input id="ac-engine-root" value="E:\Sitios\Guru\_agentes_sinteticos"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="motor">Seleccionar</button></div>
+                <div class="ac-project-field"><label for="ac-documents-folder">Carpeta de documentos *</label><input id="ac-documents-folder" value="E:\Sitios\Guru\Reuniones"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="documentos">Seleccionar</button></div>
+              </section>
+              <section class="ac-form-group"><h3>Configuración que utilizará el estudio</h3>
+                <div class="ac-project-field"><label for="ac-project-config">Proyecto JSON *</label><input id="ac-project-config" value="E:\Sitios\Guru\_agentes_sinteticos\proyectos\nuevo-estudio.json"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="configuracion">Seleccionar</button></div>
+                <div class="ac-project-field"><label for="ac-flows-config">Recorridos JSON *</label><input id="ac-flows-config" value="E:\Sitios\Guru\_agentes_sinteticos\proyectos\nuevo-estudio\recorridos.json"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="recorridos">Seleccionar</button></div>
+                <div class="ac-project-field"><label for="ac-cohort-config">Cohorte JSON *</label><input id="ac-cohort-config" value="E:\Sitios\Guru\_agentes_sinteticos\proyectos\nuevo-estudio\cohorte.json"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="cohorte">Seleccionar</button></div>
+                <div class="ac-project-field"><label for="ac-cognitive-base">Base cognitiva *</label><input id="ac-cognitive-base" value="E:\Sitios\Guru\_agentes_sinteticos\datos\nuevo-estudio.sqlite"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="base">Seleccionar</button></div>
+                <div class="ac-project-field"><label for="ac-output-folder">Carpeta de resultados *</label><input id="ac-output-folder" value="E:\Sitios\Guru\_agentes_sinteticos\salidas"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="salidas">Seleccionar</button></div>
+                <div class="ac-project-field"><label for="ac-last-study-file">Registro del último índice *</label><input id="ac-last-study-file" value="E:\Sitios\Guru\_agentes_sinteticos\ULTIMO_ESTUDIO.txt"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="ultimo-estudio">Seleccionar</button></div>
+                <label class="ac-checkbox-row"><input id="ac-open-index" type="checkbox" checked> Abrir automáticamente el último <code>index.html</code> al finalizar</label>
+              </section>
+            </div>
+            <div class="ac-full-only">
+              <div class="ac-project-field"><label for="ac-prototype-source">Prototipo inicial</label><input id="ac-prototype-source" placeholder="Opcional: ruta de un prototipo existente"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="prototipo">Seleccionar</button></div>
+              <div class="ac-project-field"><label for="ac-context-folder">Contexto y problema *</label><input id="ac-context-folder" value="C:\Synthetica\Portal\01-contexto"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="contexto">Seleccionar</button></div>
+              <div class="ac-project-field"><label for="ac-audience-folder">Población objetivo *</label><input id="ac-audience-folder" value="C:\Synthetica\Portal\02-poblacion"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="poblacion">Seleccionar</button></div>
+              <div class="ac-project-field"><label for="ac-research-folder">Investigación y reuniones</label><input id="ac-research-folder" value="C:\Synthetica\Portal\03-investigacion"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="investigacion">Seleccionar</button></div>
+              <div class="ac-project-field"><label for="ac-extra-folder">Fuentes adicionales</label><input id="ac-extra-folder" placeholder="Opcional: métricas, referentes o auditorías"><button class="ac-folder-button cursor-interaction" type="button" data-pick-folder="adicionales">Seleccionar</button></div>
+            </div>
+          </div>
+          <div class="ac-source-note" id="ac-source-note"><strong>Lectura inicial:</strong> documentos, PDF, hojas de cálculo, imágenes, transcripciones, HTML y notas de investigación. La plataforma crea el contexto del problema; la ejecución automática se inicia desde la consola.</div>
+          <div class="ac-config-status" id="ac-config-status" aria-live="polite">Configuración lista. Se detectaron 47 fuentes compatibles para iniciar desde la consola.</div>
+          <section class="ac-after-save" id="ac-after-save" aria-live="polite"><h3>Configuración guardada. Ahora puedes continuar desde la plataforma.</h3><p>El proyecto de Agentes Sintéticos no fue modificado. Synthetica creó una configuración independiente para agentes ligeros y registró esta ejecución.</p><div class="ac-command-list"><code>/agentes-actualizar-base</code><code>/agentes-correr-estudio</code><code>/agentes-rehacer-flujos</code></div><button class="ac-open-last cursor-interaction" id="ac-open-last-study" type="button">Abrir último estudio #025</button></section>
+          <div class="ac-modal-actions"><button class="ac-secondary-action cursor-interaction" type="button" data-close-modal="project">Cancelar</button><button class="ac-primary-action cursor-interaction" id="ac-save-project" type="button">Guardar configuración</button></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="ac-modal-layer" id="ac-live-layer" role="dialog" aria-modal="true" aria-labelledby="ac-live-title">
+      <section class="ac-modal">
+        <header class="ac-modal-header"><div><h2 id="ac-live-title">Prototipo en vivo</h2><p id="ac-live-subtitle"></p></div><button class="ac-modal-close cursor-interaction" type="button" data-close-modal="live">Cerrar</button></header>
+        <div class="ac-modal-body">
+          <div class="ac-live-browser">
+            <div class="ac-live-browser-bar"><strong id="ac-live-file"></strong><span class="ac-running">● Ejecutándose</span></div>
+            <div class="ac-live-screen">
+              <nav class="ac-live-nav" aria-label="Estados del prototipo"><strong>Synthetica Preview</strong><button class="cursor-interaction" type="button" data-live-view="Inicio" aria-pressed="true">Vista inicial</button><button class="cursor-interaction" type="button" data-live-view="Flujo principal" aria-pressed="false">Flujo principal</button><button class="cursor-interaction" type="button" data-live-view="Estado de error" aria-pressed="false">Estado de error</button></nav>
+              <section class="ac-live-content" aria-live="polite"><h3 id="ac-live-view-title">Vista inicial</h3><p id="ac-live-view-copy">Prototipo navegable generado por la caja seleccionada.</p><div class="ac-live-demo-grid"><div class="ac-live-demo-block"><strong>Contenido principal</strong><p>Interacciones, microcopy y rutas disponibles para revisión.</p></div><div class="ac-live-demo-block ac-accent"><strong>Estado funcional</strong><p>La vista responde y conserva las decisiones aprobadas.</p></div></div></section>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <script>
+    (() => {
+      const root = document.getElementById('synthetica-canvas');
+      if (!root) return;
+
+      const stages = [
+        {
+          id: 1, name: 'Usabilidad heurística', short: 'Heurística', state: 'completed', status: 'Aprobada', cycles: 3, score: '100% reglas', prototype: 'HTML v0.3', findings: 11,
+          lede: 'El producto y su contexto entran al framework. Aquí se construye la primera versión HTML sobre los pilares básicos de interacción.',
+          principles: ['Heurísticas de Nielsen', 'Principios de diseño de Don Norman', 'Happy path inicial', 'Visibilidad, consistencia y prevención de errores'],
+          outputs: ['Primer producto navegable en HTML', 'Mapa del happy path', 'Registro de decisiones heurísticas'],
+          evaluation: ['Auditoría automática de reglas; todavía no intervienen agentes sintéticos', 'Los incumplimientos comunes regresan a refinamiento'],
+          decision: 'Aprobada después de 3 ciclos. Los agentes y los flujos se construyen en la caja 2.'
+        },
+        {
+          id: 2, name: 'Usabilidad centrada en el usuario', short: 'Usuario', state: 'completed', status: 'Aprobada', cycles: 2, score: '86%', prototype: 'HTML v0.5', findings: 8,
+          lede: 'Convierte la evidencia del contexto y las voces reales en personas, recorridos, lenguaje y primeras decisiones visuales.',
+          principles: ['Protopersonas basadas en contexto', 'Mapas de empatía y journey maps', 'Auditoría profunda de productos similares', 'Sistema de diseño adecuado', 'Paleta inicial 60–30–10'],
+          outputs: ['Flujos de interacción priorizados', 'Protopersonas y mapas', 'Nuevo prototipo con lenguaje contextual'],
+          evaluation: ['3 agentes sintéticos, sin KLM y sin video', 'NASA-TLX y SUS', 'Tabla de severidad y dudas recurrentes'],
+          decision: 'Aprobada: los hallazgos compartidos fueron corregidos; dos preferencias individuales quedaron en backlog.'
+        },
+        {
+          id: 3, name: 'Usabilidad técnica', short: 'Técnica', state: 'active', status: 'En curso', cycles: 2, score: '68%', prototype: 'HTML v0.6', findings: 5,
+          lede: 'Comprueba que el producto sea accesible, ergonómico y coherente con los patrones técnicos de interacción.',
+          principles: ['ISO 9241', 'WCAG 2.2', 'Ergonomía', 'Leyes de UX', 'Patrones de UI', 'Gamificación solo cuando aporta valor'],
+          outputs: ['Prototipo con orden de foco corregido', 'Estados y mensajes de error revisados', 'Matriz de cumplimiento técnico'],
+          evaluation: ['3 de 5 agentes ejecutados', 'Recorrido cognitivo sin KLM ni video', 'Tabla severidad × arreglabilidad'],
+          decision: 'Debe iterar: tres agentes no percibieron el resumen de errores. El gate actual es 68% y el mínimo es 70%.'
+        },
+        {
+          id: 4, name: 'Usabilidad gráfica & psicológica', short: 'Gráfica', state: 'waiting', status: 'En espera', cycles: 0, score: '—', prototype: 'Imágenes HD', findings: 0,
+          lede: 'Traduce el producto funcional en propuestas visuales de alta fidelidad y elige autónomamente la más adecuada.',
+          principles: ['Normas de diseño gráfico', 'Peso y jerarquía visual', 'Proporción áurea y principios de belleza', 'GOMS para describir metas y métodos', 'KLM desactivado', 'Generación de alternativas visuales'],
+          outputs: ['Variantes visuales en imágenes de alta fidelidad', 'Resultado del A/B testing', 'Interfaz seleccionada y aplicada al producto'],
+          evaluation: ['3 agentes votan según su contexto y tareas', 'Los agentes no usan KLM ni graban video', 'Se descartan variantes que degradan usabilidad'],
+          decision: 'Pendiente de la aprobación técnica de la caja 3.'
+        },
+        {
+          id: 5, name: 'Usabilidad fundamental / teórica', short: 'Fundamental', state: 'waiting', status: 'En espera', cycles: 0, score: '—', prototype: 'Diseño funcional', findings: 0,
+          lede: 'Consolida la arquitectura del producto y comprueba que no existan rutas incompletas antes del diseño funcional final.',
+          principles: ['Cinco planos de Jesse James Garrett', 'Análisis de grafos', 'Caminos incompletos', 'Nodos y vistas huérfanas', 'Microcopy según Kinneret Yifrah'],
+          outputs: ['Arquitectura validada', 'Grafo de navegación completo', 'Microcopias refinadas', 'Diseño funcional consolidado'],
+          evaluation: ['3–5 agentes recorren los flujos principales', 'Se conservan los pilares aprobados en cajas anteriores', 'Regresión sobre rutas corregidas'],
+          decision: 'Pendiente de la variante visual elegida en la caja 4.'
+        },
+        {
+          id: 6, name: 'Gaps cognitivos y fugas mentales', short: 'Gaps', mode: 'ai', state: 'waiting', status: 'En espera', cycles: 0, score: '—', prototype: 'App refinada', findings: 0,
+          lede: 'Primera caja de Diseño para masas. Usa gaps cognitivos convencionales y nudges para mejorar comprensión y engagement sin degradar la autonomía.',
+          principles: ['Gaps cognitivos convencionales', 'Framing, confirmación y hindsight', 'Sunk cost, escasez y descuento hiperbólico', 'Nudges de Richard Thaler y Cass Sunstein', 'Control de patrones manipulativos'],
+          outputs: ['Mapa de gaps y fugas mentales', 'Recomendaciones por pantalla', 'Nueva aplicación refinada'],
+          evaluation: ['La app vuelve al motor ligero de agentes', '3–5 agentes, sin KLM y sin video', 'Hallazgos comunes vuelven al ciclo'],
+          decision: 'Pendiente del diseño funcional aprobado en la caja 5.'
+        },
+        {
+          id: 7, name: 'Modelos de conducta', short: 'Conducta', mode: 'ai', state: 'waiting', status: 'En espera', cycles: 0, score: '—', prototype: 'Última app IA', findings: 0,
+          lede: 'Segunda caja de Diseño para masas y último punto automatizado. Contrasta dos modelos de conducta según la intención y el contexto del proyecto.',
+          principles: ['Modelo de conducta de B. J. Fogg', 'Hooked de Nir Eyal', 'Consumo atemporal', 'Auditoría comparada de ambos modelos', 'Selección de principios aplicables al proyecto'],
+          outputs: ['Síntesis de los aportes útiles de ambos modelos', 'Aplicación nuevamente refinada', 'Paquete de cierre de la fase IA'],
+          evaluation: ['Última evaluación ligera con 3–5 agentes', 'Sin KLM y sin video', 'Al aprobar, termina la construcción automática'],
+          decision: 'Pendiente de la caja 6. Después de esta caja no se aplican más cambios autónomos.'
+        },
+        {
+          id: 8, name: 'Diseño humano', short: 'Humano', mode: 'human', state: 'waiting', status: 'Externa', cycles: 0, score: 'Humano', prototype: 'Prototipo activo', findings: 0,
+          lede: 'El equipo humano recibe el prototipo funcional y decide qué principios, instrumentos y tareas se evaluarán con usuarios finales.',
+          principles: ['Definición humana del plan de evaluación', 'SUS', 'NPS', 'CSAT', 'Técnicas cualitativas seleccionadas por el equipo'],
+          outputs: ['Plan de evaluación con usuarios finales', 'Instrumentos incorporados al prototipo', 'Criterios humanos de éxito y aceptación'],
+          evaluation: ['Participantes reales con el prototipo funcionando', 'El equipo interpreta satisfacción, comprensión y valor', 'Los resultados pueden producir una nueva versión de la app'],
+          decision: 'No la ejecuta Synthetica de forma autónoma. Synthetica observa, documenta e integra las decisiones humanas.'
+        },
+        {
+          id: 9, name: 'Diseño consciente / Zero UI', short: 'Consciente', mode: 'recommendations', state: 'waiting', status: 'Recomendación', cycles: 0, score: 'No aplica', prototype: 'Backlog futuro', findings: 0,
+          lede: 'Última frontera del framework. Evalúa el producto desde Zero UI y el diseño ético de Tristan Harris, pero no aplica cambios automáticamente.',
+          principles: ['Diseño consciente', 'Zero UI', 'Diseño ético según Tristan Harris', 'Autonomía y bienestar de la persona', 'Reducción de persuasión indebida y consumo compulsivo'],
+          outputs: ['Recomendaciones consolidadas', 'Riesgos éticos documentados', 'Backlog de evolución futura', 'Lineamientos para Figma y el sistema de diseño'],
+          evaluation: ['Revisión humana de cada recomendación', 'Ninguna recomendación modifica directamente la app', 'Trabajo paralelo con diseño visual y sistema de diseño'],
+          decision: 'Salida consultiva: las recomendaciones quedan disponibles para futuras versiones del producto digital.'
+        }
+      ];
+
+      const viewport = root.querySelector('#ac-viewport');
+      const world = root.querySelector('#ac-world');
+      const drawer = root.querySelector('#ac-drawer');
+      const home = root.querySelector('#ac-home');
+      const workspaceSection = root.querySelector('#ac-workspace-section');
+      const syntheticIndex = root.querySelector('#ac-synthetic-index');
+      const saved = window.openai && window.openai.widgetState && window.openai.widgetState.privateContent;
+      let scale = Number(saved && saved.scale) || 0.9;
+      let x = saved && Number.isFinite(Number(saved.x)) ? Number(saved.x) : -1230;
+      let y = saved && Number.isFinite(Number(saved.y)) ? Number(saved.y) : 12;
+      let selected = Number(saved && saved.stage) || 3;
+      let dragging = false;
+      let pointerStart = null;
+      let setupKind = 'full';
+      let syntheticExecution = 24;
+
+      const persist = () => {
+        if (!window.openai || !window.openai.setWidgetState) return;
+        window.openai.setWidgetState({
+          modelContent: { selectedStage: selected, zoom: Math.round(scale * 100) },
+          privateContent: { stage: selected, scale, x, y }
+        }).catch(() => {});
+      };
+
+      const stageLeft = id => 80 + (id - 1) * 710;
+
+      const previousPrototypes = {
+        1: { name: 'Contexto del producto', origin: 'Entrada inicial · sin prototipo previo' },
+        2: { name: 'prototipo-v0.3.html', origin: 'Recibido de la caja 1' },
+        3: { name: 'prototipo-v0.5.html', origin: 'Recibido de la caja 2' },
+        4: { name: 'prototipo-v0.6.html', origin: 'Recibido de la caja 3' },
+        5: { name: 'interfaz-seleccionada-v0.7.html', origin: 'Recibido de la caja 4' },
+        6: { name: 'diseno-funcional-v0.8.html', origin: 'Recibido de la caja 5' },
+        7: { name: 'app-refinada-v0.9.html', origin: 'Recibido de la caja 6' },
+        8: { name: 'producto-final-ia-v1.0.html', origin: 'Recibido de la caja 7' },
+        9: { name: 'prototipo-evaluado-v1.1.html', origin: 'Recibido de la caja 8' }
+      };
+
+      const livePrototypes = {
+        1: 'prototipo-v0.3.html',
+        2: 'prototipo-v0.5.html',
+        3: 'prototipo-v0.6.html',
+        5: 'diseno-funcional-v0.8.html',
+        6: 'app-refinada-v0.9.html',
+        7: 'producto-final-ia-v1.0.html',
+        8: 'prototipo-evaluado-v1.1.html'
+      };
+
+      const stageHtml = stage => {
+        const agentLabel = stage.id === 1 ? 'Control automático' : stage.id === 8 ? 'Evaluación humana' : stage.id === 9 ? 'Recomendaciones' : 'Evaluación por agentes';
+        const agentMeta = stage.id === 1 ? 'Nielsen + Norman' : stage.id === 8 ? 'SUS · NPS · CSAT' : stage.id === 9 ? 'No se aplican' : '3–5 · sin KLM/video';
+        const evaluatorVisual = stage.id === 1 ? '<span class="ac-evaluator-token" aria-hidden="true">AUTO</span>' : stage.id === 8 ? '<span class="ac-evaluator-token" aria-hidden="true">UX</span>' : stage.id === 9 ? '<span class="ac-evaluator-token" aria-hidden="true">ÉTICA</span>' : '<div class="ac-agent-dots" aria-hidden="true"><i></i><i></i><i></i></div>';
+        const prototypeToken = stage.id === 4 ? 'IMG' : stage.id === 9 ? 'DOC' : 'HTML';
+        const loopLabel = stage.id === 9 ? 'consolida, no aplica' : stage.id === 8 ? 'decisión humana' : 'si no cumple, refina';
+        const list = stage.principles.slice(0, 6).map(item => `<li>${item}</li>`).join('');
+        return `
+          <article class="ac-stage" data-stage="${stage.id}" data-state="${stage.state}" data-mode="${stage.mode || 'ai'}" style="left:${stageLeft(stage.id)}px">
+            <header class="ac-stage-header">
+              <span class="ac-stage-number">${stage.id}</span>
+              <div class="ac-stage-copy"><h3>${stage.name}</h3><p>${stage.id === 4 ? 'Diseño visual y selección autónoma' : stage.id === 5 ? 'Garrett está contenido únicamente aquí' : stage.id === 6 || stage.id === 7 ? 'Diseño para masas · IA' : stage.id === 8 ? 'Comienza el diseño humano' : stage.id === 9 ? 'Salida consultiva, no automática' : 'Evaluación continua del producto'}</p></div>
+              <span class="ac-state">${stage.status}</span>
+            </header>
+            <div class="ac-stage-body">
+              <div class="ac-input-node">${stage.id === 1 ? 'Producto + contexto' : 'Prototipo anterior'}</div>
+              <div class="ac-principles"><strong>Principios y procesos</strong><ul>${list}</ul></div>
+              <div class="ac-prototype"><span class="ac-prototype-token" aria-hidden="true">${prototypeToken}</span><strong>${stage.id === 9 ? 'Salida consolidada' : 'Prototipo creado'}</strong><span>${stage.prototype}</span></div>
+              <div class="ac-evaluation"><div>${evaluatorVisual}<strong>${agentLabel}</strong><span>${agentMeta}</span></div></div>
+              <button class="ac-detail-button cursor-interaction" type="button" data-open-stage="${stage.id}">Ver caja y decisiones</button>
+              ${livePrototypes[stage.id] ? `<button class="ac-live-button cursor-interaction" type="button" data-live-stage="${stage.id}">Ver en vivo</button>` : ''}
+              <svg class="ac-stage-flow" viewBox="0 0 560 402" aria-hidden="true">
+                <defs><marker id="arrow-${stage.id}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="currentColor"></path></marker></defs>
+                <path d="M138 47 H158" marker-end="url(#arrow-${stage.id})"></path>
+                <path d="M383 76 H405" marker-end="url(#arrow-${stage.id})"></path>
+                <path d="M465 138 V180" marker-end="url(#arrow-${stage.id})"></path>
+                <path class="ac-loop-path" d="M397 255 H350 Q325 255 325 230 V225" marker-end="url(#arrow-${stage.id})"></path>
+                <text class="ac-loop-label" x="330" y="273">${loopLabel}</text>
+              </svg>
+              <footer class="ac-stage-footer"><div><span>Ciclos</span><strong>${stage.cycles || '—'}</strong></div><div><span>Gate</span><strong>${stage.score}</strong></div><div><span>Hallazgos</span><strong>${stage.findings || '—'}</strong></div></footer>
+            </div>
+          </article>`;
+      };
+
+      const connectorHtml = (stage, next) => {
+        const stateClass = stage.state === 'completed' ? 'completed' : '';
+        return `<div class="ac-next ${stateClass}" style="left:${stageLeft(stage.id) + 560}px"><span>${stage.state === 'completed' ? 'gate aprobado' : 'esperando aprobación'}</span></div>`;
+      };
+
+      const renderWorld = () => {
+        const phases = `
+          <div class="ac-phase-band" style="left:80px;width:3400px">Construcción y diseño funcional · IA</div>
+          <div class="ac-phase-band mass" style="left:3630px;width:1270px">Diseño para masas · IA</div>
+          <div class="ac-phase-band human" style="left:5050px;width:1270px">Diseño humano y consciente</div>`;
+        const humanOutput = `<div class="ac-final-connector"></div><div class="ac-human-output"><span class="ac-output-token" aria-hidden="true">FIGMA</span><strong>Diseño humano en paralelo</strong><span>Figma, sistema de diseño, especificaciones y evolución futura del producto.</span></div>`;
+        world.innerHTML = phases + stages.map(stageHtml).join('') + stages.slice(0, -1).map((stage, index) => connectorHtml(stage, stages[index + 1])).join('') + humanOutput;
+        world.querySelectorAll('[data-open-stage]').forEach(button => button.addEventListener('click', event => {
+          event.stopPropagation();
+          selected = Number(button.dataset.openStage);
+          openDrawer(selected);
+          renderNavigation();
+          persist();
+        }));
+        world.querySelectorAll('[data-live-stage]').forEach(button => button.addEventListener('click', event => {
+          event.stopPropagation();
+          openLivePreview(Number(button.dataset.liveStage));
+        }));
+      };
+
+      const renderNavigation = () => {
+        root.querySelector('#ac-stage-jumps').innerHTML = stages.map(stage => `<button class="ac-jump cursor-interaction" type="button" data-jump="${stage.id}" aria-pressed="${stage.id === selected}">${stage.id} · ${stage.short}</button>`).join('');
+        root.querySelectorAll('[data-jump]').forEach(button => button.addEventListener('click', () => jumpTo(Number(button.dataset.jump))));
+      };
+
+      const applyTransform = () => {
+        world.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+        root.querySelector('#ac-zoom-value').textContent = `${Math.round(scale * 100)}%`;
+      };
+
+      const jumpTo = id => {
+        selected = id;
+        scale = Math.max(scale, 0.82);
+        const center = stageLeft(id) + 280;
+        x = viewport.clientWidth / 2 - center * scale;
+        y = 16;
+        applyTransform();
+        renderNavigation();
+        persist();
+      };
+
+      const setScale = nextScale => {
+        const old = scale;
+        scale = Math.max(0.18, Math.min(1.3, nextScale));
+        const cx = viewport.clientWidth / 2;
+        const cy = viewport.clientHeight / 2;
+        x = cx - ((cx - x) / old) * scale;
+        y = cy - ((cy - y) / old) * scale;
+        applyTransform();
+        persist();
+      };
+
+      const fitAll = () => {
+        const usableWidth = Math.max(300, viewport.clientWidth - 36);
+        scale = Math.max(0.15, Math.min(0.78, usableWidth / 6900));
+        x = 18;
+        y = Math.max(18, (viewport.clientHeight - 650 * scale) / 2);
+        applyTransform();
+        persist();
+      };
+
+      const openDrawer = id => {
+        const stage = stages.find(item => item.id === id) || stages[0];
+        root.querySelector('#ac-drawer-kicker').textContent = `Caja ${stage.id} · ${stage.status}`;
+        root.querySelector('#ac-drawer-title').textContent = stage.name;
+        root.querySelector('#ac-drawer-lede').textContent = stage.lede;
+        const previous = previousPrototypes[stage.id];
+        root.querySelector('#ac-prev-name').textContent = previous.name;
+        root.querySelector('#ac-prev-origin').textContent = previous.origin;
+        root.querySelector('#ac-detail-metrics').innerHTML = `<div><span>Ciclos</span><strong>${stage.cycles || '—'}</strong></div><div><span>Gate</span><strong>${stage.score}</strong></div><div><span>Hallazgos</span><strong>${stage.findings || '—'}</strong></div>`;
+        root.querySelector('#ac-detail-principles').innerHTML = stage.principles.map(item => `<li>${item}</li>`).join('');
+        root.querySelector('#ac-detail-output').innerHTML = stage.outputs.map(item => `<li>${item}</li>`).join('');
+        root.querySelector('#ac-detail-evaluation').innerHTML = stage.evaluation.map(item => `<li>${item}</li>`).join('');
+        root.querySelector('#ac-detail-decision').textContent = stage.decision;
+        drawer.classList.add('is-open');
+      };
+
+      const showHome = () => {
+        home.classList.remove('ac-is-hidden');
+        workspaceSection.classList.add('ac-is-hidden');
+        syntheticIndex.classList.add('ac-is-hidden');
+        root.querySelector('.ac-run-status').classList.add('ac-is-hidden');
+        root.querySelector('#ac-current-project').textContent = 'Sin proyecto abierto';
+        drawer.classList.remove('is-open');
+      };
+
+      const showWorkspace = projectName => {
+        home.classList.add('ac-is-hidden');
+        workspaceSection.classList.remove('ac-is-hidden');
+        syntheticIndex.classList.add('ac-is-hidden');
+        root.querySelector('.ac-run-status').classList.remove('ac-is-hidden');
+        root.querySelector('#ac-current-project').textContent = projectName;
+        requestAnimationFrame(applyTransform);
+      };
+
+      const renderLightAgents = count => {
+        const agents = [
+          ['S-01 · Lina', 'Primera vez · móvil · baja experiencia en el dominio'],
+          ['S-02 · Mateo', 'Usuario frecuente · escritorio · orientado a eficiencia'],
+          ['S-03 · Sara', 'Uso asistido · móvil · necesita lenguaje directo'],
+          ['S-04 · David', 'Experiencia media · escritorio · trabaja con prisa'],
+          ['S-05 · Nora', 'Primera vez · tableta · compara antes de decidir']
+        ];
+        root.querySelector('#ac-light-agent-list').innerHTML = agents.slice(0, count).map(agent => `<div class="ac-light-agent"><strong>${agent[0]}</strong><span>${agent[1]}</span></div>`).join('');
+        root.querySelector('#ac-index-agent-count').textContent = `${count} agentes ligeros`;
+        const coincidences = root.querySelectorAll('.ac-severity-table tbody tr td:last-child');
+        const shared = Math.max(2, count - 1);
+        if (coincidences[0]) coincidences[0].textContent = `${count}/${count}`;
+        if (coincidences[1]) coincidences[1].textContent = `${shared}/${count}`;
+        if (coincidences[2]) coincidences[2].textContent = `${shared}/${count}`;
+        if (coincidences[3]) coincidences[3].textContent = `1/${count}`;
+      };
+
+      const showSyntheticIndex = (projectName = 'Checkout comercio digital', number = syntheticExecution) => {
+        home.classList.add('ac-is-hidden');
+        workspaceSection.classList.add('ac-is-hidden');
+        syntheticIndex.classList.remove('ac-is-hidden');
+        root.querySelector('.ac-run-status').classList.add('ac-is-hidden');
+        root.querySelector('#ac-current-project').textContent = projectName;
+        root.querySelector('#ac-synthetic-title').textContent = `Estudio #${String(number).padStart(3, '0')} · ${projectName}`;
+        renderLightAgents(Number(root.querySelector('#ac-agent-count').value) || 4);
+      };
+
+      const openProjectSetup = kind => {
+        const synthetic = kind === 'synthetic';
+        setupKind = synthetic ? 'synthetic' : 'full';
+        root.querySelector('#ac-project-title').textContent = synthetic ? 'Crear estudio de agentes sintéticos' : 'Crear proyecto completo de producto';
+        root.querySelector('#ac-project-type').textContent = synthetic ? 'Estudio puntual · URL + población + 3–5 agentes ligeros' : 'Proyecto completo · recorrido por las nueve cajas';
+        root.querySelector('#ac-project-name').value = synthetic ? 'Nuevo estudio sintético' : 'Nuevo producto digital';
+        root.querySelector('#ac-project-name-label').textContent = synthetic ? 'Nombre del estudio' : 'Nombre del proyecto';
+        root.querySelector('#ac-modal-synthetica-brand').classList.toggle('is-visible', synthetic);
+        root.querySelectorAll('.ac-synthetic-only').forEach(item => item.classList.toggle('ac-is-hidden', !synthetic));
+        root.querySelectorAll('.ac-full-only').forEach(item => item.classList.toggle('ac-is-hidden', synthetic));
+        root.querySelector('#ac-source-note').innerHTML = synthetic ? '<strong>Modo ligero Synthetica:</strong> reutiliza la tecnología de población sintética, conserva GOMS como estructura de metas y métodos, pero no ejecuta KLM ni graba video. La vista final muestra quiénes evaluaron y la tabla de severidad. No se modifica ningún proyecto existente de Agentes Sintéticos.' : '<strong>Lectura inicial:</strong> documentos, PDF, hojas de cálculo, imágenes, transcripciones, HTML y notas de investigación. La plataforma crea el contexto del problema; la ejecución automática se inicia desde la consola.';
+        root.querySelector('#ac-config-status').classList.remove('is-visible');
+        root.querySelector('#ac-after-save').classList.remove('is-visible');
+        root.querySelector('#ac-save-project').disabled = false;
+        root.querySelector('#ac-save-project').textContent = 'Guardar configuración';
+        root.querySelector('#ac-project-layer').classList.add('is-open');
+      };
+
+      const updateSyntheticPaths = () => {
+        const rootPath = root.querySelector('#ac-engine-root').value.replace(/[\\/]+$/, '');
+        const id = (root.querySelector('#ac-project-id').value || 'nuevo-estudio').trim().replace(/\s+/g, '-').toLowerCase();
+        root.querySelector('#ac-project-config').value = `${rootPath}\\proyectos\\${id}.json`;
+        root.querySelector('#ac-flows-config').value = `${rootPath}\\proyectos\\${id}\\recorridos.json`;
+        root.querySelector('#ac-cohort-config').value = `${rootPath}\\proyectos\\${id}\\cohorte.json`;
+        root.querySelector('#ac-cognitive-base').value = `${rootPath}\\datos\\${id}.sqlite`;
+        root.querySelector('#ac-output-folder').value = `${rootPath}\\salidas`;
+        root.querySelector('#ac-last-study-file').value = `${rootPath}\\ULTIMO_ESTUDIO.txt`;
+      };
+
+      const closeModal = name => root.querySelector(`#ac-${name}-layer`).classList.remove('is-open');
+
+      const openLivePreview = id => {
+        const stage = stages.find(item => item.id === id) || stages[0];
+        root.querySelector('#ac-live-title').textContent = `Caja ${stage.id} · ${stage.name}`;
+        root.querySelector('#ac-live-subtitle').textContent = 'Vista ejecutable del resultado HTML de esta caja.';
+        root.querySelector('#ac-live-file').textContent = livePrototypes[stage.id];
+        root.querySelector('#ac-live-view-title').textContent = 'Vista inicial';
+        root.querySelector('#ac-live-view-copy').textContent = `Prototipo navegable generado por la caja ${stage.id}.`;
+        root.querySelectorAll('[data-live-view]').forEach((button, index) => button.setAttribute('aria-pressed', index === 0 ? 'true' : 'false'));
+        root.querySelector('#ac-live-layer').classList.add('is-open');
+      };
+
+      viewport.addEventListener('pointerdown', event => {
+        if (event.target.closest('button')) return;
+        dragging = true;
+        pointerStart = { clientX: event.clientX, clientY: event.clientY, x, y };
+        viewport.setPointerCapture(event.pointerId);
+        viewport.classList.add('is-dragging');
+      });
+      viewport.addEventListener('pointermove', event => {
+        if (!dragging || !pointerStart) return;
+        x = pointerStart.x + event.clientX - pointerStart.clientX;
+        y = pointerStart.y + event.clientY - pointerStart.clientY;
+        applyTransform();
+      });
+      const endDrag = event => {
+        if (!dragging) return;
+        dragging = false;
+        pointerStart = null;
+        viewport.classList.remove('is-dragging');
+        if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+        persist();
+      };
+      viewport.addEventListener('pointerup', endDrag);
+      viewport.addEventListener('pointercancel', endDrag);
+      viewport.addEventListener('wheel', event => {
+        event.preventDefault();
+        if (event.ctrlKey) setScale(scale * (event.deltaY > 0 ? 0.9 : 1.1));
+        else { x -= event.deltaX || event.deltaY; applyTransform(); persist(); }
+      }, { passive: false });
+
+      root.querySelector('#ac-zoom-in').addEventListener('click', () => setScale(scale + 0.1));
+      root.querySelector('#ac-zoom-out').addEventListener('click', () => setScale(scale - 0.1));
+      root.querySelector('#ac-fit').addEventListener('click', fitAll);
+      root.querySelector('#ac-drawer-close').addEventListener('click', () => drawer.classList.remove('is-open'));
+      root.querySelector('#ac-go-home').addEventListener('click', showHome);
+      root.querySelector('#ac-go-projects').addEventListener('click', () => {
+        showHome();
+        root.querySelector('#ac-evaluated-projects').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      root.querySelector('#ac-new-project').addEventListener('click', () => {
+        showHome();
+        root.querySelector('#ac-create-heading').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      root.querySelectorAll('[data-create-kind]').forEach(button => button.addEventListener('click', () => openProjectSetup(button.dataset.createKind)));
+      root.querySelectorAll('[data-open-project]').forEach(button => button.addEventListener('click', () => button.dataset.projectKind === 'synthetic' ? showSyntheticIndex(button.dataset.openProject) : showWorkspace(button.dataset.openProject)));
+      root.querySelector('#ac-back-projects').addEventListener('click', showHome);
+      root.querySelectorAll('[data-close-modal]').forEach(button => button.addEventListener('click', () => closeModal(button.dataset.closeModal)));
+      root.querySelectorAll('[data-pick-folder]').forEach(button => button.addEventListener('click', () => {
+        const field = button.previousElementSibling;
+        if (!field.value) field.value = button.dataset.pickFolder === 'prototipo' ? 'C:\\Synthetica\\Proyecto\\prototipo.html' : `C:\\Synthetica\\Proyecto\\${button.dataset.pickFolder}`;
+        button.textContent = 'Seleccionada';
+      }));
+      root.querySelector('#ac-project-id').addEventListener('input', updateSyntheticPaths);
+      root.querySelector('#ac-engine-root').addEventListener('input', updateSyntheticPaths);
+      root.querySelector('#ac-save-project').addEventListener('click', () => {
+        const status = root.querySelector('#ac-config-status');
+        if (setupKind === 'synthetic') {
+          syntheticExecution += 1;
+          const number = String(syntheticExecution).padStart(3, '0');
+          status.textContent = `Estudio #${number} registrado con ${root.querySelector('#ac-agent-count').value} agentes ligeros.`;
+          root.querySelector('#ac-synthetic-project-meta').textContent = `Estudio sintético · Estudio #${number} · Configurado · pendiente de ejecución`;
+          root.querySelector('#ac-synthetic-project-name').textContent = root.querySelector('#ac-project-name').value;
+          root.querySelector('#ac-open-synthetic-project').dataset.openProject = root.querySelector('#ac-project-name').value;
+          root.querySelector('#ac-open-last-study').textContent = `Abrir último estudio #${number}`;
+          const afterSave = root.querySelector('#ac-after-save');
+          afterSave.classList.add('is-visible');
+          root.querySelector('#ac-index-url').textContent = root.querySelector('#ac-study-url').value;
+          root.querySelector('#ac-save-project').disabled = true;
+          root.querySelector('#ac-save-project').textContent = 'Configuración guardada';
+          requestAnimationFrame(() => afterSave.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+        } else {
+          status.textContent = 'Proyecto configurado. Se detectaron 47 fuentes compatibles para iniciar el recorrido desde la consola.';
+        }
+        status.classList.add('is-visible');
+      });
+      root.querySelector('#ac-open-last-study').addEventListener('click', () => {
+        closeModal('project');
+        showSyntheticIndex(root.querySelector('#ac-project-name').value, syntheticExecution);
+      });
+      root.querySelectorAll('[data-live-view]').forEach(button => button.addEventListener('click', () => {
+        root.querySelectorAll('[data-live-view]').forEach(item => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
+        root.querySelector('#ac-live-view-title').textContent = button.dataset.liveView;
+        root.querySelector('#ac-live-view-copy').textContent = button.dataset.liveView === 'Estado de error' ? 'Muestra validaciones, mensajes y recuperación antes de aprobar la caja.' : button.dataset.liveView === 'Flujo principal' ? 'Recorre la tarea prioritaria del producto de principio a fin.' : 'Prototipo navegable generado por la caja seleccionada.';
+      }));
+      root.addEventListener('keydown', event => { if (event.key === 'Escape') { drawer.classList.remove('is-open'); closeModal('project'); closeModal('live'); } });
+      window.addEventListener('resize', applyTransform);
+      window.addEventListener('openai:set_globals', event => {
+        const next = event.detail && event.detail.globals && event.detail.globals.widgetState && event.detail.globals.widgetState.privateContent;
+        if (!next) return;
+        if (Number(next.stage)) selected = Number(next.stage);
+        if (Number(next.scale)) scale = Number(next.scale);
+        if (Number.isFinite(Number(next.x))) x = Number(next.x);
+        if (Number.isFinite(Number(next.y))) y = Number(next.y);
+        renderNavigation();
+        applyTransform();
+      });
+
+      renderWorld();
+      renderNavigation();
+      renderLightAgents(4);
+      applyTransform();
+    })();
+  </script>
+</div>

@@ -1,0 +1,733 @@
+<div id="synthetica-dashboard">
+  <style>
+    #synthetica-dashboard {
+      --ag-bg: light-dark(#F4F2F8, #12101A);
+      --ag-shell: light-dark(#FFFFFF, #1A1724);
+      --ag-panel: light-dark(#FAF9FC, #231F30);
+      --ag-panel-strong: light-dark(#FFFFFF, #1E1A2A);
+      --ag-text: light-dark(#242327, #F7F5FC);
+      --ag-muted: light-dark(#66616F, #B9B2C8);
+      --ag-line: light-dark(#DDD8E7, #443D56);
+      --ag-brand: light-dark(#7156D9, #A997FF);
+      --ag-brand-soft: light-dark(#F0ECFF, #2B2446);
+      --ag-blue: light-dark(#5C43C5, #B8ACFF);
+      --ag-blue-soft: light-dark(#F0ECFF, #2B2446);
+      --ag-green: light-dark(#14805e, #4ed3a5);
+      --ag-green-soft: light-dark(#e4f6ef, #17372e);
+      --ag-orange: light-dark(#b95d0b, #ffad62);
+      --ag-orange-soft: light-dark(#fff0df, #3c2818);
+      --ag-red: light-dark(#bd3543, #ff7d88);
+      --ag-red-soft: light-dark(#ffeaec, #402127);
+      --ag-shadow: light-dark(0 16px 42px rgba(30, 45, 68, .12), 0 18px 50px rgba(0, 0, 0, .34));
+      width: 100%;
+      color: var(--ag-text);
+      font-family: Manrope, "DM Sans", Arial, sans-serif;
+      color-scheme: light dark;
+    }
+
+    #synthetica-dashboard * { box-sizing: border-box; }
+    #synthetica-dashboard button { font: inherit; }
+
+    #synthetica-dashboard .ag-shell {
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      background: var(--ag-shell);
+      border: 1px solid var(--ag-line);
+      border-radius: 18px;
+      box-shadow: var(--ag-shadow);
+    }
+
+    #synthetica-dashboard .ag-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--ag-line);
+      background: var(--ag-panel-strong);
+    }
+
+    #synthetica-dashboard .ag-brand-wrap,
+    #synthetica-dashboard .ag-run-state,
+    #synthetica-dashboard .ag-inline,
+    #synthetica-dashboard .ag-status-key,
+    #synthetica-dashboard .ag-monitor-head,
+    #synthetica-dashboard .ag-source-head,
+    #synthetica-dashboard .ag-event {
+      display: flex;
+      align-items: center;
+    }
+
+    #synthetica-dashboard .ag-brand-wrap { gap: 11px; min-width: 0; }
+    #synthetica-dashboard .ag-logo { width: 136px; height: 25px; display: block; flex: none; }
+    #synthetica-dashboard .ag-project {
+      margin-top: 2px;
+      color: var(--ag-muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 380px;
+    }
+
+    #synthetica-dashboard .ag-run-state { gap: 9px; color: var(--ag-muted); font-size: 12px; }
+    #synthetica-dashboard .ag-live-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--ag-green);
+      box-shadow: 0 0 0 4px var(--ag-green-soft);
+    }
+    #synthetica-dashboard .ag-console {
+      padding: 5px 8px;
+      border-radius: 7px;
+      background: var(--ag-bg);
+      color: var(--ag-text);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 11px;
+    }
+
+    #synthetica-dashboard .ag-nav {
+      display: flex;
+      gap: 4px;
+      padding: 8px 16px 0;
+      background: var(--ag-panel-strong);
+      border-bottom: 1px solid var(--ag-line);
+    }
+    #synthetica-dashboard .ag-tab {
+      appearance: none;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: var(--ag-muted);
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    #synthetica-dashboard .ag-tab[aria-selected="true"] {
+      color: var(--ag-text);
+      border-bottom-color: var(--ag-brand);
+    }
+
+    #synthetica-dashboard .ag-view { padding: 18px; background: var(--ag-bg); }
+    #synthetica-dashboard [hidden] { display: none !important; }
+
+    #synthetica-dashboard .ag-run-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+    #synthetica-dashboard h2,
+    #synthetica-dashboard h3,
+    #synthetica-dashboard p { margin: 0; }
+    #synthetica-dashboard h2 { font-size: 18px; line-height: 1.25; }
+    #synthetica-dashboard h3 { font-size: 14px; line-height: 1.3; }
+    #synthetica-dashboard .ag-subtitle { color: var(--ag-muted); font-size: 12px; margin-top: 5px; }
+
+    #synthetica-dashboard .ag-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+    #synthetica-dashboard .ag-metric { min-width: 68px; }
+    #synthetica-dashboard .ag-metric strong { display: block; font-size: 16px; }
+    #synthetica-dashboard .ag-metric span { color: var(--ag-muted); font-size: 11px; }
+
+    #synthetica-dashboard .ag-canvas,
+    #synthetica-dashboard .ag-detail,
+    #synthetica-dashboard .ag-live,
+    #synthetica-dashboard .ag-table-panel,
+    #synthetica-dashboard .ag-version,
+    #synthetica-dashboard .ag-source-panel,
+    #synthetica-dashboard .ag-config-panel {
+      background: var(--ag-panel-strong);
+      border: 1px solid var(--ag-line);
+      border-radius: 14px;
+    }
+
+    #synthetica-dashboard .ag-canvas { padding: 16px 14px 14px; }
+    #synthetica-dashboard .ag-canvas-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    #synthetica-dashboard .ag-status-key { gap: 12px; color: var(--ag-muted); font-size: 11px; }
+    #synthetica-dashboard .ag-key-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+    #synthetica-dashboard .ag-key-dot.done { background: var(--ag-green); }
+    #synthetica-dashboard .ag-key-dot.active { background: var(--ag-blue); }
+    #synthetica-dashboard .ag-key-dot.waiting { background: var(--ag-line); }
+
+    #synthetica-dashboard .ag-stage-track {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(88px, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+    #synthetica-dashboard .ag-stage {
+      position: relative;
+      appearance: none;
+      min-width: 0;
+      min-height: 128px;
+      padding: 12px 10px;
+      text-align: left;
+      color: var(--ag-text);
+      background: var(--ag-panel);
+      border: 1px solid var(--ag-line);
+      border-radius: 12px;
+    }
+    #synthetica-dashboard .ag-stage::after {
+      content: "";
+      position: absolute;
+      top: 31px;
+      right: -11px;
+      width: 10px;
+      height: 2px;
+      background: var(--ag-line);
+    }
+    #synthetica-dashboard .ag-stage:last-child::after { display: none; }
+    #synthetica-dashboard .ag-stage.is-done { background: var(--ag-green-soft); border-color: color-mix(in srgb, var(--ag-green), transparent 55%); }
+    #synthetica-dashboard .ag-stage.is-active { background: var(--ag-blue-soft); border-color: var(--ag-blue); box-shadow: 0 0 0 2px color-mix(in srgb, var(--ag-blue), transparent 78%); }
+    #synthetica-dashboard .ag-stage.is-selected { outline: 2px solid var(--ag-brand); outline-offset: 2px; }
+    #synthetica-dashboard .ag-stage-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    #synthetica-dashboard .ag-stage-num {
+      width: 25px;
+      height: 25px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: var(--ag-shell);
+      color: var(--ag-muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    #synthetica-dashboard .is-done .ag-stage-num { background: var(--ag-green); color: white; }
+    #synthetica-dashboard .is-active .ag-stage-num { background: var(--ag-blue); color: white; }
+    #synthetica-dashboard .ag-stage-state { color: var(--ag-muted); font-size: 10px; white-space: nowrap; }
+    #synthetica-dashboard .ag-stage h3 { margin-top: 10px; font-size: 12px; min-height: 45px; }
+    #synthetica-dashboard .ag-stage-foot { display: flex; justify-content: space-between; gap: 5px; color: var(--ag-muted); font-size: 10px; }
+    #synthetica-dashboard .ag-loop {
+      display: inline-flex;
+      gap: 3px;
+      align-items: center;
+      color: var(--ag-orange);
+    }
+    #synthetica-dashboard .ag-loop svg { width: 11px; height: 11px; }
+    #synthetica-dashboard .ag-stage-progress { display: block; width: 100%; height: 4px; margin: 9px 0 7px; background: color-mix(in srgb, var(--ag-line), transparent 35%); border-radius: 4px; overflow: hidden; }
+    #synthetica-dashboard .ag-stage-progress span { display: block; height: 100%; background: var(--ag-blue); }
+    #synthetica-dashboard .is-done .ag-stage-progress span { background: var(--ag-green); }
+    #synthetica-dashboard .ag-exit-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px dashed var(--ag-line);
+      color: var(--ag-muted);
+      font-size: 11px;
+    }
+    #synthetica-dashboard .ag-exit-note svg { width: 15px; height: 15px; color: var(--ag-brand); }
+
+    #synthetica-dashboard .ag-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(270px, .72fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+    #synthetica-dashboard .ag-detail,
+    #synthetica-dashboard .ag-live { padding: 15px; min-width: 0; }
+    #synthetica-dashboard .ag-detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    #synthetica-dashboard .ag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--ag-blue-soft);
+      color: var(--ag-blue);
+      white-space: nowrap;
+    }
+    #synthetica-dashboard .ag-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 14px;
+    }
+    #synthetica-dashboard .ag-detail-item { padding: 10px; background: var(--ag-panel); border-radius: 9px; }
+    #synthetica-dashboard .ag-detail-item span { display: block; color: var(--ag-muted); font-size: 10px; }
+    #synthetica-dashboard .ag-detail-item strong { display: block; margin-top: 4px; font-size: 13px; }
+    #synthetica-dashboard .ag-current {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding-top: 14px;
+      margin-top: 14px;
+      border-top: 1px solid var(--ag-line);
+    }
+    #synthetica-dashboard .ag-current-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--ag-brand-soft);
+      color: var(--ag-brand);
+    }
+    #synthetica-dashboard .ag-current-icon svg { width: 17px; height: 17px; }
+    #synthetica-dashboard .ag-current p { margin-top: 4px; color: var(--ag-muted); font-size: 12px; line-height: 1.45; }
+    #synthetica-dashboard .ag-output-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+      padding: 10px 12px;
+      background: var(--ag-panel);
+      border-radius: 9px;
+      font-size: 12px;
+    }
+    #synthetica-dashboard .ag-output-row span { color: var(--ag-muted); }
+
+    #synthetica-dashboard .ag-monitor-head { justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+    #synthetica-dashboard .ag-monitor-button,
+    #synthetica-dashboard .ag-close {
+      appearance: none;
+      border: 1px solid var(--ag-line);
+      background: var(--ag-panel);
+      color: var(--ag-text);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    #synthetica-dashboard .ag-live-list { display: grid; gap: 2px; }
+    #synthetica-dashboard .ag-event { align-items: flex-start; gap: 9px; padding: 9px 0; border-top: 1px solid var(--ag-line); }
+    #synthetica-dashboard .ag-event:first-child { border-top: 0; }
+    #synthetica-dashboard .ag-time { color: var(--ag-muted); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; min-width: 35px; padding-top: 2px; }
+    #synthetica-dashboard .ag-event-copy { font-size: 11px; line-height: 1.4; }
+    #synthetica-dashboard .ag-event-copy strong { display: block; margin-bottom: 2px; }
+    #synthetica-dashboard .ag-event-copy span { color: var(--ag-muted); }
+
+    #synthetica-dashboard .ag-table-panel { padding: 15px; }
+    #synthetica-dashboard .ag-findings-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(250px, .6fr); gap: 14px; margin-bottom: 14px; }
+    #synthetica-dashboard .ag-curve-panel,
+    #synthetica-dashboard .ag-gate-panel { padding: 15px; background: var(--ag-panel-strong); border: 1px solid var(--ag-line); border-radius: 14px; }
+    #synthetica-dashboard .ag-curve { display: block; width: 100%; height: auto; margin-top: 10px; }
+    #synthetica-dashboard .ag-curve .frame { fill: var(--ag-panel); stroke: var(--ag-line); }
+    #synthetica-dashboard .ag-curve .grid { stroke: var(--ag-line); stroke-width: 1; }
+    #synthetica-dashboard .ag-curve .series { fill: none; stroke: var(--ag-brand); stroke-width: 3; }
+    #synthetica-dashboard .ag-curve .point { fill: var(--ag-panel-strong); stroke: var(--ag-brand); stroke-width: 3; }
+    #synthetica-dashboard .ag-curve text { fill: var(--ag-muted); font: 11px Manrope, ui-sans-serif, system-ui, sans-serif; }
+    #synthetica-dashboard .ag-curve .value { fill: var(--ag-text); font-weight: 650; }
+    #synthetica-dashboard .ag-gate-list { display: grid; gap: 10px; margin-top: 13px; }
+    #synthetica-dashboard .ag-gate-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--ag-line); font-size: 11px; }
+    #synthetica-dashboard .ag-gate-row:last-child { border-bottom: 0; padding-bottom: 0; }
+    #synthetica-dashboard .ag-gate-row span { color: var(--ag-muted); }
+    #synthetica-dashboard .ag-table-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+    #synthetica-dashboard .ag-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    #synthetica-dashboard .ag-table th { text-align: left; color: var(--ag-muted); font-weight: 600; padding: 9px 8px; border-bottom: 1px solid var(--ag-line); }
+    #synthetica-dashboard .ag-table td { padding: 11px 8px; border-bottom: 1px solid var(--ag-line); vertical-align: top; line-height: 1.35; }
+    #synthetica-dashboard .ag-table tr:last-child td { border-bottom: 0; }
+    #synthetica-dashboard .ag-severity { display: inline-flex; border-radius: 999px; padding: 3px 7px; font-size: 10px; font-weight: 700; }
+    #synthetica-dashboard .ag-severity.high { background: var(--ag-red-soft); color: var(--ag-red); }
+    #synthetica-dashboard .ag-severity.medium { background: var(--ag-orange-soft); color: var(--ag-orange); }
+    #synthetica-dashboard .ag-severity.low { background: var(--ag-blue-soft); color: var(--ag-blue); }
+    #synthetica-dashboard .ag-row-title { font-weight: 650; }
+    #synthetica-dashboard .ag-row-sub { color: var(--ag-muted); margin-top: 2px; }
+
+    #synthetica-dashboard .ag-version-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    #synthetica-dashboard .ag-version { padding: 14px; position: relative; }
+    #synthetica-dashboard .ag-version::after { content: ""; position: absolute; top: 26px; right: -13px; width: 13px; height: 1px; background: var(--ag-line); }
+    #synthetica-dashboard .ag-version:last-child::after { display: none; }
+    #synthetica-dashboard .ag-version-tag { color: var(--ag-brand); font-size: 11px; font-weight: 700; }
+    #synthetica-dashboard .ag-version h3 { margin: 7px 0 5px; }
+    #synthetica-dashboard .ag-version p { color: var(--ag-muted); font-size: 11px; line-height: 1.45; }
+    #synthetica-dashboard .ag-change-list { margin: 10px 0 0; padding-left: 17px; color: var(--ag-muted); font-size: 11px; line-height: 1.55; }
+
+    #synthetica-dashboard .ag-context-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr); gap: 14px; }
+    #synthetica-dashboard .ag-source-panel,
+    #synthetica-dashboard .ag-config-panel { padding: 15px; }
+    #synthetica-dashboard .ag-source-head { justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    #synthetica-dashboard .ag-source-row {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 0;
+      border-top: 1px solid var(--ag-line);
+    }
+    #synthetica-dashboard .ag-source-row:first-of-type { border-top: 0; }
+    #synthetica-dashboard .ag-source-icon { color: var(--ag-brand); }
+    #synthetica-dashboard .ag-source-icon svg { width: 17px; height: 17px; }
+    #synthetica-dashboard .ag-source-path { font-size: 11px; font-weight: 650; word-break: break-word; }
+    #synthetica-dashboard .ag-source-meta { color: var(--ag-muted); font-size: 10px; margin-top: 3px; }
+    #synthetica-dashboard .ag-ok { color: var(--ag-green); font-size: 10px; font-weight: 700; }
+    #synthetica-dashboard .ag-code {
+      margin-top: 12px;
+      padding: 11px;
+      border-radius: 9px;
+      background: var(--ag-bg);
+      color: var(--ag-text);
+      font: 11px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    #synthetica-dashboard .ag-note { margin-top: 10px; color: var(--ag-muted); font-size: 11px; line-height: 1.45; }
+
+    #synthetica-dashboard .ag-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: color-mix(in srgb, var(--ag-bg), transparent 14%);
+      z-index: 20;
+    }
+    #synthetica-dashboard .ag-modal {
+      width: min(620px, 100%);
+      background: var(--ag-shell);
+      border: 1px solid var(--ag-line);
+      border-radius: 15px;
+      box-shadow: var(--ag-shadow);
+      overflow: hidden;
+    }
+    #synthetica-dashboard .ag-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--ag-line); }
+    #synthetica-dashboard .ag-modal-body { padding: 16px; }
+    #synthetica-dashboard .ag-agent-header { display: flex; gap: 11px; align-items: center; }
+    #synthetica-dashboard .ag-agent-avatar { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: var(--ag-brand-soft); color: var(--ag-brand); font-weight: 750; }
+    #synthetica-dashboard .ag-agent-header p { color: var(--ag-muted); font-size: 11px; margin-top: 3px; }
+    #synthetica-dashboard .ag-trace { display: grid; gap: 8px; margin-top: 15px; }
+    #synthetica-dashboard .ag-trace-row { display: grid; grid-template-columns: 75px 1fr; gap: 10px; padding: 10px; border-radius: 9px; background: var(--ag-panel); font-size: 11px; line-height: 1.4; }
+    #synthetica-dashboard .ag-trace-row span:first-child { color: var(--ag-muted); font-weight: 650; }
+
+    @media (max-width: 860px) {
+      #synthetica-dashboard .ag-stage-track { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #synthetica-dashboard .ag-stage::after { display: none; }
+      #synthetica-dashboard .ag-workspace,
+      #synthetica-dashboard .ag-context-grid,
+      #synthetica-dashboard .ag-findings-grid { grid-template-columns: 1fr; }
+      #synthetica-dashboard .ag-version-grid { grid-template-columns: 1fr; }
+      #synthetica-dashboard .ag-version::after { display: none; }
+    }
+    @media (max-width: 560px) {
+      #synthetica-dashboard .ag-topbar,
+      #synthetica-dashboard .ag-run-banner { align-items: flex-start; flex-direction: column; }
+      #synthetica-dashboard .ag-run-state { flex-wrap: wrap; }
+      #synthetica-dashboard .ag-nav { overflow-x: auto; }
+      #synthetica-dashboard .ag-stage-track { grid-template-columns: 1fr; }
+      #synthetica-dashboard .ag-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #synthetica-dashboard .ag-metrics { justify-content: flex-start; }
+      #synthetica-dashboard .ag-table thead { display: none; }
+      #synthetica-dashboard .ag-table,
+      #synthetica-dashboard .ag-table tbody,
+      #synthetica-dashboard .ag-table tr,
+      #synthetica-dashboard .ag-table td { display: block; width: 100%; }
+      #synthetica-dashboard .ag-table tr { padding: 9px 0; border-bottom: 1px solid var(--ag-line); }
+      #synthetica-dashboard .ag-table td { border: 0; padding: 4px 8px; }
+    }
+  </style>
+
+  <section class="ag-shell" aria-label="Dashboard de Synthetica">
+    <header class="ag-topbar">
+      <div class="ag-brand-wrap">
+        <img class="ag-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAxMzYgMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iU3ludGhldGljYSI+CiAgPHN0eWxlPkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU1hbnJvcGU6d2dodEA3MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTYgMTIuNSAxMi41KSIgZmlsbD0iIzcxNTZkOSI+CiAgICA8cmVjdCB4PSI0IiB5PSIxMSIgd2lkdGg9IjUiIGhlaWdodD0iMTAiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjExIiB5PSIzIiB3aWR0aD0iNSIgaGVpZ2h0PSIxOCIgcng9IjIuNSIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjciIHdpZHRoPSI1IiBoZWlnaHQ9IjE0IiByeD0iMi41Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjM1IiB5PSIxOSIgZmlsbD0iIzI0MjMyNyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsICdETSBTYW5zJywgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSItMC42Ij5zeW50aGV0aWNhPC90ZXh0Pgo8L3N2Zz4K" alt="Synthetica">
+        <div>
+          <div class="ag-project">Construyendo “Portal de servicios ciudadanos”</div>
+        </div>
+      </div>
+      <div class="ag-run-state">
+        <span class="ag-live-dot" aria-hidden="true"></span>
+        <span>Conectado a la ejecución</span>
+        <span class="ag-console">estudio-nuevo · PID 4821</span>
+      </div>
+    </header>
+
+    <nav class="ag-nav" role="tablist" aria-label="Vistas del proyecto">
+      <button class="ag-tab cursor-interaction" type="button" role="tab" id="ag-tab-flow" aria-controls="ag-panel-flow" aria-selected="true" data-view="flow">Flujo vivo</button>
+      <button class="ag-tab cursor-interaction" type="button" role="tab" id="ag-tab-findings" aria-controls="ag-panel-findings" aria-selected="false" data-view="findings">Hallazgos</button>
+      <button class="ag-tab cursor-interaction" type="button" role="tab" id="ag-tab-evolution" aria-controls="ag-panel-evolution" aria-selected="false" data-view="evolution">Evolución</button>
+      <button class="ag-tab cursor-interaction" type="button" role="tab" id="ag-tab-context" aria-controls="ag-panel-context" aria-selected="false" data-view="context">Contexto</button>
+    </nav>
+
+    <main>
+      <section class="ag-view" id="ag-panel-flow" role="tabpanel" aria-labelledby="ag-tab-flow">
+        <div class="ag-run-banner">
+          <div>
+            <h2>Synthetica está construyendo tu producto</h2>
+            <p class="ag-subtitle">Caja 3 en evaluación · ciclo 2 · última señal hace 12 segundos</p>
+          </div>
+          <div class="ag-metrics" aria-label="Resumen de ejecución">
+            <div class="ag-metric"><strong>3/9</strong><span>Caja actual</span></div>
+            <div class="ag-metric"><strong>6</strong><span>Prototipos</span></div>
+            <div class="ag-metric"><strong>7</strong><span>Ciclos</span></div>
+            <div class="ag-metric"><strong>9</strong><span>Abiertos</span></div>
+          </div>
+        </div>
+
+        <section class="ag-canvas" aria-label="Canvas vivo del framework">
+          <div class="ag-canvas-head">
+            <h3>Las nueve cajas</h3>
+            <div class="ag-status-key" aria-label="Leyenda">
+              <span><i class="ag-key-dot done"></i>Aprobada</span>
+              <span><i class="ag-key-dot active"></i>En curso</span>
+              <span><i class="ag-key-dot waiting"></i>En espera</span>
+            </div>
+          </div>
+          <div class="ag-stage-track" id="ag-stage-track"></div>
+          <div class="ag-exit-note"><i data-lucide="corner-down-right" aria-hidden="true"></i><span>La automatización de Synthetica termina en la caja 7; la caja 8 corresponde a evaluación humana y la 9 consolida recomendaciones conscientes y Zero UI.</span></div>
+        </section>
+
+        <div class="ag-workspace">
+          <section class="ag-detail" aria-live="polite">
+            <div class="ag-detail-head">
+              <div>
+                <h3 id="ag-detail-title">3. Usabilidad técnica</h3>
+                <p class="ag-subtitle" id="ag-detail-subtitle">Auditando accesibilidad, ergonomía y patrones de interacción.</p>
+              </div>
+              <span class="ag-badge" id="ag-detail-badge"><i data-lucide="activity" aria-hidden="true"></i>EN CURSO</span>
+            </div>
+            <div class="ag-detail-grid">
+              <div class="ag-detail-item"><span>Iteración</span><strong id="ag-detail-cycle">2 de 3</strong></div>
+              <div class="ag-detail-item"><span>Agentes</span><strong id="ag-detail-agents">3 de 5</strong></div>
+              <div class="ag-detail-item"><span>Cobertura</span><strong id="ag-detail-coverage">68%</strong></div>
+              <div class="ag-detail-item"><span>Hallazgos</span><strong id="ag-detail-findings">5</strong></div>
+            </div>
+            <div class="ag-current">
+              <div class="ag-current-icon"><i data-lucide="scan-search" aria-hidden="true"></i></div>
+              <div>
+                <h3>Actividad actual</h3>
+                <p id="ag-detail-activity">El agente S-03 valida el formulario de solicitud contra WCAG 2.2 y comprueba si el error conserva el contexto de la tarea.</p>
+              </div>
+            </div>
+            <div class="ag-output-row">
+              <span>Último artefacto generado</span>
+              <strong id="ag-detail-output">prototipo-v0.6.html</strong>
+            </div>
+          </section>
+
+          <aside class="ag-live" aria-label="Actividad en tiempo real">
+            <div class="ag-monitor-head">
+              <div>
+                <h3>Registro en vivo</h3>
+                <p class="ag-subtitle">Qué está haciendo el sistema</p>
+              </div>
+              <button class="ag-monitor-button cursor-interaction" id="ag-open-monitor" type="button">Ver agente</button>
+            </div>
+            <div class="ag-live-list">
+              <div class="ag-event"><span class="ag-time">10:42</span><div class="ag-event-copy"><strong>S-03 abrió “Nueva solicitud”</strong><span>Evaluando mensajes de error y recuperación.</span></div></div>
+              <div class="ag-event"><span class="ag-time">10:41</span><div class="ag-event-copy"><strong>Hallazgo común confirmado</strong><span>3 agentes no percibieron el resumen de validación.</span></div></div>
+              <div class="ag-event"><span class="ag-time">10:40</span><div class="ag-event-copy"><strong>Prototipo v0.6 preparado</strong><span>Se corrigieron etiquetas y orden de foco.</span></div></div>
+              <div class="ag-event"><span class="ag-time">10:39</span><div class="ag-event-copy"><strong>Ciclo 2 iniciado</strong><span>Cohorte reproducible asignada a 4 flujos críticos.</span></div></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="ag-view" id="ag-panel-findings" role="tabpanel" aria-labelledby="ag-tab-findings" hidden>
+        <div class="ag-findings-grid">
+          <section class="ag-curve-panel">
+            <h2>Curva de descubrimiento</h2>
+            <p class="ag-subtitle">Cobertura estimada frente al número de agentes de la cohorte actual.</p>
+            <svg class="ag-curve" viewBox="0 0 500 185" role="img" aria-labelledby="ag-curve-title ag-curve-desc">
+              <title id="ag-curve-title">Curva de descubrimiento de problemas</title>
+              <desc id="ag-curve-desc">La cobertura crece desde 31 por ciento con un agente hasta 84 por ciento con cinco agentes.</desc>
+              <rect class="frame" x="44" y="14" width="434" height="135" rx="8"></rect>
+              <line class="grid" x1="44" y1="122" x2="478" y2="122"></line>
+              <line class="grid" x1="44" y1="82" x2="478" y2="82"></line>
+              <line class="grid" x1="44" y1="42" x2="478" y2="42"></line>
+              <text x="12" y="126">25%</text><text x="12" y="86">50%</text><text x="12" y="46">75%</text>
+              <polyline class="series" points="90,108 176,78 262,57 348,44 434,33"></polyline>
+              <circle class="point" cx="90" cy="108" r="5"></circle><circle class="point" cx="176" cy="78" r="5"></circle><circle class="point" cx="262" cy="57" r="5"></circle><circle class="point" cx="348" cy="44" r="5"></circle><circle class="point" cx="434" cy="33" r="5"></circle>
+              <text class="value" x="80" y="97">31%</text><text class="value" x="166" y="67">52%</text><text class="value" x="252" y="46">67%</text><text class="value" x="338" y="33">77%</text><text class="value" x="424" y="22">84%</text>
+              <text x="87" y="171">1</text><text x="173" y="171">2</text><text x="259" y="171">3</text><text x="345" y="171">4</text><text x="431" y="171">5</text><text x="449" y="171">agentes</text>
+            </svg>
+          </section>
+          <aside class="ag-gate-panel">
+            <h3>Gate de la caja 3</h3>
+            <p class="ag-subtitle">Todavía no puede avanzar.</p>
+            <div class="ag-gate-list">
+              <div class="ag-gate-row"><span>Rango objetivo</span><strong>70–85%</strong></div>
+              <div class="ag-gate-row"><span>Cobertura actual</span><strong>68%</strong></div>
+              <div class="ag-gate-row"><span>Problemas comunes</span><strong>3</strong></div>
+              <div class="ag-gate-row"><span>Particularidades</span><strong>2 → backlog</strong></div>
+              <div class="ag-gate-row"><span>Decisión</span><strong>Iterar</strong></div>
+            </div>
+          </aside>
+        </div>
+        <section class="ag-table-panel">
+          <div class="ag-table-head">
+            <div>
+              <h2>Problemas, dudas y severidad</h2>
+              <p class="ag-subtitle">Los hallazgos comunes vuelven al ciclo; las particularidades no críticas pasan al backlog.</p>
+            </div>
+            <span class="ag-badge"><i data-lucide="list-filter" aria-hidden="true"></i>9 ABIERTOS</span>
+          </div>
+          <table class="ag-table">
+            <thead><tr><th>Hallazgo</th><th>Caja y ubicación</th><th>Severidad</th><th>Coincidencia</th><th>Arreglabilidad</th><th>Decisión</th></tr></thead>
+            <tbody>
+              <tr><td><div class="ag-row-title">El resumen de errores pasa inadvertido</div><div class="ag-row-sub">“No sé cuál campo quedó mal.”</div></td><td>Caja 3 · Nueva solicitud</td><td><span class="ag-severity high">Alta</span></td><td>3/3 agentes</td><td>Alta</td><td>Corrección automática</td></tr>
+              <tr><td><div class="ag-row-title">“Radicar” no coincide con el lenguaje del público</div><div class="ag-row-sub">Duda semántica durante el happy path.</div></td><td>Caja 2 · Inicio</td><td><span class="ag-severity medium">Media</span></td><td>2/5 agentes</td><td>Alta</td><td>Corregido en v0.5</td></tr>
+              <tr><td><div class="ag-row-title">Contraste insuficiente en estado pendiente</div><div class="ag-row-sub">WCAG 2.2 · texto informativo.</div></td><td>Caja 3 · Seguimiento</td><td><span class="ag-severity medium">Media</span></td><td>2/3 agentes</td><td>Alta</td><td>Incluido en ciclo 2</td></tr>
+              <tr><td><div class="ag-row-title">Preferencia individual por vista compacta</div><div class="ag-row-sub">No afecta la finalización de la tarea.</div></td><td>Caja 2 · Resultados</td><td><span class="ag-severity low">Baja</span></td><td>1/5 agentes</td><td>Media</td><td>Backlog</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </section>
+
+      <section class="ag-view" id="ag-panel-evolution" role="tabpanel" aria-labelledby="ag-tab-evolution" hidden>
+        <div class="ag-run-banner">
+          <div><h2>Evolución del producto</h2><p class="ag-subtitle">Cada versión conserva el origen de sus decisiones y el gate que permitió avanzar.</p></div>
+        </div>
+        <div class="ag-version-grid">
+          <article class="ag-version"><span class="ag-version-tag">v0.1–v0.3 · Caja 1</span><h3>Base heurística</h3><p>Primera aplicación funcional derivada del contexto y de las heurísticas fundamentales.</p><ul class="ag-change-list"><li>Happy path inicial</li><li>Jerarquía y feedback del sistema</li><li>3 ciclos antes de aprobar</li></ul></article>
+          <article class="ag-version"><span class="ag-version-tag">v0.4–v0.5 · Caja 2</span><h3>Modelo centrado en usuarios</h3><p>La población objetivo define protopersonas, flujos y lenguaje del producto.</p><ul class="ag-change-list"><li>4 flujos críticos</li><li>Microcopias contextualizadas</li><li>2 ciclos antes de aprobar</li></ul></article>
+          <article class="ag-version"><span class="ag-version-tag">v0.6 · Caja 3</span><h3>Validación técnica</h3><p>Versión activa; todavía no puede pasar a diseño gráfico y psicológico.</p><ul class="ag-change-list"><li>WCAG y ergonomía</li><li>Orden de foco corregido</li><li>Gate actual: 68%</li></ul></article>
+        </div>
+      </section>
+
+      <section class="ag-view" id="ag-panel-context" role="tabpanel" aria-labelledby="ag-tab-context" hidden>
+        <div class="ag-context-grid">
+          <section class="ag-source-panel">
+            <div class="ag-source-head"><div><h2>Fuentes del proyecto</h2><p class="ag-subtitle">Synthetica leyó las carpetas declaradas en un único archivo.</p></div><span class="ag-badge"><i data-lucide="check-circle-2" aria-hidden="true"></i>41 ARCHIVOS</span></div>
+            <div class="ag-source-row"><div class="ag-source-icon"><i data-lucide="folder-open" aria-hidden="true"></i></div><div><div class="ag-source-path">./contexto-problema/</div><div class="ag-source-meta">18 documentos · PDF, DOCX, TXT y Markdown</div></div><span class="ag-ok">Leído</span></div>
+            <div class="ag-source-row"><div class="ag-source-icon"><i data-lucide="users" aria-hidden="true"></i></div><div><div class="ag-source-path">./poblacion-objetivo/</div><div class="ag-source-meta">7 documentos · perfiles, datos y restricciones</div></div><span class="ag-ok">Leído</span></div>
+            <div class="ag-source-row"><div class="ag-source-icon"><i data-lucide="messages-square" aria-hidden="true"></i></div><div><div class="ag-source-path">./reuniones/</div><div class="ag-source-meta">12 transcripciones · 4 decisiones detectadas</div></div><span class="ag-ok">Leído</span></div>
+            <div class="ag-source-row"><div class="ag-source-icon"><i data-lucide="shield-check" aria-hidden="true"></i></div><div><div class="ag-source-path">./restricciones/</div><div class="ag-source-meta">4 archivos · legales, marca y tecnología</div></div><span class="ag-ok">Leído</span></div>
+          </section>
+          <aside class="ag-config-panel">
+            <h3>Contrato mínimo</h3>
+            <p class="ag-subtitle">La plataforma observa; la consola inicia el estudio.</p>
+            <div class="ag-code">proyecto: portal-ciudadano
+contexto: ./contexto-problema
+poblacion: ./poblacion-objetivo
+reuniones: ./reuniones
+restricciones: ./restricciones</div>
+            <div class="ag-code">synthetica estudio nuevo proyecto.yml</div>
+            <p class="ag-note">Cuando el proceso arranca, el dashboard se conecta al registro de eventos y reconstruye cajas, ciclos, prototipos y decisiones en tiempo real.</p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <div class="ag-modal-backdrop" id="ag-monitor-modal" hidden>
+      <section class="ag-modal" role="dialog" aria-modal="true" aria-labelledby="ag-monitor-title">
+        <header class="ag-modal-head"><div><h3 id="ag-monitor-title">Monitor del agente</h3><p class="ag-subtitle">Resumen observable de la ejecución</p></div><button class="ag-close cursor-interaction" id="ag-close-monitor" type="button">Cerrar</button></header>
+        <div class="ag-modal-body">
+          <div class="ag-agent-header"><div class="ag-agent-avatar">S3</div><div><h3>Agente S-03 · Ciudadanía ocasional</h3><p>Escritorio · español · experiencia digital media</p></div></div>
+          <div class="ag-trace">
+            <div class="ag-trace-row"><span>Objetivo</span><strong>Crear una solicitud y confirmar que fue recibida.</strong></div>
+            <div class="ag-trace-row"><span>Observó</span><strong>El formulario marcó tres campos, pero el resumen quedó fuera del área visible.</strong></div>
+            <div class="ag-trace-row"><span>Acción</span><strong>Revisó el formulario de arriba abajo y volvió al primer campo.</strong></div>
+            <div class="ag-trace-row"><span>Resultado</span><strong>Tarea completada con fricción; hallazgo repetido por tres agentes.</strong></div>
+            <div class="ag-trace-row"><span>Decisión</span><strong>Corrección común: enfocar el resumen y enlazar cada error con su campo.</strong></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <script>
+    (() => {
+      const root = document.getElementById('synthetica-dashboard');
+      if (!root) return;
+
+      const stages = [
+        { id: 1, name: 'Usabilidad heurística', state: 'done', stateLabel: 'Aprobada', progress: 100, cycles: '3 ciclos', cycle: '3 de 3', agents: 'No aplica', coverage: '100% reglas', findings: '11', subtitle: 'Principios fundamentales de Nielsen aplicados al primer producto.', activity: 'Se creó la primera base mediante auditoría heurística automática. Los agentes y los flujos se construyen en la caja 2.', output: 'prototipo-v0.3.html' },
+        { id: 2, name: 'Usabilidad centrada en usuario', state: 'done', stateLabel: 'Aprobada', progress: 100, cycles: '2 ciclos', cycle: '2 de 2', agents: '5 de 5', coverage: '86%', findings: '8', subtitle: 'Población, protopersonas, flujos y lenguaje del producto.', activity: 'Cinco agentes confirmaron los cuatro flujos críticos. Dos preferencias individuales quedaron en backlog.', output: 'prototipo-v0.5.html' },
+        { id: 3, name: 'Usabilidad técnica', state: 'active', stateLabel: 'En curso', progress: 68, cycles: '2 ciclos', cycle: '2 de 3', agents: '3 de 5', coverage: '68%', findings: '5', subtitle: 'Auditando accesibilidad, ergonomía y patrones de interacción.', activity: 'El agente S-03 valida el formulario de solicitud contra WCAG 2.2 y comprueba si el error conserva el contexto de la tarea.', output: 'prototipo-v0.6.html' },
+        { id: 4, name: 'Usabilidad gráfica & psicológica', state: 'waiting', stateLabel: 'En espera', progress: 0, cycles: '—', cycle: 'No iniciada', agents: '0 de 5', coverage: '—', findings: '—', subtitle: 'Normas gráficas, peso visual y GOMS sin KLM.', activity: 'Esta caja comenzará cuando la validación técnica alcance el gate requerido.', output: 'Pendiente' },
+        { id: 5, name: 'Usabilidad fundamental / teórica', state: 'waiting', stateLabel: 'En espera', progress: 0, cycles: '—', cycle: 'No iniciada', agents: '0 de 5', coverage: '—', findings: '—', subtitle: 'Garrett, grafos, caminos huérfanos y microcopias.', activity: 'Recibirá el diseño gráfico aprobado y producirá el diseño funcional consolidado.', output: 'Pendiente' },
+        { id: 6, name: 'Gaps cognitivos y fugas mentales', state: 'waiting', stateLabel: 'En espera', progress: 0, cycles: '—', cycle: 'No iniciada', agents: '0 de 5', coverage: '—', findings: '—', subtitle: 'Sesgos, nudges y riesgos cognitivos.', activity: 'Evaluará el diseño funcional sin introducir presión o patrones manipulativos.', output: 'Pendiente' },
+        { id: 7, name: 'Modelos de conducta', state: 'waiting', stateLabel: 'En espera', progress: 0, cycles: '—', cycle: 'No iniciada', agents: '0 de 5', coverage: '—', findings: '—', subtitle: 'Fogg, Hooked y refinamiento temporal opcional.', activity: 'Será el último gate sintético antes de la integración con evaluación humana.', output: 'Pendiente' },
+        { id: 8, name: 'Diseño humano', state: 'waiting', stateLabel: 'Externa', progress: 0, cycles: '—', cycle: 'Decisión humana', agents: 'Usuarios reales', coverage: '—', findings: '—', subtitle: 'SUS, NPS, CSAT y evaluación con personas.', activity: 'Synthetica entrega el prototipo y la evidencia; el equipo humano define y ejecuta la evaluación.', output: 'Plan humano pendiente' },
+        { id: 9, name: 'Diseño consciente / Zero UI', state: 'waiting', stateLabel: 'Recomendación', progress: 0, cycles: '—', cycle: 'No automática', agents: 'No aplica', coverage: '—', findings: '—', subtitle: 'Diseño ético, autonomía, bienestar y oportunidades Zero UI.', activity: 'Consolidará recomendaciones futuras sin aplicarlas automáticamente al producto actual.', output: 'Backlog estratégico futuro' }
+      ];
+
+      const saved = window.openai && window.openai.widgetState && window.openai.widgetState.privateContent;
+      let selectedStage = Number(saved && saved.stage) || 3;
+      let selectedView = (saved && saved.view) || 'flow';
+
+      const persist = () => {
+        if (!window.openai || !window.openai.setWidgetState) return;
+        window.openai.setWidgetState({
+          modelContent: { selectedStage, selectedView },
+          privateContent: { stage: selectedStage, view: selectedView }
+        }).catch(() => {});
+      };
+
+      const renderStages = () => {
+        const track = root.querySelector('#ag-stage-track');
+        track.innerHTML = stages.map(stage => `
+          <button type="button" class="ag-stage cursor-interaction is-${stage.state}${stage.id === selectedStage ? ' is-selected' : ''}" data-stage="${stage.id}" aria-pressed="${stage.id === selectedStage}">
+            <span class="ag-stage-top"><span class="ag-stage-num">${stage.id}</span><span class="ag-stage-state">${stage.stateLabel}</span></span>
+            <h3>${stage.name}</h3>
+            <span class="ag-stage-progress" aria-hidden="true"><span style="width:${stage.progress}%"></span></span>
+            <span class="ag-stage-foot"><span>${stage.progress ? stage.progress + '%' : 'Pendiente'}</span><span class="ag-loop">${stage.cycles !== '—' ? '<i data-lucide="rotate-ccw" aria-hidden="true"></i>' + stage.cycles : '—'}</span></span>
+          </button>`).join('');
+        track.querySelectorAll('[data-stage]').forEach(button => {
+          button.addEventListener('click', () => {
+            selectedStage = Number(button.dataset.stage);
+            renderStages();
+            renderDetail();
+            persist();
+          });
+        });
+        if (window.lucide) window.lucide.createIcons({ attrs: { width: 16, height: 16 } });
+      };
+
+      const renderDetail = () => {
+        const stage = stages.find(item => item.id === selectedStage) || stages[2];
+        root.querySelector('#ag-detail-title').textContent = `${stage.id}. ${stage.name}`;
+        root.querySelector('#ag-detail-subtitle').textContent = stage.subtitle;
+        root.querySelector('#ag-detail-cycle').textContent = stage.cycle;
+        root.querySelector('#ag-detail-agents').textContent = stage.agents;
+        root.querySelector('#ag-detail-coverage').textContent = stage.coverage;
+        root.querySelector('#ag-detail-findings').textContent = stage.findings;
+        root.querySelector('#ag-detail-activity').textContent = stage.activity;
+        root.querySelector('#ag-detail-output').textContent = stage.output;
+        const badge = root.querySelector('#ag-detail-badge');
+        badge.innerHTML = `<i data-lucide="${stage.state === 'done' ? 'check-circle-2' : stage.state === 'active' ? 'activity' : 'clock-3'}" aria-hidden="true"></i>${stage.stateLabel.toUpperCase()}`;
+        if (window.lucide) window.lucide.createIcons({ attrs: { width: 16, height: 16 } });
+      };
+
+      const showView = view => {
+        selectedView = ['flow', 'findings', 'evolution', 'context'].includes(view) ? view : 'flow';
+        root.querySelectorAll('.ag-tab').forEach(tab => tab.setAttribute('aria-selected', String(tab.dataset.view === selectedView)));
+        root.querySelectorAll('[role="tabpanel"]').forEach(panel => { panel.hidden = panel.id !== `ag-panel-${selectedView}`; });
+        persist();
+      };
+
+      root.querySelectorAll('.ag-tab').forEach(tab => tab.addEventListener('click', () => showView(tab.dataset.view)));
+
+      const modal = root.querySelector('#ag-monitor-modal');
+      const openButton = root.querySelector('#ag-open-monitor');
+      const closeButton = root.querySelector('#ag-close-monitor');
+      openButton.addEventListener('click', () => { modal.hidden = false; closeButton.focus(); });
+      closeButton.addEventListener('click', () => { modal.hidden = true; openButton.focus(); });
+      modal.addEventListener('click', event => { if (event.target === modal) { modal.hidden = true; openButton.focus(); } });
+      root.addEventListener('keydown', event => { if (event.key === 'Escape' && !modal.hidden) { modal.hidden = true; openButton.focus(); } });
+
+      window.addEventListener('openai:set_globals', event => {
+        const next = event.detail && event.detail.globals && event.detail.globals.widgetState && event.detail.globals.widgetState.privateContent;
+        if (!next) return;
+        if (Number(next.stage)) selectedStage = Number(next.stage);
+        if (next.view) selectedView = next.view;
+        renderStages();
+        renderDetail();
+        showView(selectedView);
+      });
+
+      renderStages();
+      renderDetail();
+      showView(selectedView);
+    })();
+  </script>
+</div>

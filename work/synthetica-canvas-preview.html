@@ -1,0 +1,3054 @@
+<!doctype html>
+<html lang="en" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Synthetica · Framework de producto</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Synthetica · Framework de producto" data-srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Synthetica · Framework de producto&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 10px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+.cursor-interaction {
+  cursor: var(--cursor-interaction, pointer);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: var(--cursor-interaction, pointer);
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn,
+.nav-link {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover,
+.nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled=&quot;true&quot;] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed=&quot;true&quot;],
+  [aria-selected=&quot;true&quot;],
+  .is-selected
+) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, var(--font-size-normal));
+  }
+
+  .form-control[type=&quot;file&quot;]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type=&quot;color&quot;] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;week&quot;]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: &quot;&quot;;
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+
+  .form-range::-webkit-slider-runnable-track {
+    height: 44px;
+  }
+
+  .form-range::-moz-range-track {
+    height: 44px;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    margin-top: 12px;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
+&lt;script&gt;(() =&gt; {
+  const root = document.documentElement;
+  const mediaQuery = globalThis.matchMedia(&quot;(prefers-color-scheme: dark)&quot;);
+  const apply = Reflect.apply;
+  const isArray = Array.isArray;
+  const hasOwn = Object.hasOwn;
+  const parentWindow = globalThis.parent;
+  const stringify = JSON.stringify;
+  const parse = JSON.parse;
+  const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
+  const initialStateElement = document.getElementById(
+    &quot;codex-visualization-widget-state&quot;,
+  );
+  const initialGlobals = parse(initialStateElement?.textContent ?? &quot;{}&quot;);
+  initialStateElement?.remove();
+  /** @type {Record&lt;string, unknown&gt; | null} */
+  let state = initialGlobals.widgetState ?? null;
+  const statePersistence = initialGlobals.statePersistence ?? &quot;none&quot;;
+  let nextStateRequestId = 0;
+  /** @type {Map&lt;number, { resolve: () =&gt; void; reject: (error: Error) =&gt; void; timeout: ReturnType&lt;typeof globalThis.setTimeout&gt;; serializedState: string }&gt;} */
+  const pendingStateWrites = new Map();
+  const persistenceError = () =&gt;
+    Object.assign(
+      new Error(&quot;The host could not persist the widget state update&quot;),
+      {
+        code: -32000,
+        data: { code: &quot;widget_state_persistence_failed&quot;, retryable: false },
+      },
+    );
+  /**
+   * @param {object} prototype
+   * @param {string} property
+   */
+  const getPrototypeGetter = (prototype, property) =&gt; {
+    // oxlint-disable-next-line typescript/unbound-method -- invoked through captured Reflect.apply
+    const getter = Object.getOwnPropertyDescriptor(prototype, property)?.get;
+    if (getter == null) {
+      throw new Error(`Missing ${property} getter`);
+    }
+    return getter;
+  };
+  const getMessageData = getPrototypeGetter(MessageEvent.prototype, &quot;data&quot;);
+  const getMessagePorts = getPrototypeGetter(MessageEvent.prototype, &quot;ports&quot;);
+  const getMessageSource = getPrototypeGetter(MessageEvent.prototype, &quot;source&quot;);
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const addHostMessageListener = MessagePort.prototype.addEventListener;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const postHostMessage = MessagePort.prototype.postMessage;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const startHostPort = MessagePort.prototype.start;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const stopMessagePropagation = Event.prototype.stopImmediatePropagation;
+  /** @type {MessagePort | null} */
+  let hostPort = null;
+  const postToHost = (type, payload) =&gt; {
+    if (hostPort != null) {
+      apply(postHostMessage, hostPort, [{ type, ...payload }]);
+    }
+  };
+  const openExternal = ({ href }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;open-external&quot;, { href });
+    }
+  };
+  const sendFollowUpMessage = ({ context, prompt, title }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;follow-up&quot;, { context, prompt, title });
+    }
+    return Promise.resolve();
+  };
+  /**
+   * @param {Record&lt;string, unknown&gt; | ((previous: Record&lt;string, unknown&gt; | null) =&gt; Record&lt;string, unknown&gt;)} next
+   * @returns {Promise&lt;void&gt;}
+   */
+  const setWidgetState = async (next) =&gt; {
+    const nextState = typeof next === &quot;function&quot; ? next(state) : next;
+    if (
+      nextState == null ||
+      typeof nextState !== &quot;object&quot; ||
+      isArray(nextState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const inputState = stringify(
+      nextState,
+      (_key, /** @type {unknown} */ value) =&gt; {
+        if (
+          typeof value === &quot;undefined&quot; ||
+          typeof value === &quot;function&quot; ||
+          typeof value === &quot;symbol&quot; ||
+          (typeof value === &quot;number&quot; &amp;&amp; !Number.isFinite(value))
+        ) {
+          throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+        }
+        return value;
+      },
+    );
+    const parsedState = parse(inputState);
+    if (
+      parsedState == null ||
+      typeof parsedState !== &quot;object&quot; ||
+      isArray(parsedState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const storedState = {
+      modelContent: null,
+      privateContent: null,
+      ...parsedState,
+    };
+    const serializedState = stringify(storedState);
+    if (encode(serializedState).length &gt; 16 * 1024) {
+      throw new TypeError(
+        &quot;Widget state must be a JSON object of at most 16 KiB&quot;,
+      );
+    }
+    if (
+      hasOwn(storedState, &quot;imageIds&quot;) &amp;&amp;
+      (!isArray(storedState.imageIds) ||
+        storedState.imageIds.some(
+          (/** @type {unknown} */ id) =&gt; typeof id !== &quot;string&quot;,
+        ))
+    ) {
+      throw new TypeError(&quot;Widget state imageIds must be an array of strings&quot;);
+    }
+    if (storedState.imageIds?.length &gt; 0) {
+      throw Object.assign(
+        new TypeError(&quot;Visualization state does not support image attachments&quot;),
+        { code: -32602, data: { code: &quot;images_unsupported&quot; } },
+      );
+    }
+    state = storedState;
+    globalThis.openai.widgetState = state;
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: { widgetState: state } },
+      }),
+    );
+    if (statePersistence === &quot;none&quot;) {
+      throw persistenceError();
+    }
+    const id = ++nextStateRequestId;
+    return new Promise((resolve, reject) =&gt; {
+      const timeout = globalThis.setTimeout(() =&gt; {
+        pendingStateWrites.delete(id);
+        reject(persistenceError());
+      }, 30_000);
+      pendingStateWrites.set(id, { resolve, reject, timeout, serializedState });
+      postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+    });
+  };
+  const syncTheme = () =&gt; {
+    const theme = mediaQuery.matches ? &quot;dark&quot; : &quot;light&quot;;
+    root.dataset.theme = theme;
+    globalThis.openai = {
+      ...globalThis.openai,
+      openExternal,
+      sendFollowUpMessage,
+      setWidgetState,
+      theme,
+      visualizationStyleVariables: {},
+      visualizationTheme: theme,
+      widgetState: state,
+      statePersistence,
+      stateModelContext: &quot;none&quot;,
+    };
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: globalThis.openai },
+      }),
+    );
+  };
+  const sendHeight = () =&gt; {
+    postToHost(&quot;height&quot;, {
+      height: Math.ceil(
+        Math.max(
+          document.body.scrollHeight,
+          document.body.getBoundingClientRect().height,
+        ),
+      ),
+    });
+  };
+
+  globalThis.addEventListener(
+    &quot;message&quot;,
+    (event) =&gt; {
+      const data = apply(getMessageData, event, []);
+      const ports = apply(getMessagePorts, event, []);
+      const source = apply(getMessageSource, event, []);
+      if (
+        hostPort != null ||
+        source !== parentWindow ||
+        typeof data !== &quot;object&quot; ||
+        data?.type !== &quot;codex-visualization-initialize&quot; ||
+        !isArray(ports) ||
+        ports.length !== 1
+      ) {
+        return;
+      }
+      apply(stopMessagePropagation, event, []);
+      const nextHostPort = ports[0];
+      try {
+        apply(addHostMessageListener, nextHostPort, [
+          &quot;message&quot;,
+          (event) =&gt; {
+            const data = apply(getMessageData, event, []);
+            if (typeof data === &quot;object&quot; &amp;&amp; data?.type === &quot;measure&quot;) {
+              sendHeight();
+            } else if (
+              typeof data === &quot;object&quot; &amp;&amp;
+              data?.type === &quot;widget-state-result&quot;
+            ) {
+              /** @type {unknown} */
+              const id = data.id;
+              if (typeof id !== &quot;number&quot;) {
+                return;
+              }
+              const pending = pendingStateWrites.get(id);
+              if (pending != null) {
+                pendingStateWrites.delete(id);
+                globalThis.clearTimeout(pending.timeout);
+                if (data.ok === true) {
+                  pending.resolve();
+                } else {
+                  pending.reject(persistenceError());
+                }
+              }
+            }
+          },
+        ]);
+        apply(startHostPort, nextHostPort, []);
+      } catch {
+        return;
+      }
+      hostPort = nextHostPort;
+      for (const [id, { serializedState }] of pendingStateWrites) {
+        postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+      }
+      sendHeight();
+    },
+    { capture: true },
+  );
+  document.currentScript?.remove();
+  mediaQuery.addEventListener(&quot;change&quot;, syncTheme);
+  globalThis.addEventListener(&quot;click&quot;, (event) =&gt; {
+    if (event.defaultPrevented) {
+      return;
+    }
+    let element = null;
+    if (event.target instanceof globalThis.Element) {
+      element = event.target;
+    } else if (event.target instanceof globalThis.Node) {
+      element = event.target.parentElement;
+    }
+    const link = element?.closest(&quot;a[href]&quot;);
+    const href = link?.getAttribute(&quot;href&quot;);
+    if (href == null) {
+      return;
+    }
+    if (href.startsWith(&quot;#&quot;)) {
+      let id;
+      try {
+        id = decodeURIComponent(href.slice(1));
+      } catch {
+        return;
+      }
+      const target = id.length === 0 ? root : document.getElementById(id);
+      if (
+        target == null ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      event.preventDefault();
+      postToHost(&quot;scroll-to&quot;, {
+        top: target.getBoundingClientRect().top + globalThis.scrollY,
+      });
+      return;
+    }
+    event.preventDefault();
+    openExternal({ href });
+  });
+  new ResizeObserver(sendHeight).observe(document.body);
+  syncTheme();
+})();
+&lt;/script&gt;
+&lt;div id=&quot;synthetica-canvas&quot;&gt;
+  &lt;style&gt;
+    #synthetica-canvas {
+      --ac-brand: #7156D9;
+      --ac-blue: light-dark(#5C43C5, #B8ACFF);
+      --ac-blue-2: light-dark(#7156D9, #A997FF);
+      --ac-sky: light-dark(#8D7AE6, #B8ACFF);
+      --ac-green: light-dark(#247A61, #63D2AC);
+      --ac-red: light-dark(#C93F4F, #FF8993);
+      --ac-orange: light-dark(#B96A16, #FFB56D);
+      --ac-ink: light-dark(#242327, #F7F5FC);
+      --ac-muted: light-dark(#66616F, #B9B2C8);
+      --ac-bg: light-dark(#F4F2F8, #12101A);
+      --ac-board: light-dark(#FFFFFF, #1A1724);
+      --ac-panel: light-dark(#FAF9FC, #231F30);
+      --ac-line: light-dark(#DDD8E7, #443D56);
+      --ac-soft-blue: light-dark(#F0ECFF, #2B2446);
+      --ac-soft-green: light-dark(#EAF6F1, #21362F);
+      --ac-soft-orange: light-dark(#FFF3E7, #3C2B1D);
+      width: 100%;
+      color: var(--ac-ink);
+      font-family: Manrope, &quot;DM Sans&quot;, Arial, Helvetica, sans-serif;
+      color-scheme: light dark;
+    }
+    #synthetica-canvas * { box-sizing: border-box; }
+    #synthetica-canvas button,
+    #synthetica-canvas select { font: inherit; }
+    #synthetica-canvas button:focus-visible,
+    #synthetica-canvas select:focus-visible { outline: 3px solid var(--ac-sky); outline-offset: 3px; }
+    #synthetica-canvas h1,
+    #synthetica-canvas h2,
+    #synthetica-canvas h3,
+    #synthetica-canvas p { margin: 0; }
+
+    #synthetica-canvas .ac-app {
+      position: relative;
+      overflow: hidden;
+      background: var(--ac-bg);
+      border: 1px solid var(--ac-line);
+      border-radius: 16px;
+      box-shadow: 0 12px 30px color-mix(in srgb, var(--ac-blue), transparent 90%);
+    }
+    #synthetica-canvas .ac-context-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 44px;
+      padding: 8px 18px;
+      background: var(--ac-board);
+      border-bottom: 1px solid var(--ac-line);
+      color: var(--ac-blue);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    #synthetica-canvas .ac-context-strip span { min-width: 0; }
+    #synthetica-canvas .ac-engine { display: flex; align-items: center; gap: 8px; }
+    #synthetica-canvas .ac-engine-mark { width: 25px; height: 25px; display: block; flex: none; }
+    #synthetica-canvas .ac-product { color: var(--ac-muted); }
+    #synthetica-canvas .ac-is-hidden { display: none !important; }
+
+    #synthetica-canvas .ac-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      min-height: 62px;
+      padding: 10px 20px;
+      background: #FFFFFF;
+      color: #242327;
+      border-bottom: 1px solid var(--ac-line);
+    }
+    #synthetica-canvas .ac-brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    #synthetica-canvas .ac-header-logo { display: block; width: 136px; height: 25px; flex: none; }
+    #synthetica-canvas .ac-brand p { color: #66616F; font-size: 12px; }
+    #synthetica-canvas .ac-top-actions { display: flex; align-items: center; gap: 12px; }
+    #synthetica-canvas .ac-live { display: flex; align-items: center; gap: 8px; white-space: nowrap; font-size: 12px; }
+    #synthetica-canvas .ac-live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ac-green); box-shadow: 0 0 0 5px #a8c63433; }
+    #synthetica-canvas .ac-new-project { min-height: 38px; padding: 7px 12px; border: 1px solid var(--ac-brand); border-radius: 4px; background: var(--ac-brand); color: white; font-weight: 800; }
+    #synthetica-canvas .ac-top-link { min-height: 36px; padding: 6px 9px; border: 1px solid #D8D1EA; border-radius: 4px; background: #FFFFFF; color: #4E3A9E; font-size: 11px; font-weight: 700; }
+
+    #synthetica-canvas .ac-home { min-height: 760px; padding: 34px 38px 42px; background: var(--ac-board); }
+    #synthetica-canvas .ac-home-intro { max-width: 780px; }
+    #synthetica-canvas .ac-home-kicker { color: var(--ac-blue-2); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    #synthetica-canvas .ac-home h2 { margin-top: 6px; color: var(--ac-blue); font: 700 28px/1.15 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-home-intro p { margin-top: 9px; color: var(--ac-muted); font-size: 13px; line-height: 1.55; }
+    #synthetica-canvas .ac-home-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr); gap: 26px; margin-top: 28px; }
+    #synthetica-canvas .ac-home-section h3 { color: var(--ac-blue); font: 700 15px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-work-types { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 12px; }
+    #synthetica-canvas .ac-work-type { display: grid; align-content: start; min-height: 245px; padding: 20px; border: 1px solid var(--ac-line); border-top: 6px solid var(--ac-blue-2); border-radius: 8px; background: var(--ac-panel); }
+    #synthetica-canvas .ac-work-type.full { border-top-color: var(--ac-brand); }
+    #synthetica-canvas .ac-work-type-label { color: var(--ac-muted); font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    #synthetica-canvas .ac-synthetica-logo { display: block; width: 136px; height: 25px; object-fit: contain; object-position: left center; }
+    #synthetica-canvas .ac-synthetica-mark { width: 25px; height: 25px; flex: none; }
+    #synthetica-canvas .ac-brand-asset { width: max-content; margin-bottom: 10px; padding: 4px 6px; border-radius: 4px; background: light-dark(transparent, #FFFFFF); }
+    #synthetica-canvas .ac-project-name-with-mark { display: flex; align-items: center; gap: 8px; }
+    #synthetica-canvas .ac-work-type h4 { margin: 8px 0 0; color: var(--ac-blue); font: 700 17px/1.3 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-work-type p { margin-top: 8px; color: var(--ac-muted); font-size: 12px; line-height: 1.5; }
+    #synthetica-canvas .ac-work-type ul { margin: 12px 0 18px; padding-left: 18px; color: var(--ac-muted); font-size: 11px; line-height: 1.55; }
+    #synthetica-canvas .ac-work-type button { align-self: end; min-height: 42px; padding: 8px 12px; border: 1px solid var(--ac-blue); border-radius: 4px; background: var(--ac-blue); color: white; font-weight: 800; }
+    #synthetica-canvas .ac-work-type.full button { border-color: var(--ac-brand); background: var(--ac-brand); color: white; }
+    #synthetica-canvas .ac-tutorial { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+    #synthetica-canvas .ac-tutorial-step { padding: 13px; border-left: 4px solid var(--ac-sky); background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-tutorial-step strong { display: block; color: var(--ac-blue); font: 700 11px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-tutorial-step span { display: block; margin-top: 5px; color: var(--ac-muted); font-size: 11px; line-height: 1.45; }
+    #synthetica-canvas .ac-project-list { margin-top: 12px; border-top: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-project-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-project-row strong { display: block; color: var(--ac-blue); font-size: 12px; }
+    #synthetica-canvas .ac-project-row span { display: block; margin-top: 4px; color: var(--ac-muted); font-size: 10px; }
+    #synthetica-canvas .ac-project-row button { min-height: 36px; padding: 6px 10px; border: 1px solid var(--ac-line); border-radius: 4px; background: var(--ac-board); color: var(--ac-blue); font-weight: 800; }
+    #synthetica-canvas .ac-history-note { margin-top: 14px; color: var(--ac-muted); font-size: 11px; line-height: 1.5; }
+
+    #synthetica-canvas .ac-hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px 15px;
+      background: var(--ac-board);
+      border-bottom: 1px solid var(--ac-line);
+    }
+    #synthetica-canvas .ac-kicker { color: var(--ac-blue-2); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    #synthetica-canvas .ac-hero h2 { margin-top: 4px; color: var(--ac-blue); font: 700 24px/1.12 Manrope, Arial, sans-serif; letter-spacing: -.02em; }
+    #synthetica-canvas .ac-hero p { max-width: 780px; margin-top: 7px; color: var(--ac-muted); font-size: 12px; line-height: 1.5; }
+    #synthetica-canvas .ac-run-summary { display: flex; gap: 18px; flex: none; }
+    #synthetica-canvas .ac-run-summary div { min-width: 58px; }
+    #synthetica-canvas .ac-run-summary strong { display: block; color: var(--ac-blue); font: 700 16px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-run-summary span { color: var(--ac-muted); font-size: 10px; }
+
+    #synthetica-canvas .ac-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      background: var(--ac-board);
+      border-bottom: 1px solid var(--ac-line);
+    }
+    #synthetica-canvas .ac-stage-jumps,
+    #synthetica-canvas .ac-view-tools { display: flex; align-items: center; gap: 6px; }
+    #synthetica-canvas .ac-stage-jumps { flex-wrap: wrap; }
+    #synthetica-canvas .ac-jump,
+    #synthetica-canvas .ac-icon-button,
+    #synthetica-canvas .ac-detail-button,
+    #synthetica-canvas .ac-drawer-close {
+      appearance: none;
+      border: 1px solid var(--ac-line);
+      background: var(--ac-board);
+      color: var(--ac-blue);
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    #synthetica-canvas .ac-jump { min-width: 34px; min-height: 34px; padding: 5px 9px; font-size: 11px; }
+    #synthetica-canvas .ac-jump[aria-pressed=&quot;true&quot;] { border-color: var(--ac-blue-2); background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-icon-button { min-width: 40px; height: 40px; display: grid; place-items: center; padding: 0 12px; font-size: 13px; }
+    #synthetica-canvas .ac-icon-button.ac-fit-button { min-width: 72px; }
+    #synthetica-canvas .ac-zoom-value { min-width: 48px; text-align: center; color: var(--ac-muted); font: 600 11px Manrope, Arial, sans-serif; }
+
+    #synthetica-canvas .ac-viewport {
+      position: relative;
+      height: 690px;
+      overflow: hidden;
+      background-color: var(--ac-board);
+      background-image: radial-gradient(color-mix(in srgb, var(--ac-muted), transparent 60%) 1px, transparent 1px);
+      background-size: 20px 20px;
+      touch-action: none;
+      user-select: none;
+    }
+    #synthetica-canvas .ac-viewport.is-dragging { cursor: grabbing; }
+    #synthetica-canvas .ac-world { position: absolute; left: 0; top: 0; width: 6900px; height: 650px; transform-origin: 0 0; }
+
+    #synthetica-canvas .ac-phase-band {
+      position: absolute;
+      top: 10px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-left: 5px solid var(--ac-blue-2);
+      background: var(--ac-soft-blue);
+      color: var(--ac-blue);
+      font: 700 11px Manrope, Arial, sans-serif;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    #synthetica-canvas .ac-phase-band.mass { border-left-color: var(--ac-orange); background: var(--ac-soft-orange); }
+    #synthetica-canvas .ac-phase-band.human { border-left-color: var(--ac-sky); }
+    #synthetica-canvas .ac-stage {
+      position: absolute;
+      top: 62px;
+      width: 560px;
+      height: 520px;
+      padding: 0;
+      background: var(--ac-board);
+      border: 2px solid var(--ac-line);
+      border-radius: 10px;
+      box-shadow: 0 10px 24px color-mix(in srgb, var(--ac-blue), transparent 91%);
+    }
+    #synthetica-canvas .ac-stage[data-state=&quot;completed&quot;] { border-color: var(--ac-green); }
+    #synthetica-canvas .ac-stage[data-state=&quot;active&quot;] { border: 4px solid var(--ac-blue-2); box-shadow: 0 0 0 6px #7156D918, 0 12px 26px #7156D922; }
+    #synthetica-canvas .ac-stage[data-mode=&quot;human&quot;] { border-color: var(--ac-sky); }
+    #synthetica-canvas .ac-stage[data-mode=&quot;human&quot;] .ac-stage-number { background: var(--ac-sky); }
+    #synthetica-canvas .ac-stage[data-mode=&quot;recommendations&quot;] { border-color: var(--ac-orange); border-style: dashed; }
+    #synthetica-canvas .ac-stage[data-mode=&quot;recommendations&quot;] .ac-stage-number { background: var(--ac-orange); }
+    #synthetica-canvas .ac-stage-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 15px 12px;
+      border-bottom: 1px solid var(--ac-line);
+      background: var(--ac-panel);
+      border-radius: 8px 8px 0 0;
+    }
+    #synthetica-canvas .ac-stage-number {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      flex: none;
+      border-radius: 50%;
+      background: var(--ac-blue);
+      color: white;
+      font: 700 13px Manrope, Arial, sans-serif;
+    }
+    #synthetica-canvas .ac-stage[data-state=&quot;completed&quot;] .ac-stage-number { background: var(--ac-green); color: #1C1C1C; }
+    #synthetica-canvas .ac-stage-copy { flex: 1; min-width: 0; }
+    #synthetica-canvas .ac-stage-copy h3 { color: var(--ac-blue); font: 650 15px/1.25 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-stage-copy p { margin-top: 3px; color: var(--ac-muted); font-size: 10px; }
+    #synthetica-canvas .ac-state {
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--ac-line), transparent 55%);
+      color: var(--ac-muted);
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    #synthetica-canvas .ac-stage[data-state=&quot;completed&quot;] .ac-state { background: var(--ac-soft-green); color: #607500; }
+    #synthetica-canvas .ac-stage[data-state=&quot;active&quot;] .ac-state { background: var(--ac-soft-blue); color: var(--ac-blue); }
+    #synthetica-canvas .ac-stage[data-mode=&quot;human&quot;] .ac-evaluation { border-color: var(--ac-sky); background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-stage[data-mode=&quot;recommendations&quot;] .ac-evaluation { border-style: dashed; }
+
+    #synthetica-canvas .ac-stage-body { position: relative; height: 402px; padding: 15px; }
+    #synthetica-canvas .ac-input-node,
+    #synthetica-canvas .ac-principles,
+    #synthetica-canvas .ac-prototype,
+    #synthetica-canvas .ac-evaluation {
+      position: absolute;
+      z-index: 2;
+      background: var(--ac-board);
+    }
+    #synthetica-canvas .ac-input-node {
+      left: 18px;
+      top: 20px;
+      width: 120px;
+      min-height: 54px;
+      display: grid;
+      place-items: center;
+      padding: 8px;
+      border: 2px solid var(--ac-blue-2);
+      border-radius: 4px;
+      color: var(--ac-blue);
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    #synthetica-canvas .ac-principles {
+      left: 158px;
+      top: 16px;
+      width: 225px;
+      min-height: 228px;
+      padding: 12px;
+      border: 1px solid var(--ac-line);
+      border-left: 5px solid var(--ac-blue-2);
+      border-radius: 4px;
+    }
+    #synthetica-canvas .ac-principles strong { display: block; color: var(--ac-blue); font: 650 11px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-principles ul { margin: 8px 0 0; padding-left: 16px; color: var(--ac-muted); font-size: 10px; line-height: 1.55; }
+    #synthetica-canvas .ac-prototype {
+      left: 405px;
+      top: 26px;
+      width: 120px;
+      min-height: 112px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      padding: 10px;
+      border: 3px solid var(--ac-green);
+      border-radius: 4px;
+      text-align: center;
+    }
+    #synthetica-canvas .ac-prototype-token,
+    #synthetica-canvas .ac-evaluator-token,
+    #synthetica-canvas .ac-output-token {
+      display: inline-grid;
+      place-items: center;
+      min-width: 38px;
+      min-height: 24px;
+      margin-bottom: 6px;
+      padding: 4px 7px;
+      border-radius: 4px;
+      background: var(--ac-soft-green);
+      color: var(--ac-blue);
+      font: 800 9px Manrope, Arial, sans-serif;
+      letter-spacing: .04em;
+    }
+    #synthetica-canvas .ac-prototype strong { color: var(--ac-blue); font: 650 10px/1.35 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-prototype span { margin-top: 4px; color: var(--ac-muted); font-size: 9px; }
+    #synthetica-canvas .ac-evaluation {
+      left: 396px;
+      top: 180px;
+      width: 140px;
+      height: 140px;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      border: 4px solid var(--ac-orange);
+      border-radius: 50%;
+      background: var(--ac-soft-orange);
+      text-align: center;
+    }
+    #synthetica-canvas .ac-evaluation strong { color: var(--ac-blue); font: 650 10px/1.35 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-evaluation span { display: block; margin-top: 4px; color: var(--ac-muted); font-size: 9px; }
+    #synthetica-canvas .ac-agent-dots { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
+    #synthetica-canvas .ac-agent-dots i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--ac-board); background: var(--ac-blue-2); }
+    #synthetica-canvas .ac-agent-dots i:nth-child(2) { background: var(--ac-sky); }
+    #synthetica-canvas .ac-agent-dots i:nth-child(3) { background: var(--ac-green); }
+    #synthetica-canvas .ac-evaluator-token { margin-inline: auto; background: var(--ac-soft-blue); }
+
+    #synthetica-canvas .ac-stage-footer {
+      position: absolute;
+      left: 15px;
+      right: 15px;
+      bottom: 13px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+    #synthetica-canvas .ac-stage-footer div { padding: 7px 8px; border-radius: 4px; background: var(--ac-panel); }
+    #synthetica-canvas .ac-stage-footer span { display: block; color: var(--ac-muted); font-size: 8px; }
+    #synthetica-canvas .ac-stage-footer strong { display: block; margin-top: 2px; color: var(--ac-blue); font-size: 10px; }
+    #synthetica-canvas .ac-detail-button {
+      position: absolute;
+      left: 18px;
+      top: 278px;
+      min-height: 38px;
+      padding: 7px 10px;
+      font-size: 10px;
+    }
+    #synthetica-canvas .ac-live-button {
+      position: absolute;
+      left: 153px;
+      top: 278px;
+      min-height: 38px;
+      padding: 7px 10px;
+      border: 1px solid var(--ac-blue);
+      border-radius: 4px;
+      background: var(--ac-blue);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    #synthetica-canvas .ac-stage-flow { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+    #synthetica-canvas .ac-stage-flow path { fill: none; stroke: var(--ac-muted); stroke-width: 2; }
+    #synthetica-canvas .ac-stage-flow .ac-loop-path { stroke: var(--ac-orange); stroke-dasharray: 6 5; }
+    #synthetica-canvas .ac-stage-flow text { fill: var(--ac-muted); font: 9px &quot;Open Sans&quot;, Arial, sans-serif; }
+    #synthetica-canvas .ac-stage-flow .ac-loop-label { fill: var(--ac-orange); font-weight: 700; }
+
+    #synthetica-canvas .ac-next {
+      position: absolute;
+      top: 300px;
+      width: 150px;
+      height: 4px;
+      background: var(--ac-line);
+    }
+    #synthetica-canvas .ac-next::after {
+      content: &quot;&quot;;
+      position: absolute;
+      right: -1px;
+      top: -5px;
+      border-left: 12px solid var(--ac-line);
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+    }
+    #synthetica-canvas .ac-next.completed { background: var(--ac-green); }
+    #synthetica-canvas .ac-next.completed::after { border-left-color: var(--ac-green); }
+    #synthetica-canvas .ac-next span { position: absolute; top: -23px; left: 21px; color: var(--ac-muted); font-size: 9px; white-space: nowrap; }
+
+    #synthetica-canvas .ac-canvas-hint,
+    #synthetica-canvas .ac-live-event {
+      position: absolute;
+      z-index: 8;
+      bottom: 14px;
+      background: var(--ac-board);
+      border: 1px solid var(--ac-line);
+      border-radius: 4px;
+      box-shadow: 0 8px 20px #7156D916;
+      font-size: 11px;
+    }
+    #synthetica-canvas .ac-canvas-hint { left: 14px; padding: 9px 11px; color: var(--ac-muted); }
+    #synthetica-canvas .ac-live-event { right: 14px; max-width: 330px; padding: 10px 12px; }
+    #synthetica-canvas .ac-live-event strong { display: block; color: var(--ac-blue); font: 650 11px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-live-event span { display: block; margin-top: 3px; color: var(--ac-muted); font-size: 10px; }
+
+    #synthetica-canvas .ac-human-output {
+      position: absolute;
+      left: 6480px;
+      top: 230px;
+      width: 300px;
+      min-height: 180px;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+      padding: 20px;
+      border: 3px dashed var(--ac-blue-2);
+      border-radius: 10px;
+      background: var(--ac-board);
+      color: var(--ac-blue);
+      text-align: center;
+    }
+    #synthetica-canvas .ac-human-output .ac-output-token { margin: 0 auto; background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-human-output strong { font: 700 14px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-human-output span { color: var(--ac-muted); font-size: 11px; line-height: 1.45; }
+    #synthetica-canvas .ac-final-connector { position: absolute; left: 6320px; top: 310px; width: 160px; height: 4px; background: var(--ac-blue-2); }
+    #synthetica-canvas .ac-final-connector::after { content: &quot;&quot;; position: absolute; right: -1px; top: -5px; border-left: 12px solid var(--ac-blue-2); border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+
+    #synthetica-canvas .ac-drawer {
+      position: absolute;
+      z-index: 30;
+      top: 44px;
+      right: 0;
+      bottom: 0;
+      width: min(470px, 94%);
+      padding: 18px;
+      overflow-y: auto;
+      background: var(--ac-board);
+      box-shadow: -10px 0 30px #0003;
+      transform: translateX(105%);
+      transition: transform .2s ease;
+    }
+    #synthetica-canvas .ac-drawer.is-open { transform: none; }
+    #synthetica-canvas .ac-drawer-close { float: right; min-height: 40px; padding: 7px 11px; }
+    #synthetica-canvas .ac-drawer-kicker { color: var(--ac-blue-2); font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    #synthetica-canvas .ac-drawer h2 { padding-right: 74px; margin-top: 5px; color: var(--ac-blue); font: 700 20px/1.2 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-drawer-lede { margin-top: 8px; color: var(--ac-muted); font-size: 12px; line-height: 1.5; }
+    #synthetica-canvas .ac-detail-section { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-detail-section h3 { color: var(--ac-blue); font: 650 13px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-detail-section ul { margin: 8px 0 0; padding-left: 18px; color: var(--ac-muted); font-size: 12px; line-height: 1.55; }
+    #synthetica-canvas .ac-detail-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 12px; }
+    #synthetica-canvas .ac-detail-metrics div { padding: 9px; background: var(--ac-panel); border-radius: 4px; }
+    #synthetica-canvas .ac-detail-metrics span { display: block; color: var(--ac-muted); font-size: 9px; }
+    #synthetica-canvas .ac-detail-metrics strong { display: block; margin-top: 3px; color: var(--ac-blue); font-size: 12px; }
+    #synthetica-canvas .ac-prototype-preview { margin-top: 9px; overflow: hidden; border: 1px solid var(--ac-line); border-radius: 7px; background: var(--ac-panel); }
+    #synthetica-canvas .ac-preview-chrome { display: flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-bottom: 1px solid var(--ac-line); background: var(--ac-board); }
+    #synthetica-canvas .ac-preview-chrome i { width: 6px; height: 6px; border-radius: 50%; background: var(--ac-line); }
+    #synthetica-canvas .ac-preview-chrome i:first-child { background: var(--ac-red); }
+    #synthetica-canvas .ac-preview-chrome i:nth-child(2) { background: var(--ac-orange); }
+    #synthetica-canvas .ac-preview-chrome i:nth-child(3) { background: var(--ac-green); }
+    #synthetica-canvas .ac-preview-screen { display: grid; grid-template-columns: 72px 1fr; gap: 9px; min-height: 118px; padding: 11px; background: var(--ac-board); }
+    #synthetica-canvas .ac-preview-nav { border-radius: 4px; background: var(--ac-blue); opacity: .9; }
+    #synthetica-canvas .ac-preview-content { display: grid; grid-template-rows: 20px 38px 1fr; gap: 8px; }
+    #synthetica-canvas .ac-preview-content span { display: block; border-radius: 3px; background: var(--ac-soft-blue); }
+    #synthetica-canvas .ac-preview-content span:nth-child(2) { background: var(--ac-soft-green); }
+    #synthetica-canvas .ac-preview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+    #synthetica-canvas .ac-preview-grid i { border-radius: 3px; background: var(--ac-panel); border: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-preview-meta { display: flex; justify-content: space-between; gap: 10px; padding: 9px 11px; border-top: 1px solid var(--ac-line); font-size: 10px; }
+    #synthetica-canvas .ac-preview-meta strong { color: var(--ac-blue); }
+    #synthetica-canvas .ac-preview-meta span { color: var(--ac-muted); text-align: right; }
+    #synthetica-canvas .ac-decision { margin-top: 9px; padding: 10px; border-left: 5px solid var(--ac-orange); background: var(--ac-soft-orange); color: var(--ac-muted); font-size: 11px; line-height: 1.45; }
+
+    #synthetica-canvas .ac-modal-layer {
+      position: absolute;
+      z-index: 60;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 22px;
+      background: color-mix(in srgb, var(--ac-blue), transparent 34%);
+    }
+    #synthetica-canvas .ac-modal-layer.is-open { display: grid; }
+    #synthetica-canvas .ac-modal {
+      width: min(820px, 96%);
+      max-height: 88%;
+      overflow-y: auto;
+      border: 1px solid var(--ac-line);
+      border-radius: 10px;
+      background: var(--ac-board);
+      box-shadow: 0 20px 60px #0005;
+    }
+    #synthetica-canvas .ac-modal-header { display: flex; justify-content: space-between; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-modal-header h2 { color: var(--ac-blue); font: 700 20px/1.2 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-modal-header p { margin-top: 5px; color: var(--ac-muted); font-size: 12px; }
+    #synthetica-canvas .ac-modal-close { align-self: flex-start; min-height: 38px; padding: 7px 11px; border: 1px solid var(--ac-line); border-radius: 4px; background: var(--ac-board); color: var(--ac-blue); font-weight: 800; }
+    #synthetica-canvas .ac-modal-body { padding: 18px 20px 20px; }
+    #synthetica-canvas .ac-project-fields { display: grid; gap: 12px; }
+    #synthetica-canvas .ac-synthetic-only,
+    #synthetica-canvas .ac-full-only { display: grid; gap: 12px; }
+    #synthetica-canvas .ac-project-field { display: grid; grid-template-columns: 170px 1fr auto; align-items: center; gap: 10px; }
+    #synthetica-canvas .ac-project-field label { color: var(--ac-blue); font-size: 11px; font-weight: 800; }
+    #synthetica-canvas .ac-project-field input,
+    #synthetica-canvas .ac-project-field select { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid var(--ac-line); border-radius: 4px; background: var(--ac-panel); color: var(--ac-ink); font-size: 12px; }
+    #synthetica-canvas .ac-folder-button { min-height: 40px; padding: 7px 10px; border: 1px solid var(--ac-blue-2); border-radius: 4px; background: var(--ac-board); color: var(--ac-blue); font-weight: 800; }
+    #synthetica-canvas .ac-source-note { margin-top: 14px; padding: 12px; border-left: 5px solid var(--ac-green); background: var(--ac-soft-green); color: var(--ac-muted); font-size: 11px; line-height: 1.5; }
+    #synthetica-canvas .ac-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+    #synthetica-canvas .ac-primary-action,
+    #synthetica-canvas .ac-secondary-action { min-height: 40px; padding: 8px 13px; border-radius: 4px; font-weight: 800; }
+    #synthetica-canvas .ac-primary-action { border: 1px solid var(--ac-blue); background: var(--ac-blue); color: white; }
+    #synthetica-canvas .ac-secondary-action { border: 1px solid var(--ac-line); background: var(--ac-board); color: var(--ac-blue); }
+    #synthetica-canvas .ac-config-status { display: none; margin-top: 12px; color: #607500; font-size: 12px; font-weight: 800; }
+    #synthetica-canvas .ac-config-status.is-visible { display: block; }
+    #synthetica-canvas .ac-selected-type { margin-bottom: 14px; padding: 11px 12px; border-left: 5px solid var(--ac-blue-2); background: var(--ac-soft-blue); color: var(--ac-blue); font-size: 12px; font-weight: 800; }
+    #synthetica-canvas .ac-modal-synthetica-brand { display: none; align-items: center; gap: 10px; margin-bottom: 12px; }
+    #synthetica-canvas .ac-modal-synthetica-brand.is-visible { display: flex; }
+    #synthetica-canvas .ac-modal-synthetica-brand span { color: var(--ac-muted); font-size: 11px; }
+    #synthetica-canvas .ac-form-group { display: grid; gap: 10px; padding-top: 13px; border-top: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-form-group:first-child { padding-top: 0; border-top: 0; }
+    #synthetica-canvas .ac-form-group h3 { color: var(--ac-blue); font: 700 12px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-checkbox-row { display: flex; align-items: center; gap: 9px; padding: 10px 12px; background: var(--ac-panel); color: var(--ac-blue); font-size: 11px; font-weight: 700; }
+    #synthetica-canvas .ac-checkbox-row input { width: 17px; height: 17px; }
+    #synthetica-canvas .ac-after-save { display: none; margin-top: 14px; padding: 14px; border-left: 5px solid var(--ac-green); background: var(--ac-soft-green); }
+    #synthetica-canvas .ac-after-save.is-visible { display: block; }
+    #synthetica-canvas .ac-after-save h3 { color: var(--ac-blue); font: 700 14px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-after-save p { margin-top: 5px; color: var(--ac-muted); font-size: 11px; line-height: 1.5; }
+    #synthetica-canvas .ac-command-list { display: grid; gap: 6px; margin-top: 10px; }
+    #synthetica-canvas .ac-command-list code { display: block; padding: 8px 10px; border-radius: 3px; background: var(--ac-board); color: var(--ac-blue); font-size: 11px; font-weight: 800; }
+    #synthetica-canvas .ac-open-last { margin-top: 12px; min-height: 40px; padding: 8px 12px; border: 1px solid var(--ac-blue); border-radius: 4px; background: var(--ac-blue); color: white; font-weight: 800; }
+
+    #synthetica-canvas .ac-synthetic-index { min-height: 760px; padding: 30px 38px 40px; background: var(--ac-board); }
+    #synthetica-canvas .ac-synthetic-header { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; padding-bottom: 18px; border-bottom: 1px solid var(--ac-line); }
+    #synthetica-canvas .ac-synthetic-header h2 { color: var(--ac-blue); font: 700 24px/1.2 Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-synthetic-header p { margin-top: 7px; color: var(--ac-muted); font-size: 12px; }
+    #synthetica-canvas .ac-light-status { padding: 9px 11px; border-left: 5px solid var(--ac-green); background: var(--ac-soft-green); color: var(--ac-blue); font-size: 11px; font-weight: 800; white-space: nowrap; }
+    #synthetica-canvas .ac-synthetic-body { display: grid; grid-template-columns: minmax(300px, .8fr) minmax(480px, 1.2fr); gap: 24px; margin-top: 22px; }
+    #synthetica-canvas .ac-synthetic-panel h3 { color: var(--ac-blue); font: 700 15px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-synthetic-panel &gt; p { margin-top: 5px; color: var(--ac-muted); font-size: 11px; line-height: 1.5; }
+    #synthetica-canvas .ac-light-agent-list { display: grid; gap: 8px; margin-top: 12px; }
+    #synthetica-canvas .ac-light-agent { padding: 12px; border-left: 5px solid var(--ac-sky); background: var(--ac-panel); }
+    #synthetica-canvas .ac-light-agent strong { display: block; color: var(--ac-blue); font-size: 12px; }
+    #synthetica-canvas .ac-light-agent span { display: block; margin-top: 4px; color: var(--ac-muted); font-size: 11px; }
+    #synthetica-canvas .ac-severity-table { width: 100%; margin-top: 12px; border-collapse: collapse; font-size: 11px; }
+    #synthetica-canvas .ac-severity-table th,
+    #synthetica-canvas .ac-severity-table td { padding: 10px 8px; border-bottom: 1px solid var(--ac-line); text-align: left; vertical-align: top; }
+    #synthetica-canvas .ac-severity-table th { color: var(--ac-blue); font-weight: 800; }
+    #synthetica-canvas .ac-severity-table td { color: var(--ac-muted); }
+    #synthetica-canvas .ac-severity { display: inline-block; min-width: 56px; padding: 3px 6px; border-radius: 999px; background: var(--ac-soft-orange); color: var(--ac-red); font-weight: 800; text-align: center; }
+    #synthetica-canvas .ac-severity.medium { background: var(--ac-soft-blue); color: var(--ac-blue); }
+    #synthetica-canvas .ac-index-actions { margin-top: 18px; }
+    #synthetica-canvas .ac-index-actions button { min-height: 40px; padding: 8px 12px; border: 1px solid var(--ac-line); border-radius: 4px; background: var(--ac-board); color: var(--ac-blue); font-weight: 800; }
+
+    #synthetica-canvas .ac-live-browser { overflow: hidden; border: 1px solid var(--ac-line); border-radius: 7px; background: var(--ac-panel); }
+    #synthetica-canvas .ac-live-browser-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 42px; padding: 7px 11px; border-bottom: 1px solid var(--ac-line); background: var(--ac-board); }
+    #synthetica-canvas .ac-live-browser-bar strong { color: var(--ac-blue); font-size: 11px; }
+    #synthetica-canvas .ac-running { color: #607500; font-size: 10px; font-weight: 800; }
+    #synthetica-canvas .ac-live-screen { display: grid; grid-template-columns: 150px 1fr; min-height: 330px; background: var(--ac-board); }
+    #synthetica-canvas .ac-live-nav { padding: 18px 12px; background: var(--ac-blue); color: white; }
+    #synthetica-canvas .ac-live-nav strong { display: block; margin-bottom: 18px; font: 700 14px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-live-nav button { width: 100%; margin-bottom: 7px; padding: 9px; border: 1px solid #ffffff55; border-radius: 4px; background: transparent; color: white; text-align: left; font-size: 11px; }
+    #synthetica-canvas .ac-live-nav button[aria-pressed=&quot;true&quot;] { background: white; color: var(--ac-blue); }
+    #synthetica-canvas .ac-live-content { padding: 22px; }
+    #synthetica-canvas .ac-live-content h3 { color: var(--ac-blue); font: 700 18px Manrope, Arial, sans-serif; }
+    #synthetica-canvas .ac-live-content p { margin-top: 6px; color: var(--ac-muted); font-size: 12px; }
+    #synthetica-canvas .ac-live-demo-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; margin-top: 20px; }
+    #synthetica-canvas .ac-live-demo-block { min-height: 112px; padding: 14px; border-radius: 5px; background: var(--ac-soft-blue); color: var(--ac-blue); font-size: 11px; }
+    #synthetica-canvas .ac-live-demo-block.ac-accent { background: var(--ac-soft-green); }
+
+    @media (max-width: 720px) {
+      #synthetica-canvas .ac-context-strip,
+      #synthetica-canvas .ac-topbar,
+      #synthetica-canvas .ac-hero,
+      #synthetica-canvas .ac-toolbar { align-items: flex-start; flex-direction: column; }
+      #synthetica-canvas .ac-run-summary { width: 100%; justify-content: space-between; }
+      #synthetica-canvas .ac-view-tools { align-self: stretch; justify-content: flex-end; }
+      #synthetica-canvas .ac-top-actions { width: 100%; justify-content: space-between; }
+      #synthetica-canvas .ac-home { padding: 24px 18px 30px; }
+      #synthetica-canvas .ac-home-layout,
+      #synthetica-canvas .ac-work-types,
+      #synthetica-canvas .ac-tutorial { grid-template-columns: 1fr; }
+      #synthetica-canvas .ac-project-field { grid-template-columns: 1fr; }
+      #synthetica-canvas .ac-live-screen { grid-template-columns: 1fr; }
+      #synthetica-canvas .ac-live-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+      #synthetica-canvas .ac-live-nav strong { width: 100%; margin-bottom: 4px; }
+      #synthetica-canvas .ac-live-nav button { width: auto; margin: 0; }
+      #synthetica-canvas .ac-synthetic-body { grid-template-columns: 1fr; }
+      #synthetica-canvas .ac-synthetic-index { padding: 24px 18px 30px; }
+      #synthetica-canvas .ac-synthetic-header { flex-direction: column; }
+      #synthetica-canvas .ac-viewport { height: 650px; }
+      #synthetica-canvas .ac-product { display: none; }
+      #synthetica-canvas .ac-live-event { left: 14px; max-width: none; }
+      #synthetica-canvas .ac-canvas-hint { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #synthetica-canvas .ac-drawer { transition: none; }
+    }
+  &lt;/style&gt;
+
+  &lt;section class=&quot;ac-app&quot; aria-label=&quot;Synthetica, canvas del framework de experiencia&quot;&gt;
+    &lt;div class=&quot;ac-context-strip&quot;&gt;
+      &lt;span class=&quot;ac-engine&quot;&gt;&lt;img class=&quot;ac-engine-mark&quot; src=&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNSIgdmlld0JveD0iMCAwIDI1IDI1IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlN5bnRoZXRpY2EiPgogIDxnIHRyYW5zZm9ybT0icm90YXRlKC02IDEyLjUgMTIuNSkiIGZpbGw9IiM3MTU2ZDkiPgogICAgPHJlY3QgeD0iNCIgeT0iMTEiIHdpZHRoPSI1IiBoZWlnaHQ9IjEwIiByeD0iMi41Ii8+CiAgICA8cmVjdCB4PSIxMSIgeT0iMyIgd2lkdGg9IjUiIGhlaWdodD0iMTgiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjE4IiB5PSI3IiB3aWR0aD0iNSIgaGVpZ2h0PSIxNCIgcng9IjIuNSIvPgogIDwvZz4KPC9zdmc+Cg==&quot; alt=&quot;&quot;&gt;Synthetica · motor de diseño y evaluación&lt;/span&gt;
+      &lt;span&gt;Estudio del 22 de septiembre de 2026 · 10:42&lt;/span&gt;
+      &lt;span class=&quot;ac-product&quot; id=&quot;ac-current-project&quot;&gt;Sin proyecto abierto&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;header class=&quot;ac-topbar&quot;&gt;
+      &lt;div class=&quot;ac-brand&quot;&gt;&lt;img class=&quot;ac-header-logo&quot; src=&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAxMzYgMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iU3ludGhldGljYSI+CiAgPHN0eWxlPkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU1hbnJvcGU6d2dodEA3MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTYgMTIuNSAxMi41KSIgZmlsbD0iIzcxNTZkOSI+CiAgICA8cmVjdCB4PSI0IiB5PSIxMSIgd2lkdGg9IjUiIGhlaWdodD0iMTAiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjExIiB5PSIzIiB3aWR0aD0iNSIgaGVpZ2h0PSIxOCIgcng9IjIuNSIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjciIHdpZHRoPSI1IiBoZWlnaHQ9IjE0IiByeD0iMi41Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjM1IiB5PSIxOSIgZmlsbD0iIzI0MjMyNyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsICdETSBTYW5zJywgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSItMC42Ij5zeW50aGV0aWNhPC90ZXh0Pgo8L3N2Zz4K&quot; alt=&quot;Synthetica&quot;&gt;&lt;p&gt;Estudios sintéticos y construcción completa de productos digitales&lt;/p&gt;&lt;/div&gt;
+      &lt;div class=&quot;ac-top-actions&quot;&gt;&lt;button class=&quot;ac-top-link cursor-interaction&quot; id=&quot;ac-go-home&quot; type=&quot;button&quot;&gt;Inicio&lt;/button&gt;&lt;button class=&quot;ac-top-link cursor-interaction&quot; id=&quot;ac-go-projects&quot; type=&quot;button&quot;&gt;Proyectos evaluados&lt;/button&gt;&lt;button class=&quot;ac-new-project cursor-interaction&quot; id=&quot;ac-new-project&quot; type=&quot;button&quot;&gt;Nuevo proyecto&lt;/button&gt;&lt;div class=&quot;ac-live ac-run-status ac-is-hidden&quot;&gt;&lt;span class=&quot;ac-live-dot&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span&gt;En ejecución · caja 3 · ciclo 2&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;main class=&quot;ac-home&quot; id=&quot;ac-home&quot;&gt;
+      &lt;div class=&quot;ac-home-intro&quot;&gt;&lt;div class=&quot;ac-home-kicker&quot;&gt;No hay un proyecto abierto&lt;/div&gt;&lt;h2&gt;¿Qué quieres hacer con Synthetica?&lt;/h2&gt;&lt;p&gt;Puedes evaluar rápidamente un producto que ya existe con agentes sintéticos o construir un producto digital completo recorriendo las nueve cajas del framework.&lt;/p&gt;&lt;/div&gt;
+      &lt;div class=&quot;ac-home-layout&quot;&gt;
+        &lt;section class=&quot;ac-home-section&quot; aria-labelledby=&quot;ac-create-heading&quot;&gt;
+          &lt;h3 id=&quot;ac-create-heading&quot;&gt;Crear un trabajo nuevo&lt;/h3&gt;
+          &lt;div class=&quot;ac-work-types&quot;&gt;
+            &lt;article class=&quot;ac-work-type&quot;&gt;&lt;div class=&quot;ac-brand-asset&quot;&gt;&lt;img class=&quot;ac-synthetica-logo&quot; src=&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAxMzYgMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iU3ludGhldGljYSI+CiAgPHN0eWxlPkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU1hbnJvcGU6d2dodEA3MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTYgMTIuNSAxMi41KSIgZmlsbD0iIzcxNTZkOSI+CiAgICA8cmVjdCB4PSI0IiB5PSIxMSIgd2lkdGg9IjUiIGhlaWdodD0iMTAiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjExIiB5PSIzIiB3aWR0aD0iNSIgaGVpZ2h0PSIxOCIgcng9IjIuNSIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjciIHdpZHRoPSI1IiBoZWlnaHQ9IjE0IiByeD0iMi41Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjM1IiB5PSIxOSIgZmlsbD0iIzI0MjMyNyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsICdETSBTYW5zJywgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSItMC42Ij5zeW50aGV0aWNhPC90ZXh0Pgo8L3N2Zz4K&quot; alt=&quot;Synthetica&quot;&gt;&lt;/div&gt;&lt;span class=&quot;ac-work-type-label&quot;&gt;Alcance corto&lt;/span&gt;&lt;h4&gt;Estudio de agentes sintéticos&lt;/h4&gt;&lt;p&gt;Audita una URL o un flujo existente sin ejecutar todo el framework de construcción.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Indica la URL y el entorno&lt;/li&gt;&lt;li&gt;Configura 3–5 agentes ligeros&lt;/li&gt;&lt;li&gt;Obtén problemas, dudas y severidad&lt;/li&gt;&lt;li&gt;Entrega correcciones comunes y backlog&lt;/li&gt;&lt;/ul&gt;&lt;button class=&quot;cursor-interaction&quot; type=&quot;button&quot; data-create-kind=&quot;synthetic&quot;&gt;Crear estudio sintético&lt;/button&gt;&lt;/article&gt;
+            &lt;article class=&quot;ac-work-type full&quot;&gt;&lt;span class=&quot;ac-work-type-label&quot;&gt;Framework completo&lt;/span&gt;&lt;h4&gt;Proyecto completo de producto&lt;/h4&gt;&lt;p&gt;Parte del contexto y construye el producto a través de las nueve cajas hasta el cierre humano y consciente.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Lee todas las fuentes iniciales&lt;/li&gt;&lt;li&gt;Construye y refina prototipos HTML&lt;/li&gt;&lt;li&gt;Ejecuta gates y ciclos automáticos&lt;/li&gt;&lt;li&gt;Entrega diseño funcional y backlog&lt;/li&gt;&lt;/ul&gt;&lt;button class=&quot;cursor-interaction&quot; type=&quot;button&quot; data-create-kind=&quot;full&quot;&gt;Crear producto completo&lt;/button&gt;&lt;/article&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;ac-tutorial&quot; aria-label=&quot;Cómo funciona&quot;&gt;&lt;div class=&quot;ac-tutorial-step&quot;&gt;&lt;strong&gt;1 · Elige el alcance&lt;/strong&gt;&lt;span&gt;Estudio sintético puntual o proyecto completo de nueve cajas.&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;ac-tutorial-step&quot;&gt;&lt;strong&gt;2 · Vincula las fuentes&lt;/strong&gt;&lt;span&gt;Selecciona las carpetas de contexto, población e investigación.&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;ac-tutorial-step&quot;&gt;&lt;strong&gt;3 · Ejecuta desde consola&lt;/strong&gt;&lt;span&gt;Synthetica procesa, aprende, itera y reporta el avance aquí.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;/section&gt;
+        &lt;section class=&quot;ac-home-section&quot; id=&quot;ac-evaluated-projects&quot; aria-labelledby=&quot;ac-projects-heading&quot;&gt;
+          &lt;h3 id=&quot;ac-projects-heading&quot;&gt;Proyectos evaluados&lt;/h3&gt;
+          &lt;div class=&quot;ac-project-list&quot;&gt;
+            &lt;div class=&quot;ac-project-row&quot;&gt;&lt;div&gt;&lt;strong&gt;Portal de servicios ciudadanos&lt;/strong&gt;&lt;span&gt;Proyecto completo · Ejecución #007 · En curso · Caja 3&lt;/span&gt;&lt;/div&gt;&lt;button class=&quot;cursor-interaction&quot; type=&quot;button&quot; data-open-project=&quot;Portal de servicios ciudadanos&quot; data-project-kind=&quot;full&quot;&gt;Abrir&lt;/button&gt;&lt;/div&gt;
+            &lt;div class=&quot;ac-project-row&quot;&gt;&lt;div&gt;&lt;strong class=&quot;ac-project-name-with-mark&quot;&gt;&lt;img class=&quot;ac-synthetica-mark&quot; src=&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNSIgdmlld0JveD0iMCAwIDI1IDI1IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlN5bnRoZXRpY2EiPgogIDxnIHRyYW5zZm9ybT0icm90YXRlKC02IDEyLjUgMTIuNSkiIGZpbGw9IiM3MTU2ZDkiPgogICAgPHJlY3QgeD0iNCIgeT0iMTEiIHdpZHRoPSI1IiBoZWlnaHQ9IjEwIiByeD0iMi41Ii8+CiAgICA8cmVjdCB4PSIxMSIgeT0iMyIgd2lkdGg9IjUiIGhlaWdodD0iMTgiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjE4IiB5PSI3IiB3aWR0aD0iNSIgaGVpZ2h0PSIxNCIgcng9IjIuNSIvPgogIDwvZz4KPC9zdmc+Cg==&quot; alt=&quot;&quot;&gt;&lt;span id=&quot;ac-synthetic-project-name&quot;&gt;Checkout comercio digital&lt;/span&gt;&lt;/strong&gt;&lt;span id=&quot;ac-synthetic-project-meta&quot;&gt;Estudio sintético · Estudio #024 · Finalizado · 14 hallazgos&lt;/span&gt;&lt;/div&gt;&lt;button class=&quot;cursor-interaction&quot; id=&quot;ac-open-synthetic-project&quot; type=&quot;button&quot; data-open-project=&quot;Checkout comercio digital&quot; data-project-kind=&quot;synthetic&quot;&gt;Ver resultados&lt;/button&gt;&lt;/div&gt;
+            &lt;div class=&quot;ac-project-row&quot;&gt;&lt;div&gt;&lt;strong&gt;App de citas médicas&lt;/strong&gt;&lt;span&gt;Proyecto completo · Ejecución #003 · Finalizado · 9 cajas&lt;/span&gt;&lt;/div&gt;&lt;button class=&quot;cursor-interaction&quot; type=&quot;button&quot; data-open-project=&quot;App de citas médicas&quot; data-project-kind=&quot;full&quot;&gt;Ver resultados&lt;/button&gt;&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;p class=&quot;ac-history-note&quot;&gt;Aquí se conservan el recorrido, los ciclos, las tablas de severidad, las dudas, los prototipos y las decisiones de cada evaluación.&lt;/p&gt;
+        &lt;/section&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+
+    &lt;section class=&quot;ac-synthetic-index ac-is-hidden&quot; id=&quot;ac-synthetic-index&quot; aria-labelledby=&quot;ac-synthetic-title&quot;&gt;
+      &lt;header class=&quot;ac-synthetic-header&quot;&gt;&lt;div&gt;&lt;div class=&quot;ac-brand-asset&quot;&gt;&lt;img class=&quot;ac-synthetica-logo&quot; src=&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAxMzYgMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iU3ludGhldGljYSI+CiAgPHN0eWxlPkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU1hbnJvcGU6d2dodEA3MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTYgMTIuNSAxMi41KSIgZmlsbD0iIzcxNTZkOSI+CiAgICA8cmVjdCB4PSI0IiB5PSIxMSIgd2lkdGg9IjUiIGhlaWdodD0iMTAiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjExIiB5PSIzIiB3aWR0aD0iNSIgaGVpZ2h0PSIxOCIgcng9IjIuNSIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjciIHdpZHRoPSI1IiBoZWlnaHQ9IjE0IiByeD0iMi41Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjM1IiB5PSIxOSIgZmlsbD0iIzI0MjMyNyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsICdETSBTYW5zJywgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSItMC42Ij5zeW50aGV0aWNhPC90ZXh0Pgo8L3N2Zz4K&quot; alt=&quot;Synthetica&quot;&gt;&lt;/div&gt;&lt;div class=&quot;ac-home-kicker&quot;&gt;Índice de Agentes Sintéticos · último estudio&lt;/div&gt;&lt;h2 id=&quot;ac-synthetic-title&quot;&gt;Estudio #024 · Checkout comercio digital&lt;/h2&gt;&lt;p&gt;&lt;span id=&quot;ac-index-url&quot;&gt;https://checkout.ejemplo/&lt;/span&gt; · &lt;span id=&quot;ac-index-agent-count&quot;&gt;4 agentes ligeros&lt;/span&gt; · finalizado&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;ac-light-status&quot;&gt;Sin KLM · sin video · evaluación ligera&lt;/div&gt;&lt;/header&gt;
+      &lt;div class=&quot;ac-synthetic-body&quot;&gt;
+        &lt;section class=&quot;ac-synthetic-panel&quot;&gt;&lt;h3&gt;Quiénes evaluaron&lt;/h3&gt;&lt;p&gt;Perfiles creados con la misma tecnología de población sintética, simplificados para Synthetica.&lt;/p&gt;&lt;div class=&quot;ac-light-agent-list&quot; id=&quot;ac-light-agent-list&quot;&gt;&lt;/div&gt;&lt;/section&gt;
+        &lt;section class=&quot;ac-synthetic-panel&quot;&gt;&lt;h3&gt;Tabla de severidad encontrada&lt;/h3&gt;&lt;p&gt;Hallazgos coincidentes priorizados. Las particularidades no críticas permanecen en backlog.&lt;/p&gt;&lt;table class=&quot;ac-severity-table&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;#&lt;/th&gt;&lt;th&gt;Hallazgo&lt;/th&gt;&lt;th&gt;Severidad&lt;/th&gt;&lt;th&gt;Coincidencia&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;01&lt;/td&gt;&lt;td&gt;El costo total aparece demasiado tarde en el flujo.&lt;/td&gt;&lt;td&gt;&lt;span class=&quot;ac-severity&quot;&gt;Alta&lt;/span&gt;&lt;/td&gt;&lt;td&gt;4/4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;02&lt;/td&gt;&lt;td&gt;La recuperación después de un error no indica qué dato corregir.&lt;/td&gt;&lt;td&gt;&lt;span class=&quot;ac-severity&quot;&gt;Alta&lt;/span&gt;&lt;/td&gt;&lt;td&gt;3/4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;03&lt;/td&gt;&lt;td&gt;El texto del botón final no anticipa la confirmación.&lt;/td&gt;&lt;td&gt;&lt;span class=&quot;ac-severity medium&quot;&gt;Media&lt;/span&gt;&lt;/td&gt;&lt;td&gt;3/4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;04&lt;/td&gt;&lt;td&gt;Preferencia individual sobre el orden de métodos de pago.&lt;/td&gt;&lt;td&gt;&lt;span class=&quot;ac-severity medium&quot;&gt;Backlog&lt;/span&gt;&lt;/td&gt;&lt;td&gt;1/4&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/section&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;ac-index-actions&quot;&gt;&lt;button class=&quot;cursor-interaction&quot; id=&quot;ac-back-projects&quot; type=&quot;button&quot;&gt;Volver a proyectos evaluados&lt;/button&gt;&lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;div class=&quot;ac-workspace-section ac-is-hidden&quot; id=&quot;ac-workspace-section&quot;&gt;
+    &lt;section class=&quot;ac-hero&quot;&gt;
+      &lt;div&gt;&lt;div class=&quot;ac-kicker&quot;&gt;Canvas de trabajo&lt;/div&gt;&lt;h2&gt;Del contexto al producto consciente&lt;/h2&gt;&lt;p&gt;Arrastra el lienzo de derecha a izquierda. Las cajas 1–7 automatizan la construcción; la 8 entrega el producto al diseño humano y la 9 consolida recomendaciones éticas y Zero UI.&lt;/p&gt;&lt;/div&gt;
+      &lt;div class=&quot;ac-run-summary&quot; aria-label=&quot;Estado del estudio&quot;&gt;&lt;div&gt;&lt;strong&gt;3/9&lt;/strong&gt;&lt;span&gt;Caja actual&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;strong&gt;6&lt;/strong&gt;&lt;span&gt;Prototipos&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;strong&gt;7&lt;/strong&gt;&lt;span&gt;Ciclos&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;/section&gt;
+    &lt;div class=&quot;ac-toolbar&quot;&gt;
+      &lt;div class=&quot;ac-stage-jumps&quot; id=&quot;ac-stage-jumps&quot; aria-label=&quot;Ir a una caja&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;ac-view-tools&quot;&gt;
+        &lt;button class=&quot;ac-icon-button cursor-interaction&quot; type=&quot;button&quot; id=&quot;ac-zoom-out&quot; aria-label=&quot;Alejar&quot;&gt;−&lt;/button&gt;
+        &lt;span class=&quot;ac-zoom-value&quot; id=&quot;ac-zoom-value&quot;&gt;90%&lt;/span&gt;
+        &lt;button class=&quot;ac-icon-button cursor-interaction&quot; type=&quot;button&quot; id=&quot;ac-zoom-in&quot; aria-label=&quot;Acercar&quot;&gt;+&lt;/button&gt;
+        &lt;button class=&quot;ac-icon-button ac-fit-button cursor-interaction&quot; type=&quot;button&quot; id=&quot;ac-fit&quot; aria-label=&quot;Ver todo&quot;&gt;Ajustar&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;ac-viewport&quot; id=&quot;ac-viewport&quot; aria-label=&quot;Canvas horizontal navegable&quot;&gt;
+      &lt;div class=&quot;ac-world&quot; id=&quot;ac-world&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;ac-canvas-hint&quot;&gt;&lt;strong&gt;Arrastra para recorrer&lt;/strong&gt; · rueda para desplazarte · Ctrl + rueda para zoom&lt;/div&gt;
+      &lt;div class=&quot;ac-live-event&quot; aria-live=&quot;polite&quot;&gt;&lt;strong&gt;Ahora · agente S-03&lt;/strong&gt;&lt;span&gt;Valida el resumen de errores del prototipo v0.6 contra WCAG 2.2.&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;aside class=&quot;ac-drawer&quot; id=&quot;ac-drawer&quot; aria-live=&quot;polite&quot; aria-label=&quot;Detalle de la caja seleccionada&quot;&gt;
+      &lt;button class=&quot;ac-drawer-close cursor-interaction&quot; id=&quot;ac-drawer-close&quot; type=&quot;button&quot;&gt;Cerrar&lt;/button&gt;
+      &lt;div class=&quot;ac-drawer-kicker&quot; id=&quot;ac-drawer-kicker&quot;&gt;Caja 3 · en curso&lt;/div&gt;
+      &lt;h2 id=&quot;ac-drawer-title&quot;&gt;Usabilidad técnica&lt;/h2&gt;
+      &lt;p class=&quot;ac-drawer-lede&quot; id=&quot;ac-drawer-lede&quot;&gt;&lt;/p&gt;
+      &lt;section class=&quot;ac-detail-section&quot;&gt;&lt;h3&gt;Prototipo de entrada&lt;/h3&gt;&lt;div class=&quot;ac-prototype-preview&quot;&gt;&lt;div class=&quot;ac-preview-chrome&quot; aria-hidden=&quot;true&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;&lt;div class=&quot;ac-preview-screen&quot; aria-hidden=&quot;true&quot;&gt;&lt;div class=&quot;ac-preview-nav&quot;&gt;&lt;/div&gt;&lt;div class=&quot;ac-preview-content&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;div class=&quot;ac-preview-grid&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ac-preview-meta&quot;&gt;&lt;strong id=&quot;ac-prev-name&quot;&gt;&lt;/strong&gt;&lt;span id=&quot;ac-prev-origin&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+      &lt;div class=&quot;ac-detail-metrics&quot; id=&quot;ac-detail-metrics&quot;&gt;&lt;/div&gt;
+      &lt;section class=&quot;ac-detail-section&quot;&gt;&lt;h3&gt;Principios y procesos&lt;/h3&gt;&lt;ul id=&quot;ac-detail-principles&quot;&gt;&lt;/ul&gt;&lt;/section&gt;
+      &lt;section class=&quot;ac-detail-section&quot;&gt;&lt;h3&gt;Qué generó&lt;/h3&gt;&lt;ul id=&quot;ac-detail-output&quot;&gt;&lt;/ul&gt;&lt;/section&gt;
+      &lt;section class=&quot;ac-detail-section&quot;&gt;&lt;h3&gt;Evaluación&lt;/h3&gt;&lt;ul id=&quot;ac-detail-evaluation&quot;&gt;&lt;/ul&gt;&lt;div class=&quot;ac-decision&quot; id=&quot;ac-detail-decision&quot;&gt;&lt;/div&gt;&lt;/section&gt;
+    &lt;/aside&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;ac-modal-layer&quot; id=&quot;ac-project-layer&quot; role=&quot;dialog&quot; aria-modal=&quot;true&quot; aria-labelledby=&quot;ac-project-title&quot;&gt;
+      &lt;section class=&quot;ac-modal&quot;&gt;
+        &lt;header class=&quot;ac-modal-header&quot;&gt;&lt;div&gt;&lt;h2 id=&quot;ac-project-title&quot;&gt;Iniciar un proyecto&lt;/h2&gt;&lt;p&gt;Indica dónde están las fuentes iniciales. Synthetica revisará todos los archivos compatibles de cada carpeta.&lt;/p&gt;&lt;/div&gt;&lt;button class=&quot;ac-modal-close cursor-interaction&quot; type=&quot;button&quot; data-close-modal=&quot;project&quot;&gt;Cerrar&lt;/button&gt;&lt;/header&gt;
+        &lt;div class=&quot;ac-modal-body&quot;&gt;
+          &lt;div class=&quot;ac-modal-synthetica-brand&quot; id=&quot;ac-modal-synthetica-brand&quot;&gt;&lt;div class=&quot;ac-brand-asset&quot;&gt;&lt;img class=&quot;ac-synthetica-logo&quot; src=&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMjUiIHZpZXdCb3g9IjAgMCAxMzYgMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iU3ludGhldGljYSI+CiAgPHN0eWxlPkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU1hbnJvcGU6d2dodEA3MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTYgMTIuNSAxMi41KSIgZmlsbD0iIzcxNTZkOSI+CiAgICA8cmVjdCB4PSI0IiB5PSIxMSIgd2lkdGg9IjUiIGhlaWdodD0iMTAiIHJ4PSIyLjUiLz4KICAgIDxyZWN0IHg9IjExIiB5PSIzIiB3aWR0aD0iNSIgaGVpZ2h0PSIxOCIgcng9IjIuNSIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjciIHdpZHRoPSI1IiBoZWlnaHQ9IjE0IiByeD0iMi41Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjM1IiB5PSIxOSIgZmlsbD0iIzI0MjMyNyIgZm9udC1mYW1pbHk9Ik1hbnJvcGUsICdETSBTYW5zJywgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSItMC42Ij5zeW50aGV0aWNhPC90ZXh0Pgo8L3N2Zz4K&quot; alt=&quot;Synthetica&quot;&gt;&lt;/div&gt;&lt;span&gt;Motor de población y evaluación sintética&lt;/span&gt;&lt;/div&gt;
+          &lt;div class=&quot;ac-selected-type&quot; id=&quot;ac-project-type&quot;&gt;Proyecto completo de producto · nueve cajas&lt;/div&gt;
+          &lt;div class=&quot;ac-project-fields&quot;&gt;
+            &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-project-name&quot; id=&quot;ac-project-name-label&quot;&gt;Nombre del proyecto&lt;/label&gt;&lt;input id=&quot;ac-project-name&quot; value=&quot;Portal de servicios ciudadanos&quot;&gt;&lt;/div&gt;
+            &lt;div class=&quot;ac-synthetic-only ac-is-hidden&quot;&gt;
+              &lt;section class=&quot;ac-form-group&quot;&gt;&lt;h3&gt;Producto y población&lt;/h3&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-project-id&quot;&gt;Identificador *&lt;/label&gt;&lt;input id=&quot;ac-project-id&quot; value=&quot;nuevo-estudio&quot;&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-study-url&quot;&gt;URL del producto *&lt;/label&gt;&lt;input id=&quot;ac-study-url&quot; type=&quot;url&quot; value=&quot;https://producto.ejemplo/&quot;&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-study-environment&quot;&gt;Entorno *&lt;/label&gt;&lt;select id=&quot;ac-study-environment&quot;&gt;&lt;option&gt;Maqueta&lt;/option&gt;&lt;option selected&gt;QA&lt;/option&gt;&lt;option&gt;Producción controlada&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-agent-count&quot;&gt;Agentes sintéticos *&lt;/label&gt;&lt;select id=&quot;ac-agent-count&quot;&gt;&lt;option value=&quot;3&quot;&gt;3 agentes&lt;/option&gt;&lt;option value=&quot;4&quot; selected&gt;4 agentes&lt;/option&gt;&lt;option value=&quot;5&quot;&gt;5 agentes&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-study-audience&quot;&gt;Población objetivo *&lt;/label&gt;&lt;input id=&quot;ac-study-audience&quot; value=&quot;Personas que completan la tarea principal&quot;&gt;&lt;/div&gt;
+              &lt;/section&gt;
+              &lt;section class=&quot;ac-form-group&quot;&gt;&lt;h3&gt;Fuentes y motor existente&lt;/h3&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-engine-root&quot;&gt;Raíz de Agentes Sintéticos *&lt;/label&gt;&lt;input id=&quot;ac-engine-root&quot; value=&quot;E:\Sitios\Guru\_agentes_sinteticos&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;motor&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-documents-folder&quot;&gt;Carpeta de documentos *&lt;/label&gt;&lt;input id=&quot;ac-documents-folder&quot; value=&quot;E:\Sitios\Guru\Reuniones&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;documentos&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+              &lt;/section&gt;
+              &lt;section class=&quot;ac-form-group&quot;&gt;&lt;h3&gt;Configuración que utilizará el estudio&lt;/h3&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-project-config&quot;&gt;Proyecto JSON *&lt;/label&gt;&lt;input id=&quot;ac-project-config&quot; value=&quot;E:\Sitios\Guru\_agentes_sinteticos\proyectos\nuevo-estudio.json&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;configuracion&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-flows-config&quot;&gt;Recorridos JSON *&lt;/label&gt;&lt;input id=&quot;ac-flows-config&quot; value=&quot;E:\Sitios\Guru\_agentes_sinteticos\proyectos\nuevo-estudio\recorridos.json&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;recorridos&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-cohort-config&quot;&gt;Cohorte JSON *&lt;/label&gt;&lt;input id=&quot;ac-cohort-config&quot; value=&quot;E:\Sitios\Guru\_agentes_sinteticos\proyectos\nuevo-estudio\cohorte.json&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;cohorte&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-cognitive-base&quot;&gt;Base cognitiva *&lt;/label&gt;&lt;input id=&quot;ac-cognitive-base&quot; value=&quot;E:\Sitios\Guru\_agentes_sinteticos\datos\nuevo-estudio.sqlite&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;base&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-output-folder&quot;&gt;Carpeta de resultados *&lt;/label&gt;&lt;input id=&quot;ac-output-folder&quot; value=&quot;E:\Sitios\Guru\_agentes_sinteticos\salidas&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;salidas&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+                &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-last-study-file&quot;&gt;Registro del último índice *&lt;/label&gt;&lt;input id=&quot;ac-last-study-file&quot; value=&quot;E:\Sitios\Guru\_agentes_sinteticos\ULTIMO_ESTUDIO.txt&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;ultimo-estudio&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+                &lt;label class=&quot;ac-checkbox-row&quot;&gt;&lt;input id=&quot;ac-open-index&quot; type=&quot;checkbox&quot; checked&gt; Abrir automáticamente el último &lt;code&gt;index.html&lt;/code&gt; al finalizar&lt;/label&gt;
+              &lt;/section&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;ac-full-only&quot;&gt;
+              &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-prototype-source&quot;&gt;Prototipo inicial&lt;/label&gt;&lt;input id=&quot;ac-prototype-source&quot; placeholder=&quot;Opcional: ruta de un prototipo existente&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;prototipo&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+              &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-context-folder&quot;&gt;Contexto y problema *&lt;/label&gt;&lt;input id=&quot;ac-context-folder&quot; value=&quot;C:\Synthetica\Portal\01-contexto&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;contexto&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+              &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-audience-folder&quot;&gt;Población objetivo *&lt;/label&gt;&lt;input id=&quot;ac-audience-folder&quot; value=&quot;C:\Synthetica\Portal\02-poblacion&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;poblacion&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+              &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-research-folder&quot;&gt;Investigación y reuniones&lt;/label&gt;&lt;input id=&quot;ac-research-folder&quot; value=&quot;C:\Synthetica\Portal\03-investigacion&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;investigacion&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+              &lt;div class=&quot;ac-project-field&quot;&gt;&lt;label for=&quot;ac-extra-folder&quot;&gt;Fuentes adicionales&lt;/label&gt;&lt;input id=&quot;ac-extra-folder&quot; placeholder=&quot;Opcional: métricas, referentes o auditorías&quot;&gt;&lt;button class=&quot;ac-folder-button cursor-interaction&quot; type=&quot;button&quot; data-pick-folder=&quot;adicionales&quot;&gt;Seleccionar&lt;/button&gt;&lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;ac-source-note&quot; id=&quot;ac-source-note&quot;&gt;&lt;strong&gt;Lectura inicial:&lt;/strong&gt; documentos, PDF, hojas de cálculo, imágenes, transcripciones, HTML y notas de investigación. La plataforma crea el contexto del problema; la ejecución automática se inicia desde la consola.&lt;/div&gt;
+          &lt;div class=&quot;ac-config-status&quot; id=&quot;ac-config-status&quot; aria-live=&quot;polite&quot;&gt;Configuración lista. Se detectaron 47 fuentes compatibles para iniciar desde la consola.&lt;/div&gt;
+          &lt;section class=&quot;ac-after-save&quot; id=&quot;ac-after-save&quot; aria-live=&quot;polite&quot;&gt;&lt;h3&gt;Configuración guardada. Ahora puedes continuar desde la plataforma.&lt;/h3&gt;&lt;p&gt;El proyecto de Agentes Sintéticos no fue modificado. Synthetica creó una configuración independiente para agentes ligeros y registró esta ejecución.&lt;/p&gt;&lt;div class=&quot;ac-command-list&quot;&gt;&lt;code&gt;/agentes-actualizar-base&lt;/code&gt;&lt;code&gt;/agentes-correr-estudio&lt;/code&gt;&lt;code&gt;/agentes-rehacer-flujos&lt;/code&gt;&lt;/div&gt;&lt;button class=&quot;ac-open-last cursor-interaction&quot; id=&quot;ac-open-last-study&quot; type=&quot;button&quot;&gt;Abrir último estudio #025&lt;/button&gt;&lt;/section&gt;
+          &lt;div class=&quot;ac-modal-actions&quot;&gt;&lt;button class=&quot;ac-secondary-action cursor-interaction&quot; type=&quot;button&quot; data-close-modal=&quot;project&quot;&gt;Cancelar&lt;/button&gt;&lt;button class=&quot;ac-primary-action cursor-interaction&quot; id=&quot;ac-save-project&quot; type=&quot;button&quot;&gt;Guardar configuración&lt;/button&gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;ac-modal-layer&quot; id=&quot;ac-live-layer&quot; role=&quot;dialog&quot; aria-modal=&quot;true&quot; aria-labelledby=&quot;ac-live-title&quot;&gt;
+      &lt;section class=&quot;ac-modal&quot;&gt;
+        &lt;header class=&quot;ac-modal-header&quot;&gt;&lt;div&gt;&lt;h2 id=&quot;ac-live-title&quot;&gt;Prototipo en vivo&lt;/h2&gt;&lt;p id=&quot;ac-live-subtitle&quot;&gt;&lt;/p&gt;&lt;/div&gt;&lt;button class=&quot;ac-modal-close cursor-interaction&quot; type=&quot;button&quot; data-close-modal=&quot;live&quot;&gt;Cerrar&lt;/button&gt;&lt;/header&gt;
+        &lt;div class=&quot;ac-modal-body&quot;&gt;
+          &lt;div class=&quot;ac-live-browser&quot;&gt;
+            &lt;div class=&quot;ac-live-browser-bar&quot;&gt;&lt;strong id=&quot;ac-live-file&quot;&gt;&lt;/strong&gt;&lt;span class=&quot;ac-running&quot;&gt;● Ejecutándose&lt;/span&gt;&lt;/div&gt;
+            &lt;div class=&quot;ac-live-screen&quot;&gt;
+              &lt;nav class=&quot;ac-live-nav&quot; aria-label=&quot;Estados del prototipo&quot;&gt;&lt;strong&gt;Synthetica Preview&lt;/strong&gt;&lt;button class=&quot;cursor-interaction&quot; type=&quot;button&quot; data-live-view=&quot;Inicio&quot; aria-pressed=&quot;true&quot;&gt;Vista inicial&lt;/button&gt;&lt;button class=&quot;cursor-interaction&quot; type=&quot;button&quot; data-live-view=&quot;Flujo principal&quot; aria-pressed=&quot;false&quot;&gt;Flujo principal&lt;/button&gt;&lt;button class=&quot;cursor-interaction&quot; type=&quot;button&quot; data-live-view=&quot;Estado de error&quot; aria-pressed=&quot;false&quot;&gt;Estado de error&lt;/button&gt;&lt;/nav&gt;
+              &lt;section class=&quot;ac-live-content&quot; aria-live=&quot;polite&quot;&gt;&lt;h3 id=&quot;ac-live-view-title&quot;&gt;Vista inicial&lt;/h3&gt;&lt;p id=&quot;ac-live-view-copy&quot;&gt;Prototipo navegable generado por la caja seleccionada.&lt;/p&gt;&lt;div class=&quot;ac-live-demo-grid&quot;&gt;&lt;div class=&quot;ac-live-demo-block&quot;&gt;&lt;strong&gt;Contenido principal&lt;/strong&gt;&lt;p&gt;Interacciones, microcopy y rutas disponibles para revisión.&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;ac-live-demo-block ac-accent&quot;&gt;&lt;strong&gt;Estado funcional&lt;/strong&gt;&lt;p&gt;La vista responde y conserva las decisiones aprobadas.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;script&gt;
+    (() =&gt; {
+      const root = document.getElementById(&#x27;synthetica-canvas&#x27;);
+      if (!root) return;
+
+      const stages = [
+        {
+          id: 1, name: &#x27;Usabilidad heurística&#x27;, short: &#x27;Heurística&#x27;, state: &#x27;completed&#x27;, status: &#x27;Aprobada&#x27;, cycles: 3, score: &#x27;100% reglas&#x27;, prototype: &#x27;HTML v0.3&#x27;, findings: 11,
+          lede: &#x27;El producto y su contexto entran al framework. Aquí se construye la primera versión HTML sobre los pilares básicos de interacción.&#x27;,
+          principles: [&#x27;Heurísticas de Nielsen&#x27;, &#x27;Principios de diseño de Don Norman&#x27;, &#x27;Happy path inicial&#x27;, &#x27;Visibilidad, consistencia y prevención de errores&#x27;],
+          outputs: [&#x27;Primer producto navegable en HTML&#x27;, &#x27;Mapa del happy path&#x27;, &#x27;Registro de decisiones heurísticas&#x27;],
+          evaluation: [&#x27;Auditoría automática de reglas; todavía no intervienen agentes sintéticos&#x27;, &#x27;Los incumplimientos comunes regresan a refinamiento&#x27;],
+          decision: &#x27;Aprobada después de 3 ciclos. Los agentes y los flujos se construyen en la caja 2.&#x27;
+        },
+        {
+          id: 2, name: &#x27;Usabilidad centrada en el usuario&#x27;, short: &#x27;Usuario&#x27;, state: &#x27;completed&#x27;, status: &#x27;Aprobada&#x27;, cycles: 2, score: &#x27;86%&#x27;, prototype: &#x27;HTML v0.5&#x27;, findings: 8,
+          lede: &#x27;Convierte la evidencia del contexto y las voces reales en personas, recorridos, lenguaje y primeras decisiones visuales.&#x27;,
+          principles: [&#x27;Protopersonas basadas en contexto&#x27;, &#x27;Mapas de empatía y journey maps&#x27;, &#x27;Auditoría profunda de productos similares&#x27;, &#x27;Sistema de diseño adecuado&#x27;, &#x27;Paleta inicial 60–30–10&#x27;],
+          outputs: [&#x27;Flujos de interacción priorizados&#x27;, &#x27;Protopersonas y mapas&#x27;, &#x27;Nuevo prototipo con lenguaje contextual&#x27;],
+          evaluation: [&#x27;3 agentes sintéticos, sin KLM y sin video&#x27;, &#x27;NASA-TLX y SUS&#x27;, &#x27;Tabla de severidad y dudas recurrentes&#x27;],
+          decision: &#x27;Aprobada: los hallazgos compartidos fueron corregidos; dos preferencias individuales quedaron en backlog.&#x27;
+        },
+        {
+          id: 3, name: &#x27;Usabilidad técnica&#x27;, short: &#x27;Técnica&#x27;, state: &#x27;active&#x27;, status: &#x27;En curso&#x27;, cycles: 2, score: &#x27;68%&#x27;, prototype: &#x27;HTML v0.6&#x27;, findings: 5,
+          lede: &#x27;Comprueba que el producto sea accesible, ergonómico y coherente con los patrones técnicos de interacción.&#x27;,
+          principles: [&#x27;ISO 9241&#x27;, &#x27;WCAG 2.2&#x27;, &#x27;Ergonomía&#x27;, &#x27;Leyes de UX&#x27;, &#x27;Patrones de UI&#x27;, &#x27;Gamificación solo cuando aporta valor&#x27;],
+          outputs: [&#x27;Prototipo con orden de foco corregido&#x27;, &#x27;Estados y mensajes de error revisados&#x27;, &#x27;Matriz de cumplimiento técnico&#x27;],
+          evaluation: [&#x27;3 de 5 agentes ejecutados&#x27;, &#x27;Recorrido cognitivo sin KLM ni video&#x27;, &#x27;Tabla severidad × arreglabilidad&#x27;],
+          decision: &#x27;Debe iterar: tres agentes no percibieron el resumen de errores. El gate actual es 68% y el mínimo es 70%.&#x27;
+        },
+        {
+          id: 4, name: &#x27;Usabilidad gráfica &amp; psicológica&#x27;, short: &#x27;Gráfica&#x27;, state: &#x27;waiting&#x27;, status: &#x27;En espera&#x27;, cycles: 0, score: &#x27;—&#x27;, prototype: &#x27;Imágenes HD&#x27;, findings: 0,
+          lede: &#x27;Traduce el producto funcional en propuestas visuales de alta fidelidad y elige autónomamente la más adecuada.&#x27;,
+          principles: [&#x27;Normas de diseño gráfico&#x27;, &#x27;Peso y jerarquía visual&#x27;, &#x27;Proporción áurea y principios de belleza&#x27;, &#x27;GOMS para describir metas y métodos&#x27;, &#x27;KLM desactivado&#x27;, &#x27;Generación de alternativas visuales&#x27;],
+          outputs: [&#x27;Variantes visuales en imágenes de alta fidelidad&#x27;, &#x27;Resultado del A/B testing&#x27;, &#x27;Interfaz seleccionada y aplicada al producto&#x27;],
+          evaluation: [&#x27;3 agentes votan según su contexto y tareas&#x27;, &#x27;Los agentes no usan KLM ni graban video&#x27;, &#x27;Se descartan variantes que degradan usabilidad&#x27;],
+          decision: &#x27;Pendiente de la aprobación técnica de la caja 3.&#x27;
+        },
+        {
+          id: 5, name: &#x27;Usabilidad fundamental / teórica&#x27;, short: &#x27;Fundamental&#x27;, state: &#x27;waiting&#x27;, status: &#x27;En espera&#x27;, cycles: 0, score: &#x27;—&#x27;, prototype: &#x27;Diseño funcional&#x27;, findings: 0,
+          lede: &#x27;Consolida la arquitectura del producto y comprueba que no existan rutas incompletas antes del diseño funcional final.&#x27;,
+          principles: [&#x27;Cinco planos de Jesse James Garrett&#x27;, &#x27;Análisis de grafos&#x27;, &#x27;Caminos incompletos&#x27;, &#x27;Nodos y vistas huérfanas&#x27;, &#x27;Microcopy según Kinneret Yifrah&#x27;],
+          outputs: [&#x27;Arquitectura validada&#x27;, &#x27;Grafo de navegación completo&#x27;, &#x27;Microcopias refinadas&#x27;, &#x27;Diseño funcional consolidado&#x27;],
+          evaluation: [&#x27;3–5 agentes recorren los flujos principales&#x27;, &#x27;Se conservan los pilares aprobados en cajas anteriores&#x27;, &#x27;Regresión sobre rutas corregidas&#x27;],
+          decision: &#x27;Pendiente de la variante visual elegida en la caja 4.&#x27;
+        },
+        {
+          id: 6, name: &#x27;Gaps cognitivos y fugas mentales&#x27;, short: &#x27;Gaps&#x27;, mode: &#x27;ai&#x27;, state: &#x27;waiting&#x27;, status: &#x27;En espera&#x27;, cycles: 0, score: &#x27;—&#x27;, prototype: &#x27;App refinada&#x27;, findings: 0,
+          lede: &#x27;Primera caja de Diseño para masas. Usa gaps cognitivos convencionales y nudges para mejorar comprensión y engagement sin degradar la autonomía.&#x27;,
+          principles: [&#x27;Gaps cognitivos convencionales&#x27;, &#x27;Framing, confirmación y hindsight&#x27;, &#x27;Sunk cost, escasez y descuento hiperbólico&#x27;, &#x27;Nudges de Richard Thaler y Cass Sunstein&#x27;, &#x27;Control de patrones manipulativos&#x27;],
+          outputs: [&#x27;Mapa de gaps y fugas mentales&#x27;, &#x27;Recomendaciones por pantalla&#x27;, &#x27;Nueva aplicación refinada&#x27;],
+          evaluation: [&#x27;La app vuelve al motor ligero de agentes&#x27;, &#x27;3–5 agentes, sin KLM y sin video&#x27;, &#x27;Hallazgos comunes vuelven al ciclo&#x27;],
+          decision: &#x27;Pendiente del diseño funcional aprobado en la caja 5.&#x27;
+        },
+        {
+          id: 7, name: &#x27;Modelos de conducta&#x27;, short: &#x27;Conducta&#x27;, mode: &#x27;ai&#x27;, state: &#x27;waiting&#x27;, status: &#x27;En espera&#x27;, cycles: 0, score: &#x27;—&#x27;, prototype: &#x27;Última app IA&#x27;, findings: 0,
+          lede: &#x27;Segunda caja de Diseño para masas y último punto automatizado. Contrasta dos modelos de conducta según la intención y el contexto del proyecto.&#x27;,
+          principles: [&#x27;Modelo de conducta de B. J. Fogg&#x27;, &#x27;Hooked de Nir Eyal&#x27;, &#x27;Consumo atemporal&#x27;, &#x27;Auditoría comparada de ambos modelos&#x27;, &#x27;Selección de principios aplicables al proyecto&#x27;],
+          outputs: [&#x27;Síntesis de los aportes útiles de ambos modelos&#x27;, &#x27;Aplicación nuevamente refinada&#x27;, &#x27;Paquete de cierre de la fase IA&#x27;],
+          evaluation: [&#x27;Última evaluación ligera con 3–5 agentes&#x27;, &#x27;Sin KLM y sin video&#x27;, &#x27;Al aprobar, termina la construcción automática&#x27;],
+          decision: &#x27;Pendiente de la caja 6. Después de esta caja no se aplican más cambios autónomos.&#x27;
+        },
+        {
+          id: 8, name: &#x27;Diseño humano&#x27;, short: &#x27;Humano&#x27;, mode: &#x27;human&#x27;, state: &#x27;waiting&#x27;, status: &#x27;Externa&#x27;, cycles: 0, score: &#x27;Humano&#x27;, prototype: &#x27;Prototipo activo&#x27;, findings: 0,
+          lede: &#x27;El equipo humano recibe el prototipo funcional y decide qué principios, instrumentos y tareas se evaluarán con usuarios finales.&#x27;,
+          principles: [&#x27;Definición humana del plan de evaluación&#x27;, &#x27;SUS&#x27;, &#x27;NPS&#x27;, &#x27;CSAT&#x27;, &#x27;Técnicas cualitativas seleccionadas por el equipo&#x27;],
+          outputs: [&#x27;Plan de evaluación con usuarios finales&#x27;, &#x27;Instrumentos incorporados al prototipo&#x27;, &#x27;Criterios humanos de éxito y aceptación&#x27;],
+          evaluation: [&#x27;Participantes reales con el prototipo funcionando&#x27;, &#x27;El equipo interpreta satisfacción, comprensión y valor&#x27;, &#x27;Los resultados pueden producir una nueva versión de la app&#x27;],
+          decision: &#x27;No la ejecuta Synthetica de forma autónoma. Synthetica observa, documenta e integra las decisiones humanas.&#x27;
+        },
+        {
+          id: 9, name: &#x27;Diseño consciente / Zero UI&#x27;, short: &#x27;Consciente&#x27;, mode: &#x27;recommendations&#x27;, state: &#x27;waiting&#x27;, status: &#x27;Recomendación&#x27;, cycles: 0, score: &#x27;No aplica&#x27;, prototype: &#x27;Backlog futuro&#x27;, findings: 0,
+          lede: &#x27;Última frontera del framework. Evalúa el producto desde Zero UI y el diseño ético de Tristan Harris, pero no aplica cambios automáticamente.&#x27;,
+          principles: [&#x27;Diseño consciente&#x27;, &#x27;Zero UI&#x27;, &#x27;Diseño ético según Tristan Harris&#x27;, &#x27;Autonomía y bienestar de la persona&#x27;, &#x27;Reducción de persuasión indebida y consumo compulsivo&#x27;],
+          outputs: [&#x27;Recomendaciones consolidadas&#x27;, &#x27;Riesgos éticos documentados&#x27;, &#x27;Backlog de evolución futura&#x27;, &#x27;Lineamientos para Figma y el sistema de diseño&#x27;],
+          evaluation: [&#x27;Revisión humana de cada recomendación&#x27;, &#x27;Ninguna recomendación modifica directamente la app&#x27;, &#x27;Trabajo paralelo con diseño visual y sistema de diseño&#x27;],
+          decision: &#x27;Salida consultiva: las recomendaciones quedan disponibles para futuras versiones del producto digital.&#x27;
+        }
+      ];
+
+      const viewport = root.querySelector(&#x27;#ac-viewport&#x27;);
+      const world = root.querySelector(&#x27;#ac-world&#x27;);
+      const drawer = root.querySelector(&#x27;#ac-drawer&#x27;);
+      const home = root.querySelector(&#x27;#ac-home&#x27;);
+      const workspaceSection = root.querySelector(&#x27;#ac-workspace-section&#x27;);
+      const syntheticIndex = root.querySelector(&#x27;#ac-synthetic-index&#x27;);
+      const saved = window.openai &amp;&amp; window.openai.widgetState &amp;&amp; window.openai.widgetState.privateContent;
+      let scale = Number(saved &amp;&amp; saved.scale) || 0.9;
+      let x = saved &amp;&amp; Number.isFinite(Number(saved.x)) ? Number(saved.x) : -1230;
+      let y = saved &amp;&amp; Number.isFinite(Number(saved.y)) ? Number(saved.y) : 12;
+      let selected = Number(saved &amp;&amp; saved.stage) || 3;
+      let dragging = false;
+      let pointerStart = null;
+      let setupKind = &#x27;full&#x27;;
+      let syntheticExecution = 24;
+
+      const persist = () =&gt; {
+        if (!window.openai || !window.openai.setWidgetState) return;
+        window.openai.setWidgetState({
+          modelContent: { selectedStage: selected, zoom: Math.round(scale * 100) },
+          privateContent: { stage: selected, scale, x, y }
+        }).catch(() =&gt; {});
+      };
+
+      const stageLeft = id =&gt; 80 + (id - 1) * 710;
+
+      const previousPrototypes = {
+        1: { name: &#x27;Contexto del producto&#x27;, origin: &#x27;Entrada inicial · sin prototipo previo&#x27; },
+        2: { name: &#x27;prototipo-v0.3.html&#x27;, origin: &#x27;Recibido de la caja 1&#x27; },
+        3: { name: &#x27;prototipo-v0.5.html&#x27;, origin: &#x27;Recibido de la caja 2&#x27; },
+        4: { name: &#x27;prototipo-v0.6.html&#x27;, origin: &#x27;Recibido de la caja 3&#x27; },
+        5: { name: &#x27;interfaz-seleccionada-v0.7.html&#x27;, origin: &#x27;Recibido de la caja 4&#x27; },
+        6: { name: &#x27;diseno-funcional-v0.8.html&#x27;, origin: &#x27;Recibido de la caja 5&#x27; },
+        7: { name: &#x27;app-refinada-v0.9.html&#x27;, origin: &#x27;Recibido de la caja 6&#x27; },
+        8: { name: &#x27;producto-final-ia-v1.0.html&#x27;, origin: &#x27;Recibido de la caja 7&#x27; },
+        9: { name: &#x27;prototipo-evaluado-v1.1.html&#x27;, origin: &#x27;Recibido de la caja 8&#x27; }
+      };
+
+      const livePrototypes = {
+        1: &#x27;prototipo-v0.3.html&#x27;,
+        2: &#x27;prototipo-v0.5.html&#x27;,
+        3: &#x27;prototipo-v0.6.html&#x27;,
+        5: &#x27;diseno-funcional-v0.8.html&#x27;,
+        6: &#x27;app-refinada-v0.9.html&#x27;,
+        7: &#x27;producto-final-ia-v1.0.html&#x27;,
+        8: &#x27;prototipo-evaluado-v1.1.html&#x27;
+      };
+
+      const stageHtml = stage =&gt; {
+        const agentLabel = stage.id === 1 ? &#x27;Control automático&#x27; : stage.id === 8 ? &#x27;Evaluación humana&#x27; : stage.id === 9 ? &#x27;Recomendaciones&#x27; : &#x27;Evaluación por agentes&#x27;;
+        const agentMeta = stage.id === 1 ? &#x27;Nielsen + Norman&#x27; : stage.id === 8 ? &#x27;SUS · NPS · CSAT&#x27; : stage.id === 9 ? &#x27;No se aplican&#x27; : &#x27;3–5 · sin KLM/video&#x27;;
+        const evaluatorVisual = stage.id === 1 ? &#x27;&lt;span class=&quot;ac-evaluator-token&quot; aria-hidden=&quot;true&quot;&gt;AUTO&lt;/span&gt;&#x27; : stage.id === 8 ? &#x27;&lt;span class=&quot;ac-evaluator-token&quot; aria-hidden=&quot;true&quot;&gt;UX&lt;/span&gt;&#x27; : stage.id === 9 ? &#x27;&lt;span class=&quot;ac-evaluator-token&quot; aria-hidden=&quot;true&quot;&gt;ÉTICA&lt;/span&gt;&#x27; : &#x27;&lt;div class=&quot;ac-agent-dots&quot; aria-hidden=&quot;true&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;&#x27;;
+        const prototypeToken = stage.id === 4 ? &#x27;IMG&#x27; : stage.id === 9 ? &#x27;DOC&#x27; : &#x27;HTML&#x27;;
+        const loopLabel = stage.id === 9 ? &#x27;consolida, no aplica&#x27; : stage.id === 8 ? &#x27;decisión humana&#x27; : &#x27;si no cumple, refina&#x27;;
+        const list = stage.principles.slice(0, 6).map(item =&gt; `&lt;li&gt;${item}&lt;/li&gt;`).join(&#x27;&#x27;);
+        return `
+          &lt;article class=&quot;ac-stage&quot; data-stage=&quot;${stage.id}&quot; data-state=&quot;${stage.state}&quot; data-mode=&quot;${stage.mode || &#x27;ai&#x27;}&quot; style=&quot;left:${stageLeft(stage.id)}px&quot;&gt;
+            &lt;header class=&quot;ac-stage-header&quot;&gt;
+              &lt;span class=&quot;ac-stage-number&quot;&gt;${stage.id}&lt;/span&gt;
+              &lt;div class=&quot;ac-stage-copy&quot;&gt;&lt;h3&gt;${stage.name}&lt;/h3&gt;&lt;p&gt;${stage.id === 4 ? &#x27;Diseño visual y selección autónoma&#x27; : stage.id === 5 ? &#x27;Garrett está contenido únicamente aquí&#x27; : stage.id === 6 || stage.id === 7 ? &#x27;Diseño para masas · IA&#x27; : stage.id === 8 ? &#x27;Comienza el diseño humano&#x27; : stage.id === 9 ? &#x27;Salida consultiva, no automática&#x27; : &#x27;Evaluación continua del producto&#x27;}&lt;/p&gt;&lt;/div&gt;
+              &lt;span class=&quot;ac-state&quot;&gt;${stage.status}&lt;/span&gt;
+            &lt;/header&gt;
+            &lt;div class=&quot;ac-stage-body&quot;&gt;
+              &lt;div class=&quot;ac-input-node&quot;&gt;${stage.id === 1 ? &#x27;Producto + contexto&#x27; : &#x27;Prototipo anterior&#x27;}&lt;/div&gt;
+              &lt;div class=&quot;ac-principles&quot;&gt;&lt;strong&gt;Principios y procesos&lt;/strong&gt;&lt;ul&gt;${list}&lt;/ul&gt;&lt;/div&gt;
+              &lt;div class=&quot;ac-prototype&quot;&gt;&lt;span class=&quot;ac-prototype-token&quot; aria-hidden=&quot;true&quot;&gt;${prototypeToken}&lt;/span&gt;&lt;strong&gt;${stage.id === 9 ? &#x27;Salida consolidada&#x27; : &#x27;Prototipo creado&#x27;}&lt;/strong&gt;&lt;span&gt;${stage.prototype}&lt;/span&gt;&lt;/div&gt;
+              &lt;div class=&quot;ac-evaluation&quot;&gt;&lt;div&gt;${evaluatorVisual}&lt;strong&gt;${agentLabel}&lt;/strong&gt;&lt;span&gt;${agentMeta}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+              &lt;button class=&quot;ac-detail-button cursor-interaction&quot; type=&quot;button&quot; data-open-stage=&quot;${stage.id}&quot;&gt;Ver caja y decisiones&lt;/button&gt;
+              ${livePrototypes[stage.id] ? `&lt;button class=&quot;ac-live-button cursor-interaction&quot; type=&quot;button&quot; data-live-stage=&quot;${stage.id}&quot;&gt;Ver en vivo&lt;/button&gt;` : &#x27;&#x27;}
+              &lt;svg class=&quot;ac-stage-flow&quot; viewBox=&quot;0 0 560 402&quot; aria-hidden=&quot;true&quot;&gt;
+                &lt;defs&gt;&lt;marker id=&quot;arrow-${stage.id}&quot; markerWidth=&quot;8&quot; markerHeight=&quot;8&quot; refX=&quot;6&quot; refY=&quot;3&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;M0,0 L0,6 L7,3 z&quot; fill=&quot;currentColor&quot;&gt;&lt;/path&gt;&lt;/marker&gt;&lt;/defs&gt;
+                &lt;path d=&quot;M138 47 H158&quot; marker-end=&quot;url(#arrow-${stage.id})&quot;&gt;&lt;/path&gt;
+                &lt;path d=&quot;M383 76 H405&quot; marker-end=&quot;url(#arrow-${stage.id})&quot;&gt;&lt;/path&gt;
+                &lt;path d=&quot;M465 138 V180&quot; marker-end=&quot;url(#arrow-${stage.id})&quot;&gt;&lt;/path&gt;
+                &lt;path class=&quot;ac-loop-path&quot; d=&quot;M397 255 H350 Q325 255 325 230 V225&quot; marker-end=&quot;url(#arrow-${stage.id})&quot;&gt;&lt;/path&gt;
+                &lt;text class=&quot;ac-loop-label&quot; x=&quot;330&quot; y=&quot;273&quot;&gt;${loopLabel}&lt;/text&gt;
+              &lt;/svg&gt;
+              &lt;footer class=&quot;ac-stage-footer&quot;&gt;&lt;div&gt;&lt;span&gt;Ciclos&lt;/span&gt;&lt;strong&gt;${stage.cycles || &#x27;—&#x27;}&lt;/strong&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;Gate&lt;/span&gt;&lt;strong&gt;${stage.score}&lt;/strong&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;Hallazgos&lt;/span&gt;&lt;strong&gt;${stage.findings || &#x27;—&#x27;}&lt;/strong&gt;&lt;/div&gt;&lt;/footer&gt;
+            &lt;/div&gt;
+          &lt;/article&gt;`;
+      };
+
+      const connectorHtml = (stage, next) =&gt; {
+        const stateClass = stage.state === &#x27;completed&#x27; ? &#x27;completed&#x27; : &#x27;&#x27;;
+        return `&lt;div class=&quot;ac-next ${stateClass}&quot; style=&quot;left:${stageLeft(stage.id) + 560}px&quot;&gt;&lt;span&gt;${stage.state === &#x27;completed&#x27; ? &#x27;gate aprobado&#x27; : &#x27;esperando aprobación&#x27;}&lt;/span&gt;&lt;/div&gt;`;
+      };
+
+      const renderWorld = () =&gt; {
+        const phases = `
+          &lt;div class=&quot;ac-phase-band&quot; style=&quot;left:80px;width:3400px&quot;&gt;Construcción y diseño funcional · IA&lt;/div&gt;
+          &lt;div class=&quot;ac-phase-band mass&quot; style=&quot;left:3630px;width:1270px&quot;&gt;Diseño para masas · IA&lt;/div&gt;
+          &lt;div class=&quot;ac-phase-band human&quot; style=&quot;left:5050px;width:1270px&quot;&gt;Diseño humano y consciente&lt;/div&gt;`;
+        const humanOutput = `&lt;div class=&quot;ac-final-connector&quot;&gt;&lt;/div&gt;&lt;div class=&quot;ac-human-output&quot;&gt;&lt;span class=&quot;ac-output-token&quot; aria-hidden=&quot;true&quot;&gt;FIGMA&lt;/span&gt;&lt;strong&gt;Diseño humano en paralelo&lt;/strong&gt;&lt;span&gt;Figma, sistema de diseño, especificaciones y evolución futura del producto.&lt;/span&gt;&lt;/div&gt;`;
+        world.innerHTML = phases + stages.map(stageHtml).join(&#x27;&#x27;) + stages.slice(0, -1).map((stage, index) =&gt; connectorHtml(stage, stages[index + 1])).join(&#x27;&#x27;) + humanOutput;
+        world.querySelectorAll(&#x27;[data-open-stage]&#x27;).forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, event =&gt; {
+          event.stopPropagation();
+          selected = Number(button.dataset.openStage);
+          openDrawer(selected);
+          renderNavigation();
+          persist();
+        }));
+        world.querySelectorAll(&#x27;[data-live-stage]&#x27;).forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, event =&gt; {
+          event.stopPropagation();
+          openLivePreview(Number(button.dataset.liveStage));
+        }));
+      };
+
+      const renderNavigation = () =&gt; {
+        root.querySelector(&#x27;#ac-stage-jumps&#x27;).innerHTML = stages.map(stage =&gt; `&lt;button class=&quot;ac-jump cursor-interaction&quot; type=&quot;button&quot; data-jump=&quot;${stage.id}&quot; aria-pressed=&quot;${stage.id === selected}&quot;&gt;${stage.id} · ${stage.short}&lt;/button&gt;`).join(&#x27;&#x27;);
+        root.querySelectorAll(&#x27;[data-jump]&#x27;).forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; jumpTo(Number(button.dataset.jump))));
+      };
+
+      const applyTransform = () =&gt; {
+        world.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+        root.querySelector(&#x27;#ac-zoom-value&#x27;).textContent = `${Math.round(scale * 100)}%`;
+      };
+
+      const jumpTo = id =&gt; {
+        selected = id;
+        scale = Math.max(scale, 0.82);
+        const center = stageLeft(id) + 280;
+        x = viewport.clientWidth / 2 - center * scale;
+        y = 16;
+        applyTransform();
+        renderNavigation();
+        persist();
+      };
+
+      const setScale = nextScale =&gt; {
+        const old = scale;
+        scale = Math.max(0.18, Math.min(1.3, nextScale));
+        const cx = viewport.clientWidth / 2;
+        const cy = viewport.clientHeight / 2;
+        x = cx - ((cx - x) / old) * scale;
+        y = cy - ((cy - y) / old) * scale;
+        applyTransform();
+        persist();
+      };
+
+      const fitAll = () =&gt; {
+        const usableWidth = Math.max(300, viewport.clientWidth - 36);
+        scale = Math.max(0.15, Math.min(0.78, usableWidth / 6900));
+        x = 18;
+        y = Math.max(18, (viewport.clientHeight - 650 * scale) / 2);
+        applyTransform();
+        persist();
+      };
+
+      const openDrawer = id =&gt; {
+        const stage = stages.find(item =&gt; item.id === id) || stages[0];
+        root.querySelector(&#x27;#ac-drawer-kicker&#x27;).textContent = `Caja ${stage.id} · ${stage.status}`;
+        root.querySelector(&#x27;#ac-drawer-title&#x27;).textContent = stage.name;
+        root.querySelector(&#x27;#ac-drawer-lede&#x27;).textContent = stage.lede;
+        const previous = previousPrototypes[stage.id];
+        root.querySelector(&#x27;#ac-prev-name&#x27;).textContent = previous.name;
+        root.querySelector(&#x27;#ac-prev-origin&#x27;).textContent = previous.origin;
+        root.querySelector(&#x27;#ac-detail-metrics&#x27;).innerHTML = `&lt;div&gt;&lt;span&gt;Ciclos&lt;/span&gt;&lt;strong&gt;${stage.cycles || &#x27;—&#x27;}&lt;/strong&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;Gate&lt;/span&gt;&lt;strong&gt;${stage.score}&lt;/strong&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;Hallazgos&lt;/span&gt;&lt;strong&gt;${stage.findings || &#x27;—&#x27;}&lt;/strong&gt;&lt;/div&gt;`;
+        root.querySelector(&#x27;#ac-detail-principles&#x27;).innerHTML = stage.principles.map(item =&gt; `&lt;li&gt;${item}&lt;/li&gt;`).join(&#x27;&#x27;);
+        root.querySelector(&#x27;#ac-detail-output&#x27;).innerHTML = stage.outputs.map(item =&gt; `&lt;li&gt;${item}&lt;/li&gt;`).join(&#x27;&#x27;);
+        root.querySelector(&#x27;#ac-detail-evaluation&#x27;).innerHTML = stage.evaluation.map(item =&gt; `&lt;li&gt;${item}&lt;/li&gt;`).join(&#x27;&#x27;);
+        root.querySelector(&#x27;#ac-detail-decision&#x27;).textContent = stage.decision;
+        drawer.classList.add(&#x27;is-open&#x27;);
+      };
+
+      const showHome = () =&gt; {
+        home.classList.remove(&#x27;ac-is-hidden&#x27;);
+        workspaceSection.classList.add(&#x27;ac-is-hidden&#x27;);
+        syntheticIndex.classList.add(&#x27;ac-is-hidden&#x27;);
+        root.querySelector(&#x27;.ac-run-status&#x27;).classList.add(&#x27;ac-is-hidden&#x27;);
+        root.querySelector(&#x27;#ac-current-project&#x27;).textContent = &#x27;Sin proyecto abierto&#x27;;
+        drawer.classList.remove(&#x27;is-open&#x27;);
+      };
+
+      const showWorkspace = projectName =&gt; {
+        home.classList.add(&#x27;ac-is-hidden&#x27;);
+        workspaceSection.classList.remove(&#x27;ac-is-hidden&#x27;);
+        syntheticIndex.classList.add(&#x27;ac-is-hidden&#x27;);
+        root.querySelector(&#x27;.ac-run-status&#x27;).classList.remove(&#x27;ac-is-hidden&#x27;);
+        root.querySelector(&#x27;#ac-current-project&#x27;).textContent = projectName;
+        requestAnimationFrame(applyTransform);
+      };
+
+      const renderLightAgents = count =&gt; {
+        const agents = [
+          [&#x27;S-01 · Lina&#x27;, &#x27;Primera vez · móvil · baja experiencia en el dominio&#x27;],
+          [&#x27;S-02 · Mateo&#x27;, &#x27;Usuario frecuente · escritorio · orientado a eficiencia&#x27;],
+          [&#x27;S-03 · Sara&#x27;, &#x27;Uso asistido · móvil · necesita lenguaje directo&#x27;],
+          [&#x27;S-04 · David&#x27;, &#x27;Experiencia media · escritorio · trabaja con prisa&#x27;],
+          [&#x27;S-05 · Nora&#x27;, &#x27;Primera vez · tableta · compara antes de decidir&#x27;]
+        ];
+        root.querySelector(&#x27;#ac-light-agent-list&#x27;).innerHTML = agents.slice(0, count).map(agent =&gt; `&lt;div class=&quot;ac-light-agent&quot;&gt;&lt;strong&gt;${agent[0]}&lt;/strong&gt;&lt;span&gt;${agent[1]}&lt;/span&gt;&lt;/div&gt;`).join(&#x27;&#x27;);
+        root.querySelector(&#x27;#ac-index-agent-count&#x27;).textContent = `${count} agentes ligeros`;
+        const coincidences = root.querySelectorAll(&#x27;.ac-severity-table tbody tr td:last-child&#x27;);
+        const shared = Math.max(2, count - 1);
+        if (coincidences[0]) coincidences[0].textContent = `${count}/${count}`;
+        if (coincidences[1]) coincidences[1].textContent = `${shared}/${count}`;
+        if (coincidences[2]) coincidences[2].textContent = `${shared}/${count}`;
+        if (coincidences[3]) coincidences[3].textContent = `1/${count}`;
+      };
+
+      const showSyntheticIndex = (projectName = &#x27;Checkout comercio digital&#x27;, number = syntheticExecution) =&gt; {
+        home.classList.add(&#x27;ac-is-hidden&#x27;);
+        workspaceSection.classList.add(&#x27;ac-is-hidden&#x27;);
+        syntheticIndex.classList.remove(&#x27;ac-is-hidden&#x27;);
+        root.querySelector(&#x27;.ac-run-status&#x27;).classList.add(&#x27;ac-is-hidden&#x27;);
+        root.querySelector(&#x27;#ac-current-project&#x27;).textContent = projectName;
+        root.querySelector(&#x27;#ac-synthetic-title&#x27;).textContent = `Estudio #${String(number).padStart(3, &#x27;0&#x27;)} · ${projectName}`;
+        renderLightAgents(Number(root.querySelector(&#x27;#ac-agent-count&#x27;).value) || 4);
+      };
+
+      const openProjectSetup = kind =&gt; {
+        const synthetic = kind === &#x27;synthetic&#x27;;
+        setupKind = synthetic ? &#x27;synthetic&#x27; : &#x27;full&#x27;;
+        root.querySelector(&#x27;#ac-project-title&#x27;).textContent = synthetic ? &#x27;Crear estudio de agentes sintéticos&#x27; : &#x27;Crear proyecto completo de producto&#x27;;
+        root.querySelector(&#x27;#ac-project-type&#x27;).textContent = synthetic ? &#x27;Estudio puntual · URL + población + 3–5 agentes ligeros&#x27; : &#x27;Proyecto completo · recorrido por las nueve cajas&#x27;;
+        root.querySelector(&#x27;#ac-project-name&#x27;).value = synthetic ? &#x27;Nuevo estudio sintético&#x27; : &#x27;Nuevo producto digital&#x27;;
+        root.querySelector(&#x27;#ac-project-name-label&#x27;).textContent = synthetic ? &#x27;Nombre del estudio&#x27; : &#x27;Nombre del proyecto&#x27;;
+        root.querySelector(&#x27;#ac-modal-synthetica-brand&#x27;).classList.toggle(&#x27;is-visible&#x27;, synthetic);
+        root.querySelectorAll(&#x27;.ac-synthetic-only&#x27;).forEach(item =&gt; item.classList.toggle(&#x27;ac-is-hidden&#x27;, !synthetic));
+        root.querySelectorAll(&#x27;.ac-full-only&#x27;).forEach(item =&gt; item.classList.toggle(&#x27;ac-is-hidden&#x27;, synthetic));
+        root.querySelector(&#x27;#ac-source-note&#x27;).innerHTML = synthetic ? &#x27;&lt;strong&gt;Modo ligero Synthetica:&lt;/strong&gt; reutiliza la tecnología de población sintética, conserva GOMS como estructura de metas y métodos, pero no ejecuta KLM ni graba video. La vista final muestra quiénes evaluaron y la tabla de severidad. No se modifica ningún proyecto existente de Agentes Sintéticos.&#x27; : &#x27;&lt;strong&gt;Lectura inicial:&lt;/strong&gt; documentos, PDF, hojas de cálculo, imágenes, transcripciones, HTML y notas de investigación. La plataforma crea el contexto del problema; la ejecución automática se inicia desde la consola.&#x27;;
+        root.querySelector(&#x27;#ac-config-status&#x27;).classList.remove(&#x27;is-visible&#x27;);
+        root.querySelector(&#x27;#ac-after-save&#x27;).classList.remove(&#x27;is-visible&#x27;);
+        root.querySelector(&#x27;#ac-save-project&#x27;).disabled = false;
+        root.querySelector(&#x27;#ac-save-project&#x27;).textContent = &#x27;Guardar configuración&#x27;;
+        root.querySelector(&#x27;#ac-project-layer&#x27;).classList.add(&#x27;is-open&#x27;);
+      };
+
+      const updateSyntheticPaths = () =&gt; {
+        const rootPath = root.querySelector(&#x27;#ac-engine-root&#x27;).value.replace(/[\\/]+$/, &#x27;&#x27;);
+        const id = (root.querySelector(&#x27;#ac-project-id&#x27;).value || &#x27;nuevo-estudio&#x27;).trim().replace(/\s+/g, &#x27;-&#x27;).toLowerCase();
+        root.querySelector(&#x27;#ac-project-config&#x27;).value = `${rootPath}\\proyectos\\${id}.json`;
+        root.querySelector(&#x27;#ac-flows-config&#x27;).value = `${rootPath}\\proyectos\\${id}\\recorridos.json`;
+        root.querySelector(&#x27;#ac-cohort-config&#x27;).value = `${rootPath}\\proyectos\\${id}\\cohorte.json`;
+        root.querySelector(&#x27;#ac-cognitive-base&#x27;).value = `${rootPath}\\datos\\${id}.sqlite`;
+        root.querySelector(&#x27;#ac-output-folder&#x27;).value = `${rootPath}\\salidas`;
+        root.querySelector(&#x27;#ac-last-study-file&#x27;).value = `${rootPath}\\ULTIMO_ESTUDIO.txt`;
+      };
+
+      const closeModal = name =&gt; root.querySelector(`#ac-${name}-layer`).classList.remove(&#x27;is-open&#x27;);
+
+      const openLivePreview = id =&gt; {
+        const stage = stages.find(item =&gt; item.id === id) || stages[0];
+        root.querySelector(&#x27;#ac-live-title&#x27;).textContent = `Caja ${stage.id} · ${stage.name}`;
+        root.querySelector(&#x27;#ac-live-subtitle&#x27;).textContent = &#x27;Vista ejecutable del resultado HTML de esta caja.&#x27;;
+        root.querySelector(&#x27;#ac-live-file&#x27;).textContent = livePrototypes[stage.id];
+        root.querySelector(&#x27;#ac-live-view-title&#x27;).textContent = &#x27;Vista inicial&#x27;;
+        root.querySelector(&#x27;#ac-live-view-copy&#x27;).textContent = `Prototipo navegable generado por la caja ${stage.id}.`;
+        root.querySelectorAll(&#x27;[data-live-view]&#x27;).forEach((button, index) =&gt; button.setAttribute(&#x27;aria-pressed&#x27;, index === 0 ? &#x27;true&#x27; : &#x27;false&#x27;));
+        root.querySelector(&#x27;#ac-live-layer&#x27;).classList.add(&#x27;is-open&#x27;);
+      };
+
+      viewport.addEventListener(&#x27;pointerdown&#x27;, event =&gt; {
+        if (event.target.closest(&#x27;button&#x27;)) return;
+        dragging = true;
+        pointerStart = { clientX: event.clientX, clientY: event.clientY, x, y };
+        viewport.setPointerCapture(event.pointerId);
+        viewport.classList.add(&#x27;is-dragging&#x27;);
+      });
+      viewport.addEventListener(&#x27;pointermove&#x27;, event =&gt; {
+        if (!dragging || !pointerStart) return;
+        x = pointerStart.x + event.clientX - pointerStart.clientX;
+        y = pointerStart.y + event.clientY - pointerStart.clientY;
+        applyTransform();
+      });
+      const endDrag = event =&gt; {
+        if (!dragging) return;
+        dragging = false;
+        pointerStart = null;
+        viewport.classList.remove(&#x27;is-dragging&#x27;);
+        if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+        persist();
+      };
+      viewport.addEventListener(&#x27;pointerup&#x27;, endDrag);
+      viewport.addEventListener(&#x27;pointercancel&#x27;, endDrag);
+      viewport.addEventListener(&#x27;wheel&#x27;, event =&gt; {
+        event.preventDefault();
+        if (event.ctrlKey) setScale(scale * (event.deltaY &gt; 0 ? 0.9 : 1.1));
+        else { x -= event.deltaX || event.deltaY; applyTransform(); persist(); }
+      }, { passive: false });
+
+      root.querySelector(&#x27;#ac-zoom-in&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; setScale(scale + 0.1));
+      root.querySelector(&#x27;#ac-zoom-out&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; setScale(scale - 0.1));
+      root.querySelector(&#x27;#ac-fit&#x27;).addEventListener(&#x27;click&#x27;, fitAll);
+      root.querySelector(&#x27;#ac-drawer-close&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; drawer.classList.remove(&#x27;is-open&#x27;));
+      root.querySelector(&#x27;#ac-go-home&#x27;).addEventListener(&#x27;click&#x27;, showHome);
+      root.querySelector(&#x27;#ac-go-projects&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+        showHome();
+        root.querySelector(&#x27;#ac-evaluated-projects&#x27;).scrollIntoView({ behavior: &#x27;smooth&#x27;, block: &#x27;center&#x27; });
+      });
+      root.querySelector(&#x27;#ac-new-project&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+        showHome();
+        root.querySelector(&#x27;#ac-create-heading&#x27;).scrollIntoView({ behavior: &#x27;smooth&#x27;, block: &#x27;center&#x27; });
+      });
+      root.querySelectorAll(&#x27;[data-create-kind]&#x27;).forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; openProjectSetup(button.dataset.createKind)));
+      root.querySelectorAll(&#x27;[data-open-project]&#x27;).forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; button.dataset.projectKind === &#x27;synthetic&#x27; ? showSyntheticIndex(button.dataset.openProject) : showWorkspace(button.dataset.openProject)));
+      root.querySelector(&#x27;#ac-back-projects&#x27;).addEventListener(&#x27;click&#x27;, showHome);
+      root.querySelectorAll(&#x27;[data-close-modal]&#x27;).forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; closeModal(button.dataset.closeModal)));
+      root.querySelectorAll(&#x27;[data-pick-folder]&#x27;).forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; {
+        const field = button.previousElementSibling;
+        if (!field.value) field.value = button.dataset.pickFolder === &#x27;prototipo&#x27; ? &#x27;C:\\Synthetica\\Proyecto\\prototipo.html&#x27; : `C:\\Synthetica\\Proyecto\\${button.dataset.pickFolder}`;
+        button.textContent = &#x27;Seleccionada&#x27;;
+      }));
+      root.querySelector(&#x27;#ac-project-id&#x27;).addEventListener(&#x27;input&#x27;, updateSyntheticPaths);
+      root.querySelector(&#x27;#ac-engine-root&#x27;).addEventListener(&#x27;input&#x27;, updateSyntheticPaths);
+      root.querySelector(&#x27;#ac-save-project&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+        const status = root.querySelector(&#x27;#ac-config-status&#x27;);
+        if (setupKind === &#x27;synthetic&#x27;) {
+          syntheticExecution += 1;
+          const number = String(syntheticExecution).padStart(3, &#x27;0&#x27;);
+          status.textContent = `Estudio #${number} registrado con ${root.querySelector(&#x27;#ac-agent-count&#x27;).value} agentes ligeros.`;
+          root.querySelector(&#x27;#ac-synthetic-project-meta&#x27;).textContent = `Estudio sintético · Estudio #${number} · Configurado · pendiente de ejecución`;
+          root.querySelector(&#x27;#ac-synthetic-project-name&#x27;).textContent = root.querySelector(&#x27;#ac-project-name&#x27;).value;
+          root.querySelector(&#x27;#ac-open-synthetic-project&#x27;).dataset.openProject = root.querySelector(&#x27;#ac-project-name&#x27;).value;
+          root.querySelector(&#x27;#ac-open-last-study&#x27;).textContent = `Abrir último estudio #${number}`;
+          const afterSave = root.querySelector(&#x27;#ac-after-save&#x27;);
+          afterSave.classList.add(&#x27;is-visible&#x27;);
+          root.querySelector(&#x27;#ac-index-url&#x27;).textContent = root.querySelector(&#x27;#ac-study-url&#x27;).value;
+          root.querySelector(&#x27;#ac-save-project&#x27;).disabled = true;
+          root.querySelector(&#x27;#ac-save-project&#x27;).textContent = &#x27;Configuración guardada&#x27;;
+          requestAnimationFrame(() =&gt; afterSave.scrollIntoView({ behavior: &#x27;smooth&#x27;, block: &#x27;center&#x27; }));
+        } else {
+          status.textContent = &#x27;Proyecto configurado. Se detectaron 47 fuentes compatibles para iniciar el recorrido desde la consola.&#x27;;
+        }
+        status.classList.add(&#x27;is-visible&#x27;);
+      });
+      root.querySelector(&#x27;#ac-open-last-study&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+        closeModal(&#x27;project&#x27;);
+        showSyntheticIndex(root.querySelector(&#x27;#ac-project-name&#x27;).value, syntheticExecution);
+      });
+      root.querySelectorAll(&#x27;[data-live-view]&#x27;).forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; {
+        root.querySelectorAll(&#x27;[data-live-view]&#x27;).forEach(item =&gt; item.setAttribute(&#x27;aria-pressed&#x27;, item === button ? &#x27;true&#x27; : &#x27;false&#x27;));
+        root.querySelector(&#x27;#ac-live-view-title&#x27;).textContent = button.dataset.liveView;
+        root.querySelector(&#x27;#ac-live-view-copy&#x27;).textContent = button.dataset.liveView === &#x27;Estado de error&#x27; ? &#x27;Muestra validaciones, mensajes y recuperación antes de aprobar la caja.&#x27; : button.dataset.liveView === &#x27;Flujo principal&#x27; ? &#x27;Recorre la tarea prioritaria del producto de principio a fin.&#x27; : &#x27;Prototipo navegable generado por la caja seleccionada.&#x27;;
+      }));
+      root.addEventListener(&#x27;keydown&#x27;, event =&gt; { if (event.key === &#x27;Escape&#x27;) { drawer.classList.remove(&#x27;is-open&#x27;); closeModal(&#x27;project&#x27;); closeModal(&#x27;live&#x27;); } });
+      window.addEventListener(&#x27;resize&#x27;, applyTransform);
+      window.addEventListener(&#x27;openai:set_globals&#x27;, event =&gt; {
+        const next = event.detail &amp;&amp; event.detail.globals &amp;&amp; event.detail.globals.widgetState &amp;&amp; event.detail.globals.widgetState.privateContent;
+        if (!next) return;
+        if (Number(next.stage)) selected = Number(next.stage);
+        if (Number(next.scale)) scale = Number(next.scale);
+        if (Number.isFinite(Number(next.x))) x = Number(next.x);
+        if (Number.isFinite(Number(next.y))) y = Number(next.y);
+        renderNavigation();
+        applyTransform();
+      });
+
+      renderWorld();
+      renderNavigation();
+      renderLightAgents(4);
+      applyTransform();
+    })();
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) =&gt; {
+    lastPointerWasTouch =
+      event.type === &quot;pointerdown&quot; &amp;&amp; event.pointerType === &quot;touch&quot;;
+  };
+  const handleTouchClick = (event) =&gt; {
+    const isTouch = event.pointerType === &quot;touch&quot; || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch &amp;&amp; activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() =&gt; {
+      if (activeTrigger === trigger &amp;&amp; !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) =&gt; {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerdown&quot;, handlePointer);
+    document.removeEventListener(&quot;pointercancel&quot;, handlePointer);
+    document.removeEventListener(&quot;click&quot;, handleTouchClick);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerdown&quot;, handlePointer);
+  document.addEventListener(&quot;pointercancel&quot;, handlePointer);
+  document.addEventListener(&quot;click&quot;, handleTouchClick);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-tabs&quot;&gt;
+(() =&gt; {
+  const selector = &#x27;.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]&#x27;;
+  const disabled = &#x27;:disabled,[aria-disabled=&quot;true&quot;]&#x27;;
+  const selectTab = (selected) =&gt; {
+    const panelId = selected.getAttribute(&quot;aria-controls&quot;);
+    for (const tab of selected.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;)) {
+      const active = tab === selected;
+      tab.classList.toggle(&quot;active&quot;, active);
+      tab.setAttribute(&quot;aria-selected&quot;, String(active));
+      const id = tab.getAttribute(&quot;aria-controls&quot;);
+      const panel = id &amp;&amp; document.getElementById(id);
+      if (panel != null) {
+        panel.hidden = id !== panelId;
+        if (!panel.hidden &amp;&amp; selected.id) {
+          panel.setAttribute(&quot;aria-labelledby&quot;, selected.id);
+        }
+      }
+    }
+  };
+  const interact = (event) =&gt; {
+    const tab = event.target?.closest?.(selector);
+    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
+      return;
+    }
+    if (event.type === &quot;click&quot;) {
+      selectTab(tab);
+      return;
+    }
+    const tabs = Array.from(
+      tab.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;),
+    ).filter((candidate) =&gt; !candidate.matches(disabled));
+    const current = tabs.indexOf(tab);
+    let next;
+    if (event.key === &quot;ArrowRight&quot; || event.key === &quot;ArrowDown&quot;) {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === &quot;ArrowLeft&quot; || event.key === &quot;ArrowUp&quot;) {
+      next = (current + tabs.length - 1) % tabs.length;
+    } else if (event.key === &quot;Home&quot;) {
+      next = 0;
+    } else if (event.key === &quot;End&quot;) {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    selectTab(tabs[next]);
+  };
+
+  for (const list of document.querySelectorAll(&#x27;.nav[role=&quot;tablist&quot;]&#x27;)) {
+    const selected =
+      list.querySelector(&#x27;[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;].active&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;]&#x27;);
+    if (selected != null) {
+      selectTab(selected);
+    }
+  }
+  document.addEventListener(&quot;click&quot;, interact);
+  document.addEventListener(&quot;keydown&quot;, interact);
+  window.addEventListener(&quot;pagehide&quot;, () =&gt; {
+    document.removeEventListener(&quot;click&quot;, interact);
+    document.removeEventListener(&quot;keydown&quot;, interact);
+  }, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+<script>(() => {
+  const frame = document.getElementById("codex-visualization");
+  if (!(frame instanceof HTMLIFrameElement)) {
+    return;
+  }
+  let viewportHeight = globalThis.innerHeight;
+  const storageKey = `codex:visualization-widget-state-v2:${JSON.stringify([
+    globalThis.location.pathname,
+    globalThis.location.search,
+  ])}`;
+  const parseState = (serializedState) => {
+    if (
+      typeof serializedState !== "string" ||
+      new TextEncoder().encode(serializedState).length > 16 * 1024
+    ) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    /** @type {unknown} */
+    const state = JSON.parse(serializedState);
+    if (
+      state == null ||
+      typeof state !== "object" ||
+      Array.isArray(state) ||
+      ("imageIds" in state &&
+        (!Array.isArray(state.imageIds) || state.imageIds.length > 0))
+    ) {
+      throw new TypeError("Widget state must be a JSON object");
+    }
+    const storedState = { modelContent: null, privateContent: null, ...state };
+    const canonicalState = JSON.stringify(
+      storedState,
+      (_key, /** @type {unknown} */ value) => {
+        if (typeof value === "number" && !Number.isFinite(value)) {
+          throw new TypeError("Widget state must contain finite numbers");
+        }
+        return value;
+      },
+    );
+    if (new TextEncoder().encode(canonicalState).length > 16 * 1024) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    return storedState;
+  };
+  let storage = null;
+  let state = null;
+  try {
+    const localStorage = globalThis.localStorage;
+    const probeKey = `${storageKey}:probe`;
+    localStorage.setItem(probeKey, "1");
+    localStorage.removeItem(probeKey);
+    storage = localStorage;
+    const savedState = storage.getItem(storageKey);
+    if (savedState != null) {
+      try {
+        state = parseState(savedState);
+      } catch {
+        // Invalid saved state does not disable future writes.
+      }
+    }
+  } catch {
+    storage = null;
+  }
+  const initialGlobals = {
+    widgetState: state,
+    statePersistence: storage == null ? "none" : "local",
+  };
+
+  const channel = new MessageChannel();
+  channel.port1.addEventListener("message", (event) => {
+    const data = event.data;
+    if (typeof data !== "object" || data == null) {
+      return;
+    }
+    if (data.type === "widget-state-write") {
+      if (!Number.isSafeInteger(data.id) || data.id <= 0) {
+        return;
+      }
+      let ok = false;
+      try {
+        if (storage != null) {
+          const state = parseState(data.state);
+          storage.setItem(storageKey, JSON.stringify(state));
+          ok = true;
+        }
+      } catch {
+        // Storage denial, quota limits, and invalid state return a failed receipt.
+      }
+      channel.port1.postMessage({
+        type: "widget-state-result",
+        id: data.id,
+        ok,
+      });
+      return;
+    }
+    if (data.type === "height") {
+      const height = data.height;
+      if (
+        typeof height === "number" &&
+        Number.isFinite(height) &&
+        height >= 0 &&
+        height <= 10_000
+      ) {
+        frame.style.height = Math.ceil(height) + "px";
+      }
+      return;
+    }
+    if (data.type === "scroll-to") {
+      const top = data.top;
+      if (
+        typeof top === "number" &&
+        Number.isFinite(top) &&
+        top >= 0 &&
+        globalThis.navigator.userActivation?.isActive === true
+      ) {
+        globalThis.scrollTo({
+          top: Math.ceil(
+            globalThis.scrollY + frame.getBoundingClientRect().top + top,
+          ),
+        });
+      }
+      return;
+    }
+    if (data.type === "open-external") {
+      const rawHref = data.href;
+      if (typeof rawHref !== "string") {
+        return;
+      }
+      let href;
+      try {
+        const url = new URL(rawHref, document.baseURI);
+        if (url.protocol !== "https:") {
+          return;
+        }
+        href = url.href;
+      } catch {
+        return;
+      }
+      if (globalThis.navigator.userActivation?.isActive === true) {
+        const anchor = document.createElement("a");
+        anchor.href = href;
+        anchor.rel = "noopener noreferrer";
+        anchor.target = "_blank";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+      }
+      return;
+    }
+    if (data.type === "follow-up") {
+      const prompt = data.prompt;
+      if (
+        typeof prompt !== "string" ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      const title = data.title;
+      globalThis.prompt(typeof title === "string" ? title : prompt, prompt);
+    }
+  });
+  channel.port1.start();
+  const srcdoc = frame.dataset.srcdoc;
+  if (srcdoc == null) {
+    return;
+  }
+  globalThis.addEventListener("resize", () => {
+    const height = Number.parseFloat(frame.style.height);
+    if (!Number.isFinite(height) || height <= viewportHeight) {
+      frame.style.removeProperty("height");
+    }
+    viewportHeight = globalThis.innerHeight;
+    channel.port1.postMessage({ type: "measure" });
+  });
+  frame.addEventListener(
+    "load",
+    () => {
+      frame.contentWindow?.postMessage(
+        { type: "codex-visualization-initialize" },
+        "*",
+        [channel.port2],
+      );
+    },
+    { once: true },
+  );
+  // Match the trusted bootstrap element, not the same text in an authored title.
+  frame.srcdoc = srcdoc.replace(
+    '<script type="application/json" id="codex-visualization-widget-state">__CODEX_VISUALIZATION_WIDGET_STATE__<\/script>',
+    () =>
+      '<script type="application/json" id="codex-visualization-widget-state">' +
+      JSON.stringify(initialGlobals).replaceAll("<", "\\u003c") +
+      "<\/script>",
+  );
+  delete frame.dataset.srcdoc;
+})();
+</script>
+</body>
+</html>
