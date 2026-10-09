@@ -214,6 +214,16 @@ th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align:
 .pcard:hover { border-color: var(--blue-2); }
 .pcard.sintetico { border-top-color: #8D7AE6; }
 .pcard.seguimiento { border-top-color: var(--green); }
+.pcard.qa { border-top-color: #E07A2E; }
+.qa-fila { position: relative; display: grid; gap: 8px; margin-top: 10px; padding: 12px 40px 12px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+.qa-fila > .quitar-archivo { position: absolute; top: 8px; right: 8px; }
+.qa-fila > .btn { justify-self: start; }
+.qa-campos { display: grid; gap: 6px; margin-top: 4px; }
+.qa-campo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto auto; gap: 6px; align-items: center; }
+.qa-campo input[type=text], .qa-campo input[type=password] { width: 100%; }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.seg button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
+@media (max-width: 700px) { .qa-campo { grid-template-columns: 1fr; } }
 .pcard h3 { font-size: 16px; font-weight: 800; }
 .pstate { display: grid; gap: 6px; font-size: 12px; }
 .todo-strip { display: grid; gap: 8px; margin-top: 18px; }
@@ -335,7 +345,7 @@ code.snippet { display: block; padding: 12px; border-radius: 8px; background: va
 .cv-zoom span { min-width: 44px; text-align: center; color: var(--muted); font-size: 11px; font-weight: 700; }
 .cv-view { position: relative; height: 640px; overflow: hidden; background-color: var(--board); background-image: radial-gradient(color-mix(in srgb, var(--muted), transparent 60%) 1px, transparent 1px); background-size: 20px 20px; touch-action: none; user-select: none; cursor: grab; }
 .cv-view.drag { cursor: grabbing; }
-.cv-world { position: absolute; left: 0; top: 0; width: 7100px; height: 640px; transform-origin: 0 0; }
+.cv-world { position: absolute; left: 0; top: 0; width: 10200px; height: 640px; transform-origin: 0 0; }
 .cv-band { position: absolute; top: 10px; height: 34px; display: flex; align-items: center; padding: 0 12px; border-left: 5px solid var(--blue-2); background: var(--soft-blue); color: var(--blue); font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 .cv-band.masa { border-left-color: var(--orange); background: var(--soft-orange); color: var(--orange); }
 .cv-src { position: absolute; left: 30px; top: 220px; width: 250px; padding: 14px; border: 2px solid var(--line); border-radius: 10px; background: var(--board); }
@@ -535,28 +545,52 @@ const TIPOS = {
     ]
   },
   completo: {
-    nombre: 'Proyecto completo', corto: 'Completo', total: 'Cada escenario, entre 3 y 5 h',
-    resumen: 'Construimos el producto en nueve escenarios. En cada uno validas lo que logramos antes de seguir.',
+    nombre: 'Proyecto completo', corto: 'Completo', total: 'Cada caja, entre 3 y 6 h',
+    resumen: 'Construimos el producto caja a caja (de la 1 a la 11). En cada una validas lo que logramos antes de seguir.',
+    // Las mismas cajas del motor de creación (numeración del 2026-10-08): la 8 y la 10 son opcionales.
     etapas: [
       // Tus entradas llegan directo a la caja 1: la lanza un analista desde la consola.
       { n: 1, nombre: 'Usabilidad básica (Nielsen)', corto: 'Básica', min: 300, rango: 'entre 3 y 5 h', modo: 'auto',
-        hace: ['Leer tus entradas y ordenar el contexto', 'Heurísticas de Nielsen y principios de Don Norman', 'Menús, contenidos y happy path', 'Primera aplicación navegable con tus colores e imágenes'], entrega: 'Tu primera aplicación, para que nos digas si te gusta y si cumple.' },
+        hace: ['Leer tus entradas y ordenar el contexto', 'Heurísticas de Nielsen y principios de Don Norman', 'Menús, contenidos y happy path', 'Primera aplicación navegable'], entrega: 'Tu primera aplicación, para que nos digas si te gusta y si cumple.' },
       { n: 2, nombre: 'Usabilidad centrada en el usuario', corto: 'Usuario', min: 300, modo: 'auto',
-        hace: ['Protopersonas desde tus entradas', 'Escenarios que usarán los agentes sintéticos', 'Journey maps y productos similares', 'Paleta 60–30–10'], entrega: 'Protopersonas, escenarios y un prototipo con el lenguaje de tu público.' },
+        hace: ['Protopersonas desde tus entradas', 'Escenarios que usarán los agentes sintéticos', 'Journey maps y productos similares', 'Sistema de diseño de partida'], entrega: 'Protopersonas, escenarios y un prototipo con el lenguaje de tu público.' },
       { n: 3, nombre: 'Usabilidad técnica', corto: 'Técnica', min: 300, modo: 'auto',
         hace: ['ISO 9241', 'WCAG 2.2', 'Ergonomía', 'Leyes de UX y patrones de UI'], entrega: 'Prototipo accesible y ergonómico.' },
-      { n: 4, nombre: 'Usabilidad gráfica y psicológica', corto: 'Gráfica', min: 360, modo: 'diseno',
-        hace: ['Peso y jerarquía visual', 'Principios de belleza', 'Variantes en alta definición', 'Voto de los agentes'], entrega: 'Eliges el diseño que te gusta.' },
-      { n: 5, nombre: 'Usabilidad fundamental', corto: 'Fundamental', min: 300, modo: 'auto',
-        hace: ['Cinco planos de Garrett', 'Grafo de navegación', 'Caminos incompletos y vistas huérfanas', 'Microcopy'], entrega: 'Diseño funcional consolidado.' },
-      { n: 6, nombre: 'Gaps cognitivos', corto: 'Gaps', min: 240, modo: 'auto',
-        hace: ['Sesgos y fugas mentales', 'Nudges éticos', 'Control de patrones manipulativos'], entrega: 'App refinada.' },
-      { n: 7, nombre: 'Modelos de conducta', corto: 'Conducta', min: 240, modo: 'auto',
-        hace: ['Modelo de Fogg', 'Hooked de Nir Eyal', 'Selección de lo aplicable'], entrega: 'Última versión automática.' },
-      { n: 8, nombre: 'Diseño humano', corto: 'Humano', min: null, modo: 'humana',
-        hace: ['Plan de evaluación con usuarios finales', 'SUS, NPS, CSAT', 'Técnicas cualitativas'], entrega: 'Lo hace tu equipo; Synthetica documenta.' },
-      { n: 9, nombre: 'Diseño consciente / Zero UI', corto: 'Consciente', min: 180, modo: 'auto',
-        hace: ['Diseño ético', 'Zero UI', 'Autonomía y bienestar'], entrega: 'Recomendaciones que no tocan la app.' }
+      { n: 3.1, nombre: 'Color', corto: 'Color', min: 180, modo: 'diseno',
+        hace: ['Tres gamas desde tu marca o tu producto', '60-30-10, estados y modo oscuro', 'Contraste y daltonismo medidos', 'El color de tus competidores, medido'], entrega: 'Eliges la gama de color.' },
+      { n: 4, nombre: 'Maquetación', corto: 'Maquetación', min: 360, modo: 'diseno',
+        hace: ['Estado del arte e ideación', 'Dos o tres propuestas como páginas reales', 'Recursos de librerías libres', 'Evaluación completa con los agentes'], entrega: 'Eliges la propuesta de tu producto.' },
+      { n: 4.1, nombre: 'Imagen', corto: 'Imagen', min: 120, modo: 'auto',
+        hace: ['El material gráfico de la propuesta elegida, con su origen', 'Lo que haría un diseñador gráfico', 'Si lo pides: recursos propios maquetados'], entrega: 'Ves el material gráfico y decides: lo aceptas como está o pides recursos propios.' },
+      { n: 5, nombre: 'Usabilidad gráfica y psicológica', corto: 'Gráfica', min: 360, modo: 'auto',
+        hace: ['Parte del diseño que elegiste', 'Normas gráficas y psicológicas', 'Tipografía, iconos e imágenes', 'Evaluación con los agentes'], entrega: 'Tu diseño pulido y medido.' },
+      { n: 6, nombre: 'Estructura, contenido y confianza', corto: 'Estructura', min: 300, modo: 'auto',
+        hace: ['Cinco planos de Garrett', 'Grafo de navegación y caminos sin salida', 'Microcopy y búsqueda (también con IA)', 'Confianza en el método'], entrega: 'Diseño funcional consolidado.' },
+      { n: 7, nombre: 'Diseño comportamental', corto: 'Conducta', min: 240, modo: 'auto',
+        hace: ['Sesgos y atajos mentales', 'Nudges éticos', 'Control de patrones manipulativos', 'Narrativa'], entrega: 'App refinada.' },
+      { n: 8, nombre: 'Gamificación y hábito (opcional)', corto: 'Hábito', min: 240, modo: 'auto',
+        hace: ['Modelo de Fogg', 'Hooked de Nir Eyal completo', 'Riesgo y ética'], entrega: 'La evaluación es obligatoria; aplicarla, opcional.' },
+      { n: 9, nombre: 'Punto de control: la voz de los agentes', corto: 'Control', min: 120, modo: 'auto',
+        hace: ['Evolución caja a caja', 'La voz de los agentes', 'Qué comprobar con personas reales'], entrega: 'Cierra la etapa de diseño.' },
+      { n: 10, nombre: 'Futuro: Zero UI y diseño ético (opcional)', corto: 'Futuro', min: 180, modo: 'auto', opcional: true,
+        hace: ['Diseño ético', 'Zero UI', 'Autonomía y bienestar'], entrega: 'Recomendaciones que no tocan la app.' },
+      { n: 11, nombre: 'Aceptación de la entrega', corto: 'Aceptación', min: null, modo: 'humana',
+        hace: ['Imágenes y HTML de tu producto', 'Carta de entrega con huellas', 'Firma del acta'], entrega: 'Descargas, revisas y firmas.' }
+    ]
+  },
+  qa: {
+    nombre: 'QA visual', corto: 'QA visual', total: 'Informe en unas 4 horas',
+    resumen: 'Comparamos tu diseño (Figma o web) con el producto desarrollado, punto a punto: pixel perfect y maquetado.',
+    etapas: [
+      { n: 1, nombre: 'Fuentes y plan', corto: 'Fuentes', min: 60, modo: 'auto',
+        hace: ['Leer tu diseño en Figma o en la web', 'Abrir tu producto con las credenciales que nos diste', 'Emparejar cada vista del diseño con su par en el producto', 'Elegir lo que entra según tu meta'],
+        entrega: 'Apruebas el plan: qué vistas vamos a comparar.' },
+      { n: 2, nombre: 'Ejecución', corto: 'Ejecución', min: 120, modo: 'auto',
+        hace: ['Comparación píxel a píxel', 'Textos, letra, color y tamaño de los componentes', 'Alineación e idioma', 'Responsive en celular y tableta'],
+        entrega: 'Nada que validar: la comparación corre sola.' },
+      { n: 3, nombre: 'Informe', corto: 'Informe', min: 60, modo: 'auto',
+        hace: ['Lo que no quedó como en el diseño', 'Sugerencias de maquetado', 'Cada hallazgo con el diseño junto al producto', 'PDF para tu equipo de desarrollo'],
+        entrega: 'Lees el informe y lo compartes con tu equipo.' }
     ]
   },
   seguimiento: {
@@ -578,22 +612,30 @@ const TIPOS = {
 const CANVAS = {
   1: { sub: 'Primera versión navegable', tok: 'HTML', ev: ['Control automático', 'Nielsen + Norman'], evTok: 'AUTO', loop: 'si no cumple, refina',
        pri: ['Heurísticas de Nielsen', 'Principios de Don Norman', 'Happy path inicial', 'Visibilidad, consistencia y prevención de errores'] },
-  2: { sub: 'Personas, recorridos y lenguaje', tok: 'HTML', ev: ['Evaluación por agentes', '3–5 · sin KLM/video'], loop: 'si no cumple, refina',
-       pri: ['Protopersonas basadas en contexto', 'Mapas de empatía y journey maps', 'Auditoría de productos similares', 'Sistema de diseño adecuado', 'Paleta inicial 60–30–10'] },
-  3: { sub: 'Evaluación continua del producto', tok: 'HTML', ev: ['Evaluación por agentes', '3–5 · sin KLM/video'], loop: 'si no cumple, refina',
-       pri: ['ISO 9241', 'WCAG 2.2', 'Ergonomía', 'Leyes de UX', 'Patrones de UI', 'Gamificación solo cuando aporta valor'] },
-  4: { sub: 'Diseño visual · tú eliges la variante', tok: 'IMG', ev: ['Evaluación por agentes', 'Votan las variantes'], loop: 'si no cumple, refina',
-       pri: ['Normas de diseño gráfico', 'Peso y jerarquía visual', 'Proporción áurea y principios de belleza', 'GOMS para describir metas y métodos', 'KLM desactivado', 'Alternativas visuales en alta definición'] },
-  5: { sub: 'Garrett está contenido únicamente aquí', tok: 'HTML', ev: ['Evaluación por agentes', '3–5 · sin KLM/video'], loop: 'si no cumple, refina',
-       pri: ['Cinco planos de Jesse James Garrett', 'Análisis de grafos', 'Caminos incompletos', 'Nodos y vistas huérfanas', 'Microcopy según Kinneret Yifrah'] },
-  6: { sub: 'Diseño para masas · IA', tok: 'HTML', ev: ['Evaluación por agentes', '3–5 · sin KLM/video'], loop: 'si no cumple, refina',
-       pri: ['Gaps cognitivos convencionales', 'Framing, confirmación y hindsight', 'Sunk cost, escasez y descuento hiperbólico', 'Nudges de Thaler y Sunstein', 'Control de patrones manipulativos'] },
-  7: { sub: 'Diseño para masas · IA · último paso automático', tok: 'HTML', ev: ['Evaluación por agentes', '3–5 · sin KLM/video'], loop: 'si no cumple, refina',
-       pri: ['Modelo de conducta de B. J. Fogg', 'Hooked de Nir Eyal', 'Consumo atemporal', 'Auditoría comparada de ambos modelos', 'Principios aplicables al proyecto'] },
-  8: { sub: 'Comienza el diseño humano', tok: 'HTML', ev: ['Evaluación humana', 'SUS · NPS · CSAT'], evTok: 'UX', loop: 'decisión humana', modo: 'humana',
-       pri: ['Plan de evaluación definido por tu equipo', 'SUS', 'NPS', 'CSAT', 'Técnicas cualitativas elegidas por el equipo'] },
-  9: { sub: 'Salida consultiva, no automática', tok: 'DOC', ev: ['Recomendaciones', 'No se aplican a la app'], evTok: 'ÉTICA', loop: 'consolida, no aplica', modo: 'rec',
-       pri: ['Diseño consciente', 'Zero UI', 'Diseño ético según Tristan Harris', 'Autonomía y bienestar de la persona', 'Menos persuasión indebida y consumo compulsivo'] }
+  2: { sub: 'Personas, recorridos y lenguaje', tok: 'HTML', ev: ['Evaluación por agentes', 'estudio ligero'], loop: 'si no cumple, refina',
+       pri: ['Protopersonas basadas en contexto', 'Mapas de empatía y journey maps', 'Auditoría de productos similares', 'Sistema de diseño adecuado'] },
+  3: { sub: 'Evaluación continua del producto', tok: 'HTML', ev: ['Evaluación por agentes', 'estudio ligero'], loop: 'si no cumple, refina',
+       pri: ['ISO 9241', 'WCAG 2.2', 'Ergonomía', 'Leyes de UX', 'Patrones de UI'] },
+  3.1: { sub: 'El color · tú eliges la gama', tok: 'IMG', ev: ['Contraste y daltonismo', 'medidos, sin agentes'], evTok: 'COLOR', loop: 'si no convence, otras gamas',
+       pri: ['Tres gamas desde la marca o el producto', '60-30-10 y estados', 'Modo oscuro', 'Psicología y temperatura del color'] },
+  4: { sub: 'Diseño visual · tú eliges la propuesta', tok: 'HTML', ev: ['Evaluación por agentes', 'completa, por propuesta'], loop: 'si no convence, otras direcciones',
+       pri: ['Estado del arte del año', 'Ideación medida (Kleon)', 'Dos o tres propuestas como páginas reales', 'Recursos de librerías libres', 'La usabilidad ganada no se pierde'] },
+  4.1: { sub: 'El material gráfico · tú decides', tok: 'IMG', ev: ['Lo revisas tú', 'sin agentes'], evTok: 'DISEÑO', loop: 'si pides recursos, el diseñador los hace',
+       pri: ['El material de la propuesta, con su origen', 'Lo que haría un diseñador gráfico', 'Brief con el nombre exacto de cada archivo', 'Recursos maquetados para aprobar'] },
+  5: { sub: 'Parte del diseño elegido, sin repetirlo', tok: 'HTML', ev: ['Evaluación por agentes', 'estudio ligero'], loop: 'si no cumple, refina',
+       pri: ['Normas de diseño gráfico', 'Peso y jerarquía visual', 'Tipografía, iconos e imágenes con conexión', 'KLM y GOMS', 'Lo que recomendó la caja 4'] },
+  6: { sub: 'Garrett está contenido únicamente aquí', tok: 'HTML', ev: ['Evaluación por agentes', 'estudio ligero'], loop: 'si no cumple, refina',
+       pri: ['Cinco planos de Jesse James Garrett', 'Análisis de grafos', 'Caminos incompletos y vistas huérfanas', 'Microcopy según Kinneret Yifrah', 'Confianza en el método'] },
+  7: { sub: 'Diseño para masas · IA', tok: 'HTML', ev: ['Evaluación por agentes', 'estudio ligero'], loop: 'si no cumple, refina',
+       pri: ['Gaps cognitivos convencionales', 'Framing, confirmación y hindsight', 'Nudges de Thaler y Sunstein', 'Control de patrones manipulativos'] },
+  8: { sub: 'Diseño para masas · IA · aplicación opcional', tok: 'HTML', ev: ['Evaluación por agentes', 'estudio ligero'], loop: 'si no cumple, refina',
+       pri: ['Modelo de conducta de B. J. Fogg', 'Hooked de Nir Eyal', 'Riesgo de hábito y ética', 'Principios aplicables al proyecto'] },
+  9: { sub: 'Punto de control del diseño', tok: 'DOC', ev: ['Voz de los agentes', 'evolución caja a caja'], evTok: 'CONTROL', loop: 'consolida, no aplica', modo: 'rec',
+       pri: ['Indicadores caja a caja', 'La voz de los agentes', 'Qué comprobar con personas reales', 'Tres fuerzas: usuario, negocio y sistema'] },
+  10: { sub: 'Salida consultiva, no automática · opcional', tok: 'DOC', ev: ['Recomendaciones', 'No se aplican a la app'], evTok: 'ÉTICA', loop: 'consolida, no aplica', modo: 'rec',
+       pri: ['Diseño consciente', 'Zero UI', 'Diseño ético según Tristan Harris', 'Autonomía y bienestar de la persona'] },
+  11: { sub: 'Recibes y firmas la entrega', tok: 'ZIP', ev: ['Firma del acta', 'con evidencia'], evTok: 'FIRMA', loop: 'si algo falta, contacto', modo: 'humana',
+       pri: ['Imágenes y HTML de la versión válida', 'Carta de entrega con huellas', 'Acta de aceptación firmada', 'Tu carta de satisfacción'] }
 };
 
 /* Lo que se pregunta a las personas al revisar cada caja. Además, siempre:
@@ -602,13 +644,17 @@ const PREGUNTAS = {
   1: [['menu', '¿El menú es válido para ti?'], ['menu_claro', '¿El menú se entiende? ¿Recomiendas algo más?'], ['contenido', '¿Las opciones del contenido son cómodas?'], ['falta', '¿Falta información que no estemos considerando?']],
   2: [['personas', '¿Las protopersonas se parecen a quienes usarán tu producto?'], ['escenarios', '¿Los escenarios son las tareas que de verdad hacen?'], ['lenguaje', '¿El lenguaje es el de tu público?'], ['falta', '¿Falta alguien o alguna situación?']],
   3: [['leer', '¿Todo se lee con comodidad (tamaños, contraste)?'], ['errores', '¿Los mensajes de error dicen qué hacer?'], ['teclado', '¿Se puede usar sin ratón y con lector de pantalla?'], ['falta', '¿Algo te costó más de lo que debería?']],
-  4: [['estilo', '¿El estilo visual representa tu marca?'], ['jerarquia', '¿Lo importante es lo primero que se ve?'], ['imagenes', '¿Las imágenes y los íconos te sirven?'], ['falta', '¿Qué cambiarías del diseño elegido?']],
-  5: [['encontrar', '¿Encuentras cada cosa donde la esperas?'], ['caminos', '¿Algún camino queda a medias o sin salida?'], ['textos', '¿Los textos y botones dicen lo que va a pasar?'], ['falta', '¿Falta alguna pantalla o paso?']],
-  6: [['empuja', '¿Algún mensaje te empuja de más o te incomoda?'], ['claro', '¿Se entiende qué pasa en cada paso y por qué?'], ['confianza', '¿Te da confianza para decidir?'], ['falta', '¿Algo te hizo dudar?']],
-  7: [['volver', '¿Volverías a usarla? ¿Qué te haría volver?'], ['insiste', '¿Algo se siente insistente o adictivo?'], ['rutina', '¿Encaja en tu rutina real?'], ['falta', '¿Qué quitarías?']],
-  9: [['sirve', '¿Qué recomendaciones te sirven para el futuro?'], ['ya', '¿Alguna te parece necesaria ya?'], ['falta', '¿Qué más te preocupa del impacto del producto?']]
+  3.1: [['gama', '¿La gama transmite lo que quieres que sienta tu público?'], ['marca', '¿Encaja con tu marca?'], ['falta', '¿Qué cambiarías del color?']],
+  4: [['estilo', '¿La propuesta representa tu marca?'], ['jerarquia', '¿Lo importante es lo primero que se ve?'], ['imagenes', '¿Las imágenes y los íconos te sirven?'], ['falta', '¿Qué cambiarías de la propuesta elegida?']],
+  4.1: [['material', '¿El material gráfico representa tu marca?'], ['propios', '¿Necesitas recursos propios de un diseñador?'], ['falta', '¿Qué cambiarías?']],
+  5: [['jerarquia', '¿Lo importante es lo primero que se ve?'], ['leer', '¿Se lee y se recorre con comodidad?'], ['imagenes', '¿Las imágenes y los íconos te sirven?'], ['falta', '¿Qué cambiarías del diseño?']],
+  6: [['encontrar', '¿Encuentras cada cosa donde la esperas?'], ['caminos', '¿Algún camino queda a medias o sin salida?'], ['textos', '¿Los textos y botones dicen lo que va a pasar?'], ['falta', '¿Falta alguna pantalla o paso?']],
+  7: [['empuja', '¿Algún mensaje te empuja de más o te incomoda?'], ['claro', '¿Se entiende qué pasa en cada paso y por qué?'], ['confianza', '¿Te da confianza para decidir?'], ['falta', '¿Algo te hizo dudar?']],
+  8: [['volver', '¿Volverías a usarla? ¿Qué te haría volver?'], ['insiste', '¿Algo se siente insistente o adictivo?'], ['rutina', '¿Encaja en tu rutina real?'], ['falta', '¿Qué quitarías?']],
+  9: [['voz', '¿Lo que dicen los agentes se parece a lo que dirían tus usuarios?'], ['personas', '¿Qué quieres comprobar con personas reales?'], ['falta', '¿Algo más antes de cerrar el diseño?']],
+  10: [['sirve', '¿Qué recomendaciones te sirven para el futuro?'], ['ya', '¿Alguna te parece necesaria ya?'], ['falta', '¿Qué más te preocupa del impacto del producto?']]
 };
-const PREG_COLORES = [1, 4];
+const PREG_COLORES = [1, 3.1];
 const PALETA_TEMPORAL = ['#1F4E79', '#F2F5F9', '#E07A2E'];
 
 /* ------------------------------------------------ Textos legales
@@ -998,8 +1044,22 @@ function proyectoDesdeMotor(mp, extra = {}) {
     ]
   }, extra);
 }
+// Numeración de cajas del 2026-10-08 (motor de creación): la 4 pasa a 5, … la 9 a 10; se suman la 3.1, la 4, la 4.1 y la 11.
+const MIGRA_CAJAS = { 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10 };
+function migrarCajas(p) {
+  if (p.tipo !== 'completo' || !Array.isArray(p.etapas) || p.etapas.some(e => e.n === 3.1)) return;
+  const nuevo = n => MIGRA_CAJAS[n] ?? n;
+  p.etapas = p.etapas.map(e => ({ ...e, n: nuevo(e.n) }));
+  ['ajustes', 'variantes', 'elecciones', 'notas'].forEach(t => (DB[t] || []).forEach(x => { if (x.proyecto === p.id && typeof x.etapa === 'number') x.etapa = nuevo(x.etapa); }));
+  const avanzado = p.etapas.some(e => e.n >= 5 && !['cola', 'analista'].includes(e.estado));
+  [3.1, 4, 4.1, 11].forEach(n => { if (!p.etapas.some(e => e.n === n)) p.etapas.push(avanzado && n < 5 ? { n, estado: 'hecha', inicio: null, fin: null, agregada: true } : { n, estado: 'cola', inicio: null, fin: null }); });
+  p.etapas.sort((a, b) => a.n - b.n);
+}
+// La caja que sigue en el orden del proyecto (no n + 1: hay cajas con decimal, como la 3.1 y la 4.1).
+const siguienteEtapa = (p, e) => p.etapas[p.etapas.indexOf(e) + 1];
 function normalizarProyectos() {
   (DB.proyectos || []).forEach(p => {
+    migrarCajas(p);
     if (p.tipo === 'sintetico' && Array.isArray(p.etapas) && !p.etapas.some(e => e.n === 4)) p.etapas.push({ n: 4, estado: 'cola', inicio: null, fin: null });
   });
 }
@@ -1160,7 +1220,7 @@ function progresoEtapa(p, e) {
 }
 const RAZON_EXTENSION = {
   sintetico: ['para leer mejor tus fuentes', 'para identificar mejor tu producto y armar recorridos más fieles', 'para que los agentes completen sus recorridos', 'para terminar el informe con toda la evidencia'],
-  completo: 'para afinar mejor este escenario', seguimiento: 'para reunir más datos'
+  completo: 'para afinar mejor este escenario', seguimiento: 'para reunir más datos', qa: 'para comparar con más cuidado'
 };
 const razonExtension = (p, n) => { const r = RAZON_EXTENSION[p.tipo]; return Array.isArray(r) ? r[n] || r[r.length - 1] : r || 'para hacerlo mejor'; };
 // Cada proyecto nuevo y cada ejecución pedida mandan toda la información al equipo,
@@ -1188,9 +1248,34 @@ function fichaProyecto(p) {
     en.github ? `Código: ${en.github}` : '', en.enlaces ? `Enlaces:\n${en.enlaces}` : '', en.competencia ? `Competencia y referentes:\n${en.competencia}` : '',
     f.acceso ? `Acceso: ${f.acceso.url || p.url}${f.acceso.necesita_clave ? ' · pide usuario y contraseña' : ''} · usuario de prueba ${f.acceso.usuario || '—'} · contraseña ${f.acceso.credencial ? 'entregada, cifrada en la plataforma (no va en este correo)' : 'no entregada'}` : '',
     f.acceso && f.acceso.notas ? `Notas del acceso: ${f.acceso.notas}` : '',
+    ...(p.tipo === 'qa' ? fichaQA(f.qa) : []),
     p.consentimiento ? `Acuerdo de confidencialidad: aceptado por ${p.consentimiento.nombre} <${p.consentimiento.correo}> el ${fmtF(p.consentimiento.fecha)} (versión ${p.consentimiento.version})` : '',
     `Abrir en la plataforma: #/p/${p.id}`
   ];
+}
+/* ---- QA visual: el diseño (Figma y/o web), el producto real, la meta y los grupos de credenciales.
+   Los valores de las credenciales nunca van en el proyecto ni en el borrador: viven en SEC (memoria de esta pestaña)
+   hasta que se envían cifrados a api/credenciales. */
+const SEC = new WeakMap();
+const FIGMA_URL = /^https?:\/\/(www\.)?figma\.com\/(design|file|proto|board)\/[A-Za-z0-9]+/i;
+const metaQA = m => m && m.todo ? 'Todo el producto' : (m && m.texto) || '—';
+function fichaQA(q) {
+  if (!q) return [];
+  return [`Meta: ${metaQA(q.meta)}`,
+    ...q.prototipos.map(x => `Diseño (${x.fuente === 'figma' ? 'Figma' : 'web'}): ${x.url}${x.fuente === 'figma' ? (x.todo_el_flujo ? ' · todo el flujo' : ` · ${x.flujo}`) : x.flujo ? ` · ${x.flujo}` : ''}${x.credencial ? ` · credenciales «${x.credencial}»` : ''}`),
+    ...q.real.map(x => `Producto real: ${x.url}${x.vista ? ` · ${x.vista}` : ''}${x.credencial ? ` · credenciales «${x.credencial}»` : ''}`),
+    ...q.grupos.map(g => `Credenciales «${g.nombre}»${g.para ? ` (${g.para})` : ''}: ${g.campos.map(c => c.etiqueta + (c.entregado ? '' : ' (vacío)')).join(', ')} · cifradas en la plataforma, no van en este correo`),
+    q.figma_token ? 'Token de Figma: entregado, cifrado' : 'Token de Figma: no lo dio (usa el del equipo)'];
+}
+function entradasQA(q) {
+  if (!q) return '';
+  const fila = (t, v) => v ? `<tr><td style="width:190px"><strong>${t}</strong></td><td>${v}</td></tr>` : '';
+  const enlace = u => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>`;
+  return fila('Meta', esc(metaQA(q.meta)))
+    + fila('Diseño', q.prototipos.map(x => `${x.fuente === 'figma' ? 'Figma' : 'Web'} · ${enlace(x.url)}${x.fuente === 'figma' ? ' · ' + (x.todo_el_flujo ? 'todo el flujo' : esc(x.flujo)) : x.flujo ? ' · ' + esc(x.flujo) : ''}`).join('<br>'))
+    + fila('Producto real', q.real.map(x => `${enlace(x.url)}${x.vista ? ' · ' + esc(x.vista) : ''}${x.credencial ? ` · entra con «${esc(x.credencial)}»` : ''}`).join('<br>'))
+    + fila('Credenciales', q.grupos.map(g => `«${esc(g.nombre)}»${g.para ? ' · ' + esc(g.para) : ''}: ${g.campos.map(c => esc(c.etiqueta)).join(', ')} <span class="chip green">cifradas</span>`).join('<br>'))
+    + fila('Token de Figma', q.figma_token ? '<span class="chip green">entregado, cifrado</span>' : '');
 }
 function avisar(pid, a, asunto) {
   (DB.avisos || (DB.avisos = [])).push({ proyecto: pid, a, asunto, fecha: new Date().toISOString() });
@@ -1258,6 +1343,11 @@ function completarEtapa(p, e) {
     return;
   }
   if (p.tipo === 'sintetico' && e.n === 4) { e.estado = 'hecha'; e.auto = true; return; }
+  if (p.tipo === 'qa' && e.n === 2) {   // la ejecución no se revisa: arranca el informe
+    e.estado = 'hecha'; e.auto = true;
+    const sig = p.etapas.find(x => x.n === 3); if (sig) Object.assign(sig, { estado: 'pensando', inicio: e.fin, fin: null });
+    return;
+  }
   if (p.tipo === 'sintetico' && e.n < 3) {
     // Fuentes, cohorte y ejecución se aprueban solas; el informe es el que se audita.
     e.estado = 'hecha'; e.auto = true; e.pedida = null;
@@ -1282,7 +1372,7 @@ function completarEtapa(p, e) {
     ? ['Archivos clasificados en contexto, negocio, producto y objetivo', 'Datos personales redactados antes de guardar', 'Lista de lo que falta, para que decidas si lo traes']
     : [d.entrega, ...d.hace.slice(0, 2).map(h => 'Aplicado: ' + h)]);
   if (p.tipo === 'completo' && e.n >= 1 && d.modo !== 'humana') e.prototipo = e.prototipo || `prototipo-v0.${e.n + 2}.html`;
-  if (p.tipo === 'completo' && e.n >= 2 && e.n <= 7) e.eval = e.eval || { agentes: 3, tareas: '3 de 3 tareas completadas', resumen: 'Resultado de ejemplo generado por la maqueta.' };
+  if (p.tipo === 'completo' && e.n >= 2 && e.n <= 8 && !['diseno', 'humana'].includes(d.modo)) e.eval = e.eval || { agentes: 3, tareas: '3 de 3 tareas completadas', resumen: 'Resultado de ejemplo generado por la maqueta.' };
   if (d.modo === 'diseno' && !DB.variantes.some(v => v.proyecto === p.id && v.etapa === e.n)) {
     ['serena', 'contraste', 'calida'].forEach((st, i) => DB.variantes.push({ id: 'v' + Date.now() + i, proyecto: p.id, etapa: e.n, letra: 'ABC'[i], nombre: ['Serena', 'Contraste alto', 'Cálida'][i], estilo: st, votos: [1, 2, 0][i], razon: 'Voto de ejemplo generado por la maqueta.' }));
   }
@@ -1335,7 +1425,7 @@ function continuar(pid) {
   const pend = ajustesDe(pid, e.n).filter(a => a.estado === 'pendiente');
   pend.forEach(a => { a.estado = 'backlog'; });
   e.estado = 'hecha'; e.aprobada_por = UI.actor; e.fin = e.fin || new Date().toISOString(); e.aprobada_en = new Date().toISOString();
-  const sig = p.etapas.find(x => x.n === e.n + 1);
+  const sig = siguienteEtapa(p, e);
   if (sig) {
     const d = defEtapa(p, sig.n);
     sig.inicio = new Date().toISOString();
@@ -1348,6 +1438,8 @@ function continuar(pid) {
   if (p.tipo === 'completo' && location.hash !== '#/p/' + pid) location.hash = '#/p/' + pid; else render();
   if (p.tipo === 'completo') correoEquipo(p, sig ? `Escenario aprobado: ${p.nombre} · sigue «${defEtapa(p, sig.n).nombre}»` : `Proyecto terminado: ${p.nombre}`,
     [`El cliente aprobó el escenario ${e.n} («${defEtapa(p, e.n).nombre}»).`, sig ? `Corre /synthetica-respuestas ${p.id}: te dice cómo seguir con el escenario ${sig.n} en el motor de creación.` : 'Era el último escenario.', '', ...fichaProyecto(p)]);
+  if (p.tipo === 'qa') correoEquipo(p, sig ? `Plan aprobado: ${p.nombre} · ejecutar la comparación` : `QA visual cerrado: ${p.nombre}`,
+    [sig ? 'El cliente aprobó el plan de la comparación (caja 1). En el motor de QA visual: python _qa_visual/qa.py aprobado <id del motor> 1 y luego /qa-caja <id del motor> 2.' : 'El cliente cerró el proyecto después de leer el informe.', '', ...fichaProyecto(p)]);
   toast(sig ? `Etapa aprobada. Empezamos «${defEtapa(p, sig.n).nombre}».` : 'Proyecto terminado.');
 }
 function leerOpinion(n) {
@@ -1812,9 +1904,11 @@ function vistaProyecto(pid, nSel) {
 
 function vistaCanvas(p) {
   const pr = progresoProyecto(p); const st = estadoTexto(p); const cur = actual(p);
-  const left = n => 330 + (n - 1) * 710;
+  const orden = p.etapas.filter(x => x.n >= 1).map(x => x.n);
+  const left = n => 330 + Math.max(0, orden.indexOf(n)) * 710;
+  const ultima = orden[orden.length - 1];
   const pill = e => ({ detenido: `Detenido · ${Math.round((e.pausa || {}).pct || 0)} %`, analista: 'Esperando al analista', hecha: 'Aprobada', revision: rondas(e).length > 1 ? `Tu momento de revisar · vuelta ${rondas(e).length}` : 'Tu momento de revisar', pensando: `Pensando · ${Math.round((progresoEtapa(p, e) || { pct: 0 }).pct)} %`, cola: 'En espera', humana: 'Tu equipo', vivo: 'En vivo' }[e.estado]);
-  const prev = n => { const a = p.etapas.find(x => x.n === n - 1); return n === 1 ? 'Tus entradas' : (a && a.prototipo) ? a.prototipo : 'Prototipo anterior'; };
+  const prev = n => { const a = p.etapas[p.etapas.findIndex(x => x.n === n) - 1]; return n === 1 ? 'Tus entradas' : (a && a.prototipo) ? a.prototipo : 'Prototipo anterior'; };
   const caja = e => {
     const c = CANVAS[e.n]; const d = defEtapa(p, e.n);
     const ajs = ajustesDe(p.id, e.n); const pend = ajs.filter(a => a.estado === 'pendiente').length;
@@ -1829,7 +1923,7 @@ function vistaCanvas(p) {
       <div class="cv-body">
         <div class="cv-in">${esc(prev(e.n))}</div>
         <div class="cv-pri"><strong>Principios y procesos</strong><ul>${c.pri.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
-        <div class="cv-proto"><span class="cv-tok">${c.tok}</span><strong>${e.n === 9 ? 'Salida consolidada' : 'Prototipo creado'}</strong><span>${esc(e.prototipo || (e.estado === 'cola' ? 'Pendiente' : '—'))}</span></div>
+        <div class="cv-proto"><span class="cv-tok">${c.tok}</span><strong>${c.modo === 'rec' ? 'Salida consolidada' : 'Prototipo creado'}</strong><span>${esc(e.prototipo || (e.estado === 'cola' ? 'Pendiente' : '—'))}</span></div>
         <div class="cv-eval"><div>${evalVis}${evalTxt}</div></div>
         <div class="cv-actions">${verCaja}${vivo}${e.estado === 'pensando' && !NUBE ? `<button class="btn small" data-adelantar="${p.id}">Adelantar (maqueta)</button>` : ''}</div>
         <svg class="cv-flow" viewBox="0 0 560 402" aria-hidden="true">
@@ -1844,7 +1938,7 @@ function vistaCanvas(p) {
       </div></article>`;
   };
   const conector = e => {
-    const sig = p.etapas.find(x => x.n === e.n + 1); if (!sig) return '';
+    const sig = siguienteEtapa(p, e); if (!sig) return '';
     const ok = e.estado === 'hecha';
     const txt = ok ? `gate aprobado${e.aprobada_por ? ' por ' + esc(persona(e.aprobada_por).nombre) : ''}` : e.estado === 'revision' ? 'esperando tu aprobación' : 'esperando aprobación';
     return `<div class="cv-next ${ok ? 'ok' : ''}" style="left:${left(e.n) + 560}px;width:150px"><span>${txt}</span></div>`;
@@ -1854,14 +1948,14 @@ function vistaCanvas(p) {
   const proto = p.etapas.filter(x => x.prototipo).length;
   const ciclos = p.etapas.filter(x => !['cola', 'analista'].includes(x.estado)).reduce((a, x) => a + rondas(x).length, 0);
   const world = `
-    <div class="cv-band" style="left:${left(1)}px;width:${left(5) + 560 - left(1)}px">Construcción y diseño funcional · IA</div>
-    <div class="cv-band masa" style="left:${left(6)}px;width:${left(7) + 560 - left(6)}px">Diseño para masas · IA</div>
-    <div class="cv-band" style="left:${left(8)}px;width:${left(9) + 560 - left(8)}px">Diseño humano y consciente</div>
+    <div class="cv-band" style="left:${left(1)}px;width:${left(6) + 560 - left(1)}px">Construcción y diseño funcional · IA</div>
+    <div class="cv-band masa" style="left:${left(7)}px;width:${left(8) + 560 - left(7)}px">Diseño para masas · IA</div>
+    <div class="cv-band" style="left:${left(9)}px;width:${left(ultima) + 560 - left(9)}px">Control, futuro y entrega</div>
     <div class="cv-src hecha"><p class="kicker">Punto de partida</p><h3>Tus entradas</h3><p>${(p.fuentes.archivos || []).length} archivos${(p.fuentes.entradas || {}).github ? ' · código' : ''}${p.fuentes.acceso ? ' · acceso a la plataforma actual' : ''}${p.fuentes.descripcion ? ' · descripción' : ''}</p><a class="btn small" style="margin-top:10px" href="#/p/${p.id}/e/1">Ver lo que nos diste</a></div>
     <div class="cv-next ok" style="left:280px;width:50px"></div>
     ${cajas.map(caja).join('')}${cajas.map(conector).join('')}
-    <div class="cv-next" style="left:${left(9) + 560}px;width:160px;background:var(--blue-2)"></div>
-    <div class="cv-out" style="left:${left(9) + 720}px"><span class="cv-tok" style="margin:0 auto;background:var(--soft-blue)">FIGMA</span><strong>Diseño humano en paralelo</strong><span>Figma, sistema de diseño, especificaciones y evolución futura del producto.</span></div>`;
+    <div class="cv-next" style="left:${left(ultima) + 560}px;width:160px;background:var(--blue-2)"></div>
+    <div class="cv-out" style="left:${left(ultima) + 720}px"><span class="cv-tok" style="margin:0 auto;background:var(--soft-blue)">FIGMA</span><strong>Diseño humano en paralelo</strong><span>Figma, sistema de diseño, especificaciones y evolución futura del producto.</span></div>`;
   const analista = cur && cur.estado === 'analista' ? `<div class="note-box cv-cta"><div><strong>Recibimos tu proyecto.</strong> Avisamos al equipo; un analista pondrá en marcha ${p.tipo === 'completo' ? 'el primer escenario' : 'tu estudio'} y te escribiremos cuando esté lista (${esc(defEtapa(p, 1).rango)}).</div>${puede(p, 'interna') ? `<button class="btn small primary" data-lanzar="${p.id}">Lanzar el primer escenario (analista)</button>` : ''}</div>` : '';
   const revisar = cur && cur.estado === 'revision' ? `<div class="note-box orange cv-cta"><div><strong>El escenario ${cur.n}, ${esc(defEtapa(p, cur.n).nombre)}, está listo.</strong> Pruébalo y danos tu opinión antes de seguir.</div><a class="btn small primary" href="#/p/${p.id}/e/${cur.n}">Revisar el escenario ${cur.n}</a></div>` : '';
   return `
@@ -1876,11 +1970,11 @@ function vistaCanvas(p) {
     ${avisoCancelado(p)}${analista}${revisar}
     <section class="cv" aria-label="Canvas del proyecto">
       <div class="cv-hero"><div><p class="kicker">Canvas de trabajo</p><h2>Del contexto al producto consciente</h2>
-        <p>Arrastra el lienzo para recorrerlo. Los escenarios 1 a 7 construyen el producto automáticamente y cada uno espera tu aprobación; el 8 lo hace tu equipo con usuarios reales y el 9 deja recomendaciones que no tocan la app.</p></div>
-        <div class="cv-sum"><div><strong>${cur ? cur.n : 0}/9</strong><span>Escenario actual</span></div><div><strong>${proto}</strong><span>Prototipos</span></div><div><strong>${ciclos}</strong><span>Vueltas</span></div></div></div>
+        <p>Arrastra el lienzo para recorrerlo. Las cajas 1 a 9 construyen el producto y cada una espera tu aprobación: en la 3.1 eliges el color, en la 4 la propuesta y en la 4.1 decides sobre su material gráfico; la 8 (hábito) y la 10 (futuro) son opcionales; en la 11 recibes y firmas la entrega.</p></div>
+        <div class="cv-sum"><div><strong>${cur ? cur.n : 0}/${ultima}</strong><span>Caja actual</span></div><div><strong>${proto}</strong><span>Prototipos</span></div><div><strong>${ciclos}</strong><span>Vueltas</span></div></div></div>
       <div class="cv-tools"><div class="cv-jumps" aria-label="Ir a un escenario">${cajas.map(e => `<button class="cv-jump ${e.estado}" data-cvjump="${e.n}">${e.n} · ${esc(defEtapa(p, e.n).corto)}</button>`).join('')}</div>
         <div class="cv-zoom"><button class="btn small" data-cvzoom="-0.1" aria-label="Alejar">−</button><span id="cv-zv">90%</span><button class="btn small" data-cvzoom="0.1" aria-label="Acercar">+</button><button class="btn small" data-cvfit="1">Ver todo</button></div></div>
-      <div class="cv-view" id="cv-view" data-proyecto="${p.id}" data-actual="${cur ? Math.max(1, cur.n) : 1}"><div class="cv-world" id="cv-world">${world}</div>
+      <div class="cv-view" id="cv-view" data-proyecto="${p.id}" data-actual="${cur ? Math.max(1, cur.n) : 1}"><div class="cv-world" id="cv-world" style="width:${left(ultima) + 1100}px">${world}</div>
         <div class="cv-hint"><strong>Arrastra para recorrer</strong> · rueda para desplazarte · Ctrl + rueda para zoom</div>
         ${ultimo ? `<div class="cv-live" aria-live="polite"><strong>Último movimiento · ${fmtF(ultimo.t)}</strong><span>${esc(ultimo.txt)}</span></div>` : ''}</div>
     </section>
@@ -1890,7 +1984,8 @@ function vistaCanvas(p) {
 function wireCanvas() {
   const view = document.getElementById('cv-view'); if (!view) return;
   const world = document.getElementById('cv-world'); const pid = view.dataset.proyecto;
-  const WIDTH = 7100, left = n => 330 + (n - 1) * 710;
+  const orden = ((proyecto(pid) || {}).etapas || []).filter(x => x.n >= 1).map(x => x.n);   // por orden: hay cajas con decimal
+  const left = n => 330 + Math.max(0, orden.indexOf(n)) * 710, WIDTH = left(orden[orden.length - 1]) + 1100;
   const st = UI.cv[pid] || (UI.cv[pid] = { scale: 0.8, x: null, y: 16 });
   const apply = () => { world.style.transform = `translate(${st.x}px, ${st.y}px) scale(${st.scale})`; const z = document.getElementById('cv-zv'); if (z) z.textContent = Math.round(st.scale * 100) + '%'; };
   const jump = n => { st.scale = Math.max(st.scale, 0.7); st.x = view.clientWidth / 2 - (left(n) + 280) * st.scale; st.y = 16; apply(); };
@@ -1923,7 +2018,7 @@ function etapaHTML(p, e) {
         <p class="small">Empezó ${fmtF(e.inicio)}${rondas(e).length > 1 ? `, vuelta ${rondas(e).length}` : ''}. ${rondas(e).length > 1 ? `Como ya conocemos tu producto, esta vuelta tarda unas ${dur(minEtapa(p, e))}` : `${p.tipo === 'completo' ? 'Este escenario' : 'Esta etapa'} tarda ${esc(d.rango || 'en promedio ' + dur(d.min))}`}${pr.extendido ? '' : `; debería estar lista hacia <strong>${fmtH(pr.fin)}</strong>`}. Te escribiremos en cuanto esté lista.</p>
         <ul class="checklist">${d.hace.map((h, i) => `<li class="${k < 0 ? 'plan' : i < k ? 'done' : i === k ? 'now' : ''}">${esc(h)}</li>`).join('')}</ul>
       </div>
-      ${(e.n === 0 && p.tipo === 'sintetico' && !p.motor) || (e.n === 1 && p.tipo === 'completo') ? `<h3 style="margin-top:16px">Lo que nos diste</h3>${entradasHTML(p)}` : ''}
+      ${(e.n === 0 && p.tipo === 'sintetico' && !p.motor) || (e.n === 1 && ['completo', 'qa'].includes(p.tipo)) ? `<h3 style="margin-top:16px">Lo que nos diste</h3>${entradasHTML(p)}` : ''}
       <p class="small muted" style="margin-top:12px">Mientras tanto puedes dejar notas: las leemos antes de cerrar la etapa.</p>
       ${interna() ? `<div class="internal" style="margin-top:12px"><b>Interno.</b> Corrida del motor ligada a esta etapa: <code>${p.id}-e${e.n}</code>. ${p.tipo === 'sintetico' ? 'Motor completo: KLM, grabación y mirada simulada.' : 'Motor ligero: 3–5 agentes, sin KLM ni grabación.'}</div>` : ''}
       ${NUBE ? '' : `<div class="row" style="margin-top:14px"><button class="btn small" data-adelantar="${p.id}" title="Solo en la maqueta">Adelantar el tiempo (maqueta)</button></div>`}
@@ -1937,7 +2032,7 @@ function etapaHTML(p, e) {
         ${p.cancelado ? '' : `<div class="row"><button class="btn small primary" data-reanudar="${p.id}">Reanudar</button></div>`}
       </div></div>`;
   if (e.estado === 'cola') {
-    const prev = defEtapa(p, e.n - 1);
+    const prev = catalogo(p)[catalogo(p).findIndex(x => x.n === e.n) - 1];
     return `<div class="card">${cab}<p class="sub" style="margin-top:8px">Empieza cuando se apruebe «${esc(prev ? prev.nombre : '')}». Las etapas van siempre en orden: ninguna se puede saltar.</p>
       <h3 style="margin-top:16px">Qué haremos</h3><ul class="plain">${d.hace.map(h => `<li>${esc(h)}</li>`).join('')}</ul>
       <h3 style="margin-top:16px">Qué recibirás</h3><p class="sub">${esc(d.entrega)}</p></div>`;
@@ -1970,14 +2065,14 @@ function etapaHTML(p, e) {
       <p class="sub" style="margin-top:6px">${revisando ? `Lista desde el ${fmtF(e.fin)}.` : e.auto ? `Lista el ${fmtF(e.fin)}${defEtapa(p, e.n + 1) ? '; pasó sola a la siguiente etapa' : ''}.` : e.aprobada_por ? `Aprobada por ${esc(persona(e.aprobada_por).nombre)}${e.aprobada_en ? ' el ' + fmtF(e.aprobada_en) : ''}.` : e.en_motor ? (e.inicio ? `Corrió en el motor del ${fmtF(e.inicio)} al ${fmtF(e.fin)}.` : 'Se configuró directamente en el motor, antes de ligar el proyecto a la plataforma.') : 'Terminada.'}</p>
       ${e.logros ? `<h3 style="margin-top:16px">Qué logramos</h3><ul class="plain">${e.logros.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
       ${e.nota_equipo ? `<div class="note-box" style="margin-top:12px"><strong>Nota del equipo Synthetica.</strong> ${esc(e.nota_equipo)}</div>` : ''}
-      ${e.prototipo ? `<div class="note-box" style="margin-top:16px"><div class="row between"><div><strong>Prueba la interfaz</strong><div class="small muted">${esc(e.prototipo)} · navegable, con los datos que nos diste</div></div><button class="btn small primary" data-probar="${p.id}:${e.n}">Abrir el prototipo</button></div></div>` : ''}
+      ${e.prototipo ? `<div class="note-box" style="margin-top:16px"><div class="row between"><div><strong>${p.tipo === 'qa' ? (e.n === 1 ? 'Lo que vamos a comparar' : 'Tu informe de QA visual') : 'Prueba la interfaz'}</strong><div class="small muted">${esc(e.prototipo)}${p.tipo === 'qa' ? (e.n === 1 ? ' · cada vista del diseño con su par en tu producto' : ' · para leer, imprimir o descargar en PDF') : ' · navegable, con los datos que nos diste'}</div></div><button class="btn small primary" data-probar="${p.id}:${e.n}">${p.tipo === 'qa' ? (e.n === 1 ? 'Ver el plan' : 'Abrir el informe') : 'Abrir el prototipo'}</button></div></div>` : ''}
       ${e.eval ? `<h3 style="margin-top:18px">Cómo les fue a los agentes</h3>
         <p class="small muted">Evaluación ligera: ${e.eval.agentes} agentes, sin KLM ni grabaciones.</p>
         <div class="grid3" style="margin-top:8px"><div class="kpi"><span>Agentes</span><strong>${e.eval.agentes}</strong></div><div class="kpi"><span>Tareas</span><strong style="font-size:16px">${esc(e.eval.tareas)}</strong></div><div class="kpi"><span>Ajustes propuestos</span><strong>${ajs.length}</strong></div></div>
         <p style="margin-top:10px">${esc(e.eval.resumen)}</p>` : ''}
       ${p.tipo === 'sintetico' && e.n === 3 && !p.motor ? `<div class="note-box green" style="margin-top:16px"><strong>Este informe usa el motor completo.</strong> Incluye tiempos KLM por paso, grabaciones de cada agente, mirada simulada, recomendaciones UI y la auditoría experta. <span class="muted">(En la plataforma real se abre desde aquí.)</span></div>` : ''}
     </div>
-    ${(e.n === 1 && p.tipo === 'completo') || (e.n === 0 && p.tipo === 'sintetico' && !p.motor) ? `<div class="card"><h2>Lo que nos diste</h2>${entradasHTML(p)}</div>` : ''}
+    ${(e.n === 1 && ['completo', 'qa'].includes(p.tipo)) || (e.n === 0 && p.tipo === 'sintetico' && !p.motor) ? `<div class="card"><h2>Lo que nos diste</h2>${entradasHTML(p)}</div>` : ''}
     ${p.motor ? motorEtapaHTML(p, e) : ''}
     ${p.tipo === 'sintetico' && e.n === 4 && p.propuestas ? propuestasHTML(p) : ''}
     ${esDiseno ? disenoHTML(p, e) : ''}
@@ -1996,7 +2091,7 @@ function entradasHTML(p) {
   const lista = t => esc(t).split(/\n+/).filter(Boolean).join('<br>');
   const html = [
     fila('Acuerdo de confidencialidad', p.consentimiento ? `Aceptado por ${esc(p.consentimiento.nombre)} (${esc(p.consentimiento.correo)}) el ${fmtF(p.consentimiento.fecha)} · versión ${esc(p.consentimiento.version)}` : ''),
-    fila('Descripción', f.descripcion ? esc(f.descripcion) : ''),
+    fila('Descripción', f.descripcion ? esc(f.descripcion) : ''), p.tipo === 'qa' ? entradasQA(f.qa) : '',
     fila('Alcance', en.alcance ? esc(en.alcance) : ''), fila('Problemas que identificaste', en.analizar ? esc(en.analizar) : ''), fila('Qué esperas obtener', en.esperas ? esc(en.esperas) : ''),
     fila('Sistema de diseño / Storybook', en.storybook ? `<a href="${esc(en.storybook)}" target="_blank" rel="noopener">${esc(en.storybook)}</a>` : ''), fila('Secciones útiles', en.secciones ? esc(en.secciones) : ''),
     fila('Objetivo', en.objetivo ? esc(en.objetivo) : ''), fila('Intención y condiciones de negocio', en.intencion ? esc(en.intencion) : ''), fila('Flujo actual', en.flujo ? esc(en.flujo) : ''),
@@ -2549,7 +2644,127 @@ function nuevoWizard() {
   return { paso: 1, tipo: null, motor: '', cliente: '',
     nombre: '', descripcion: '', url: '', analizar: '', esperas: '', alcance: '', storybook: '', secciones: '', objetivo: '', intencion: '', flujo: '', github: '', enlaces: '', competencia: '',
     archivos: [], ignorados: [], manual: '', pegado: '', acceso_url: '', acceso_usuario: '', acceso_clave: false, acceso_necesita: false, acceso_notas: '',
-    miembros: [{ persona: 'p1', rol: 'responsable' }] };
+    miembros: [{ persona: 'p1', rol: 'responsable' }], qa: nuevoQA() };
+}
+function nuevoQA() {
+  return { meta: { todo: false, texto: '' }, fuente: 'figma', figma: [{ url: '', todo: true, flujo: '' }], web: [{ url: '', flujo: '', credencial: '' }],
+    real: [{ url: '', vista: '', credencial: '' }], grupos: [] };
+}
+function validoQA(w, paso) {
+  const q = w.qa || (w.qa = nuevoQA());
+  if (paso === 2) return !!w.nombre.trim() && (q.meta.todo || q.meta.texto.trim().length >= 3);
+  const usa = x => q.fuente === 'ambos' || q.fuente === x;
+  const fig = usa('figma') ? q.figma.filter(x => x.url.trim()) : [], web = usa('web') ? q.web.filter(x => x.url.trim()) : [];
+  const real = q.real.filter(x => x.url.trim());
+  return fig.length + web.length > 0 && fig.every(x => FIGMA_URL.test(x.url.trim()) && (x.todo || x.flujo.trim())) && web.every(x => urlValida(x.url))
+    && real.length > 0 && real.every(x => urlValida(x.url)) && q.grupos.every(g => g.nombre.trim());
+}
+function motivoQA(w, paso) {
+  const q = w.qa;
+  if (paso === 2) return !w.nombre.trim() ? 'Falta el nombre del proyecto.' : 'Cuéntanos la meta: marca «Evaluar todo el producto» o di qué parte evaluamos.';
+  const usa = x => q.fuente === 'ambos' || q.fuente === x;
+  const fig = usa('figma') ? q.figma.filter(x => x.url.trim()) : [], web = usa('web') ? q.web.filter(x => x.url.trim()) : [];
+  if (!fig.length && !web.length) return 'Falta al menos un enlace del diseño: de Figma o de la web.';
+  if (fig.some(x => !FIGMA_URL.test(x.url.trim()))) return 'Revisa los enlaces de Figma: deben verse como https://www.figma.com/design/…';
+  if (fig.some(x => !x.todo && !x.flujo.trim())) return 'Di qué flujo o vista hay en cada enlace de Figma, o marca «Este enlace contiene todo el flujo».';
+  if (web.some(x => !urlValida(x.url))) return 'Revisa las direcciones del prototipo web.';
+  if (!q.real.some(x => x.url.trim())) return 'Falta la dirección del producto real: dónde está desarrollado.';
+  if (q.real.some(x => x.url.trim() && !urlValida(x.url))) return 'Revisa las direcciones del producto real.';
+  return 'Ponle nombre a cada grupo de credenciales.';
+}
+function fuentesQA(w) {
+  const q = w.qa; const usa = x => q.fuente === 'ambos' || q.fuente === x;
+  const nombre = id => { const g = q.grupos.find(x => x.id === id); return g ? g.nombre.trim() : null; };
+  return { meta: { todo: !!q.meta.todo, texto: q.meta.todo ? '' : q.meta.texto.trim() },
+    prototipos: [...(usa('figma') ? q.figma.filter(x => x.url.trim()).map(x => ({ fuente: 'figma', url: x.url.trim(), todo_el_flujo: !!x.todo, flujo: x.todo ? '' : x.flujo.trim() })) : []),
+                 ...(usa('web') ? q.web.filter(x => x.url.trim()).map(x => ({ fuente: 'web', url: urlNormal(x.url), flujo: x.flujo.trim(), credencial: nombre(x.credencial) })) : [])],
+    real: q.real.filter(x => x.url.trim()).map(x => ({ url: urlNormal(x.url), vista: x.vista.trim(), credencial: nombre(x.credencial) })),
+    grupos: q.grupos.map(g => ({ nombre: g.nombre.trim(), para: g.para.trim(), campos: g.campos.filter(c => c.etiqueta.trim()).map(c => ({ etiqueta: c.etiqueta.trim(), secreto: !!c.secreto, entregado: !!SEC.get(c) })) })),
+    figma_token: !!SEC.get(q) };
+}
+// Las credenciales salen de la pestaña una sola vez, cifradas en el servidor; si el proyecto aún no llegó a la base, reintenta.
+async function enviarCredencialesQA(q, id) {
+  const grupos = {};
+  q.grupos.forEach(g => { const c = {}; g.campos.forEach(x => { const v = SEC.get(x); if (x.etiqueta.trim() && v) c[x.etiqueta.trim()] = v; }); if (Object.keys(c).length) grupos[g.nombre.trim()] = c; });
+  const token = SEC.get(q) || '';
+  if (!Object.keys(grupos).length && !token) return;
+  if (!NUBE) return toast('En la maqueta las credenciales no se guardan; en línea van cifradas.');
+  for (let i = 0; i < 6; i++) {
+    await new Promise(r => setTimeout(r, 1500));
+    const r = await api('api/credenciales', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ proyecto_id: id, grupos, figma_token: token }) }).catch(() => null);
+    if (r && r.ok) return toast('Credenciales guardadas, cifradas.');
+    if (r && r.status !== 404) break;
+  }
+  toast('No pudimos guardar las credenciales: el analista te las pedirá por un canal privado.');
+}
+function qaPaso2HTML(w) {
+  const m = w.qa.meta;
+  return `<div class="card" style="max-width:780px"><h3>La meta</h3><p class="sub">¿Qué quieres evaluar? Con esto elegimos qué flujos del diseño comparamos.</p>
+    <label class="row small" style="gap:8px;cursor:pointer;margin-top:10px"><input type="checkbox" data-qa-check="meta.todo" ${m.todo ? 'checked' : ''}> Evaluar todo el producto</label>
+    ${m.todo ? '' : `<label class="field" style="margin-top:10px"><span>¿Qué parte evaluamos? *</span><textarea data-qa="meta.texto" rows="3" placeholder="Por ejemplo: desde el inicio de sesión hasta confirmar el pago (registro, carrito y pago). Si es todo, marca «Evaluar todo el producto».">${esc(m.texto)}</textarea></label>`}</div>`;
+}
+function qaPaso3HTML(w) {
+  const q = w.qa; const usa = x => q.fuente === 'ambos' || q.fuente === x;
+  const opciones = sel => `<option value="">Sin credenciales</option>${q.grupos.map(g => `<option value="${esc(g.id)}" ${sel === g.id ? 'selected' : ''}>${esc(g.nombre || 'Grupo sin nombre')}</option>`).join('')}`;
+  const quitar = (ruta, n) => n > 1 ? `<button type="button" class="quitar-archivo" data-qa-quitar="${ruta}" aria-label="Quitar" title="Quitar">×</button>` : '';
+  const figma = q.figma.map((x, i) => `<div class="qa-fila">${quitar('figma.' + i, q.figma.length)}
+      <label class="field"><span>Enlace de Figma</span><input data-qa="figma.${i}.url" type="url" value="${esc(x.url)}" placeholder="https://www.figma.com/design/…"></label>
+      <label class="row small" style="gap:8px;cursor:pointer"><input type="checkbox" data-qa-check="figma.${i}.todo" ${x.todo ? 'checked' : ''}> Este enlace contiene todo el flujo</label>
+      ${x.todo ? '' : `<label class="field"><span>¿Qué flujo o vista hay en este enlace? *</span><input data-qa="figma.${i}.flujo" value="${esc(x.flujo)}" placeholder="Por ejemplo: registro de usuario"></label>`}</div>`).join('');
+  const web = q.web.map((x, i) => `<div class="qa-fila">${quitar('web.' + i, q.web.length)}
+      <label class="field"><span>Dirección del prototipo</span><input data-qa="web.${i}.url" type="url" value="${esc(x.url)}" placeholder="https://"></label>
+      <div class="grid2"><label class="field"><span>¿Qué representa?</span><input data-qa="web.${i}.flujo" value="${esc(x.flujo)}" placeholder="Por ejemplo: el formulario de pago"></label>
+      <label class="field"><span>Credenciales para entrar</span><select data-qa="web.${i}.credencial">${opciones(x.credencial)}</select></label></div></div>`).join('');
+  const real = q.real.map((x, i) => `<div class="qa-fila">${quitar('real.' + i, q.real.length)}
+      <label class="field"><span>Dirección del producto real${i ? '' : ' *'}</span><input data-qa="real.${i}.url" type="url" value="${esc(x.url)}" placeholder="https://"></label>
+      <div class="grid2"><label class="field"><span>¿Qué vista o punto es?</span><input data-qa="real.${i}.vista" value="${esc(x.vista)}" placeholder="Por ejemplo: aquí está el inicio de sesión"></label>
+      <label class="field"><span>Credenciales para entrar</span><select data-qa="real.${i}.credencial">${opciones(x.credencial)}</select></label></div></div>`).join('');
+  const grupos = q.grupos.map((g, i) => `<div class="qa-fila"><button type="button" class="quitar-archivo" data-qa-quitar="grupos.${i}" aria-label="Quitar el grupo" title="Quitar el grupo">×</button>
+      <div class="grid2"><label class="field"><span>Nombre del grupo *</span><input data-qa="grupos.${i}.nombre" value="${esc(g.nombre)}" placeholder="Por ejemplo: Clientes"></label>
+      <label class="field"><span>¿Para qué vista o flujo sirve?</span><input data-qa="grupos.${i}.para" value="${esc(g.para)}" placeholder="Por ejemplo: el panel del cliente"></label></div>
+      <div class="qa-campos">${g.campos.map((c, j) => `<div class="qa-campo"><input class="inp" type="text" data-qa="grupos.${i}.campos.${j}.etiqueta" value="${esc(c.etiqueta)}" placeholder="Campo (usuario, contraseña, código…)" aria-label="Nombre del campo">
+        <input class="inp" type="${c.secreto ? 'password' : 'text'}" data-qa-secreto="grupos.${i}.campos.${j}" value="${esc(SEC.get(c) || '')}" autocomplete="off" placeholder="Valor" aria-label="Valor de ${esc(c.etiqueta || 'el campo')}">
+        <label class="small row" style="gap:4px;cursor:pointer"><input type="checkbox" data-qa-check="grupos.${i}.campos.${j}.secreto" ${c.secreto ? 'checked' : ''}> Oculto</label>
+        <button type="button" class="quitar-archivo" data-qa-quitar="grupos.${i}.campos.${j}" aria-label="Quitar el campo" title="Quitar el campo">×</button></div>`).join('')}</div>
+      <button type="button" class="btn small" data-qa-mas="campo:${i}">+ Campo</button></div>`).join('');
+  return `<div class="card"><h3>El diseño: cómo debería verse</h3><p class="sub">¿Dónde está el diseño? Puede estar en Figma, en la web o en ambos.</p>
+      <div class="seg" role="group" aria-label="Dónde está el diseño">${[['figma', 'Figma'], ['web', 'Web'], ['ambos', 'Ambos']].map(([k, n]) => `<button type="button" class="btn small" data-qa-fuente="${k}" aria-pressed="${q.fuente === k}">${n}</button>`).join('')}</div>
+      ${usa('figma') ? `<div style="margin-top:14px"><p class="small note-box"><strong>Para que funcione</strong>, comparte el archivo como «Cualquiera con el enlace puede ver» (en Figma: Compartir → Cualquiera con el enlace → puede ver).</p>${figma}
+        <button type="button" class="btn small" style="margin-top:10px" data-qa-mas="figma">+ Otro enlace de Figma</button>
+        <details style="margin-top:12px"><summary class="small">¿Tienes un token de Figma? (opcional)</summary><p class="small muted" style="margin-top:6px">Si no sabes qué es, sáltalo: usamos el nuestro. Si lo das, se guarda cifrado.</p>
+          <input class="inp" type="password" data-qa-secreto="token" value="${esc(SEC.get(q) || '')}" autocomplete="off" placeholder="figd_…" aria-label="Token de Figma" style="margin-top:6px;width:100%"></details></div>` : ''}
+      ${usa('web') ? `<div style="margin-top:14px"><h3 style="font-size:15px">Prototipo en la web</h3>${web}<button type="button" class="btn small" style="margin-top:10px" data-qa-mas="web">+ Otra dirección del prototipo</button></div>` : ''}</div>
+    <div class="card"><h3>El producto real: dónde está desarrollado</h3><p class="sub">La dirección donde corre el producto y qué vista encontramos en cada una. Al menos una.</p>${real}
+      <button type="button" class="btn small" style="margin-top:10px" data-qa-mas="real">+ Otra dirección</button></div>
+    <div class="card"><h3>Credenciales (si hacen falta para entrar)</h3><p class="sub">Solo para el flujo que quieres evaluar. Agrúpalas por la vista donde se usan y elige el grupo en cada dirección.</p>
+      <p class="small note-box" style="margin-top:8px">Usa <strong>usuarios de prueba</strong>, no cuentas reales. Se guardan cifradas, solo las ve el analista y no hacemos operaciones irreversibles.${NUBE ? '' : ' En esta maqueta no se guardan.'} Si sales del asistente, no quedan en el borrador.</p>
+      ${grupos}<button type="button" class="btn small" style="margin-top:10px" data-qa-mas="grupos">+ Grupo de credenciales</button></div>`;
+}
+function wireQA(w, sync) {
+  const q = w.qa; if (!q) return;
+  const ir = ruta => { const ks = ruta.split('.'); const ult = ks.pop(); return [ks.reduce((o, k) => o[k], q), ult]; };
+  const actualizar = () => { const ok = validoWizard(w); $('#w-next').disabled = !ok; $('#w-motivo').textContent = ok ? '' : motivoWizard(w); };
+  document.querySelectorAll('[data-qa]').forEach(el => { el.oninput = el.onchange = () => { const [o, k] = ir(el.dataset.qa); o[k] = el.value; actualizar(); }; });
+  document.querySelectorAll('[data-qa-check]').forEach(el => el.onchange = () => { sync(); const [o, k] = ir(el.dataset.qaCheck); o[k] = el.checked; render(); });
+  document.querySelectorAll('[data-qa-secreto]').forEach(el => el.oninput = () => {
+    if (el.dataset.qaSecreto === 'token') SEC.set(q, el.value); else { const [o, k] = ir(el.dataset.qaSecreto); SEC.set(o[k], el.value); }
+  });
+  document.querySelectorAll('[data-qa-fuente]').forEach(b => b.onclick = () => { sync(); q.fuente = b.dataset.qaFuente; render(); });
+  document.querySelectorAll('[data-qa-mas]').forEach(b => b.onclick = () => {
+    sync(); const k = b.dataset.qaMas;
+    if (k === 'figma') q.figma.push({ url: '', todo: true, flujo: '' });
+    else if (k === 'web') q.web.push({ url: '', flujo: '', credencial: '' });
+    else if (k === 'real') q.real.push({ url: '', vista: '', credencial: '' });
+    else if (k === 'grupos') q.grupos.push({ id: 'g' + Date.now().toString(36), nombre: `Grupo ${q.grupos.length + 1}`, para: '', campos: [{ etiqueta: 'Usuario', secreto: false }, { etiqueta: 'Contraseña', secreto: true }] });
+    else if (k.startsWith('campo:')) q.grupos[+k.split(':')[1]].campos.push({ etiqueta: '', secreto: false });
+    render();
+  });
+  document.querySelectorAll('[data-qa-quitar]').forEach(b => b.onclick = () => {
+    sync(); const ks = b.dataset.qaQuitar.split('.'); const i = +ks.pop(); const lista = ks.reduce((o, k) => o[k], q);
+    const [x] = lista.splice(i, 1);
+    if (ks.length === 1 && ks[0] === 'grupos') [...q.web, ...q.real].forEach(y => { if (y.credencial === x.id) y.credencial = ''; });
+    render();
+  });
 }
 const rolDefault = () => persona(UI.actor).org === 'Synthetica' ? 'synthetica' : 'responsable';
 function detectar(w) {
@@ -2570,6 +2785,7 @@ const urlValida = u => /^(https?:\/\/)?[^\s\/.]+(\.[^\s\/.]+)+(\/\S*)?$/i.test(u
 const urlNormal = u => { u = u.trim(); return !u || /^https?:\/\//i.test(u) ? u : 'https://' + u; };
 function validoWizard(w) {
   if (w.paso === 1) return !!w.tipo;
+  if (w.tipo === 'qa' && w.paso > 1) return w.paso === 4 ? !!w.consiente && validoQA(w, 2) && validoQA(w, 3) : validoQA(w, w.paso);
   if (w.paso === 2) return !!(w.nombre.trim() && (w.tipo === 'completo' || urlValida(w.url)));
   if (w.paso === 4) return !!w.consiente && (w.tipo !== 'completo' || hayContexto(w));
   if (w.paso === 3) return w.tipo !== 'completo' || hayContexto(w);
@@ -2579,6 +2795,8 @@ function validoWizard(w) {
 const hayContexto = w => !!(w.archivos.length || w.manual || w.objetivo.trim() || w.intencion.trim() || w.flujo.trim() || (w.alcance || '').trim() || palabras(w.descripcion) >= 12);
 function motivoWizard(w) {
   if (w.paso === 1) return 'Elige qué quieres hacer.';
+  if (w.tipo === 'qa' && (w.paso === 2 || w.paso === 3)) return motivoQA(w, w.paso);
+  if (w.tipo === 'qa' && w.paso === 4) return !validoQA(w, 2) ? motivoQA(w, 2) : !validoQA(w, 3) ? motivoQA(w, 3) : 'Acepta el acuerdo de confidencialidad para enviar el proyecto.';
   if (w.paso === 2) return !w.nombre.trim() ? 'Falta el nombre del proyecto.' : !w.url.trim() ? 'Falta la URL del producto.' : 'Revisa la URL: debe verse como tuproducto.com o https://tuproducto.com';
   if (w.tipo === 'completo' && !hayContexto(w)) return 'Necesitamos un poco de contexto para empezar: sube al menos un documento o cuéntanos tu objetivo, la intención del producto o cómo funciona hoy.';
   if (w.paso === 4) return 'Acepta el acuerdo de confidencialidad para enviar el proyecto.';
@@ -2605,8 +2823,8 @@ function vistaNuevo() {
   if (w.paso === 1) {
     body = `
     <div class="types">${Object.entries(TIPOS).map(([k, t]) => `<button class="type" data-tipo="${k}" aria-pressed="${w.tipo === k}">
-      <span class="chip">${t.total}</span><h3>${{ completo: 'Crear mi producto', sintetico: 'Evaluar mi producto', seguimiento: 'Seguir mi producto publicado' }[k]}</h3><p class="small">${t.resumen}</p>
-      <ul>${{ sintetico: ['Solo necesitamos la URL del producto', 'Si quieres, cuéntanos qué buscas analizar y suma documentos de apoyo', 'Recibes un informe con hallazgos para auditar, las grabaciones de los agentes y un reporte en PDF'], completo: ['Construimos desde lo que nos compartas', 'Nueve escenarios: en cada uno nos dices si te gusta y si cumple', 'Ajustamos hasta que no te queden dudas', 'Eliges el diseño entre variantes en alta definición'], seguimiento: ['El producto ya está publicado', 'Una etiqueta mide visitas, tiempos y enlaces', 'CSAT, SUS y NASA-TLX cuando quieras'] }[k].map(x => `<li>${x}</li>`).join('')}</ul></button>`).join('')}</div>`;
+      <span class="chip">${t.total}</span><h3>${{ completo: 'Crear mi producto', sintetico: 'Evaluar mi producto', qa: 'Comparar diseño y producto', seguimiento: 'Seguir mi producto publicado' }[k]}</h3><p class="small">${t.resumen}</p>
+      <ul>${{ sintetico: ['Solo necesitamos la URL del producto', 'Si quieres, cuéntanos qué buscas analizar y suma documentos de apoyo', 'Recibes un informe con hallazgos para auditar, las grabaciones de los agentes y un reporte en PDF'], completo: ['Construimos desde lo que nos compartas', 'Nueve escenarios: en cada uno nos dices si te gusta y si cumple', 'Ajustamos hasta que no te queden dudas', 'Eliges el diseño entre variantes en alta definición'], qa: ['Nos das el diseño: enlaces de Figma, de la web o ambos', 'Y dónde está el producto desarrollado, con sus credenciales si hacen falta', 'Recibes un informe para imprimir: lo que no quedó como en el diseño y sugerencias de maquetado'], seguimiento: ['El producto ya está publicado', 'Una etiqueta mide visitas, tiempos y enlaces', 'CSAT, SUS y NASA-TLX cuando quieras'] }[k].map(x => `<li>${x}</li>`).join('')}</ul></button>`).join('')}</div>`;
   } else if (w.paso === 2) {
     const n = palabras(w.descripcion);
     const conEstudios = MOTOR ? MOTOR.proyectos.filter(x => estudiosDe(x.id).length) : [];
@@ -2614,8 +2832,9 @@ function vistaNuevo() {
       ${campo('nombre', 'Nombre del proyecto *', 'Por ejemplo: Portal de trámites')}
       <label class="field" style="margin-top:14px"><span>Descripción corta (opcional)</span><textarea id="w-descripcion" rows="5" placeholder="¿Qué es y para quién? Una frase sirve; si te animas, un párrafo corto.">${esc(w.descripcion)}</textarea></label>
       <p class="small muted" id="w-palabras" style="margin-top:4px">${n ? `${n} palabras${n < 50 ? ' · perfecto si es una frase; entre 50 y 100 nos da más contexto' : n > 100 ? ' · con menos de 100 basta' : ' · muy bien'}` : 'Si no te gusta escribir, puedes saltarlo.'}</p>
-      ${w.tipo !== 'completo' ? `<div style="margin-top:14px">${campo('url', 'URL del producto *', 'https://', 0, 'url')}</div>` : ''}
+      ${!['completo', 'qa'].includes(w.tipo) ? `<div style="margin-top:14px">${campo('url', 'URL del producto *', 'https://', 0, 'url')}</div>` : ''}
     </div>
+    ${w.tipo === 'qa' ? qaPaso2HTML(w) : ''}
     ${w.tipo === 'sintetico' ? agentesHTML(w) : ''}
     ${w.tipo === 'sintetico' ? `<div class="card" style="max-width:780px"><h3>Acceso (si tu producto pide iniciar sesión)</h3>
       <div class="grid2" style="margin-top:10px">${campo('acceso_usuario', 'Usuario de prueba', 'usuario')}<label class="field"><span>Contraseña</span><input id="w-clave" type="password" autocomplete="new-password" placeholder="${w.acceso_clave ? 'Entregada: escribe otra para reemplazarla' : ''}"></label></div>
@@ -2623,6 +2842,8 @@ function vistaNuevo() {
     ${w.tipo === 'sintetico' ? `<div class="card" style="max-width:780px;background:var(--panel)"><h3>Proyecto en el motor de agentes</h3>
       <p class="sub">Si el producto ya tiene estudios en el motor, elígelo y verás sus resultados al crear el proyecto.</p>
       <label class="field" style="margin-top:10px"><span>Proyecto del motor</span><select id="w-motor"><option value="">Nuevo: el motor lo configura con lo que compartas</option>${conEstudios.map(x => `<option value="${esc(x.id)}" ${w.motor === x.id ? 'selected' : ''}>${esc(x.nombre)} · ${estudiosDe(x.id).length} estudios</option>`).join('')}</select></label></div>` : ''}`;
+  } else if (w.paso === 3 && w.tipo === 'qa') {
+    body = qaPaso3HTML(w);
   } else if (w.paso === 3 && w.tipo !== 'completo') {
     body = `<div class="aviso-paso"><span class="aviso-icono" aria-hidden="true">i</span><div><strong>Este paso es opcional.</strong> Puedes seguir sin llenar nada. Si nos cuentas lo que ya sabes, los agentes se enfocan en eso y el estudio sale más útil.</div></div>
     <div class="grid2">
@@ -2676,17 +2897,18 @@ function vistaNuevo() {
     body = `${w.motor ? `<div class="note-box green" style="margin-bottom:14px">Ligado al proyecto <strong>${esc(motorProyecto(w.motor).nombre)}</strong> del motor: verás su último estudio en cuanto lo crees.</div>` : ''}<div class="grid2">
       <div class="card" style="margin:0"><h3>${esc(w.nombre)}</h3><p class="sub">${t.nombre}${w.url ? ' · ' + esc(urlNormal(w.url)) : ''}</p>
         ${w.descripcion.trim() ? `<p style="margin-top:8px">${esc(w.descripcion)}</p>` : ''}
-        <h3 style="margin-top:14px">Lo que compartes</h3><p class="small">${[w.analizar.trim() ? 'problemas que identificaste' : '', w.esperas.trim() ? 'qué esperas obtener' : '', w.acceso_usuario.trim() ? 'acceso' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : '', w.archivos.length ? w.archivos.length + ' archivo(s)' : '', w.manual ? 'manual de marca' : '', w.objetivo.trim() ? 'objetivo' : '', w.intencion.trim() ? 'intención' : '', w.flujo.trim() ? 'flujo actual' : '', w.github.trim() ? 'código' : '', w.enlaces.trim() ? 'enlaces' : '', w.competencia.trim() ? 'competencia' : '', w.acceso_url.trim() ? 'acceso a la plataforma actual' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : ''].filter(Boolean).join(', ') || 'Solo lo básico: arrancamos con eso.'}.</p>
+        <h3 style="margin-top:14px">Lo que compartes</h3>${w.tipo === 'qa' ? (() => { const q = fuentesQA(w); return `<p class="small">Meta: ${esc(metaQA(q.meta))}. ${q.prototipos.length} ${q.prototipos.length === 1 ? 'enlace' : 'enlaces'} del diseño, ${q.real.length} ${q.real.length === 1 ? 'dirección' : 'direcciones'} del producto real${q.grupos.length ? ` y ${q.grupos.length} ${q.grupos.length === 1 ? 'grupo' : 'grupos'} de credenciales (van cifradas)` : ''}.</p>`; })() : ''}<p class="small" ${w.tipo === 'qa' ? 'hidden' : ''}>${[w.analizar.trim() ? 'problemas que identificaste' : '', w.esperas.trim() ? 'qué esperas obtener' : '', w.acceso_usuario.trim() ? 'acceso' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : '', w.archivos.length ? w.archivos.length + ' archivo(s)' : '', w.manual ? 'manual de marca' : '', w.objetivo.trim() ? 'objetivo' : '', w.intencion.trim() ? 'intención' : '', w.flujo.trim() ? 'flujo actual' : '', w.github.trim() ? 'código' : '', w.enlaces.trim() ? 'enlaces' : '', w.competencia.trim() ? 'competencia' : '', w.acceso_url.trim() ? 'acceso a la plataforma actual' + (w.acceso_clave ? ' (contraseña cifrada)' : '') : ''].filter(Boolean).join(', ') || 'Solo lo básico: arrancamos con eso.'}.</p>
         ${w.tipo === 'completo' ? (() => { const extra = CARPETAS.filter(([k]) => !det[k]).map(([, n]) => n.toLowerCase());
           return `<p class="small muted">Con esto arrancamos.${extra.length ? ` Si más adelante tienes ${extra.join(', ')}, puedes sumarlo en cualquier escenario para afinar el trabajo.` : ''}</p>`; })() : ''}
 </div>
       <div class="card" style="margin:0"><h3>Qué pasa al enviarlo</h3>
         <ul class="checklist" style="margin-top:10px">${(w.tipo === 'completo'
           ? ['Recibimos tus archivos', 'Avisamos al equipo; un analista lanza el primer escenario y valida que todo funcione', 'El primer escenario tarda entre 3 y 5 horas; te escribimos al terminar', 'Lo pruebas y nos dices si te gusta y si cumple', 'Cada vuelta nueva tarda cerca de la mitad que la anterior']
+          : w.tipo === 'qa' ? ['Recibimos tus enlaces; las credenciales quedan cifradas', 'Un analista arma el plan: cada vista del diseño con su par en tu producto', 'Apruebas el plan y ejecutamos la comparación', 'Recibes el informe para imprimir o compartir con tu equipo']
           : w.tipo === 'sintetico' ? ['Recibimos tu solicitud', 'Avisamos al equipo; un analista lanza el estudio y valida que todo funcione', 'Te escribimos cuando el informe esté listo para auditar']
           : ['Te damos la etiqueta para instalar en tu producto', 'Medimos una semana de línea base', 'Después ves el uso en vivo']).map(x => `<li>${x}</li>`).join('')}</ul>
-        <table style="margin-top:10px"><tbody>${t.etapas.map(e => `<tr><td>${esc(w.tipo === 'completo' ? `Escenario ${e.n} · ${e.nombre}` : e.nombre)}</td><td class="num">${e.rango ? esc(e.rango) : e.min ? dur(e.min) : w.tipo === 'seguimiento' ? '—' : 'tu equipo'}</td></tr>`).join('')}</tbody></table>
-        <p class="small" style="margin-top:8px">${w.tipo === 'sintetico' ? `<strong>Primera evaluación: unos ${dur(total)}</strong>. Puede ser antes, según el tamaño y la complejidad del producto.` : w.tipo === 'completo' ? `<strong>Primera vuelta de todos los escenarios: unos ${dur(total)}</strong>, más el tiempo de tus revisiones.` : ''}</p></div>
+        <table style="margin-top:10px"><tbody>${t.etapas.map(e => `<tr><td>${esc(w.tipo === 'completo' ? `Caja ${e.n} · ${e.nombre}` : e.nombre)}</td><td class="num">${e.rango ? esc(e.rango) : e.min ? dur(e.min) : w.tipo === 'seguimiento' ? '—' : 'tu equipo'}</td></tr>`).join('')}</tbody></table>
+        <p class="small" style="margin-top:8px">${w.tipo === 'qa' ? `<strong>Informe en unas ${dur(total)}</strong>, más el tiempo en que apruebas el plan.` : ''}${w.tipo === 'sintetico' ? `<strong>Primera evaluación: unos ${dur(total)}</strong>. Puede ser antes, según el tamaño y la complejidad del producto.` : w.tipo === 'completo' ? `<strong>Primera vuelta de todos los escenarios: unos ${dur(total)}</strong>, más el tiempo de tus revisiones.` : ''}</p></div>
     </div>`;
   }
   if (w.paso === 4) body += `<div class="card" style="margin-top:16px;border-left:4px solid var(--brand)">
@@ -2774,6 +2996,7 @@ function wireWizard() {
   // La contraseña nunca se guarda en la maqueta: solo se registra que se entregó.
   const sync = () => { CAMPOS.forEach(k => { const el = document.getElementById('w-' + k); if (el) w[k] = el.value; }); const c = document.getElementById('w-clave'); if (c && c.value) { w.acceso_clave = true; c.value = ''; } };
   document.querySelectorAll('[data-tipo]').forEach(b => b.onclick = () => { w.tipo = b.dataset.tipo; render(); });
+  if (w.tipo === 'qa') { w.qa = w.qa || nuevoQA(); wireQA(w, sync); }
   const cli = document.getElementById('w-cliente'); if (cli) cli.onchange = () => { w.cliente = cli.value; render(); };
   const con = document.getElementById('w-contrato'); if (con) con.onclick = () => {
     const org = $('#w-org').value.trim(); if (!org) return $('#w-org').focus();
@@ -2847,6 +3070,7 @@ function wireWizard() {
     if (!w.consiente) return;
     const cta = cuentaActual();
     const consentimiento = { documento: 'acuerdo', version: LEGAL.acuerdo.version, fecha: new Date().toISOString(), cuenta: cta.id, nombre: cta.nombre, correo: cta.correo };
+    if (w.tipo === 'qa') w.url = (w.qa.real.find(x => x.url.trim()) || {}).url || '';
     w.url = urlNormal(w.url); w.miembros = [{ persona: cta.id, rol: 'responsable' }];
     const id = 'p-' + Date.now().toString(36);
     const mp = w.tipo === 'sintetico' && w.motor ? motorProyecto(w.motor) : null;
@@ -2859,11 +3083,12 @@ function wireWizard() {
     }
     const cat = TIPOS[w.tipo].etapas; const now = new Date().toISOString(); const primera = cat[0];
     // El sintético arranca su reloj al crearse (8 h en total); el completo espera al analista.
-    const estado0 = w.tipo === 'completo' ? 'analista' : primera.modo === 'humana' ? 'humana' : 'pensando';
+    const estado0 = ['completo', 'qa'].includes(w.tipo) ? 'analista' : primera.modo === 'humana' ? 'humana' : 'pensando';
     DB.proyectos.unshift({ id, cuenta: cta.id, consentimiento, cliente: w.cliente, nombre: w.nombre.trim(), tipo: w.tipo, url: w.url.trim(), creado: now, deriva_de: w.deriva || null, miembros: w.miembros,
-      fuentes: fuentesDe(w),
+      fuentes: { ...fuentesDe(w), qa: w.tipo === 'qa' ? fuentesQA(w) : undefined },
       etapas: cat.map(e => ({ n: e.n, estado: e === primera ? estado0 : 'cola', inicio: e === primera && estado0 !== 'analista' ? now : null, fin: null })) });
-    if (w.tipo === 'completo') avisar(id, 'equipo', `Un proyecto nuevo acaba de iniciar: ${w.nombre.trim()}`);
+    if (['completo', 'qa'].includes(w.tipo)) avisar(id, 'equipo', `Un proyecto nuevo acaba de iniciar: ${w.nombre.trim()}`);
+    if (w.tipo === 'qa') enviarCredencialesQA(w.qa, id);
     correoEquipo(proyecto(id), `Nuevo proyecto para ejecutar: ${w.nombre.trim()}`, fichaProyecto(proyecto(id)));
     registrarConsentimiento(id); guardarAdjuntosDe(w, id); quitarBorrador(w);
     UI.wizard = null; UI.recienCreado = id; save(); location.hash = '#/p/' + id;

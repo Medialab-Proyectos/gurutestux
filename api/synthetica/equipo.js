@@ -3,10 +3,12 @@
 //   GET  /api/equipo?accion=proyecto&cuenta=<id>&id=<id>   → el proyecto, su ficha y sus archivos
 //   GET  /api/equipo?accion=archivo&cuenta=<id>&p=<ruta>   → descarga un archivo de esa cuenta
 //   GET  /api/equipo?accion=cuentas                       → cuentas registradas
+//   GET  /api/equipo?accion=credenciales&cuenta=<id>&id=<id> → las credenciales del proyecto, descifradas (QA visual)
 //   POST /api/equipo?accion=clave { correo, clave }        → el administrador pone una contraseña nueva
 //   POST /api/equipo?accion=borrar { cuenta, id }  → quita el proyecto, sus documentos y su historial
 //   POST /api/equipo?accion=subir&cuenta=<id>&p=<proyecto>/<ruta>  (cuerpo: el archivo) → publica en u/<cuenta>/publicado/
-//   POST /api/equipo?accion=etapa { cuenta, id, n, estado: 'en_curso' | 'progreso' | 'lista', logros?, nota?, detalle?, resultado?, motor? }
+//   POST /api/equipo?accion=etapa { cuenta, id, n, estado: 'en_curso' | 'progreso' | 'lista' | 'omitida', logros?, nota?, detalle?, resultado?, motor? }
+//     omitida: una caja opcional que el motor saltó (la 10): queda hecha y arranca la siguiente.
 //     progreso: solo actualiza «Ahora: …» sin cambiar la etapa. resultado: hallazgos del estudio para auditar.
 import { get, del, put } from '@vercel/blob';
 import crypto from 'node:crypto';
@@ -14,6 +16,7 @@ import { Readable } from 'node:stream';
 import { query, esquema } from '../_synthetica/db.js';
 import { usuarioDe, hashClave } from '../_synthetica/sesion.js';
 import { responder, exigirOrigenPropio, cuerpo } from '../_synthetica/http.js';
+import { descifrar } from '../_synthetica/cifrado.js';
 
 // El administrador entra sin cuenta con la llave SYNTHETICA_LLAVE_ADMIN (la usa operador.py).
 function esAdmin(req) {
@@ -58,6 +61,13 @@ function marcarEtapa(p, n, estado, logros, nota, detalle) {
   const ahora = new Date().toISOString();
   if (detalle) Object.assign(e, { detalle, detalle_fecha: ahora });
   if (estado === 'progreso') return e;
+  if (estado === 'omitida') {   // caja opcional que el motor saltó: no se revisa; sigue la próxima en orden
+    const ahora2 = new Date().toISOString();
+    Object.assign(e, { estado: 'hecha', omitida: true, fin: e.fin || ahora2 });
+    const sig = p.etapas[p.etapas.indexOf(e) + 1];
+    if (sig && ['cola', 'analista'].includes(sig.estado)) Object.assign(sig, { estado: 'pensando', inicio: ahora2, fin: null });
+    return e;
+  }
   if (estado === 'en_curso') {
     if (e.pedida) e.pedida.lanzada = true;
     Object.assign(e, { estado: 'pensando', inicio: ahora, fin: null, lanzada_por: 'equipo' });
@@ -77,10 +87,26 @@ function marcarEtapa(p, n, estado, logros, nota, detalle) {
     // Los hallazgos se auditan; mientras tanto se redactan las propuestas de mejora (caja 4).
     e.estado = 'revision';
     arrancar(p.etapas.find(x => x.n === 4));
+  } else if (p.tipo === 'qa' && n === 2) {
+    e.estado = 'hecha'; e.auto = true;
+    arrancar(p.etapas.find(x => x.n === 3));
   } else if (p.tipo === 'sintetico' && n === 4) {
     e.estado = 'hecha'; e.auto = true;   // las propuestas se leen y se deciden; no bloquean el estudio
   } else e.estado = 'revision';
   return e;
+}
+
+// Proyectos completos creados con las 9 cajas de antes del 2026-10-08 (motor de creación): la 4 pasa a 5, … la 9 a 10;
+// se suman la 3.1 (color), la 4 (maquetación), la 4.1 (imagen) y la 11 (aceptación). Igual que en index.html.
+const MIGRA_CAJAS = { 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10 };
+function migrarCajas(p, datos) {
+  if (p.tipo !== 'completo' || !Array.isArray(p.etapas) || p.etapas.some(e => e.n === 3.1)) return;
+  const nuevo = n => MIGRA_CAJAS[n] ?? n;
+  p.etapas = p.etapas.map(e => ({ ...e, n: nuevo(e.n) }));
+  ['ajustes', 'variantes', 'elecciones', 'notas'].forEach(t => (datos[t] || []).forEach(x => { if (x.proyecto === p.id && typeof x.etapa === 'number') x.etapa = nuevo(x.etapa); }));
+  const avanzado = p.etapas.some(e => e.n >= 5 && !['cola', 'analista'].includes(e.estado));
+  [3.1, 4, 4.1, 11].forEach(n => { if (!p.etapas.some(e => e.n === n)) p.etapas.push(avanzado && n < 5 ? { n, estado: 'hecha', inicio: null, fin: null, agregada: true } : { n, estado: 'cola', inicio: null, fin: null }); });
+  p.etapas.sort((a, b) => a.n - b.n);
 }
 
 // Estudios sintéticos creados antes de la caja 4 (propuestas de mejora): se les agrega en cola.
@@ -110,6 +136,7 @@ export default async function handler(req, res) {
       const r = await query(`select u.id, u.nombre, u.correo, d.datos from documentos d join usuarios u on u.id = d.usuario_id where u.id = $1`, [q.get('cuenta')]);
       const c = r.rows[0]; const p = c && (c.datos.proyectos || []).find(x => x.id === q.get('id'));
       if (!p) return responder(res, 404, { error: 'No existe' });
+      migrarCajas(p, c.datos);   // solo en la respuesta: se guarda migrado la próxima vez que cambie
       const duenos = new Set([p.id]);
       return responder(res, 200, {
         cuenta: { id: c.id, nombre: c.nombre, correo: c.correo }, proyecto: p,
@@ -140,7 +167,7 @@ export default async function handler(req, res) {
     }
     if (req.method === 'POST' && accion === 'etapa') {
       const d = await cuerpo(req);
-      if (!['en_curso', 'progreso', 'lista'].includes(d.estado)) return responder(res, 400, { error: 'estado debe ser en_curso, progreso o lista' });
+      if (!['en_curso', 'progreso', 'lista', 'omitida'].includes(d.estado)) return responder(res, 400, { error: 'estado debe ser en_curso, progreso, lista u omitida' });
       if (d.resultado && JSON.stringify(d.resultado).length > 2_500_000) return responder(res, 413, { error: 'El resultado es demasiado grande' });
       if (d.propuestas && JSON.stringify(d.propuestas).length > 1_500_000) return responder(res, 413, { error: 'Las propuestas son demasiado grandes' });
       const logros = Array.isArray(d.logros) ? d.logros.map(x => String(x).slice(0, 300)).slice(0, 12) : null;
@@ -148,6 +175,7 @@ export default async function handler(req, res) {
         const p = (datos.proyectos || []).find(x => x.id === d.id);
         if (!p) return null;
         conCajaDePropuestas(p);
+        migrarCajas(p, datos);
         if (d.resultado && typeof d.resultado === 'object') p.resultado_motor = d.resultado;
         // Propuestas de mejora e indicadores (caja 4), ya pulidas por el analista.
         if (d.propuestas && typeof d.propuestas === 'object') p.propuestas = d.propuestas;
@@ -210,6 +238,11 @@ export default async function handler(req, res) {
       });
       return r ? responder(res, 200, { reiniciado: r, desde }) : responder(res, 404, { error: 'No existe ese proyecto' });
     }
+    if (req.method === 'GET' && accion === 'credenciales') {
+      const r = await query('select cifrado, actualizado from credenciales where usuario_id = $1 and proyecto_id = $2', [q.get('cuenta'), q.get('id')]);
+      if (!r.rows.length) return responder(res, 404, { error: 'Ese proyecto no tiene credenciales' });
+      return responder(res, 200, { ...descifrar(r.rows[0].cifrado), actualizado: r.rows[0].actualizado });
+    }
     if (req.method === 'POST' && accion === 'borrar') {
       const d = await cuerpo(req);
       let archivos = [];
@@ -225,6 +258,7 @@ export default async function handler(req, res) {
       });
       if (!nombre) return responder(res, 404, { error: 'No existe ese proyecto' });
       if (archivos.length) await del(archivos);
+      await query('delete from credenciales where usuario_id = $1 and proyecto_id = $2', [String(d.cuenta || ''), String(d.id || '')]);
       return responder(res, 200, { borrado: nombre, archivos: archivos.length });
     }
     return responder(res, 400, { error: 'Acción desconocida' });

@@ -61,6 +61,14 @@ const ESQUEMA = [
      asunto text not null,
      enviado boolean not null,
      fecha timestamptz not null default now()
+   )`,
+  // Credenciales de los proyectos (QA visual): cifradas con AES-256-GCM (cifrado.js). Solo las descifra el equipo al bajar el proyecto.
+  `create table if not exists credenciales (
+     usuario_id text not null references usuarios(id) on delete cascade,
+     proyecto_id text not null,
+     cifrado text not null,
+     actualizado timestamptz not null default now(),
+     primary key (usuario_id, proyecto_id)
    )`
 ];
 

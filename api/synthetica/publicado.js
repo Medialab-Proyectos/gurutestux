@@ -7,7 +7,7 @@ import { usuarioDe } from '../_synthetica/sesion.js';
 import { responder } from '../_synthetica/http.js';
 
 const TIPOS = { html: 'text/html; charset=utf-8', js: 'text/javascript; charset=utf-8', css: 'text/css; charset=utf-8', json: 'application/json',
-  jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', svg: 'image/svg+xml', webp: 'image/webp', woff2: 'font/woff2' };
+  jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', svg: 'image/svg+xml', webp: 'image/webp', woff2: 'font/woff2', pdf: 'application/pdf' };
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return responder(res, 405, { error: 'Método no permitido' });
