@@ -44,6 +44,7 @@ _revision/
 # Perfiles, recorridos e informes internos; no publicar en el repositorio público.
 _agentes_sinteticos/
 _creacion_productos/
+_qa_visual/
 
 # --- Documentos de clientes de Synthetica -----------------------------------
 # Lo que los clientes suben y lo que se descarga aquí para procesarlo no se sube
