@@ -131,6 +131,26 @@ window.EDOC = (function () {
   function d(n) { return n.toLocaleString('en-AE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
   /* --- Documentos emitidos ---------------------------------------------- */
+  /* --- El resumen del cuadro de mando -----------------------------------
+     Cifras de demostración, y la pantalla lo dice. Son las del modelo que se le
+     presentó a la autoridad, para que reconozca el bloque; con los documentos
+     de la maqueta —unos pocos y de un solo periodo— «hoy» daría dos y «este
+     mes» cero, y un cuadro de mando en ceros no enseña nada. Cuando haya
+     volumen real esto se calcula, no se escribe. */
+  var RESUMEN = {
+    demostracion: true,
+    emision: {
+      hoy:    { aprobadas:  38, pendientes:   7, rechazadas:  5 },
+      semana: { aprobadas: 198, pendientes:  33, rechazadas: 16 },
+      mes:    { aprobadas: 856, pendientes: 114, rechazadas: 54 }
+    },
+    recepcion: {
+      hoy:    { aprobadas:  22, pendientes:   6, rechazadas:  3 },
+      semana: { aprobadas: 141, pendientes:  28, rechazadas: 15 },
+      mes:    { aprobadas: 612, pendientes:  98, rechazadas: 53 }
+    }
+  };
+
   var EMITIDOS = [
     /* Lleva descuento y una fecha de suministro anterior a la emisión: son los
        dos casos que el artículo 59 obliga a declarar y que la maqueta tiene que
@@ -404,6 +424,7 @@ window.EDOC = (function () {
     transaccionBinaria: transaccionBinaria,
     MOTIVOS_RECHAZO: MOTIVOS_RECHAZO,
     sello: sello,
+    RESUMEN: RESUMEN,
     EMITIDOS: EMITIDOS, RECIBIDOS: RECIBIDOS, DETALLE: DETALLE, dinero: d,
     AVISOS: AVISOS, TIPOS_AVISO: TIPOS_AVISO, ESTADOS_SISTEMA: ESTADOS_SISTEMA
   };

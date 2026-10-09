@@ -295,3 +295,29 @@
     });
   });
 })();
+
+/* Vive aquí y no en edoc.js porque el acceso y el primer ingreso no cargan
+   edoc.js: son pantallas sin armazón de portal. campos.js sí lo cargan las dos. */
+/* --- La verificación de seguridad ---------------------------------------
+   Se comporta como una de verdad: al marcarla gira un momento y después sale
+   el visto. La casilla real queda oculta detrás, para que el formulario la
+   siga leyendo como siempre y no haya que tocar su validación. */
+(function () {
+  var caja = document.getElementById('captcha');
+  if (!caja) return;
+  var boton = document.getElementById('captcha-casilla');
+  var texto = document.getElementById('captcha-texto');
+  var real = document.getElementById('robot');
+  boton.addEventListener('click', function () {
+    if (caja.dataset.estado !== 'libre') return;
+    caja.dataset.estado = 'girando';
+    caja.classList.remove('is-invalid');
+    texto.textContent = 'Comprobando…';
+    setTimeout(function () {
+      caja.dataset.estado = 'hecho';
+      texto.textContent = 'Verificado';
+      real.checked = true;
+      real.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 1100);
+  });
+}());

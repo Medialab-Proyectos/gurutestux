@@ -37,65 +37,168 @@
      aviso de la pantalla. La salida es volver al acceso. -->
 <!-- 16 de septiembre: con el registro aprobado la empresa ya entra al portal, así
      que esta pantalla va con el armazón normal y se llega desde el inicio. -->
-<body data-seccion="inicio" data-pagina="onboarding.html">
+<body data-seccion="" data-pagina="onboarding.html" data-armazon="reducido" data-quien="">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <div class="edoc-titulo-barra">
     <div>
-      <div class="edoc-miga"><a href="inicio.html">Inicio</a><span>Asociarnos en EmaraTax</span></div>
+      <div class="edoc-miga"><span>Después del alta</span><span>Asociarnos en EmaraTax</span></div>
       <h1 class="edoc-titulo">Asociarnos en EmaraTax</h1>
-      <p class="edoc-subtitulo">Es lo que nos autoriza a facturar por ti, y se hace en el portal de la
-      autoridad, no en el nuestro. Sin esta asociación no podemos emitir ni recibir documentos a tu nombre.</p>
+      <p class="edoc-subtitulo">Es el último paso de tu alta y se hace en el portal de la autoridad, no en
+      el nuestro. Te lo contamos ahora para que sepas en qué consiste: lo harás cuando aprobemos tu solicitud
+      y recibas tus credenciales.</p>
     </div>
   </div>
 
-  <div class="edoc-aviso edoc-aviso--advertencia mb-3">
-    <div><strong>Tu empresa está aprobada, pero todavía no nos has asociado como proveedor.</strong>
-    Puedes usar el portal, pero hasta que nos asocies no podemos emitir ni recibir documentos a tu nombre.</div>
-  </div>
-
-  <!-- El orden completo, para quien llega aquí sin saber dónde está. -->
-  <div class="edoc-aviso edoc-aviso--info mb-3">
-    <div><strong>Dónde estás.</strong> Es el último paso del alta. Tu registro y el acuerdo con nosotros ya
-    están cerrados; ahora falta decírselo a la autoridad. No tienes que avisarnos de nada: la autoridad nos
-    confirma la asociación.</div>
-  </div>
-
-  <div class="row rejilla">
-    <div class="col-12 col-lg-7">
-      <section class="edoc-tablero h-100">
-        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Qué tienes que hacer</h2></div>
-        <div class="edoc-tablero__cuerpo">
-          <ul class="linea-tiempo">
-            <li>
-              <div class="linea-tiempo__titulo">Entra a EmaraTax</div>
-              <div class="linea-tiempo__detalle">Con las credenciales fiscales de tu empresa. Es el portal de la
-              Federal Tax Authority, no el nuestro.</div>
-            </li>
-            <li>
-              <div class="linea-tiempo__titulo">Búscanos en la lista de proveedores</div>
-              <div class="linea-tiempo__detalle">Aparecemos como <strong>GuruSoft S.A.</strong> en la lista de
-              proveedores de servicios.</div>
-            </li>
-            <li>
-              <div class="linea-tiempo__titulo">Pulsa «Proceed to ASP»</div>
-              <div class="linea-tiempo__detalle">EmaraTax te avisará de que vas a salir de su sistema. Acepta y te
-              traemos de vuelta aquí.</div>
-            </li>
-          </ul>
-
-          <a class="btn btn-edoc-primario mt-2" href="https://eservices.tax.gov.ae/en-us/#/Logon" target="_blank" rel="noopener">Ir a EmaraTax</a>
-          <!-- Al pulsar «Proceed to ASP», la autoridad trae a esta pantalla nuestra. -->
-          <p class="edoc-secundario mt-3 mb-0">Cuando allí nos elijas, EmaraTax te traerá a nuestra
-          <a href="emaratax-verificacion.html">pantalla de verificación</a>, donde se comprueban tus datos
-          con la autoridad y se completa la asociación.</p>
+  <!-- Esta pantalla lleva el mismo carril de pasos del alta, con los seis hechos
+       y este último activo. No es un adorno: el cliente llega aquí días después
+       de registrarse, en otra sesión y por otra puerta, y sin el carril no tiene
+       forma de saber que esto es la continuación de aquello y no un trámite
+       nuevo. Con él, ve de un vistazo que ya hizo seis cosas y le queda una. -->
+  <div class="reg reg--emt">
+    <aside class="reg__lado">
+      <!-- La solicitud está ENVIADA, no aprobada: esta pantalla se ve justo
+           después de mandar el alta. Decir «Aprobada» aquí prometía algo que
+           todavía no ha pasado, y el cliente se iría a buscar un correo con
+           credenciales que nadie le ha mandado. -->
+      <div class="reg__cabecera">
+        <div class="reg__rotulo">Tu alta</div>
+        <div class="reg__nombre">Lo que ya hiciste</div>
+        <div class="reg__folio">
+          <span class="edoc-secundario" style="font-size:11.5px">Tu solicitud</span>
+          <span class="edoc-estado edoc-estado--neutro" style="font-size:10px">Enviada</span>
         </div>
-      </section>
-    </div>
+      </div>
+      <div class="reg__avance">
+        <div class="reg__avance-t">Te queda un paso, para después</div>
+        <div class="reg__barra"><i style="width:100%"></i></div>
+      </div>
+      <ul class="reg__pasos" id="carril"></ul>
+    </aside>
 
-    <div class="col-12 col-lg-5">
-      <section class="edoc-tablero h-100">
-        <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Cómo sabrás que ya estás habilitado</h2></div>
+    <section>
+  <div class="edoc-aviso edoc-aviso--info mb-3">
+    <div><strong>Esto todavía no toca hacerlo.</strong> Primero revisamos tu solicitud y te mandamos tus
+    credenciales. Cuando entres al portal, el inicio te traerá otra vez aquí y entonces sí: sin esta
+    designación no podemos emitir ni recibir documentos a tu nombre.</div>
+  </div>
+
+  <!-- Solo la guía, con su botón. Antes había al lado un recuadro con la pinta
+       de un navegador, para que se viera que EmaraTax abre en su ventana. No
+       servía de nada: era un marco vacío ocupando media pantalla para decir con
+       un dibujo lo que el botón ya dice con una frase. Fuera.
+
+       El porqué de abrir en ventana aparte sigue valiendo, y conviene tenerlo
+       escrito: EmaraTax no se puede encajar dentro de esta página —los portales
+       de gobierno mandan X-Frame-Options / frame-ancestors para impedirlo— y
+       tampoco convendría, porque ahí el cliente escribe sus claves de la
+       autoridad y pedírselas dentro de una ventana nuestra tiene la forma de un
+       fraude. -->
+  <div class="emt">
+    <aside class="emt__lado emt__lado--guia emt__lado--sola" aria-label="Guía de eDoc">
+      <div class="emt__guia-cab">
+        <img src="assets/img/favicon.svg" alt="eDoc" class="emt__logo" onerror="this.remove()">
+        <div>
+          <div class="emt__guia-t">Ayuda y soporte</div>
+          <div class="emt__guia-s">Qué tienes que hacer dentro de EmaraTax</div>
+        </div>
+      </div>
+
+      <!-- Dos columnas, y no por llenar el ancho: separan dos cosas que el
+           cliente usa en momentos distintos. A la izquierda el relato —qué va a
+           pasar, en orden—, que se lee una vez antes de empezar. A la derecha
+           las herramientas —el botón y los dos datos que hay que pegar allí—,
+           que se usan a mitad del camino, con EmaraTax abierto al lado. Puestas
+           una debajo de otra, los datos quedaban lejos del paso que los pide. -->
+      <div class="emt__cuerpo">
+        <div class="emt__relato">
+          <div class="emt__datos-t">Lo que vas a hacer allí</div>
+          <ol class="emt__pasos">
+            <li class="emt__paso">
+              <span class="emt__paso-t">Entra a EmaraTax</span>
+              <span class="emt__paso-p">Tiene que hacerlo el administrador de la cuenta fiscal de tu empresa.
+              Es el portal de la Federal Tax Authority, no el nuestro.</span>
+            </li>
+            <li class="emt__paso">
+              <span class="emt__paso-t">Pulsa el mosaico E-INVOICING</span>
+              <span class="emt__paso-p">Está en el menú de la izquierda. Se abre la lista de proveedores
+              acreditados.</span>
+            </li>
+            <li class="emt__paso">
+              <span class="emt__paso-t">Elígenos en la lista</span>
+              <span class="emt__paso-p">Aparecemos como GuruSoft S.A. Solo puedes tener un proveedor a la vez.</span>
+            </li>
+            <li class="emt__paso">
+              <span class="emt__paso-t">Pulsa «Proceed to ASP»</span>
+              <span class="emt__paso-p">EmaraTax te trae de vuelta a nuestro portal para terminar.</span>
+            </li>
+            <li class="emt__paso">
+              <span class="emt__paso-t">Te traemos de vuelta y se completa</span>
+              <span class="emt__paso-p">La autoridad te devuelve a una pantalla nuestra que comprueba tus datos
+              con ella y cierra la asociación. No tienes que hacer nada más.</span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="emt__herramientas">
+          <div class="emt__abrir">
+            <button class="btn btn-edoc-primario btn-block" id="abrir" type="button">Abrir EmaraTax al lado</button>
+            <p class="emt__p emt__p--chico">Puedes abrirlo ahora para verlo por dentro, aunque la
+            designación la harás más adelante. Se abre en su propia ventana, junto a esta.</p>
+            <p class="emt__p emt__p--chico" id="aviso-ventana" hidden>Tu navegador bloqueó la ventana. Permítela, o
+            <a href="https://eservices.tax.gov.ae/en-us/#/Logon" target="_blank" rel="noopener">ábrelo en una
+            pestaña</a>: la guía se queda aquí.</p>
+          </div>
+
+          <!-- Aquí no se pega ningún identificador. La guía del Ministerio, en
+               su página 39, describe el trámite entero: se entra en EmaraTax,
+               se pulsa el mosaico E-INVOICING, sale la lista de proveedores
+               acreditados, se elige el suyo y se pulsa «Proceed to ASP».
+               Se elige de una lista, por el nombre.
+
+               Antes aquí había un «nuestro Participant ID» con un botón de
+               copiar. Mal por dos lados: EmaraTax no lo pide, y el número que
+               se enseñaba era el del propio cliente —su TIN—, así que el mismo
+               dato aparecía como «tu dirección» en una pantalla y como «lo
+               nuestro» en esta. -->
+          <div class="emt__datos">
+            <div class="emt__datos-t">Búscanos en la lista por este nombre</div>
+            <div class="emt__dato">
+              <div><span class="emt__dato-r">Proveedor acreditado</span>
+                <span class="emt__dato-v">GuruSoft S.A. · eDoc</span></div>
+              <button class="btn btn-edoc-terciario btn-sm" type="button" data-copia="GuruSoft S.A.">Copiar</button>
+            </div>
+            <p class="emt__p emt__p--chico">No hay nada más que escribir: en EmaraTax nos eliges de la lista de
+            proveedores acreditados. Tu dirección en la red la damos de alta nosotros cuando nos designes.</p>
+          </div>
+
+          <!-- Sin enlace a los manuales: viven dentro del portal y aquí
+               todavía no hay acceso. Lo único que sirve ahora es escribirnos. -->
+          <div class="emt__pie">
+            <div class="emt__pie-t">¿Dudas antes de tiempo?</div>
+            <p class="emt__p emt__p--chico">Escríbenos a soporte@edoc.ae con tu código de seguimiento y te lo
+            explicamos. Los manuales completos los tendrás dentro del portal, con tus credenciales.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Esto se lee una vez, al volver de EmaraTax, y hasta entonces solo empuja
+       hacia abajo lo que sí hay que hacer ahora. Plegado, con el panel que ya
+       usa el portal en credenciales y en contraseña. -->
+  <div class="row rejilla mt-3">
+    <div class="col-12">
+      <section class="edoc-tablero edoc-tablero--plegable mb-0">
+        <div class="edoc-tablero__cabecera">
+          <h2 class="edoc-tablero__titulo">
+            <button class="edoc-plegar" type="button" data-toggle="collapse"
+                    data-target="#panel-habilitado" aria-expanded="false" aria-controls="panel-habilitado">
+              <svg class="edoc-plegar__flecha" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>Cómo sabrás que ya estás habilitado</button>
+          </h2>
+        </div>
+        <div class="collapse" id="panel-habilitado">
         <div class="edoc-tablero__cuerpo">
           <p>No tienes que avisarnos ni escribir ningún código. Al volver lo verás en tres sitios, y los tres
           dicen lo mismo:</p>
@@ -103,8 +206,8 @@
             <li>
               <div class="linea-tiempo__titulo">Aquí, en tu cuenta</div>
               <div class="linea-tiempo__detalle">El aviso de arriba desaparece y en
-              <a href="admin-empresa.html">Actualización de identificación fiscal</a> aparece la conexión con la
-              autoridad como <strong>Activa</strong>, con la fecha.</div>
+              <strong>Identificación fiscal</strong> aparece la conexión con la autoridad como
+              <strong>Activa</strong>, con la fecha.</div>
             </li>
             <li>
               <div class="linea-tiempo__titulo">Tu dirección en la red</div>
@@ -123,9 +226,8 @@
           registro fiscal con el que entraste allí no sea el mismo de esta cuenta, o que se cerrara la ventana
           antes de volver. Vuelve a intentarlo y, si sigue igual, escríbenos con tu TRN desde el acceso al
           soporte.</p>
-          <div class="d-flex hueco-2 flex-wrap">
-            <a class="btn btn-edoc-secundario" href="inicio.html">Volver al inicio</a>
-          </div>
+          <!-- Sin botón al inicio: desde aquí todavía no hay portal al que
+               volver. La salida de esta pantalla es cerrarla. -->
 
           <!-- Fuera de la capa de notas a propósito: esa capa está apagada por
                defecto y el botón hace falta para seguir el recorrido en la demo. -->
@@ -139,6 +241,61 @@
       </section>
     </div>
   </div>
+    </section>
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Contrastado con la guía · 9 de octubre</span>
+    <strong>Lo que dice esta pantalla coincide con la guía del Ministerio, y una cosa que ya habíamos decidido
+    queda respaldada.</strong> El 16 de septiembre pusimos EmaraTax al final, después de contratar con
+    nosotros. La guía lo exige: «The Person or Government Entity is required to finalize their contract with
+    the selected ASP and fulfil all commercial obligations <em>before</em> onboarding on to their ASP’s system
+    via EmaraTax». Primero el contrato, después EmaraTax.
+    <br><br>
+    De ahí salen también dos precisiones que ahora están en la guía de la derecha: lo hace <strong>el
+    administrador de la cuenta fiscal</strong> —«This onboarding process should be initiated via the FTA’s
+    EmaraTax system by the Account admin of the Taxable Person»— y el Participant ID se obtiene <strong>a
+    través del proveedor</strong>, no se pide por separado: «Obtain a Peppol participant identifier via the
+    identified ASP».
+    <br><br>
+    <strong>Lo que no está respaldado por ningún documento, y conviene saberlo:</strong> que aparezcamos en la
+    lista con un nombre u otro depende de la lista de proveedores acreditados que publica el Ministerio, y los
+    tres motivos del «¿y si no llega?» son razonables pero nuestros, no de la norma.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 9 de octubre</span>
+    <strong>Esta pantalla se ve justo después de enviar el alta, no desde el portal.</strong> Salía con el menú
+    del portal arriba —Inicio, Cuadro de mando, Administración, Emisión, Recepción—, con la solicitud marcada
+    como «Aprobada» y con un enlace a los manuales. Las tres cosas prometían algo que no ha pasado: la empresa
+    acaba de enviar su solicitud, nadie la ha aprobado y no se le han mandado credenciales, así que no puede
+    entrar a ninguna de esas pantallas.
+    <br><br>
+    Lo que es: <strong>documentación de apoyo</strong>. Se le enseña al terminar el alta para que sepa en qué
+    consiste el último paso antes de que le llegue nada, y se vuelve a ella desde el inicio del portal cuando
+    ya tenga acceso y sí toque hacerlo.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Guía del Ministerio, p. 39 · 9 de octubre</span>
+    <strong>Los pasos ya no son una suposición: están en la guía oficial.</strong> «Click on the E-INVOICING
+    tile from the menu options on the left side to view the list of ASPs… You can select the required ASP and
+    click “Proceed to ASP”. You will then be redirected to that ASP’s portal». Entrar, mosaico E-INVOICING,
+    lista, elegir y continuar. Y añade un límite que conviene decir en voz alta: «each Person or Government
+    Entity should onboard with only one ASP», un proveedor a la vez.
+    <br><br>
+    <strong>Y se cayó un invento mío.</strong> Esta pantalla pedía copiar «nuestro Participant ID». EmaraTax no
+    pide ningún identificador —se elige de una lista, por el nombre— y encima el número que se enseñaba era el
+    del propio cliente, su TIN: el mismo dato salía como «tu dirección en la red» en identificación fiscal y
+    como «lo nuestro» aquí.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Límite técnico · decirlo antes de prometerlo</span>
+    <strong>EmaraTax no se puede meter dentro de esta página, y no conviene aunque se pudiera.</strong> Los
+    portales de gobierno mandan la cabecera que impide encajarlos en otro sitio —<span class="cifra">X-Frame-Options</span>,
+    <span class="cifra">frame-ancestors</span>—. Y aunque lo permitieran: ahí el cliente escribe sus claves de
+    la autoridad, y pedírselas dentro de una ventana nuestra tiene la forma exacta de un fraude. El botón abre
+    EmaraTax en una ventana al lado y esta guía se queda a la derecha, que da el mismo resultado sin ese
+    problema.
+  </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -149,6 +306,86 @@
 <script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+  var abrir = document.getElementById('abrir');
+  if (!abrir) return;
+
+  /* El carril de pasos del alta, en estado fijo: los seis hechos y este último
+     activo. Se pinta aquí y no se copia a mano en el HTML para que diga lo
+     mismo que el asistente, con sus mismos iconos y sus mismos rótulos. */
+  /* Los mismos rótulos y los mismos subtítulos que el asistente, copiados tal
+     cual: si aquí dijeran otra cosa parecerían otros pasos, y además se
+     quedarían sin traducir, porque el diccionario tiene esas frases y no otras
+     parecidas. */
+  var PASOS = [
+    { icono: 'info',    rotulo: 'Cómo funciona',             sub: 'El orden del alta, en tres momentos.' },
+    { icono: 'candado', rotulo: 'Solicitud y acceso',         sub: 'Tipo de solicitud y verificación' },
+    { icono: 'perfil',  rotulo: 'Administrador de la cuenta', sub: 'Responsable principal' },
+    { icono: 'empresa', rotulo: 'Datos de la empresa',        sub: 'Razón social, TRN y dirección' },
+    { icono: 'libro',   rotulo: 'Documento legal',            sub: 'Certificado fiscal y número de licencia' },
+    { icono: 'perfil',  rotulo: 'Contactos por área',         sub: 'Ventas y cobranzas, y el técnico' },
+    { icono: 'candado', rotulo: 'Consentimientos legales',    sub: 'Revisión y aceptación' },
+    { icono: 'aprobar', rotulo: 'Revisión final',             sub: 'Verifica antes de enviar' }
+  ];
+  document.getElementById('carril').innerHTML = PASOS.map(function (p) {
+    return '<li class="reg__paso reg__paso--hecho">' +
+      '<span class="reg__paso-icono">' + window.edocIcono(p.icono) + '</span>' +
+      '<span><span class="reg__paso-t">' + p.rotulo + '</span>' +
+        '<span class="reg__paso-s">' + p.sub + '</span>' +
+        '<span class="reg__paso-chip reg__paso-chip--completado">Completado</span></span>' +
+      '<span class="reg__tic" aria-hidden="true">✓</span>' +
+    '</li>';
+  }).join('') +
+    '<li class="reg__paso reg__paso--hito reg__paso--activo">' +
+      '<span class="reg__paso-icono">' + window.edocIcono('estados') + '</span>' +
+      '<span><span class="reg__paso-t">Asociarnos en EmaraTax</span>' +
+        '<span class="reg__paso-s">En el portal de la autoridad, no en el nuestro.</span>' +
+        '<span class="reg__paso-chip reg__paso-chip--requerido">Estás aquí</span></span>' +
+      '<span class="reg__paso-n">Último</span>' +
+    '</li>';
+
+  /* EmaraTax ocupando la mitad izquierda y esta guía a la derecha. Si el
+     navegador bloquea la ventana se dice y se ofrece la pestaña: no se deja al
+     cliente mirando un botón que no hizo nada. */
+  abrir.addEventListener('click', function () {
+    var ancho = Math.max(640, Math.floor(window.screen.availWidth * 0.52));
+    /* Sin «noopener» entre las opciones: con esa opción el navegador devuelve
+       null por norma, y entonces no hay forma de distinguir «se abrió» de «lo
+       bloquearon». El vínculo se corta justo después, que protege igual —la
+       ventana de la autoridad no puede redirigir la nuestra— y además deja
+       saber qué pasó. */
+    var v = window.open('https://eservices.tax.gov.ae/en-us/#/Logon', 'emaratax',
+      'width=' + ancho + ',height=' + window.screen.availHeight + ',left=0,top=0');
+    try { if (v) v.opener = null; } catch (error) { /* otro origen: ya va aislada */ }
+    document.getElementById('aviso-ventana').hidden = !!v;
+    if (v) {
+      try { v.focus(); } catch (error) { /* nada */ }
+      window.edocAvisar('EmaraTax está abierto en la ventana de al lado. Esta guía se queda aquí.', 'exito');
+    } else {
+      window.edocAvisar('Tu navegador bloqueó la ventana. Permítela para esta página, o abre EmaraTax ' +
+                        'en una pestaña: la guía se queda aquí.', 'advertencia');
+    }
+  });
+
+  /* Copiar diciendo lo que hizo: sin eso el cliente pulsa y no sabe si tiene
+     algo en el portapapeles. */
+  document.querySelectorAll('[data-copia]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var listo = function () {
+        var antes = b.textContent;
+        b.textContent = 'Copiado';
+        setTimeout(function () { b.textContent = antes; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(b.getAttribute('data-copia')).then(listo, listo);
+      } else { listo(); }
+    });
+  });
+}());
+</script>
 <script>
   document.getElementById('simular').addEventListener('click', function () {
     try { window.sessionStorage.setItem('edoc-asociada', '1'); } catch (error) { /* nada */ }

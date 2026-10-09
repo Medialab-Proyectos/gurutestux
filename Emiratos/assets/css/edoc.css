@@ -346,6 +346,9 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
                border-radius: 4px; padding: 2px 6px; margin-left: 7px; vertical-align: 1px; }
 .marca-campo--obligatorio { background: #fdeaea; color: #b3261e; }
 .marca-campo--opcional    { background: #fff4e2; color: #8a5200; }
+/* Ni obligatorio ni opcional: depende de algo. Decirlo «opcional» sería mentir
+   a quien sí está registrada, y «obligatorio» dejaría fuera a quien no lo está. */
+.marca-campo--condicional { background: #eceffa; color: #222c63; }
 
 .reg__nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 22px;
             padding-top: 16px; border-top: 1px solid #f0f0f0; flex-wrap: wrap; }
@@ -376,6 +379,44 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 /* --- La subida del documento --------------------------------------------
    Zona grande en vez de un campo de fichero suelto: es lo que hace Francia y
    es lo que se acierta a la primera. */
+/* Separador de grupo dentro de un paso: dice que lo que viene es una sola
+   cosa -la direccion- y no cuatro campos sueltos. */
+/* --- La verificación de seguridad ----------------------------------------
+   Con la forma que tiene una de verdad: recuadro con marco, casilla grande a
+   la izquierda y una espera corta antes del visto. Esa espera no es adorno —es
+   lo que hace que se reconozca— y además es honesta: en producción hay una ida
+   y vuelta al servicio que la valida. No se usa la marca de ningún proveedor:
+   aquí se enseña el comportamiento, no se integra a nadie. */
+.edoc-captcha { display: flex; align-items: center; gap: 12px; max-width: 320px;
+                border: 1px solid #d3d7de; border-radius: 6px; background: #f9f9fa;
+                padding: 12px 14px; box-shadow: 0 1px 2px rgba(28,28,28,.06); }
+.edoc-captcha__casilla { width: 28px; height: 28px; flex: 0 0 28px; border: 2px solid #b9bec7;
+                         border-radius: 3px; background: #fff; cursor: pointer; padding: 0;
+                         display: flex; align-items: center; justify-content: center; }
+.edoc-captcha__casilla:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
+.edoc-captcha__tic { color: var(--edoc-verde); font-size: 20px; line-height: 1; display: none; }
+.edoc-captcha__giro { width: 18px; height: 18px; border: 2px solid #d3d7de;
+                      border-top-color: var(--edoc-azul); border-radius: 50%; display: none;
+                      animation: edoc-captcha-giro .7s linear infinite; }
+@keyframes edoc-captcha-giro { to { transform: rotate(360deg); } }
+.edoc-captcha__texto { font-size: 13.5px; color: var(--edoc-negro); flex: 1 1 auto; }
+/* El rótulo va en un solo nodo de texto y se parte por ancho: con un <br>
+   dentro, el diccionario no lo reconoce y se queda en español. */
+.edoc-captcha__marca { display: flex; flex-direction: column; align-items: center; gap: 2px;
+                       color: #8a9099; font-size: 8.5px; line-height: 1.15; text-align: center; }
+.edoc-captcha__marca span { max-width: 56px; }
+.edoc-captcha__real { position: absolute; opacity: 0; pointer-events: none; }
+.edoc-captcha[data-estado="girando"] .edoc-captcha__giro { display: block; }
+.edoc-captcha[data-estado="hecho"] .edoc-captcha__tic { display: block; }
+.edoc-captcha[data-estado="hecho"] .edoc-captcha__casilla { border-color: var(--edoc-verde); cursor: default; }
+.edoc-captcha[data-estado="hecho"] .edoc-captcha__texto { color: var(--edoc-gris-texto); }
+.edoc-captcha.is-invalid { border-color: var(--rojo-1); background: #fdf4f2; }
+@media (prefers-reduced-motion: reduce) { .edoc-captcha__giro { animation-duration: 2s; } }
+
+.reg__grupo-titulo { font-family: var(--fuente-titulos, inherit); font-size: 12px; font-weight: 600;
+                     letter-spacing: .05em; text-transform: uppercase; color: var(--edoc-gris-texto);
+                     margin: 22px 0 10px; padding-top: 16px; border-top: 1px solid var(--edoc-gris-claro); }
+
 .reg__subir { display: block; border: 2px dashed #d2d2d2; border-radius: 12px; padding: 30px 20px;
               text-align: center; cursor: pointer; background: #fcfcfd; margin: 0;
               transition: border-color .15s, background .15s; }
@@ -384,11 +425,19 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
 .reg__subir-icono { width: 46px; height: 46px; border-radius: 50%; border: 1.6px solid #c9c9c9;
                     display: inline-flex; align-items: center; justify-content: center;
                     color: #6f7686; margin-bottom: 12px; }
-.reg__subir-t { font-family: var(--fuente-titulos, inherit); font-size: 15px; font-weight: 600;
-                color: #22252e; }
-.reg__subir-s { font-size: 12.5px; color: #636363; margin-top: 3px; }
-.reg__subir-f { font-family: var(--fuente-cifras); font-size: 11px; color: #6b6b6b; margin-top: 6px; }
+.reg__subir-t { display: inline-block; font-family: var(--fuente-titulos, inherit); font-size: 15px;
+                font-weight: 600; color: #22252e; }
+.reg__subir-marca { margin-left: 7px; vertical-align: 2px; }
+.reg__subir-s { display: block; font-size: 12.5px; color: #636363; margin-top: 3px; }
+.reg__subir-f { display: block; font-family: var(--fuente-cifras); font-size: 11px; color: #6b6b6b;
+                margin-top: 6px; }
+/* El pie del recuadro va fuera de la etiqueta, porque todo lo de dentro
+   abre el selector de archivos al pulsarlo. */
+.reg__subir-pie { display: flex; justify-content: flex-end; margin-top: 8px; }
+
 .reg__subir--lleno { border-style: solid; border-color: var(--edoc-verde); background: #f7fbec; }
+/* El input va invisible, así que el rojo de «falta esto» lo lleva el recuadro. */
+.reg__subir:has(> input.is-invalid) { border-color: var(--rojo-1); background: #fdf4f2; }
 .reg__subir:focus-within { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
 
 /* El icono que acompaña al título de cada paso. */
@@ -606,7 +655,9 @@ body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado)
 .edoc-pagina { padding: 16px 18px var(--alto-pie); max-width: 1680px; margin: 0 auto; width: 100%; flex: 1; }
 .edoc-titulo-barra { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
 .edoc-miga { font-size: 11.5px; color: #5c5c5c; margin-bottom: 2px; }
-.edoc-miga span + span::before { content: "›"; margin: 0 6px; color: var(--edoc-gris-texto); }
+/* El separador vale entre cualquier par, no solo entre dos span: algunas migas
+   llevan el primer tramo como enlace y se quedaban pegadas. */
+.edoc-miga > * + *::before { content: "›"; margin: 0 6px; color: var(--edoc-gris-texto); }
 .edoc-titulo { font-family: var(--fuente-titulos); font-size: 21px; font-weight: 600; color: var(--edoc-azul); margin: 0; }
 .edoc-subtitulo { color: #4a4a4a; font-size: 12.5px; margin: 2px 0 0; max-width: 78ch; }
 
@@ -2473,6 +2524,175 @@ button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-of
 
 /* Cuadro de mando: las cifras de arriba y las barras de estado. Sin biblioteca
    de gráficos: son cajas con un ancho, y así pesa lo que tiene que pesar. */
+/* --- El resumen por periodo del cuadro de mando --------------------------
+   Lo que pidió Alejandro el 6 de octubre para la presentación al Ministerio:
+   el bloque que se le mostró a la autoridad en el documento de la solución,
+   con tres recortes de tiempo —hoy, la semana y el mes— y el reparto de cada
+   uno en una dona.
+
+   Dos diferencias con el modelo, a propósito:
+
+   · El modelo pinta los tres estados en tres azules. Aquí lo rechazado va en
+     rojo y lo pendiente en naranja, porque el color es lo primero que se lee y
+     un rechazo en azul oscuro se lee como «otro grupo más» en vez de «esto hay
+     que arreglarlo». Es la misma razón por la que el resto del portal usa esas
+     señales, y mantenerlas distintas solo aquí obligaría a aprender dos
+     códigos de color en la misma pantalla.
+
+   · El modelo separa «e-invoicing» de «e-reporting» porque allí son dos
+     obligaciones distintas. En Emiratos el mandato es uno —el modelo de cinco
+     esquinas reporta a la autoridad en el mismo envío—, así que los dos
+     bloques que sí existen aquí son emisión y recepción. */
+.tab-flujo { margin-bottom: 18px; }
+.tab-flujo__t { font-family: var(--fuente-titulos, inherit); font-size: 15px; font-weight: 600;
+                color: var(--edoc-azul); margin: 0 0 9px; display: flex; align-items: center; gap: 9px; }
+.tab-flujo__t svg { width: 19px; height: 19px; flex: 0 0 19px; }
+.tab-flujo__t a { font-size: 12.5px; font-weight: 400; }
+/* Hoy es lo que se acciona al entrar; la semana y el mes son el contexto que
+   dice si hoy fue raro. Por eso hoy ocupa más: la jerarquía se hace con
+   tamaño, porque el color ya está asignado a los estados. */
+.tab-periodos { display: grid; grid-template-columns: 1.45fr 1fr 1fr; gap: 14px; align-items: start; }
+@media (max-width: 1100px) { .tab-periodos { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } }
+.tab-tarjeta { background: var(--edoc-tablero); border-radius: 14px; padding: 16px 18px 14px;
+               box-shadow: var(--sombra-tablero); display: flex; flex-direction: column; gap: 12px; }
+/* El periodo manda en la tarjeta: era lo único que cambiaba de una a otra y
+   estaba escrito en lo más pequeño, mientras el rótulo repetido ocupaba el
+   sitio del título. */
+.tab-tarjeta__cab { display: flex; align-items: center; gap: 11px; }
+.tab-tarjeta__ico { width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #eceffa;
+                    color: #222c63; display: inline-flex; align-items: center; justify-content: center; }
+.tab-tarjeta__ico svg { width: 19px; height: 19px; }
+.tab-tarjeta__periodo { display: block; font-family: var(--fuente-titulos, inherit); font-size: 16px;
+                        font-weight: 600; color: var(--edoc-azul); line-height: 1.2; }
+.tab-tarjeta__r { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .06em;
+                  text-transform: uppercase; color: var(--edoc-gris-texto); }
+.tab-tarjeta__cuerpo { display: flex; align-items: center; gap: 16px; }
+.tab-dona-caja { position: relative; width: 88px; height: 88px; flex: 0 0 88px; }
+.tab-tarjeta--hoy .tab-dona-caja { width: 120px; height: 120px; flex: 0 0 120px; }
+.tab-dona { width: 100%; height: 100%; display: block; transform: rotate(-90deg); }
+.tab-tarjeta--hoy .tab-tarjeta__periodo { font-size: 19px; }
+.tab-tarjeta--hoy .tab-leyenda li { font-size: 14px; padding: 4.5px 0; }
+.tab-tarjeta--hoy .tab-leyenda__total b { font-size: 21px; }
+.tab-tarjeta--hoy .tab-leyenda__ico svg { width: 18px; height: 18px; }
+.tab-tarjeta--hoy { padding: 20px 22px 18px; }
+.tab-dona circle { fill: none; stroke-width: 5.2; transition: stroke-width .12s, opacity .12s; }
+/* El ratón amplía lo que ya está escrito; no es el único modo de llegar a
+   ello. El porcentaje sigue en su línea de la leyenda, pase o no pase el
+   ratón, así que en un teléfono no se pierde ningún dato. */
+.tab-dona [data-k] { cursor: default; }
+.tab-tarjeta--resalta .tab-dona [data-k] { opacity: .28; }
+.tab-tarjeta--resalta .tab-dona [data-k].on { opacity: 1; stroke-width: 7.4; }
+.tab-dona-centro { position: absolute; inset: 0; display: flex; flex-direction: column;
+                   align-items: center; justify-content: center; text-align: center;
+                   opacity: 0; transition: opacity .12s; pointer-events: none; }
+.tab-tarjeta--resalta .tab-dona-centro { opacity: 1; }
+.tab-dona-centro b { font-family: var(--fuente-cifras); font-size: 15px; font-weight: 500;
+                     color: var(--edoc-azul); line-height: 1.1; }
+.tab-tarjeta--hoy .tab-dona-centro b { font-size: 19px; }
+.tab-dona-centro span { font-size: 10px; color: var(--edoc-gris-texto); line-height: 1.2; }
+.tab-leyenda li { border-radius: 6px; transition: background .12s; }
+.tab-tarjeta--resalta .tab-leyenda li { opacity: .5; }
+.tab-tarjeta--resalta .tab-leyenda li.on { opacity: 1; background: #f3f5f6; }
+@media (prefers-reduced-motion: reduce) {
+  .tab-dona circle, .tab-dona-centro, .tab-leyenda li { transition: none; }
+}
+.tab-leyenda { list-style: none; margin: 0; padding: 0; flex: 1 1 auto; }
+/* Cuatro columnas: figura, estado, cuántas y qué parte del total. El
+   porcentaje va pegado a su número y no en una fila aparte, que es lo que
+   obligaba a emparejar colores con cifras. */
+.tab-leyenda li { display: grid; grid-template-columns: 17px 1fr auto 54px; align-items: center;
+                  gap: 9px; font-size: 13px; padding: 3px 0; }
+.tab-leyenda__pct { font-family: var(--fuente-cifras); font-size: 11.5px; color: var(--edoc-gris-texto);
+                    text-align: right; }
+/* Cada estado con su figura además de su color: visto, reloj y tacha. La WCAG
+   1.4.1 pide que el color no sea el único medio de transmitir información, y
+   con seis donas en pantalla es además lo que hace que se lean de un golpe. */
+.tab-leyenda__ico { display: inline-flex; }
+.tab-leyenda__ico svg { width: 16px; height: 16px; display: block; }
+.tab-leyenda b { font-family: var(--fuente-cifras); font-weight: 500; }
+.tab-leyenda__total { border-top: 1px solid var(--edoc-gris-claro); margin-top: 6px; padding-top: 7px; }
+.tab-leyenda__total b { font-size: 17px; color: var(--edoc-azul); }
+@media (max-width: 420px) {
+  .tab-tarjeta__cuerpo { flex-direction: column; align-items: stretch; }
+  .tab-dona { align-self: center; }
+}
+
+/* --- Asociarnos en EmaraTax: la pantalla partida -------------------------
+   Izquierda la autoridad, derecha nuestra guía. La proporción no es mitad y
+   mitad: la guía se lee, así que necesita ancho de lectura fijo; el lado de la
+   autoridad se queda con el resto. */
+/* Una sola columna: la guía, ocupando todo el ancho que le queda. Antes tenía al
+   lado un recuadro con pinta de navegador —un marco vacío para decir con un
+   dibujo lo que el botón dice con una frase— y luego se quedó con un tope de
+   620 px que dejaba medio hueco a la derecha, que es igual de feo. Lo que se
+   limita es el texto, no la tarjeta. */
+.emt { display: block; }
+/* Dentro de la tarjeta, dos columnas: el relato de lo que va a pasar y, al
+   lado, las herramientas que se usan mientras tanto. No es por llenar el ancho:
+   apiladas, los dos datos que hay que pegar quedaban lejos del paso que los
+   pide, y había que subir a buscarlos con EmaraTax abierto delante. */
+.emt__cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+.emt__relato { padding: 16px 18px 6px; }
+.emt__herramientas { border-left: 1px solid var(--edoc-gris-claro); }
+.emt__herramientas .emt__abrir,
+.emt__herramientas .emt__datos,
+.emt__herramientas .emt__pie { border-bottom: 1px solid var(--edoc-gris-claro); border-top: 0; }
+.emt__herramientas .emt__pie { border-bottom: 0; }
+@media (max-width: 900px) {
+  .emt__cuerpo { grid-template-columns: minmax(0, 1fr); }
+  .emt__herramientas { border-left: 0; border-top: 1px solid var(--edoc-gris-claro); }
+}
+.emt__paso-p, .emt__pie .emt__p { max-width: 86ch; }
+
+/* En esta pantalla el carril no se pega ni se desplaza por dentro: tiene nueve
+   pasos, todos hechos menos el último, y con 60vh le salía una barra propia que
+   lo cortaba por la mitad. Se lee de un vistazo o no sirve. */
+.reg--emt .reg__lado { position: static; }
+.reg--emt .reg__pasos { max-height: none; overflow-y: visible; }
+.emt__abrir { padding: 16px 18px; border-bottom: 1px solid var(--edoc-gris-claro); }
+.emt__abrir .emt__p { margin-top: 9px; }
+/* En columna para que el lienzo crezca y ocupe todo el lado: si no, al marcarlo
+   como abierto el color se quedaba a media altura y debajo sobraba blanco. */
+.emt__lado { background: var(--edoc-tablero); border-radius: 14px; box-shadow: var(--sombra-tablero);
+             overflow: hidden; display: flex; flex-direction: column; }
+/* Sin tope de ancho: la tarjeta ya mide un ancho de lectura, y el tope de 46ch
+   que venía de cuando la guía era una columna estrecha partía las frases en
+   renglones cortos en medio de un hueco vacío. */
+.emt__p { font-size: 13px; color: var(--edoc-gris-texto); margin: 0 0 16px; }
+.emt__p--chico { font-size: 12px; margin: 10px 0 0; }
+
+.emt__guia-cab { display: flex; align-items: center; gap: 11px; padding: 16px 18px;
+                 border-bottom: 1px solid var(--edoc-gris-claro); }
+.emt__logo { height: 26px; width: auto; }
+.emt__guia-t { font-family: var(--fuente-titulos, inherit); font-size: 15px; font-weight: 600;
+               color: var(--edoc-azul); }
+.emt__guia-s { font-size: 12px; color: var(--edoc-gris-texto); }
+.emt__datos { padding: 15px 18px; background: #f7f9fc; border-bottom: 1px solid var(--edoc-gris-claro); }
+.emt__datos-t { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+                color: var(--edoc-gris-texto); margin-bottom: 10px; }
+/* Con tope de ancho: el botón de copiar tiene que quedar cerca de su valor. A
+   lo ancho de toda la tarjeta se iba al otro extremo y había que cruzar medio
+   renglón vacío para relacionarlos. */
+.emt__dato { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+             max-width: 560px; padding: 7px 0; border-bottom: 1px solid #e7ebee; }
+.emt__dato:last-of-type { border-bottom: 0; }
+.emt__dato-r { display: block; font-size: 11.5px; color: var(--edoc-gris-texto); }
+.emt__dato-v { display: block; font-size: 13.5px; font-weight: 600; color: var(--edoc-negro); }
+.emt__pasos { list-style: none; counter-reset: emt; margin: 0; padding: 16px 18px 6px; }
+.emt__paso { counter-increment: emt; position: relative; padding: 0 0 16px 34px; }
+.emt__paso::before { content: counter(emt); position: absolute; left: 0; top: 0;
+                     width: 23px; height: 23px; border-radius: 50%; background: var(--edoc-azul);
+                     color: #fff; font-family: var(--fuente-cifras); font-size: 12px;
+                     display: flex; align-items: center; justify-content: center; }
+.emt__paso::after { content: ''; position: absolute; left: 11px; top: 27px; bottom: 4px; width: 1px;
+                    background: var(--edoc-gris-claro); }
+.emt__paso:last-child::after { display: none; }
+.emt__paso-t { display: block; font-size: 13.5px; font-weight: 600; color: var(--edoc-negro); }
+.emt__paso-p { display: block; font-size: 12.5px; color: var(--edoc-gris-texto); margin-top: 2px; }
+.emt__pie { padding: 14px 18px 18px; border-top: 1px solid var(--edoc-gris-claro); }
+.emt__pie-t { font-size: 13px; font-weight: 600; color: var(--edoc-negro); }
+@media (max-width: 920px) { .emt { grid-template-columns: 1fr; } }
+
 .tablero-cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .tablero-cifra {
   display: flex; flex-direction: column; gap: 2px; text-decoration: none;

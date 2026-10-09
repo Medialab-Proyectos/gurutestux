@@ -23,123 +23,81 @@
   </script>
 </head>
 <!--
-  Cuadro de mando, para la sesión de certificación.
+  Cuadro de mando.
 
-  Lo que se pidió en la reunión del 2 de octubre: la autoridad quiere ver el
-  portal y «los dashboards», y aquí no había ninguno. Se maqueta copiando el
-  sentido del de Francia: lo que la empresa necesita saber de un vistazo cuando
-  entra, sin convertirlo en un informe.
+  Enseña una cosa y nada más: cuántas facturas van y en qué estado quedaron, en
+  tres recortes de tiempo. Es el bloque que ya se le presentó a la autoridad en
+  el documento de la solución, y es lo que se pidió el 6 de octubre para la
+  presentación al Ministerio de Finanzas.
 
-  Qué se enseña y por qué: TODO sale de los documentos que ya tiene la maqueta.
-  No hay ni una cifra inventada: los contadores, los importes y los estados se
-  calculan de EMITIDOS y RECIBIDOS. Por eso no hay serie de meses: con los datos
-  de un periodo, una curva de doce meses sería un dibujo, no un dato.
+  Lo que llevaba antes —lo emitido por estado, lo recibido por respuesta, la
+  conexión con la autoridad, los últimos documentos— se quitó: era una propuesta
+  del 2 de octubre, de cuando no había modelo y hubo que inventar uno. Con
+  modelo delante, proponer de más es ruido. Cada una de esas cosas sigue estando
+  donde le toca: los estados en emitidos y recibidos, la conexión en la
+  identificación fiscal.
 
-  Ojo con la decisión anterior: para el MVP se dijo que el inicio es solo la
-  imagen, sin cuadro de mando, porque todos los usuarios lo consultarían al
-  entrar y castigaría la base de datos. Esto no la contradice: es una vista
-  aparte para la demo, y sigue pendiente decidir si entra, y con qué datos.
+  Las cifras son de demostración: lo dice la nota de abajo, no la pantalla,
+  porque el rótulo en pantalla se lo iba a leer el Ministerio en la
+  presentación. Los tres colores son los
+  de señalización del manual de marca, p.15: verde ACEPTAR, naranja
+  ADVERTENCIA, rojo RECHAZADO. Ningún tono nuevo.
 -->
-<body data-seccion="inicio" data-pagina="tablero.html">
+<body data-seccion="tablero" data-pagina="tablero.html">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <div class="edoc-titulo-barra">
     <div>
-      <div class="edoc-miga"><span>Inicio</span><span>Cuadro de mando</span></div>
+      <div class="edoc-miga"><span>Cuadro de mando</span></div>
       <h1 class="edoc-titulo">Cuadro de mando</h1>
-      <p class="edoc-subtitulo">Lo que pasó con tus documentos y con tu conexión a la autoridad. Cada cifra
-      lleva a la pantalla donde se ve el detalle.</p>
-    </div>
-    <div class="edoc-secundario" id="periodo"></div>
-  </div>
-
-  <!-- Las cifras de arriba: lo que se mira primero. Cada una es un enlace. -->
-  <section class="tablero-cifras" id="cifras"></section>
-
-  <div class="row rejilla">
-    <div class="col-12 col-lg-7">
-      <section class="edoc-tablero">
-        <div class="edoc-tablero__cabecera">
-          <h2 class="edoc-tablero__titulo">Lo que emitiste, por estado</h2>
-          <a class="edoc-secundario" href="emitidos.html">Ver emitidos ›</a>
-        </div>
-        <div class="edoc-tablero__cuerpo">
-          <p class="edoc-secundario">Un documento pasa por varias manos; aquí está en cuál se quedó. Lo
-          rechazado es lo que hay que mirar hoy.</p>
-          <div id="barras-emitidos"></div>
-        </div>
-      </section>
-
-      <section class="edoc-tablero">
-        <div class="edoc-tablero__cabecera">
-          <h2 class="edoc-tablero__titulo">Lo que recibiste, por respuesta</h2>
-          <a class="edoc-secundario" href="recibidos.html">Ver recibidos ›</a>
-        </div>
-        <div class="edoc-tablero__cuerpo">
-          <p class="edoc-secundario">Lo pendiente es lo que tu empresa todavía no ha contestado a sus
-          proveedores.</p>
-          <div id="barras-recibidos"></div>
-        </div>
-      </section>
-    </div>
-
-    <div class="col-12 col-lg-5">
-      <section class="edoc-tablero">
-        <div class="edoc-tablero__cabecera">
-          <h2 class="edoc-tablero__titulo">Conexión con la autoridad</h2>
-          <span class="edoc-estado edoc-estado--exito">Activa</span>
-        </div>
-        <div class="edoc-tablero__cuerpo">
-          <div class="edoc-perfil-dato">
-            <div class="edoc-etiqueta">Proveedor nombrado en EmaraTax</div>
-            <div>GuruSoft S.A. · eDoc</div>
-          </div>
-          <div class="edoc-perfil-dato">
-            <div class="edoc-etiqueta">Participant ID</div>
-            <div class="cifra">0235:1007766554</div>
-          </div>
-          <div class="edoc-perfil-dato">
-            <div class="edoc-etiqueta">Asociación confirmada</div>
-            <div class="cifra">2026-09-02 10:41</div>
-          </div>
-          <a class="btn btn-edoc-terciario btn-sm mt-3" href="admin-empresa.html">Ver la identificación fiscal</a>
-        </div>
-      </section>
-
-      <section class="edoc-tablero">
-        <div class="edoc-tablero__cabecera">
-          <h2 class="edoc-tablero__titulo">Últimos documentos</h2>
-        </div>
-        <div class="edoc-tablero__cuerpo">
-          <div class="edoc-tabla-envoltura">
-            <table class="edoc-tabla">
-              <thead><tr><th scope="col">Documento</th><th scope="col">Quién</th>
-                <th scope="col" class="n">Total</th><th scope="col">Estado</th></tr></thead>
-              <tbody id="ultimos"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+      <p class="edoc-subtitulo">Cuántas facturas van y en qué estado quedaron, en tres recortes de
+      tiempo.</p>
     </div>
   </div>
+
+  <!-- El resumen por periodo: es el bloque que se le presentó a la autoridad en
+       el documento de la solución, y es lo primero que se mira. -->
+  <div id="resumen"></div>
 
   <div class="nota nota--decidido">
-    <span class="nota__sello">De la reunión del 2 de octubre</span>
-    <strong>Esta vista nace para la sesión de certificación.</strong> Se pidió enseñar el portal y sus cuadros de
-    mando, y no había ninguno; se maqueta copiando el sentido del de Francia en lugar de inventar otro.
+    <span class="nota__sello">De la reunión del 6 de octubre</span>
+    <strong>El resumen por periodo es el bloque que ya vio la autoridad.</strong> Hay presentación al Ministerio
+    de Finanzas y se pidió que el cuadro de mando fuera, con el modelo del documento de la solución: tres
+    recortes de tiempo y el reparto de cada uno. Y deja de estar escondido: pasa a pestaña propia, entre Inicio
+    y Administración.
+    <br><br>
+    Dos cosas se hacen distinto que en el modelo, a propósito. Una: allí los tres estados van en tres azules, y
+    aquí lo rechazado va en rojo y lo pendiente en naranja, porque el color es lo primero que se lee y un
+    rechazo en azul oscuro se lee como «otro grupo» en vez de «esto hay que arreglarlo»; son las mismas señales
+    que usa el resto del portal, y cambiarlas solo aquí obligaría a aprender dos códigos de color. Dos: el
+    modelo separa «e-invoicing» de «e-reporting» porque allí son dos obligaciones; en Emiratos el mandato es uno
+    —el modelo de cinco esquinas reporta a la autoridad en el mismo envío—, así que los dos bloques que
+    existen son emisión y recepción.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Quitado · 6 de octubre</span>
+    <strong>Fuera los cuatro bloques que nadie pidió.</strong> La vista llevaba además lo emitido por estado, lo
+    recibido por respuesta, la conexión con la autoridad y los últimos documentos. Se maquetaron el 2 de
+    octubre, cuando no había cuadro de mando y hubo que proponer uno a ciegas; ahora hay modelo, así que la
+    vista enseña el modelo y nada más. Lo que se quitó sigue existiendo donde corresponde: los estados, en
+    emitidos y recibidos; la conexión, en la identificación fiscal.
   </div>
   <div class="nota nota--abierto">
-    <span class="nota__sello">Abierto · pendiente de decidir</span>
-    <strong>Si entra en el MVP, y con qué datos.</strong> Para el MVP se había decidido que el inicio es solo la
-    imagen, sin cuadro de mando, porque todos los usuarios lo consultarían al entrar y eso castiga la base de
-    datos. Si esta vista se queda, hay que resolver de dónde salen las cifras —una copia en caché, no una
-    consulta en vivo— y cada cuánto se refrescan.
+    <span class="nota__sello">Abierto · para desarrollo</span>
+    <strong>De dónde salen las cifras del resumen.</strong> Hoy son de demostración y la pantalla lo dice. El
+    inicio se había dejado sin cuadro de mando porque todos los usuarios lo consultarían al entrar y eso
+    castiga la base de datos; el mismo problema vuelve aquí, y más, porque son seis recortes de tiempo. Lo que
+    hay que resolver antes de conectarlo: que salga de un resumen diario precalculado —una tabla que se escribe
+    una vez al día— y no de seis consultas contra los documentos cada vez que alguien entra. Se nombró en la
+    reunión: «una tabla donde saque esos datos».
   </div>
-  <div class="nota nota--abierto">
-    <span class="nota__sello">Abierto</span>
-    <strong>Falta el histórico.</strong> Aquí no hay evolución por meses a propósito: con los documentos de un
-    solo periodo, una curva sería un dibujo y no un dato. Cuando haya histórico se decide qué comparar —mes
-    contra mes, o contra el mismo mes del año anterior— y si se enseña importe o número de documentos.
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Colores · BrandBook p.15</span>
+    <strong>Los tres colores de las donas son los de señalización del manual.</strong> Verde para ACEPTAR,
+    naranja para ADVERTENCIA y rojo para RECHAZADO | ERROR, tal como los asigna el manual; no hay ningún tono
+    nuevo. El manual no legisla gráficas —no tiene sección de donas ni de barras—, así que lo que manda es su
+    paleta, y por eso los tres azules del modelo no se copiaron: pintar un rechazo en azul rompería la
+    asignación de la página 15 y obligaría a leer dos códigos de color en la misma pantalla.
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -156,82 +114,101 @@
   'use strict';
   if (window.edocEnObra) return;
   var D = window.EDOC;
-  var EMI = D.EMITIDOS, REC = D.RECIBIDOS;
 
-  /* El periodo es el de los documentos que hay, no el de hoy: si la maqueta
-     enseña agosto, decir «octubre» sería mentir. */
-  var fechas = EMI.concat(REC).map(function (d) { return d.fecha; }).sort();
-  document.getElementById('periodo').textContent =
-    'Del ' + fechas[0] + ' al ' + fechas[fechas.length - 1];
-
-  function cuantos(lista, prueba) { return lista.filter(prueba).length; }
-  function dinero(n) { return D.dinero ? D.dinero(n) : n.toLocaleString('en-AE'); }
-
-  /* Lo rechazado es lo que pide acción: basta con que una mano lo haya
-     rechazado para que el documento cuente como rechazado. */
-  function rechazado(d) { return ['c2', 'c5', 'c3', 'c4'].some(function (c) { return d[c] === 'rechazado'; }); }
-  function enCamino(d) { return !rechazado(d) && ['c2', 'c5', 'c3', 'c4'].some(function (c) {
-    return d[c] && d[c] !== 'aprobado'; }); }
-
-  var facturado = EMI.reduce(function (a, d) { return a + d.total; }, 0);
-  var CIFRAS = [
-    { n: EMI.length, r: 'Documentos emitidos', p: 'En el periodo', url: 'emitidos.html' },
-    { n: REC.length, r: 'Documentos recibidos', p: 'De tus proveedores', url: 'recibidos.html' },
-    { n: cuantos(EMI, rechazado), r: 'Emitidos con rechazo', p: 'Hay que corregirlos y volver a enviarlos',
-      url: 'emitidos.html?estado=rechazado', alerta: true },
-    { n: cuantos(REC, function (d) { return d.respuesta === 'pendiente'; }), r: 'Recibidos sin responder',
-      p: 'Esperan tu aprobación o tu rechazo', url: 'recibidos.html', alerta: true },
-    { n: dinero(facturado), r: 'Facturado', p: 'Suma de lo emitido en el periodo', url: 'emitidos.html' }
+  /* --- El resumen por periodo --------------------------------------------
+     La dona es un círculo de perímetro 100 —el radio sale de 100/2π— así que
+     cada trozo mide lo que su porcentaje y no hay que calcular arcos. Sin
+     biblioteca: son tres círculos con su patrón de guiones. */
+  var icono = window.edocIcono;
+  var PARTES = [
+    { k: 'aprobadas',  r: 'Aceptadas',  color: 'var(--senal-exito)',       icono: 'aprobar' },
+    { k: 'pendientes', r: 'Pendientes', color: 'var(--senal-advertencia)', icono: 'estados' },
+    { k: 'rechazadas', r: 'Rechazadas', color: 'var(--senal-error)',       icono: 'rechazar' }
   ];
-  document.getElementById('cifras').innerHTML = CIFRAS.map(function (c) {
-    return '<a class="tablero-cifra' + (c.alerta && c.n ? ' tablero-cifra--ojo' : '') + '" href="' + c.url + '">' +
-      '<span class="tablero-cifra__n cifra">' + c.n + '</span>' +
-      '<span class="tablero-cifra__r">' + c.r + '</span>' +
-      '<span class="tablero-cifra__p">' + c.p + '</span></a>';
-  }).join('');
+  var PERIODOS = [
+    { k: 'hoy',    r: 'Hoy',         icono: 'hoy' },
+    { k: 'semana', r: 'Esta semana', icono: 'semana' },
+    { k: 'mes',    r: 'Este mes',    icono: 'mes' }
+  ];
+  var FLUJOS = [
+    { k: 'emision',   r: 'Emisión',   url: 'emitidos.html',  ver: 'Ver emitidos',  icono: 'emision' },
+    { k: 'recepcion', r: 'Recepción', url: 'recibidos.html', ver: 'Ver recibidos', icono: 'recepcion' }
+  ];
 
-  /* Barras: una fila por estado, con su número al final. Sin biblioteca; es una
-     división con un ancho, que es lo que esto necesita. */
-  function barras(donde, filas) {
-    var tope = Math.max.apply(null, filas.map(function (f) { return f.n; }).concat([1]));
-    document.getElementById(donde).innerHTML = filas.map(function (f) {
-      return '<div class="tablero-barra">' +
-        '<span class="tablero-barra__r">' + f.r + '</span>' +
-        '<span class="tablero-barra__pista"><i style="width:' + Math.round(f.n / tope * 100) + '%;' +
-          'background:' + f.color + '"></i></span>' +
-        '<span class="tablero-barra__n cifra">' + f.n + '</span></div>';
-    }).join('');
+  function tarjeta(flujo, periodo, cifras) {
+    var total = PARTES.reduce(function (a, p) { return a + cifras[p.k]; }, 0) || 1;
+    var acum = 0, arcos = '', leyenda = '';
+    PARTES.forEach(function (p) {
+      var pct = cifras[p.k] / total * 100;
+      arcos += '<circle data-k="' + p.k + '" cx="21" cy="21" r="15.9155" stroke="' + p.color + '" ' +
+               'stroke-dasharray="' + pct.toFixed(2) + ' ' + (100 - pct).toFixed(2) + '" ' +
+               'stroke-dashoffset="' + ((100 - acum) % 100).toFixed(2) + '"/>';
+      leyenda += '<li data-k="' + p.k + '"><span class="tab-leyenda__ico" style="color:' + p.color + '">' +
+                 icono(p.icono) + '</span><span>' + p.r + '</span>' +
+                 '<b class="cifra">' + cifras[p.k] + '</b>' +
+                 '<span class="tab-leyenda__pct">' + pct.toFixed(1) + '%</span></li>';
+      acum += pct;
+    });
+    var dicho = PARTES.map(function (p) {
+      return cifras[p.k] + ' ' + p.r.toLowerCase() + ', el ' +
+             (cifras[p.k] / total * 100).toFixed(1) + ' por ciento';
+    }).join('; ');
+    return '<article class="tab-tarjeta' + (periodo.k === 'hoy' ? ' tab-tarjeta--hoy' : '') + '">' +
+      '<div class="tab-tarjeta__cab">' +
+        '<span class="tab-tarjeta__ico">' + icono(periodo.icono) + '</span>' +
+        '<span><span class="tab-tarjeta__periodo">' + periodo.r + '</span>' +
+        '<span class="tab-tarjeta__r">Total de facturas</span></span></div>' +
+      '<div class="tab-tarjeta__cuerpo">' +
+        '<div class="tab-dona-caja">' +
+          '<svg class="tab-dona" viewBox="0 0 42 42" role="img" aria-label="' +
+            flujo.r + ', ' + periodo.r.toLowerCase() + ': ' + dicho + '">' +
+            '<circle cx="21" cy="21" r="15.9155" stroke="#f0f2f2"/>' + arcos + '</svg>' +
+          '<div class="tab-dona-centro" aria-hidden="true"></div>' +
+        '</div>' +
+        '<ul class="tab-leyenda">' + leyenda +
+          '<li class="tab-leyenda__total"><span></span><span>Total</span><b class="cifra">' +
+          total + '</b><span class="tab-leyenda__pct">100%</span></li></ul>' +
+      '</div>' +
+      '</article>';
   }
 
-  barras('barras-emitidos', [
-    { r: 'Aprobado por todos', n: cuantos(EMI, function (d) { return !rechazado(d) && !enCamino(d); }), color: 'var(--edoc-verde)' },
-    { r: 'En camino', n: cuantos(EMI, enCamino), color: 'var(--azul-2)' },
-    { r: 'Rechazado', n: cuantos(EMI, rechazado), color: 'var(--rojo-1)' }
-  ]);
-  barras('barras-recibidos', [
-    { r: 'Aprobado', n: cuantos(REC, function (d) { return d.respuesta === 'aprobado'; }), color: 'var(--edoc-verde)' },
-    { r: 'Rechazado', n: cuantos(REC, function (d) { return d.respuesta === 'rechazado'; }), color: 'var(--rojo-1)' },
-    { r: 'Sin responder', n: cuantos(REC, function (d) { return d.respuesta === 'pendiente'; }), color: 'var(--gris-2)' }
-  ]);
+  var RES = D.RESUMEN;
 
-  /* Los últimos cinco, mezclando emitidos y recibidos: es lo que pasó, no lo
-     que está en cada bandeja. */
-  var ultimos = EMI.map(function (d) {
-    return { fecha: d.fecha, numero: d.numero, quien: d.receptorLatino, total: d.total,
-             estado: rechazado(d) ? 'rechazado' : (enCamino(d) ? 'entregado' : 'aprobado'), salida: true };
-  }).concat(REC.map(function (d) {
-    return { fecha: d.fecha, numero: d.numero, quien: d.emisorLatino, total: d.total,
-             estado: d.respuesta, salida: false };
-  })).sort(function (a, b) { return a.fecha < b.fecha ? 1 : -1; }).slice(0, 5);
+  /* --- El realce ----------------------------------------------------------
+     Pasar por un trozo o por su línea resalta los dos y escribe en el agujero
+     de qué es y cuánto. Amplía lo escrito, no lo sustituye: el porcentaje
+     sigue en su línea aunque no haya ratón, que es lo que pasa en un móvil. */
+  function realzar(tarjeta, k) {
+    tarjeta.classList.toggle('tab-tarjeta--resalta', !!k);
+    tarjeta.querySelectorAll('[data-k]').forEach(function (e) {
+      e.classList.toggle('on', e.getAttribute('data-k') === k);
+    });
+    var centro = tarjeta.querySelector('.tab-dona-centro');
+    var fila = k && tarjeta.querySelector('li[data-k="' + k + '"]');
+    centro.innerHTML = fila
+      ? '<b>' + fila.querySelector('.tab-leyenda__pct').textContent + '</b>' +
+        '<span>' + fila.children[1].textContent + '</span>'
+      : '';
+  }
 
-  document.getElementById('ultimos').innerHTML = ultimos.map(function (d) {
-    var e = D.ESTADOS[d.estado] || { rotulo: d.estado, clase: 'neutro' };
-    return '<tr><td><strong class="cifra">' + d.numero + '</strong>' +
-      '<div class="edoc-secundario">' + (d.salida ? 'Emitido' : 'Recibido') + ' · ' + d.fecha + '</div></td>' +
-      '<td>' + d.quien + '</td>' +
-      '<td class="n cifra">' + dinero(d.total) + '</td>' +
-      '<td><span class="edoc-estado edoc-estado--' + e.clase + '">' + e.rotulo + '</span></td></tr>';
+  document.addEventListener('mouseover', function (ev) {
+    var marcado = ev.target.closest && ev.target.closest('[data-k]');
+    var tarjeta = ev.target.closest && ev.target.closest('.tab-tarjeta');
+    if (!tarjeta) return;
+    realzar(tarjeta, marcado ? marcado.getAttribute('data-k') : null);
+  });
+  document.addEventListener('mouseleave', function (ev) {
+    if (ev.target.classList && ev.target.classList.contains('tab-tarjeta')) realzar(ev.target, null);
+  }, true);
+
+  document.getElementById('resumen').innerHTML = FLUJOS.map(function (f) {
+    return '<section class="tab-flujo"><h2 class="tab-flujo__t">' + icono(f.icono) + f.r +
+      '<a class="edoc-secundario" href="' + f.url + '">' + f.ver + ' ›</a></h2>' +
+      '<div class="tab-periodos">' + PERIODOS.map(function (p) {
+        return tarjeta(f, p, RES[f.k][p.k]);
+      }).join('') + '</div></section>';
   }).join('');
+
 }());
 </script>
 </body>

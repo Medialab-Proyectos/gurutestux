@@ -133,30 +133,71 @@
       <p class="edoc-parrafo">Estos son los datos que viajan dentro de cada documento. Están aquí los que
       exige la reglamentación de los Emiratos, y nada más: lo que no pide la autoridad no se guarda.</p>
       <div class="row rejilla">
+        <!-- Vale cualquiera de los dos y basta con uno, igual que en el alta.
+             La factura lleva UN nombre legal (IBT-027, 1..1) y ningún documento
+             impone alfabeto: las Guidelines V1.1 del Ministerio dicen en su
+             página 11 que el marco «is designed to support both the Arabic and
+             English languages». Aquí decía «en inglés» con asterisco, que era
+             más estricto que la norma. -->
+        <!-- Los dos nombres legales llevan su propia marca y no el asterisco:
+             con asterisco en los dos parecían obligatorios los dos, que es
+             justo lo contrario de la regla. La factura lleva UN nombre legal
+             (IBT-027, 1..1) y ningún documento impone alfabeto: las Guidelines
+             V1.1 del Ministerio dicen en su página 11 que el marco «is designed
+             to support both the Arabic and English languages». -->
         <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e1">Nombre legal en inglés<span class="obligatorio">*</span></label>
-          <input class="form-control" id="e1" value="Al Noor Trading LLC" required>
-          <div class="edoc-ayuda">Tal como está en tu licencia comercial. No se traduce.</div></div>
+          <label class="edoc-etiqueta" for="e1">Nombre legal en alfabeto latino
+            <span class="marca-campo marca-campo--condicional">Uno de los dos</span></label>
+          <input class="form-control" id="e1" value="Al Noor Trading LLC">
+          <div class="edoc-ayuda">Tal como está en tu registro. No se traduce.</div></div>
         <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e2">Nombre legal en árabe</label>
+          <label class="edoc-etiqueta" for="e2">Nombre legal en árabe
+            <span class="marca-campo marca-campo--condicional">Uno de los dos</span></label>
           <input class="form-control" id="e2" dir="rtl" lang="ar" value="النور للتجارة ذ.م.م">
-          <div class="edoc-ayuda">Campo aparte, en un solo alfabeto. Nunca se traduce el nombre de una empresa.</div></div>
+          <div class="edoc-ayuda">Si tu certificado trae los dos, pon los dos: es lo habitual. Con uno basta
+          solo si no tienes el otro. Un solo alfabeto por campo, y nunca se traduce el nombre de una
+          empresa.</div></div>
+
+        <!-- El tipo de registro legal es el campo 14 de los 51 obligatorios del
+             Ministerio, con su catálogo cerrado. Esta pantalla no lo tenía y
+             daba por hecha la licencia comercial. -->
         <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e4">Número de la licencia comercial<span class="obligatorio">*</span></label>
+          <label class="edoc-etiqueta" for="e9">Tipo de registro legal<span class="obligatorio">*</span></label>
+          <select class="custom-select" id="e9">
+            <option value="TL">Licencia comercial</option>
+            <option value="EID">Emirates ID</option>
+            <option value="PAS">Pasaporte</option>
+            <option value="CD">Decisión del gabinete</option>
+          </select>
+          <div class="edoc-ayuda">Con qué está registrada la empresa. Casi siempre, la licencia comercial: las
+          otras tres son para quien factura como persona.</div></div>
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e4">Número de registro legal<span class="obligatorio">*</span></label>
           <input class="form-control cifra" id="e4" value="CN-1183042" required>
-          <div class="edoc-ayuda">Está en tu certificado de la Federal Tax Authority, más abajo, en la lista de
-          establecimientos, como «License Number». No hay otro tipo de documento.</div></div>
+          <div class="edoc-ayuda">El número del documento de arriba. Si es la licencia comercial, está en ella
+          como «License Number»; en el certificado fiscal solo aparece si tu empresa tiene establecimientos o
+          sucursales registrados.</div></div>
+
+        <!-- El TRN es condicional y el TIN obligatorio, no al revés. Esta
+             pantalla decía «sin TRN no hay dirección, así que la plataforma lo
+             pide siempre», y es falso: el TIN puede existir sin TRN. -->
         <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e3">Registro fiscal · TRN<span class="obligatorio">*</span></label>
-          <input class="form-control cifra" id="e3" value="100776655400003" inputmode="numeric" required>
-          <div class="edoc-ayuda">Está en tu certificado de la Federal Tax Authority, como «Tax Registration
-          Number». Sus diez primeras cifras son tu TIN, que es tu dirección en la red: sin TRN no hay dirección,
-          así que la plataforma lo pide siempre.</div></div>
+          <label class="edoc-etiqueta" for="e3">Registro fiscal · TRN
+            <span class="marca-campo marca-campo--condicional">Si está registrada</span></label>
+          <input class="form-control cifra" id="e3" value="100776655400003" inputmode="numeric" maxlength="15">
+          <div class="edoc-ayuda">Quince cifras, como en tu certificado de la Federal Tax Authority. En blanco
+          si la empresa no está registrada en ningún impuesto.</div></div>
         <div class="col-12 col-md-6">
-          <label class="edoc-etiqueta" for="e8">Nombre comercial</label>
+          <label class="edoc-etiqueta" for="e10">Dirección en la red · TIN<span class="obligatorio">*</span></label>
+          <input class="form-control cifra" id="e10" value="1007766554" inputmode="numeric" maxlength="10">
+          <div class="edoc-ayuda">Las diez primeras cifras del TRN, del impuesto que sea. En un grupo fiscal es
+          el propio, no el del representante. Sin registro fiscal, se pide en EmaraTax.</div></div>
+
+        <div class="col-12 col-md-6">
+          <label class="edoc-etiqueta" for="e8">Nombre comercial
+            <span class="marca-campo marca-campo--opcional">Opcional</span></label>
           <input class="form-control" id="e8" value="Al Noor">
-          <div class="edoc-ayuda">El nombre con el que se conoce a tu empresa, aunque la razón social
-          sea otra. Lo pide la reglamentación solo si lo usas.</div></div>
+          <div class="edoc-ayuda">Solo si tu empresa se conoce por un nombre distinto del legal.</div></div>
         <div class="col-12">
           <label class="edoc-etiqueta" for="e7">Calle y edificio<span class="obligatorio">*</span></label>
           <input class="form-control" id="e7" value="Jebel Ali Free Zone, Warehouse 44"></div>
@@ -164,7 +205,7 @@
           <label class="edoc-etiqueta" for="e11">Ciudad<span class="obligatorio">*</span></label>
           <input class="form-control" id="e11" value="Dubai"></div>
         <div class="col-12 col-md-4">
-          <label class="edoc-etiqueta" for="e5">Emirato</label>
+          <label class="edoc-etiqueta" for="e5">Emirato<span class="obligatorio">*</span></label>
           <select class="custom-select" id="e5"><option>Dubái</option><option>Abu Dabi</option><option>Sharja</option>
             <option>Ajmán</option><option>Ras al-Jaima</option><option>Fujaira</option><option>Umm al-Qaywayn</option></select></div>
         <div class="col-12 col-md-4">
@@ -315,17 +356,34 @@
   </div>
 
   <div class="nota nota--decidido">
-    <span class="nota__sello">Decidido · 5 de octubre</span>
-    <strong>En esta pantalla solo van los datos que pide la reglamentación.</strong> La referencia es la
-    especificación PINT AE y el documento de campos obligatorios del Ministerio de Finanzas. Obligatorios:
-    nombre legal <span class="cifra">IBT-027</span>, número de registro legal y su tipo
-    <span class="cifra">IBT-030</span> y <span class="cifra">BTAE-15</span>, dirección electrónica
-    <span class="cifra">IBT-034</span> —el Participant ID con el esquema 0235, que está arriba— y país
-    <span class="cifra">IBT-040</span>. El TRN <span class="cifra">IBT-031</span> es condicional: solo si la
-    empresa está registrada en IVA. Calle y ciudad <span class="cifra">IBT-035</span> y
-    <span class="cifra">IBT-037</span> son condicionales, y el emirato <span class="cifra">IBT-039</span> es
-    opcional. Se fueron «Actividad» y «Teléfono»: no están en el documento, y el teléfono ya vive en
-    «Actualización de contactos».
+    <span class="nota__sello">Verificado contra la especificación · 7 de octubre</span>
+    <strong>En esta pantalla solo van los datos que pide la reglamentación, y las cardinalidades están
+    comprobadas una por una.</strong> La referencia es la especificación PINT AE publicada en
+    <span class="cifra">docs.peppol.eu/poac/ae/pint-ae</span>, no un resumen.
+    <br><br>
+    <strong>Obligatorios de verdad, cardinalidad 1..1:</strong> nombre legal
+    <span class="cifra">IBT-027</span> —uno, en el alfabeto que sea: la guía del Ministerio dice que el marco
+    «is designed to support both the Arabic and English languages», así que exigir el latino sería ser más
+    estrictos que la norma—, calle <span class="cifra">IBT-035</span>, ciudad
+    <span class="cifra">IBT-037</span>, <strong>emirato</strong> <span class="cifra">IBT-039</span> y país
+    <span class="cifra">IBT-040</span>. El emirato es la subdivisión del país, y esta pantalla lo tenía como
+    opcional: estaba mal y ya está corregido. El ejemplar oficial que nos pasaron lo trae relleno, con
+    <span class="cifra">SHJ</span> y con <span class="cifra">AUH</span>.
+    <br><br>
+    <strong>Condicionales, cardinalidad 0..1:</strong> el TRN <span class="cifra">IBT-031</span> y el número de
+    registro legal <span class="cifra">IBT-030</span>. La regla <span class="cifra">IBR-CO-26</span> obliga a
+    que esté al menos uno de los tres identificadores del vendedor —<span class="cifra">IBT-029</span>,
+    <span class="cifra">IBT-030</span> o <span class="cifra">IBT-031</span>—, no los tres.
+    <br><br>
+    <strong>Y lo que de verdad no puede faltar es el TIN</strong>, que no es el TRN: es la dirección en la red
+    —<span class="cifra">0235 + TIN</span>— y sale de las diez primeras cifras del TRN, del impuesto que sea.
+    Quien no está registrado en ninguno lo pide en EmaraTax, así que puede haber TIN sin TRN. Por eso en el
+    alta el TRN quedó condicional y el TIN obligatorio.
+    <br><br>
+    <strong>Opcional, 0..1:</strong> el nombre comercial <span class="cifra">IBT-028</span>. El código postal
+    <span class="cifra">IBT-038</span> no se pide y el ejemplar oficial tampoco lo trae. Se fueron
+    «Actividad» y «Teléfono»: no están en el documento, y el teléfono ya vive en «Actualización de
+    contactos».
   </div>
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>

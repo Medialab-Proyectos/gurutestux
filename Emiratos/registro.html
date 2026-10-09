@@ -191,7 +191,7 @@
             <span class="nota__sello">Para probar la maqueta</span>
             <strong>019fa464-8241-730b-9748-9677cb1ecce8</strong> abre el expediente de Al Noor, con la licencia
             caducada: salta al paso 3. <strong>019fa464-9c10-7d2e-8a41-3f5b2c7e9d01</strong> abre el de Gulf Marine,
-            con el correo de cobros rebotado: salta al paso 4. Cualquier otro código dice que no existe.
+            con el correo de ventas y cobranzas rebotado: salta al paso 4. Cualquier otro código dice que no existe.
           </div>
         </div>
 
@@ -240,11 +240,11 @@
         </div>
         <label class="edoc-etiqueta" for="a-nombre">Nombre completo del administrador
           <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control" id="a-nombre" placeholder="Nombre y apellidos">
+        <input class="form-control" maxlength="100" id="a-nombre" placeholder="Nombre y apellidos">
 
         <label class="edoc-etiqueta mt-3" for="a-cargo">Cargo en la empresa
           <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control" id="a-cargo" placeholder="Tu cargo en la empresa">
+        <input class="form-control" maxlength="100" id="a-cargo" placeholder="Tu cargo en la empresa">
 
         <div class="row rejilla mt-3">
           <div class="col-12 col-md-5">
@@ -277,68 +277,185 @@
       <!-- ------------------------------------- 3 · empresa -->
       <div class="paso" data-paso="3" hidden>
         <div class="edoc-aviso edoc-aviso--info mb-3">
-          <div><strong>Todo esto está en tu certificado de registro de la Federal Tax Authority.</strong> De ahí
-          salen el registro fiscal, el nombre legal en inglés y en árabe, y la dirección registrada: cópialos
-          tal como aparecen.</div>
+          <div><strong>Si tu empresa está registrada, cópialo de tu certificado de la Federal Tax
+          Authority.</strong> De ahí salen el registro fiscal, el nombre legal y la dirección registrada. Los
+          escribes aquí y después nos subes el documento, porque comprobamos uno contra otro antes de
+          aprobarte: si algo no coincide, te lo devolvemos señalado en vez de dejar que viaje en todas tus
+          facturas.</div>
         </div>
-        <label class="edoc-etiqueta" for="e-legal">Razón social
-          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control" id="e-legal" placeholder="Como figura en tu certificado">
-
-        <div class="row rejilla mt-3">
+        <!-- Los dos nombres legales van juntos y vale cualquiera de los dos.
+             La factura lleva UN nombre legal —IBT-027, cardinalidad 1..1— y
+             ningún documento impone alfabeto: las Guidelines V1.1 del
+             Ministerio dicen en su página 11 que «the Electronic Invoicing
+             framework is designed to support both the Arabic and English
+             languages». Exigir el latino era ser más estrictos que la norma
+             por nuestra cuenta, y eso es lo que se mira en una revisión.
+             En la práctica casi todos tendrán los dos, porque el certificado
+             de la autoridad los trae impresos; pero quien solo tenga el árabe
+             entra igual. -->
+        <div class="row rejilla">
           <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="e-comercial">Nombre comercial
-              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
-            <input class="form-control" id="e-comercial" placeholder="Ej: Al Noor">
+            <label class="edoc-etiqueta" for="e-legal">Razón social
+              <span class="marca-campo marca-campo--condicional">Uno de los dos</span></label>
+            <input class="form-control" id="e-legal" maxlength="200" placeholder="Como figura en tu certificado">
           </div>
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-nativo">Razón social en árabe
-              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
-            <input class="form-control" id="e-nativo" dir="rtl" placeholder="النور للتجارة ذ.م.م">
-            <div class="edoc-ayuda">Un solo alfabeto por campo: aquí el árabe, arriba el latino.</div>
+              <span class="marca-campo marca-campo--condicional">Uno de los dos</span></label>
+            <input class="form-control" id="e-nativo" dir="rtl" maxlength="200" placeholder="النور للتجارة ذ.م.م">
           </div>
-          <!-- Administración, 6 de octubre: el TRN es obligatorio. Sin TRN no hay
-               TIN, y sin TIN no hay dirección en la red: la plataforma es para
-               empresas registradas en IVA. Por eso ya no se pregunta si lo está:
-               tener TRN lo responde. -->
+          <div class="col-12">
+            <!-- El orden de esta frase importa. Lo normal es tener los dos: el
+                 certificado de la autoridad los trae impresos, porque la
+                 licencia comercial se emite bilingüe. Así que lo que se pide es
+                 los dos, y «con uno basta» es la excepción para quien solo
+                 tenga uno. Al revés —como estaba— invitaba a rellenar uno y
+                 dejar el otro en blanco, y entonces nos quedamos sin el dato
+                 que la autoridad sí tiene. -->
+            <div class="edoc-ayuda">Si tu certificado trae los dos, cópialos los dos: es lo habitual. Con uno
+            basta solo si no tienes el otro. Un solo alfabeto por campo, y el nombre legal no se traduce.</div>
+          </div>
+        </div>
+
+        <div class="row rejilla mt-3">
+          <div class="col-12 col-md-6">
+            <!-- El alias en alfabeto latino que pidió gerencia el 8 de octubre:
+                 «yo pediría un nombre, un alias, pero no obligatorio porque qué
+                 tal no la tenga». Y el porqué no es de experiencia de usuario
+                 sino administrativo: si una empresa solo nos da su nombre en
+                 árabe, nuestras propias facturas y correos hacia ella llevan un
+                 nombre que nadie de administración puede leer ni dictar. Se
+                 pide, se explica para qué, y no se obliga. -->
+            <label class="edoc-etiqueta" for="e-comercial">Nombre comercial o alias en latino
+              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
+            <input class="form-control" id="e-comercial" maxlength="200" placeholder="Ej: Al Noor">
+            <div class="edoc-ayuda">El nombre corto con el que se te conoce. Si tu razón social solo está en
+            árabe, ponlo: es el que usaremos para escribirte y para nuestras facturas. No se traduce el nombre
+            legal, que viaja tal cual.</div>
+          </div>
+          <!-- El dato que no puede faltar es el TIN, no el TRN.
+               Administración dijo el 6 de octubre que el TRN era obligatorio, y
+               así estaba; pero el documento del Ministerio dice en su página 4
+               que la facturación electrónica alcanza a «any Person conducting
+               Business in the UAE, regardless of their VAT registration status»,
+               y que quien no deba registrarse en ningún impuesto tiene que
+               pedirle el TIN a la FTA. Con el TRN obligatorio, a esa gente la
+               dejábamos fuera del alta.
+               En la lista de los 51 campos se ve cuál manda: el 11, «Seller
+               electronic address», ES el TIN; el 15, el TRN, dice «for Sellers
+               which are registered under tax». Uno es la dirección en la red y
+               el otro depende de estar registrado.
+               PENDIENTE: contradice lo que dijo administración y hay que
+               confirmárselo. Está anotado en el informe. -->
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-trn">Número de registro fiscal · TRN
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+              <span class="marca-campo marca-campo--condicional">Si estás registrada</span></label>
             <input class="form-control cifra" id="e-trn" inputmode="numeric" maxlength="15" placeholder="15 dígitos">
-            <div class="edoc-ayuda">Quince cifras. Está arriba del todo en tu certificado de la Federal Tax
-            Authority, como «Tax Registration Number». Sus diez primeras cifras son tu TIN: la dirección a la
-            que te llegarán las facturas.</div>
+            <div class="edoc-ayuda">Quince cifras, como figura en tu certificado de la Federal Tax Authority.
+            Déjalo en blanco solo si tu empresa no está registrada en ningún impuesto.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="e-tin">Tu dirección en la red · TIN
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input class="form-control cifra" id="e-tin" inputmode="numeric" maxlength="10" placeholder="10 dígitos">
+            <div class="edoc-ayuda" id="ayuda-tin">Son las diez primeras cifras de tu TRN, sea del impuesto
+            que sea, y se rellenan solas al escribirlo. Si perteneces a un grupo fiscal es el tuyo, no el del
+            representante. Si no estás registrada en ningún impuesto, pide el TIN en EmaraTax: sin esta
+            dirección no te pueden llegar facturas.</div>
+          </div>
+        </div>
+
+        <!-- La dirección, de lo pequeño a lo grande: calle, ciudad, emirato,
+             país. Es el orden del documento del Ministerio —17 calle, 18
+             ciudad, 19 subdivisión del país, 20 país—, el del ejemplar oficial
+             en XML y el que espera el autocompletado del navegador. Estaba al
+             revés: la ciudad y el emirato arriba y la calle debajo del todo,
+             separada de ellas, cuando las tres son una sola cosa.
+
+             Y sobre «¿qué diferencia hay entre la ciudad y el emirato?», del 6
+             de octubre: el emirato es la subdivisión del país (IBT-039), y es
+             obligatorio —cardinalidad 1..1 en la especificación, campo 19 en el
+             documento del Ministerio—. El ejemplar oficial la trae rellena, con
+             SHJ y con AUH. El código postal (IBT-038) no se pide: no está entre
+             los obligatorios y el ejemplar oficial tampoco lo trae. -->
+        <div class="reg__grupo-titulo">Dirección registrada</div>
+        <div class="row rejilla">
+          <div class="col-12">
+            <label class="edoc-etiqueta" for="e-dir">Calle y edificio
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input class="form-control" id="e-dir" maxlength="150" placeholder="Jebel Ali Free Zone, Warehouse 44">
           </div>
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-ciudad">Ciudad
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <input class="form-control" id="e-ciudad" placeholder="Dubai">
+            <input class="form-control" id="e-ciudad" maxlength="50" placeholder="Dubai">
           </div>
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="e-emirato">Emirato
-              <span class="marca-campo marca-campo--opcional">Opcional</span></label>
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
             <select class="custom-select" id="e-emirato">
               <option value="">Selecciona una opción</option>
               <option>Abu Dabi</option><option>Dubái</option><option>Sharjah</option>
               <option>Ajmán</option><option>Umm Al Quwain</option>
               <option>Ras Al Jaima</option><option>Fujairah</option>
             </select>
+            <div class="edoc-ayuda">Casi siempre se llama igual que la ciudad; no es que te lo preguntemos dos
+            veces. Las dos van en la factura por separado.</div>
           </div>
         </div>
-
-        <label class="edoc-etiqueta mt-3" for="e-dir">Calle y edificio
-          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control" id="e-dir" placeholder="Jebel Ali Free Zone, Warehouse 44">
       </div>
 
       <!-- ------------------------------------- 4 · documento legal -->
       <div class="paso" data-paso="4" hidden>
         <div class="edoc-aviso edoc-aviso--info mb-3">
-          <div><strong>Con el certificado de la Federal Tax Authority tienes todo lo que te pedimos.</strong>
-          Arriba está tu registro fiscal y más abajo el número de licencia: son las dos cosas que necesitamos
-          para el contrato.</div>
+          <div id="aviso-legal"><strong>Tu certificado de la Federal Tax Authority trae el registro fiscal y
+          los nombres legales.</strong> El número de licencia solo aparece ahí si tu empresa tiene
+          establecimientos o sucursales registrados; si no, está en tu licencia comercial.</div>
         </div>
 
+
+        <div class="row rejilla mt-3">
+          <!-- El tipo vuelve, y con el catálogo del Ministerio. Administración
+               dijo el 6 de octubre que «el único es licencia comercial, no vamos
+               con otro más», y para una empresa será casi siempre así; pero el
+               documento oficial de campos obligatorios lo lista como campo 14
+               con cuatro valores cerrados —TL, EID, PAS, CD— porque en el
+               mandato también entran personas físicas, que se identifican con
+               Emirates ID o pasaporte. Es obligatorio en la factura, así que
+               alguien tiene que decir cuál es. La caducidad sigue sin pedirse:
+               va en el certificado.
+
+               Las siglas no se enseñan. Viajan en el valor de cada opción, que
+               es lo que acaba en el XML, pero en pantalla cada cosa va por su
+               nombre: es la misma regla por la que los formatos de archivo se
+               anuncian como «PDF» y no como «application/pdf». Y el par queda
+               como el que cualquiera ha rellenado cien veces, tipo de documento
+               y número de documento, uno al lado del otro. -->
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="d-tipo">Tipo de registro legal
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <select class="custom-select" id="d-tipo">
+              <option value="TL">Licencia comercial</option>
+              <option value="EID">Emirates ID</option>
+              <option value="PAS">Pasaporte</option>
+              <option value="CD">Decisión del gabinete</option>
+            </select>
+            <div class="edoc-ayuda">Con qué está registrada la empresa. Casi siempre, la licencia comercial:
+            las otras tres son para quien factura como persona y no como empresa.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="edoc-etiqueta" for="d-numero">Número de registro legal
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <input class="form-control cifra" id="d-numero" maxlength="50" placeholder="Como figura en el documento">
+            <div class="edoc-ayuda" id="ayuda-numero">Está en tu certificado fiscal, más abajo, en la lista de
+            establecimientos, como «License Number».</div>
+          </div>
+        </div>
+
+        <!-- El documento, después de haber dicho qué es: así el recuadro ya
+             sabe qué nombre ponerse, y el cliente entiende por qué se lo
+             pedimos. Al revés, lo primero que veía era un papel más sin saber
+             todavía con qué se identifica. -->
         <label class="reg__subir" id="zona-subir" for="d-archivo">
           <input type="file" id="d-archivo" accept=".pdf,.jpg,.jpeg,.png">
           <span class="reg__subir-icono" aria-hidden="true">
@@ -348,58 +465,46 @@
             </svg>
           </span>
           <span class="reg__subir-t" id="subir-t">Certificado fiscal · Tax Certificate</span>
-          <span class="reg__subir-s" id="subir-s">Es el documento del que salen los dos números. Haz clic para subirlo.</span>
-          <span class="reg__subir-f">Formatos permitidos: PDF, PNG o JPG · Máximo 10&nbsp;MB por archivo</span>
+          <span class="marca-campo marca-campo--obligatorio reg__subir-marca" id="subir-marca">Obligatorio</span>
+          <span class="reg__subir-s" id="subir-s">Es el documento del que salen los dos números de arriba. Haz clic para subirlo.</span>
+          <span class="reg__subir-f">Formatos permitidos: PDF, PNG o JPG · Máximo 20&nbsp;MB por archivo</span>
         </label>
+        <!-- Fuera del recuadro a propósito: todo lo que va dentro de una
+             etiqueta de archivo abre el selector al pulsarlo, así que un botón
+             de quitar ahí dentro abriría el explorador en vez de quitar nada.
+             Y hacía falta: un archivo subido por error solo se podía cambiar
+             por otro, nunca sacar. -->
+        <div class="reg__subir-pie" id="subir-pie" hidden>
+          <button type="button" class="btn btn-edoc-terciario btn-sm" id="quitar-archivo">Quitar el archivo</button>
+        </div>
         <div class="nota nota--decidido">
           <span class="nota__sello">Cambia respecto de Francia</span>
           Allí los formatos se enuncian con sus nombres técnicos —«application/pdf, image/png,
           image/jpeg»—, que es lo que entiende el navegador, no la persona. Aquí se dicen por su nombre.
         </div>
-
-        <div class="row rejilla mt-3">
-          <!-- Administración, 6 de octubre: el documento es el registro comercial
-               y «el único es licencia comercial, no vamos con otro más», así que
-               no hay tipo que elegir. Del resto: «el número, no necesitamos el
-               archivo», y la caducidad no se escribe —va en el archivo que
-               suba—. Menos campos, menos fricción. -->
-          <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="d-numero">Número de la licencia comercial
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <input class="form-control cifra" id="d-numero" placeholder="Como figura en la licencia">
-            <div class="edoc-ayuda">Está en el mismo certificado de la Federal Tax Authority, más abajo, en la
-            lista de establecimientos, como «License Number». Con el número basta: el archivo de arriba es el
-            soporte y de ahí sale la fecha de vencimiento, no hace falta escribirla.</div>
-          </div>
-        </div>
       </div>
 
+      <!-- La lista de contactos la fijó administración el 7 de octubre: un solo
+           correo de ventas y cobranzas. Antes eran dos obligatorios, comercial
+           y cobros, que era propuesta nuestra y nunca se había validado. -->
       <!-- ------------------------------------- 5 · contactos -->
       <div class="paso" data-paso="5" hidden>
         <div class="edoc-aviso edoc-aviso--info mb-3">
-          <div>Estos contactos permiten dirigir cada comunicación al responsable adecuado según el
-          tema: gestión comercial, cobros o soporte técnico.</div>
+          <div>Para saber a quién escribimos de cada cosa: lo comercial y las facturas del servicio por un
+          lado, y lo técnico por otro si vas a integrarte por API.</div>
         </div>
         <div class="row rejilla">
           <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="r-com">Contacto comercial
+            <label class="edoc-etiqueta" for="r-com">Contacto de ventas y cobranzas
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
             <input class="form-control" id="r-com" placeholder="Nombre y apellidos">
           </div>
           <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="r-com-c">Correo del contacto comercial
+            <label class="edoc-etiqueta" for="r-com-c">Correo de ventas y cobranzas
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
             <input type="email" class="form-control" id="r-com-c" placeholder="Correo del contacto">
-          </div>
-          <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="r-cob">Contacto de cobros
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <input class="form-control" id="r-cob" placeholder="Nombre y apellidos">
-          </div>
-          <div class="col-12 col-md-6">
-            <label class="edoc-etiqueta" for="r-cob-c">Correo del contacto de cobros
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-            <input type="email" class="form-control" id="r-cob-c" placeholder="Correo del contacto">
+            <div class="edoc-ayuda">Puede ser un buzón del área y no una persona: ahí te escribimos tanto de
+            la relación comercial como de las facturas del servicio.</div>
           </div>
           <div class="col-12 col-md-6">
             <label class="edoc-etiqueta" for="r-tec">Contacto técnico
@@ -413,11 +518,18 @@
           </div>
         </div>
         <div class="nota nota--decidido">
+          <span class="nota__sello">Administración · 7 de octubre</span>
+          <strong>Un solo correo para ventas y cobranzas.</strong> Eran dos contactos obligatorios con sus dos
+          correos; administración pidió dejar uno. Tiene sentido: en la mayoría de las empresas que vamos a dar
+          de alta es el mismo buzón, y pedir dos obliga a repetir el mismo correo o a inventarse un segundo que
+          nadie lee. El paso baja de seis campos a cuatro y de cuatro obligatorios a dos.
+        </div>
+        <div class="nota nota--decidido">
           <span class="nota__sello">Cambia respecto de Francia</span>
-          <strong>Dos cosas.</strong> Allí el paso entero se marca «OPCIONAL» y los tres son solo un
-          correo, sin nombre: hoy no sirven para nada porque no hay ninguna emisión de notificaciones
-          detrás. Aquí comercial y cobros son obligatorios, con nombre, y el técnico sigue opcional
-          porque solo hace falta si la empresa va a integrar por API.
+          <strong>Allí el paso entero se marca «OPCIONAL»</strong> y los contactos son solo un correo, sin
+          nombre: no sirven para nada porque no hay ninguna emisión de notificaciones detrás. Aquí el de ventas
+          y cobranzas es obligatorio y con nombre, y el técnico sigue opcional porque solo hace falta si la
+          empresa va a integrar por API.
         </div>
       </div>
 
@@ -500,15 +612,22 @@
               <div class="linea-tiempo__detalle">Al aprobarla. La primera vez que entres tendrás que cambiar la
               contraseña.</div>
             </li>
-            <li class="espera">
+            <li class="espera" id="fin-emaratax-primero">
               <div class="linea-tiempo__titulo">Nos asocias en EmaraTax</div>
-              <div class="linea-tiempo__detalle">Ya dentro del portal, el inicio te lo recuerda y te explica
-              cómo. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.</div>
+              <div class="linea-tiempo__detalle">Ya dentro del portal, el inicio te lo recuerda y te lleva a una
+              guía paso a paso. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.</div>
             </li>
           </ul>
 
+          <!-- Dos salidas: la que toca ahora —esperar y entrar cuando lleguen
+               las credenciales— y la de ver ya en qué consiste el último paso.
+               Ver no es hacer: hasta que aprobemos no hay nada que asociar,
+               pero verlo ahora, que es cuando está atento, le quita la sorpresa
+               después. -->
           <div class="d-flex hueco-2 flex-wrap justify-content-center mt-4">
-            <a class="btn btn-edoc-primario" href="index.html" id="fin-ir-login">Ir al login</a>
+            <a class="btn btn-edoc-primario" href="index.html" id="fin-ir-login">Ir al acceso</a>
+            <a class="btn btn-edoc-secundario" href="onboarding.html" id="fin-ir-emaratax">Ver cómo nos asocias
+            en EmaraTax</a>
           </div>
         </div>
       </div>
@@ -529,17 +648,75 @@
     Con soporte de por medio conviene decidir si se le añade una referencia corta y legible del tipo
     <span class="cifra">REG-2026-00918</span>, que es la que ya usa la bandeja del Office Manager.
   </div>
-  <div class="nota nota--abierto">
-    <span class="nota__sello">Abierto · 6 de octubre</span>
-    <strong>El archivo que se adjunta es el certificado fiscal, no la licencia.</strong> Decía «licencia
-    comercial» porque así empezó, pero los dos datos que pedimos —el registro fiscal y el número de licencia—
-    salen del <em>Tax Certificate</em> de la autoridad. Pedir otra cosa manda al cliente a buscar un segundo
-    papel que no necesitamos. Ya está cambiado.
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Consecuencia del cambio · 7 de octubre</span>
+    <strong>Siempre se sube un documento, pero no siempre el mismo.</strong> Lo que no cambia es el principio
+    que fijó administración: el cliente escribe sus datos y sube el documento del que salen, y nosotros
+    comprobamos uno contra otro antes de aprobar. Lo que cambia es cuál es ese documento, y lo decide el paso
+    anterior sin preguntar nada más:
+    <br>· <strong>Licencia comercial y con TRN</strong> → el certificado fiscal, que trae los dos números.
+    <br>· <strong>Licencia comercial y sin TRN</strong> → la licencia, porque sin registro fiscal no hay
+    certificado que subir.
+    <br>· <strong>Emirates ID o pasaporte</strong> → ese documento.
+    <br>· <strong>Decisión del gabinete</strong> → el documento oficial que la recoge.
     <br><br>
-    Queda por decidir si <strong>pasa a obligatorio</strong>. Hoy es opcional porque administración dijo «el
-    número, no necesitamos el archivo». Pero si el certificado es la prueba de los dos números, y el cliente
-    acaba de descargarlo para poder llegar hasta aquí, pedirlo no añade fricción y nos ahorra comprobarlos a
-    mano. Es decisión de administración, de una línea.
+    Enseñarle «Tax Certificate» a quien no está registrado es pedirle un papel que no existe y dejar que lo
+    descubra él, parado en el paso, sin saber si el equivocado es él o el formulario.
+    <br><br>
+    Queda una pregunta sin respuesta, y es para administración o para la autoridad: <strong>qué documento
+    acredita el TIN de quien no está registrado en ningún impuesto</strong> y lo pidió en EmaraTax solo para
+    poder facturar. Esa persona no tiene certificado fiscal, y su Emirates ID no lleva el TIN. Si no hay
+    documento que lo pruebe, el cotejo de administración no puede comprobar ese dato.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Documento del Ministerio · 7 de octubre</span>
+    <strong>Las dudas de campos se resolvieron contra la fuente, no contra resúmenes.</strong> Se descargó de
+    <span class="cifra">mof.gov.ae</span> el documento «UAE Electronic Invoice Mandatory Fields», versión 1.0
+    del 23 de febrero de 2026, que lista los 51 campos obligatorios. Tres consecuencias para esta pantalla.
+    <br><br>
+    <strong>El emirato es obligatorio</strong> —campo 19, «Seller country subdivision»—. Lo teníamos opcional.
+    <br><br>
+    <strong>El tipo de registro vuelve, con su catálogo</strong> —campo 14—: TL licencia comercial, EID
+    Emirates ID, PAS pasaporte, CD decisión del gabinete. Lo habíamos quitado porque administración dijo que
+    siempre es licencia comercial; para una empresa lo será, pero el mandato alcanza también a personas
+    físicas y el campo viaja en la factura. Ya no hay que pedirle el catálogo a la autoridad: está publicado.
+    <br><br>
+    <strong>El TIN sale de las diez primeras cifras del TRN</strong>, del impuesto que sea. El documento de
+    febrero decía «a Corporate Tax TRN», pero la guía oficial V1.1 del 1 de junio de 2026 —posterior, y por
+    tanto la que manda— lo dice más ancho: «Taxpayers that have registered with the FTA for any Tax type…
+    The TIN is the first 10 digits of the TRN that you have been issued». Lo que sí mantiene es el aviso del
+    grupo fiscal: el TIN es el del propio TRN y no el del representante, así que con el del representante la
+    dirección saldría mal y no llegaría nada.
+    <br><br>
+    Y lo que el documento <em>no</em> trae también cuenta: en los 51 campos no hay nombre en árabe, ni nombre
+    comercial, ni código postal. Que el nombre comercial y el árabe sigan siendo opcionales está respaldado.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Guidelines del Ministerio · 8 de octubre</span>
+    <strong>La razón social vale en cualquiera de los dos alfabetos, y basta con uno.</strong> Antes se exigía
+    la latina y la árabe era opcional. No había norma detrás: la factura lleva <em>un</em> nombre legal
+    —<span class="cifra">IBT-027</span>, cardinalidad 1..1— y ningún documento impone alfabeto. Las
+    <em>Electronic Invoicing Guidelines V1.1</em> del Ministerio, del 1 de junio de 2026, lo dicen en su página
+    11: «the Electronic Invoicing framework is designed to support both the Arabic and English languages».
+    Soporta los dos y no impone ninguno.
+    <br><br>
+    Exigir el latino era <strong>ser más estrictos que la norma por nuestra cuenta</strong>, y eso es
+    exactamente lo que se mira en una revisión. En la práctica casi nadie lo va a notar, porque el certificado
+    de la autoridad trae los dos nombres impresos y la mayoría copiará los dos; pero quien solo tenga el árabe
+    ya no se queda fuera, y no tiene que inventarse una transliteración que después viajaría en todas sus
+    facturas.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 6 de octubre</span>
+    <strong>El certificado fiscal se adjunta siempre, y es el único documento del paso.</strong> Antes se pedía
+    la licencia comercial y era opcional, porque Isabel había dicho «el número, no necesitamos el archivo». Al
+    ver el certificado quedó claro que los dos datos que pedimos —el registro fiscal y el número de licencia—
+    salen de ese mismo papel, así que es lo que se adjunta y se adjunta siempre: es la prueba de los dos
+    números y el cliente acaba de descargarlo para poder copiarlos. La fecha de vencimiento sigue sin pedirse,
+    porque está dentro del documento.
   </div>
 
   <div class="nota nota--decidido">
@@ -693,34 +870,37 @@
 
   /* Los expedientes que se pueden recuperar con su código de seguimiento. Quien
      vuelve no empieza de cero: se le rellena lo que ya envió y se le lleva
-     directo al paso que el revisor marcó como no conforme. Ese campo queda
-     vacío, para que el paso no cuente como hecho hasta que lo corrija. */
+     directo al paso que el revisor marcó como no conforme, con ese campo en
+     rojo y lo que escribió intacto. Intacto a propósito: si la observación es
+     que la calle no coincide con el certificado, para corregirla hay que ver
+     qué se puso. */
   var EXPEDIENTES = {
     '019fa464-8241-730b-9748-9677cb1ecce8': {
-      ref: 'REG-2026-00918', paso: 4, campo: 'd-caduca', archivo: null, archivoCaducado: true,
-      observacion: 'La licencia comercial del expediente caducó. Sube la vigente y pon su fecha de validez.',
+      ref: 'REG-2026-00918', paso: 3, campo: 'e-dir', archivo: 'tax-certificate-alnoor.pdf',
+      observacion: 'La calle no coincide con la del certificado fiscal: allí dice «Jebel Ali Free Zone, '
+                 + 'Warehouse 44». Corrígela, o sube el certificado actualizado si te mudaste.',
       datos: {
         'a-nombre': 'Fatima Al Marzooqi', 'a-cargo': 'Directora financiera', 'a-tel': '50 123 4567',
         'e-legal': 'Al Noor Trading LLC', 'e-comercial': 'Al Noor', 'e-nativo': 'النور للتجارة ذ.م.م',
-        'e-trn': '100908070600003', 'e-emirato': 2, 'e-sujeta': 1,
+        'e-trn': '100908070600003', 'e-tin': '1009080706', 'e-emirato': 2, 'e-ciudad': 'Dubai',
         'e-dir': 'Jebel Ali Free Zone, Bloque C, Oficina 214',
-        'd-numero': 'CN-1183042', 'd-caduca': '',
+        'd-tipo': 'TL', 'd-numero': 'CN-1183042',
         'r-com': 'Omar Haddad', 'r-com-c': 'ventas@alnoor.ae',
-        'r-cob': 'Daniel Tigreros', 'r-cob-c': 'cuentas@alnoor.ae',
+
         'l-privacidad': true, 'l-condiciones': true, 'l-datos': true
       }
     },
     '019fa464-9c10-7d2e-8a41-3f5b2c7e9d01': {
-      ref: 'REG-2026-00917', paso: 5, campo: 'r-cob-c', archivo: 'licencia-comercial-gms.pdf',
-      observacion: 'El correo del contacto de cobros rebotó: no le llega a nadie. Pon uno que funcione.',
+      ref: 'REG-2026-00917', paso: 5, campo: 'r-com-c', archivo: 'tax-certificate-gms.pdf',
+      observacion: 'El correo de ventas y cobranzas rebotó: no le llega a nadie. Pon uno que funcione.',
       datos: {
         'a-nombre': 'Rashid Al Suwaidi', 'a-cargo': 'Gerente de operaciones', 'a-tel': '55 987 6543',
         'e-legal': 'Gulf Marine Services', 'e-comercial': 'GMS', 'e-nativo': 'خدمات الخليج البحرية',
-        'e-trn': '100445566700003', 'e-emirato': 1, 'e-sujeta': 1,
-        'e-dir': 'Mussafah Industrial Area, Abu Dabi',
-        'd-numero': 'CN-2207719', 'd-caduca': '2027-11-30',
+        'e-trn': '100445566700003', 'e-tin': '1004455667', 'e-emirato': 1, 'e-ciudad': 'Abu Dabi',
+        'e-dir': 'Mussafah Industrial Area',
+        'd-tipo': 'TL', 'd-numero': 'CN-2207719',
         'r-com': 'Sara Mansour', 'r-com-c': 'ventas@gulfmarine.ae',
-        'r-cob': 'Imran Qureshi', 'r-cob-c': '',
+
         'l-privacidad': true, 'l-condiciones': true, 'l-datos': true
       }
     }
@@ -734,8 +914,12 @@
     { n: 0, icono: 'candado', rotulo: 'Solicitud y acceso',        sub: 'Tipo de solicitud y verificación' },
     { n: 1, icono: 'perfil',  rotulo: 'Administrador de la cuenta', sub: 'Responsable principal' },
     { n: 2, icono: 'empresa', rotulo: 'Datos de la empresa',        sub: 'Razón social, TRN y dirección' },
-    { n: 3, icono: 'libro',   rotulo: 'Documento legal',            sub: 'Licencia comercial' },
-    { n: 4, icono: 'perfil',  rotulo: 'Contactos por área',         sub: 'Comercial, cobros y técnico' },
+    /* El subtítulo no nombra el certificado: desde que el documento depende del
+       tipo de registro, decir «certificado fiscal» aquí contradice a la propia
+       pantalla cuando lo que pide es la licencia, el Emirates ID o el
+       pasaporte. */
+    { n: 3, icono: 'libro',   rotulo: 'Documento legal',            sub: 'Con qué está registrada y su documento' },
+    { n: 4, icono: 'perfil',  rotulo: 'Contactos por área',         sub: 'Ventas y cobranzas, y el técnico' },
     { n: 5, icono: 'candado', rotulo: 'Consentimientos legales',    sub: 'Revisión y aceptación' },
     { n: 6, icono: 'aprobar', rotulo: 'Revisión final',             sub: 'Verifica antes de enviar' }
   ];
@@ -745,8 +929,16 @@
      así lo dice la reglamentación de Emiratos. La lista cambia con la
      respuesta, y por eso se calcula en vez de estar escrita. */
   function datosEmpresa() {
-    return [['e-legal', 'Razón social'], ['e-trn', 'Registro fiscal'],
-            ['e-dir', 'Calle y edificio'], ['e-ciudad', 'Ciudad']];
+    /* El TRN no entra: es condicional. El que cuenta es el TIN, que es la
+       dirección en la red y sin él no llega nada.
+       Y del nombre legal vale cualquiera de los dos alfabetos: cuenta el que
+       tenga algo, y si no hay ninguno cuenta el latino, para que el paso no se
+       dé por hecho y el aviso señale un campo concreto. */
+    var nombre = (!val('e-legal') && val('e-nativo'))
+      ? ['e-nativo', 'Razón social']
+      : ['e-legal', 'Razón social'];
+    return [nombre, ['e-tin', 'TIN'],
+            ['e-dir', 'Calle y edificio'], ['e-ciudad', 'Ciudad'], ['e-emirato', 'Emirato']];
   }
 
   /* Qué campos mira cada paso: sirve para el estado de la tarjeta y para los
@@ -760,9 +952,9 @@
     return ({
       2: [['a-nombre', 'Nombre'], ['a-cargo', 'Cargo'], ['a-tel', 'Teléfono']],
       3: datosEmpresa(),
-      4: [['d-numero', 'Número de la licencia comercial']],
-      5: [['r-com', 'Contacto comercial'], ['r-com-c', 'Correo comercial'],
-          ['r-cob', 'Contacto de cobros'], ['r-cob-c', 'Correo de cobros']],
+      4: [['d-archivo', 'El documento del registro'], ['d-tipo', 'Tipo de registro legal'],
+          ['d-numero', 'Número de registro legal']],
+      5: [['r-com', 'Contacto de ventas y cobranzas'], ['r-com-c', 'Correo de ventas y cobranzas']],
       6: [['l-privacidad', 'Política de privacidad'], ['l-condiciones', 'Términos de servicio'],
           ['l-datos', 'Tratamiento de datos']]
     })[paso] || [];
@@ -811,12 +1003,18 @@
     if (paso === 2 && !/^[\d\s]{7,}$/.test(val('a-tel'))) {
       return { id: 'a-tel', texto: 'El teléfono son solo cifras, sin el código de país.' };
     }
-    if (paso === 3 && !/^\d{15}$/.test(val('e-trn'))) {
+    /* El TRN solo se comprueba si lo escribieron: quien no está registrada lo
+       deja en blanco y aun así tiene que pasar. El TIN sí se comprueba siempre,
+       porque es la dirección. */
+    if (paso === 3 && val('e-trn') && !/^\d{15}$/.test(val('e-trn'))) {
       return { id: 'e-trn', texto: 'El registro fiscal son quince cifras.' };
+    }
+    if (paso === 3 && !/^\d{10}$/.test(val('e-tin'))) {
+      return { id: 'e-tin', texto: 'El TIN son diez cifras.' };
     }
 
     if (paso === 5) {
-      var correos = [['r-com-c', 'comercial'], ['r-cob-c', 'cobros']];
+      var correos = [['r-com-c', 'de ventas y cobranzas']];
       for (var j = 0; j < correos.length; j++) {
         if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val(correos[j][0]))) {
           return { id: correos[j][0], texto: 'El correo de ' + correos[j][1] + ' no tiene buena pinta.' };
@@ -878,7 +1076,7 @@
       '<li class="reg__paso reg__paso--hito">' +
         '<span class="reg__paso-icono">' + window.edocIcono('estados') + '</span>' +
         '<span><span class="reg__paso-t">Asociarnos en EmaraTax</span>' +
-          '<span class="reg__paso-s">Cuando aprobemos tu solicitud, desde el portal.</span>' +
+          '<span class="reg__paso-s">Cuando aprobemos tu solicitud, con una guía paso a paso.</span>' +
           '<span class="reg__paso-chip reg__paso-chip--opcional">Después</span></span>' +
         '<span class="reg__paso-n">Al final</span>' +
       '</li>');
@@ -952,6 +1150,9 @@
     document.querySelectorAll('.paso').forEach(function (p) {
       p.hidden = Number(p.getAttribute('data-paso')) !== n;
     });
+    /* Al entrar al documento legal se repinta, porque lo que se pide depende
+       de si en el paso anterior escribieron TRN, y puede haber cambiado. */
+    if (n === 4) pintarDocumento();
     var f = PASOS[n - 1];
     $('eyebrow').textContent = n === 1
       ? 'Registro de empresa · Verificación'
@@ -982,11 +1183,8 @@
     });
     archivoPrevio = exp.archivo;
     if (archivoPrevio) {
-      $('zona-subir').classList.add('reg__subir--lleno');
-      $('subir-t').textContent = archivoPrevio;
-      $('subir-s').textContent = 'Ya está en el expediente. Haz clic para cambiarla.';
-    } else if (exp.archivoCaducado) {
-      $('subir-s').textContent = 'La que tenías caducó: sube la vigente.';
+      pintarArchivo(archivoPrevio);
+      $('subir-s').textContent = 'Ya está en el expediente. Haz clic para cambiarlo.';
     }
     ponerEstado('observada');
     observacion = { paso: exp.paso, texto: exp.observacion };
@@ -1081,9 +1279,8 @@
     });
     if (b.archivo) {
       archivoPrevio = b.archivo;
-      $('zona-subir').classList.add('reg__subir--lleno');
-      $('subir-t').textContent = b.archivo;
-      $('subir-s').textContent = 'Ya está en el expediente. Haz clic para cambiarla.';
+      pintarArchivo(b.archivo);
+      $('subir-s').textContent = 'Ya está en el expediente. Haz clic para cambiarlo.';
     }
     if (b.observacion) {
       observacion = b.observacion;
@@ -1272,13 +1469,15 @@
       }));
     } catch (error) { /* nada */ }
     // Quien vino desde EmaraTax ya tiene hecha la asociación: no se le manda otra vez.
-    if (deEmaraTax) {
+    /* Quien vino desde EmaraTax ya nos eligió allí: ese renglón pasa a hecho y
+       el botón de ir a verlo sobra. Antes esto buscaba dos elementos que ya no
+       existían en la ventana y reventaba la confirmación justo al confirmar. */
+    if (deEmaraTax && $('fin-emaratax-primero')) {
       var hito = $('fin-emaratax-primero');
       hito.className = 'hecho';
       hito.querySelector('.linea-tiempo__detalle').textContent =
         'Hecho: llegaste desde el portal de la autoridad, así que la asociación ya nos consta.';
       $('fin-ir-emaratax').hidden = true;
-      $('fin-ir-login').className = 'btn btn-edoc-primario';
     }
     window.jQuery('#modal-fin').modal('show');
   });
@@ -1397,14 +1596,131 @@
     enviarCodigo(true);
   });
 
+  /* --- el TIN sale del TRN -------------------------------------------------
+     Quien tiene TRN no debería teclear dos veces lo mismo: el TIN son sus diez
+     primeras cifras y se rellenan solas. Pero el campo no se bloquea, porque
+     hay dos casos donde el TIN NO sale de ahí: quien no tiene registro fiscal
+     y lo pidió en EmaraTax, y quien pertenece a un grupo fiscal, donde el TRN
+     de IVA es el del representante y el TIN es el suyo. Bloquearlo haría
+     imposible corregirlo justo en los dos casos que importan. */
+  $('e-trn').addEventListener('input', function () {
+    var cifras = this.value.replace(/\D/g, '');
+    if (cifras.length < 10) return;
+    var tin = $('e-tin');
+    if (!tin.value || tin.dataset.delTrn === '1') {
+      tin.value = cifras.slice(0, 10);
+      tin.dataset.delTrn = '1';
+      tin.classList.remove('is-invalid');
+    }
+  });
+  $('e-tin').addEventListener('input', function () { this.dataset.delTrn = ''; });
+
+  /* --- el documento sigue al tipo de registro ------------------------------
+     Antes aquí siempre decía «Certificado fiscal», y eso valía cuando el alta
+     era solo para empresas con licencia comercial. Desde que entran también
+     personas que se identifican con Emirates ID o pasaporte, pedirles un
+     certificado fiscal es pedirles un papel que no tienen.
+     Lo que no cambia es el principio: se escriben los datos y se sube el
+     documento del que salen, para que administración compruebe uno contra
+     otro. Lo que cambia es cuál es ese documento. */
+  var DOCUMENTO = {
+    /* Licencia comercial y registro fiscal son dos cosas distintas y se tienen
+       por separado: hay empresas con licencia que no llegan al umbral del IVA.
+       Por eso «licencia comercial» tiene dos versiones, y la que se enseña
+       depende de si en el paso anterior escribieron TRN. Con TRN hay
+       certificado fiscal y ahí están los dos números; sin TRN no hay
+       certificado, y lo que se sube es la licencia. Enseñar «Tax Certificate» a
+       quien no lo tiene es pedirle un papel inexistente y dejar que lo
+       descubra él. */
+    TL:  { t: 'Certificado fiscal · Tax Certificate',
+           s: 'Es el documento del que salen los dos números de arriba. Haz clic para subirlo.',
+           aviso: '<strong>Tu certificado de la Federal Tax Authority trae el registro fiscal y los nombres ' +
+                  'legales.</strong> El número de licencia solo aparece ahí si tu empresa tiene ' +
+                  'establecimientos o sucursales registrados; si no, está en tu licencia comercial.',
+           n: 'Si tu certificado trae la lista de establecimientos, está ahí como «License Number». Si viene vacía —lo normal en una sociedad sin sucursales—, cópialo de tu licencia comercial.' },
+    TL0: { t: 'Licencia comercial · Trade licence',
+           s: 'Es el documento del que sale el número de arriba. Haz clic para subirlo.',
+           aviso: '<strong>Sube tu licencia comercial.</strong> Como tu empresa no está registrada en impuestos ' +
+                  'no tienes certificado fiscal, así que el documento es la licencia: de ahí sale el número que ' +
+                  'escribiste arriba.',
+           n: 'Está en tu licencia comercial, como «License Number».' },
+    EID: { t: 'Emirates ID',
+           s: 'Las dos caras, o el PDF que descargas de UAE PASS. Haz clic para subirlo.',
+           aviso: '<strong>Sube tu Emirates ID.</strong> De ahí sale el número que escribiste arriba, y con él ' +
+                  'comprobamos que eres quien dices antes de firmar el contrato.',
+           n: 'Las quince cifras de tu Emirates ID, con o sin guiones.' },
+    PAS: { t: 'Pasaporte',
+           s: 'La página con tu foto y tus datos. Haz clic para subirlo.',
+           aviso: '<strong>Sube la página de datos de tu pasaporte.</strong> De ahí sale el número que escribiste ' +
+                  'arriba, y con él comprobamos que eres quien dices antes de firmar el contrato.',
+           n: 'El número de tu pasaporte, tal como figura en la página de datos.' },
+    CD:  { t: 'La decisión del gabinete',
+           s: 'El documento oficial que la recoge. Haz clic para subirlo.',
+           aviso: '<strong>Sube la decisión del gabinete.</strong> De ahí sale el número que escribiste arriba, y ' +
+                  'con él comprobamos el registro antes de firmar el contrato.',
+           n: 'El número de la decisión, tal como figura en el documento.' }
+  };
+  function documentoDelTipo() {
+    var tipo = $('d-tipo').value;
+    if (tipo === 'TL' && !val('e-trn')) return DOCUMENTO.TL0;
+    return DOCUMENTO[tipo] || DOCUMENTO.TL;
+  }
+
+  function pintarDocumento() {
+    var d = documentoDelTipo();
+    $('aviso-legal').innerHTML = d.aviso;
+    $('ayuda-numero').textContent = d.n;
+    /* Si ya hay archivo puesto, el rótulo es su nombre y no se toca. */
+    if (!$('zona-subir').classList.contains('reg__subir--lleno')) {
+      $('subir-t').textContent = d.t;
+      $('subir-s').textContent = d.s;
+    }
+  }
+  $('d-tipo').addEventListener('change', pintarDocumento);
+
   /* --- la zona de subida --------------------------------------------------- */
+  /* El límite se dice y se comprueba. Anunciarlo sin comprobarlo deja que el
+     cliente elija un archivo de 40 MB, la pantalla lo acepte y el rechazo
+     llegue al final, cuando ya no está mirando. El aviso lleva el peso de SU
+     archivo para que sepa cuánto le sobra. Los 20 MB son los que se nombraron
+     en la reunión del 6 de octubre; el tope de verdad lo pone el servidor. */
+  var TOPE_MB = 20;
+
   $('d-archivo').addEventListener('change', function () {
-    var hay = this.files.length > 0;
+    if (this.files.length && this.files[0].size > TOPE_MB * 1024 * 1024) {
+      var pesa = (this.files[0].size / 1024 / 1024).toFixed(1);
+      window.edocAvisar('Ese archivo pesa ' + pesa + ' MB y el máximo son ' + TOPE_MB +
+                        ' MB. Comprímelo o escanéalo con menos resolución.', 'error');
+      this.value = '';
+    }
+    pintarArchivo(this.files.length > 0 ? this.files[0].name : null);
+    if (this.files.length) this.classList.remove('is-invalid');
+  });
+
+  /* Un solo sitio que decide cómo se ve el recuadro, lo haya puesto el cliente,
+     lo traiga el expediente o lo acabe de quitar. Antes esto estaba escrito
+     cuatro veces y cada copia se fue quedando con un texto distinto. */
+  function pintarArchivo(nombre) {
+    var hay = !!nombre;
+    /* Al quitarlo vuelve el rótulo del tipo elegido, no el del certificado: si
+       eligió pasaporte, ahí tiene que decir pasaporte. */
+    var d = documentoDelTipo();
     $('zona-subir').classList.toggle('reg__subir--lleno', hay);
-    $('subir-t').textContent = hay ? this.files[0].name : 'Certificado fiscal · Tax Certificate';
-    $('subir-s').textContent = hay
-      ? 'Archivo cargado. Haz clic para cambiarlo.'
-      : 'Haz clic para subir un archivo';
+    $('subir-marca').hidden = hay;
+    $('subir-pie').hidden = !hay;
+    $('subir-t').textContent = hay ? nombre : d.t;
+    $('subir-s').textContent = hay ? 'Archivo cargado. Haz clic para cambiarlo.' : d.s;
+  }
+
+  /* Quitar de verdad: vacía el campo y olvida el que venía del expediente. Sin
+     esto, quien subía el papel equivocado solo podía taparlo con otro. */
+  $('quitar-archivo').addEventListener('click', function () {
+    $('d-archivo').value = '';
+    archivoPrevio = null;
+    pintarArchivo(null);
+    pintarPanel();
+    window.edocAvisar('Archivo quitado. Sube el que corresponda para poder seguir.');
+    $('zona-subir').focus();
   });
 
   /* --- copiar el código --------------------------------------------------- */

@@ -37,7 +37,7 @@ window.EDOC_ALCANCE = (function () {
      textos legales, las dos marcadas como no negociables. */
   var VISTAS = [
     { archivo: 'inicio.html',              rotulo: 'Inicio',                                     grupo: 'Portal',             entrega: true  },
-    { archivo: 'tablero.html',             rotulo: 'Cuadro de mando · para la certificación',    grupo: 'Portal',             entrega: true  },
+    { archivo: 'tablero.html',             rotulo: 'Cuadro de mando',                            grupo: 'Portal',             entrega: true  },
     { archivo: 'emitidos.html',            rotulo: 'Documentos Emitidos',                        grupo: 'Portal',             entrega: true  },
     { archivo: 'emitidos-criterios.html',  rotulo: 'Búsqueda por criterios · fuera del MVP',      grupo: 'Emisión',            entrega: false },
     { archivo: 'recibidos.html',           rotulo: 'Documentos Recibidos',                       grupo: 'Portal',             entrega: true  },

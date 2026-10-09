@@ -13,6 +13,16 @@
     inicio:   '<path d="M3 9.5 10 3l7 6.5V17a1 1 0 0 1-1 1h-3.5v-5h-5v5H4a1 1 0 0 1-1-1z"/>',
     admin:    '<circle cx="10" cy="6.2" r="3"/><path d="M3.6 17c0-3.2 2.9-5.2 6.4-5.2s6.4 2 6.4 5.2"/>',
     emision:  '<path d="M5 2.5h7l3.5 3.5v11.5H5z"/><path d="M12 2.5V6h3.5"/><path d="M7.6 10h4.8M7.6 13h4.8"/>',
+    tablero:  '<path d="M3 16.8h14"/><path d="M5.6 16.8V10"/><path d="M10 16.8V4.8"/><path d="M14.4 16.8v-4.4"/>',
+    /* Día, semana y mes: el mismo calendario con una marca, una fila y dos
+       filas. El manual (p.45) deja añadir iconos de línea si respetan la
+       curvatura de los suyos. */
+    hoy:      '<rect x="3" y="4.6" width="14" height="12.4" rx="1.8"/><path d="M3 8.4h14"/>' +
+              '<path d="M6.8 2.9v2.8M13.2 2.9v2.8"/><path d="M9 12.8h2"/>',
+    semana:   '<rect x="3" y="4.6" width="14" height="12.4" rx="1.8"/><path d="M3 8.4h14"/>' +
+              '<path d="M6.8 2.9v2.8M13.2 2.9v2.8"/><path d="M6.2 12.8h7.6"/>',
+    mes:      '<rect x="3" y="4.6" width="14" height="12.4" rx="1.8"/><path d="M3 8.4h14"/>' +
+              '<path d="M6.8 2.9v2.8M13.2 2.9v2.8"/><path d="M6.2 11.5h7.6M6.2 14.3h7.6"/>',
     recepcion:'<path d="M2.8 10.5h4l1.2 2.2h4l1.2-2.2h4"/><path d="M4.6 4.2h10.8l1.8 6.3V16a1 1 0 0 1-1 1H3.8a1 1 0 0 1-1-1v-5.5z"/>',
     buscar:   '<circle cx="8.6" cy="8.6" r="5.4"/><path d="m12.6 12.6 4 4"/>',
     ver:      '<path d="M1.8 10S4.7 4.6 10 4.6 18.2 10 18.2 10 15.3 15.4 10 15.4 1.8 10 1.8 10Z"/><circle cx="10" cy="10" r="2.5"/>',
@@ -93,10 +103,12 @@
      gris, para no tenderle una trampa a quien tiene clientes esperando. */
   var MENU = [
     { id: 'inicio', rotulo: 'Inicio', icono: 'inicio', url: 'inicio.html' },
-    /* El cuadro de mando NO va en el menú: se decidió el 2 de octubre, después
-       de ver que Francia tampoco lo tiene. La pantalla sigue existiendo en
-       tablero.html para enseñarla en la certificación como propuesta, y entra
-       al menú solo si gerencia la acepta. */
+    /* El cuadro de mando sí va en el menú, y como pestaña propia: lo pidió
+       gerencia el 6 de octubre para la presentación al Ministerio de Finanzas,
+       «no lo pondría por ahí escondido». Entre Inicio y Administración, que es
+       el orden que se nombró. Antes se había dejado fuera porque Francia
+       tampoco lo tiene; la presentación cambia la decisión. */
+    { id: 'tablero', rotulo: 'Cuadro de mando', icono: 'tablero', url: 'tablero.html' },
     /* «Cambiar Contraseña» ya no cuelga de aquí. De la reunión del 15 de
        septiembre: Administración es de la empresa —sus roles, sus usuarios, sus
        datos—, y lo mío va en el avatar, que es donde lo busca cualquiera que
@@ -940,6 +952,7 @@
   });
 
   window.edocAvisar = avisar;
+
 
   /* --- Cambios sin guardar ------------------------------------------------ */
   /* RN-02 de la corrida del 14 sep: salir de una pantalla de administración con
