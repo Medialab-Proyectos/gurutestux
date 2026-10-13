@@ -141,7 +141,9 @@ export default async function handler(req, res) {
       return responder(res, 200, {
         cuenta: { id: c.id, nombre: c.nombre, correo: c.correo }, proyecto: p,
         archivos: (c.datos.adjuntos || []).filter(x => duenos.has(x.dueno)),
-        correos: (c.datos.correos || []).filter(x => x.proyecto === p.id)
+        correos: (c.datos.correos || []).filter(x => x.proyecto === p.id),
+        // Hallazgos con su auditoría: el operador los exporta al motor para la base de lecciones aprendidas.
+        ajustes: (c.datos.ajustes || []).filter(x => x.proyecto === p.id)
       });
     }
     if (req.method === 'POST' && accion === 'subir') {

@@ -721,6 +721,48 @@ def cmd_respuestas(api, a):
     print("\nEl cliente todavía está revisando." if hay else "\nTodavía no hay respuestas del cliente.")
 
 
+# Auditoría de la plataforma → estados de validación del motor (validacion_humana.py).
+# «Pasa» acepta el hallazgo; «No pasa» lo rechaza; «No era un problema» lo descarta; «Ya está solucionado» lo corrige.
+AUDITORIA_A_VALIDACION = {"pasa": "confirmado", "no_pasa": "descartado", "no_era": "descartado", "solucionado": "corregido"}
+
+
+def cmd_auditorias(api, a):
+    """Lleva lo que el cliente auditó en la plataforma a la base de lecciones aprendidas del motor de agentes."""
+    v = leer("vinculos.json", {}).get(a.proyecto) or next(
+        (x for k, x in leer("vinculos.json", {}).items() if k.lower() == a.proyecto.lower()), None)
+    if not v:
+        sys.exit(f"{a.proyecto} no está vinculado a un proyecto del motor (operador.py vincular).")
+    p = buscar(api, a.proyecto)
+    d = api.pedir(f'api/equipo?accion=proyecto&cuenta={quote(p["cuenta"]["id"])}&id={quote(p["id"])}')
+    auditados = [x for x in d.get("ajustes") or [] if x.get("auditoria") and x.get("hallazgo_ref")]
+    if not auditados:
+        print("Todavía no hay hallazgos auditados en la plataforma.")
+        return
+    motor = Path(a.motor).resolve()
+    estudio = _estudio_del_proyecto(motor, v["motor_id"], v.get("url", ""), 0)
+    tipos = {}
+    if estudio:
+        backlog = _json(estudio / "backlog-ux.json") or {}
+        tipos = {h.get("id"): h.get("tipo", "") for h in backlog.get("hallazgos", [])}
+    items = [{"id": x["hallazgo_ref"], "tipo": tipos.get(x["hallazgo_ref"], ""), "titulo": x.get("titulo", ""),
+              "estado": AUDITORIA_A_VALIDACION.get(x["auditoria"].get("resultado"), "pendiente"), "revisado": True,
+              "notas": x["auditoria"].get("comentario", ""), "quien": x["auditoria"].get("persona") or "cliente",
+              "fecha": x["auditoria"].get("fecha", ""), "metodo": "Auditoría del cliente en Synthetica"}
+             for x in auditados]
+    destino = motor / "proyectos" / v["motor_id"] / "validaciones" / "plataforma.json"
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    destino.write_text(json.dumps({"version": "validaciones-v1", "origen": "plataforma", "proyecto": v["motor_id"],
+                                   "estudio": estudio.name if estudio else "", "exportado": datetime.now().isoformat(),
+                                   "items": items}, ensure_ascii=False, indent=2), encoding="utf-8")
+    cuenta = {}
+    for it in items:
+        cuenta[it["estado"]] = cuenta.get(it["estado"], 0) + 1
+    print(f"{len(items)} hallazgos auditados → {destino}")
+    print("  " + ", ".join(f"{n} {e}" for e, n in cuenta.items()))
+    print("El próximo estudio los aprende. Para ver la base ahora: "
+          "python -m agentes_sinteticos.lecciones_auditoria actualizar")
+
+
 def cmd_vigilar(api, a):
     import time
     motor = Path(a.motor).resolve()
@@ -764,12 +806,14 @@ def main():
     s = sub.add_parser("borrar"); s.add_argument("proyecto"); s.add_argument("--si", action="store_true")
     s = sub.add_parser("vincular"); s.add_argument("proyecto"); s.add_argument("motor_id"); s.add_argument("--creacion", action="store_true", help="Proyecto del motor de creación de productos")
     s = sub.add_parser("respuestas"); s.add_argument("proyecto")
+    s = sub.add_parser("auditorias", help="Lleva lo auditado en la plataforma a la base de lecciones del motor")
+    s.add_argument("proyecto"); s.add_argument("--motor", default=str(AQUI.parent.parent / "_agentes_sinteticos"))
     s = sub.add_parser("vigilar"); s.add_argument("--cada", type=int, default=60, help="Segundos entre revisiones")
     s.add_argument("--una-vez", action="store_true"); s.add_argument("--motor", default=str(AQUI.parent.parent / "_agentes_sinteticos"))
     a = ap.parse_args()
     api = Api(a.base)
     {"ingresar": cmd_ingresar, "salir": cmd_salir, "nuevos": cmd_nuevos, "bajar": cmd_bajar, "etapa": cmd_etapa,
-     "cuentas": cmd_cuentas, "clave": cmd_clave, "url": cmd_url, "propuestas": cmd_propuestas, "publicar": cmd_publicar, "reiniciar": cmd_reiniciar, "borrar": cmd_borrar, "vincular": cmd_vincular, "respuestas": cmd_respuestas, "vigilar": cmd_vigilar}[a.cmd](api, a)
+     "cuentas": cmd_cuentas, "clave": cmd_clave, "url": cmd_url, "propuestas": cmd_propuestas, "publicar": cmd_publicar, "reiniciar": cmd_reiniciar, "borrar": cmd_borrar, "vincular": cmd_vincular, "respuestas": cmd_respuestas, "auditorias": cmd_auditorias, "vigilar": cmd_vigilar}[a.cmd](api, a)
 
 
 if __name__ == "__main__":
