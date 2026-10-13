@@ -155,8 +155,15 @@
              que sepa desde el principio que lo que activa el servicio pasa en el
              portal de la autoridad, y que puede hacerlo ya. -->
         <div class="edoc-aviso edoc-aviso--info mb-3" id="falta-emaratax">
-          <div><strong>EmaraTax va después.</strong> No tienes que asociarnos todavía: se hace cuando aprobemos
-          tu solicitud y tengas tus credenciales.</div>
+          <!-- Antes decía «no tienes que asociarnos todavía: se hace cuando
+               aprobemos tu solicitud y tengas tus credenciales». Dos cosas mal:
+               la norma pide cerrar el CONTRATO antes de la designación, no
+               tener credenciales del portal, y son dos trámites independientes
+               que pueden ir en paralelo. Frenar a quien ya puede hacerlo es
+               fricción gratis. -->
+          <div><strong>EmaraTax va por su cuenta.</strong> Es un trámite aparte, en la web de la autoridad, y no
+          depende de este registro: puedes hacerlo mientras revisamos tu solicitud. Si ya nos elegiste allí,
+          <a href="emaratax-verificacion.html">valídalo aquí</a>.</div>
         </div>
 
         <div class="edoc-aviso edoc-aviso--exito mb-3" id="viene-emaratax" hidden>
@@ -1072,13 +1079,20 @@
         '<span class="reg__paso-n">' + (actual > 0 ? '' : 'Paso 0') + '</span>' +
         '<span class="reg__tic" aria-hidden="true">✓</span>' +
       '</li>');
+    /* Este hito se enseñaba como un <li> muerto: el carril decia a donde hay
+       que ir y no habia por donde. Ahora es un enlace a la guia, que se puede
+       leer desde ya aunque el tramite venga despues. Saber lo que te espera
+       no estorba; ver un destino sin puerta si. */
     $('pasos').insertAdjacentHTML('beforeend',
-      '<li class="reg__paso reg__paso--hito">' +
-        '<span class="reg__paso-icono">' + window.edocIcono('estados') + '</span>' +
-        '<span><span class="reg__paso-t">Asociarnos en EmaraTax</span>' +
-          '<span class="reg__paso-s">Cuando aprobemos tu solicitud, con una guía paso a paso.</span>' +
-          '<span class="reg__paso-chip reg__paso-chip--opcional">Después</span></span>' +
-        '<span class="reg__paso-n">Al final</span>' +
+      '<li>' +
+        '<a class="reg__paso reg__paso--hito" href="' +
+          (window.EDOC_ALCANCE ? window.EDOC_ALCANCE.conVistas('onboarding.html') : 'onboarding.html') + '">' +
+          '<span class="reg__paso-icono">' + window.edocIcono('estados') + '</span>' +
+          '<span><span class="reg__paso-t">Asociarnos en EmaraTax</span>' +
+            '<span class="reg__paso-s">Cuando aprobemos tu solicitud. Puedes leer la guía desde ya.</span>' +
+            '<span class="reg__paso-chip reg__paso-chip--opcional">Ver la guía</span></span>' +
+          '<span class="reg__paso-n">Al final</span>' +
+        '</a>' +
       '</li>');
 
     /* La verificación no lleva número, igual que en Francia: es con lo que

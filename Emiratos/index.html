@@ -54,7 +54,14 @@
           <p class="edoc-acceso__aviso edoc-acceso__aviso--alerta" id="aviso-acceso" role="alert" hidden></p>
           <!-- Quien acaba de terminar el registro: se le dice qué va a pasar al
                entrar, para que el cambio de contraseña no le pille por sorpresa. -->
-          <p class="edoc-acceso__aviso" id="aviso-alta" role="status" hidden></p>
+          <!-- Con cierre: salía en cada visita al acceso y no había forma de
+               quitarlo. Un aviso que no se puede cerrar y que ya se leyó deja
+               de informar y empieza a estorbar. Se queda cerrado. -->
+          <div class="edoc-acceso__aviso edoc-acceso__aviso--cerrable" id="aviso-alta" role="status" hidden>
+            <button type="button" class="edoc-pendiente__x" id="cerrar-aviso-alta"
+              aria-label="Cerrar este aviso">&times;</button>
+            <span id="aviso-alta-texto"></span>
+          </div>
           <h2 class="edoc-titulo mb-1" style="font-size:20px">Bienvenido</h2>
           <p class="edoc-secundario mb-4">Entra con las credenciales que te enviamos por correo.</p>
           <form id="forma-acceso" novalidate>
@@ -128,7 +135,21 @@
                 <span class="edoc-acceso__via-textos">
                   <span class="edoc-acceso__via-nombre">Registrar mi empresa</span>
                   <span class="edoc-acceso__via-detalle">Nos cuentas quién es tu empresa y lo revisamos contigo.
-                  EmaraTax va al final, cuando ya tengas tus credenciales.</span>
+                  Al aprobarlo te mandamos tus credenciales.</span>
+                </span>
+                <span class="edoc-acceso__via-flecha">›</span>
+              </a>
+
+              <!-- La via que faltaba. El acceso es la pantalla donde cae
+                   todo el mundo, así que es el único sitio donde esta puerta
+                   sirve: antes estaba en el carril del registro, en un panel
+                   plegado de la guía y dentro de un diálogo, y en los tres
+                   casos había que ir a buscarla. -->
+              <a class="edoc-acceso__via" href="emaratax-verificacion.html">
+                <span class="edoc-acceso__via-textos">
+                  <span class="edoc-acceso__via-nombre">Validar mi asociación con GuruSoft</span>
+                  <span class="edoc-acceso__via-detalle">Si ya nos elegiste en EmaraTax, aquí se comprueba con la
+                  autoridad y se cierra. También sirve si lo hiciste y no te trajo de vuelta.</span>
                 </span>
                 <span class="edoc-acceso__via-flecha">›</span>
               </a>
@@ -422,9 +443,18 @@
       document.getElementById('compania').value = alta.trn;
     }
     var aviso = document.getElementById('aviso-alta');
-    aviso.innerHTML = '<strong>Tu registro está enviado.</strong> ' +
+    /* Si ya se cerró una vez, no vuelve. Se guarda con el registro fiscal del
+       alta: si manana se da de alta otra empresa, su aviso sí sale. */
+    var llave = 'edoc-aviso-alta-visto-' + (alta.trn || 'sin-trn');
+    try { if (window.localStorage.getItem(llave) === '1') return; } catch (error) { /* nada */ }
+    document.getElementById('aviso-alta-texto').innerHTML =
+      '<strong>Tu registro está enviado.</strong> ' +
       'Cuando lo aprobemos te llegan las credenciales. La primera vez que entres tendrás que cambiar la contraseña.';
     aviso.hidden = false;
+    document.getElementById('cerrar-aviso-alta').addEventListener('click', function () {
+      aviso.hidden = true;
+      try { window.localStorage.setItem(llave, '1'); } catch (error) { /* nada */ }
+    });
   }());
 
   function entrarAlPortal() {

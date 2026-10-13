@@ -134,8 +134,19 @@
             </li>
             <li class="emt__paso">
               <span class="emt__paso-t">Te traemos de vuelta y se completa</span>
-              <span class="emt__paso-p">La autoridad te devuelve a una pantalla nuestra que comprueba tus datos
-              con ella y cierra la asociación. No tienes que hacer nada más.</span>
+              <span class="emt__paso-p">La autoridad te devuelve a una pantalla nuestra, «Confirma tu asociación
+              con GuruSoft», donde escribes el correo y el TIN con los que te conoce EmaraTax. Comprobamos tus
+              datos con ella, te enseñamos lo que nos responde y se cierra la asociación.</span>
+              <!-- Esto no es un botón de maqueta, es soporte. La redirección
+                   de la autoridad puede fallar: la ventana se cierra, el
+                   navegador la bloquea, se pierde la vuelta. Entonces el
+                   contribuyente hizo su parte y no llegó a ninguna parte, y
+                   necesita una puerta de verdad. Va debajo de este paso porque
+                   es el paso que puede fallar. -->
+              <span class="emt__rescate">
+                <span class="emt__p emt__p--chico">¿Lo hiciste y no te trajo de vuelta?</span>
+                <button type="button" class="btn btn-edoc-terciario btn-sm" id="simular">Entrar al comprobador</button>
+              </span>
             </li>
           </ol>
         </div>
@@ -148,6 +159,10 @@
             <p class="emt__p emt__p--chico" id="aviso-ventana" hidden>Tu navegador bloqueó la ventana. Permítela, o
             <a href="https://eservices.tax.gov.ae/en-us/#/Logon" target="_blank" rel="noopener">ábrelo en una
             pestaña</a>: la guía se queda aquí.</p>
+            <!-- Quien ya lo hizo no tiene nada que hacer en esta guía: entra.
+                 Antes no había salida y la pantalla era un callejón. -->
+            <p class="emt__p emt__p--chico"><a href="index.html" id="ir-acceso">Ya lo hice: entrar al
+            portal</a></p>
           </div>
 
           <!-- Aquí no se pega ningún identificador. La guía del Ministerio, en
@@ -229,14 +244,6 @@
           <!-- Sin botón al inicio: desde aquí todavía no hay portal al que
                volver. La salida de esta pantalla es cerrarla. -->
 
-          <!-- Fuera de la capa de notas a propósito: esa capa está apagada por
-               defecto y el botón hace falta para seguir el recorrido en la demo. -->
-          <div class="onboarding-maqueta">
-            <p class="edoc-secundario">Desde aquí no se sale de verdad al portal de impuestos. Este botón hace
-            como si ya hubieras vuelto, para poder seguir viendo la maqueta.</p>
-            <button type="button" class="btn btn-edoc-terciario btn-sm" id="simular">Simular la vuelta desde
-            EmaraTax</button>
-          </div>
         </div>
       </section>
     </div>
@@ -387,12 +394,21 @@
 }());
 </script>
 <script>
-  document.getElementById('simular').addEventListener('click', function () {
-    try { window.sessionStorage.setItem('edoc-asociada', '1'); } catch (error) { /* nada */ }
-    window.edocAvisar('Recibimos la asociación desde EmaraTax. Ya podemos emitir y recibir a tu nombre.', 'exito');
+  /* La vuelta desde EmaraTax. Antes este botón daba la asociación por hecha y
+     se iba al inicio, saltando la pantalla que de verdad aparece al volver: en
+     la maqueta eso dejaba la verificación sin camino y en una demo no existía.
+     Ahora hace lo que hace la autoridad, que es devolverte a nuestra pantalla
+     con un código de autorización. Con el TIN detrás si ya eras cliente, que
+     es lo que distingue el alta de la revisión. */
+  function volverDeEmaraTax(tin) {
+    var destino = 'emaratax-verificacion.html?auth=SIMULADO' + (tin ? '&tin=' + tin : '');
+    window.edocAvisar('EmaraTax te devuelve a nuestro portal para terminar.', 'info');
     setTimeout(function () {
-      location.href = window.EDOC_ALCANCE ? window.EDOC_ALCANCE.conVistas('inicio.html') : 'inicio.html';
-    }, 1600);
+      location.href = window.EDOC_ALCANCE ? window.EDOC_ALCANCE.conVistas(destino) : destino;
+    }, 1200);
+  }
+  document.getElementById('simular').addEventListener('click', function () {
+    volverDeEmaraTax('');
   });
 </script>
 </body>

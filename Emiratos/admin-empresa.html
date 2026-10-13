@@ -42,9 +42,22 @@
   <section class="edoc-tablero" id="bloque-conexion" hidden>
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Conexión con la autoridad</h2>
+      <!-- El estado estaba escrito a pelo como «Activa». Si el contribuyente
+           acaba de darse de baja en la pantalla de verificación, su propio
+           portal le seguía diciendo que está conectado. Ahora lo lee. -->
       <span class="edoc-estado edoc-estado--exito" id="estado-conexion">Activa</span>
     </div>
     <div class="edoc-tablero__cuerpo">
+      <!-- Cuando el contribuyente se ha dado de baja, lo primero que tiene que
+           leer es eso, no sus datos de conexión. Y tiene que saber qué pasa
+           mientras tanto: la autoridad nos da tres días hábiles para quitarle
+           del SMP, así que no es inmediato. -->
+      <div class="edoc-aviso edoc-aviso--advertencia mb-4" id="aviso-baja" hidden>
+        <span data-icono="alerta" class="edoc-aviso__icono"></span>
+        <div><strong>Te diste de baja como cliente.</strong> Lo comunicamos a la autoridad y estamos quitando tu
+        dirección de la red; la norma nos da tres días hábiles para hacerlo. Hasta que elijas otro proveedor en
+        EmaraTax no podrás emitir ni recibir. Lo que ya emitiste se conserva.</div>
+      </div>
       <div class="row rejilla">
         <div class="col-12 col-md-4">
           <div class="edoc-etiqueta">Proveedor nombrado en EmaraTax</div>
@@ -61,7 +74,7 @@
         </div>
         <div class="col-12 col-md-4">
           <div class="edoc-etiqueta">Asociación en EmaraTax</div>
-          <div>La confirma la autoridad</div>
+          <div id="texto-asociacion">La confirma la autoridad</div>
           <div class="edoc-ayuda">La asociación se hace y se consulta en EmaraTax. Cuando nos elijas allí, aquí
           podrás emitir y recibir; si algo no sale, escríbenos.</div>
         </div>
@@ -275,6 +288,34 @@
   </section>
   -->
 
+  <!-- La salida del cliente, al pie y SIEMPRE A LA VISTA. Estuvo dentro del
+       bloque «Conexión con la autoridad», que está oculto tras ?conexion=1
+       porque es MVP2, así que quedaba escondida detrás de un parámetro que
+       nadie conoce. El razonamiento estaba mal: ese bloque se oculta porque no
+       podemos enseñar el ESTADO de la conexión —no hay servicio que nos lo
+       diga—, pero «cómo me doy de baja» no necesita ningún servicio. Vale
+       siempre, así que se ve siempre. -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cuerpo">
+      <details class="edoc-detalle-salida" id="detalle-salida">
+        <summary>¿Quieres cambiar de proveedor o dejar de usar eDoc?</summary>
+        <div class="edoc-detalle-salida__cuerpo">
+          <p>No se hace desde aquí. Como la designación, la baja empieza en EmaraTax: entras con la cuenta del
+          administrador, eliges tu TIN y ahí aparece la opción de desvincularte. La autoridad te devuelve a una
+          pantalla nuestra para confirmarlo y listo.</p>
+          <p class="edoc-ayuda">Al desvincularte dejas de poder emitir y recibir por la red hasta que elijas otro
+          proveedor acreditado. Tus documentos anteriores se conservan. Tenemos tres días hábiles para quitar tu
+          dirección de la red.</p>
+          <div class="d-flex hueco-2 flex-wrap mt-2">
+            <a class="btn btn-edoc-terciario btn-sm" href="https://eservices.tax.gov.ae/en-us/#/Logon"
+               target="_blank" rel="noopener">Abrir EmaraTax</a>
+            <a class="btn btn-edoc-terciario btn-sm" href="emaratax-verificacion.html">Ya lo hice: confirmarlo</a>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
   <!-- Un solo botón al pie de toda la pantalla, fuera de los paneles: es
        exactamente como guarda Bolivia, y cumple la regla de un primario por
        pantalla. -->
@@ -397,6 +438,43 @@
     nativo, que se decidió en revisión. Si gerencia prefiere quedarse solo con lo que exige la autoridad, se
     quita este campo y con él el botón «Nombre nativo».
   </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 13 de octubre</span>
+    <strong>El estado de la conexión estaba escrito a pelo, y mentía.</strong> Decía «Activa» siempre, en el
+    HTML. Si el contribuyente acababa de darse de baja en la pantalla de verificación, su propio portal le
+    seguía diciendo que está conectado, que es la peor forma de enterarse de que algo no cuadra. Ahora lee lo
+    que pasó y, si hay baja, lo primero que se ve es eso —con el plazo de tres días hábiles que la autoridad nos
+    da para quitarle del SMP— y no sus datos de conexión.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 13 de octubre</span>
+    <strong>Dónde se da de baja el cliente: no aquí, y había que decirlo.</strong> La baja empieza en EmaraTax,
+    igual que la designación —la guía de la autoridad: «TP will login… select the relevant TIN number. TP will
+    see the option of Reverify/Offboarding»—, así que el portal no puede iniciarla. Pero no decirlo en ninguna
+    parte era peor: el cliente tiene derecho a saber cómo se va, y si no lo encuentra acaba escribiendo a
+    soporte para algo que es suyo.
+    <br><br>
+    Va al pie del bloque de conexión, plegada y sin botón de acción. Nadie anuncia su propia puerta de salida
+    con un botón rojo, pero esconderla es otra cosa: un desplegable discreto que explica el camino, lo que se
+    pierde al irse —no se puede emitir ni recibir hasta elegir otro proveedor—, lo que se conserva, y el plazo
+    de tres días hábiles. Con dos salidas: abrir EmaraTax, y el comprobador para quien ya lo hizo allí.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · falta una pantalla</span>
+    <strong>Nosotros no vemos las bajas en ninguna parte.</strong> Esto no es un ajuste: no hay pantalla donde un
+    operador vea que un cliente se fue, ni cuándo, ni por qué. Y hace falta por tres razones que no son de
+    diseño: los requisitos de la autoridad Peppol nos dan <strong>tres días hábiles</strong> para quitar al
+    cliente del SMP cuando cambia de proveedor, así que hay un plazo que correr; una baja es un cliente que se
+    va, o sea un aviso comercial y no una línea de registro; y ocurre en una pantalla sin sesión y fuera del
+    portal, así que nadie se entera si nada lo cuenta.
+    <br><br>
+    Con lo que ya sabemos del API se puede alimentar: la respuesta de <span class="cifra">crregupdate</span>
+    trae <span class="cifra">onboardingStatus</span> y <span class="cifra">recordUpdateTimestamp</span>, y
+    nosotros guardamos el <span class="cifra">reason</span> que el contribuyente eligió. O sea que la pantalla
+    tendría quién, cuándo, por qué y en qué estado quedó. Falta decidir dónde vive —«Clientes y proveedores»
+    es el sitio natural y está fuera del MVP— y si además se avisa a alguien, que para un cliente que se va
+    parece lo menos.
+  </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -483,6 +561,24 @@
     try {
       if (bloque && new URLSearchParams(window.location.search).has('conexion')) bloque.hidden = false;
     } catch (e) { /* nada */ }
+
+    /* Si el contribuyente se dio de baja en la pantalla de verificacion, su
+       portal tiene que decirlo. La verificacion lo deja anotado en la sesion;
+       en el producto esto lo dira el onboardingStatus que devuelve el API. */
+    (function pintarBaja() {
+      var baja = false;
+      try { baja = window.sessionStorage.getItem('edoc-asociada') === '0'; } catch (e) { /* nada */ }
+      if (!baja) return;
+      var sello = document.getElementById('estado-conexion');
+      if (sello) {
+        sello.className = 'edoc-estado edoc-estado--advertencia';
+        sello.textContent = 'Dada de baja';
+      }
+      var texto = document.getElementById('texto-asociacion');
+      if (texto) texto.textContent = 'Baja comunicada a la autoridad';
+      var aviso = document.getElementById('aviso-baja');
+      if (aviso) aviso.hidden = false;
+    }());
 
     var caja = document.getElementById('caja-estado-asociacion');
     if (!caja) return;

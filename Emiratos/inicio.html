@@ -42,7 +42,11 @@
       elígenos como proveedor en EmaraTax. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.</p>
       <div class="d-flex hueco-2 flex-wrap">
         <a class="btn btn-edoc-primario" href="onboarding.html">Cómo asociarnos</a>
-        <button class="btn btn-edoc-terciario" type="button" id="ya-asociado">Ya lo hice</button>
+        <!-- Antes este botón solo escondía la tarjeta y decía que lo
+             estábamos comprobando. Si de verdad lo hizo y la vinculación no se
+             cerró, lo que necesita es el comprobador, no un mensaje de espera. -->
+        <a class="btn btn-edoc-terciario" href="emaratax-verificacion.html" id="ya-asociado">Ya lo hice:
+        validarlo</a>
       </div>
       <p class="edoc-pendiente__pie" id="pendiente-pie" hidden>Lo estamos comprobando con la autoridad.</p>
     </aside>
@@ -152,12 +156,8 @@
     /* «Ya lo hice» no marca nada por sí solo: en Emiratos la autoridad nos lo
        confirma, y hasta que llegue esa confirmación el aviso se queda. En Omán
        no hay confirmación automática y habrá que mirarlo a mano. */
-    document.getElementById('ya-asociado').addEventListener('click', function () {
-      document.getElementById('pendiente-pie').hidden = false;
-      document.getElementById('ya-asociado').disabled = true;
-      window.edocAvisar('Vamos a comprobarlo con la autoridad. Si ya nos elegiste, el aviso desaparece solo ' +
-        'y la conexión aparece activa en <strong>Actualización de identificación fiscal</strong>.');
-    });
+    /* El botón ya es un enlace al comprobador: no hay nada que atar aquí.
+       El pie se queda en el marcado por si vuelve a hacer falta. */
   }());
 </script>
 </body>

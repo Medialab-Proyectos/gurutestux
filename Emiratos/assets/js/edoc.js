@@ -713,6 +713,33 @@
     '</footer>';
   }
 
+  /* --- La barra del titulo, pegada al desplazar ---------------------------
+     Las migas dicen donde estas y en una tabla larga se pierden justo cuando
+     hacen falta. La barra se pega con CSS; lo que el guion aporta es saber
+     CUANDO esta pegada, que en CSS no se puede preguntar: se pone un centinela
+     de un pixel justo encima y se mira si sale de la pantalla por arriba.
+     Al pegarse la barra se encoge, que si no una barra de tres lineas se come
+     la pantalla en un portatil. */
+  function pegarBarraTitulo() {
+    var barra = document.querySelector('.edoc-titulo-barra');
+    if (!barra || !window.IntersectionObserver) return;
+    var centinela = document.createElement('div');
+    centinela.className = 'edoc-centinela';
+    centinela.setAttribute('aria-hidden', 'true');
+    barra.parentNode.insertBefore(centinela, barra);
+    /* El margen de arriba descuenta lo que ya ocupan el encabezado y el menu:
+       el centinela tiene que contarse fuera cuando desaparece DEBAJO de
+       ellos, no cuando toca el borde de la ventana. */
+    var alto = window.getComputedStyle(document.documentElement);
+    var tope = parseInt(alto.getPropertyValue('--alto-encabezado'), 10) || 62;
+    if (document.body.dataset.armazon !== 'reducido') {
+      tope += parseInt(alto.getPropertyValue('--alto-menu'), 10) || 44;
+    }
+    new window.IntersectionObserver(function (entradas) {
+      barra.classList.toggle('esta-pegada', !entradas[0].isIntersecting);
+    }, { rootMargin: '-' + tope + 'px 0px 0px 0px', threshold: 0 }).observe(centinela);
+  }
+
   /* --- Montaje ----------------------------------------------------------- */
   function montar() {
     var sim = window.EDOC_SIMULACRO;
@@ -738,6 +765,7 @@
     if (window.EDOC_ALCANCE && window.EDOC_ALCANCE.propagar) window.EDOC_ALCANCE.propagar();
 
     cablearCampana();
+    pegarBarraTitulo();
 
     /* Los '?' de ayuda. Se abren al pulsarlos y se cierran al pulsar fuera,
        que es el patron 'dismiss on next click' de Bootstrap: hace falta que

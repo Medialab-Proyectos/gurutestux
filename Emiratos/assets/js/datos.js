@@ -436,10 +436,25 @@ window.EDOC = (function () {
       titulo: 'Mantenimiento en curso',
       detalle: 'Estamos trabajando en el portal. Puedes consultar, pero lo que emitas ahora ' +
                'quedará en cola hasta que terminemos. Previsto hasta las 04:00.' },
+    /* OJO con lo que este aviso dice. Antes terminaba en «no hace falta que lo
+       reintentes», y eso tranquilizaba al cliente sobre algo que tiene plazo y
+       multa. El artículo 12 de la Decisión Ministerial 243 de 2025: «every
+       Issuer and Recipient shall notify the Authority of a System Failure
+       within 2 Business Days from the date of occurrence». Y la Decisión del
+       Consejo de Ministros 106 de 2025 pone la sanción: AED 1.000 por cada
+       día de retraso, al emisor y al receptor por separado.
+       O sea que una caída no es solo un problema nuestro: le abre un plazo al
+       cliente. El aviso tiene que decirlo. Queda por confirmar si el proveedor
+       puede notificar en su nombre —la norma dice «in the mechanism and
+       procedures determined by the Authority» y ese mecanismo no está
+       publicado—, y hasta saberlo no se le puede prometer que lo hacemos
+       nosotros. */
     { clave: 'conexion', activo: false, senal: 'error',
       titulo: 'Sin conexión con la autoridad',
       detalle: 'No estamos recibiendo respuesta de la Federal Tax Authority. Lo que emitas queda en ' +
-               'cola y sale solo en cuanto se restablezca. No hace falta que lo reintentes.' }
+               'cola y sale solo en cuanto se restablezca, sin que tengas que reintentarlo. Aparte de eso, ' +
+               'la norma te obliga a avisar a la autoridad de una caída del sistema en 2 días hábiles: ' +
+               'escríbenos y te decimos cómo.' }
   ];
 
   /* Se distinguen por el icono y por la palabra. El icono va teñido, que es el

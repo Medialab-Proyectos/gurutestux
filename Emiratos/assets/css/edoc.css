@@ -663,7 +663,39 @@ body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado)
 
 /* --- 5. Página ----------------------------------------------------------- */
 .edoc-pagina { padding: 16px 18px var(--alto-pie); max-width: 1680px; margin: 0 auto; width: 100%; flex: 1; }
-.edoc-titulo-barra { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+/* --- La barra del titulo, pegada al desplazar -----------------------------
+   Las migas de pan tienen que seguir a la vista: dicen donde estas, y en una
+   tabla larga se pierde justo cuando hace falta. No se pega solo la miga
+   porque su bloque contenedor acaba con la barra: dejaria de pegarse a los
+   dos centimetros.
+   Al pegarse se encoge -se va el subtitulo y el titulo baja de tamano- porque
+   una barra de tres lineas fija se come la pantalla. La clase la pone el guion
+   con un centinela: en CSS no hay forma de saber si algo esta pegado. */
+.edoc-titulo-barra {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+  margin-bottom: 12px; flex-wrap: wrap;
+  position: sticky; top: calc(var(--alto-encabezado) + var(--alto-menu)); z-index: 1026;
+  background: var(--edoc-fondo, #dadada);
+  padding: 10px 0 8px; margin-top: -10px;
+}
+/* Sin menu -acceso, registro, verificacion- se pega directamente al encabezado. */
+body[data-armazon="reducido"] .edoc-titulo-barra { top: var(--alto-encabezado); }
+/* Un sistema caido se queda por encima: sigue siendo verdad en toda la pantalla. */
+.edoc-estado-sistema ~ #armazon .edoc-titulo-barra { z-index: 1026; }
+
+.edoc-titulo-barra.esta-pegada {
+  box-shadow: 0 6px 10px -8px rgba(0, 0, 0, .28);
+  border-bottom: 1px solid #c9cbcb;
+  padding-bottom: 6px;
+}
+.edoc-titulo-barra.esta-pegada .edoc-subtitulo { display: none; }
+.edoc-titulo-barra.esta-pegada .edoc-titulo { font-size: 17px; }
+@media (prefers-reduced-motion: no-preference) {
+  .edoc-titulo-barra .edoc-titulo { transition: font-size .14s ease-out; }
+}
+/* El centinela: un pelo de alto justo encima de la barra. Cuando sale de la
+   pantalla por arriba, la barra esta pegada. */
+.edoc-centinela { height: 1px; margin: 0; padding: 0; }
 .edoc-miga { font-size: 11.5px; color: #5c5c5c; margin-bottom: 2px; }
 /* El separador vale entre cualquier par, no solo entre dos span: algunas migas
    llevan el primer tramo como enlace y se quedaban pegadas. */
@@ -1580,6 +1612,28 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 
 /* Lo que devuelve la autoridad: se lee, no se escribe. Mismo aspecto que el
    campo traído de fuera, pero sin ser un campo. */
+/* --- La ficha de la autoridad -------------------------------------------
+   Un bloque donde NADA se puede editar no se dibuja como un formulario. La
+   caja verde de .reg__dato-autoridad sirve en Administración, donde marca el
+   único campo bloqueado entre otros que sí se escriben; aquí, con los seis
+   datos bloqueados, seis cajas verdes solo parecen seis campos rellenos y el
+   verde deja de significar nada. Esto es una ficha: rótulo pequeño, dato en
+   negro y una línea fina. El verde se queda para el aviso de éxito, que es
+   para lo que el manual lo reserva. */
+/* Dos columnas, como la propia pantalla de la autoridad. Con cuatro, en una
+   pantalla ancha, se pierde el orden de lectura: el ojo no sabe si sigue a la
+   derecha o abajo, y una celda con nota debajo desalinea la fila entera. */
+.reg__ficha { display: grid; grid-template-columns: 1fr; gap: 0 36px; margin: 4px 0 0; }
+@media (min-width: 768px) { .reg__ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.reg__ficha > div { padding: 11px 0; border-bottom: 1px solid #e7e9ec; }
+.reg__ficha-rotulo { display: block; font-size: 10.5px; text-transform: uppercase;
+                     letter-spacing: .06em; color: #6a6a6a; margin-bottom: 3px; }
+.reg__ficha-dato { display: block; font-size: 14px; color: var(--edoc-negro, #212121);
+                   font-weight: 600; word-break: break-word; }
+.reg__ficha-dato:empty::after { content: "—"; font-weight: 400; color: #8a8a8a; }
+.reg__ficha-nota { display: block; font-size: 10.5px; color: #666666; margin-top: 4px;
+                   font-weight: 400; line-height: 1.35; }
+
 .reg__dato-autoridad {
   background: #f4f7ef; border: 1px solid #cfe0a8; border-radius: var(--radio-chico, 6px);
   padding: 8px 12px; min-height: 38px; font-size: 13.5px; color: var(--edoc-negro, #212121);
@@ -1912,6 +1966,32 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
   background: #f2f5ea; border-left: 3px solid var(--edoc-verde);
   font-size: 12px; line-height: 1.45; color: #3f4a2e;
 }
+/* Con la cruz dentro hace falta sitio a la derecha y una referencia para
+   colocarla, que si no se va al rincon de la pantalla. */
+.edoc-acceso__aviso--cerrable { position: relative; padding-right: 38px; }
+
+/* La puerta de rescate del paso 5: separada del texto del paso con una linea
+   fina, porque no es parte de la explicacion sino lo que se hace si falla. */
+.emt__rescate { display: block; margin-top: 10px; padding-top: 10px;
+                border-top: 1px dashed #cfd3d2; }
+.emt__rescate .emt__p { margin-bottom: 6px; }
+
+/* La salida del cliente: plegada, discreta y al pie. Ni boton rojo ni letra
+   pequena escondida. */
+.edoc-detalle-salida > summary {
+  cursor: pointer; font-size: 12.5px; color: var(--edoc-azul); padding: 6px 0;
+  list-style: none; display: flex; align-items: center; gap: 7px;
+}
+.edoc-detalle-salida > summary::-webkit-details-marker { display: none; }
+.edoc-detalle-salida > summary::before {
+  content: "\203a"; font-size: 15px; line-height: 1; transition: transform .14s ease-out;
+}
+.edoc-detalle-salida[open] > summary::before { transform: rotate(90deg); }
+.edoc-detalle-salida > summary:hover { text-decoration: underline; }
+.edoc-detalle-salida > summary:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
+.edoc-detalle-salida__cuerpo { padding: 4px 0 2px 18px; max-width: 70ch; }
+.edoc-detalle-salida__cuerpo p { font-size: 13px; margin-bottom: 8px; }
+.edoc-acceso__aviso--cerrable .edoc-pendiente__x { top: 2px; right: 2px; font-size: 17px; }
 
 /* --- 28.1 · Selector de idioma -------------------------------------------
    El mismo control en el acceso y en la barra superior. El código que enseña
@@ -2373,11 +2453,16 @@ body.edoc-login-cuerpo > .footer { display: none; }
 
 /* Las tarjetas del panel son <button>, porque el guion las pulsa para saltar
    de paso, y un botón no hereda la tipografía ni alinea a la izquierda. */
-button.reg__paso {
+button.reg__paso, a.reg__paso {
   width: 100%; text-align: left; font: inherit; color: inherit;
   -webkit-appearance: none; appearance: none;
 }
-button.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
+button.reg__paso:focus-visible, a.reg__paso:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
+/* Un paso que es enlace tiene que parecerlo al pasar por encima: si no, se
+   queda con la misma pinta que los que no llevan a ninguna parte. */
+a.reg__paso { text-decoration: none; }
+a.reg__paso:hover { border-color: var(--edoc-verde); background: #f8faf2; }
+a.reg__paso:hover .reg__paso-t { color: var(--edoc-azul); }
 
 /* El estado de la tarjeta lo escribe el guion sobre .step-card. El color va
    sobre esa clase, y no sobre .reg__paso--activo, para que siga estando si el
