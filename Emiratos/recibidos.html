@@ -32,7 +32,7 @@
     <div>
       <div class="edoc-miga"><span>Recepción</span><span>Reportes</span><span>Documentos Recibidos</span></div>
       <h1 class="edoc-titulo">Documentos Recibidos</h1>
-      <p class="edoc-subtitulo">Lo que llega por la red a nombre de tu empresa. Desde aquí lo apruebas, lo rechazas con un motivo o dejas constancia de que llegó.</p>
+      <p class="edoc-subtitulo">Lo que llega por la red a nombre de tu empresa. Esta pantalla es de consulta: el comprador no aprueba ni rechaza la factura.</p>
     </div>
     <div class="edoc-titulo-barra__lado">
       <span class="edoc-estado edoc-estado--info" id="sello-clasificacion" hidden>Con clasificación</span>
@@ -64,9 +64,17 @@
 
   <div class="nota nota--decidido">
     <span class="nota__sello">Decidido</span>
-    <strong>Recepción es una sola página, no un árbol de ventanas.</strong> Aprobar, rechazar y acusar recibo son un menú
-    de acciones dentro de esta misma tabla, y cada opción se habilita según el estado de la fila. Separarlo en pantallas
-    distintas se ve anticuado y obliga a ir y volver.
+    <strong>Recepción es una sola página, no un árbol de ventanas.</strong> Mirar el documento y descargarlo son un menú de acciones dentro de esta misma tabla. Separarlo en pantallas distintas se ve anticuado y obliga a ir y volver.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 13 de octubre</span>
+    <strong>eDoc no dice «Aprobado». Dice «Recibido», y son tres estados, no dos.</strong> La infografía de estados de nuestro propio API lo deja escrito: al terminar de procesar devuelve Recibido con código 2, Rechazado con código 15 o Error de proceso con código 4, y advierte que recibido significa que el documento completó el proceso interno y no que una autoridad lo haya autorizado. Nuestra columna ponía «Aprobado», que es justo la palabra que la entidad dijo el 13 de octubre que no existe en el marco. El error de proceso faltaba del todo, y sin él un fallo nuestro al procesar se leía como un rechazo del documento: va en naranja, que es la señal de advertencia del manual, porque no hay nada que corregir y se reintenta. Y el estado es ahora un filtro, que es como lo tiene el producto construido y aquí no estaba; el código se ve en la opción porque es el número lo que se cita al pedir soporte.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 13 de octubre</span>
+    <strong>En el desplegable de proveedores se escribe.</strong> El campo existe porque con doscientos proveedores nadie recuerda cómo se escribe cada nombre, pero una lista de doscientas casillas con barra de desplazamiento tiene el mismo problema: hay que recorrerla igual. Ahora se abre con el cursor dentro de la caja de buscar, se filtra a cada letra —sin distinguir mayúsculas ni acentos y buscando en cualquier parte del nombre, porque a «Khalifa Industrial Zone Services» se llega tanto por «khalifa» como por «zone»— y se puede recorrer con las flechas y marcar con la barra espaciadora. Lo que ya está marcado no se esconde nunca al filtrar, que es el fallo típico de estos desplegables: buscas otra cosa, dejas de ver lo que tenías elegido y crees que se perdió. Y se reordena al abrir, no mientras está abierto, porque mover las opciones bajo el ratón cambia de sitio la que ibas a pulsar.
   </div>
 
   <!-- ===================== Banner de búsqueda ========================= -->
@@ -90,6 +98,14 @@
             <label class="edoc-etiqueta" for="f-tipo">Tipo de documento</label>
             <select class="custom-select" id="f-tipo"><option value="">Todos</option></select>
           </div>
+          <!-- El estado de eDoc, que es el único que todo documento tiene
+               siempre: las otras esquinas pueden estar sin responder. Se
+               rellena desde los datos para que no haya que mantener dos
+               listas. -->
+          <div class="col-12 col-md-6 col-xl-3 edoc-filtro-extra">
+            <label class="edoc-etiqueta" for="f-estado">Estado en eDoc</label>
+            <select class="custom-select" id="f-estado"><option value="">Todos</option></select>
+          </div>
           <!-- El MVP lo pide como «Filtrar por proveedor», y viene del feedback
                de Francia: escribir el nombre a mano no sirve cuando llegan
                documentos de doscientos proveedores y uno no recuerda cómo se
@@ -102,9 +118,18 @@
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span id="f-proveedor-rotulo">Todos</span>
               </button>
-              <div class="dropdown-menu edoc-multi__menu" aria-labelledby="f-proveedor" id="f-proveedor-lista"></div>
+              <div class="dropdown-menu edoc-multi__menu" aria-labelledby="f-proveedor">
+                <div class="edoc-multi__buscar">
+                  <input type="search" class="form-control form-control-sm" id="f-proveedor-buscar"
+                         placeholder="Escribe para buscar" autocomplete="off"
+                         aria-label="Buscar un proveedor por su nombre">
+                </div>
+                <div class="edoc-multi__lista" id="f-proveedor-lista" role="group"
+                     aria-label="Proveedores"></div>
+                <div class="edoc-multi__vacio" id="f-proveedor-vacio" hidden>Ningún proveedor con esas letras</div>
+              </div>
             </div>
-            <div class="edoc-ayuda">Se pueden marcar varios. Aparecen con el nombre tal como llega.</div>
+            <div class="edoc-ayuda">Escribe para buscarlo por su nombre. Se pueden marcar varios, y aparecen con el nombre tal como llega.</div>
           </div>
         </div>
 
@@ -114,13 +139,6 @@
         <div class="d-flex hueco-2 flex-wrap mt-4 align-items-center">
           <button type="submit" class="btn btn-edoc-primario">Consultar</button>
           <button type="reset" class="btn btn-edoc-terciario">Limpiar</button>
-          <!-- Se deja a la vista y en gris, con su fase. Es lo que se pidió en
-               la sesión del MVP: si lo quitamos, a quien tiene clientes
-               esperando le tendemos una trampa; si lo dejamos sin marcar,
-               parece que va en la primera entrega. -->
-          <span class="edoc-fase-marca" title="No entra en la primera entrega">
-            Aprobar o rechazar en bloque · fase 2
-          </span>
         </div>
       </form>
     </div>
@@ -159,6 +177,11 @@
       </div>
     </div>
 
+    <div class="edoc-aviso edoc-aviso--info mb-3">
+      <span data-icono="info" class="edoc-aviso__icono"></span>
+      <div>Si un documento que recibiste está mal, pídele a tu proveedor una nota de crédito. El comprador no rechaza una factura que ya pasó las validaciones: la norma obliga al emisor a emitir la nota de crédito cuando hay un error, y tiene 14 días para hacerlo.</div>
+    </div>
+
     <div class="edoc-tabla-envoltura">
       <table class="edoc-tabla" id="tabla-recibidos">
         <thead>
@@ -178,10 +201,6 @@
               <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="bottom"
                 data-content="La misma esquina que ves en Documentos Emitidos. En esta pantalla la plataforma receptora somos nosotros, eDoc, porque el documento llega a tu nombre. Aquí ves si llegó bien por la red."
                 aria-label="Qué es C3">?</button></th>
-            <th scope="col">Destinatario <span class="clave-corner">(C4)</span>
-              <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="bottom"
-                data-content="La misma esquina que ves en Documentos Emitidos. Allí el destinatario es tu cliente; aquí eres tú. Puedes aprobar o rechazar, y mientras no respondas el emisor no sabe nada de ti."
-                aria-label="Qué es C4">?</button></th>
           </tr>
         </thead>
         <tbody id="cuerpo-recibidos"></tbody>
@@ -191,27 +210,8 @@
   </section>
 
   <div class="nota nota--decidido">
-    <span class="nota__sello">Decidido · 5 de octubre</span>
-    <strong>Dos respuestas, y sin código prestado.</strong>
-    <span class="edoc-estado edoc-estado--exito">Aprobada</span>
-    <span class="edoc-estado edoc-estado--error">Rechazada</span>
-    Aquí respondes como comprador, y eso es una respuesta de negocio. No es un <span class="cifra">MLS</span>: el
-    MLS es técnico y va entre plataformas. En el estándar de Peppol esta respuesta es el
-    <span class="cifra">Invoice Response</span>, que tiene siete códigos —acuse, en proceso, aceptada, rechazada,
-    en consulta, aceptada con condiciones y pagada—, pero <strong>Emiratos no lo tiene</strong>. Comprobado el 7 de
-    octubre en la especificación publicada: de Emiratos solo hay tres documentos —facturación, autofacturación y
-    el Tax Data Document con el que se reporta a la autoridad— y ninguno es un Invoice Response. O sea que esta
-    respuesta, por ahora, vive en nuestro portal y no viaja por la red al proveedor. Hay que decirlo así al
-    cliente y no prometer que su proveedor la recibe. Mientras tanto, dos: aprobar y rechazar, y el rechazo pide
-    siempre motivo tipificado.
-  </div>
-
-  <div class="nota nota--abierto">
-    <span class="nota__sello">Abierto</span>
-    <strong>Bolivia distingue «Rechazar y notificar» de «Solo rechazar».</strong> Son dos botones distintos: uno avisa al
-    proveedor por correo y el otro solo deja el rechazo registrado. Aquí el rechazo se registra y se le comunica al
-    emisor, así que el correo sería un canal alterno —el mismo asunto que bloquea «Reenviar al cliente»—. Hay que decidir si el rechazo
-    lleva aviso por correo o no; mientras tanto, esta maqueta ofrece una sola acción.
+    <span class="nota__sello">Corregido · 13 de octubre</span>
+    <strong>El comprador no aprueba ni rechaza. Lo dijo la entidad.</strong> En la revisión técnica del 13 de octubre, al preguntar nosotros por la autorización y el rechazo, la respuesta fue que no existe el concepto: si la factura pasa las validaciones no hay mecanismo para rechazarla, la provisión de Peppol en Emiratos queda solo como acuerdo comercial entre las partes, y lo que se emite cuando algo está mal es una nota de crédito. También nos pidieron quitar el rechazo del diagrama de flujo de la presentación. Así que aquí se fueron los dos botones, los motivos tipificados y la columna del destinatario: esta pantalla consulta, y el único estado que viene de la red es el MLS de la plataforma receptora. Lo anterior no era un invento nuestro —la especificación publicada no trae Invoice Response, y así estaba anotado desde el 7 de octubre—, pero daba por hecho que llegaría y ya sabemos que no.
   </div>
 
   <div class="nota nota--abierto">
@@ -229,61 +229,7 @@
 
   <div class="nota nota--fuera">
     <span class="nota__sello">Fuera del MVP</span>
-    <strong>Workflow de aprobaciones.</strong> Asignar proveedores a usuarios, autoaprobar por reglas y rechazar en masa
-    es un módulo con personalidad propia, hermano de esta consulta y no una opción suya. En Bolivia lleva años sin salir a
-    producción. Se deja escrito para que no se pida como si fuera gratis. Por eso aquí no hay casillas de selección múltiple.
-  </div>
-
-  <!-- ===================== Modal · aprobar ============================ -->
-  <div class="modal fade" id="modal-aprobar" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header"><h5 class="modal-title">Aprobar el documento</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>
-        <div class="modal-body">
-          <p class="mb-3">Vas a aprobar <strong id="ap-numero"></strong> de <strong id="ap-emisor"></strong>.
-          Se le comunicará al emisor que la aprobaste.</p>
-          <div class="edoc-aviso edoc-aviso--advertencia">
-            <span data-icono="alerta" class="edoc-aviso__icono"></span>
-            <div>La aprobación no se deshace desde el portal. Si después hay que corregir el documento, el emisor tiene que
-            emitir una nota de crédito: en Emiratos anular no existe.</div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-edoc-exito" id="confirmar-aprobar">Aprobar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== Modal · rechazar =========================== -->
-  <div class="modal fade" id="modal-rechazar" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header"><h5 class="modal-title">Rechazar el documento</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button></div>
-        <div class="modal-body">
-          <p class="mb-3">Vas a rechazar <strong id="re-numero"></strong> de <strong id="re-emisor"></strong>.
-          Se le comunicará al emisor, con el motivo que elijas.</p>
-          <div class="mb-3">
-            <label class="edoc-etiqueta" for="re-motivo">Motivo del rechazo<span class="obligatorio">*</span></label>
-            <select class="custom-select" id="re-motivo" required>
-              <option value="">Elige un motivo</option>
-            </select>
-            <div class="edoc-ayuda">El motivo es tipificado: viaja como código dentro de la respuesta, no como texto libre.</div>
-          </div>
-          <div>
-            <label class="edoc-etiqueta" for="re-detalle">Detalle para el emisor</label>
-            <textarea class="form-control" id="re-detalle" rows="3" maxlength="300" placeholder="Opcional. Ayuda al emisor a corregir."></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-edoc-error" id="confirmar-rechazar">Rechazar</button>
-        </div>
-      </div>
-    </div>
+    <strong>Conformar una factura por dentro es otro problema.</strong> Asignar proveedores a usuarios y dar el visto bueno antes de pagar es un circuito interno de cuentas por pagar: un módulo con personalidad propia, hermano de esta consulta y no una opción suya. Y ahora, además, no tiene nada que ver con la red: lo que se conformara ahí no viajaría a ninguna parte. En Bolivia lleva años sin salir a producción. Se deja escrito para que no se pida como si fuera gratis. Por eso aquí no hay casillas de selección múltiple.
   </div>
 
   <!-- ===================== Modal · visor ============================== -->
@@ -354,7 +300,7 @@
     if (!caja) return;
     caja.innerHTML = lista.map(function (nombre, i) {
       var id = 'prov-' + i;
-      return '<label class="edoc-multi__opcion" for="' + id + '">' +
+      return '<label class="edoc-multi__opcion" for="' + id + '" data-nombre="' + nombre + '">' +
         '<input type="checkbox" id="' + id + '" value="' + nombre + '"> ' +
         '<span>' + nombre + '</span></label>';
     }).join('');
@@ -366,10 +312,102 @@
       else if (marcados.length === 1) rotulo.textContent = marcados[0].value;
       else rotulo.textContent = marcados.length + ' proveedores';
     });
+
+    /* --- Buscar por letra ------------------------------------------------
+       Con doscientos proveedores, una lista con barra de desplazamiento no
+       resuelve nada: hay que recorrerla igual. Se filtra a cada letra, sin
+       distinguir mayúsculas ni acentos, y buscando en cualquier parte del
+       nombre: quien recibe de «Khalifa Industrial Zone Services» lo busca
+       tanto por «khalifa» como por «zone». */
+    var buscar = document.getElementById('f-proveedor-buscar');
+    var vacio = document.getElementById('f-proveedor-vacio');
+
+    function sinTildes(s) {
+      return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    /* Lo marcado va arriba y no se esconde nunca. Es el fallo clásico de
+       estos desplegables: filtras por otra cosa, dejas de ver lo que tenías
+       elegido y crees que se perdió.
+
+       Se reordena al abrir, nunca con el menú abierto: mover las opciones
+       mientras alguien las está marcando le cambia de sitio la que iba a
+       pulsar, y si la que se mueve es la que tiene el foco, lo pierde. */
+    function ordenar() {
+      var opciones = [].slice.call(caja.children);
+      opciones.sort(function (a, b) {
+        var ma = a.querySelector('input').checked, mb = b.querySelector('input').checked;
+        if (ma !== mb) return ma ? -1 : 1;
+        return a.dataset.nombre.localeCompare(b.dataset.nombre);
+      }).forEach(function (o) { caja.appendChild(o); });
+    }
+
+    function filtrar() {
+      var q = sinTildes(buscar.value.trim());
+      var quedan = 0;
+      [].forEach.call(caja.children, function (o) {
+        var marcada = o.querySelector('input').checked;
+        var cabe = !q || sinTildes(o.dataset.nombre).indexOf(q) >= 0;
+        o.hidden = !(cabe || marcada);
+        if (cabe) quedan++;
+      });
+      vacio.hidden = quedan > 0;
+    }
+
+    buscar.addEventListener('input', filtrar);
+    // Que no se cierre el menú al escribir o al pulsar dentro de la caja.
+    buscar.addEventListener('click', function (e) { e.stopPropagation(); });
+
+    /* Flechas para recorrer y barra espaciadora para marcar, sin soltar el
+       teclado. Escape cierra, que es lo que espera cualquiera. */
+    buscar.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') {
+        var primera = caja.querySelector('.edoc-multi__opcion:not([hidden]) input');
+        if (primera) { e.preventDefault(); primera.focus(); }
+      }
+    });
+
+    /* Escape cierra desde dentro del menú. Bootstrap solo lo escucha en el
+       botón y en sus propios dropdown-item, y aquí dentro hay una caja de
+       texto y casillas: sin esto el menú se queda abierto tapando el botón de
+       consultar, que es justo donde va uno después de elegir. Y el foco vuelve
+       al botón, que es de donde salió. */
+    document.querySelector('.edoc-multi__menu').addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      e.stopPropagation();
+      $('#f-proveedor').dropdown('hide');
+      document.getElementById('f-proveedor').focus();
+    });
+    caja.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      var visibles = [].slice.call(caja.querySelectorAll('.edoc-multi__opcion:not([hidden]) input'));
+      var i = visibles.indexOf(document.activeElement);
+      if (i < 0) return;
+      e.preventDefault();
+      if (e.key === 'ArrowUp' && i === 0) return buscar.focus();
+      var siguiente = visibles[e.key === 'ArrowDown' ? i + 1 : i - 1];
+      if (siguiente) siguiente.focus();
+    });
+
+    /* Al abrirlo, el cursor ya está en la caja: se abre para buscar. Y se
+       limpia lo escrito, que si no la segunda vez se abre filtrado por lo que
+       se buscó la vez anterior y parece que faltan proveedores. */
+    $('#f-proveedor').closest('.dropdown').on('shown.bs.dropdown', function () {
+      buscar.value = '';
+      ordenar();
+      filtrar();
+      buscar.focus();
+    });
+
     // Al limpiar el formulario, el rótulo vuelve con las casillas.
     var forma = caja.closest('form');
     if (forma) forma.addEventListener('reset', function () {
-      window.setTimeout(function () { rotulo.textContent = 'Todos'; }, 0);
+      window.setTimeout(function () {
+        rotulo.textContent = 'Todos';
+        buscar.value = '';
+        ordenar();
+        filtrar();
+      }, 0);
     });
   }
   montarProveedores();
@@ -379,37 +417,14 @@
   // Con value: sin él, el valor sería el texto y cambiaría al traducir la página.
   document.getElementById('f-tipo').insertAdjacentHTML('beforeend',
     D.TIPOS.map(function (t) { return '<option value="' + t + '">' + t + '</option>'; }).join(''));
-  document.getElementById('re-motivo').insertAdjacentHTML('beforeend',
-    D.MOTIVOS_RECHAZO.map(function (m) { return '<option value="' + m.codigo + '">' + m.codigo + ' · ' + m.texto + '</option>'; }).join(''));
-
-  function respuestaPastilla(doc) {
-    if (doc.respuesta === 'pendiente') return '<span class="edoc-estado edoc-estado--neutro">Pendiente</span>';
-    var mapa = { aprobado: ['exito', 'Aprobada'], rechazado: ['error', 'Rechazada'] };
-    var m = mapa[doc.respuesta];
-    var extra = doc.respuestaSello ? '<div class="edoc-secundario cifra mt-1">' + doc.respuestaSello + '</div>' : '';
-    var motivo = doc.motivo ? '<div class="edoc-secundario mt-1">' + doc.motivo + '</div>' : '';
-    return '<span class="edoc-estado edoc-estado--' + m[0] + '">' + m[1] + '</span>' + extra + motivo;
-  }
-
-  /* Las acciones se habilitan según el estado de la fila. Aprobar o rechazar
-     cierra el círculo: ya no se puede volver a responder, y son las dos únicas
-     respuestas que ofrece el portal.
-
-     Reparto pedido en la revisión del 2026-09-07: «dejaría las opciones
+  /* Reparto pedido en la revisión del 2026-09-07: «dejaría las opciones
      principales o las más utilizadas y las otras debajo de este submenú».
-     Fuera quedan las del recorrido —mirar la factura y responderla—; en el menú
-     de los tres puntos, las ocasionales: descargar el PDF y el XML. */
+     Fuera queda la del recorrido —mirar la factura—; en el menú de los tres
+     puntos, las ocasionales: descargar el PDF y el XML.
+
+     Desde el 13 de octubre no hay nada que responder: la entidad confirmó que
+     el comprador no aprueba ni rechaza. */
   function acciones(doc, i) {
-    var cerrado = doc.respuesta === 'aprobado' || doc.respuesta === 'rechazado';
-    function boton(accion, iconoNombre, matiz, rotulo, permitido, razon) {
-      var clases = 'edoc-accion' + (matiz ? ' edoc-accion--' + matiz : '');
-      if (permitido) {
-        return '<a class="' + clases + '" href="#" data-accion="' + accion + '" data-i="' + i + '" ' +
-               'title="' + rotulo + '" aria-label="' + rotulo + ' · ' + doc.numero + '">' + ico(iconoNombre) + '</a>';
-      }
-      return '<span class="' + clases + '" aria-disabled="true" title="' + razon + '" ' +
-             'aria-label="' + rotulo + ' · no disponible: ' + razon + '">' + ico(iconoNombre) + '</span>';
-    }
     function opcion(accion, iconoNombre, rotulo, detalle, permitido, razon) {
       if (!permitido) {
         return '<li><span class="dropdown-item edoc-mas__opcion" aria-disabled="true" title="' + razon + '">' +
@@ -423,8 +438,6 @@
     return '<div class="edoc-acciones-fila">' +
       '<a class="edoc-accion edoc-accion--pdf" href="#" data-accion="visor" data-i="' + i + '" title="Abrir el visor de la factura" ' +
         'aria-label="Abrir el visor de ' + doc.numero + '">' + ico('ver') + '</a>' +
-      boton('aprobar',  'aprobar',  'exito', 'Aprobar',  !cerrado, 'Ya respondiste este documento') +
-      boton('rechazar', 'rechazar', 'error', 'Rechazar', !cerrado, 'Ya respondiste este documento') +
       '<div class="dropdown">' +
         '<button type="button" class="edoc-accion edoc-accion--gris" data-toggle="dropdown" ' +
           'title="Más acciones" aria-label="Más acciones para ' + doc.numero + '" ' +
@@ -487,7 +500,6 @@
         '<td class="cifra cifra-der"' + negativo + '>' + D.dinero(doc.iva) + '</td>' +
         '<td class="cifra cifra-der font-weight-bold"' + negativo + '>' + D.dinero(doc.total) + '</td>' +
         '<td class="separador-izq">' + window.edocPastilla(doc.recepcion) + '</td>' +
-        '<td>' + respuestaPastilla(doc) + '</td>' +
       '</tr>';
     }).join('');
     window.edocPintarNombres();
@@ -574,11 +586,6 @@
     $('#modal-visor').modal('show');
   }
 
-  function sello() {
-    var f = new Date();
-    return '2026-09-01 ' + String(f.getHours()).padStart(2, '0') + ':' + String(f.getMinutes()).padStart(2, '0');
-  }
-
   document.getElementById('cuerpo-recibidos').addEventListener('click', function (e) {
     var a = e.target.closest('[data-accion]');
     if (!a) return;
@@ -591,38 +598,6 @@
     if (accion === 'visor') return abrirVisor(doc);
     if (accion === 'xml') return window.edocDescargarXML(doc.numero);
     if (accion === 'pdf') { abrirVisor(doc); return window.edocImprimirVisor(doc.numero); }
-
-    if (accion === 'aprobar') {
-      document.getElementById('ap-numero').textContent = doc.numero;
-      document.getElementById('ap-emisor').textContent = doc.emisorLatino;
-      $('#modal-aprobar').modal('show');
-    }
-    if (accion === 'rechazar') {
-      document.getElementById('re-numero').textContent = doc.numero;
-      document.getElementById('re-emisor').textContent = doc.emisorLatino;
-      document.getElementById('re-motivo').value = '';
-      document.getElementById('re-detalle').value = '';
-      $('#modal-rechazar').modal('show');
-    }
-  });
-
-  document.getElementById('confirmar-aprobar').addEventListener('click', function () {
-    docs[actual].respuesta = 'aprobado';
-    docs[actual].respuestaSello = sello();
-    $('#modal-aprobar').modal('hide');
-    pintar();
-    window.edocAvisar('Aprobaste <strong>' + docs[actual].numero + '</strong>. Se lo comunicamos al emisor.', 'exito');
-  });
-
-  document.getElementById('confirmar-rechazar').addEventListener('click', function () {
-    var sel = document.getElementById('re-motivo');
-    if (!sel.value) { sel.focus(); return window.edocAvisar('Elige el motivo del rechazo. Es obligatorio.', 'advertencia'); }
-    docs[actual].respuesta = 'rechazado';
-    docs[actual].respuestaSello = sello();
-    docs[actual].motivo = sel.options[sel.selectedIndex].text;
-    $('#modal-rechazar').modal('hide');
-    pintar();
-    window.edocAvisar('Rechazaste <strong>' + docs[actual].numero + '</strong>. Se lo comunicamos al emisor con el motivo.', 'error');
   });
 
   /* --- Buscar ------------------------------------------------------------ */
@@ -652,12 +627,26 @@
   function filtroContiene(texto, buscado) {
     return !buscado || String(texto || '').toLowerCase().indexOf(buscado.toLowerCase()) >= 0;
   }
+  /* Las tres respuestas del API, con su código delante. El código se ve porque
+     es lo que se cita al pedir soporte, y porque dos estados pueden parecerse
+     mucho por el nombre y no significar lo mismo. */
+  (function montarEstados() {
+    var sel = document.getElementById('f-estado');
+    if (!sel) return;
+    ['recibido', 'rechazado', 'errorproceso'].forEach(function (clave) {
+      var e = D.ESTADOS[clave];
+      sel.insertAdjacentHTML('beforeend', '<option value="' + clave + '">' +
+        e.rotulo + (e.codigo ? ' · código ' + e.codigo : '') + '</option>');
+    });
+  }());
+
   window.edocFiltrar('#tabla-recibidos', document.getElementById('forma-buscar'), {
     unidad: ['documento', 'documentos'],
     fechas: ['f-desde', 'f-hasta'],
     leer: function () {
       return {
         desde: filtroValor('f-desde'), hasta: filtroValor('f-hasta'), tipo: filtroValor('f-tipo'),
+        estado: filtroValor('f-estado'),
         proveedores: [].slice.call(document.querySelectorAll('#f-proveedor-lista input:checked'))
           .map(function (x) { return x.value; })
       };
@@ -667,6 +656,7 @@
       if (!doc) return true;
       return (!c.desde || doc.fecha >= c.desde) && (!c.hasta || doc.fecha <= c.hasta) &&
         (!c.tipo || doc.tipo === c.tipo) &&
+        (!c.estado || doc.recepcion === c.estado) &&
         (!c.proveedores.length || c.proveedores.indexOf(doc.emisorLatino) >= 0);
     }
   });

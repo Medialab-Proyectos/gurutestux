@@ -136,11 +136,35 @@
           </div>
         </div>
 
-        <label class="edoc-etiqueta mt-3" for="v-trn">Identificador fiscal · TRN
-          <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
-        <input class="form-control cifra" id="v-trn" inputmode="numeric" maxlength="15"
-          placeholder="15 dígitos" style="max-width:280px">
-        <div class="edoc-ayuda" id="ayuda-trn">Este número sí es el mismo en impuestos y aquí.</div>
+        <label class="edoc-etiqueta mt-3" for="v-tin">TIN
+          <span class="marca-campo marca-campo--obligatorio" id="marca-tin">Obligatorio</span>
+          <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="right"
+            data-content="El número con el que te conoce la autoridad, diez dígitos. Es el de la cuenta que acabas de elegir en EmaraTax. No es el TRN: el TRN es más largo, es de un impuesto concreto y aquí no hace falta, porque nos lo da la autoridad."
+            aria-label="Qué es el TIN">?</button></label>
+        <input class="form-control cifra" id="v-tin" inputmode="numeric" maxlength="10"
+          placeholder="10 dígitos" style="max-width:280px">
+        <div class="edoc-ayuda" id="ayuda-tin">Diez dígitos. El TRN no se pide: lo devuelve la autoridad.</div>
+
+        <!-- Solo cuando la empresa ya es cliente y entra a revisar. La guía de
+             la autoridad lo exige: «Mandatory to choose one of the options». -->
+        <div id="caja-accion" hidden>
+          <div class="edoc-etiqueta mt-3 mb-2">Qué quieres hacer
+            <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></div>
+          <div class="reg__tipos">
+            <label class="reg__tipo" for="v-seguir">
+              <input type="radio" name="v-accion" id="v-seguir" value="reverificar">
+              <span class="reg__tipo-marca" aria-hidden="true">✓</span>
+              <span><span class="reg__tipo-t">Seguir con nosotros</span>
+                <span class="reg__tipo-s">Confirmas que GuruSoft sigue siendo tu proveedor. No cambia nada.</span></span>
+            </label>
+            <label class="reg__tipo" for="v-salir">
+              <input type="radio" name="v-accion" id="v-salir" value="desvincular">
+              <span class="reg__tipo-marca" aria-hidden="true">✓</span>
+              <span><span class="reg__tipo-t">Dejar de ser cliente</span>
+                <span class="reg__tipo-s">Dejarás de emitir y recibir por la red hasta que elijas otro proveedor.</span></span>
+            </label>
+          </div>
+        </div>
 
         <div class="edoc-aviso edoc-aviso--error mt-3" id="error-datos" hidden>
           <div id="error-texto">Revisa lo que está marcado en rojo.</div>
@@ -179,6 +203,14 @@
         <!-- Datos, no campos: lo que devuelve la autoridad no se edita. -->
         <div class="row rejilla">
           <div class="col-12 col-md-6">
+            <div class="edoc-etiqueta">Tipo de entidad</div>
+            <div class="reg__dato-autoridad" id="r-tipo">Sociedad de responsabilidad limitada</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="edoc-etiqueta">Fecha de la solicitud</div>
+            <div class="reg__dato-autoridad cifra" id="r-envio">2026-10-13</div>
+          </div>
+          <div class="col-12 col-md-6">
             <div class="edoc-etiqueta">Razón social</div>
             <div class="reg__dato-autoridad" id="r-empresa">Al Noor Trading LLC</div>
           </div>
@@ -187,8 +219,13 @@
             <div class="reg__dato-autoridad" id="r-nativo" dir="rtl" lang="ar">النور للتجارة ذ.م.م</div>
           </div>
           <div class="col-12 col-md-6">
-            <div class="edoc-etiqueta">Identificador fiscal · TRN</div>
+            <div class="edoc-etiqueta">TRN del IVA</div>
             <div class="reg__dato-autoridad cifra" id="r-trn">100776655400003</div>
+            <div class="edoc-ayuda">Lo pone la autoridad. Si tu empresa no está registrada en el IVA viene vacío, y la vinculación sigue igual.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="edoc-etiqueta">Alta en el IVA o entrada en el grupo</div>
+            <div class="reg__dato-autoridad cifra" id="r-fecha-iva">2022-02-01</div>
           </div>
           <div class="col-12 col-md-6">
             <div class="edoc-etiqueta">Correo del administrador</div>
@@ -197,10 +234,6 @@
           <div class="col-12 col-md-6">
             <div class="edoc-etiqueta">Proveedor que estás nombrando</div>
             <div class="reg__dato-autoridad" id="r-proveedor">GuruSoft S.A. · eDoc</div>
-          </div>
-          <div class="col-12 col-md-6">
-            <div class="edoc-etiqueta">Alcance</div>
-            <div class="reg__dato-autoridad" id="r-alcance">Emisión y recepción</div>
           </div>
         </div>
 
@@ -271,6 +304,15 @@
           proveedor nombrado. Suele verse en unos minutos.</div>
         </div>
 
+        <div id="caja-peppol">
+          <div class="edoc-etiqueta mb-2">Tu dirección en la red</div>
+          <p class="mb-2">Con esta dirección te encuentran tus clientes y tus proveedores. Se construye con tu TIN, y la damos de alta nosotros.</p>
+          <div class="reg__folio-fila mb-4">
+            <div class="reg__folio-cod" id="peppol-id">—</div>
+            <button type="button" class="btn btn-edoc-secundario btn-sm reg__folio-copiar" id="copiar-peppol">Copiar</button>
+          </div>
+        </div>
+
         <div class="edoc-etiqueta mb-2">Qué sigue</div>
         <ul class="linea-tiempo mb-4">
           <li class="hecho">
@@ -305,11 +347,33 @@
     que es verdad y se envía. Cambiar los campos por nuestra cuenta puede costar una sanción. Lo que sí es
     nuestro es la marca, decir que se está nombrando a GuruSoft y explicar qué pasa después.
   </div>
-  <div class="nota nota--abierto">
-    <span class="nota__sello">Abierto · para desarrollo</span>
-    <strong>Qué nos manda la autoridad y por dónde.</strong> Falta confirmar con qué llega el cliente a esta
-    dirección —si trae una referencia, un código de un solo uso o nada—, qué servicio se consulta al verificar y
-    qué campos devuelve. Aquí se enseñan los que la empresa reconoce; la lista real la fija la integración.
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Respondido · 13 de octubre</span>
+    <strong>Ya sabemos con qué llega y qué devuelve: lo dice la guía de la autoridad.</strong> El documento es
+    «FTA Onboarding Testing Overview User Guide», del portal de certificación. Llega con un código de
+    autorización, y en la reverificación y la baja con el TIN además. Se le piden tres cosas —correo
+    registrado, TIN y el móvil como opcional— y la ficha que devuelve son seis campos: tipo de entidad, los dos
+    nombres, el TRN del IVA, la fecha de alta en el IVA y la fecha de la solicitud. Están puestos tal cual. Lo
+    que sí sigue sin poderse contrastar es el contrato del API: la especificación técnica es un enlace al
+    portal de APIs del gobierno, que pide credenciales, y no hay nada publicado fuera. Eso lo ve José.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 13 de octubre</span>
+    <strong>Lo teníamos invertido: pedíamos el TRN y la autoridad pide el TIN.</strong> Y no es un cambio de
+    nombre. La circular del Ministerio sobre TIN y TRN dice tres cosas: que el TRN <em>no</em> es requisito para
+    vincularse, que si la empresa está registrada en el IVA el TRN <em>lo devuelve EmaraTax</em> como parte de
+    la ficha, y que la dirección en la red de Peppol se construye siempre con el TIN y nunca con el TRN. O sea
+    que pedíamos lo que nos iban a dar y no pedíamos lo que hace falta. Ahora el TIN es el campo que se escribe
+    —diez dígitos— y el TRN es un dato que llega. Hay que revisar si el campo TRN del registro comercial sigue
+    teniendo sentido, porque esto lo deja en entredicho.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 13 de octubre</span>
+    <strong>El código de autorización desaparece de la barra de direcciones.</strong> Lo pide la guía con estas
+    palabras: «AUTH code parameter to be hidden after receiving the URL». No es cosmética: ese código autoriza
+    a hablar con la autoridad en nombre de esta empresa, y una dirección se copia, se pega en un chat, se queda
+    en el historial y la ve quien pase por detrás. Se lee al cargar y se borra de la dirección sin recargar la
+    página, que si no se pierde lo demás.
   </div>
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
@@ -317,10 +381,42 @@
     registrado antes. Hoy esta pantalla lo manda al registro al terminar. Falta decidir si además se le abre
     una cuenta con lo que la autoridad nos devuelve, para no pedirle dos veces lo mismo.
   </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Hecho · 13 de octubre</span>
+    <strong>Reverificar y desvincular, en esta misma pantalla.</strong> Estaba anotado como pendiente y ya tiene
+    respuesta en la guía de la autoridad: si la redirección trae un TIN es que la empresa ya es cliente y entra
+    a revisar, y entonces hay que enseñarle las dos opciones —seguir o irse— y obligarle a elegir una
+    «Mandatory to choose one of the options». Si no trae TIN es un alta y lo escribe él. Es la misma pantalla
+    con el TIN bloqueado o no y la elección a la vista o no, en vez de dos pantallas casi iguales que haya que
+    mantener en paralelo. Lo que sigue sin decidir es qué pasa con los documentos en curso cuando alguien se da
+    de baja a media mañana.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 13 de octubre</span>
+    <strong>Al final se enseña la dirección en la red, porque es lo único que se lleva.</strong> La guía lo pide
+    —«ASP to call the Peppol and display the relevant details»— y además contesta la pregunta con la que se va
+    el contribuyente: y ahora qué. Se construye con su TIN, con el prefijo que Emiratos tiene asignado en
+    Peppol, y se puede copiar porque se la van a pedir sus clientes. Si se da de baja no se enseña: ya no hay
+    dirección nuestra que dar.
+  </div>
   <div class="nota nota--abierto">
     <span class="nota__sello">Abierto</span>
-    <strong>Reverificar y desvincular.</strong> El proceso de Emiratos las contempla y esta pantalla todavía no.
-    Hay que decidir quién puede hacerlas, desde dónde y qué pasa con los documentos en curso.
+    <strong>Qué tipos de documento se le dan de alta.</strong> En la reunión del 13 de octubre quedó que son tres
+    obligatorios —factura, nota de crédito y el estado de mensaje— y dos opcionales: la autofactura y la
+    autonota. La duda es si damos de alta solo los obligatorios, todos, o preguntamos. Preguntar sería lo
+    limpio, pero esta pantalla la especifica la autoridad y no tiene ese campo, así que aquí no se pregunta. Si
+    se decide ofrecer los opcionales, el sitio es el portal, después. Lo confirma Felipe cuando el SMP esté en
+    pie: la página pública de Peppol para Emiratos lista las especificaciones pero no dice cuáles son
+    obligatorias, así que esos tres salen de la reunión y no de un documento.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>La dirección de vuelta a EmaraTax y lo que se ve mientras tanto.</strong> El botón del final tiene que
+    devolver al contribuyente a la pantalla de la autoridad donde ve la vinculación hecha; la guía enseña esa
+    pantalla pero no da la dirección de retorno, así que de momento lleva al acceso de EmaraTax. Y hay dos
+    llamadas al API del gobierno —verificar y enviar— que en la propia reunión se dijo que «están demorando en
+    abrir bastante». Si tardan diez segundos, un botón quieto parece roto: hay que medirlo antes de decidir si
+    basta con el botón ocupado.
   </div>
   <div class="nota nota--fuera">
     <span class="nota__sello">Maqueta</span>
@@ -343,6 +439,49 @@
   if (window.edocEnObra) return;
   var $ = function (id) { return document.getElementById(id); };
   var val = function (id) { return ($(id).value || '').trim(); };
+
+  /* --- Con qué llega el contribuyente ------------------------------------
+     La autoridad redirige con un código de autorización. En la reverificación
+     y en la baja manda además el TIN, y que venga el TIN es lo que decide cuál
+     de las dos caras se enseña. */
+  var entrada = (function () {
+    try { return new URLSearchParams(window.location.search); }
+    catch (error) { return new URLSearchParams(''); }
+  }());
+  var tinDeLaAutoridad = (entrada.get('tin') || '').replace(/\D/g, '');
+  var revisando = tinDeLaAutoridad.length > 0;
+
+  /* El código autoriza a hablar con la autoridad en nombre de esta empresa, y
+     una dirección se copia, se pega en un chat y se queda en el historial. La
+     guía de la autoridad lo pide: «AUTH code parameter to be hidden after
+     receiving the URL». Se borra de la barra sin recargar, que si no se pierde
+     lo demás. */
+  (function esconderCodigo() {
+    if (!entrada.get('auth')) return;
+    try {
+      entrada.delete('auth');
+      var resto = entrada.toString();
+      window.history.replaceState({}, '',
+        window.location.pathname + (resto ? '?' + resto : '') + window.location.hash);
+    } catch (error) { /* si el navegador no deja, se sigue igual */ }
+  }());
+
+  /* La otra cara: ya es cliente y entra a revisar. Mismo formulario con el TIN
+     bloqueado y la elección a la vista, en vez de una segunda pantalla casi
+     igual que haya que mantener en paralelo. */
+  (function pintarModo() {
+    if (!revisando) return;
+    document.querySelector('.edoc-titulo').textContent = 'Revisa tu asociación con GuruSoft';
+    document.querySelector('.edoc-subtitulo').textContent =
+      'Vienes del portal de la Federal Tax Authority. Ya somos tu proveedor: aquí decides si sigues con nosotros o te desvinculas.';
+    $('caja-accion').hidden = false;
+    $('v-tin').value = tinDeLaAutoridad;
+    $('v-tin').readOnly = true;
+    $('marca-tin').textContent = 'Lo pone la autoridad';
+    $('marca-tin').className = 'marca-campo';
+    $('ayuda-tin').textContent = 'Nos lo ha dicho la autoridad y no se puede cambiar.';
+    $('paso-3').querySelector('.reg__paso-t').textContent = 'Decisión enviada';
+  }());
 
   /* Los tres momentos del panel. «no cuadra» no es un paso más: es el mismo
      paso 2 con otra respuesta. */
@@ -367,13 +506,17 @@
   function correoValido(c) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c); }
 
   function fallo() {
-    var correo = $('v-correo'), trn = $('v-trn');
-    [correo, trn].forEach(function (e) { e.classList.remove('is-invalid'); });
+    var correo = $('v-correo'), tin = $('v-tin');
+    [correo, tin].forEach(function (e) { e.classList.remove('is-invalid'); });
     if (!correoValido(val('v-correo'))) {
       return { campo: correo, texto: 'Escribe el correo del administrador, tal como consta en EmaraTax.' };
     }
-    if (!/^\d{15}$/.test(val('v-trn').replace(/\s/g, ''))) {
-      return { campo: trn, texto: 'El registro fiscal son quince dígitos, sin espacios ni guiones.' };
+    if (!/^\d{10}$/.test(val('v-tin').replace(/\s/g, ''))) {
+      return { campo: tin, texto: 'El TIN son diez dígitos, sin espacios ni guiones. Es el número de la cuenta que elegiste en EmaraTax.' };
+    }
+    /* La autoridad lo exige: «Mandatory to choose one of the options». */
+    if (revisando && !document.querySelector('input[name="v-accion"]:checked')) {
+      return { campo: $('v-seguir'), texto: 'Elige si quieres seguir con nosotros o desvincularte. Hay que elegir una de las dos.' };
     }
     return null;
   }
@@ -391,7 +534,6 @@
     if (respuesta === 'no') { ir('no'); return; }
     // Lo que devuelve la autoridad se enseña tal cual; lo escrito no lo pisa.
     $('r-correo').textContent = val('v-correo');
-    if (val('v-trn')) $('r-trn').textContent = val('v-trn');
     ir('2');
   }
 
@@ -411,20 +553,55 @@
     $('declaro-error').hidden = true;
     /* En la maqueta, la asociación queda anotada: el portal enseña la conexión
        como activa y el inicio deja de pedir el paso. */
-    try { window.sessionStorage.setItem('edoc-asociada', '1'); } catch (error) { /* nada */ }
+    var baja = document.querySelector('input[name="v-accion"]:checked');
+    baja = !!baja && baja.value === 'desvincular';
+    try {
+      window.sessionStorage.setItem('edoc-asociada', baja ? '0' : '1');
+    } catch (error) { /* nada */ }
+    pintarRemate(baja);
     ir('3');
-    window.edocAvisar('Asociación enviada. En EmaraTax aparecemos como tu proveedor nombrado.', 'exito');
+    window.edocAvisar(baja
+      ? 'Baja enviada. En EmaraTax aparecerás sin proveedor nombrado.'
+      : 'Asociación enviada. En EmaraTax aparecemos como tu proveedor nombrado.',
+      baja ? 'advertencia' : 'exito');
+  });
+
+  /* La dirección en la red se construye con el TIN, nunca con el TRN: lo dice
+     la circular del Ministerio sobre TIN y TRN. El 0235 es el código que la
+     autoridad de Emiratos tiene asignado en Peppol. */
+  function pintarRemate(baja) {
+    var caja = $('caja-peppol');
+    if (baja) {
+      caja.hidden = true;
+      document.querySelector('#cuerpo-3 .reg__titulo').textContent = 'Baja enviada';
+      document.querySelector('#cuerpo-3 .reg__sub').textContent = 'Ya consta en EmaraTax que dejamos de ser tu proveedor';
+      return;
+    }
+    caja.hidden = false;
+    $('peppol-id').textContent = '0235:' + val('v-tin').replace(/\s/g, '');
+  }
+
+  $('copiar-peppol').addEventListener('click', function () {
+    try {
+      navigator.clipboard.writeText($('peppol-id').textContent);
+      window.edocAvisar('Copiada tu dirección en la red.', 'exito');
+    } catch (error) {
+      window.edocAvisar('No pudimos copiarla. Selecciónala y cópiala a mano.', 'advertencia');
+    }
   });
 
   // Los dos botones de la maqueta, para ver las dos respuestas.
+  function rellenar(correo) {
+    if (!val('v-correo')) $('v-correo').value = correo;
+    if (!val('v-tin')) $('v-tin').value = '1000001602';
+    if (revisando && !document.querySelector('input[name="v-accion"]:checked')) $('v-seguir').checked = true;
+  }
   $('sim-ok').addEventListener('click', function () {
-    if (!val('v-correo')) $('v-correo').value = 'f.almarzooqi@alnoor.ae';
-    if (!val('v-trn')) $('v-trn').value = '100776655400003';
+    rellenar('f.almarzooqi@alnoor.ae');
     verificar('ok');
   });
   $('sim-no').addEventListener('click', function () {
-    if (!val('v-correo')) $('v-correo').value = 'otro.correo@alnoor.ae';
-    if (!val('v-trn')) $('v-trn').value = '100776655400003';
+    rellenar('otro.correo@alnoor.ae');
     verificar('no');
   });
 

@@ -57,7 +57,7 @@
     <span class="nota__sello">Decidido</span>
     <strong>Aquí «Emisión» es consultar lo emitido.</strong> No se emite desde el portal: eDoc Emisor queda fuera del alcance
     de Emiratos, así que no hay formulario de factura, ni notas, ni contingencia, ni catálogo de productos.
-    Tampoco hay botón de anular: la única corrección es una nota de crédito y este portal no emite notas.
+    Tampoco hay botón de anular: no se anula el documento, se cancela la operación emitiendo una nota de crédito dentro de 14 días, y este portal no emite notas.
   </div>
 
   <!-- ===================== Banner de búsqueda ========================= -->
@@ -273,17 +273,20 @@
           <h3 class="edoc-tablero__titulo mb-2" style="font-size:15px">El camino de la factura</h3>
           <div class="edoc-tabla-envoltura mb-4">
             <table class="edoc-tabla">
-              <thead><tr><th scope="col">Esquina</th><th scope="col">Quién es</th><th scope="col">Qué puede responder</th></tr></thead>
+              <thead><tr><th scope="col">Esquina</th><th scope="col">Quién es</th><th scope="col">Qué se sabe por esta esquina</th></tr></thead>
               <tbody>
                 <tr><td>eDoc <span class="clave-corner">(C2)</span></td><td>Tu proveedor de servicios en la red Peppol. Es quien transmite el documento.</td>
-                    <td>Aprueba el documento o lo rechaza si el XML no valida.</td></tr>
+                    <td>Valida el documento. Si el XML no pasa las validaciones, lo rechaza por error de validación.</td></tr>
                 <tr><td>Plataforma receptora <span class="clave-corner">(C3)</span></td><td>El proveedor de servicios del comprador. En Documentos Recibidos, esta esquina somos nosotros.</td>
                     <td>Valida y entrega. Su respuesta nos llega como MLS: AB validada pero sin poder confirmar que se la pasó al comprador, AP validada y entregada, RE rechazada.
                     <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="left"
-                      data-content="El MLS es técnico y va de la plataforma del comprador a la nuestra. Dice si el documento llegó y validó, no si el comprador está de acuerdo: eso es la respuesta de C4."
+                      data-content="El MLS es técnico y va de la plataforma del comprador a la nuestra. Dice si el documento llegó y validó, no si el comprador está de acuerdo. Y de acuerdo o no, el comprador no puede decirlo por la red: en Emiratos no existe su respuesta."
                       aria-label="Qué significa el MLS en esta esquina">?</button></td></tr>
-                <tr><td>Destinatario <span class="clave-corner">(C4)</span></td><td>La empresa que recibe el documento. En Documentos Recibidos, esta esquina eres tú.</td>
-                    <td>Aprueba o rechaza con motivo. Es una respuesta de negocio, no un MLS.</td></tr>
+                <tr><td>Destinatario <span class="clave-corner">(C4)</span></td><td>Tu cliente, la empresa que recibe el documento. En Documentos Recibidos esta esquina eres tú.</td>
+                    <td>No responde nada: en Emiratos el comprador no aprueba ni rechaza. Lo único que esta esquina te dice es si el documento llegó a sus manos. Si está mal, eres tú quien tiene que emitir la nota de crédito.
+                    <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="left"
+                      data-content="Confirmado por la entidad el 13 de octubre, y la Decisión Ministerial 243 de 2025 no usa ni una vez la palabra rechazo. Su artículo 6.2 te obliga a emitir la nota de crédito cuando la operación se cancela, cuando baja lo pactado, cuando se devuelve el importe o cuando hubo un error."
+                      aria-label="Por qué el destinatario no responde">?</button></td></tr>
               </tbody>
             </table>
           </div>
@@ -291,7 +294,7 @@
           <h3 class="edoc-tablero__titulo mb-2" style="font-size:15px">El reporte a la autoridad</h3>
           <div class="edoc-tabla-envoltura">
             <table class="edoc-tabla">
-              <thead><tr><th scope="col">Esquina</th><th scope="col">Quién es</th><th scope="col">Qué puede responder</th></tr></thead>
+              <thead><tr><th scope="col">Esquina</th><th scope="col">Quién es</th><th scope="col">Qué se sabe por esta esquina</th></tr></thead>
               <tbody>
                 <tr><td>Autoridad <span class="clave-corner">(C5)</span></td>
                     <td>El concentrador de la Federal Tax Authority. Detrás están Finanzas, el Ministerio y las demás entidades que fiscalizan.</td>
@@ -300,18 +303,18 @@
             </table>
           </div>
 
-          <h3 class="edoc-tablero__titulo mt-4 mb-2" style="font-size:15px">Hay dos clases de rechazo</h3>
-          <p class="mb-2">No significan lo mismo ni se arreglan igual, aunque los dos se pinten en rojo.</p>
+          <h3 class="edoc-tablero__titulo mt-4 mb-2" style="font-size:15px">Solo hay una clase de rechazo</h3>
+          <p class="mb-2">Rechazado quiere decir siempre lo mismo: no pasó las validaciones. Que el comprador no esté de acuerdo no es un rechazo.</p>
           <div class="edoc-tabla-envoltura">
             <table class="edoc-tabla">
-              <thead><tr><th scope="col">Clase</th><th scope="col">Quién lo hace</th><th scope="col">Qué hacer</th></tr></thead>
+              <thead><tr><th scope="col">Qué pasó</th><th scope="col">Quién lo dice</th><th scope="col">Qué hacer</th></tr></thead>
               <tbody>
-                <tr><td><strong>Rechazo técnico</strong></td>
-                    <td>eDoc, la autoridad o la plataforma receptora <span class="clave-corner">(C2, C5, C3)</span></td>
+                <tr><td><strong>Rechazado</strong></td>
+                    <td>eDoc, la plataforma receptora o la autoridad <span class="clave-corner">(C2, C3, C5)</span></td>
                     <td>El documento no pasó las validaciones. Hay que corregirlo y volver a emitirlo.</td></tr>
-                <tr><td><strong>Rechazo comercial</strong></td>
-                    <td>El destinatario <span class="clave-corner">(C4)</span></td>
-                    <td>El documento está bien hecho, pero el comprador no está de acuerdo. Se corrige con una nota de crédito, porque en Emiratos anular no existe.</td></tr>
+                <tr><td><strong>El comprador no está de acuerdo</strong></td>
+                    <td>El destinatario <span class="clave-corner">(C4)</span>, por su cuenta y fuera de la red</td>
+                    <td>El documento está bien hecho y quedó emitido. Se corrige con una nota de crédito, que la norma obliga a emitir dentro de 14 días.</td></tr>
               </tbody>
             </table>
           </div>

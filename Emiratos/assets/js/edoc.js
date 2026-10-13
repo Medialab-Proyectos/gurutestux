@@ -137,7 +137,12 @@
         // Ubicación decidida en la revisión: traer un documento de fuera hacia
         // dentro es importar, no un reporte.
         { titulo: 'Importar', enlaces: [ { rotulo: 'Cargar XML', fase: 2 } ] },
-        { titulo: 'Workflow Aprobación', enlaces: [ { rotulo: 'Gestión proveedores', fase: 3 } ] }
+        /* Se llamaba «Workflow Aprobación» hasta el 13 de octubre. Un menú que
+           dice eso promete que en el portal se aprueban facturas, y la entidad
+           confirmó que el comprador no aprueba ni rechaza. El módulo planeado
+           sigue aquí, pero nombrado por lo que es: un circuito interno de
+           cuentas por pagar, que no viaja por la red. */
+        { titulo: 'Cuentas por pagar', enlaces: [ { rotulo: 'Gestión proveedores', fase: 3 } ] }
       ] }
   ];
 

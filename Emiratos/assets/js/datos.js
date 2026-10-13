@@ -40,16 +40,36 @@ window.EDOC = (function () {
       rama: 'fiscal', rechazo: 'tecnico' },
     { clave: 'C3', nombre: 'Plataforma receptora',  quien: 'El ASP del comprador',
       rama: 'entrega', rechazo: 'tecnico' },
+    /* 13 de octubre: C4 no rechaza. La entidad confirmó que el comprador no
+       tiene forma de rechazar una factura que pasó las validaciones, así que
+       esta esquina no tiene clase de rechazo: o le llegó, o no se ha
+       conectado todavía. */
     { clave: 'C4', nombre: 'Destinatario',          quien: 'La empresa que recibe el documento',
-      rama: 'entrega', rechazo: 'comercial' }
+      rama: 'entrega' }
   ];
 
-  /* Las dos clases de rechazo, con el nombre que se enseña y qué hacer. */
+  /* Por qué se rechazó (código 15) y qué falló al procesar (código 4). Son los
+     catálogos del API de eDoc, y se ensenñan con el número delante porque es el
+     número lo que se cita al pedir soporte. */
+  var MOTIVOS_EDOC = {
+    '100': 'InvalidDocument · el documento no es válido',
+    '101': 'UnknownIssuer · el emisor no está registrado',
+    '102': 'Duplicate · el documento ya se había enviado',
+    '103': 'ValidationFailed · no pasó una validación'
+  };
+  var ERRORES_EDOC = {
+    '500': 'Unexpected', '501': 'IssuerLookupFailed', '502': 'MappingFailed',
+    '503': 'ProcessingRegistryFailed', '504': 'DocumentGeneratorFailed',
+    '505': 'ValidationFailed', '506': 'StorageFailed', '507': 'MessagingFailed',
+    '508': 'PersistenceFailed'
+  };
+
+  /* Rechazado quiere decir siempre lo mismo: no pasó las validaciones. El
+     rechazo comercial se fue el 13 de octubre, cuando la entidad confirmó que
+     el comprador no rechaza. */
   var RECHAZOS = {
-    tecnico:   { rotulo: 'Rechazo técnico',
-                 que: 'El documento no pasó las validaciones. Hay que corregirlo y volver a emitirlo.' },
-    comercial: { rotulo: 'Rechazo comercial',
-                 que: 'El documento está bien hecho, pero el comprador no está de acuerdo. Se corrige con una nota de crédito.' }
+    tecnico:   { rotulo: 'Rechazado',
+                 que: 'El documento no pasó las validaciones. Hay que corregirlo y volver a emitirlo.' }
   };
 
   /* Estado → cómo se pinta. Los colores son los de señalización del manual.
@@ -59,8 +79,21 @@ window.EDOC = (function () {
      «pagado». Salen de una lista de códigos cerrada. */
   var ESTADOS = {
     aprobado:  { rotulo: 'Aprobado',    clase: 'exito' },
-    rechazado: { rotulo: 'Rechazado',   clase: 'error' },
+    rechazado: { rotulo: 'Rechazado',   clase: 'error',       codigo: '15' },
     entregado: { rotulo: 'Entregado',   clase: 'transito' },
+    /* Los tres resultados que devuelve eDoc al terminar de procesar, con el
+       código de su propio API. «Recibido» es lo que dice el código 2, y dice
+       solo eso: que el documento completó el proceso interno. No dice que una
+       autoridad lo haya autorizado, y por eso no pone «Aprobado».
+       Es también el único estado que puede tener el destinatario: el documento
+       está en sus manos, no que esté de acuerdo. */
+    recibido:  { rotulo: 'Recibido',    clase: 'exito',       codigo: '2' },
+    /* El tercero. No estaba, y sin él un documento o pasaba o lo rechazaban:
+       un fallo nuestro al procesar se quedaba sin sitio donde contarse, y el
+       cliente lo leía como un rechazo suyo, que es otra cosa y se arregla de
+       otra manera. Va en naranja, que es la señal de advertencia del manual:
+       ni éxito ni rechazo. */
+    errorproceso: { rotulo: 'Error de proceso', clase: 'advertencia', codigo: '4' },
     enviado:   { rotulo: 'Enviado',     clase: 'transito' },
     pendiente: { rotulo: 'Pendiente',   clase: 'neutro' },
     /* Le llegó y no ha dicho nada. Puede quedarse así para siempre: el comprador
@@ -116,17 +149,8 @@ window.EDOC = (function () {
     }).join('');
   }
 
-  /* Motivos tipificados de rechazo. En Emiratos el rechazo pide motivo;
-     el texto libre es opcional y va aparte. */
-  var MOTIVOS_RECHAZO = [
-    { codigo: 'RE-01', texto: 'Los datos del receptor no corresponden' },
-    { codigo: 'RE-02', texto: 'El importe no coincide con lo pactado' },
-    { codigo: 'RE-03', texto: 'Bienes o servicios no recibidos' },
-    { codigo: 'RE-04', texto: 'Cantidad o descripción incorrecta' },
-    { codigo: 'RE-05', texto: 'Documento duplicado' },
-    { codigo: 'RE-06', texto: 'Impuesto aplicado de forma incorrecta' },
-    { codigo: 'RE-07', texto: 'Falta la referencia de la orden de compra' }
-  ];
+  /* Los motivos tipificados de rechazo se fueron el 13 de octubre: la entidad
+     confirmó que el comprador no rechaza, así que no hay motivo que elegir. */
 
   function d(n) { return n.toLocaleString('en-AE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
@@ -158,33 +182,32 @@ window.EDOC = (function () {
     { numero: 'INV-2026-004871', fecha: '2026-08-31', suministro: '2026-08-27', descuento: 400.00, tipo: 'Factura',
       receptorLatino: 'Al Futtaim Logistics LLC', receptorArabe: 'الفطيم للخدمات اللوجستية ذ.م.م',
       trn: '100234567800003', moneda: 'AED', base: 18000.00, iva: 900.00, total: 18900.00,
-      c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'aprobado' },
+      c2: 'recibido', c5: 'aprobado', c3: 'aprobado', c4: 'recibido' },
 
     { numero: 'INV-2026-004870', fecha: '2026-08-31', tipo: 'Factura',
       receptorLatino: 'Emirates Steel Arkan PJSC', receptorArabe: 'الإمارات للحديد والصلب أركان',
       trn: '100987654300003', moneda: 'AED', base: 6250.00, iva: 312.50, total: 6562.50,
-      c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'desconocido' },
+      c2: 'recibido', c5: 'aprobado', c3: 'aprobado', c4: 'desconocido' },
 
     { numero: 'INV-2026-004869', fecha: '2026-08-30', tipo: 'Nota de crédito',
       receptorLatino: 'Gulf Marine Services', receptorArabe: 'خدمات الخليج البحرية',
       trn: '100445566700003', moneda: 'AED', base: -1200.00, iva: -60.00, total: -1260.00,
-      c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'desconocido' },
+      c2: 'recibido', c5: 'aprobado', c3: 'aprobado', c4: 'desconocido' },
 
     { numero: 'INV-2026-004868', fecha: '2026-08-30', tipo: 'Factura',
       receptorLatino: 'Dubai Investments PJSC', receptorArabe: 'دبي للاستثمار ش.م.ع',
       trn: '100112233400003', moneda: 'AED', base: 43900.00, iva: 2195.00, total: 46095.00,
-      c2: 'aprobado', c5: 'aprobado', c3: 'aprobado', c4: 'rechazado',
-      motivoC4: 'RE-02 · El importe no coincide con lo pactado' },
+      c2: 'recibido', c5: 'aprobado', c3: 'aprobado', c4: 'recibido' },
 
     { numero: 'INV-2026-004867', fecha: '2026-08-29', tipo: 'Factura', transaccion: ['Zona franca', 'Exportación'],
       receptorLatino: 'Qatar Fuel Company', receptorArabe: 'شركة قطر للوقود',
       trn: '100778899100003', moneda: 'USD', base: 12750.00, iva: 0.00, total: 12750.00,
-      c2: 'aprobado', c5: 'aprobado', c3: 'nosentrega', c4: 'nosentrega', endpoint: '99' },
+      c2: 'recibido', c5: 'aprobado', c3: 'nosentrega', c4: 'nosentrega', endpoint: '99' },
 
     { numero: 'INV-2026-004866', fecha: '2026-08-29', tipo: 'Factura', transaccion: ['Margen de ganancia'],
       receptorLatino: 'Sharjah Cement Factory', receptorArabe: 'مصنع الشارقة للإسمنت',
       trn: '100556677800003', moneda: 'AED', base: 9800.00, iva: 490.00, total: 10290.00,
-      c2: 'aprobado', c5: 'rechazado', c3: 'noaplica', c4: 'noaplica',
+      c2: 'recibido', c5: 'rechazado', c3: 'noaplica', c4: 'noaplica',
       motivoC5: 'Falta el número de registro fiscal del receptor · dato obligatorio' },
 
     /* La autofactura va con inversión del sujeto pasivo: el impuesto lo liquida
@@ -192,25 +215,35 @@ window.EDOC = (function () {
     { numero: 'INV-2026-004865', fecha: '2026-08-28', tipo: 'Factura', autofacturada: true, inversion: true,
       receptorLatino: 'Ras Al Khaimah Ceramics', receptorArabe: 'رأس الخيمة للسيراميك',
       trn: '100334455600003', moneda: 'AED', base: 3150.00, iva: 157.50, total: 3307.50,
-      c2: 'aprobado', c5: 'aprobado', c3: 'rechazado', c4: 'noaplica',
+      c2: 'recibido', c5: 'aprobado', c3: 'rechazado', c4: 'noaplica',
       motivoC3: 'La firma del sobre de transmisión no valida · error técnico' },
 
     { numero: 'INV-2026-004864', fecha: '2026-08-28', tipo: 'Factura', codigo: '480',
       receptorLatino: 'Mohammed Bin Saeed Trading', receptorArabe: 'محمد بن سعيد للتجارة',
       trn: '—', moneda: 'AED', base: 740.00, iva: 0.00, total: 740.00,
-      c2: 'aprobado', c5: 'aprobado', c3: 'entregado', c4: 'noaplica' },
+      c2: 'recibido', c5: 'aprobado', c3: 'entregado', c4: 'noaplica' },
 
     { numero: 'INV-2026-004863', fecha: '2026-08-27', tipo: 'Factura', transaccion: ['Zona franca', 'Margen de ganancia', 'Factura resumen',
         'Suministro continuo', 'Comercio electrónico', 'Exportación'],
       receptorLatino: 'Abu Dhabi Ports Company', receptorArabe: 'شركة موانئ أبوظبي',
       trn: '100223344500003', moneda: 'AED', base: 27500.00, iva: 1375.00, total: 28875.00,
-      c2: 'aprobado', c5: 'enviado', c3: 'pendiente', c4: 'noaplica' },
+      c2: 'recibido', c5: 'enviado', c3: 'pendiente', c4: 'noaplica' },
 
     { numero: 'INV-2026-004862', fecha: '2026-08-27', tipo: 'Factura',
       receptorLatino: 'Etihad Rail PJSC', receptorArabe: 'الاتحاد للقطارات ش.م.ع',
       trn: '100667788900003', moneda: 'AED', base: 15200.00, iva: 760.00, total: 15960.00,
       c2: 'rechazado', c5: 'noaplica', c3: 'noaplica', c4: 'noaplica',
-      motivoC2: 'El esquema del XML no valida contra la versión vigente' }
+      motivoC2: '103 · ValidationFailed · el esquema del XML no valida contra la versión vigente' },
+
+    /* El tercer resultado del API: ni pasó ni lo rechazamos, falló algo
+       nuestro. El documento está bien hecho, así que el cliente no tiene que
+       corregir nada: se reintenta. Que exista en la demostración obliga a que
+       la pantalla lo sepa contar. */
+    { numero: 'INV-2026-004861', fecha: '2026-08-26', tipo: 'Factura',
+      receptorLatino: 'Dubai Electricity and Water Authority', receptorArabe: 'هيئة كهرباء ومياه دبي',
+      trn: '100991122300003', moneda: 'AED', base: 8400.00, iva: 420.00, total: 8820.00,
+      c2: 'errorproceso', c5: 'noaplica', c3: 'noaplica', c4: 'noaplica',
+      motivoC2: '507 · MessagingFailed · no pudimos encolar el documento. No hay nada que corregir: se reintenta.' }
   ];
 
 
@@ -265,43 +298,43 @@ window.EDOC = (function () {
     { numero: 'INV-882301', fecha: '2026-08-31', fechaEmision: '2026-08-29', tipo: 'Factura',
       emisorLatino: 'Al Ain Water Company', emisorArabe: 'شركة العين للمياه',
       trn: '100908070600003', moneda: 'AED', base: 2400.00, iva: 120.00, total: 2520.00,
-      recepcion: 'aprobado', respuesta: 'pendiente' },
+      recepcion: 'recibido' },
 
     { numero: 'INV-2026-77120', fecha: '2026-08-31', fechaEmision: '2026-08-30', tipo: 'Factura', transaccion: ['Margen de ganancia'],
       emisorLatino: 'Emirates Global Aluminium', emisorArabe: 'الإمارات العالمية للألمنيوم',
       trn: '100101202300003', moneda: 'AED', base: 88500.00, iva: 4425.00, total: 92925.00,
-      recepcion: 'aprobado', respuesta: 'pendiente' },
+      recepcion: 'recibido' },
 
     { numero: 'CN-2026-0043', fecha: '2026-08-30', fechaEmision: '2026-08-28', tipo: 'Nota de crédito',
       emisorLatino: 'Jumeirah Facilities Management', emisorArabe: 'الجميرا لإدارة المرافق',
       trn: '100404505600003', moneda: 'AED', base: -960.00, iva: -48.00, total: -1008.00,
-      recepcion: 'aprobado', respuesta: 'pendiente', respuestaSello: '2026-08-30 14:12' },
+      recepcion: 'recibido' },
 
     { numero: 'INV-55219', fecha: '2026-08-30', fechaEmision: '2026-08-29', tipo: 'Factura',
       emisorLatino: 'Union Coop', emisorArabe: 'جمعية الاتحاد التعاونية',
       trn: '100606707800003', moneda: 'AED', base: 1180.00, iva: 59.00, total: 1239.00,
-      recepcion: 'aprobado', respuesta: 'aprobado', respuestaSello: '2026-08-30 09:41' },
+      recepcion: 'recibido' },
 
     { numero: 'INV-2026-00918', fecha: '2026-08-29', fechaEmision: '2026-08-27', tipo: 'Factura',
       emisorLatino: 'Khalifa Industrial Zone Services', emisorArabe: 'خدمات مدينة خليفة الصناعية',
       trn: '100808909100003', moneda: 'AED', base: 34200.00, iva: 1710.00, total: 35910.00,
-      recepcion: 'aprobado', respuesta: 'rechazado', respuestaSello: '2026-08-29 16:05',
-      motivo: 'RE-03 · Bienes o servicios no recibidos' },
+      recepcion: 'errorproceso',
+      motivoRecepcion: '506 · StorageFailed · no pudimos archivar el documento. Lo estamos reintentando.' },
 
     { numero: 'INV-2026-00917', fecha: '2026-08-29', fechaEmision: '2026-08-26', tipo: 'Factura', transaccion: ['Exportación'],
       emisorLatino: 'Oman National Transport', emisorArabe: 'النقل الوطنية العمانية',
       trn: '100303404500003', moneda: 'USD', base: 7600.00, iva: 0.00, total: 7600.00,
-      recepcion: 'aprobado', respuesta: 'pendiente' },
+      recepcion: 'recibido' },
 
     { numero: 'INV-71044', fecha: '2026-08-28', fechaEmision: '2026-08-27', tipo: 'Factura', codigo: '480',
       emisorLatino: 'Ahmed Al Suwaidi Services', emisorArabe: 'أحمد السويدي للخدمات',
       trn: '—', moneda: 'AED', base: 520.00, iva: 0.00, total: 520.00,
-      recepcion: 'aprobado', respuesta: 'pendiente' },
+      recepcion: 'recibido' },
 
     { numero: 'INV-2026-31288', fecha: '2026-08-28', fechaEmision: '2026-08-26', tipo: 'Factura',
       emisorLatino: 'DP World Logistics', emisorArabe: 'موانئ دبي العالمية للخدمات اللوجستية',
       trn: '100505606700003', moneda: 'AED', base: 19750.00, iva: 987.50, total: 20737.50,
-      recepcion: 'aprobado', respuesta: 'aprobado', respuestaSello: '2026-08-28 11:20' }
+      recepcion: 'recibido' }
   ];
 
   /* --- Detalle del visor · un documento renderizado desde el XML --------- */
@@ -401,8 +434,8 @@ window.EDOC = (function () {
   var ESTADOS_SISTEMA = [
     { clave: 'mantenimiento', activo: false, senal: 'advertencia',
       titulo: 'Mantenimiento en curso',
-      detalle: 'Estamos trabajando en el portal. Puedes consultar, pero las respuestas a documentos ' +
-               'no se enviarán hasta que terminemos. Previsto hasta las 04:00.' },
+      detalle: 'Estamos trabajando en el portal. Puedes consultar, pero lo que emitas ahora ' +
+               'quedará en cola hasta que terminemos. Previsto hasta las 04:00.' },
     { clave: 'conexion', activo: false, senal: 'error',
       titulo: 'Sin conexión con la autoridad',
       detalle: 'No estamos recibiendo respuesta de la Federal Tax Authority. Lo que emitas queda en ' +
@@ -421,8 +454,8 @@ window.EDOC = (function () {
 
   return {
     CORNERS: CORNERS, RECHAZOS: RECHAZOS, ESTADOS: ESTADOS, TIPOS: TIPOS, TRANSACCION: TRANSACCION,
+    MOTIVOS_EDOC: MOTIVOS_EDOC, ERRORES_EDOC: ERRORES_EDOC,
     transaccionBinaria: transaccionBinaria,
-    MOTIVOS_RECHAZO: MOTIVOS_RECHAZO,
     sello: sello,
     RESUMEN: RESUMEN,
     EMITIDOS: EMITIDOS, RECIBIDOS: RECIBIDOS, DETALLE: DETALLE, dinero: d,
