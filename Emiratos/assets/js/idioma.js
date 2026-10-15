@@ -1858,6 +1858,10 @@
       "Paso 0": "Step 0",
       "Antes de empezar": "Before you start",
       /* El paso previo de la solicitud de vinculación. */
+      "¿Te equivocaste al escribir el correo o el TIN?": "Did you mistype the email or the TIN?",
+      "Corrígelos y vuelve a comprobar": "Correct them and check again",
+      ": lo de arriba es lo que la autoridad respondió a": ": what is above is what the authority answered for",
+      "datos.": "details.",
       "Tienes cinco días hábiles": "You have five business days",
       "desde que la autoridad te confirma el cambio para avisárnoslo, y cada día de retraso se sanciona con AED 1.000. La reverificación es la forma de hacerlo.": "from the moment the authority confirms the change to tell us, and each day of delay carries an AED 1,000 penalty. The reverification is how you do it.",
       "Entrar o salir de un grupo fiscal": "Joining or leaving a Tax Group",

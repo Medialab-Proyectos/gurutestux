@@ -446,27 +446,20 @@
           </div>
         </dl>
 
-        <!-- Lo verificado no se toca. Si hay que corregirlo se vuelve al paso
-             1, porque la ficha de arriba es la respuesta a ESOS datos. -->
-        <div class="edoc-aviso edoc-aviso--info mt-3" id="caja-llave-bloqueada" hidden>
-          <span data-icono="info" class="edoc-aviso__icono"></span>
-          <div>El correo y el TIN quedan bloqueados: lo de arriba es lo que la autoridad respondió a <em>esos</em>
-          datos. Si te equivocaste, <button type="button" class="edoc-enlace-texto" id="corregir-llave">corrígelos
-          y vuelve a comprobar</button>.</div>
-        </div>
+        <!-- Decía «el correo y el TIN quedan bloqueados», y en este paso esos
+             campos no están en pantalla: el paso 1 entero está oculto. Era
+             describir un estado que no se ve —y el correo no se enseña nunca,
+             a propósito—. Lo único útil era la salida, así que queda la salida
+             y nada más, sin caja de color: es una puerta, no un aviso. -->
+        <p class="edoc-ayuda mt-3" id="caja-llave-bloqueada" hidden>¿Te equivocaste al escribir el correo o el
+        TIN? <button type="button" class="edoc-enlace-texto" id="corregir-llave">Corrígelos y vuelve a
+        comprobar</button>: lo de arriba es lo que la autoridad respondió a <em>esos</em> datos.</p>
 
-        <!-- El plazo no es un detalle: MD 243, Art. 5(3) obliga al
-             contribuyente a notificarnos por escrito cualquier cambio en sus
-             datos dentro de CINCO DÍAS HÁBILES desde que la autoridad se lo
-             confirma, y la Decisión del Gabinete 106/2025, infracción 6, lo
-             sanciona con AED 1.000 por cada día de retraso. Decírselo aquí, que
-             es justo cuando lo está haciendo, es lo único que le sirve. -->
-        <div class="edoc-aviso edoc-aviso--info mt-3" id="aviso-plazo" hidden>
-          <span data-icono="info" class="edoc-aviso__icono"></span>
-          <div><strong>Tienes cinco días hábiles para avisarnos de un cambio.</strong> Cuentan desde que la
-          autoridad te confirma la modificación, y cada día de retraso se sanciona con AED 1.000. Enviando
-          esto queda hecho.</div>
-        </div>
+        <!-- Aquí había un aviso con los cinco días hábiles de MD 243, Art.
+             5(3) y la multa de AED 1.000 por día. Fuera: ese plazo sirve para
+             que sepa que TIENE que avisárnoslo, y eso se decide antes, en
+             identificación fiscal, donde sigue estando. Aquí llega cuando ya lo
+             está haciendo y no cambia ninguna decisión. -->
 
         <div class="edoc-separador"></div>
 
@@ -622,6 +615,23 @@
     </section>
   </div>
 
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Regla de seguridad · 15 de octubre</span>
+    <strong>El correo que devuelve la autoridad no se enseña nunca, y no es un olvido.</strong> El servicio
+    <em>sí</em> lo devuelve en la respuesta, pero solo sirve para comparar: si el que escribió el contribuyente
+    no es igual al que consta, se rechaza. De la sesión del 15: «está escondido el correo… nos lo van a mandar
+    en el response, solo que no se lo mostramos y lo verificamos; si el correo que digitó allí es diferente al
+    que aparece acá, le rechazamos».
+    <br><br>
+    El porqué es de seguridad: «es para no darle señales a alguien que está tratando [de adivinar]». El correo
+    es el segundo factor —«un doble factor de autenticación escondido»— y enseñarlo lo vacía: quien fuera
+    probando TIN se llevaría un correo válido de regalo. Por eso tampoco el mensaje de error dice cuál de los
+    dos datos falló: decirlo sería la misma fuga por otro lado.
+    <br><br>
+    Hoy se cumple, pero convenía dejarlo escrito: el correo salió de la ficha al corregir que <em>Entity
+    Details</em> son los seis campos de la autoridad y ni uno más, no por esta razón. Sin la nota, cualquiera lo
+    vuelve a añadir creyendo que ayuda.
+  </div>
   <div class="nota nota--decidido">
     <span class="nota__sello">Corregido · 15 de octubre</span>
     <strong>La autoridad no devuelve a esta ventana: abre una página nueva.</strong> Y eso echaba abajo la
@@ -1265,8 +1275,6 @@
        palabra anterior. */
     if (cual === '2') {
       pintarPalabra();
-      /* El plazo solo aplica a quien viene a avisar de un cambio. */
-      $('aviso-plazo').hidden = !revisando;
       var cambiados = marcarCambios();
       var cab = $('cuerpo-2').querySelector('.edoc-aviso--exito div');
       if (revisando && cab) {
