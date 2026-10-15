@@ -34,6 +34,7 @@
       <h1 class="edoc-titulo">Documentos Recibidos</h1>
       <p class="edoc-subtitulo">Lo que llega por la red a nombre de tu empresa. Esta pantalla es de consulta: el comprador no aprueba ni rechaza la factura.</p>
     </div>
+
     <div class="edoc-titulo-barra__lado">
       <span class="edoc-estado edoc-estado--info" id="sello-clasificacion" hidden>Con clasificación</span>
       <button type="button" class="btn btn-edoc-terciario" id="ver-clasificacion">Mostrar la clasificación</button>
@@ -411,7 +412,11 @@
     });
   }
   montarProveedores();
-  var docs = D.RECIBIDOS.map(function (d) { return Object.assign({}, d); });
+  /* Sin designación no llega nada: nadie puede mandarnos un documento a un
+     nombre que la autoridad todavía no tiene asociado a nosotros. */
+  var docs = D.designada()
+    ? D.RECIBIDOS.map(function (d) { return Object.assign({}, d); })
+    : [];
   var actual = null;
 
   // Con value: sin él, el valor sería el texto y cambiaría al traducir la página.
@@ -506,8 +511,11 @@
     window.edocPintarIconos();
     window.edocTabla('#tabla-recibidos', {
       language: {
-        emptyTable: window.edocVacio('No has recibido documentos en ese rango de fechas',
-          'Prueba a ampliar las fechas. Lo que te envíen tus proveedores aparece aquí.'),
+        emptyTable: D.designada()
+          ? window.edocVacio('No has recibido documentos en ese rango de fechas',
+              'Prueba a ampliar las fechas. Lo que te envíen tus proveedores aparece aquí.')
+          : window.edocVacio('Todavía no puedes recibir',
+              'Falta que nos designes en EmaraTax. Hasta entonces tus proveedores no tienen dónde enviarte.'),
         zeroRecords: window.edocVacio('Ningún documento coincide con lo que buscas',
           'Revisa el número o quita algún filtro.', true)
       },

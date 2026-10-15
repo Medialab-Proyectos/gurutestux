@@ -674,12 +674,20 @@ body[data-armazon="reducido"] .edoc-estado-sistema { top: var(--alto-encabezado)
 .edoc-titulo-barra {
   display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
   margin-bottom: 12px; flex-wrap: wrap;
-  position: sticky; top: calc(var(--alto-encabezado) + var(--alto-menu)); z-index: 1026;
+  /* Debajo de la franja de avisos, si la hay. La franja también es pegajosa y
+     a la misma altura: sin descontarla, las dos se montaban y la franja tapaba
+     el título. El alto lo mide el guion, porque depende de cuántas líneas
+     ocupe el texto del aviso. */
+  position: sticky;
+  top: calc(var(--alto-encabezado) + var(--alto-menu) + var(--alto-aviso, 0px));
+  z-index: 1026;
   background: var(--edoc-fondo, #dadada);
   padding: 10px 0 8px; margin-top: -10px;
 }
 /* Sin menu -acceso, registro, verificacion- se pega directamente al encabezado. */
-body[data-armazon="reducido"] .edoc-titulo-barra { top: var(--alto-encabezado); }
+body[data-armazon="reducido"] .edoc-titulo-barra {
+  top: calc(var(--alto-encabezado) + var(--alto-aviso, 0px));
+}
 /* Un sistema caido se queda por encima: sigue siendo verdad en toda la pantalla. */
 .edoc-estado-sistema ~ #armazon .edoc-titulo-barra { z-index: 1026; }
 
@@ -1991,6 +1999,49 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
 .edoc-detalle-salida > summary:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
 .edoc-detalle-salida__cuerpo { padding: 4px 0 2px 18px; max-width: 70ch; }
 .edoc-detalle-salida__cuerpo p { font-size: 13px; margin-bottom: 8px; }
+
+/* --- Los escenarios del panel --------------------------------------------
+   Tarjetas en rejilla, con el enlace a la vista debajo: si el copiar falla
+   -en navegador sin permiso de portapapeles- se puede seleccionar a mano. */
+.pnl-escenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 12px; }
+.pnl-escenario {
+  border: 1px solid #dcdfe4; border-radius: var(--radio-chico, 6px);
+  padding: 13px 14px; background: #fbfcfd; display: flex; flex-direction: column; gap: 5px;
+}
+.pnl-escenario__t { font-family: var(--fuente-titulos, inherit); font-size: 14px; font-weight: 600;
+                    color: var(--edoc-azul); }
+.pnl-escenario__q { font-size: 12.5px; color: var(--edoc-negro, #212121); }
+.pnl-escenario__o { font-size: 11.5px; color: #666666; line-height: 1.4; }
+.pnl-escenario__acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+/* Un campo que se verificó y ya no se toca. Gris y sin cursor de escritura:
+   la forma tiene que decir lo mismo que el aviso de debajo. */
+/* Una línea de texto entre las vías del acceso: está, pero no compite con
+   ellas. */
+.edoc-acceso__linea { font-size: 12px; color: #5f6771; margin: 10px 0 0; line-height: 1.45; }
+.edoc-acceso__linea a { color: var(--edoc-azul); }
+
+/* Lo que cambio desde la ultima vez, en la reverificacion: el dato nuevo
+   destacado y debajo, chico, el que teniamos. Sin color de alarma: no es un
+   error, es lo que el contribuyente viene a contarnos. */
+.reg__ficha-dato.es-cambiado { color: var(--edoc-azul); font-weight: 700; }
+.reg__ficha-antes { font-size: 11.5px; color: #6b7280; margin-top: 2px; text-decoration: line-through; }
+
+.form-control.es-bloqueado {
+  background: #f1f3f5; color: #4a4a4a; cursor: default; border-color: #d8dbe0;
+}
+/* Un botón que se lee como enlace dentro de una frase: no es un botón de
+   acción con su caja, es una palabra pulsable en medio del texto. */
+.edoc-enlace-texto {
+  background: none; border: 0; padding: 0; font: inherit; color: var(--edoc-azul);
+  text-decoration: underline; cursor: pointer;
+}
+.edoc-enlace-texto:hover { text-decoration: none; }
+.edoc-enlace-texto:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 2px; }
+
+.pnl-escenario__url {
+  font-size: 10.5px; color: #5a5a5a; word-break: break-all; user-select: all;
+  border-top: 1px dashed #dcdfe4; padding-top: 7px; margin-top: 2px;
+}
 .edoc-acceso__aviso--cerrable .edoc-pendiente__x { top: 2px; right: 2px; font-size: 17px; }
 
 /* --- 28.1 · Selector de idioma -------------------------------------------

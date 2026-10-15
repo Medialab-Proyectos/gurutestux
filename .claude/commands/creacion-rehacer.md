@@ -1,5 +1,5 @@
 ---
-description: Rehace el contenido de una caja del motor de creación (0 a 11, con 3.1 y 4.1) en un ciclo nuevo; las cajas posteriores quedan bloqueadas hasta volver a completarla
+description: Rehace el contenido de una caja del motor de creación (0 a 12, con 3.1 y 4.1) en un ciclo nuevo; las cajas posteriores quedan bloqueadas hasta volver a completarla
 argument-hint: <id> <número de caja o 1.1> [motivo]
 ---
 
@@ -52,10 +52,10 @@ Al cerrar un ciclo 2 o posterior, el motor comprueba que la versión evaluada ya
    - en las demás, parte de la `entrega.md` anterior y rehaz solo lo que cambia.
 3. Termina la caja como indica su guía y ciérrala:
    - caja 0: `python _creacion_productos/producto.py validar <id>`;
-   - cajas 1 a 11: `python _creacion_productos/producto.py cerrar <id> <n>` (en la 11, antes `producto.py entrega <id>`; una entrega firmada no se rehace: se abre otra vuelta).
+   - cajas 1 a 12: `python _creacion_productos/producto.py cerrar <id> <n>` (en la 10, motion, antes `producto.py motion <id>`; en la 12, antes `producto.py entrega <id>`; una entrega firmada no se rehace: se abre otra vuelta).
 4. Termina diciendo:
    - el ciclo en que quedó la caja y qué cambió frente al anterior;
    - que la caja **cumple el mínimo pero falta la aprobación del cliente** (en la página o con `producto.py aprobado <id> <n>`);
    - qué cajas posteriores quedaron bloqueadas y por qué.
 
-**Reglas comunes** (lecciones aprendidas, jerarquía de normas, regla de progreso con máximo 3 pasadas, no romper lo aprobado, Three-Body Balance, pendientes): `_creacion_productos/REGLAS.md`. Léelas antes de empezar.
+**Reglas comunes** (lecciones aprendidas, jerarquía de normas, regla de progreso con máximo 2 pasadas, no romper lo aprobado, Three-Body Balance, pendientes): `_creacion_productos/REGLAS.md`. Léelas antes de empezar.

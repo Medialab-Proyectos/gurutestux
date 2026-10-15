@@ -35,6 +35,7 @@
       <p class="edoc-subtitulo">Lo que tu empresa ha emitido y en qué punto está: primero el camino
       hasta el destinatario, y aparte la respuesta de la autoridad.</p>
     </div>
+
     <div class="edoc-titulo-barra__lado">
       <span class="edoc-estado edoc-estado--info" id="sello-clasificacion" hidden>Con clasificación</span>
       <button type="button" class="btn btn-edoc-terciario" id="ver-clasificacion">Mostrar la clasificación</button>
@@ -561,13 +562,16 @@
   /* Repintar sin recargar: lo usa el interruptor de la clasificación. */
   window.edocRepintarTabla = function () {
     window.edocDestruirTabla('#tabla-emitidos');
-    cuerpo.innerHTML = D.EMITIDOS.map(fila).join('');
+    cuerpo.innerHTML = LISTA.map(fila).join('');
     window.edocPintarNombres();
     window.edocPintarIconos();
     window.edocPrepararTablas(document);
   };
 
-  cuerpo.innerHTML = D.EMITIDOS.map(fila).join('');
+  /* Sin designación no hay documentos: ni uno. La lista se vacía en el
+     origen para no tener que acordarse de cada sitio donde se lee. */
+  var LISTA = D.designada() ? D.EMITIDOS : [];
+  cuerpo.innerHTML = LISTA.map(fila).join('');
   window.edocPintarNombres();
   window.edocPintarIconos();
 
@@ -576,8 +580,13 @@
      no por el texto con comas. */
   window.edocTabla('#tabla-emitidos', {
     language: {
-      emptyTable: window.edocVacio('No hay documentos emitidos en ese rango de fechas',
-        'Prueba a ampliar las fechas. Los documentos aparecen aquí en cuanto tu sistema los envía.'),
+      /* Un «no hay nada» a secas, en una pantalla recién estrenada, parece un
+         fallo. Mientras falte la designación se dice por qué y por dónde. */
+      emptyTable: D.designada()
+        ? window.edocVacio('No hay documentos emitidos en ese rango de fechas',
+            'Prueba a ampliar las fechas. Los documentos aparecen aquí en cuanto tu sistema los envía.')
+        : window.edocVacio('Todavía no puedes emitir',
+            'Falta que nos designes en EmaraTax. En cuanto lo hagas, lo que emitas aparece aquí.'),
       zeroRecords: window.edocVacio('Ningún documento coincide con lo que buscas',
         'Revisa el número o quita algún filtro.', true)
     },

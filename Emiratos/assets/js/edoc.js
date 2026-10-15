@@ -414,6 +414,44 @@
     return (sim && sim.barraHTML) ? sim.barraHTML() : '';
   }
 
+  /* La designacion pendiente en EmaraTax es un aviso de sistema, no de una
+     pantalla: sin ella no se emite ni se recibe, asi que vale en todo el
+     portal. Por eso va en la misma franja que el mantenimiento y con el mismo
+     patron, en vez de en una tarjeta flotante en una esquina del inicio. */
+  function barraDesignacion() {
+    var cuerpo = document.body;
+    if (cuerpo.dataset.armazon === 'reducido') return '';
+    var asociada = false;
+    try { asociada = window.sessionStorage.getItem('edoc-asociada') === '1'; } catch (error) { /* nada */ }
+    if (asociada) return '';
+    return '<div class="edoc-estado-sistema edoc-estado-sistema--advertencia" role="alert">' +
+      '<span class="edoc-estado-sistema__icono">' + icono('alerta') + '</span>' +
+      '<span><strong>Falta que nos designes en EmaraTax.</strong> Hasta entonces no podemos emitir ni ' +
+      'recibir documentos a tu nombre. <a href="onboarding.html">Cómo designarnos</a> · ' +
+      '<a href="emaratax-verificacion.html">Ya lo hice: validarlo</a></span>' +
+    '</div>';
+  }
+
+  /* Las dos franjas pegajosas —la de avisos y la del titulo— estaban a la
+     misma altura y se montaban: la de arriba tapaba el titulo. Se mide lo que
+     ocupa la de avisos y la del titulo se pega justo debajo. Se vuelve a medir
+     al cambiar el ancho, que un aviso largo pasa de una linea a dos. */
+  function medirAvisos() {
+    function medir() {
+      var alto = 0;
+      [].forEach.call(document.querySelectorAll('.edoc-estado-sistema'), function (f) {
+        alto += f.offsetHeight;
+      });
+      document.documentElement.style.setProperty('--alto-aviso', alto + 'px');
+    }
+    medir();
+    if (window.ResizeObserver) {
+      var ro = new window.ResizeObserver(medir);
+      [].forEach.call(document.querySelectorAll('.edoc-estado-sistema'), function (f) { ro.observe(f); });
+    }
+    window.addEventListener('resize', medir);
+  }
+
   /* Los avisos que hay que ver sin abrir nada: un corte de servicio, un
      cambio que afecta a todo el mundo. Van en una franja arriba de la página,
      en toda pantalla. Lleva el naranja de ADVERTENCIA, que es lo que el manual
@@ -722,22 +760,60 @@
      la pantalla en un portatil. */
   function pegarBarraTitulo() {
     var barra = document.querySelector('.edoc-titulo-barra');
-    if (!barra || !window.IntersectionObserver) return;
-    var centinela = document.createElement('div');
-    centinela.className = 'edoc-centinela';
-    centinela.setAttribute('aria-hidden', 'true');
-    barra.parentNode.insertBefore(centinela, barra);
-    /* El margen de arriba descuenta lo que ya ocupan el encabezado y el menu:
-       el centinela tiene que contarse fuera cuando desaparece DEBAJO de
-       ellos, no cuando toca el borde de la ventana. */
+    if (!barra) return;
+
+    /* Primero se media con un centinela y un IntersectionObserver, y vibraba:
+       el centinela media una geometria que la propia clase cambiaba. Al
+       pegarse, la barra encoge; al encoger, el contenido se recoloca y el
+       centinela vuelve a entrar; se quita la clase, la barra crece, y vuelta
+       a empezar. Siete pixeles de temblor en la cabecera.
+
+       Esto no se arregla afinando margenes: hay que romper la dependencia. Se
+       compara con la posicion de desplazamiento, que la barra no puede
+       cambiar, y el origen se anota una vez estando la barra en su estado
+       normal. Lo que hay ENCIMA de la barra no cambia al pegarse, asi que ese
+       origen vale para siempre. */
     var alto = window.getComputedStyle(document.documentElement);
-    var tope = parseInt(alto.getPropertyValue('--alto-encabezado'), 10) || 62;
-    if (document.body.dataset.armazon !== 'reducido') {
-      tope += parseInt(alto.getPropertyValue('--alto-menu'), 10) || 44;
+    function tope() {
+      var n = parseInt(alto.getPropertyValue('--alto-encabezado'), 10) || 62;
+      if (document.body.dataset.armazon !== 'reducido') {
+        n += parseInt(alto.getPropertyValue('--alto-menu'), 10) || 44;
+      }
+      n += parseInt(alto.getPropertyValue('--alto-aviso'), 10) || 0;
+      return n;
     }
-    new window.IntersectionObserver(function (entradas) {
-      barra.classList.toggle('esta-pegada', !entradas[0].isIntersecting);
-    }, { rootMargin: '-' + tope + 'px 0px 0px 0px', threshold: 0 }).observe(centinela);
+
+    var origen = 0;
+    function medirOrigen() {
+      var pegada = barra.classList.contains('esta-pegada');
+      barra.classList.remove('esta-pegada');
+      origen = barra.getBoundingClientRect().top + window.pageYOffset;
+      barra.classList.toggle('esta-pegada', pegada);
+    }
+
+    /* Un pelo de margen para que, justo en el punto de corte, no se encienda y
+       se apague con un pixel de diferencia. */
+    var HOLGURA = 2;
+    var pedido = false;
+    function revisar() {
+      pedido = false;
+      var pegada = window.pageYOffset + tope() > origen + HOLGURA;
+      if (pegada !== barra.classList.contains('esta-pegada')) {
+        barra.classList.toggle('esta-pegada', pegada);
+      }
+    }
+    function alDesplazar() {
+      if (pedido) return;
+      pedido = true;
+      window.requestAnimationFrame(revisar);
+    }
+
+    medirOrigen();
+    revisar();
+    window.addEventListener('scroll', alDesplazar, { passive: true });
+    /* Al cambiar el ancho, el contenido de arriba puede ocupar otra altura, y
+       entonces el origen ya no es el mismo. */
+    window.addEventListener('resize', function () { medirOrigen(); revisar(); });
   }
 
   /* --- Montaje ----------------------------------------------------------- */
@@ -751,7 +827,7 @@
     if (soporte) {
       soporte.insertAdjacentHTML('beforebegin',
         (reducido ? encabezadoReducido(cuerpo.dataset.quien || '') : encabezado() + menu(seccion)) +
-        barraEstado() + franjaFija());
+        barraEstado() + barraDesignacion() + franjaFija());
     }
     cuerpo.insertAdjacentHTML('beforeend', pie());
     // El armazón se pinta después de que idioma.js haya arrancado, así que hay
@@ -765,6 +841,7 @@
     if (window.EDOC_ALCANCE && window.EDOC_ALCANCE.propagar) window.EDOC_ALCANCE.propagar();
 
     cablearCampana();
+    medirAvisos();
     pegarBarraTitulo();
 
     /* Los '?' de ayuda. Se abren al pulsarlos y se cierran al pulsar fuera,

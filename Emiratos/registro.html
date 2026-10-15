@@ -1479,7 +1479,10 @@
        servidor; en la maqueta vive en el navegador hasta que se cambia. */
     try {
       window.localStorage.setItem('edoc-alta-reciente', JSON.stringify({
-        empresa: val('e-legal'), trn: val('e-trn'), correo: val('p-correo'), folio: folio
+        empresa: val('e-legal'), trn: val('e-trn'), correo: val('p-correo'), folio: folio,
+        /* Con fecha: el aviso del acceso dice «tu registro está enviado» y eso
+           caduca. Sin ella salía meses después, a quien iba a entrar. */
+        cuando: Date.now()
       }));
     } catch (error) { /* nada */ }
     // Quien vino desde EmaraTax ya tiene hecha la asociación: no se le manda otra vez.

@@ -117,6 +117,47 @@
     return 'nada';
   }
 
+  /* --- Escenarios con enlace directo --------------------------------------
+     Los estados del portal salen al azar —el primer ingreso se sortea, y el
+     escenario de avisos también— y la designación depende de si se ha pasado
+     por el comprobador en esta sesión. Para ver un estado concreto había que
+     entrar, recargar y a veces limpiar el almacenamiento: lento, y confunde a
+     quien revisa.
+
+     Esto no cambia la lógica del producto —quien entra normal sigue viendo lo
+     que le toque—: escribe las mismas llaves que el portal ya consulta, antes
+     de que nadie las lea. Y como va en este archivo, que lo carga toda
+     pantalla, el enlace vale apuntando a cualquiera. */
+  var ESCENARIOS = {
+    'primer-ingreso': { primeraVez: '1', asociada: '1', avisos: 'nada' },
+    'sin-designar':   { primeraVez: '0', asociada: null, avisos: 'nada' },
+    'operando':       { primeraVez: '0', asociada: '1',  avisos: 'nada' },
+    'mantenimiento':  { primeraVez: '0', asociada: '1',  avisos: 'mantenimiento' },
+    'alertas':        { primeraVez: '0', asociada: '1',  avisos: 'alertas' }
+  };
+
+  (function aplicarEscenario() {
+    var pedido;
+    try { pedido = new URLSearchParams(window.location.search).get('escenario'); }
+    catch (error) { return; }
+    var e = pedido && ESCENARIOS[pedido];
+    if (!e) return;
+    try {
+      /* El primer ingreso: la misma llave que sortea el acceso. Ponerla a mano
+         hace que no se sortee. */
+      window.sessionStorage.setItem('edoc-primera-vez', e.primeraVez);
+      /* La designación. Sin llave es «no designado», que es lo que ve quien
+         acaba de entrar por primera vez. */
+      if (e.asociada === null) window.sessionStorage.removeItem('edoc-asociada');
+      else window.sessionStorage.setItem('edoc-asociada', e.asociada);
+      /* Y que no quede un aviso cerrado de una prueba anterior. */
+      window.sessionStorage.removeItem('edoc-tarjeta-cerrada');
+      /* Los avisos del sistema, con la llave que ya usa el panel. */
+      window.localStorage.setItem(LLAVE_FORZADO, e.avisos);
+      window.localStorage.removeItem(LLAVE_MODO);
+    } catch (error) { /* en privado no deja escribir: se sigue igual */ }
+  }());
+
   /* `?sim=` en la dirección manda sobre todo lo demás. Sirve para enseñar un
      escenario concreto sin tocar nada —basta pasar el enlace— y para que las
      pruebas no dependan del sorteo. */

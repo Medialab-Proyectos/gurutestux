@@ -75,6 +75,24 @@
     o escribiendo <strong>/panel.html</strong>; ningún enlace del portal lleva a esta página.</p>
   </div>
 
+  <!-- Los escenarios, los primeros: es lo que se busca al abrir el panel.
+       Antes había que entrar, recargar y cruzar los dedos, porque el primer
+       ingreso se sortea y el escenario de avisos también. Cada enlace fija el
+       estado y entra por donde toca. -->
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Escenarios</h2>
+      <span class="edoc-secundario" style="font-size:12px">Abren el portal en un estado fijo, sin azar</span>
+    </div>
+    <div class="edoc-tablero__cuerpo">
+      <p class="mb-3">Cada enlace deja el portal en ese estado y entra por la pantalla donde se nota. Se pueden
+      copiar y pasar: funcionan tal cual, sin tocar nada antes.</p>
+      <div class="pnl-escenarios" id="escenarios"></div>
+      <p class="edoc-ayuda mt-3">El estado dura la visita. Para volver al reparto normal —que es lo que ve quien
+      entra sin enlace— se usa «Empezar de cero», más abajo.</p>
+    </div>
+  </section>
+
   <section class="edoc-tablero">
     <div class="edoc-tablero__cabecera">
       <h2 class="edoc-tablero__titulo">Pantallas</h2>
@@ -388,6 +406,94 @@
   });
 
   pintar();
+}());
+</script>
+<script>
+(function () {
+  'use strict';
+  /* Los escenarios. El destino de cada uno es la pantalla donde ese estado se
+     nota: no sirve de nada abrir el cuadro de mando para ver el primer
+     ingreso, que ocurre en el acceso. */
+  var LISTA = [
+    { clave: 'primer-ingreso', donde: 'index.html',
+      titulo: 'Primer ingreso',
+      que: 'Entra al acceso y, al meter el código, obliga a cambiar la contraseña.',
+      ojo: 'Usuario y contraseña cualquiera; el código que pida, 123456.' },
+    { clave: 'sin-designar', donde: 'inicio.html',
+      titulo: 'Designación pendiente',
+      que: 'Dentro del portal pero sin designarnos en EmaraTax.',
+      ojo: 'Sale la barra de alerta arriba, la portada dice «Designación pendiente» y el cuadro de mando avisa de que esas cifras aún no son suyas.' },
+    { clave: 'operando', donde: 'inicio.html',
+      titulo: 'Operando con normalidad',
+      que: 'Dentro, designado y sin ningún aviso.',
+      ojo: 'Es el estado limpio: el que hay que enseñar cuando se habla del producto y no de una excepción.' },
+    { clave: 'mantenimiento', donde: 'inicio.html',
+      titulo: 'Portal en mantenimiento',
+      que: 'Designado, con la franja de mantenimiento puesta.',
+      ojo: 'Algunas funciones avisan de que pueden no responder. La pantalla no se tapa.' },
+    { clave: 'alertas', donde: 'inicio.html',
+      titulo: 'Con avisos del sistema',
+      que: 'Designado, con los avisos de la campana.',
+      ojo: 'Sirve para ver cómo convive un aviso con el resto de la pantalla.' },
+
+    /* Las tres entradas de la solicitud de vinculación. Dos no se pueden
+       alcanzar a mano: hacen falta los parámetros que pone la autoridad en la
+       redirección, y es justo lo que costaba probar. */
+    { clave: 'vinculacion-frio', donde: 'emaratax-verificacion.html',
+      cola: '',
+      titulo: 'Vinculación · entra en frío',
+      que: 'Llega desde el enlace del acceso, sin haber pasado por EmaraTax.',
+      ojo: 'Abre en el paso previo: la guía de lo que va a hacer allí y el botón que abre EmaraTax al lado. No hay formulario, porque sin el código de la redirección no se puede preguntar a la autoridad.' },
+    { clave: 'vinculacion-alta', donde: 'emaratax-verificacion.html',
+      cola: '?auth=AUTH-DE-PRUEBA',
+      titulo: 'Vinculación · viene de EmaraTax',
+      que: 'El alta: la autoridad redirige con el código de autorización.',
+      ojo: 'Abre en el paso 1 y el paso previo queda marcado como hecho. Escribe correo y TIN, y no hay nada que elegir. El código desaparece de la barra al entrar, que lo pide la guía.' },
+    { clave: 'vinculacion-revision', donde: 'emaratax-verificacion.html',
+      cola: '?auth=AUTH-DE-PRUEBA&tin=1000001602',
+      titulo: 'Vinculación · reverificar o darse de baja',
+      que: 'La autoridad manda además el TIN, y eso cambia la pantalla.',
+      ojo: 'El título pasa a «Solicitud de reverificación o baja», el TIN viene puesto y no se puede tocar, y hay que elegir entre seguir o desvincularse, con motivo obligatorio. La guía lo exige: mandatory to choose one.' }
+  ];
+
+  var caja = document.getElementById('escenarios');
+  if (!caja) return;
+
+  /* El enlace absoluto, para poder copiarlo y pasarlo. Se arma desde donde
+     esté servido el panel, así que vale igual en local y en el despliegue. */
+  /* Con «undefined» y no con «o»: la entrada en frio lleva cola vacia a
+     proposito, y una cadena vacia caia en el valor por omision, asi que el
+     enlace anunciaba un escenario que no existe. */
+  function cola(e) { return e.cola === undefined ? '?escenario=' + e.clave : e.cola; }
+  function enlaceDe(e) {
+    var base = window.location.href.replace(/panel\.html.*$/, '');
+    return base + e.donde + cola(e);
+  }
+
+  caja.innerHTML = LISTA.map(function (e) {
+    return '<div class="pnl-escenario">' +
+      '<div class="pnl-escenario__t">' + e.titulo + '</div>' +
+      '<div class="pnl-escenario__q">' + e.que + '</div>' +
+      '<div class="pnl-escenario__o">' + e.ojo + '</div>' +
+      '<div class="pnl-escenario__acciones">' +
+        '<a class="btn btn-edoc-primario btn-sm" href="' + e.donde + cola(e) + '">Abrir</a>' +
+        '<button type="button" class="btn btn-edoc-terciario btn-sm" data-copiar="' + e.clave + '">Copiar el enlace</button>' +
+      '</div>' +
+      '<div class="pnl-escenario__url cifra">' + enlaceDe(e) + '</div>' +
+    '</div>';
+  }).join('');
+
+  caja.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-copiar]');
+    if (!b) return;
+    var e = LISTA.filter(function (x) { return x.clave === b.dataset.copiar; })[0];
+    try {
+      navigator.clipboard.writeText(enlaceDe(e));
+      window.edocAvisar('Enlace copiado: <strong>' + e.titulo + '</strong>.', 'exito');
+    } catch (error) {
+      window.edocAvisar('No pudimos copiarlo. El enlace está debajo, seleccionable.', 'advertencia');
+    }
+  });
 }());
 </script>
 </body>

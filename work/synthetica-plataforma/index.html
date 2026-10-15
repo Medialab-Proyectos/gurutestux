@@ -546,8 +546,8 @@ const TIPOS = {
   },
   completo: {
     nombre: 'Proyecto completo', corto: 'Completo', total: 'Cada caja, entre 3 y 6 h',
-    resumen: 'Construimos el producto caja a caja (de la 1 a la 11). En cada una validas lo que logramos antes de seguir.',
-    // Las mismas cajas del motor de creación (numeración del 2026-10-08): la 8 y la 10 son opcionales.
+    resumen: 'Construimos el producto caja a caja (de la 1 a la 12). En cada una validas lo que logramos antes de seguir.',
+    // Las mismas cajas del motor de creación (numeración del 2026-10-13: motion es la 11 y la aceptación la 12): la 8 y la 10 son opcionales.
     etapas: [
       // Tus entradas llegan directo a la caja 1: la lanza un analista desde la consola.
       { n: 1, nombre: 'Usabilidad básica (Nielsen)', corto: 'Básica', min: 300, rango: 'entre 3 y 5 h', modo: 'auto',
@@ -574,8 +574,10 @@ const TIPOS = {
         hace: ['Evolución caja a caja', 'La voz de los agentes', 'Qué comprobar con personas reales'], entrega: 'Cierra la etapa de diseño.' },
       { n: 10, nombre: 'Futuro: Zero UI y diseño ético (opcional)', corto: 'Futuro', min: 180, modo: 'auto', opcional: true,
         hace: ['Diseño ético', 'Zero UI', 'Autonomía y bienestar'], entrega: 'Recomendaciones que no tocan la app.' },
-      { n: 11, nombre: 'Aceptación de la entrega', corto: 'Aceptación', min: null, modo: 'humana',
-        hace: ['Imágenes y HTML de tu producto', 'Carta de entrega con huellas', 'Firma del acta'], entrega: 'Descargas, revisas y firmas.' }
+      { n: 11, nombre: 'Motion: usabilidad y engagement con movimiento', corto: 'Motion', min: 300, rango: 'entre 4 y 6 h', modo: 'auto',
+        hace: ['Microinteracciones con propósito', 'Transiciones, esperas y el momento que se recuerda', 'Movimiento reducido respetado', 'Evaluación con los agentes'], entrega: 'Pruebas cada microinteracción y decides; el diseño no cambia.' },
+      { n: 12, nombre: 'Aceptación de la entrega', corto: 'Aceptación', min: null, modo: 'humana',
+        hace: ['Tu producto terminado, limpio', 'Las últimas correcciones que pediste', 'Imágenes y HTML con carta y huellas', 'Firma del acta'], entrega: 'Lo ves, lo descargas, lo revisas y firmas.' }
     ]
   },
   qa: {

@@ -9,7 +9,7 @@ Datos: $ARGUMENTS
 
 1. Mira qué se sabe: el criterio «población» de la última vuelta del paso 0 (`escenario-0/vuelta-K/validacion.json`), las respuestas del cliente (`respuestas-cliente.json`) y todo el contexto (`proyectos/<id>/contexto/`).
 2. Si el cliente ya la dio, no investigues: muéstrasela tal cual y pregúntale «Esta es la población objetivo determinada: ¿tienes alguna sugerencia o quieres una segunda ronda de revisión?».
-3. Si no está o es parcial, investiga a fondo. Nada con costo sin preguntar.
+3. **Nunca la elijas al azar.** La población sale de lo que dio el cliente en la caja previa o de la investigación del analista (caja previa.1); si no hay nada, no la inventes: el cliente pide la investigación en la caja previa. Si no está o es parcial, investiga a fondo. Nada con costo sin preguntar.
    - Productos parecidos (los referentes del cliente y los de `bases/arquetipos.json`): a quién le hablan y quién los usa según sus reseñas.
    - Estudios y encuestas del sector: demografía solo si es pertinente; rol, contexto y necesidad pesan más que la edad.
    - Comunidades y reseñas: lo que dicen quienes usan productos así.
@@ -23,4 +23,4 @@ Datos: $ARGUMENTS
    - Si pide otra ronda o cambia algo: ajusta `poblacion.md` y vuelve al paso 5.
    - Si la acepta: `python _creacion_productos/producto.py poblacion <id> <poblacion.md> --aprobada`. La entrada de la caja 2 queda en verde.
 
-**Reglas comunes** (lecciones aprendidas, jerarquía de normas, regla de progreso con máximo 3 pasadas, no romper lo aprobado, Three-Body Balance, pendientes): `_creacion_productos/REGLAS.md`. Léelas antes de empezar.
+**Reglas comunes** (lecciones aprendidas, jerarquía de normas, regla de progreso con máximo 2 pasadas, no romper lo aprobado, Three-Body Balance, pendientes): `_creacion_productos/REGLAS.md`. Léelas antes de empezar.

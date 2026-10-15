@@ -297,22 +297,55 @@
        siempre, así que se ve siempre. -->
   <section class="edoc-tablero">
     <div class="edoc-tablero__cuerpo">
-      <details class="edoc-detalle-salida" id="detalle-salida">
-        <summary>¿Quieres cambiar de proveedor o dejar de usar eDoc?</summary>
-        <div class="edoc-detalle-salida__cuerpo">
-          <p>No se hace desde aquí. Como la designación, la baja empieza en EmaraTax: entras con la cuenta del
-          administrador, eliges tu TIN y ahí aparece la opción de desvincularte. La autoridad te devuelve a una
-          pantalla nuestra para confirmarlo y listo.</p>
-          <p class="edoc-ayuda">Al desvincularte dejas de poder emitir y recibir por la red hasta que elijas otro
-          proveedor acreditado. Tus documentos anteriores se conservan. Tenemos tres días hábiles para quitar tu
-          dirección de la red.</p>
-          <div class="d-flex hueco-2 flex-wrap mt-2">
-            <a class="btn btn-edoc-terciario btn-sm" href="https://eservices.tax.gov.ae/en-us/#/Logon"
-               target="_blank" rel="noopener">Abrir EmaraTax</a>
-            <a class="btn btn-edoc-terciario btn-sm" href="emaratax-verificacion.html">Ya lo hice: confirmarlo</a>
-          </div>
-        </div>
-      </details>
+      <!-- Esto estaba dentro de un <details> cerrado, así que no se veía si no
+           lo abrías, y solo hablaba de la baja. Pasa a estar a la vista y con
+           los dos caminos: cambiar tus datos y darte de baja. El botón de ir a
+           EmaraTax se quitó en su día para no empujarle a irse; ofrecerlo a
+           quien viene buscando justo eso no es empujar. -->
+      <div class="edoc-etiqueta mb-2">Tu vinculación con la autoridad</div>
+      <p class="mb-3">Nos designaste como tu proveedor en EmaraTax, y todo lo que cambie esa designación se hace
+      allí, no aquí: el registro que manda es el suyo. Los dos caminos empiezan igual —entras con la cuenta del
+      administrador y eliges tu TIN— y los dos terminan en una pantalla nuestra para confirmarlo.</p>
+
+      <div class="emt__datos mb-3">
+        <div class="emt__datos-t">Cambiaron los datos de tu empresa</div>
+        <p class="emt__p emt__p--chico">Si cambia tu razón social, entras o sales de un grupo de IVA o
+        cambia tu situación en el IVA, en EmaraTax eliges <strong>Reverify</strong>. Seguimos siendo tu
+        proveedor; lo que se actualiza son tus datos.</p>
+        <!-- El plazo y la multa salen de MD 243, Art. 5(3) y de la Decisión del
+             Gabinete 106/2025, infracción 6. Es lo más útil que podemos
+             decirle y no estaba en ninguna parte del producto. -->
+        <p class="emt__p emt__p--chico"><strong>Tienes cinco días hábiles</strong> desde que la autoridad te
+        confirma el cambio para avisárnoslo, y cada día de retraso se sanciona con AED 1.000. La
+        reverificación es la forma de hacerlo.</p>
+        <!-- Tranquiliza y tiene fuente: los campos obligatorios, página 5,
+             dicen que el TIN son los diez primeros dígitos de TU TRN de
+             Corporate Tax, no el del representante del grupo. -->
+        <p class="emt__p emt__p--chico">Entrar o salir de un grupo fiscal <strong>no cambia tu TIN</strong>, así
+        que tu dirección en la red sigue siendo la misma.</p>
+        <button type="button" class="btn btn-edoc-terciario btn-sm" id="ya-reverifique">Ya hice la
+        reverificación</button>
+      </div>
+
+      <div class="emt__datos mb-3">
+        <div class="emt__datos-t">Cambiar de proveedor o dejar de usar eDoc</div>
+        <p class="emt__p emt__p--chico">El mismo camino, eligiendo la baja. Solo puedes tener un proveedor a la
+        vez, así que para cambiarte hay que pasar por aquí.</p>
+        <p class="emt__p emt__p--chico mb-0">Al darte de baja <strong>dejas de emitir</strong> con nosotros.
+        Recibir no se corta en el acto: hasta que te quitemos de la red —tenemos tres días hábiles— los
+        documentos que te manden siguen llegando aquí y los verás, porque sigues obligado a recibirlos. Lo que
+        ya emitiste se conserva.</p>
+        <button type="button" class="btn btn-edoc-terciario btn-sm" id="ya-pedi-baja">Ya pedí la baja</button>
+      </div>
+
+      <!-- Abrir EmaraTax es uno solo porque el destino es el mismo: los dos
+           caminos se separan dentro de EmaraTax, no antes. Lo que sí va por
+           separado es decirnos qué hiciste, que está en cada tarjeta. -->
+      <div class="d-flex hueco-2 flex-wrap mt-2">
+        <a class="btn btn-edoc-secundario btn-sm" href="https://eservices.tax.gov.ae/en-us/#/Logon"
+           target="_blank" rel="noopener" id="abrir-emaratax-admin">Abrir EmaraTax</a>
+      </div>
+      <p class="edoc-ayuda mt-2" id="gracias-baja" hidden></p>
     </div>
   </section>
 
@@ -476,6 +509,37 @@
     parece lo menos.
   </div>
 </main>
+<script>
+(function () {
+  'use strict';
+  /* Quien nos dice que ya lo hizo en EmaraTax no puede demostrarlo aquí: el
+     estado lo tiene la autoridad. Lo único honesto es darle las gracias,
+     decirle que lo comprobamos y que le escribimos.
+
+     Pero hay dos casos y antes había un solo botón, así que llegaba el mismo
+     aviso para los dos y había que adivinar cuál hizo. Y no da igual: una
+     reverificación actualiza sus datos y el cliente se queda; una baja es que
+     se va, y arranca el plazo de tres días hábiles para sacarle de la red. */
+  var AVISOS = {
+    'ya-reverifique': ['Gracias por decirnoslo. Lo comprobamos con la autoridad y actualizamos tus datos.',
+                       'exito'],
+    'ya-pedi-baja': ['Gracias por decirnoslo. Lo comprobamos con la autoridad y nos ponemos en contacto '
+                     + 'contigo antes de sacarte de la red.', 'advertencia']
+  };
+  var gracias = document.getElementById('gracias-baja');
+  Object.keys(AVISOS).forEach(function (id) {
+    var boton = document.getElementById(id);
+    if (!boton) return;
+    boton.addEventListener('click', function () {
+      gracias.textContent = AVISOS[id][0];
+      gracias.hidden = false;
+      boton.disabled = true;
+      window.edocAvisar(AVISOS[id][0], AVISOS[id][1]);
+    });
+  });
+}());
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/datos.js"></script>

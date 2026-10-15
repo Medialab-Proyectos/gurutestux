@@ -154,6 +154,19 @@ window.EDOC = (function () {
 
   function d(n) { return n.toLocaleString('en-AE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
+  /* --- Con designación o sin ella ----------------------------------------
+     Una empresa que no nos ha designado en EmaraTax no tiene documentos. No
+     los tiene «de muestra»: no los tiene. Así que las pantallas que los
+     enseñan salen vacías, y el cuadro de mando a cero.
+
+     Esto antes no se podía hacer porque sin datos no había forma de enseñar
+     el diseño de la tabla. Ya sí: el escenario «operando» enseña el diseño
+     con sus datos y el de «designación pendiente» enseña la verdad. */
+  function designada() {
+    try { return window.sessionStorage.getItem('edoc-asociada') === '1'; }
+    catch (error) { return true; }
+  }
+
   /* --- Documentos emitidos ---------------------------------------------- */
   /* --- El resumen del cuadro de mando -----------------------------------
      Cifras de demostración, y la pantalla lo dice. Son las del modelo que se le
@@ -468,6 +481,7 @@ window.EDOC = (function () {
   };
 
   return {
+    designada: designada,
     CORNERS: CORNERS, RECHAZOS: RECHAZOS, ESTADOS: ESTADOS, TIPOS: TIPOS, TRANSACCION: TRANSACCION,
     MOTIVOS_EDOC: MOTIVOS_EDOC, ERRORES_EDOC: ERRORES_EDOC,
     transaccionBinaria: transaccionBinaria,

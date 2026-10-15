@@ -33,29 +33,21 @@
     <!-- 30 de septiembre: la tarjeta se cierra —si no, se queda ahí para
          siempre— y deja decir que ya se hizo. Quien lo dice no decide: lo
          comprobamos con la autoridad, que es quien lo sabe. -->
-    <aside class="edoc-pendiente" id="falta-asociar" hidden>
-      <button type="button" class="edoc-pendiente__x" id="cerrar-pendiente"
-        aria-label="Cerrar este aviso">&times;</button>
-      <span class="edoc-estado edoc-estado--advertencia">Falta un paso</span>
-      <h2 class="edoc-pendiente__titulo">Asócianos en EmaraTax</h2>
-      <p>Tu empresa ya está aprobada y puedes usar el portal. Para que la autoridad sepa que facturamos por ti,
-      elígenos como proveedor en EmaraTax. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.</p>
-      <div class="d-flex hueco-2 flex-wrap">
-        <a class="btn btn-edoc-primario" href="onboarding.html">Cómo asociarnos</a>
-        <!-- Antes este botón solo escondía la tarjeta y decía que lo
-             estábamos comprobando. Si de verdad lo hizo y la vinculación no se
-             cerró, lo que necesita es el comprobador, no un mensaje de espera. -->
-        <a class="btn btn-edoc-terciario" href="emaratax-verificacion.html" id="ya-asociado">Ya lo hice:
-        validarlo</a>
-      </div>
-      <p class="edoc-pendiente__pie" id="pendiente-pie" hidden>Lo estamos comprobando con la autoridad.</p>
-    </aside>
+    <!-- 13 de octubre: esto era una tarjeta flotante en la esquina. Un aviso
+         que condiciona TODO el portal —sin designación no se emite ni se
+         recibe— no puede vivir en un rincón de una sola pantalla: va donde van
+         los avisos que valen en todas, que es la franja de debajo del menú, y
+         con el mismo patrón que el mantenimiento. El marcado lo pone edoc.js
+         en el armazón, así que aquí no queda nada. -->
     <div class="edoc-bienvenida__texto">
       <img src="assets/img/edoc-logo-neg.svg" alt="eDoc">
       <h1 class="mt-4 mb-2" style="font-weight:600;color:#fff">Tu facturación electrónica en Emiratos, en un solo sitio.</h1>
-      <p style="color:rgba(255,255,255,.86);max-width:56ch">Consulta lo que emitiste, responde lo que recibes y administra tu conexión con nosotros. Somos tu proveedor de facturación electrónica en la red Peppol.</p>
+      <!-- El texto cambia con el estado: decíamos «Somos tu proveedor» también
+           a quien no nos ha designado, y no lo somos hasta que la autoridad lo
+           registra. Decirlo antes es prometer algo que no está hecho. -->
+      <p style="color:rgba(255,255,255,.86);max-width:56ch" id="bienvenida-texto">Consulta lo que emitiste, responde lo que recibes y administra tu conexión con nosotros. Somos tu proveedor de facturación electrónica en la red Peppol.</p>
       <div class="d-flex hueco-3 mt-4 flex-wrap" style="color:rgba(255,255,255,.78);font-size:12.5px">
-        <span>Proveedor de facturación electrónica</span><span>·</span><span>Red Peppol</span><span>·</span><span>GuruSoft S.A.</span>
+        <span id="bienvenida-estado">Proveedor de facturación electrónica</span><span>·</span><span>Red Peppol</span><span>·</span><span>GuruSoft S.A.</span>
       </div>
     </div>
     <!-- 2 de octubre: los cinco atajos del inicio de Francia, con nuestros
@@ -140,18 +132,18 @@
       if (q.get('asociada') === '1') window.sessionStorage.setItem('edoc-asociada', '1');
       asociada = window.sessionStorage.getItem('edoc-asociada') === '1';
     } catch (error) { asociada = false; }
-    var tarjeta = document.getElementById('falta-asociar');
-    var cerrada = false;
-    try { cerrada = window.sessionStorage.getItem('edoc-tarjeta-cerrada') === '1'; } catch (error) { cerrada = false; }
-    if (tarjeta) tarjeta.hidden = asociada || cerrada;
-
-    /* Cerrar es solo dejar de verla esta visita: el paso sigue pendiente y se
-       vuelve a ver al entrar de nuevo. */
-    document.getElementById('cerrar-pendiente').addEventListener('click', function () {
-      tarjeta.hidden = true;
-      try { window.sessionStorage.setItem('edoc-tarjeta-cerrada', '1'); } catch (error) { /* nada */ }
-      window.edocAvisar('Aviso cerrado por esta visita. El paso sigue pendiente y lo verás al volver a entrar.');
-    });
+    /* Mientras falte la designación no somos su proveedor todavía: la
+       autoridad no lo tiene registrado. Decirlo en la portada evita prometer
+       algo que no está hecho. */
+    if (!asociada) {
+      var texto = document.getElementById('bienvenida-texto');
+      var estado = document.getElementById('bienvenida-estado');
+      if (texto) {
+        texto.textContent = 'Consulta lo que emitiste, responde lo que recibes y administra tu conexión con ' +
+          'nosotros. Para serlo del todo falta que nos designes en EmaraTax.';
+      }
+      if (estado) estado.textContent = 'Designación pendiente';
+    }
 
     /* «Ya lo hice» no marca nada por sí solo: en Emiratos la autoridad nos lo
        confirma, y hasta que llegue esa confirmación el aviso se queda. En Omán

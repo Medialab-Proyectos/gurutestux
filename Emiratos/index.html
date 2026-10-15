@@ -140,19 +140,12 @@
                 <span class="edoc-acceso__via-flecha">›</span>
               </a>
 
-              <!-- La via que faltaba. El acceso es la pantalla donde cae
-                   todo el mundo, así que es el único sitio donde esta puerta
-                   sirve: antes estaba en el carril del registro, en un panel
-                   plegado de la guía y dentro de un diálogo, y en los tres
-                   casos había que ir a buscarla. -->
-              <a class="edoc-acceso__via" href="emaratax-verificacion.html">
-                <span class="edoc-acceso__via-textos">
-                  <span class="edoc-acceso__via-nombre">Validar mi asociación con GuruSoft</span>
-                  <span class="edoc-acceso__via-detalle">Si ya nos elegiste en EmaraTax, aquí se comprueba con la
-                  autoridad y se cierra. También sirve si lo hiciste y no te trajo de vuelta.</span>
-                </span>
-                <span class="edoc-acceso__via-flecha">›</span>
-              </a>
+              <!-- Una línea, no una vía. Estaba con el mismo peso que
+                   «Registrar mi empresa» y cargaba la pantalla: casi todo el
+                   que llega al acceso viene a entrar, no a validar una
+                   asociación. Sigue estando para quien la busque. -->
+              <p class="edoc-acceso__linea">¿Vienes de EmaraTax y no te trajo de vuelta?
+                <a href="emaratax-verificacion.html">Valida tu asociación</a>.</p>
 
               <button type="button" class="edoc-acceso__ayuda-enlace" data-toggle="modal" data-target="#modal-emaratax">
                 ¿Qué es EmaraTax y por qué me lo piden?
@@ -442,11 +435,21 @@
     if (alta.trn && !document.getElementById('compania').value) {
       document.getElementById('compania').value = alta.trn;
     }
+    /* Caduca. Dice «tu registro está enviado», en presente, y eso solo vale
+       recien hecho: sin fecha salía siempre, incluso a quien llega desde la
+       vinculación pulsando «ya tengo acceso», que es justo lo contrario de lo
+       que el aviso le dice. Las altas viejas, sin fecha, ya no lo ensenan. */
+    var DIA = 24 * 60 * 60 * 1000;
+    if (!alta.cuando || Date.now() - alta.cuando > DIA) return;
+
     var aviso = document.getElementById('aviso-alta');
-    /* Si ya se cerró una vez, no vuelve. Se guarda con el registro fiscal del
-       alta: si manana se da de alta otra empresa, su aviso sí sale. */
+    /* Se marca como visto en cuanto se ensena, no solo si lo cierra: es una
+       confirmación de algo que ya pasó, no un recordatorio. Se guarda con el
+       registro fiscal del alta: si manana se da de alta otra empresa, su aviso
+       sí sale. */
     var llave = 'edoc-aviso-alta-visto-' + (alta.trn || 'sin-trn');
     try { if (window.localStorage.getItem(llave) === '1') return; } catch (error) { /* nada */ }
+    try { window.localStorage.setItem(llave, '1'); } catch (error) { /* nada */ }
     document.getElementById('aviso-alta-texto').innerHTML =
       '<strong>Tu registro está enviado.</strong> ' +
       'Cuando lo aprobemos te llegan las credenciales. La primera vez que entres tendrás que cambiar la contraseña.';

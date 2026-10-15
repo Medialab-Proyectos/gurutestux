@@ -1,5 +1,5 @@
 ---
-description: Ejecuta un escenario (1 a 11, con 3.1 y 4.1) de un proyecto con el motor de creación de productos
+description: Ejecuta un escenario (1 a 12, con 3.1 y 4.1) de un proyecto con el motor de creación de productos
 argument-hint: <id> <número de escenario> [archivo con las respuestas del cliente]
 ---
 
@@ -13,7 +13,7 @@ Datos: $ARGUMENTS
 4. **Cierra:** `python _creacion_productos/producto.py cerrar <id> <n>`. Si el cliente dejó dudas, respóndelas con `--respuesta "…"`.
 5. **Termina diciendo** qué quedó, qué supuestos se tomaron y qué conviene que valide el cliente. La caja cumple el mínimo al cerrarse; queda completa cuando el cliente la aprueba.
 
-Orden: 0, 1 (puerto 1.1), 2, 3, 3.1 color, 4 maquetación, 4.1 imagen, 5 gráfica y psicológica, 6, 7, 8, 9 punto de control, 10 futuro (opcional), 11 aceptación.
+Orden: 0, 1 (puerto 1.1), 2, 3, 3.1 color, 4 maquetación, 4.1 imagen, 5 gráfica y psicológica, 6, 7, 8, 9 futuro (opcional), 10 motion (con agentes; guía `escenarios/10-motion.md`), 10.1 growth (solo si capta o convierte), 11 punto de control, 12 aceptación.
 
 | Caja | Lo particular (el detalle, en su guía) |
 |---|---|
@@ -23,7 +23,9 @@ Orden: 0, 1 (puerto 1.1), 2, 3, 3.1 color, 4 maquetación, 4.1 imagen, 5 gráfic
 | 4 | `/creacion-vision <id>`: el encargo y **parada** hasta que el usuario diga «continuar»; luego 2 o 3 propuestas con recursos de librerías libres, evaluadas completas con los agentes. |
 | 4.1 | Se arma sola al aprobar la 4 (`/crear-imagenes <id>` solo si el cliente pide recursos propios). Sin agentes. |
 | 5 | Paso 0: maquetar la propuesta elegida; lo que recomendó la evaluación de la 4; normas gráficas; un estudio con `-Entregas ambas`. |
-| 6 a 8 | Normas de su base con fuentes y evidencias; estudio y usabilidad ganada. La 8 (gamificación) es experimental: «tecnicas» y «experimento». |
-| 9 | Punto de control (`producto.py control <id>`); el motor agrega la pregunta «futuro». |
-| 10 | Opcional, futurista y sin agentes (`futuro.json`, auditorías Zero UI y ética). |
-| 11 | `producto.py entrega <id>`: el cliente descarga y firma el acta. |
+| 6 a 8 | Normas de su base con fuentes y evidencias; estudio y usabilidad ganada. La 8 (gamificación): técnicas que se aprueban una por una; el motor agrega la pregunta «futuro». |
+| 9 | Opcional, futurista y sin agentes (`futuro.json`, auditorías Zero UI y ética). |
+| 10 | Motion (`producto.py motion <id>`), con agentes; aplica lo aprobado en la 8. |
+| 10.1 | Growth: plan de crecimiento (`growth.json`), experimentos de conversión en el prototipo y estudio con `-Growth`. Se omite solo si el producto no capta ni convierte. |
+| 11 | Punto de control (`producto.py control <id>`): cómo vivieron los agentes el diseño final, caja a caja. |
+| 12 | `producto.py entrega <id>`: el cliente descarga y firma el acta. |

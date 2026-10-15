@@ -53,6 +53,7 @@
       <p class="edoc-subtitulo">Cuántas facturas van y en qué estado quedaron, en tres recortes de
       tiempo.</p>
     </div>
+
   </div>
 
   <!-- El resumen por periodo: es el bloque que se le presentó a la autoridad en
@@ -136,10 +137,14 @@
   ];
 
   function tarjeta(flujo, periodo, cifras) {
-    var total = PARTES.reduce(function (a, p) { return a + cifras[p.k]; }, 0) || 1;
+    var total = PARTES.reduce(function (a, p) { return a + cifras[p.k]; }, 0);
+    /* El reparto divide entre el total, así que con todo a cero había que
+       protegerlo. Se protege el cálculo, no lo que se enseña: antes el «|| 1»
+       se colaba a la pantalla y un cuadro vacío decía «Total 1 · 100%». */
+    var divisor = total || 1;
     var acum = 0, arcos = '', leyenda = '';
     PARTES.forEach(function (p) {
-      var pct = cifras[p.k] / total * 100;
+      var pct = cifras[p.k] / divisor * 100;
       arcos += '<circle data-k="' + p.k + '" cx="21" cy="21" r="15.9155" stroke="' + p.color + '" ' +
                'stroke-dasharray="' + pct.toFixed(2) + ' ' + (100 - pct).toFixed(2) + '" ' +
                'stroke-dashoffset="' + ((100 - acum) % 100).toFixed(2) + '"/>';
@@ -151,7 +156,7 @@
     });
     var dicho = PARTES.map(function (p) {
       return cifras[p.k] + ' ' + p.r.toLowerCase() + ', el ' +
-             (cifras[p.k] / total * 100).toFixed(1) + ' por ciento';
+             (cifras[p.k] / divisor * 100).toFixed(1) + ' por ciento';
     }).join('; ');
     return '<article class="tab-tarjeta' + (periodo.k === 'hoy' ? ' tab-tarjeta--hoy' : '') + '">' +
       '<div class="tab-tarjeta__cab">' +
@@ -167,12 +172,28 @@
         '</div>' +
         '<ul class="tab-leyenda">' + leyenda +
           '<li class="tab-leyenda__total"><span></span><span>Total</span><b class="cifra">' +
-          total + '</b><span class="tab-leyenda__pct">100%</span></li></ul>' +
+          total + '</b><span class="tab-leyenda__pct">' + (total ? '100%' : '—') + '</span></li></ul>' +
       '</div>' +
       '</article>';
   }
 
-  var RES = D.RESUMEN;
+  /* Sin designación el resumen va a cero: no hay nada que resumir. Se
+     construye con la misma forma que el de verdad para que el pintado no
+     tenga que saber nada de esto. */
+  function aCero(r) {
+    var vacio = {};
+    Object.keys(r).forEach(function (rama) {
+      vacio[rama] = {};
+      Object.keys(r[rama]).forEach(function (periodo) {
+        vacio[rama][periodo] = {};
+        Object.keys(r[rama][periodo]).forEach(function (estado) {
+          vacio[rama][periodo][estado] = 0;
+        });
+      });
+    });
+    return vacio;
+  }
+  var RES = D.designada() ? D.RESUMEN : aCero(D.RESUMEN);
 
   /* --- El realce ----------------------------------------------------------
      Pasar por un trozo o por su línea resalta los dos y escribe en el agujero

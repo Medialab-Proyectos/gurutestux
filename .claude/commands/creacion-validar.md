@@ -7,6 +7,7 @@ Motor: `_creacion_productos/` (independiente de la plataforma). Lee su `README.m
 
 Datos: $ARGUMENTS
 
+0. **Caja previa:** `python _creacion_productos/producto.py previa <id>` dice en qué va lo que dio el cliente. Si todavía no la mandó, falta información o la investigación (previa.1) está en curso, la caja 0 no se abre: dile al usuario qué falta y el enlace. Lee `contexto/ficha-del-cliente.md` como una fuente más.
 1. Si ya hay una validación anterior y llegaron documentos o respuestas, usa `/creacion-reevaluar <id>` en su lugar. Abre la vuelta: `python _creacion_productos/producto.py validar <id>`. Si te dieron un archivo con las respuestas del cliente, agrégalo con `--respuestas <archivo>`. Si el cliente mandó documentos nuevos, antes corre `python _creacion_productos/producto.py agregar <id> <carpeta o archivo>`.
 2. Lee `entrada.md` y **todos** los documentos que lista, completos. No te bases solo en la ficha.
 3. Califica los diez criterios de la guía, repartidos en los cinco planos de Garrett, con nivel 0, 1 o 2 según lo que está escrito y no según lo que se pueda deducir. Los obligatorios son objetivo, población, nombre, alcance, requerimientos y plataforma; los opcionales, flujo, restricciones, referentes y marca. Escribe `validacion.json` en la vuelta con la forma que indica la guía: fuente en los niveles 1 y 2, supuesto en el nivel 1, y pregunta para el cliente en los niveles 0 y 1. Formula cada pregunta como `si_no` u `opciones` siempre que se pueda, para que el cliente responda con una casilla.
@@ -19,4 +20,4 @@ Datos: $ARGUMENTS
    - **Paso aprobado:** los supuestos que pasan al escenario 1 y el comando `/creacion-escenario <id> 1`;
    - **Falta información:** las preguntas para el cliente, tal como quedaron en `preguntas.md`, listas para enviar.
 
-**Reglas comunes** (lecciones aprendidas, jerarquía de normas, regla de progreso con máximo 3 pasadas, no romper lo aprobado, Three-Body Balance, pendientes): `_creacion_productos/REGLAS.md`. Léelas antes de empezar.
+**Reglas comunes** (lecciones aprendidas, jerarquía de normas, regla de progreso con máximo 2 pasadas, no romper lo aprobado, Three-Body Balance, pendientes): `_creacion_productos/REGLAS.md`. Léelas antes de empezar.
