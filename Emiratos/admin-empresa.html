@@ -302,6 +302,19 @@
            los dos caminos: cambiar tus datos y darte de baja. El botón de ir a
            EmaraTax se quitó en su día para no empujarle a irse; ofrecerlo a
            quien viene buscando justo eso no es empujar. -->
+      <!-- Reunión del 16: la empresa está «activa, pendiente de asociarnos en
+           EmaraTax», y si no sabe cómo, se le dice. Antes este bloque daba por
+           hecho que ya nos había designado, y en la misma pantalla la franja
+           de arriba decía que faltaba: se contradecían. Ahora lee lo mismo que
+           la franja. -->
+      <div id="vinculo-pendiente" hidden>
+        <div class="edoc-etiqueta mb-2">Tu vinculación con la autoridad</div>
+        <p class="mb-2"><span class="edoc-estado edoc-estado--advertencia">Activa · falta designarnos en EmaraTax</span></p>
+        <p class="mb-3">Tu empresa ya está dada de alta con nosotros. Falta un paso, y se hace en EmaraTax, el portal de la autoridad: designarnos como tu proveedor. Hasta entonces no podemos emitir ni recibir documentos a tu nombre.</p>
+        <a class="btn btn-edoc-secundario btn-sm" href="onboarding.html?activa=1">Cómo designarnos</a>
+      </div>
+
+      <div id="vinculo-hecho">
       <div class="edoc-etiqueta mb-2">Tu vinculación con la autoridad</div>
       <p class="mb-3">Nos designaste como tu proveedor en EmaraTax, y todo lo que cambie esa designación se hace
       allí, no aquí: el registro que manda es el suyo. Los dos caminos empiezan igual —entras con la cuenta del
@@ -346,6 +359,7 @@
            target="_blank" rel="noopener" id="abrir-emaratax-admin">Abrir EmaraTax</a>
       </div>
       <p class="edoc-ayuda mt-2" id="gracias-baja" hidden></p>
+      </div>
     </div>
   </section>
 
@@ -642,6 +656,24 @@
       if (texto) texto.textContent = 'Baja comunicada a la autoridad';
       var aviso = document.getElementById('aviso-baja');
       if (aviso) aviso.hidden = false;
+    }());
+
+    /* Lo mismo que la franja de arriba: designada si la sesión lo dice, y si
+       no, «activa, falta designarnos» y cómo hacerlo. ?asociada=1 o 0 lo
+       fuerza, como en la portada. Reverificar o darse de baja solo tiene
+       sentido para quien ya nos designó. */
+    (function pintarVinculo() {
+      var asociada = false;
+      try {
+        var q = new URLSearchParams(window.location.search);
+        if (q.get('asociada') === '1') window.sessionStorage.setItem('edoc-asociada', '1');
+        if (q.get('asociada') === '0') window.sessionStorage.removeItem('edoc-asociada');
+        asociada = window.sessionStorage.getItem('edoc-asociada') === '1';
+      } catch (e) { /* nada */ }
+      var hecho = document.getElementById('vinculo-hecho');
+      var pendiente = document.getElementById('vinculo-pendiente');
+      if (hecho) hecho.hidden = !asociada;
+      if (pendiente) pendiente.hidden = asociada;
     }());
 
     var caja = document.getElementById('caja-estado-asociacion');

@@ -1,0 +1,1672 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verificación desde EmaraTax · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+</head>
+<!--
+  La otra cara de la asociación, la que exige la certificación de Emiratos
+  (reunión del 30 de septiembre).
+
+  Quién llega aquí: alguien que estaba en EmaraTax, nos eligió de la lista de
+  proveedores y pulsó continuar. La autoridad lo manda a una página NUESTRA con
+  un formulario que ella define: correo del administrador tal como está
+  registrado en EmaraTax, país, teléfono —opcional— y su identificador fiscal.
+  Al pulsar verificar, consultamos el servicio de la autoridad; si cuadra,
+  enseñamos lo que nos devuelve SIN dejar editarlo, la persona declara que es
+  verdad y se envía la asociación.
+
+  Qué NO se puede tocar: los campos y el orden son de la norma. Lo que sí es
+  nuestro: la marca, la explicación de qué está pasando y qué sigue después.
+  Cambiar el formulario por nuestra cuenta puede costar una sanción.
+
+  Por qué se piden datos que ya nos dio: porque el correo que tiene en
+  impuestos puede no ser el que usó con nosotros, y solo la autoridad sabe
+  cuál es el bueno. El identificador fiscal sí es el mismo en los dos lados.
+-->
+<body data-seccion="" data-pagina="tax-onboard.html" data-armazon="minimo" data-quien="">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra">
+    <div>
+      <!-- El título es el de la autoridad, no uno nuestro: así se llaman sus
+           pantallas y es lo que el contribuyente acaba de leer en EmaraTax.
+           Lo nuestro es la bienvenida de debajo, que es lo que le dice dónde
+           ha caído: sale de impuestos y aterriza en una web que no conoce. -->
+      <!-- El título es el suyo y debajo, pequeño, qué toca en este paso: «yo
+           debería estar viendo Linking Request, y debajo más pequeñito "ingrese
+           los datos", y en el segundo "verifique los detalles"». La bienvenida
+           es nuestra, así que va aparte y fuera del cuadro blanco. -->
+      <h1 class="edoc-titulo" id="titulo-pantalla">Solicitud de vinculación</h1>
+      <p class="edoc-fuera" id="nota-marca"><strong>Bienvenido a GuruSoft · eDoc.</strong> Vienes de EmaraTax,
+      donde nos elegiste como tu proveedor de facturación electrónica. Aquí comprobamos tus datos con la
+      autoridad y se completa la vinculación.</p>
+    </div>
+  </div>
+
+  <!-- Lo nuestro, fuera del cuadro blanco. No se borra: se mueve. -->
+  <!-- Misma caja que la ayuda de abajo: es información nuestra, y suelta sobre
+       el gris no se leía como tal. Con su icono y su rótulo se entiende que es
+       algo que conviene saber, no un trozo de texto perdido. -->
+  <div class="edoc-fuera edoc-fuera--pie" id="fuera-antes">
+    <p class="edoc-fuera__rotulo"><span data-icono="info" aria-hidden="true"></span>Antes de empezar</p>
+    <p id="por-que">Esta comprobación <strong>la define la autoridad</strong> y la hacemos contra su sistema. <strong>Nada de lo que escribas aquí cambia tus datos en eDoc.</strong></p>
+  </div>
+
+  <div class="reg">
+    <!-- Sin carril de pasos: «no wizard, no opciones adicionales, no guías
+         adicionales para el cliente, lo más sencillo posible». Su pantalla no
+         tiene ninguno, y esto hacía ver difícil lo que es escribir dos datos,
+         verificar y aceptar. -->
+    <section class="reg__cuerpo">
+      <!-- Aquí estaba «Antes de empezar», una guía previa con lo que iba a
+           hacer en EmaraTax. Fuera por lo mismo: esta página la abre la
+           autoridad y lo único que tiene que hacer aquí es escribir dos datos
+           y verificar. -->
+
+      <!-- ============================ 1 · los datos ============================ -->
+      <div id="cuerpo-1">
+        <!-- Su nombre para esta caja. «Tus datos en impuestos» era nuestro, y
+             además confundía: «no son mis detalles, son mis datos». -->
+        <h2 class="reg__titulo mb-3">Datos del solicitante</h2>
+
+        <!-- Los dos obligatorios, juntos y al mismo nivel. Son la llave: un
+             mismo correo puede administrar varias empresas en EmaraTax —su
+             guía habla de «the list of taxable persons associated with the
+             logged in user», en plural—, así que el correo solo no identifica
+             nada. El TIN estaba debajo, detrás de dos campos opcionales, y eso
+             lo leía como un dato secundario cuando es la otra mitad. -->
+        <!-- Mitad y mitad en las dos filas. Antes la de arriba iba 7/5 y la
+             de abajo 5/7, con cortes distintos además, y los bordes de las
+             casillas no se alineaban entre una fila y otra. En la pantalla de
+             la autoridad las cuatro son iguales. -->
+        <div class="row rejilla">
+          <div class="col-12 col-lg-6">
+            <label class="edoc-etiqueta" for="v-correo">Correo registrado en EmaraTax
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+            <!-- Se escribe, no se pega: este campo es el segundo factor de la
+                 comprobación, y pegarlo de otra ventana lo vacía de sentido.
+                 Y sin consejos sobre qué correo es: no sabemos sus reglas y
+                 decirle «no uno personal» puede despistarle cuando el que tiene
+                 registrado sí lo es. -->
+            <!-- 254 es el máximo de una dirección de correo (RFC 5321). El
+                 contrato del API no publica ninguno suyo. -->
+            <input type="email" class="form-control" id="v-correo" autocomplete="off"
+                   maxlength="254" placeholder="El que consta en EmaraTax">
+          </div>
+          <div class="col-12 col-lg-6">
+            <label class="edoc-etiqueta" for="v-tin">TIN (número de identificación fiscal)
+              <span class="marca-campo marca-campo--obligatorio" id="marca-tin">Obligatorio</span>
+              <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="left"
+                data-content="El número con el que te conoce la autoridad, diez dígitos. Es el de la cuenta que acabas de elegir en EmaraTax. No es el TRN: el TRN es más largo, es de un impuesto concreto y aquí no hace falta, porque nos lo da la autoridad."
+                aria-label="Qué es el TIN">?</button></label>
+            <input class="form-control cifra" id="v-tin" inputmode="numeric" maxlength="10"
+              placeholder="10 dígitos">
+          </div>
+        </div>
+
+
+        <div class="row rejilla mt-3">
+          <!-- En la pantalla de la autoridad esto es «Country Code» y lleva el
+               prefijo: «+971 United Arab Emirates». El nuestro decía «País» con
+               el nombre a secas, y eso se lee como el país de la empresa cuando
+               es el prefijo del teléfono. Si el teléfono es opcional, su
+               prefijo también: marcar uno como obligatorio y el otro no era
+               contradictorio. -->
+          <div class="col-12 col-lg-6">
+            <label class="edoc-etiqueta" for="v-pais">Código de país
+              <span class="marca-campo">Opcional</span></label>
+            <select class="custom-select" id="v-pais">
+              <option value="+971" selected>+971 Emiratos Árabes Unidos</option>
+              <option value="+966">+966 Arabia Saudí</option>
+              <option value="+973">+973 Baréin</option>
+              <option value="+965">+965 Kuwait</option>
+              <option value="+968">+968 Omán</option>
+              <option value="+974">+974 Catar</option>
+              <option value="+20">+20 Egipto</option>
+              <option value="+91">+91 India</option>
+              <option value="+92">+92 Pakistán</option>
+              <option value="+44">+44 Reino Unido</option>
+            </select>
+          </div>
+          <div class="col-12 col-lg-6">
+            <label class="edoc-etiqueta" for="v-tel">Móvil registrado
+              <span class="marca-campo">Opcional</span></label>
+            <!-- E.164 permite 15 dígitos contando el prefijo; como el prefijo
+                 va aparte y el más largo de la lista son 3 (+971), aquí caben
+                 12. El móvil de Emiratos son 9. -->
+            <input class="form-control cifra" id="v-tel" inputmode="tel" autocomplete="tel"
+              maxlength="12" placeholder="50 123 4567">
+          </div>
+        </div>
+
+
+        <!-- Solo cuando la empresa ya es cliente y entra a revisar. La guía de
+             la autoridad lo exige: «Mandatory to choose one of the options». -->
+        <div id="caja-accion" hidden>
+          <!-- Su caja se llama «Select the action» y las opciones «Reverify»
+               y «Delinking». «Qué quieres hacer / Seguir con nosotros / Dejar de
+               ser cliente» era framing comercial nuestro sobre un trámite que
+               no controlamos: lo decide la autoridad y el flujo es suyo. -->
+          <div class="edoc-etiqueta mt-3 mb-2">Elige la acción
+            <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></div>
+          <div class="reg__tipos">
+            <label class="reg__tipo" for="v-seguir">
+              <input type="radio" name="v-accion" id="v-seguir" value="reverificar">
+              <span class="reg__tipo-marca" aria-hidden="true">✓</span>
+              <span><span class="reg__tipo-t">Reverificar</span></span>
+            </label>
+            <label class="reg__tipo" for="v-salir">
+              <input type="radio" name="v-accion" id="v-salir" value="desvincular">
+              <span class="reg__tipo-marca" aria-hidden="true">✓</span>
+              <!-- Decía «dejarás de emitir y recibir», el mismo exceso que ya se
+                   quitó del cierre y de identificación fiscal: recibir no se
+                   corta en el acto, porque mientras tu identificador siga en
+                   nuestro SMP el documento llega aquí. -->
+              <span><span class="reg__tipo-t">Baja</span></span>
+            </label>
+          </div>
+
+          <!-- El motivo no se le pregunta: su formulario (página 13) no lo
+               pide. Pero «reason» es obligatorio en crregupdate para las
+               acciones 2 y 3, y la respuesta de verifyenduser no lo trae —se
+               revisó campo por campo—, así que lo pone el proveedor. Contesta
+               la pregunta de si nos lo envían ellos: no. -->
+          <input type="hidden" id="v-motivo" value="">
+        </div>
+
+        <div class="edoc-aviso edoc-aviso--error mt-3" id="error-datos" hidden>
+          <span data-icono="rechazar" class="edoc-aviso__icono" aria-hidden="true"></span>
+          <div id="error-texto">Revisa lo que está marcado en rojo.</div>
+        </div>
+
+        <div class="reg__nav">
+          <!-- Tampoco aquí: no sabemos de qué página de EmaraTax viene, y la
+               suya sigue abierta detrás. Cerrar esta es volver. -->
+          
+          <!-- El nombre exacto del botón de su pantalla: «Verify Applicant
+               Details», en las capturas de las páginas 9 y 11 de la guía. El
+               texto de la guía dice «Click on Verify», pero el botón se llama
+               así, y es lo que comparan al certificar. -->
+          <button class="btn btn-edoc-primario" type="button" id="verificar">Verificar datos del solicitante</button>
+        </div>
+
+        <!-- Fuera de la capa de notas: hace falta para recorrer la maqueta. -->
+        <div class="onboarding-maqueta mt-4">
+          <p class="edoc-secundario">Aquí no se consulta de verdad a la autoridad. Estos botones enseñan las respuestas posibles.</p>
+          <div class="d-flex hueco-2 flex-wrap">
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-ok">Simular que cuadra</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-no">Simular que no cuadra</button>
+            <!-- Cuadra con la autoridad, pero el TIN no está entre nuestros
+                 clientes. Solo en el alta: en la reverificación y la baja la
+                 autoridad solo manda el TIN si ya estamos vinculados. -->
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-nocliente">Simular que no es cliente</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-noresponde">Simular que EmaraTax no responde</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-nuestro">Simular un fallo nuestro</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================ 2 · la respuesta ============================ -->
+      <div id="cuerpo-2" hidden>
+        <!-- Su nombre: «Entity Details». «Lo que responde la autoridad» era
+             nuestro, y es justo lo que no se puede inventar aquí dentro. -->
+        <h2 class="reg__titulo mb-2">Datos de la entidad</h2>
+        <!-- Algo que le identifique, que es lo que faltaba: «ahí ya no ve el
+             correo». Se enseña el TIN, que la autoridad ya manda en la
+             dirección; el correo no se enseña nunca (regla del 15). -->
+        <!-- Aquí había «TIN 1000001602» bajo el título. Fuera: la captura
+             oficial de «Entity Details» (páginas 10 y 12 de la guía) no lo
+             lleva; allí el TIN está en «Applicant Details», arriba. -->
+
+
+        <!-- Los SEIS campos de su captura, en su orden y sin añadir ninguno.
+             Habíamos metido el correo y el proveedor —que no están en su
+             pantalla— y quitado la fecha de solicitud porque el contrato del
+             API no la devuelve. Que el API no la traiga es una pregunta para
+             ellos, no permiso para quitarla: lo que nos validan es esto. -->
+        <!-- En la reverificación el guión marca aquí lo que es distinto de lo
+             que teníamos: el sentido del trámite es que algo cambió, y lo útil
+             es ver qué. En el alta no hay con qué comparar y no se marca nada. -->
+        <dl class="reg__ficha" id="ficha-autoridad">
+          <div>
+            <dt class="reg__ficha-rotulo">Tipo de entidad</dt>
+            <dd class="reg__ficha-dato" id="r-tipo">Sociedad de responsabilidad limitada</dd>
+          </div>
+          <div>
+            <dt class="reg__ficha-rotulo">Razón social en letras latinas</dt>
+            <dd class="reg__ficha-dato" id="r-empresa">Al Noor Trading LLC</dd>
+          </div>
+          <div>
+            <dt class="reg__ficha-rotulo">Razón social en árabe</dt>
+            <dd class="reg__ficha-dato" id="r-nativo" dir="rtl" lang="ar">النور للتجارة ذ.م.م</dd>
+          </div>
+          <div>
+            <dt class="reg__ficha-rotulo">TRN del IVA</dt>
+            <dd class="reg__ficha-dato cifra" id="r-trn">100776655400003</dd>
+          </div>
+          <div>
+            <dt class="reg__ficha-rotulo">Alta en el IVA o entrada en el grupo</dt>
+            <dd class="reg__ficha-dato cifra" id="r-fecha-iva">2022-02-01</dd>
+          </div>
+          <div>
+            <dt class="reg__ficha-rotulo">Fecha de la solicitud</dt>
+            <dd class="reg__ficha-dato cifra" id="r-envio">2025-08-25</dd>
+          </div>
+        </dl>
+
+        <!-- Decía «el correo y el TIN quedan bloqueados», y en este paso esos
+             campos no están en pantalla: el paso 1 entero está oculto. Era
+             describir un estado que no se ve —y el correo no se enseña nunca,
+             a propósito—. Lo único útil era la salida, así que queda la salida
+             y nada más, sin caja de color: es una puerta, no un aviso. -->
+
+        <!-- Aquí había un aviso con los cinco días hábiles de MD 243, Art.
+             5(3) y la multa de AED 1.000 por día. Fuera: ese plazo sirve para
+             que sepa que TIENE que avisárnoslo, y eso se decide antes, en
+             identificación fiscal, donde sigue estando. Aquí llega cuando ya lo
+             está haciendo y no cambia ninguna decisión. -->
+
+        <!-- Sin separador: la última fila de la ficha ya cierra con su
+             propia línea, y las dos juntas se veían como una raya doble. -->
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="declaro">
+          <!-- La declaración es la suya, palabra por palabra: «I declare that
+               all information provided is true, accurate and complete to the
+               best of my knowledge and belief». La habíamos reescrito para que
+               nombrara el alta en la red —por el requisito de consentimiento de
+               Peppol— y eso es cambiar un texto que no es nuestro. Si ese
+               consentimiento hay que pedirlo aparte, se pide aparte. -->
+          <label class="form-check-label" for="declaro">Declaro que toda la información facilitada es verdadera,
+          exacta y completa, a mi leal saber y entender.</label>
+          <div class="invalid-feedback edoc-error-campo" id="declaro-error" hidden>Marca la casilla para poder
+          enviarla.</div>
+        </div>
+
+        <div class="reg__nav">
+          <button class="btn btn-edoc-terciario" type="button" id="volver-1">Volver</button>
+          <!-- El texto lo pone el guión según lo que haya elegido: no se envía
+               «la asociación» cuando lo que mandas es una baja. -->
+          <!-- «Submit», el suyo: «usted tenía que igualar lo que yo le puse». -->
+          <button class="btn btn-edoc-primario" type="button" id="enviar">Enviar</button>
+        </div>
+
+        <!-- Fuera de la capa de notas: hace falta para recorrer la maqueta. -->
+        <div class="onboarding-maqueta mt-4">
+          <p class="edoc-secundario">Y lo que puede fallar al enviar. Marca antes la declaración.</p>
+          <div class="d-flex hueco-2 flex-wrap">
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-envio-noresponde">Simular que EmaraTax no responde al enviar</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-envio-nuestro">Simular un fallo nuestro al enviar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================ 2b · no cuadra ============================ -->
+      <div id="cuerpo-no" hidden>
+
+        <!-- Un solo mensaje y genérico: antes había una lista de causas y
+             «el está diciendo que el error es uno de mil». Fuera también «la
+             empresa está en otro país», que ni siquiera es cierto: puede
+             llegar alguien de otro país.
+
+             Y genérico también en qué falló: no dice si es el correo o el
+             TIN. Decirlo le da pistas a quien prueba datos ajenos —con el
+             TIN de otra empresa sabría si acertó el correo—. La certificación
+             pide probar correo correcto e incorrecto, y eso se cumple igual:
+             uno pasa y el otro no. -->
+        <!-- El mismo patrón que «Proceso completado»: icono grande con el
+             color de su señal, el mensaje como título y la explicación
+             debajo. Sin caja de color: con el icono grande era repetirla. -->
+        <p class="reg__hecho-icono reg__hecho-icono--error" aria-hidden="true"><span data-icono="rechazar"></span></p>
+        <p class="reg__hecho" id="error-no-cuadra">El correo o el TIN no coinciden con los de EmaraTax</p>
+        <p class="reg__hecho-sub">Revisa los dos tal como constan allí y vuelve a intentarlo.</p>
+        <div class="reg__nav reg__nav--centro">
+          <button class="btn btn-edoc-primario" type="button" id="reintentar">Volver a intentarlo</button>
+        </div>
+      </div>
+
+      <!-- ======================== no es cliente nuestro ======================== -->
+      <!-- Reunión del 16, segunda grabación: «al momento que dice verificar y
+           no estás en eDoc, yo tengo que decirle: no puedes usar nuestra
+           plataforma, contáctate con el gerente de proyecto o con ventas». Y:
+           «no existe nuestro modelo de negocio de primero regístrate y luego
+           yo te registro». Los lineamientos, 13.2, dicen lo mismo: el contrato
+           con el proveedor va antes del onboarding.
+
+           Sin botón de registrarse, que es justo lo que se descartó, y sin
+           «volver a intentarlo», que no cambiaría nada: no es un error de lo
+           escrito. La autoridad ya confirmó quién es; lo que falta es el
+           contrato, y eso no se arregla en esta pantalla. Ámbar y no rojo por
+           lo mismo: no se equivocó en nada. -->
+      <div id="cuerpo-nocliente" hidden>
+        <p class="reg__hecho-icono reg__hecho-icono--aviso" aria-hidden="true"><span data-icono="alerta"></span></p>
+        <p class="reg__hecho">Tu empresa todavía no es cliente de GuruSoft</p>
+        <p class="reg__hecho-sub">Para designarnos primero tienes que registrarla con nosotros. Cuando la aprobemos y tengas tus credenciales, vuelve a EmaraTax y elígenos otra vez.</p>
+        <!-- Las dos salidas, pedidas en la revisión: registrarse o hablar con
+             alguien. Registrarse va primero porque es lo que hace la mayoría
+             y lo que la reunión del 16 pone como primer paso. El registro no
+             hereda los datos de la autoridad: con eso no basta para operar
+             —falta la aprobación—, y heredarlos invitaba a pensar que sí. -->
+        <div class="reg__nav reg__nav--centro">
+          <a class="btn btn-edoc-secundario" id="nocliente-asesor" href="mailto:soporte@edoc.ae">Contactar con un asesor</a>
+          <a class="btn btn-edoc-primario" id="nocliente-registro" href="registro.html?empezar=1">Registrar mi empresa</a>
+        </div>
+      </div>
+
+      <!-- ======================== falta el código ======================== -->
+      <!-- Sin el código de la autoridad no se puede preguntarle nada:
+           «emarataxToken» es obligatorio y solo lo trae la redirección. Pasa
+           si alguien guarda la dirección o si el código ya se usó o caducó.
+           Lo único útil es decir qué falta y dónde se consigue. -->
+      <div id="cuerpo-sincodigo" hidden>
+        <p class="reg__hecho-icono reg__hecho-icono--aviso" aria-hidden="true"><span data-icono="alerta"></span></p>
+        <p class="reg__hecho">Falta el código de EmaraTax</p>
+        <p class="reg__hecho-sub">Esta página la abre EmaraTax cuando nos eliges como proveedor, y sin su código no podemos comprobar tus datos. Vuelve a EmaraTax y pulsa «Proceed to ASP».</p>
+      </div>
+
+      <!-- ======================== fallo de conexión ======================== -->
+      <!-- Los cuatro errores que documenta el servicio para las dos llamadas
+           (Service Samples, 8-jul-2025) se quedan en dos, por lo que puede
+           hacer la persona:
+             · 408 GSB_002 y 500 GSB_001, al verificar o al enviar: «EmaraTax no
+               responde». Un solo error: «no sabemos si llegó» era hilar
+               demasiado. Se vuelve al paso 1 y se verifica otra vez antes de
+               mandar nada, en vez de reenviar a ciegas.
+             · 401 y 400, y un fallo al darle de alta en Peppol: «no pudimos
+               completar el trámite», genérico. No se dice de quién es el fallo:
+               un 400 o un 401 también sale si alguien manipuló el token o la
+               petición. Se le ofrece reintentar y, si se repite, soporte.
+           Sin referencia ni «ya nos ha llegado el aviso»: hoy no hay registro
+           que lo respalde. Queda como requisito en la nota para desarrollo.
+           Y nunca se enseña el código ni el texto de la autoridad. -->
+      <div id="cuerpo-conexion" hidden>
+        <div data-caso="noresponde" hidden>
+          <p class="reg__hecho-icono reg__hecho-icono--aviso" aria-hidden="true"><span data-icono="alerta"></span></p>
+          <p class="reg__hecho">EmaraTax no responde ahora</p>
+          <p class="reg__hecho-sub">No es un problema de tus datos. Inténtalo de nuevo en unos minutos.</p>
+          <div class="reg__nav reg__nav--centro">
+            <button class="btn btn-edoc-primario" type="button" id="conexion-reintentar" data-reintentar>Volver a intentarlo</button>
+          </div>
+        </div>
+        <div data-caso="nuestro" hidden>
+          <p class="reg__hecho-icono reg__hecho-icono--error" aria-hidden="true"><span data-icono="rechazar"></span></p>
+          <p class="reg__hecho">No pudimos completar el trámite</p>
+          <p class="reg__hecho-sub">Vuelve a intentarlo y, si se repite, escríbenos a soporte@edoc.ae con tu TIN.</p>
+          <div class="reg__nav reg__nav--centro">
+            <button class="btn btn-edoc-primario" type="button" data-reintentar>Volver a intentarlo</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================ 3 · enviada ============================ -->
+      <div id="cuerpo-3" hidden>
+        <div class="reg__sub" id="cierre-sub" hidden></div>
+
+        <!-- Antes decía «ya estás conectado», y eso no lo sabemos: lo que
+             sabemos es que le mandamos la vinculación y nos respondió. Quien
+             manda es su registro, no nuestra pantalla, así que se cuenta lo
+             que pasó y se le dice dónde se comprueba. -->
+        <!-- Grande, limpio y con aire: «póngala más pequeñita y abajo
+             colóquele los detalles, porque se ve muy cargada». Y sin
+             «vinculación» ni «linking», que es término técnico: lo que la
+             persona necesita saber es que terminó. -->
+        <!-- Un visto, que es lo que la persona busca de un vistazo: que
+             termino. Va dentro del cuadro porque acompana al mensaje, no es
+             una ayuda nuestra. -->
+        <p class="reg__hecho-icono" aria-hidden="true"><span data-icono="aprobar"></span></p>
+        <p class="reg__hecho" id="remate-fuerte">Proceso completado</p>
+        <p class="reg__hecho-sub" id="remate-texto">Ya puedes cerrar esta ventana.</p>
+
+        <div id="caja-peppol">
+          <div class="edoc-etiqueta mb-2">Tu dirección en la red</div>
+          <p class="mb-2" id="peppol-texto">Con esta dirección te encuentran tus clientes y tus proveedores. Se construye con tu TIN, y la damos de alta nosotros.</p>
+          <div class="reg__folio-fila mb-4">
+            <div class="reg__folio-cod" id="peppol-id">—</div>
+            <button type="button" class="btn btn-edoc-secundario btn-sm reg__folio-copiar" id="copiar-peppol">Copiar</button>
+          </div>
+        </div>
+
+        <!-- Aquí había dos avisos azules, uno naranja y una línea de tiempo, y
+             entre los cuatro decían tres veces «vuelve a EmaraTax y comprueba
+             que aparecemos». La línea de tiempo además repetía entera la caja
+             verde y mezclaba hechos con una tarea pendiente.
+
+             Queda un solo bloque de pasos, los mismos que usa el paso 0 —así
+             que ya los conoce—: dónde mirar, qué hacer si no aparece y que ya
+             puede cerrar. Cada cosa, una vez. -->
+
+      </div>
+    </section>
+    <!-- El paso, entre el formulario y la ayuda: no es ayuda, es dónde está. -->
+    <p class="edoc-pasos-fuera" id="paso-actual">Paso 1 de 2</p>
+    <!-- Debajo del cuadro: el paso en el que va y la salida. «Eso de Step 1 y
+         Step 2 lo puede dejar al ladito, debajo del cuadro.» -->
+    <!-- Plegada y cerrada de entrada: «debería colapsarse y aparecer
+         cerrado». El formulario es lo que manda; la ayuda la abre quien la
+         necesita. -->
+    <details class="edoc-fuera edoc-fuera--pie edoc-fuera--plegada" id="caja-ayuda">
+      <!-- Esta caja es nuestra, así que puede llevar icono y negritas: lo
+           que no puede llevarlas es el cuadro blanco de arriba. -->
+      <!-- El paso no es ayuda: va en la esquina, en la misma fila que el
+           rótulo, no como una línea más dentro de la caja. -->
+      <summary class="edoc-fuera__rotulo"><span data-icono="info" aria-hidden="true"></span>Ayuda</summary>
+      <div class="edoc-fuera__dentro">
+      <p class="edoc-fuera__punto" id="cuadran" hidden><span data-icono="aprobar" aria-hidden="true"></span><span><strong>Tus datos cuadran con el registro fiscal.</strong> Esto es lo que nos devuelve la autoridad. Si algo está mal, se corrige en EmaraTax, no aquí.</span></p>
+      <div id="cierre-fuera" hidden>
+        <!-- Lo primero, lo que hará casi todo el mundo: cerrar. Antes iba al
+             final, tras un separador y un rótulo «¿Y ahora?», y la caja se
+             veía muy separada. -->
+        <p class="edoc-fuera__punto" id="ahora-cerrar-p"><span data-icono="salir" aria-hidden="true"></span><span id="ahora-cerrar">Ya está: el trámite con la autoridad está hecho y puedes cerrar esta ventana. La de EmaraTax sigue abierta detrás, donde estabas.</span></p>
+        <!-- Ya no es un plegable dentro de otro: la caja entera se pliega. -->
+        <p class="edoc-fuera__subrotulo"><strong>¿Cómo compruebo que quedó hecho?</strong></p>
+        <ol class="emt__pasos">
+          <li class="emt__paso">
+            <span class="emt__paso-t">Compruébalo en EmaraTax</span>
+            <span class="emt__paso-p" id="comprobar-detalle">Vuelve a la pantalla de donde saliste: en la lista
+            de proveedores debe figurar GuruSoft como tu proveedor vinculado. El registro que vale es el
+            suyo.</span>
+          </li>
+          <!-- En la baja esta pregunta es al revés —lo que hay que mirar es
+               que YA NO aparezcamos— y la salida tampoco es la misma, así que
+               el guión cambia las dos. -->
+          <li class="emt__paso">
+            <span class="emt__paso-t" id="fallo-titulo">¿No aparecemos?</span>
+            <span class="emt__paso-p" id="fallo-detalle">Entonces no quedó hecho. Vuelve a pulsar
+            <strong>Proceed to ASP</strong> y espera a que te traiga otra vez al paso 1. Puedes comprobarlo más tarde, sin prisa. Si se repite, escríbenos a soporte@edoc.ae con tu TIN.</span>
+          </li>
+        </ol>
+
+        <!-- Aquí NO hay botón de volver a EmaraTax, y es a propósito: el
+             contribuyente vino de una página concreta de su sesión y esa
+             dirección no la sabemos, porque la autoridad no manda ninguna de
+             retorno. Mandarle al acceso no es devolverle. Por eso el tercer
+             paso dice que cierre esta ventana: la suya sigue abierta detrás.
+             El aviso azul que lo repetía aquí, fuera. -->
+        <!-- Las tres salidas, juntas y en orden. Antes «ya puedes cerrar esta
+             ventana» era un paso de la lista y los botones estaban debajo, en
+             otro bloque: se contradecían, porque los botones solo sirven si no
+             cierras. Son alternativas, así que se presentan como tales.
+
+             Cerrar va primero porque es lo que va a hacer la mayoría: vino de
+             EmaraTax a hacer un trámite y ya lo hizo. El portal se ofrece
+             después y sin empujar.
+
+             No hay botón de cerrar: esta ventana no la abrimos nosotros —la
+             abrió la redirección de la autoridad— y window.close() no la
+             cerraría. Prometer un botón que no funciona es peor que decirlo. -->
+        <!-- Aquí se ofrecía entrar al portal o registrarse. Fuera: la guía
+             pide en esta pantalla una sola cosa —«ASP to call the Peppol and
+             display the relevant details»— y meter nuestro portal dentro de
+             la transacción de la autoridad es mezclarlos. «El onboarding de
+             taxes no es parte de portal consulta, son cosas aparte.» Y José el
+             14: «el dueño de esa transacción son ellos, impuestos, no
+             nosotros». El cierre es cerrar la ventana y volver a EmaraTax. -->
+      </div>
+      <p class="edoc-fuera__punto" id="caja-llave-bloqueada" hidden><span data-icono="reenviar" aria-hidden="true"></span><span><strong>¿Te equivocaste al escribir el correo o el TIN?</strong> <button type="button" class="edoc-enlace-texto" id="corregir-llave">Corrígelos y vuelve a comprobar</button>: lo de arriba es lo que la autoridad respondió a <em>esos</em> datos.</span></p>
+      <!-- En una sola línea por trozo: el diccionario traduce nodos enteros y
+           un salto de línea dentro del nodo lo parte y deja el texto sin
+           traducir. -->
+      <!-- Para quien no es cliente: lo más probable es que haya firmado y su
+           alta en el portal siga en revisión, porque comercial le dice que nos
+           elija. Se le explica qué esperar, sin mandarle a ningún sitio. -->
+      <p class="edoc-fuera__punto" id="ayuda-nocliente" hidden><span data-icono="soporte" aria-hidden="true"></span><span><strong>¿Ya te registraste?</strong> Puede que tu alta siga en revisión. Cuando recibas tus credenciales, vuelve a EmaraTax y elígenos otra vez.</span></p>
+      <p class="edoc-fuera__punto" id="ayuda-sincodigo" hidden><span data-icono="info" aria-hidden="true"></span><span><strong>¿Es la primera vez?</strong> <a href="onboarding.html?activa=1">Mira cómo se hace en EmaraTax</a></span></p>
+      <p class="edoc-fuera__punto" id="salida-fuera"><span data-icono="salir" aria-hidden="true"></span><span><strong>Comprobamos con la autoridad que eres tú</strong> antes de enviar nada. ¿Prefieres no seguir? <strong>Cierra esta ventana</strong>: la de EmaraTax sigue abierta donde estabas.</span></p>
+      </div>
+    </details>
+  </div>
+
+  <div class="nota nota--decidido" id="nota-desarrollo">
+    <span class="nota__sello">Para desarrollo · 16 de octubre</span>
+    <strong>Qué hace esta pantalla por debajo, paso a paso.</strong> Pedido en la reunión del 16: «esto se lo
+    pasamos al desarrollador… que esté documentado por ti».
+    <br><br>
+    <strong>Con qué llega.</strong> EmaraTax redirige a nuestra dirección con un código de autorización y, en la
+    reverificación y la baja, también con el TIN. Esta pantalla se abrió con:
+    <span class="cifra" id="url-entrada">—</span>
+    <br>
+    La página se llama <span class="cifra">tax-onboard</span> porque es la dirección que declaramos al
+    Ministerio en la solicitud de acreditación: <span class="cifra">https://qas-ae-entpr-site.edoclab.com/tax-onboard</span>
+    para el entorno de pruebas. Los parámetros llevan los nombres del contrato oficial del API (swagger):
+    <span class="cifra">emarataxToken</span> —«Token from the redirect url»— y <span class="cifra">TIN</span>.
+    La guía no da el nombre del parámetro de la dirección —solo dice «AUTH code» y «TIN number»—, así que
+    <strong>hay que confirmarlo con la primera redirección real</strong>: la dirección completa queda en el
+    registro del servidor.
+    <ol class="mt-2 mb-2">
+      <li><strong>Al abrir.</strong> Se guarda el código, que es el <span class="cifra">emarataxToken</span> del
+      servicio, y se borra de la barra (guía 4.1: «AUTH code parameter to be hidden»). Si viene el TIN, es
+      reverificación o baja: el TIN queda bloqueado y elegir la acción es obligatorio. Sin código no se puede seguir: la
+      pantalla lo dice y le manda a repetir el paso en EmaraTax (en la maqueta, con
+      <span class="cifra">?sincodigo=1</span>). No se llama a nada. <strong>Ningún documento dice si el token
+      caduca</strong> —ni la guía, ni la especificación, ni las directrices del Ministerio v1.1—: no se avisa de
+      plazos ni se pone cuenta atrás. Si la autoridad lo rechaza por usado o vencido, se trata como «falta el
+      código». <strong>Para José:</strong> si caduca, cuánto dura y con qué respuesta lo rechaza.
+      <br><strong>En la maqueta, sin parámetros,</strong> se escribe en la barra un token simulado y se deja a la
+      vista, para enseñar cómo llega la dirección desde EmaraTax: lo pidió el CEO. <strong>En producción se
+      borra al recibirlo</strong> (guía 4.1), que es lo que hace la maqueta cuando el código llega de verdad con
+      <span class="cifra">?emarataxToken=</span>.</li>
+      <li><strong>Verify Applicant Details.</strong>
+      <span class="cifra">POST /api/prc/ects-einvoicing/v1/verifyenduser</span> con
+      <span class="cifra">TIN</span>, <span class="cifra">email</span>, <span class="cifra">mobile</span>
+      (opcional) y <span class="cifra">emarataxToken</span>. Responde <span class="cifra">verificationStatus</span>,
+      <span class="cifra">msgCode</span>, <span class="cifra">msgDesc</span> y la ficha:
+      <span class="cifra">legalType</span>, <span class="cifra">entityNameEn</span>,
+      <span class="cifra">entityNameAr</span>, <span class="cifra">vatTrn</span> y
+      <span class="cifra">effectiveDate</span>. Si no cuadra, se enseña el error sin decir cuál de los dos datos
+      falló. Si cuadra, <strong>se busca el TIN en nuestra base de clientes</strong>, y si no está se para aquí y se
+      le ofrece registrar su empresa o hablar con un asesor.
+      Se guarda la respuesta con su fecha. En EmaraTax todavía no cambia nada.</li>
+      <li><strong>Submit.</strong> Primero el alta en Peppol (guía 4.2: «ASP to call the Peppol») con la dirección
+      <span class="cifra">0235:&lt;TIN&gt;</span>; en la baja, la salida del SMP, con tres días hábiles de plazo.
+      Después <span class="cifra">POST /api/prc/ects-einvoicing/v1/crregupdate</span> con la ficha tal cual,
+      <span class="cifra">peppolParticipantId</span>, <span class="cifra">eventDate</span>,
+      <span class="cifra">aspName</span>, <span class="cifra">aspAccrediationNumber</span>,
+      <span class="cifra">emarataxToken</span>, <span class="cifra">action</span> (1 alta, 2 reverificación,
+      3 baja), <span class="cifra">reason</span> en la 2 y la 3, y <span class="cifra">field1</span> a
+      <span class="cifra">field5</span>, sin describir (nota para José, más abajo). En nuestra base se guardan la
+      acción, la fecha y la respuesta, y la empresa pasa a designada o a dada de baja. Con eso la autoridad nos
+      enseña en su pestaña «Linkage Status with ASP».</li>
+      <li><strong>Proceso completado.</strong> No llama a nada. En el alta enseña la dirección en la red, con la
+      que sus clientes y proveedores le encuentran al facturar.</li>
+    </ol>
+    Las dos llamadas llevan tres cabeceras: <span class="cifra">GW-APIKey</span>,
+    <span class="cifra">Authorization</span> y <span class="cifra">CustomAuth</span>, que sale de
+    <span class="cifra">generateAccessToken_FTAX</span>. Base:
+    <span class="cifra">https://api.gsb.government.ae/gateway/validateTaxPayerDetails_FTAX/1.0</span>.
+    <br><br>
+    <strong>Fallos de conexión.</strong> El servicio documenta cuatro respuestas de error para las dos
+    llamadas: <span class="cifra">408 GSB_002</span> «Request has timed out», <span class="cifra">500 GSB_001</span>
+    «An internal error occurred», <span class="cifra">401</span> «Unauthorized application request» y
+    <span class="cifra">400</span> «One or more validation errors occurred». La persona ve dos: 408 y 500, al
+    verificar o al enviar, son «EmaraTax no responde» y se vuelve al paso 1 con el formulario vacío —nada de lo
+    escrito se guarda— para verificar otra vez antes de mandar nada; 401, 400 y un fallo al darle de alta en
+    Peppol son «no pudimos completar el trámite», genérico y con el mismo reintento. No se dice de quién es el
+    fallo: el 401 sale si nuestra clave del API o el <span class="cifra">CustomAuth</span> está mal, y el 400 si
+    la petición llega mal formada, pero los dos salen también si alguien manipuló el token o la petición.
+    <strong>Requisito, hoy no existe:</strong> guardar en un registro el código y el
+    <span class="cifra">Unique ReferenceID</span> de la autoridad, que es lo que pide el soporte de GSB. Hasta
+    que exista, la pantalla no promete referencia ni aviso. <strong>Para José:</strong> si el token sigue
+    valiendo después de un 408 o un 500, y si un 408 al enviar pudo registrarse igual. Los ejemplos de error del
+    documento están copiados de otro servicio (<span class="cifra">manageInstituteApplicantDetails_MOE</span>).
+    <br><br>
+    <strong>Por qué nuestra base va después de la autoridad y no antes.</strong> Si se mirara primero,
+    cualquiera podría escribir TIN al azar y averiguar quién es cliente nuestro y quién no. Después de la
+    autoridad ya sabemos que quien pregunta es el administrador de ese TIN.
+  </div>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · 16 de octubre</span>
+    <strong>A dónde va «Contactar con un asesor».</strong> La maqueta no tiene canal comercial, así que abre un
+    correo a <span class="cifra">soporte@edoc.ae</span> con el TIN en el asunto. Falta el canal de verdad:
+    un correo de ventas, un formulario o un teléfono. Lo decide comercial.
+  </div>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · 16 de octubre</span>
+    <strong>Los largos máximos de los campos.</strong> El único que fija la normativa es el TIN: diez
+    dígitos, y se valida. Para el correo y el móvil el contrato del API no publica ninguno —solo
+    <em>Maximum request message size &lt; 1 MB</em> y 300 llamadas al día—, así que van los de la norma
+    general: correo <span class="cifra">254</span> caracteres (RFC 5321) y móvil <span class="cifra">12</span>
+    dígitos (E.164 son 15 con el prefijo, que aquí va aparte). El móvil es opcional: vacío pasa,
+    escrito tiene que ser dígitos.
+    <br><br>
+    <strong>Falta confirmar con José:</strong> si la autoridad corta alguno de los dos por un largo suyo.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 15 de octubre</span>
+    <strong>La razón se manda, pero no se le pregunta al contribuyente.</strong> El servicio la exige: en la
+    especificación, tabla 10, <span class="cifra">reason</span> es <em>Mandatory for update and delete</em>, o
+    sea para <span class="cifra">action</span> 2 (reverificar) y 3 (baja); en el alta, <span class="cifra">action</span>
+    1, no hace falta. Viaja en la segunda llamada,
+    <span class="cifra">/api/prc/ects-einvoicing/v1/crregupdate</span>.
+    <br><br>
+    Y no nos la manda la autoridad: la respuesta de <span class="cifra">verifyenduser</span> trae TIN, correo,
+    móvil, token, verificationStatus, msgCode, msgDesc, los dos nombres, vatTrn, effectiveDate y legalType —se
+    revisó campo por campo— y ninguno es un motivo. Contesta la pregunta de Alejandro: no hay por dónde
+    pudieran enviárnosla.
+    <br><br>
+    Su formulario tampoco se la pregunta: la página 13 de la guía tiene cuatro campos y la caja de la acción, y
+    nada más. Así que la pone el proveedor. Aquí se rellena con la acción elegida y se ve, en el bloque de
+    maqueta del final, lo que viaja: antes era un campo oculto y eso es no documentar una decisión.
+    <br><br>
+    <strong>Lo que falta acordar con ellos:</strong> el texto exacto. No publican catálogo de motivos, así que
+    «Reverification requested by the taxpayer» es nuestro. Va en el correo de preguntas, con
+    <span class="cifra">field1</span> a <span class="cifra">field5</span>, que son obligatorios en la misma tabla
+    y están sin describir.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Regla de seguridad · 15 de octubre</span>
+    <strong>El correo que devuelve la autoridad no se enseña nunca, y no es un olvido.</strong> El servicio
+    <em>sí</em> lo devuelve en la respuesta, pero solo sirve para comparar: si el que escribió el contribuyente
+    no es igual al que consta, se rechaza. De la sesión del 15: «está escondido el correo… nos lo van a mandar
+    en el response, solo que no se lo mostramos y lo verificamos; si el correo que digitó allí es diferente al
+    que aparece acá, le rechazamos».
+    <br><br>
+    El porqué es de seguridad: «es para no darle señales a alguien que está tratando [de adivinar]». El correo
+    es el segundo factor —«un doble factor de autenticación escondido»— y enseñarlo lo vacía: quien fuera
+    probando TIN se llevaría un correo válido de regalo. Por eso tampoco el mensaje de error dice cuál de los
+    dos datos falló: decirlo sería la misma fuga por otro lado.
+    <br><br>
+    Hoy se cumple, pero convenía dejarlo escrito: el correo salió de la ficha al corregir que <em>Entity
+    Details</em> son los seis campos de la autoridad y ni uno más, no por esta razón. Sin la nota, cualquiera lo
+    vuelve a añadir creyendo que ayuda.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 15 de octubre</span>
+    <strong>La autoridad no devuelve a esta ventana: abre una página nueva.</strong> Y eso echaba abajo la
+    premisa con la que estaba escrito el paso previo. Señalado en la revisión: «no queda esperándolo, porque
+    ellos no hacen un redirect hasta esta página; nunca se reactualiza esta página, la que estoy viendo».
+    <br><br>
+    Lo que pasa de verdad: EmaraTax se abre en otra ventana, el contribuyente hace su parte allí y, al pulsar
+    <strong>Proceed to ASP</strong>, la autoridad redirige y <strong>carga de nuevo</strong> la solicitud, ya en
+    el paso 1. La ventana que estaba mirando no se entera de nada. Decíamos «mantente en este portal, esta
+    página se queda aquí esperándote»: prometer eso es prometer algo que el navegador no hace, y encima le ata
+    a una ventana que ya no le sirve. Ahora la pantalla dice lo contrario y lo dice pronto: <strong>es solo la
+    guía y puede cerrarla en cuanto abra EmaraTax</strong>.
+    <br><br>
+    Para que la maqueta no enseñe un comportamiento que no existe, el botón de simular ya no salta de paso por
+    dentro: recarga la página con el código en la dirección, que es exactamente lo que hace la autoridad.
+    Comprobado que es un documento nuevo, no el mismo.
+    <br><br>
+    De paso, tres recortes del mismo origen —esta vista está atada a la verificación y de aquí no se puede
+    sacar al contribuyente—: fuera el recuadro que repetía nuestro nombre (ya está en el paso 4), fuera el
+    «¿Ya tienes empresa con nosotros?» con sus dos puertas —lo pedí yo mismo la vuelta anterior y, visto
+    montado, no va: tener cuenta con nosotros se resuelve en su sitio, no en mitad de un trámite de la
+    autoridad— y el botón bajó del final al primer paso, que es donde se usa.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 15 de octubre</span>
+    <strong>El cierre no afirma lo que no sabemos, y dice qué hacer si sale mal.</strong> Decía «ya estás
+    conectado con EmaraTax», y eso no lo sabemos: lo único que sabemos es que le mandamos la vinculación y nos
+    respondió. Señalado: «realmente tú ya estás conectado o no». Ahora cuenta lo que pasó —le enviamos tu
+    vinculación, nos respondió con tus datos— y manda a comprobarlo donde vale, que es su registro.
+    <br><br>
+    Fuera también «por mucho que aquí lo diga», que salía dos veces: es ponerse la venda antes de la herida en
+    la misma pantalla que acaba de decir que todo fue bien. Y se añadió lo que faltaba: la salida de cuando
+    <em>no</em> aparece. Decirle «no se completó» y dejarlo ahí es dejarlo tirado; la salida existe y es volver
+    a pulsar Proceed to ASP en EmaraTax, sin prisa, porque puede comprobarlo más tarde.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 14 de octubre</span>
+    <strong>El paso previo: ayuda y documentación antes de pedir nada.</strong> Se pidió traer aquí la guía que
+    hay al final del alta de empresa: decirle qué va a pasar, qué se va a encontrar allí, que se mantenga en el
+    portal mientras comprobamos, el bifurcado de «si ya tienes empresa» y un «continuar» que abre EmaraTax en
+    una ventana aparte.
+    <br><br>
+    Y encaja con un hueco de fondo. Esta pantalla tiene dos entradas: quien <strong>viene de EmaraTax</strong>,
+    con el código de autorización en la redirección, y quien <strong>entra en frío</strong> desde el enlace del
+    acceso. Hasta ahora las dos caían en el formulario, y la segunda no podía terminar: en la especificación del
+    servicio «emarataxToken» es obligatorio con cardinalidad 1 y solo lo trae la redirección, así que sin
+    código no hay manera de preguntarle a la autoridad. El paso previo no es un adorno: es el único contenido
+    honesto para esa entrada.
+    <br><br>
+    Los cinco pasos salen de la guía de onboarding de la autoridad, capítulos 2 a 4, incluida la lista de
+    empresas por correo. El bifurcado tiene respaldo —los lineamientos, 13.2, piden cerrar el contrato con el
+    proveedor <em>antes</em> del onboarding por EmaraTax— pero <strong>informa y no bloquea</strong>: los dos
+    trámites son independientes, y ya se quitó una vez una pantalla que paraba al que no era cliente.
+    <br><br>
+    La ventana aparte tampoco es una preferencia: EmaraTax no se puede encajar aquí dentro —los portales de
+    gobierno mandan X-Frame-Options— y tampoco convendría, porque ahí escribe sus claves de la autoridad y
+    pedírselas dentro de una ventana nuestra tiene la forma de un fraude.
+  </div>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Contrastado con los documentos · 14 de octubre</span>
+    <strong>Los tres trámites son esta misma pantalla, y el relinking no se puede arrancar desde el portal.</strong>
+    La guía de onboarding de la autoridad describe los tres y se repiten casi literales: alta (capítulo 4),
+    reverificación (5) y baja (6). Lo que cambia es poco y está recogido:
+    <br><br>
+    En el <strong>alta</strong> la redirección trae solo el código, el contribuyente escribe correo y TIN, el
+    móvil es opcional y no hay nada que elegir —«action» 1, sin motivo—. En la <strong>reverificación</strong>
+    y en la <strong>baja</strong> la redirección trae además el TIN, y entonces «ASP has to display the above
+    page which has reverify or delinking option for Tax Payer to choose (Mandatory to choose one of the
+    options)»: una sola pantalla con las dos opciones, el TIN puesto por la autoridad y el correo a mano.
+    «action» 2 o 3, y el motivo obligatorio en las dos. O sea que 5.1 y 6.1 de la guía son la misma página, y
+    es la que ya hay.
+    <br><br>
+    Y una cosa que conviene tener clara: <strong>los tres empiezan siempre en EmaraTax</strong>. La guía es
+    explícita —«TP will login… Select the relevant TIN number. TP will see the option of
+    Reverify/Offboarding»— y no hay ningún sitio donde se contemple arrancarlos desde el portal del proveedor.
+    Así que volver a vincularse no es un botón nuestro: lo único que podemos hacer es mandarle a EmaraTax a que
+    lo pida, y entonces sí, la autoridad lo devuelve a esta misma pantalla con el código y el TIN. Por eso el
+    paso previo vale igual para el que vuelve.
+  </div>
+
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Hay que preguntarlo · 14 de octubre</span>
+    <strong>Al desvincularse, ¿cuándo deja de emitir y de recibir? Ningún documento lo dice.</strong> Se
+    revisaron la guía de onboarding, los lineamientos, las decisiones ministeriales 243, 244 y 168, la de
+    sanciones, los requisitos de la Autoridad Peppol y la especificación del servicio. Describen el trámite
+    entero y <em>no dicen nada</em> del efecto ni del momento. Lo que sí está escrito, y de ahí sale lo que
+    proponemos:
+    <br><br>
+    Los <strong>3 días hábiles</strong> son un plazo nuestro, no una espera del cliente: «When the End User
+    decides to switch from one Accredited SP to another, the existing Accredited SP MUST deregister the End-User
+    from their SMP within 3 working days». Es el máximo que tenemos para sacarlo del SMP, y está escrito para el
+    cambio de proveedor —para que el nuevo pueda entrar sin que el contribuyente desaparezca de la red—.
+    <br><br>
+    De ahí sale que el efecto es <strong>asimétrico</strong>, y es lo que hay que decidir con ellos.
+    <strong>Emitir</strong> depende de la designación: en cuanto la autoridad registra la baja ya no somos su
+    proveedor, y transmitir en su nombre sin designación no tiene respaldo. <strong>Recibir</strong> no depende
+    de nosotros: mientras su identificador siga en nuestro SMP, el que le factura nos encuentra en la búsqueda y
+    el documento llega aquí. No podemos «dejar de recibir» apagando una casilla.
+    <br><br>
+    Y eso tiene una consecuencia que pesa más que la comodidad: el receptor <strong>está obligado</strong> a
+    recibir y procesar lo que le llega. Si durante esa ventana nos llega una factura suya y la tiramos en
+    silencio, le dejamos en falta sin que lo sepa. Así que bloquear el portal entero al desvincularse sería lo
+    peor: lo que hay que hacer es <strong>cerrar la emisión y dejar la recepción y el historial a la vista</strong>
+    hasta que lo demos de baja del SMP, diciéndole qué está pasando y hasta cuándo.
+    <br><br>
+    Va al correo de preguntas, junto con el callback: ¿el registro central rechaza nuestros envíos en cuanto
+    consta la baja, o hay ventana? ¿hay que sacarlo del SMP enseguida o esperar a que el nuevo proveedor
+    registre? ¿y si se da de baja sin cambiar de proveedor, que es el caso que la norma no cubre? Esto no está
+    construido todavía: la pantalla del operador que ve las bajas que entran tampoco existe.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Respondido · 13 de octubre</span>
+    <strong>Sí: un mismo correo puede administrar varias empresas, y por eso la llave son los dos campos.</strong>
+    Lo contesta la guía de la autoridad sola: «if the login is successful, the list of taxable person<em>s</em>
+    associated with the logged in user shall be displayed», en plural, y su propia captura enseña dos fichas bajo
+    la misma cuenta. Las Guidelines lo rematan para los grupos fiscales: cada miembro tiene su propio TIN y
+    <em>cada uno puede designar a un proveedor distinto</em>.
+    <br><br>
+    O sea que el correo no identifica una empresa. La pareja correo más TIN sí. De ahí tres cosas: los dos
+    campos van al mismo nivel y uno al lado del otro —el TIN estaba debajo, detrás de dos opcionales, y eso lo
+    leía como un dato secundario cuando es la otra mitad de la llave—; la pregunta que se le hace al API no es
+    «existe este correo» sino «es este correo el administrador <em>de este TIN</em>», y así lo dice el aviso de
+    error; y hace falta decirle al contribuyente por qué le pedimos el número, que es para saber de cuál de sus
+    empresas nos habla.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>El TIN tiene estructura y dígito de control, y aquí solo se cuentan diez cifras.</strong> La
+    arquitectura publicada, apartado 13.4, lo describe: el TIN es <span class="cifra">[1][23456789][X]</span>,
+    donde la primera cifra es el identificador de país de Emiratos según el acuerdo del Consejo de Cooperación
+    del Golfo, las ocho siguientes son el número de identificación de Emiratos y <strong>la última es un dígito
+    de control</strong>. O sea que un TIN mal copiado se puede cazar aquí mismo, antes de molestar a la
+    autoridad, y ahorrarle al contribuyente el viaje de ida y vuelta.
+    <br><br>
+    Lo que no dice el documento es con qué se calcula ese dígito. Un proveedor publica por su cuenta que es
+    Luhn, pero no está en ninguna fuente oficial de las que tenemos, así que no se implementa a ciegas: un
+    cálculo equivocado rechazaría TIN buenos, que es peor que no comprobar nada. Hay que confirmarlo con la
+    autoridad. Y ojo: esto no cambia la dirección en la red —el dígito va <em>dentro</em> de las diez cifras,
+    no detrás—, así que <span class="cifra">0235:TIN</span> sigue siendo correcto.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Refinado con José · 14 de octubre</span>
+    <strong>El título es suyo, la bienvenida es nuestra, y el final no lleva al portal.</strong> Tres cosas de
+    la sesión de refinamiento, y la tercera deshace lo que habíamos puesto el día anterior.
+    <br><br>
+    <strong>El título lo ponen ellos.</strong> «Deberíamos colocar el título que ellos le llaman»: así se
+    llaman sus pantallas y es lo que el contribuyente acaba de leer en EmaraTax. Pero lo nuestro sigue haciendo
+    falta debajo: sale de impuestos y aterriza en una web que no conoce, así que lo primero que lee es quiénes
+    somos. «Algo que diga GuruSoft… bienvenido».
+    <br><br>
+    <strong>El correo se escribe, no se pega.</strong> Es el segundo factor de la comprobación —el
+    contribuyente demuestra que sabe con qué correo está registrado— y pegarlo de otra ventana lo vacía de
+    sentido. El campo lo impide y lo dice, en vez de tragarse la acción en silencio.
+    <br><br>
+    <strong>Y el final vuelve a EmaraTax.</strong> Lo habíamos puesto llevando al portal y es al revés: el
+    contribuyente arrancó en impuestos y termina en impuestos. Además, que la vinculación esté hecha no
+    significa que pueda entrar: «puede que comercialmente le falte pagar algo», y eso es otra cosa. Lo que sí
+    hace falta es pedirle que lo compruebe allí, porque «si esto no aparece allá, por más que nosotros lo
+    tengamos registrado, para impuestos no existe».
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Refinado con José · 14 de octubre</span>
+    <strong>Lo verificado se bloquea, y al cerrar se lleva constancia.</strong> Dos cosas más de la misma
+    sesión, y la primera era un agujero y no un detalle: el correo y el TIN se podían cambiar después de
+    verificar, así que se podía comprobar con unos datos y enviar con otros —y entonces la comprobación no
+    comprueba nada—. «No debería dejarle cambiar el TIN, ni el correo… si cambias los datos yo logaría estos
+    detalles y le quitaría el botón de submit».
+    <br><br>
+    Ahora los dos campos se bloquean al verificar, con su aviso al lado de la ficha, y corregirlos devuelve al
+    paso 1 olvidando lo que la autoridad respondió: era la respuesta a <em>esos</em> datos, y enseñar la ficha
+    de una empresa junto al correo de otra es peor que no enseñar nada. En la reverificación el TIN ya viene
+    bloqueado por la autoridad y no se desbloquea nunca.
+    <br><br>
+    Y el cierre lleva un resumen —qué se hizo, qué empresa, qué TIN, qué proveedor, fecha y hora, y el motivo
+    si lo hubo— porque quien termina aquí cierra la ventana y no vuelve: si algo sale mal después, esto es lo
+    único que se lleva para poder reclamar. «El proceso completado, el resumen de la transacción y decirle ya
+    puede cerrar esta ventana».
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 14 de octubre</span>
+    <strong>Fuera «correo del administrador» y fuera el consejo de que no sea personal.</strong> Dos avisos de
+    la misma clase. El primero porque no está en ninguna parte de la especificación: el campo se llama
+    simplemente el correo registrado en EmaraTax. Y el segundo porque decíamos «no uno personal» sin saber sus
+    reglas, y puede que el que tenga registrado lo sea: «cada cosita que usted les ponga está induciendo a la
+    duda o al error». El principio de fondo vale para toda la pantalla: «ustedes son facilitadores, no enreden
+    a los tributarios».
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Hay que preguntarlo · 14 de octubre</span>
+    <strong>¿Nos dan una dirección de retorno? Sin eso no podemos devolverle.</strong> De la sesión del 14, y
+    lo teníamos mal: «solo si nos dan un callback, porque volver a EmaraTax es registro / proveedor / sesión, y
+    esa es la cual tenemos que volver, <em>no a la que nosotros</em>; si no la mandan, no podemos dirigirlo
+    porque no sabemos dónde cae».
+    <br><br>
+    Habíamos puesto un botón al acceso de EmaraTax, y eso no es volver: es dejarle en la puerta de entrada con
+    la sesión perdida, lejos de la pantalla donde estaba. Mientras no haya dirección de retorno, la pantalla le
+    dice que <strong>cierre esta ventana</strong>, porque la suya sigue abierta detrás y cerrar esta le deja
+    exactamente donde estaba. Es lo único que podemos prometer sin inventarnos un destino.
+    <br><br>
+    Va en el correo de preguntas a la autoridad: si la redirección trae una dirección de retorno —como trae el
+    código de autorización y el TIN—, o si esperan que el contribuyente cierre la ventana. «Ahí toca mirar con
+    ellos cómo hacerlo.»
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · para el back</span>
+    <strong>Hay que guardar el expediente antes de terminarlo, y tres veces.</strong> De la sesión del 14:
+    guardar en cuanto la autoridad nos redirige —ahí ya tenemos el código de autorización y el contribuyente
+    puede cerrar la ventana y desaparecer—, guardar lo que escribe al comprobar, y actualizar al enviar. El
+    motivo es que hoy, si alguien llega hasta la mitad y se va, no queda rastro: «aquí vino alguien, dejó hasta
+    la mitad y no continuó», y no hay a quién llamar. Esta pantalla no lo puede hacer sola.
+    <br><br>
+    Y el alta en la red va por el bus de mensajes, no en vivo: si se hiciera síncrona y fallara, habría que
+    cancelarle el registro al contribuyente, que lo reportaría a la autoridad como un fallo nuestro. Asíncrona
+    se reintenta hasta que entra.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Contrastado con el API · 13 de octubre</span>
+    <strong>Ya tenemos el contrato, y la pantalla cuadra con él.</strong> El servicio es
+    <span class="cifra">validateTaxPayerDetails_FTAX</span>, en el bus del gobierno, con dos operaciones.
+    <span class="cifra">verifyenduser</span> pide exactamente <span class="cifra">TIN</span>,
+    <span class="cifra">email</span>, <span class="cifra">mobile</span> opcional y el
+    <span class="cifra">emarataxToken</span> —que es el código de la redirección— y devuelve los cinco datos
+    de la empresa que están en la ficha. <span class="cifra">crregupdate</span> es la vuelta: le mandamos la
+    ficha, nuestro nombre y número de acreditación, la dirección de Peppol que acabamos de dar de alta y la
+    acción —<span class="cifra">1</span> alta, <span class="cifra">2</span> reverificación,
+    <span class="cifra">3</span> baja—.
+    <br><br>
+    Tres cosas que el contrato corrige. <strong>La fecha de la solicitud no la trae la respuesta:</strong>
+    sale en la captura de la guía, se quitó y se volvió a poner, porque lo que nos validan es su pantalla; que
+    el API no la devuelva es una pregunta para ellos. <strong>El móvil sí
+    vuelve</strong> aunque se mande vacío —el ejemplo oficial manda cadena vacía y recibe un número—, así que
+    ahora se enseña. Y <strong>el motivo es obligatorio</strong>: el campo <span class="cifra">reason</span> lo
+    exige el servicio para las acciones 2 y 3, y la pantalla no lo pedía. Sin él no se puede llamar.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto · para José</span>
+    <strong>Cuatro huecos del contrato, antes de construir.</strong> Primero: el tipo de entidad vuelve como
+    <strong>código</strong> —el ejemplo oficial trae <span class="cifra">"legalType": "L3"</span>— y no hay
+    catálogo que diga qué es L3. La pantalla enseña un nombre legible, así que hace falta esa tabla o habrá que
+    enseñar el código pelado. Segundo: <span class="cifra">field1</span> a <span class="cifra">field5</span>
+    figuran como obligatorios y sin descripción, en blanco. Tercero: hacen falta tres cabeceras y una
+    —<span class="cifra">CustomAuth</span>— sale de otro servicio, <span class="cifra">generateAccessToken_FTAX</span>,
+    cuya especificación no tenemos. Y cuarto: el motivo viaja como texto libre en
+    <span class="cifra">reason</span> y la autoridad no publica catálogo, así que los que ofrece esta pantalla
+    son una propuesta nuestra y hay que acordarlos.
+    <br><br>
+    Lo que sí queda resuelto es la pregunta que estaba abierta: cuando el correo no es el administrador de ese
+    TIN, la respuesta trae <span class="cifra">verificationStatus</span>,
+    <span class="cifra">msgCode</span> y <span class="cifra">msgDesc</span>. El aviso de error de esta pantalla
+    tiene que enseñar el <span class="cifra">msgDesc</span> de la autoridad, no un texto nuestro.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 13 de octubre</span>
+    <strong>La ficha de la autoridad parecía un formulario, y el estado del sistema se perdía.</strong> Cuatro
+    cosas que no se entendían, señaladas en la revisión. La primera: los ocho datos que devuelve la autoridad
+    iban en cajas con fondo verde claro, borde verde y la altura de un campo —la forma decía «escribe aquí» y el
+    texto decía «no se puede cambiar»—, y con el aviso verde de éxito encima el bloque entero era verde y no
+    había dónde mirar primero. Ese estilo sí sirve en Administración, donde marca <em>el</em> campo bloqueado
+    entre otros que se escriben; aquí, con los ocho bloqueados, no hay nada contra lo que contrastar. Ahora es una
+    ficha —rótulo pequeño, dato en negro, línea fina— en dos columnas, como la propia pantalla de la autoridad,
+    y el verde se queda solo en el aviso, que es para lo que el manual lo reserva.
+    <br><br>
+    La segunda: el último paso decía «Asociación enviada · 3/3 · En curso» al mismo tiempo. Si el paso es
+    terminal, se completa. La tercera: en ninguna parte se decía que ya estamos conectados —el aviso decía
+    «aparecerás con GuruSoft», en futuro—, así que el carril lleva ahora el estado de la conexión y cambia con
+    lo que pasa: sin confirmar, datos comprobados, no cuadra, conectado o desvinculado. Y la cuarta: las salidas
+    daban por hecho que no tienes cuenta; a quien ya es cliente, un botón de «Registrar mi empresa» le dice que
+    algo salió mal.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">De la reunión del 30 de septiembre</span>
+    <strong>Esta pantalla la exige la certificación, y sus campos no son nuestros.</strong> El recorrido es el
+    de la guía de Emiratos: la empresa nos elige en EmaraTax, la autoridad la manda a una página nuestra con
+    este formulario, se verifica contra su servicio, se enseña lo que responde sin dejar editarlo, se declara
+    que es verdad y se envía. Cambiar los campos por nuestra cuenta puede costar una sanción. Lo que sí es
+    nuestro es la marca, decir que se está nombrando a GuruSoft y explicar qué pasa después.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Respondido · 13 de octubre</span>
+    <strong>Ya sabemos con qué llega y qué devuelve: lo dice la guía de la autoridad.</strong> El documento es
+    «FTA Onboarding Testing Overview User Guide», del portal de certificación. Llega con un código de
+    autorización, y en la reverificación y la baja con el TIN además. Se le piden tres cosas —correo
+    registrado, TIN y el móvil como opcional— y la ficha que devuelve son seis campos: tipo de entidad, los dos
+    nombres, el TRN del IVA, la fecha de alta en el IVA y la fecha de la solicitud. Están puestos tal cual. Lo
+    que sí sigue sin poderse contrastar es el contrato del API: la especificación técnica es un enlace al
+    portal de APIs del gobierno, que pide credenciales, y no hay nada publicado fuera. Eso lo ve José.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 13 de octubre</span>
+    <strong>Lo teníamos invertido: pedíamos el TRN y la autoridad pide el TIN.</strong> Y no es un cambio de
+    nombre. La circular del Ministerio sobre TIN y TRN dice tres cosas: que el TRN <em>no</em> es requisito para
+    vincularse, que si la empresa está registrada en el IVA el TRN <em>lo devuelve EmaraTax</em> como parte de
+    la ficha, y que la dirección en la red de Peppol se construye siempre con el TIN y nunca con el TRN. O sea
+    que pedíamos lo que nos iban a dar y no pedíamos lo que hace falta. Ahora el TIN es el campo que se escribe
+    —diez dígitos— y el TRN es un dato que llega. Hay que revisar si el campo TRN del registro comercial sigue
+    teniendo sentido, porque esto lo deja en entredicho.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 13 de octubre</span>
+    <strong>El código de autorización desaparece de la barra de direcciones.</strong> Lo pide la guía con estas
+    palabras: «AUTH code parameter to be hidden after receiving the URL». No es cosmética: ese código autoriza
+    a hablar con la autoridad en nombre de esta empresa, y una dirección se copia, se pega en un chat, se queda
+    en el historial y la ve quien pase por detrás. Se lee al cargar y se borra de la dirección sin recargar la
+    página, que si no se pierde lo demás.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">De la circular del 22 de junio</span>
+    <strong>Esta pantalla necesita dos entornos, y la maqueta no es ninguno de los dos.</strong> El Ministerio
+    publicó una circular porque había proveedores haciendo pruebas de alta y de baja contra el EmaraTax de
+    producción: «the production environment must not be used for testing activities». Así que esta pantalla
+    tiene que saber contra qué entorno habla y decirlo, y la dirección de pruebas no puede ser la misma que la
+    de producción. Lo que se enseña aquí no consulta nada: ni pruebas ni producción.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Corregido · 13 de octubre</span>
+    <strong>Cómo se llega aquí, y por qué no se llega sin ser cliente.</strong> Lo tenía anotado al revés: que
+    se podía asociar en EmaraTax sin haberse registrado antes, y el último paso ofrecía «Registrar mi
+    empresa» como si ese fuera el orden. La guía del Ministerio, apartado 13.2, dice lo contrario con todas las
+    letras: «the Person is required to finalize their contract with the selected ASP and fulfil all commercial
+    obligations <em>before</em> onboarding on to their ASP's system via EmaraTax», y «shall onboard to their
+    <em>contracted</em> ASP's system».
+    <br><br>
+    Así que el camino es: registro de la empresa → aprobación → la guía del portal le dice que vaya a EmaraTax
+    → allí nos elige y pulsa «Proceed to ASP» → esta pantalla → vuelta a EmaraTax o al portal. Quien llega
+    aquí <strong>ya es cliente</strong>, y de hecho es lo que le permitió encontrarnos. Por eso la salida es el
+    portal y no el formulario de registro.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Cambiado · 16 de octubre</span>
+    <strong>Lo de abajo cambia en dos cosas tras la reunión del 16.</strong> La vinculación no se completa sin
+    contrato: «no existe nuestro modelo de negocio de primero regístrate y luego yo te registro». Y el registro
+    ya no hereda los datos de la autoridad ni promete que con eso basta: tras la aprobación hay que volver a
+    designarnos. Lo que sí se mantiene es ofrecerle registrarse —«primero necesito que te registres en la
+    página donde le pedimos datos»— o hablar con un asesor. Se deja como historia de la decisión.
+    <br><br>
+    <strong>El que llega sin ser cliente tiene su propia pantalla, y de ella sale al registro con los datos
+    puestos.</strong> No es un caso raro: comercial puede decirle a un cliente «entra en EmaraTax y elígenos»
+    antes de registrarlo, y la pantalla de la autoridad no lo impide. Acaba de nombrarnos, así que es lo
+    contrario de un intruso: es un cliente a medio hacer. Dejarle completar un alta que la norma no sostiene
+    sería engañarle, y dejarle en un callejón sin salida sería peor.
+    <br><br>
+    Lo que hace la pantalla: le dice que nos falta su contrato, le enseña que <em>ya sabemos quién es</em>
+    —porque la autoridad nos lo acaba de decir— y le lleva al registro con esos datos heredados. De ahí sale
+    la ganancia de verdad: el TIN, los dos nombres legales, el tipo de entidad y el TRN vienen de la autoridad,
+    así que del registro solo le queda lo que ella no sabe —los contactos y el certificado—. Nadie escribe dos
+    veces lo mismo. Y lo detecta el propio API: un TIN que no está entre nuestros clientes ya es la señal.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Decidido · 16 de octubre · gerencia</span>
+    <strong>Respuesta de la reunión del 16: no se completa.</strong> «Yo no puedo registrar a alguien que no
+    esté registrado.» Se le manda a su gerente de proyecto o a comercial, y vuelve a designarnos cuando tenga
+    el contrato y las credenciales.
+    <br><br>
+    <strong>Si a ese cliente se le completa la vinculación o se le hace esperar al contrato.</strong> Aquí no se
+    completa, que es lo que dice la norma al pie de la letra —«finalize their contract … before onboarding»— y
+    lo que encaja con el requisito de Peppol de tener consentimiento expreso antes de darle de alta en el SMP.
+    Pero su elección en EmaraTax ya existe del lado de la autoridad, y hacerle volver a designarnos después es
+    un paso más. La otra opción —cerrar la vinculación y retener solo el alta en el SMP hasta la firma— es más
+    cómoda para él y defendible, pero es una decisión comercial: supone atender a alguien sin contrato. No es
+    de diseño, así que no la tomo yo.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Hecho · 13 de octubre</span>
+    <strong>Reverificar y desvincular, en esta misma pantalla.</strong> Estaba anotado como pendiente y ya tiene
+    respuesta en la guía de la autoridad: si la redirección trae un TIN es que la empresa ya es cliente y entra
+    a revisar, y entonces hay que enseñarle las dos opciones —seguir o irse— y obligarle a elegir una
+    «Mandatory to choose one of the options». Si no trae TIN es un alta y lo escribe él. Es la misma pantalla
+    con el TIN bloqueado o no y la elección a la vista o no, en vez de dos pantallas casi iguales que haya que
+    mantener en paralelo. Lo que sigue sin decidir es qué pasa con los documentos en curso cuando alguien se da
+    de baja a media mañana.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 13 de octubre</span>
+    <strong>Al final se enseña la dirección en la red, porque es lo único que se lleva.</strong> La guía lo pide
+    —«ASP to call the Peppol and display the relevant details»— y además contesta la pregunta con la que se va
+    el contribuyente: y ahora qué. Se construye con su TIN, con el prefijo que Emiratos tiene asignado en
+    Peppol, y se puede copiar porque se la van a pedir sus clientes. Si se da de baja no se enseña: ya no hay
+    dirección nuestra que dar.
+  </div>
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Respondido · 13 de octubre</span>
+    <strong>Son dos obligatorios, no tres, y el estado de mensaje no es del cliente.</strong> En la reunión se
+    dijo que eran tres —factura, nota de crédito y el estado de mensaje— y lo anoté así. La arquitectura
+    publicada dice otra cosa, en su apartado 2.1.2: al cliente, identificado con su
+    <span class="cifra">0235:TIN</span>, se le dan de alta <strong>la factura y la nota de crédito</strong> como
+    capacidad obligatoria, y la autofactura y la autonota como <strong>opcionales</strong>. El estado de mensaje
+    se registra bajo <strong>nuestro</strong> identificador de proveedor, no bajo el del cliente: no es un
+    documento que el cliente reciba, es una capacidad nuestra. Enseñárselo a él como uno de sus documentos era
+    un error de concepto.
+    <br><br>
+    Y los dos opcionales se pueden preguntar, que era la duda: los requisitos de la autoridad Peppol para
+    Emiratos dicen «where required by End Users, Accredited SPs may also register them». La norma contempla
+    preguntarlo. No aquí, porque esta pantalla la especifica la autoridad y no tiene ese campo: el sitio es el
+    portal, después, y solo para quien autofacture.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>La baja tiene plazo: tres días hábiles.</strong> Los requisitos de la autoridad Peppol lo fijan:
+    «when the End User decides to switch from one Accredited SP to another, the existing Accredited SP MUST
+    deregister the End-User from their SMP within 3 working days». Así que desvincularse no es instantáneo ni
+    indefinido, y esta pantalla no lo dice. Hay que decidir qué se le promete al contribuyente al darse de baja
+    —«en tres días hábiles dejas de estar en nuestra lista»— y qué pasa con lo que esté en curso en ese
+    hueco. Es de Felipe, que es quien lleva el SMP.
+  </div>
+  <div class="nota nota--abierto">
+    <span class="nota__sello">Abierto</span>
+    <strong>La dirección de vuelta a EmaraTax y lo que se ve mientras tanto.</strong> El botón del final tiene que
+    devolver al contribuyente a la pantalla de la autoridad donde ve la vinculación hecha; la guía enseña esa
+    pantalla pero no da la dirección de retorno, así que de momento lleva al acceso de EmaraTax. Y hay dos
+    llamadas al API del gobierno —verificar y enviar— que en la propia reunión se dijo que «están demorando en
+    abrir bastante». Si tardan diez segundos, un botón quieto parece roto: hay que medirlo antes de decidir si
+    basta con el botón ocupado.
+  </div>
+  <div class="nota nota--fuera">
+    <span class="nota__sello">Maqueta</span>
+    Aquí no se consulta a la autoridad. Sin <span class="cifra">?emarataxToken=</span> la maqueta escribe en la barra un
+    token simulado y lo deja a la vista, para que se vea cómo llega y se pueda recorrer; y <span class="cifra">?sincodigo=1</span> enseña lo que pasa de verdad cuando falta.
+    Con <span class="cifra">&amp;resultado=no</span> se abre
+    directamente la respuesta de que los datos no cuadran, con <span class="cifra">&amp;resultado=ok</span> la
+    buena y con <span class="cifra">&amp;resultado=nocliente</span> la de quien no es cliente. Los fallos de conexión:
+    <span class="cifra">noresponde</span> y <span class="cifra">nuestro</span> al verificar,
+    <span class="cifra">envio</span> al enviar.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var val = function (id) { return ($(id).value || '').trim(); };
+
+  /* --- Con qué llega el contribuyente ------------------------------------
+     La autoridad redirige con un código de autorización. En la reverificación
+     y en la baja manda además el TIN, y que venga el TIN es lo que decide cuál
+     de las dos caras se enseña. */
+  var entrada = (function () {
+    try { return new URLSearchParams(window.location.search); }
+    catch (error) { return new URLSearchParams(''); }
+  }());
+  /* Los nombres del contrato oficial del API: «emarataxToken» —en la
+     especificación, «Token from the redirect url»— y «TIN». La guía no da el
+     nombre del parámetro de la dirección; estos son los únicos oficiales. Los
+     de antes (auth, tin) siguen valiendo para no romper enlaces viejos. */
+  function deEntrada(oficial, viejo) { return entrada.get(oficial) || entrada.get(viejo) || ''; }
+  var tokenDeLaAutoridad = deEntrada('emarataxToken', 'auth');
+  var tinDeLaAutoridad = deEntrada('TIN', 'tin').replace(/\D/g, '');
+  /* Y el TIN solo cuenta si viene con el codigo. Antes bastaba el TIN y
+     un TIN suelto en la direccion pintaba la pantalla de reverificacion
+     -titulo incluido- sobre una guia de alta: dos cosas distintas a la
+     vez. La guia dice que el TIN viaja junto al codigo, asi que sin
+     codigo no viene de la autoridad. */
+  /* En la maqueta, sin código se simula que vino: es la página que abre
+     EmaraTax y quien la revisa entra por la dirección pelada. Lo que pasa de
+     verdad cuando falta se ve con ?sincodigo=1. */
+  var sinCodigo = entrada.has('sincodigo');
+  var codigoSimulado = !tokenDeLaAutoridad && !sinCodigo;
+  var deLaAutoridad = !!tokenDeLaAutoridad || codigoSimulado;
+  var revisando = deLaAutoridad && tinDeLaAutoridad.length > 0;
+
+  /* Antes, sin código, se mandaba a la guía de cómo designarnos. Fuera: esta
+     es la página que abre EmaraTax, y la normativa no dice que sin código se
+     vaya a otra. Lo que hace es decir que falta y que repita el paso allí
+     (?sincodigo=1). */
+
+  /* Se apunta antes de que esconderCodigo lo borre de la barra. Decide por
+     cuál de las dos entradas llega: con código viene de EmaraTax y va al
+     formulario; sin código entra en frío y lo que necesita es la guía. Y no es
+     una comodidad: «emarataxToken» es obligatorio en el servicio y solo lo
+     trae la redirección, así que sin código el formulario no puede terminar.
+
+     Y lo decide el código, no el TIN. Antes esto era «auth || revisando» y un
+     TIN suelto en la dirección colaba: se pintaba el formulario de
+     reverificación, que tampoco podía terminar. Un TIN suelto no prueba nada,
+     porque la guía dice que viaja JUNTO al código —«TIN number also will be
+     passed along with AUTH code»—: sin código, no viene de la autoridad. */
+
+  /* El código autoriza a hablar con la autoridad en nombre de esta empresa, y
+     una dirección se copia, se pega en un chat y se queda en el historial. La
+     guía de la autoridad lo pide: «AUTH code parameter to be hidden after
+     receiving the URL». Se borra de la barra sin recargar, que si no se pierde
+     lo demás. */
+  /* El token, a la vista. Lo pidió el CEO en la reunión del 16: «pon arriba
+     la URL que me generas, el código, el token». Sin parámetros se escribe en
+     la barra uno simulado, con el formato del ejemplo oficial del API (32
+     caracteres), y se deja ahí para enseñar cómo llega. Cuando llega uno de
+     verdad con ?auth= se borra, como pide la guía (4.1). */
+  var TOKEN_SIMULADO = '7f3a9c21e4b84d0a9c55e1f2a6b3d708';
+  var tokenEnUso = tokenDeLaAutoridad || (codigoSimulado ? TOKEN_SIMULADO : '');
+
+  /* La barra enseña solo lo que manda la autoridad —el token y el TIN, con sus
+     nombres del swagger— y nunca lo de la maqueta (idioma, resultado,
+     sincodigo): «todas las URL simulan la que navega». Lo de la maqueta ya se
+     leyó al entrar. */
+  function barraComoLaAutoridad(conToken) {
+    try {
+      var partes = [];
+      if (conToken && tokenEnUso) partes.push('emarataxToken=' + tokenEnUso);
+      if (tinDeLaAutoridad) partes.push('TIN=' + tinDeLaAutoridad);
+      window.history.replaceState({}, '', window.location.pathname +
+        (partes.length ? '?' + partes.join('&') : '') + window.location.hash);
+    } catch (error) { /* si el navegador no deja, se sigue igual */ }
+  }
+
+  /* Para la nota de desarrollo: la dirección tal como llega, con el token
+     recortado. Aunque sea la capa de notas, no se enseña entero. */
+  (function apuntarEntrada() {
+    var sitio = $('url-entrada');
+    if (!sitio) return;
+    var partes = [];
+    if (tokenEnUso) partes.push('emarataxToken=' + tokenEnUso.slice(0, 4) + '\u2026');
+    if (tinDeLaAutoridad) partes.push('TIN=' + tinDeLaAutoridad);
+    sitio.textContent = window.location.origin + window.location.pathname +
+      (partes.length ? '?' + partes.join('&') : '') +
+      (codigoSimulado ? '  (token simulado por la maqueta, a la vista a propósito)' : '');
+  }());
+
+  /* Al llegar: el token simulado se queda a la vista, que lo pidió el CEO; el
+     de verdad se borra, como pide la guía (4.1). */
+  barraComoLaAutoridad(codigoSimulado);
+
+  /* La otra cara: ya es cliente y entra a revisar. Mismo formulario con el TIN
+     bloqueado y la elección a la vista, en vez de una segunda pantalla casi
+     igual que haya que mantener en paralelo. */
+  /* Aquí se cambiaba la bienvenida para quien entraba sin código. Ahora
+     esa entrada tiene su propio estado (?sincodigo=1). */
+
+  (function pintarModo() {
+    if (!revisando) return;
+    /* El título también es el suyo: así se llama su pantalla cuando llegas a
+       revisar. Y la bienvenida se queda, que el contribuyente sigue saliendo
+       de impuestos y aterrizando aquí. */
+    $('titulo-pantalla').textContent = 'Solicitud de reverificación o baja';
+    $('nota-marca').innerHTML =
+      '<strong>Bienvenido a GuruSoft · eDoc.</strong> Vienes de EmaraTax, donde ya nos tienes como proveedor. ' +
+      'Aquí decides si sigues con nosotros o te desvinculas.';
+    $('caja-accion').hidden = false;
+    $('v-tin').value = tinDeLaAutoridad;
+    $('v-tin').readOnly = true;
+    /* Fuera el aviso de «escribe el TIN»: aquí no lo escribe. */
+    $('marca-tin').textContent = 'Lo pone la autoridad';
+    $('marca-tin').className = 'marca-campo';
+  }());
+
+  /* Aquí estaban el botón de abrir EmaraTax y el de simular la vuelta, los
+     dos de la guía previa que se quitó. */
+
+  /* Aquí se comparaba la ficha con lo que teníamos y se pintaba debajo,
+     tachado, el valor anterior. Fuera: la autoridad no devuelve el valor
+     anterior, y su guía pide enseñar su respuesta tal cual —«Response
+     fields from EmaraTax to be displayed without edit option»—. El cuadro
+     blanco es suyo; nuestra comparación dentro de él era otra capa. */
+
+  /* La palabra del trámite. La pantalla sirve los tres y el título ya lo dice,
+     pero el botón y el final se habían quedado hablando de «la asociación»
+     incluso al darse de baja. */
+  function palabraDelTramite() {
+    var elegida = document.querySelector('input[name="v-accion"]:checked');
+    if (!revisando || !elegida) return 'la vinculación';
+    return elegida.value === 'desvincular' ? 'la baja' : 'la reverificación';
+  }
+
+  /* El boton NO cambia de texto: el suyo dice «Submit» y punto. Antes decia
+     «Enviar la vinculacion / la reverificacion / la baja», que es nuestro, y
+     eso es justo lo que no se puede tocar dentro del cuadro blanco. La palabra
+     del tramite sigue sirviendo para el final, que si es nuestro. */
+  function pintarPalabra() { }
+
+  /* Los motivos cambian segun lo que se elija: no se le puede ofrecer
+     «cambio de proveedor» a quien está confirmando que se queda. Son nuestros:
+     el servicio pide un texto en «reason» y no publica catálogo, así que lo
+     que viaje de aquí hay que acordarlo con la autoridad. */
+  var MOTIVOS = {
+    /* No son nuestros: son los cambios de circunstancias que enumeran los
+       Lineamientos, 13.5 —registrarse en el IVA, entrar o salir de un grupo
+       fiscal, darse de baja del IVA—. El servicio pide un «reason» y no
+       publica catálogo, así que lo que viaje hay que acordarlo con ellos, pero
+       partir de su lista es mejor que inventarla. */
+    reverificar: [
+      'Cambió la razón social de la empresa',
+      'Me registré en el IVA',
+      'Entré en un grupo fiscal',
+      'Salí de un grupo fiscal',
+      'Me di de baja del IVA',
+      'Confirmación periódica de los datos'
+    ],
+    desvincular: [
+      'Cambio a otro proveedor acreditado',
+      'La empresa deja de operar o cesa su actividad',
+      'Fusión o reestructuración de la empresa',
+      'Otro motivo'
+    ]
+  };
+  function pintarMotivos() {
+    var elegida = document.querySelector('input[name="v-accion"]:checked');
+    var campo = $('v-motivo');
+    if (!campo) return;
+    campo.value = elegida
+      ? (elegida.value === 'desvincular' ? 'Delinking requested by the taxpayer'
+                                         : 'Reverification requested by the taxpayer')
+      : '';
+  }
+  /* Al cambiar de opción cambia la palabra: de «reverificación» a «baja». */
+  [].forEach.call(document.querySelectorAll('input[name="v-accion"]'), function (r) {
+    r.addEventListener('change', pintarPalabra);
+  });
+  [].forEach.call(document.querySelectorAll('input[name="v-accion"]'), function (r) {
+    r.addEventListener('change', pintarMotivos);
+  });
+
+  /* Los tres momentos del panel. «no cuadra» no es un paso más: es el mismo
+     paso 2 con otra respuesta.
+
+     El tercero es terminal: cuando se llega, se ha terminado. Antes decía
+     «Asociación enviada · 3/3 · En curso» a la vez, que es contradictorio y
+     deja al usuario sin saber si falta algo. */
+  function quitarTokenDeLaBarra() { barraComoLaAutoridad(false); }
+
+  function ir(cual) {
+    ['1', '2', '3', 'no', 'nocliente', 'sincodigo', 'conexion'].forEach(function (c) { $('cuerpo-' + c).hidden = true; });
+    $('cuerpo-' + cual).hidden = false;
+    /* Tambien aqui: si la opcion se marco sin pasar por un «change» -el
+       relleno de la maqueta lo hace- el boton se habria quedado con la
+       palabra anterior. */
+    /* El subtítulo del título y el indicador de abajo cuentan en qué paso va.
+       Van fuera del cuadro blanco: dentro no cabe nada que no sea suyo. */
+    var PASOS = {
+      '1': ['Escribe tus datos', 'Paso 1 de 2', 'escribe tus datos'],
+      '2': ['Verifica los datos', 'Paso 2 de 2', 'verifica los datos'],
+      'no': ['Verifica los datos', 'Paso 2 de 2', 'verifica los datos'],
+      /* Es un final: no hay paso que contar. */
+      'nocliente': ['', '', ''],
+      'sincodigo': ['', '', ''],
+      'conexion': ['', '', ''],
+      '3': ['Listo', '', '']
+    }[cual];
+    if (PASOS) {
+      $('paso-actual').textContent = PASOS[1];
+
+      $('fuera-antes').hidden = cual !== '1';
+      $('salida-fuera').hidden = cual === '3';
+      /* Hay dos cajas con esta clase: la de arriba la maneja su propio id. */
+      if ($('cierre-fuera')) $('cierre-fuera').hidden = cual !== '3';
+      /* El verde solo vale en el paso 2: en el final ya no dice nada. */
+      if ($('cuadran')) $('cuadran').hidden = cual !== '2';
+      if ($('salida-fuera')) $('salida-fuera').hidden = cual === '3';
+      if ($('ayuda-nocliente')) $('ayuda-nocliente').hidden = cual !== 'nocliente';
+      if ($('ayuda-sincodigo')) $('ayuda-sincodigo').hidden = cual !== 'sincodigo';
+      /* Enviado ya, corregir no tiene sentido: lo enviado, enviado está. */
+      if (cual === '3') $('caja-llave-bloqueada').hidden = true;
+      /* Y el token sale de la barra: se gastó al enviar —«crregupdate» lo
+         lleva— y es de un solo uso. Dejarlo a la vista después de enviar
+         sugiere que esa dirección sirve para repetir el trámite. */
+      if (cual === '3') quitarTokenDeLaBarra();
+    }
+    if (cual === '2') {
+      /* Algo que le identifique en el paso 2, que es lo que faltaba. */
+      if ($('cuadran')) $('cuadran').hidden = false;
+      pintarPalabra();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* El estado de la conexión con la autoridad, en el carril. Es lo único que
+     el contribuyente necesita saber de un vistazo, y antes solo se decía en el
+     texto del último paso: al cambiar de paso desaparecía. */
+  /* El sello de la conexión vivía en el carril, que ya no está. Se deja
+     vacía para no tocar los sitios que la llaman. */
+  function conexion() { }
+
+  /* Verificar: lo que aquí se comprueba de forma tonta, en el portal real lo
+     responde el servicio de la autoridad. */
+  function correoValido(c) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c); }
+
+  function fallo() {
+    var correo = $('v-correo'), tin = $('v-tin'), tel = $('v-tel');
+    [correo, tin, tel].forEach(function (e) { e.classList.remove('is-invalid'); });
+    if (!correoValido(val('v-correo'))) {
+      return { campo: correo, texto: 'Escribe el correo del administrador, tal como consta en EmaraTax.' };
+    }
+    if (!/^\d{10}$/.test(val('v-tin').replace(/\s/g, ''))) {
+      return { campo: tin, texto: 'El TIN son diez dígitos, sin espacios ni guiones. Es el número de la cuenta que elegiste en EmaraTax.' };
+    }
+    /* El móvil es opcional —su guía lo dice: «Mobile number is optional»—,
+       así que vacío pasa. Escrito tiene que ser un número: si no, se envía a
+       la autoridad algo que no puede usar y el fallo aparece después. */
+    var movil = val('v-tel').replace(/[^0-9]/g, '');
+    if (val('v-tel').trim() && !/^\d{5,12}$/.test(movil)) {
+      return { campo: tel, texto: 'El m\u00f3vil son s\u00f3lo d\u00edgitos, sin el prefijo del pa\u00eds: ese va en la casilla de al lado. D\u00e9jalo vac\u00edo si prefieres no darlo.' };
+    }
+    /* La autoridad lo exige: «Mandatory to choose one of the options». */
+    if (revisando && !document.querySelector('input[name="v-accion"]:checked')) {
+      return { campo: $('v-seguir'), texto: 'Elige si quieres seguir con nosotros o desvincularte. Hay que elegir una de las dos.' };
+    }
+    /* El servicio de la autoridad exige el motivo en las dos acciones. */
+    return null;
+  }
+
+  /* Un fallo de conexión: se enseña su caso. */
+  function mostrarConexion(caso) {
+    [].forEach.call(document.querySelectorAll('#cuerpo-conexion [data-caso]'), function (b) {
+      b.hidden = b.getAttribute('data-caso') !== caso;
+    });
+    conexion('falla');
+    ir('conexion');
+  }
+
+  /* Después de un fallo no se guarda lo escrito: «por seguridad no puede
+     pasar». Se vacía el correo y el móvil, y el TIN si lo escribió él; el que
+     manda EmaraTax en la reverificación se queda, que va bloqueado. Lo
+     declarado tampoco vale ya. */
+  function empezarDeCero() {
+    olvidarFicha();
+    bloquearLlave(false);
+    $('v-correo').value = '';
+    $('v-tel').value = '';
+    if (!revisando) $('v-tin').value = '';
+    ['v-correo', 'v-tin', 'v-tel'].forEach(function (id) { $(id).classList.remove('is-invalid'); });
+    /* Y la acción tampoco se queda: volvía marcada «Reverificar» —la marcaba
+       el simulador— y eso no lo eligió ella. Se elige otra vez. */
+    [].forEach.call(document.querySelectorAll('input[name="v-accion"]'), function (r) {
+      r.checked = false;
+      r.classList.remove('is-invalid');
+    });
+    pintarMotivos();
+    pintarPalabra();
+  }
+
+  function verificar(respuesta) {
+    var f = fallo();
+    if (f) {
+      f.campo.classList.add('is-invalid');
+      $('error-texto').textContent = f.texto;
+      $('error-datos').hidden = false;
+      f.campo.focus();
+      return;
+    }
+    $('error-datos').hidden = true;
+    /* La autoridad no contesta (408 o 500) o el fallo es nuestro (401 o 400). */
+    if (respuesta === 'noresponde' || respuesta === 'nuestro') { mostrarConexion(respuesta); return; }
+    if (respuesta === 'no') { conexion('falla'); ir('no'); return; }
+    /* Nuestra base se mira DESPUÉS de la autoridad, nunca antes: si fuera
+       antes, cualquiera podría escribir TIN al azar y saber quién es cliente
+       nuestro. Después de la autoridad ya sabemos que quien pregunta es el
+       administrador de ese TIN. Y aquí se para: ni alta en Peppol ni
+       «crregupdate». */
+    if (respuesta === 'nocliente') {
+      /* El asesor recibe el TIN en el asunto: es lo primero que va a pedir. */
+      $('nocliente-asesor').href = 'mailto:soporte@edoc.ae?subject=' +
+        encodeURIComponent('Quiero contratar eDoc · TIN ' + val('v-tin').replace(/\s/g, ''));
+      conexion('falla'); ir('nocliente'); return;
+    }
+    conexion('comprobado');
+    // Lo que devuelve la autoridad se enseña tal cual; lo escrito no lo pisa.
+    bloquearLlave(true);
+    ir('2');
+  }
+
+  /* --- El correo se escribe, no se pega ---------------------------------
+     Es el segundo factor de la comprobación: el contribuyente demuestra que
+     sabe con qué correo está registrado. Pegarlo de otra ventana lo vacía de
+     sentido, así que el campo no acepta pegado y lo dice en vez de tragarse
+     la acción en silencio. */
+  $('v-correo').addEventListener('paste', function (e) {
+    e.preventDefault();
+    window.edocAvisar('Escribe el correo en vez de pegarlo: es parte de la comprobación.', 'advertencia');
+  });
+
+  /* --- La ficha no sobrevive a un cambio de datos ------------------------
+     José lo pidió así: «no debería dejarle cambiar el TIN, ni el correo» una
+     vez que se ve la ficha, porque si se cambia el correo después de verla,
+     lo que se envía no corresponde a lo que se vio y eso no se nota.
+
+     Resulta que eso ya estaba resuelto por la estructura: en el paso 2 los
+     campos no están ocultos, es que no están —el paso 1 entero no se pinta—,
+     así que no hay forma de tocarlos. Lo único que faltaba es la vuelta
+     atrás: si se pulsa «Volver», la ficha que se vio deja de valer y la
+     declaración tiene que desmarcarse, porque se declaró sobre unos datos que
+     a lo mejor ya no son los mismos. */
+  /* --- Lo verificado no se toca -------------------------------------------
+     Pedido en la revisión del 14: «no debería dejarle cambiar el TIN, ni el
+     correo» después de verificar, y «si cambias los datos yo logaría estos
+     detalles y le quitaría el botón de submit».
+
+     No es cosmética: si se puede verificar con un correo y enviar con otro,
+     la comprobación no comprueba nada. Al verificar se bloquean los dos
+     campos; si se desbloquean para corregir, la ficha que nos dio la autoridad
+     deja de valer y hay que volver a preguntarle. */
+  function bloquearLlave(si) {
+    ['v-correo', 'v-tin'].forEach(function (id) {
+      var c = $(id);
+      /* En la reverificación el TIN ya viene bloqueado por la autoridad: no se
+         desbloquea nunca. */
+      if (id === 'v-tin' && revisando) return;
+      c.readOnly = si;
+      c.classList.toggle('es-bloqueado', si);
+    });
+    $('caja-llave-bloqueada').hidden = !si;
+  }
+
+  function olvidarFicha() {
+    $('declaro').checked = false;
+    $('declaro').classList.remove('is-invalid');
+    $('declaro-error').hidden = true;
+    bloquearLlave(false);
+  }
+
+  /* Corregir la llave invalida lo que la autoridad nos respondió: se vuelve al
+     paso 1 y se verifica otra vez. Dejar la ficha en pantalla con otro correo
+     debajo sería enseñar los datos de una empresa junto al correo de otra. */
+  $('corregir-llave').addEventListener('click', function () {
+    olvidarFicha();
+    conexion('sin');
+    ir('1');
+    $('v-correo').focus();
+    window.edocAvisar('Corrige tus datos y vuelve a comprobarlos: lo que nos dijo la autoridad era para los anteriores.', 'advertencia');
+  });
+
+  $('verificar').addEventListener('click', function () { verificar('ok'); });
+  $('reintentar').addEventListener('click', function () { conexion('sin'); ir('1'); });
+  $('volver-1').addEventListener('click', function () { olvidarFicha(); conexion('sin'); ir('1'); });
+
+  function enviar(resultado) {
+    var caja = $('declaro');
+    if (!caja.checked) {
+      caja.classList.add('is-invalid');
+      $('declaro-error').hidden = false;
+      caja.focus();
+      return;
+    }
+    caja.classList.remove('is-invalid');
+    $('declaro-error').hidden = true;
+    /* Lo que puede fallar al enviar: no se anota nada ni se da por hecho. */
+    if (resultado === 'noresponde' || resultado === 'nuestro') {
+      mostrarConexion(resultado);
+      return;
+    }
+    /* En la maqueta, la asociación queda anotada: el portal enseña la conexión
+       como activa y el inicio deja de pedir el paso. */
+    var baja = document.querySelector('input[name="v-accion"]:checked');
+    baja = !!baja && baja.value === 'desvincular';
+    try {
+      window.sessionStorage.setItem('edoc-asociada', baja ? '0' : '1');
+    } catch (error) { /* nada */ }
+    conexion(baja ? 'baja' : 'conectado');
+    pintarRemate(baja);
+    ir('3');
+    /* Tampoco aquí se da por hecho el resultado: se dice lo que hicimos y
+       dónde se comprueba. */
+    window.edocAvisar(baja
+      ? 'Baja enviada. Compruébalo en EmaraTax: debes aparecer sin proveedor nombrado.'
+      : 'Vinculación enviada. Compruébalo en EmaraTax: debemos aparecer como tu proveedor.',
+      baja ? 'advertencia' : 'exito');
+  }
+  $('enviar').addEventListener('click', function () { enviar('ok'); });
+  $('sim-envio-noresponde').addEventListener('click', function () { enviar('noresponde'); });
+  $('sim-envio-nuestro').addEventListener('click', function () { enviar('nuestro'); });
+  /* Volver desde un fallo, sea cual sea: al paso 1, vacío, a verificar otra
+     vez antes de mandar nada. */
+  [].forEach.call(document.querySelectorAll('#cuerpo-conexion [data-reintentar]'), function (b) {
+    b.addEventListener('click', function () {
+      empezarDeCero();
+      conexion('sin');
+      ir('1');
+    });
+  });
+
+  /* La dirección en la red se construye con el TIN, nunca con el TRN: lo dice
+     la circular del Ministerio sobre TIN y TRN. El 0235 es el código que la
+     autoridad de Emiratos tiene asignado en Peppol. */
+  function pintarRemate(baja) {
+    var caja = $('caja-peppol');
+    $('peppol-id').textContent = '0235:' + val('v-tin').replace(/\s/g, '');
+    /* Una sola salida, y es volver a EmaraTax. Lo de llevarle al portal estuvo
+       aquí un día y es al revés: el contribuyente arrancó en impuestos y
+       termina en impuestos, y que la vinculación esté hecha no significa que
+       pueda entrar al portal —eso depende de lo comercial—. */
+    if (baja) {
+      /* La guía, 6.2: también en la baja «ASP to call the Peppol and display
+         the relevant details». Llamar a Peppol es sacarle de nuestro SMP, con
+         tres días hábiles de plazo (requisitos de la autoridad Peppol), y
+         mientras tanto lo que le envíen sigue llegando. Sin «Copiar»: es una
+         dirección que se va. */
+      caja.hidden = false;
+      $('peppol-texto').textContent = 'La damos de baja de la red Peppol en un máximo de 3 días hábiles. ' +
+        'Hasta entonces, los documentos que te envíen siguen llegando.';
+      $('copiar-peppol').hidden = true;
+      /* El cierre ya no tiene titulo propio: lo dice «Proceso completado». */
+      /* Tampoco aquí se afirma el resultado: le comunicamos la baja, y quien
+         dice si consta es su registro. */
+      $('comprobar-detalle').textContent = 'Vuelve a la pantalla de donde saliste: debes aparecer sin proveedor nombrado. El registro que vale es el suyo.';
+      $('fallo-titulo').textContent = '¿Seguimos apareciendo?';
+      $('fallo-detalle').textContent = 'Entonces la baja no quedó hecha. Vuelve a EmaraTax, elige otra vez la '
+        + 'baja y espera a que te traiga al paso 1. Puedes comprobarlo más tarde, sin prisa. Si se repite, '
+        + 'escríbenos a soporte@edoc.ae con tu TIN.';
+      /* A quien acaba de irse no se le ofrece el portal: es insistir justo
+         cuando acaba de decir que no. Se queda con la salida de cerrar. */
+      $('ahora-cerrar').textContent = 'Ya está: la baja está enviada y puedes cerrar esta ventana. La de '
+        + 'EmaraTax sigue abierta detrás, donde estabas.';
+      /* Igual que el del alta: lo que sabemos es que la enviamos. Y aquí
+         había además una afirmación que no se sostiene —«no podrás emitir ni
+         recibir»—: recibir no depende de nosotros, mientras tu identificador
+         siga en nuestro SMP el documento sigue llegando aquí, y el plazo para
+         sacarte es de 3 días hábiles. */
+      $('remate-fuerte').textContent = 'Proceso completado';
+      $('remate-texto').textContent = 'Ya puedes cerrar esta ventana.';
+      return;
+    }
+    /* En la reverificación la dirección ya la tenía: no es noticia. Solo en
+       el alta es nueva. */
+    caja.hidden = revisando;
+    $('peppol-texto').textContent = 'Con esta dirección te encuentran tus clientes y tus proveedores. Se construye con tu TIN, y la damos de alta nosotros.';
+    $('copiar-peppol').hidden = false;
+    if (revisando) {
+      /* Se había quedado en «Asociación enviada», que no es lo que acaba de
+         enviar quien viene a reverificarse. */
+      /* El cierre ya no tiene titulo propio: lo dice «Proceso completado». */
+      $('remate-fuerte').textContent = 'Proceso completado';
+      $('remate-texto').textContent = 'Ya puedes cerrar esta ventana.';
+    }
+    $('peppol-id').textContent = '0235:' + val('v-tin').replace(/\s/g, '');
+  }
+
+  $('copiar-peppol').addEventListener('click', function () {
+    try {
+      navigator.clipboard.writeText($('peppol-id').textContent);
+      window.edocAvisar('Copiada tu dirección en la red.', 'exito');
+    } catch (error) {
+      window.edocAvisar('No pudimos copiarla. Selecciónala y cópiala a mano.', 'advertencia');
+    }
+  });
+
+  // Los dos botones de la maqueta, para ver las dos respuestas.
+  function rellenar(correo) {
+    if (!val('v-correo')) $('v-correo').value = correo;
+    if (!val('v-tin')) $('v-tin').value = '1000001602';
+    if (revisando && !document.querySelector('input[name="v-accion"]:checked')) {
+      $('v-seguir').checked = true;
+      pintarMotivos();
+    }
+    if (revisando) pintarMotivos();
+  }
+  $('sim-ok').addEventListener('click', function () {
+    rellenar('f.almarzooqi@alnoor.ae');
+    verificar('ok');
+  });
+  $('sim-no').addEventListener('click', function () {
+    rellenar('otro.correo@alnoor.ae');
+    verificar('no');
+  });
+  $('sim-noresponde').addEventListener('click', function () {
+    rellenar('f.almarzooqi@alnoor.ae');
+    verificar('noresponde');
+  });
+  $('sim-nuestro').addEventListener('click', function () {
+    rellenar('f.almarzooqi@alnoor.ae');
+    verificar('nuestro');
+  });
+  $('sim-nocliente').addEventListener('click', function () {
+    rellenar('f.almarzooqi@alnoor.ae');
+    verificar('nocliente');
+  });
+  if (revisando) $('sim-nocliente').hidden = true;
+
+  conexion('sin');
+  /* Se lee de lo que llegó: la barra ya no lo enseña. */
+  var pedido = entrada.get('resultado');
+  if (sinCodigo) {
+    $('nota-marca').innerHTML = '<strong>Bienvenido a GuruSoft · eDoc.</strong> Esta página la abre EmaraTax cuando nos eliges como proveedor de facturación electrónica.';
+    ir('sincodigo');
+  }
+  else if (pedido === 'no') { $('sim-no').click(); }
+  else if (pedido === 'ok') { $('sim-ok').click(); }
+  else if (pedido === 'nocliente' && !revisando) { $('sim-nocliente').click(); }
+  else if (pedido === 'noresponde') { $('sim-noresponde').click(); }
+  else if (pedido === 'nuestro') { $('sim-nuestro').click(); }
+  else if (pedido === 'envio') {
+    $('sim-ok').click();
+    $('declaro').checked = true;
+    enviar('noresponde');
+  }
+  /* Con qué paso abre. Si viene de EmaraTax trae el código y va al
+     formulario. Si entra en frío no lo trae, y sin «emarataxToken» no se
+     puede preguntar a la autoridad: el formulario no tendría manera de
+     terminar. Lo que le sirve es la guía, y la puerta para ir. */
+  else { ir('1'); }
+}());
+</script>
+</body>
+</html>

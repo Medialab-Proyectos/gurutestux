@@ -142,7 +142,9 @@
         texto.textContent = 'Consulta lo que emitiste, responde lo que recibes y administra tu conexión con ' +
           'nosotros. Para serlo del todo falta que nos designes en EmaraTax.';
       }
-      if (estado) estado.textContent = 'Designación pendiente';
+      /* «Empresa activa, pendiente de asociarnos en EmaraTax»: las dos cosas,
+         que lo primero ya lo tiene y no hay que quitárselo. */
+      if (estado) estado.textContent = 'Activa · falta designarnos en EmaraTax';
     }
 
     /* «Ya lo hice» no marca nada por sí solo: en Emiratos la autoridad nos lo

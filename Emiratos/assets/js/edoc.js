@@ -419,16 +419,23 @@
      portal. Por eso va en la misma franja que el mantenimiento y con el mismo
      patron, en vez de en una tarjeta flotante en una esquina del inicio. */
   function barraDesignacion() {
+    /* En la pagina que abre la autoridad, no. Quien esta ahi viene de
+       EmaraTax de designarnos, y ademas esa pagina no es el portal. */
+    if (document.body.dataset.armazon === 'minimo') return '';
     var cuerpo = document.body;
     if (cuerpo.dataset.armazon === 'reducido') return '';
     var asociada = false;
     try { asociada = window.sessionStorage.getItem('edoc-asociada') === '1'; } catch (error) { /* nada */ }
     if (asociada) return '';
+    /* Reunión del 16: la empresa está «activa, pendiente de asociarnos en
+       EmaraTax», y lo que le sirve es saber cómo. Fuera «Ya lo hice:
+       validarlo»: llevaba a nuestra pantalla de vinculación sin el código de
+       la autoridad, y sin él no se puede terminar. «No tiene sentido poner
+       aquí dale aquí para que me vinculen.» */
     return '<div class="edoc-estado-sistema edoc-estado-sistema--advertencia" role="alert">' +
       '<span class="edoc-estado-sistema__icono">' + icono('alerta') + '</span>' +
-      '<span><strong>Falta que nos designes en EmaraTax.</strong> Hasta entonces no podemos emitir ni ' +
-      'recibir documentos a tu nombre. <a href="onboarding.html">Cómo designarnos</a> · ' +
-      '<a href="emaratax-verificacion.html">Ya lo hice: validarlo</a></span>' +
+      '<span><strong>Tu empresa está activa. Falta que nos designes en EmaraTax.</strong> Hasta entonces no ' +
+      'podemos emitir ni recibir documentos a tu nombre. <a href="onboarding.html?activa=1">Cómo designarnos</a></span>' +
     '</div>';
   }
 
@@ -476,6 +483,32 @@
           'aria-label="Cerrar este aviso">&times;</button>' +
       '</div>';
     }).join('');
+  }
+
+  /* --- Encabezado mínimo ------------------------------------------------
+     Para la página que abre la autoridad. No es el portal: no hay sesión, no
+     hay menú y no hay dónde volver. «Haga de cuenta que está en otro
+     servidor… es una página de un solo uso.»
+
+     Solo la marca, que sí se queda y lleva al portal. Sin sello de ambiente,
+     sin selector de idioma, sin «Nombre nativo» y sin «Volver al acceso»,
+     que sería devolverle a un sitio donde no ha entrado.
+
+     El botón de las notas se queda porque es herramienta de maqueta: solo
+     existe en local y es como se revisa esto.                             */
+  function encabezadoMinimo() {
+    return '' +
+    '<header class="edoc-encabezado edoc-encabezado--minimo">' +
+      '<a class="edoc-encabezado__marca" href="index.html" aria-label="eDoc">' +
+        '<img src="assets/img/edoc-logo-neg-compacto.svg" alt="eDoc · Electronic Invoicing">' +
+      '</a>' +
+      (herramientaNotas()
+        ? '<div class="edoc-encabezado__util">' +
+          '<button type="button" class="edoc-btn-util" data-alterna-notas ' +
+          'title="Muestra las decisiones de la reunión sobre cada bloque">' +
+          icono('info') + '<span class="edoc-btn-util__texto">Notas de diseño</span></button></div>'
+        : '') +
+    '</header>';
   }
 
   /* --- Encabezado reducido -----------------------------------------------
@@ -776,7 +809,7 @@
     var alto = window.getComputedStyle(document.documentElement);
     function tope() {
       var n = parseInt(alto.getPropertyValue('--alto-encabezado'), 10) || 62;
-      if (document.body.dataset.armazon !== 'reducido') {
+      if (document.body.dataset.armazon !== 'reducido' && document.body.dataset.armazon !== 'minimo') {
         n += parseInt(alto.getPropertyValue('--alto-menu'), 10) || 44;
       }
       n += parseInt(alto.getPropertyValue('--alto-aviso'), 10) || 0;
@@ -824,9 +857,11 @@
     var seccion = cuerpo.dataset.seccion || '';
     var soporte = document.getElementById('armazon');
     var reducido = cuerpo.dataset.armazon === 'reducido';
+    var minimo = cuerpo.dataset.armazon === 'minimo';
     if (soporte) {
       soporte.insertAdjacentHTML('beforebegin',
-        (reducido ? encabezadoReducido(cuerpo.dataset.quien || '') : encabezado() + menu(seccion)) +
+        (minimo ? encabezadoMinimo()
+          : reducido ? encabezadoReducido(cuerpo.dataset.quien || '') : encabezado() + menu(seccion)) +
         barraEstado() + barraDesignacion() + franjaFija());
     }
     cuerpo.insertAdjacentHTML('beforeend', pie());

@@ -44,7 +44,7 @@
     <div>
       <div class="edoc-miga"><span>Después del alta</span><span>Asociarnos en EmaraTax</span></div>
       <h1 class="edoc-titulo">Asociarnos en EmaraTax</h1>
-      <p class="edoc-subtitulo">Es el último paso de tu alta y se hace en el portal de la autoridad, no en
+      <p class="edoc-subtitulo" id="guia-sub">Es el último paso de tu alta y se hace en el portal de la autoridad, no en
       el nuestro. Te lo contamos ahora para que sepas en qué consiste: lo harás cuando aprobemos tu solicitud
       y recibas tus credenciales.</p>
     </div>
@@ -66,18 +66,22 @@
         <div class="reg__nombre">Lo que ya hiciste</div>
         <div class="reg__folio">
           <span class="edoc-secundario" style="font-size:11.5px">Tu solicitud</span>
-          <span class="edoc-estado edoc-estado--neutro" style="font-size:10px">Enviada</span>
+          <span class="edoc-estado edoc-estado--neutro" style="font-size:10px" id="guia-estado">Enviada</span>
         </div>
       </div>
       <div class="reg__avance">
-        <div class="reg__avance-t">Te queda un paso, para después</div>
+        <div class="reg__avance-t" id="guia-avance">Te queda un paso, para después</div>
         <div class="reg__barra"><i style="width:100%"></i></div>
       </div>
       <ul class="reg__pasos" id="carril"></ul>
     </aside>
 
     <section>
-  <div class="edoc-aviso edoc-aviso--info mb-3">
+  <!-- Dos caras. Quien acaba de enviar el registro todavía no puede: le
+       faltan la aprobación y las credenciales. Quien llega desde el portal con
+       la empresa activa (?activa=1) sí, y es justo lo que le falta: decirle
+       «todavía no toca» era mandarle a esperar algo que ya pasó. -->
+  <div class="edoc-aviso edoc-aviso--info mb-3" id="guia-aviso">
     <div><strong>Esto todavía no toca hacerlo.</strong> Primero revisamos tu solicitud y te mandamos tus
     credenciales. Cuando entres al portal, el inicio te traerá otra vez aquí y entonces sí: sin esta
     designación no podemos emitir ni recibir documentos a tu nombre.</div>
@@ -130,12 +134,11 @@
             </li>
             <li class="emt__paso">
               <span class="emt__paso-t">Pulsa «Proceed to ASP»</span>
-              <span class="emt__paso-p">EmaraTax te trae de vuelta a nuestro portal para terminar.</span>
+              <span class="emt__paso-p">EmaraTax te avisa de que vas a salir de su portal. Pulsa «Yes» y te trae a nuestra pantalla para terminar.</span>
             </li>
             <li class="emt__paso">
               <span class="emt__paso-t">Te traemos de vuelta y se completa</span>
-              <span class="emt__paso-p">La autoridad te devuelve a una pantalla nuestra, «Confirma tu asociación
-              con GuruSoft», donde escribes el correo y el TIN con los que te conoce EmaraTax. Comprobamos tus
+              <span class="emt__paso-p">La autoridad te devuelve a una pantalla nuestra, «Linking Request», donde escribes el correo y el TIN con los que te conoce EmaraTax. Comprobamos tus
               datos con ella, te enseñamos lo que nos responde y se cierra la asociación.</span>
               <!-- Esto no es un botón de maqueta, es soporte. La redirección
                    de la autoridad puede fallar: la ventana se cierra, el
@@ -154,7 +157,7 @@
         <div class="emt__herramientas">
           <div class="emt__abrir">
             <button class="btn btn-edoc-primario btn-block" id="abrir" type="button">Abrir EmaraTax al lado</button>
-            <p class="emt__p emt__p--chico">Puedes abrirlo ahora para verlo por dentro, aunque la
+            <p class="emt__p emt__p--chico" id="guia-abrir">Puedes abrirlo ahora para verlo por dentro, aunque la
             designación la harás más adelante. Se abre en su propia ventana, junto a esta.</p>
             <p class="emt__p emt__p--chico" id="aviso-ventana" hidden>Tu navegador bloqueó la ventana. Permítela, o
             <a href="https://eservices.tax.gov.ae/en-us/#/Logon" target="_blank" rel="noopener">ábrelo en una
@@ -190,8 +193,8 @@
           <!-- Sin enlace a los manuales: viven dentro del portal y aquí
                todavía no hay acceso. Lo único que sirve ahora es escribirnos. -->
           <div class="emt__pie">
-            <div class="emt__pie-t">¿Dudas antes de tiempo?</div>
-            <p class="emt__p emt__p--chico">Escríbenos a soporte@edoc.ae con tu código de seguimiento y te lo
+            <div class="emt__pie-t" id="guia-dudas-t">¿Dudas antes de tiempo?</div>
+            <p class="emt__p emt__p--chico" id="guia-dudas">Escríbenos a soporte@edoc.ae con tu código de seguimiento y te lo
             explicamos. Los manuales completos los tendrás dentro del portal, con tus credenciales.</p>
           </div>
         </div>
@@ -320,6 +323,29 @@
   var abrir = document.getElementById('abrir');
   if (!abrir) return;
 
+  /* La cara de quien ya está activo: llega desde «Cómo designarnos» en el
+     portal. Lo que cambia es el momento, no los pasos. */
+  (function caraActiva() {
+    var activa = false;
+    try { activa = new URLSearchParams(window.location.search).get('activa') === '1'; } catch (e) { /* nada */ }
+    if (!activa) return;
+    document.getElementById('guia-sub').textContent = 'Es el último paso de tu alta y se hace en el portal ' +
+      'de la autoridad, no en el nuestro. Tu empresa ya está activa: puedes hacerlo ahora.';
+    var estado = document.getElementById('guia-estado');
+    estado.className = 'edoc-estado edoc-estado--exito';
+    estado.textContent = 'Aprobada';
+    document.getElementById('guia-avance').textContent = 'Te queda un paso';
+    var aviso = document.getElementById('guia-aviso');
+    aviso.className = 'edoc-aviso edoc-aviso--advertencia mb-3';
+    aviso.innerHTML = '<div><strong>Ya puedes hacerlo.</strong> Tu empresa está activa con nosotros. ' +
+      'Sin esta designación no podemos emitir ni recibir documentos a tu nombre.</div>';
+    /* Y lo demás que daba por hecho que aún no tocaba. */
+    document.getElementById('guia-abrir').textContent = 'Se abre en su propia ventana, junto a esta.';
+    document.getElementById('guia-dudas-t').textContent = '¿Dudas?';
+    document.getElementById('guia-dudas').textContent = 'Escríbenos a soporte@edoc.ae con tu TIN y te lo ' +
+      'explicamos.';
+  }());
+
   /* El carril de pasos del alta, en estado fijo: los seis hechos y este último
      activo. Se pinta aquí y no se copia a mano en el HTML para que diga lo
      mismo que el asistente, con sus mismos iconos y sus mismos rótulos. */
@@ -401,7 +427,8 @@
      con un código de autorización. Con el TIN detrás si ya eras cliente, que
      es lo que distingue el alta de la revisión. */
   function volverDeEmaraTax(tin) {
-    var destino = 'emaratax-verificacion.html?auth=SIMULADO' + (tin ? '&tin=' + tin : '');
+    /* La dirección que declaramos al Ministerio, con los nombres del swagger. */
+    var destino = 'tax-onboard?emarataxToken=7f3a9c21e4b84d0a9c55e1f2a6b3d708' + (tin ? '&TIN=' + tin : '');
     window.edocAvisar('EmaraTax te devuelve a nuestro portal para terminar.', 'info');
     setTimeout(function () {
       location.href = window.EDOC_ALCANCE ? window.EDOC_ALCANCE.conVistas(destino) : destino;

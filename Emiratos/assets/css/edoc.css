@@ -277,6 +277,10 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
    con su pastilla de obligatorio u opcional. Lo que cambia respecto de
    Francia va anotado en la propia pantalla. */
 .reg { display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: start; }
+/* Sin carril -la pantalla de la autoridad no lo tiene- la columna del
+   contenido ocupa el ancho entero: si no, se queda con los 300 px que
+   tenia reservados el carril. */
+.reg:not(:has(.reg__lado)) { grid-template-columns: 1fr; }
 
 .reg__lado { background: #fff; border: 1px solid var(--edoc-linea, #e3e3e3); border-radius: 10px;
              overflow: hidden; position: sticky; top: 76px; }
@@ -353,7 +357,10 @@ a:hover { color: var(--azul-2); text-decoration: underline; }
    del rótulo y se lee de un vistazo; es mejor que un asterisco. */
 .marca-campo { display: inline-block; font-family: var(--fuente-titulos, inherit); font-size: 9px;
                font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-               border-radius: 4px; padding: 2px 6px; margin-left: 7px; vertical-align: 1px; }
+               border-radius: 4px; padding: 2px 6px; margin-left: 7px; vertical-align: 1px;
+               /* Con fondo propio: sin el, la capsula sin modificador -la de
+                  «Opcional»- quedaba blanca sobre blanco y no se veia. */
+               background: #eef0f2; color: #5a6168; }
 .marca-campo--obligatorio { background: #fdeaea; color: #b3261e; }
 .marca-campo--opcional    { background: #fff4e2; color: #8a5200; }
 /* Ni obligatorio ni opcional: depende de algo. Decirlo «opcional» sería mentir
@@ -1634,6 +1641,8 @@ a.edoc-menu-movil__seccion:hover { text-decoration: none; background: #eef0f7; }
 .reg__ficha { display: grid; grid-template-columns: 1fr; gap: 0 36px; margin: 4px 0 0; }
 @media (min-width: 768px) { .reg__ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .reg__ficha > div { padding: 11px 0; border-bottom: 1px solid #e7e9ec; }
+/* La declaración iba pegada a la línea de la última fila de la ficha. */
+.reg__ficha ~ .form-check { margin-top: 18px; }
 .reg__ficha-rotulo { display: block; font-size: 10.5px; text-transform: uppercase;
                      letter-spacing: .06em; color: #6a6a6a; margin-bottom: 3px; }
 .reg__ficha-dato { display: block; font-size: 14px; color: var(--edoc-negro, #212121);
@@ -2023,8 +2032,131 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
 /* Lo que cambio desde la ultima vez, en la reverificacion: el dato nuevo
    destacado y debajo, chico, el que teniamos. Sin color de alarma: no es un
    error, es lo que el contribuyente viene a contarnos. */
-.reg__ficha-dato.es-cambiado { color: var(--edoc-azul); font-weight: 700; }
-.reg__ficha-antes { font-size: 11.5px; color: #6b7280; margin-top: 2px; text-decoration: line-through; }
+
+/* La caja de la accion, como en la pagina 13 de la guia: un recuadro gris
+   claro con el rotulo y las dos opciones en linea, sin descripciones. */
+/* Como en sus paginas 11 y 13: el rotulo de la caja a la izquierda y el
+   boton abajo a la derecha. */
+/* Sin carril, la tarjeta entera se queda en un ancho de lectura en vez de
+   estirarse a 1300 px: asi los campos no quedan larguisimos y la pantalla
+   sigue pareciendose al resto del portal. La estructura grafica es la
+   nuestra; lo que viene de la autoridad son los campos. */
+/* Centrado de verdad: con una sola columna, «justify-content» no mueve nada;
+   lo que centra es el margen automatico de la propia columna. Y lo nuestro
+   -la nota de arriba y la caja de ayuda- se alinea con el formulario. */
+.reg:not(:has(.reg__lado)) { justify-items: center; }
+/* Mas respiro arriba: el titulo de la caja es grande y con 22 px parecia
+   que el borde de la tarjeta estuviera cortado. */
+.reg:not(:has(.reg__lado)) > .reg__cuerpo { max-width: 1040px; width: 100%; padding-top: 30px; }
+#cuerpo-1 > h2.reg__titulo { text-align: left; }
+/* Con el texto fuera, el boton se alinea a la derecha solo. */
+#cuerpo-1 .reg__nav { justify-content: flex-end; }
+#cuerpo-1 .reg__nav { justify-content: flex-end; }
+
+/* La cabecera de la pagina que abre la autoridad: solo la marca, centrada
+   a la izquierda, sin nada del portal. */
+.edoc-encabezado--minimo { justify-content: space-between; }
+.edoc-encabezado--minimo .edoc-encabezado__marca { position: static; transform: none; margin-right: auto; }
+
+/* Lo nuestro vive FUERA del cuadro blanco: ese cuadro es el formulario de
+   la autoridad y dentro no cabe nada que no sea suyo. Gris, discreto y
+   alineado con el cuadro. */
+/* El titulo de esta pagina se alinea con la tarjeta y la caja de ayuda, que
+   van centradas en 1040 px, y con aire entre el titulo y su texto. */
+body[data-armazon='minimo'] .edoc-titulo-barra > div { max-width: 1040px; margin: 0 auto;
+  width: 100%; }
+body[data-armazon='minimo'] .edoc-titulo { margin-bottom: 10px; }
+/* El rotulo de la caja, con su icono en linea. */
+.edoc-fuera__rotulo { display: flex; align-items: center; gap: 6px; }
+.edoc-fuera__rotulo svg { width: 15px; height: 15px; stroke: currentColor; fill: none;
+  stroke-width: 1.6; }
+
+/* En esta pagina la barra del titulo no se pega: es una pagina de un solo
+   uso, no hay nada que seguir leyendo al bajar, y pegada tapaba la caja de
+   informacion y le cortaba el borde de arriba. */
+body[data-armazon='minimo'] .edoc-titulo-barra { position: static; }
+#fuera-antes { margin: 16px auto 14px; }
+
+.edoc-fuera { max-width: 1040px; margin: 0 auto 14px; color: #5a6168; font-size: 13px;
+  line-height: 1.55; }
+.edoc-fuera p { margin: 0 0 8px; }
+.edoc-fuera p:last-child { margin-bottom: 0; }
+/* La ayuda de debajo, en su propia caja y con menos peso que el cuadro
+   blanco de arriba: ese es el formulario y es el que manda. Fondo apenas
+   distinto del gris de la pagina, borde suave y su rotulo. */
+/* width 100%: dentro de la rejilla centrada, sin esto la caja se encoge a
+   su contenido y no cuadra con el ancho de la tarjeta. */
+.edoc-fuera--pie { width: 100%; margin: 16px auto 0; background: #f7f8fa; border: 1px solid #e4e7eb;
+  border-radius: 10px; padding: 14px 18px; }
+.edoc-fuera__rotulo { font-family: var(--fuente-titulos, inherit); font-weight: 700;
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #8a9099;
+  margin: 0 0 8px; }
+/* El paso va entre el formulario y la caja de ayuda, alineado con los dos. */
+/* Puntos de la ayuda: icono a la izquierda y el texto en su propio bloque,
+   para que la negrita no parta la línea en piezas sueltas del flex. */
+.edoc-fuera__punto { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 10px; }
+.edoc-fuera__punto:last-child { margin-bottom: 0; }
+.edoc-fuera__punto > [data-icono] { flex: 0 0 16px; margin-top: 2px; color: #6b7280; }
+.edoc-fuera__punto > [data-icono] svg,
+.edoc-fuera__plegable summary [data-icono] svg { width: 16px; height: 16px; stroke: currentColor;
+  fill: none; stroke-width: 1.6; }
+/* Lo que se pliega, cerrado de entrada. */
+/* La caja de ayuda plegada: el rótulo es el resumen, con su flecha a la
+   derecha para que se lea que se abre. Cerrada ocupa una línea. */
+.edoc-fuera--plegada > summary { list-style: none; cursor: pointer; margin: 0; }
+.edoc-fuera--plegada > summary::-webkit-details-marker { display: none; }
+.edoc-fuera--plegada > summary::after { content: '\203A'; margin-left: auto; font-size: 16px;
+  transition: transform .15s; }
+.edoc-fuera--plegada[open] > summary::after { transform: rotate(90deg); }
+.edoc-fuera--plegada > summary:focus-visible { outline: 2px solid var(--edoc-azul); outline-offset: 4px;
+  border-radius: 4px; }
+.edoc-fuera__dentro { margin-top: 12px; }
+.edoc-fuera__subrotulo { margin: 4px 0 0; }
+@media (prefers-reduced-motion: reduce) { .edoc-fuera--plegada > summary::after { transition: none; } }
+.edoc-fuera__plegable { margin: 4px 0 0; }
+.edoc-fuera__plegable summary { display: flex; gap: 10px; align-items: center; cursor: pointer;
+  font-weight: 600; color: var(--edoc-azul); list-style: none; }
+.edoc-fuera__plegable summary::-webkit-details-marker { display: none; }
+.edoc-fuera__plegable summary::after { content: '\203A'; margin-left: 2px; transition: transform .15s; }
+.edoc-fuera__plegable[open] summary::after { transform: rotate(90deg); }
+.edoc-fuera__plegable summary [data-icono] { color: #6b7280; display: inline-flex; }
+.edoc-fuera__plegable .emt__pasos { margin: 12px 0 0; }
+@media (prefers-reduced-motion: reduce) { .edoc-fuera__plegable summary::after { transition: none; } }
+/* El hueco de la rejilla (18) mas los margenes sumaban 32 y 34: el paso
+   quedaba suelto entre el cuadro y la ayuda. Queda 12 arriba y 8 abajo. */
+.reg > .edoc-pasos-fuera + .edoc-fuera--pie { margin-top: -10px; }
+.reg > .edoc-pasos-fuera { width: 100%; max-width: 1040px; margin: -6px auto 0;
+  color: #8a9099; }
+.edoc-pasos-fuera { font-family: var(--fuente-titulos, inherit); font-weight: 600;
+  font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: #6b7280; }
+
+/* El final: grande, centrado y con aire. «Proceso completado, asi como
+   limpio, y mas abajo ya le dice la informacion bien pulida». */
+/* El visto del final: grande, centrado y en el verde del portal, para que
+   se vea de un golpe que termino. */
+.reg__hecho-icono { text-align: center; margin: 6px 0 2px; line-height: 1; }
+/* El mismo visto, en pequeño, para el final del registro, que va en un modal
+   y al lado del título. */
+.reg__hecho-icono--chico { display: inline-flex; flex: 0 0 auto; margin: 0; }
+.reg__hecho-icono.reg__hecho-icono--chico svg { width: 34px; height: 34px; }
+.reg__hecho-icono svg { width: 54px; height: 54px; stroke: var(--edoc-verde, #6aa84f);
+  stroke-width: 1.6; fill: none; }
+
+.reg__hecho { font-family: var(--fuente-titulos, inherit); font-size: 26px; font-weight: 700;
+  color: var(--edoc-azul); text-align: center; margin: 28px 0 6px; }
+.reg__hecho-sub { text-align: center; color: #5a6168; margin: 0 0 28px; }
+/* Los otros resultados, con el mismo patrón y el color de su señal. */
+.reg__hecho-icono.reg__hecho-icono--error svg { stroke: var(--senal-error); }
+.reg__hecho-icono.reg__hecho-icono--aviso svg { stroke: var(--senal-advertencia); }
+.reg__hecho-sub { max-width: 640px; margin-left: auto; margin-right: auto; text-wrap: balance; }
+/* Los botones de un resultado, centrados bajo el mensaje. */
+.reg__nav.reg__nav--centro { justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+.reg__accion { background: #eef0f6; border-radius: .5rem; padding: .75rem .9rem; }
+.reg__accion-ops { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.reg__accion-op { display: inline-flex; align-items: center; gap: .5rem; margin: 0;
+  min-height: 44px; cursor: pointer; font-size: 14px; }
+.reg__accion-op input { margin: 0; }
 
 .form-control.es-bloqueado {
   background: #f1f3f5; color: #4a4a4a; cursor: default; border-color: #d8dbe0;

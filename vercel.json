@@ -41,6 +41,10 @@
   ],
   "rewrites": [
     {
+      "source": "/Emiratos/tax-onboard",
+      "destination": "/Emiratos/tax-onboard.html"
+    },
+    {
       "source": "/work/synthetica-plataforma/api/:ruta",
       "destination": "/api/synthetica/:ruta"
     },

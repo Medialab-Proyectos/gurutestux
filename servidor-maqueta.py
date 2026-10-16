@@ -11,11 +11,20 @@ sin fondo, iconos enormes, textos a medio traducir. Este servidor manda
 
 Después: http://127.0.0.1:8080/Emiratos/index.html
 """
+import os
 import sys
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
 
 class SinCache(SimpleHTTPRequestHandler):
+    def translate_path(self, path):
+        """Direcciones limpias, como en Vercel: /Emiratos/tax-onboard sirve
+        tax-onboard.html. Es la dirección que declaramos al Ministerio."""
+        ruta = SimpleHTTPRequestHandler.translate_path(self, path)
+        if not os.path.exists(ruta) and os.path.exists(ruta + '.html'):
+            return ruta + '.html'
+        return ruta
+
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store, must-revalidate')
         self.send_header('Pragma', 'no-cache')

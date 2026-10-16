@@ -57,7 +57,7 @@ window.EDOC_ALCANCE = (function () {
     { archivo: 'clave-primer-ingreso.html', rotulo: 'Cambio de contraseña del primer ingreso',   grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'legales.html',             rotulo: 'Textos legales y tratamiento de datos',      grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'onboarding.html',          rotulo: 'Asociarnos en EmaraTax · tras la aprobación', grupo: 'Fuera de la sesión', entrega: true  },
-    { archivo: 'emaratax-verificacion.html', rotulo: 'Verificación desde EmaraTax',              grupo: 'Fuera de la sesión', entrega: true  },
+    { archivo: 'tax-onboard.html', rotulo: 'Verificación desde EmaraTax',              grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'registro.html',            rotulo: 'Registro de la empresa',                     grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'aprobacion-registro.html', rotulo: 'Aprobación del registro',                    grupo: 'Fuera de la sesión', entrega: true  }
   ];
