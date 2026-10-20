@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solicitudes de privacidad · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+</head>
+<body data-seccion="" data-pagina="privacidad-solicitudes.html" data-armazon="reducido" data-quien="Equipo de privacidad · back-office">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Fuera de la sesión</span><span>Solicitudes de privacidad</span></div>
+      <h1 class="edoc-titulo">Solicitudes de privacidad</h1>
+      <p class="edoc-subtitulo">Lo que piden las personas sobre sus datos. Cada solicitud tiene un mes para responderse.</p>
+    </div>
+  </div>
+
+  <section class="edoc-tablero">
+    <div class="edoc-tablero__cuerpo">
+      <div class="edoc-tabla-envoltura">
+        <table class="edoc-tabla" id="tabla-solicitudes">
+          <thead>
+            <tr>
+              <th scope="col">Solicitud</th>
+              <th scope="col">Persona</th>
+              <th scope="col">Qué pide</th>
+              <th scope="col">Plazo</th>
+              <th scope="col">Identidad</th>
+              <th scope="col">Estado</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Para el equipo · RGPD</span>
+    <strong>Las reglas de esta bandeja.</strong> Un mes desde que llega, prorrogable dos meses más si la
+    solicitud es compleja o hay muchas, avisando a la persona del motivo dentro del primer mes (art. 12.3). Si
+    hay dudas razonables sobre quién pide, se verifica la identidad antes de responder (art. 12.6): por eso
+    «Responder» espera a la verificación. Eliminar no borra las facturas, que conserva la obligación legal (art.
+    17.3.b) y son de la empresa cliente. En Emiratos se aplica el mismo plazo mientras no se publique el
+    reglamento de su ley de datos. <strong>Supuesto a confirmar:</strong> quién atiende esta bandeja y con qué
+    correo se responde.
+  </div>
+
+  <!-- Responder y prorrogar: lo que se dice queda escrito. -->
+  <div class="modal fade" id="modal-responder" tabindex="-1" role="dialog" aria-labelledby="t-responder" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="t-responder">Responder</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p class="edoc-secundario" id="responder-quien"></p>
+          <label class="edoc-etiqueta" for="responder-texto">Respuesta
+            <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+          <textarea class="form-control" id="responder-texto" rows="4" maxlength="1000"></textarea>
+          <div class="invalid-feedback edoc-error-campo" id="responder-error" hidden>Escribe qué se hizo.</div>
+          <p class="edoc-ayuda mt-2 mb-0">La persona la ve en su perfil, en «Tus solicitudes».</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" id="responder-enviar">Marcar como respondida</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modal-prorrogar" tabindex="-1" role="dialog" aria-labelledby="t-prorrogar" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="t-prorrogar">Prorrogar dos meses</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p class="edoc-secundario" id="prorrogar-plazo"></p>
+          <label class="edoc-etiqueta" for="prorrogar-motivo">Motivo que se le comunica
+            <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+          <textarea class="form-control" id="prorrogar-motivo" rows="3" maxlength="600"></textarea>
+          <div class="invalid-feedback edoc-error-campo" id="prorrogar-error" hidden>Escribe el motivo: la persona tiene derecho a saberlo.</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" id="prorrogar-enviar">Prorrogar y avisar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script src="assets/js/privacidad.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+  var P = window.EDOC_PRIVACIDAD;
+  var $ = function (id) { return document.getElementById(id); };
+  var actual = null;
+
+  function plazo(s) {
+    if (s.estado === 'respondida') return '<span class="cifra">' + P.fecha(s.plazo) + '</span>';
+    var d = P.diasHasta(s.plazo);
+    var clase = d < 0 ? 'plazo--vencido' : (d <= 10 ? 'plazo--cerca' : 'plazo--bien');
+    var texto = d < 0 ? 'Vencida hace ' + (-d) + (d === -1 ? ' día' : ' días')
+      : (d === 0 ? 'Vence hoy' : (d === 1 ? 'Queda 1 día' : 'Quedan ' + d + ' días'));
+    return '<span class="cifra">' + P.fecha(s.plazo) + '</span><br><span class="plazo ' + clase + '">' + texto + '</span>';
+  }
+
+  function pintar() {
+    var lista = P.solicitudes().slice().sort(function (a, b) {
+      var ra = a.estado === 'respondida', rb = b.estado === 'respondida';
+      if (ra !== rb) return ra ? 1 : -1;
+      return new Date(a.plazo) - new Date(b.plazo);
+    });
+    document.querySelector('#tabla-solicitudes tbody').innerHTML = lista.map(function (s) {
+      var est = P.ESTADOS[s.estado] || P.ESTADOS.recibida;
+      var abierta = s.estado !== 'respondida';
+      var identidad = s.identidad
+        ? '<span class="edoc-estado edoc-estado--exito">Verificada</span>'
+        : (abierta ? '<button type="button" class="btn btn-edoc-terciario btn-sm" data-verificar="' + s.id + '">Verificar</button>'
+                   : '<span class="edoc-secundario">—</span>');
+      var acciones = abierta
+        ? '<button type="button" class="btn btn-edoc-primario btn-sm" data-responder="' + s.id + '"' +
+            (s.identidad ? '' : ' disabled title="Verifica antes la identidad"') + '>Responder</button> ' +
+          (s.estado === 'prorrogada' ? '' :
+            '<button type="button" class="btn btn-edoc-terciario btn-sm" data-prorrogar="' + s.id + '">Prorrogar</button>')
+        : '<span class="edoc-secundario">' + (s.respuesta || '') + '</span>';
+      return '<tr>' +
+        '<td><span class="cifra">' + s.id + '</span><br><span class="edoc-secundario">' + P.fecha(s.recibida) + '</span></td>' +
+        '<td>' + s.persona + '<br><span class="edoc-secundario">' + s.empresa + '</span></td>' +
+        '<td><strong>' + P.TIPOS[s.tipo] + '</strong>' + (s.detalle ? '<br><span class="edoc-secundario">' + s.detalle + '</span>' : '') + '</td>' +
+        '<td>' + plazo(s) + '</td>' +
+        '<td>' + identidad + '</td>' +
+        '<td><span class="edoc-estado edoc-estado--' + est[1] + '">' + est[0] + '</span></td>' +
+        '<td class="col-acciones">' + acciones + '</td></tr>';
+    }).join('');
+  }
+
+  function buscar(id) { return P.solicitudes().filter(function (s) { return s.id === id; })[0]; }
+
+  document.querySelector('#tabla-solicitudes tbody').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b || b.disabled) return;
+    if (b.dataset.verificar) {
+      P.actualizar(b.dataset.verificar, { identidad: true });
+      pintar();
+      window.edocAvisar('Identidad verificada.', 'exito');
+    } else if (b.dataset.responder) {
+      actual = buscar(b.dataset.responder);
+      $('responder-quien').textContent = actual.persona + ' · ' + P.TIPOS[actual.tipo];
+      $('responder-texto').value = '';
+      $('responder-error').hidden = true;
+      $('responder-texto').classList.remove('is-invalid');
+      window.jQuery('#modal-responder').modal('show');
+    } else if (b.dataset.prorrogar) {
+      actual = buscar(b.dataset.prorrogar);
+      $('prorrogar-plazo').textContent = 'Nuevo plazo: ' + P.fecha(P.masMeses(actual.recibida, 3)) + '.';
+      $('prorrogar-motivo').value = '';
+      $('prorrogar-error').hidden = true;
+      $('prorrogar-motivo').classList.remove('is-invalid');
+      window.jQuery('#modal-prorrogar').modal('show');
+    }
+  });
+
+  $('responder-enviar').addEventListener('click', function () {
+    var texto = $('responder-texto').value.trim();
+    if (!texto) { $('responder-texto').classList.add('is-invalid'); $('responder-error').hidden = false; return; }
+    P.actualizar(actual.id, { estado: 'respondida', respuesta: texto });
+    window.jQuery('#modal-responder').modal('hide');
+    pintar();
+    window.edocAvisar('Solicitud respondida.', 'exito');
+  });
+
+  $('prorrogar-enviar').addEventListener('click', function () {
+    var motivo = $('prorrogar-motivo').value.trim();
+    if (!motivo) { $('prorrogar-motivo').classList.add('is-invalid'); $('prorrogar-error').hidden = false; return; }
+    P.actualizar(actual.id, { estado: 'prorrogada', plazo: P.masMeses(actual.recibida, 3).toISOString(), motivo: motivo });
+    window.jQuery('#modal-prorrogar').modal('hide');
+    pintar();
+    window.edocAvisar('Solicitud prorrogada. La persona recibe el motivo.', 'advertencia');
+  });
+
+  pintar();
+}());
+</script>
+</body>
+</html>

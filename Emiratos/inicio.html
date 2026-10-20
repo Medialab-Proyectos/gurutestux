@@ -93,6 +93,38 @@
     Queda por preguntar a gerencia si esta pantalla se hereda tal cual de Latinoamérica o si se rediseña. Si algún día
     lleva datos, tendrían que venir de una copia en caché y no de una consulta en vivo.
   </div>
+
+  <!-- Re-aceptación. Cuando cambian los términos, el contrato cambia: hay que
+       aceptarlos otra vez antes de seguir, y queda la versión y la hora (RGPD,
+       art. 7.1, para la parte de datos; y el propio contrato). Si solo cambia
+       la política de privacidad no se acepta: se informa (arts. 12 y 13).
+       Maqueta: ?terminos=nuevos y ?privacidad=nueva. Los cambios de la lista
+       son de ejemplo: el texto lo da legal. -->
+  <div class="edoc-aviso edoc-aviso--info mb-3" id="aviso-privacidad-nueva" hidden>
+    <span data-icono="info" class="edoc-aviso__icono" aria-hidden="true"></span>
+    <div><strong>Actualizamos la Política de privacidad.</strong> No tienes que hacer nada; puedes <a href="legales.html">leer qué cambia</a>.</div>
+  </div>
+  <div class="modal fade" id="modal-terminos" tabindex="-1" role="dialog" aria-labelledby="t-terminos"
+       aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header"><h2 class="modal-title" id="t-terminos">Actualizamos los Términos de servicio</h2></div>
+        <div class="modal-body">
+          <p>Desde el 1 de noviembre de 2026 rige la versión 1.1. Para seguir usando eDoc tienes que aceptarla.</p>
+          <p class="mb-2"><strong>Lo que cambia:</strong></p>
+          <ul class="mb-3">
+            <li>Cómo te avisamos de las paradas programadas del servicio.</li>
+            <li>Los plazos para resolver incidencias.</li>
+          </ul>
+          <a href="legales.html" target="_blank" rel="noopener">Leer los términos completos</a>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-edoc-terciario" href="index.html">Salir</a>
+          <button type="button" class="btn btn-edoc-primario" id="aceptar-terminos">Aceptar y continuar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -103,6 +135,30 @@
 <script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script src="assets/js/privacidad.js"></script>
+<script>
+  /* La re-aceptación de los términos y el aviso de la política nueva. */
+  (function reaceptar() {
+    var P = window.EDOC_PRIVACIDAD;
+    var q = new URLSearchParams(window.location.search);
+    if (q.get('privacidad') === 'nueva') {
+      var aviso = document.getElementById('aviso-privacidad-nueva');
+      /* Arriba del todo: la portada empieza con la bienvenida, y al pie
+         nadie lo vería. */
+      var cuerpo = document.getElementById('armazon');
+      if (cuerpo) cuerpo.insertBefore(aviso, cuerpo.firstElementChild);
+      aviso.hidden = false;
+      if (P) P.registrarAceptacion('Política de privacidad', '1.1', 'Informada');
+    }
+    if (q.get('terminos') !== 'nuevos') return;
+    window.jQuery('#modal-terminos').modal('show');
+    document.getElementById('aceptar-terminos').addEventListener('click', function () {
+      if (P) P.registrarAceptacion('Términos de servicio', '1.1', 'Aceptados');
+      window.jQuery('#modal-terminos').modal('hide');
+      window.edocAvisar('Aceptados los términos nuevos.', 'exito');
+    });
+  }());
+</script>
 <script>
   /* Los atajos: los mismos cinco de Francia, en el mismo orden. Son enlaces
      de verdad, así que funcionan con el teclado y se pueden abrir aparte. */

@@ -26,9 +26,13 @@
      selector no se queda atrapado en español sin forma de salir. Para revisar
      la maqueta en español: ?idioma=es; para volver: ?idioma=en. */
   var LLAVE = 'edoc-idioma-revision';
+  /* Lo que pide la dirección al cargar. Se apunta ahora porque hay páginas
+     —tax-onboard— que después limpian la barra. */
+  var PEDIDO_EN_DIRECCION = '';
   (function porDireccion() {
     try {
       var pedido = (new URLSearchParams(window.location.search).get('idioma') || '').toUpperCase();
+      PEDIDO_EN_DIRECCION = pedido;
       if (pedido === 'ES') window.localStorage.setItem(LLAVE, 'ES');
       if (pedido === 'EN') window.localStorage.removeItem(LLAVE);
     } catch (error) { /* nada */ }
@@ -51,6 +55,11 @@
   }
 
   function actual() {
+    /* Páginas con idioma propio (data-idioma-propio): la de la autoridad,
+       tax-onboard, va en inglés aunque el navegador recuerde el español de la
+       revisión. Solo cambia si su propia dirección pide ?idioma=es. */
+    var propio = document.body && document.body.getAttribute('data-idioma-propio');
+    if (propio) return PEDIDO_EN_DIRECCION === 'ES' ? 'ES' : propio;
     try { return window.localStorage.getItem(LLAVE) === 'ES' ? 'ES' : IDIOMAS[0].codigo; }
     catch (error) { return IDIOMAS[0].codigo; }
   }
@@ -1644,6 +1653,119 @@
       "Este número sí es el mismo en impuestos y aquí.": "This number is the same with the tax authority and here.",
       "Revisa lo que está marcado en rojo.": "Check what is marked in red.",
       "Verificar": "Verify",
+      "GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta. Ya puedes cerrar esta ventana.": "GuruSoft is now linked as your electronic invoicing provider and we have created your registration on the Peppol network. You can check it in eDoc Consulta. You can close this window now.",
+      "Tus datos quedaron actualizados con GuruSoft como tu proveedor. Ya puedes cerrar esta ventana.": "Your details have been updated with GuruSoft as your provider. You can close this window now.",
+      "Comunicamos tu baja con GuruSoft. En un máximo de 3 días hábiles finalizaremos tu registro en la red Peppol; sin embargo, hasta entonces seguirás recibiendo los documentos que te envíen. Ya puedes cerrar esta ventana.": "We have reported your delinking from GuruSoft. Within 3 working days at most we will end your registration on the Peppol network; however, until then you will keep receiving the documents sent to you. You can close this window now.",
+      "Tu empresa no tiene un contrato con GuruSoft": "Your company does not have a contract with GuruSoft",
+      "Tus datos coinciden con los de EmaraTax. ¿Nos autorizas a pasar tu contacto a nuestro equipo comercial para que te llame?": "Your details match those in EmaraTax. May we pass your contact to our sales team so they can call you?",
+      "No, gracias": "No, thanks",
+      "Sí, que me contacten": "Yes, contact me",
+      "Somos GuruSoft. Si quieres más información, haz clic aquí": "We are GuruSoft. For more information, click here",
+      "Listo. Nuestro equipo comercial te contactará en breve.": "Done. Our sales team will contact you shortly.",
+      "De acuerdo, no compartimos tu contacto.": "All right, we will not share your contact.",
+      "Tu contacto llegó a nuestro equipo comercial.": "Your contact has reached our sales team.",
+      "Mi registro Peppol": "My Peppol registration",
+      "Tu dirección en la red Peppol: con ella te encuentran tus clientes y tus proveedores para enviarte facturas.": "Your address on the Peppol network: your customers and suppliers use it to send you invoices.",
+      "Tu registro": "Your registration",
+      "Se construye con tu TIN, el número de diez cifras de la autoridad. No usa el TRN.": "It is built from your TIN, the authority’s ten-digit number. It does not use the TRN.",
+      "Alta en la red": "Registered on the network",
+      "Proveedor que te dio de alta": "Provider that registered you",
+      "Sin registro": "Not registered",
+      "Todavía no tienes registro en la red Peppol. Se crea en cuanto nos designes como proveedor en EmaraTax.": "You are not registered on the Peppol network yet. It is created as soon as you appoint us as your provider in EmaraTax.",
+      "Dándose de baja": "Being removed",
+      "Comunicaste tu baja. En un máximo de 3 días hábiles finalizaremos tu registro en la red Peppol; sin embargo, hasta entonces seguirás recibiendo los documentos que te envíen.": "You reported your delinking. Within 3 working days at most we will end your registration on the Peppol network; however, until then you will keep receiving the documents sent to you.",
+      "Privacidad": "Privacy",
+      "Tus datos personales": "Your personal data",
+      "Esto es lo que guardamos de ti en el portal, para qué y hasta cuándo.": "This is what we keep about you in the portal, what for and until when.",
+      "Qué": "What",
+      "Para qué": "What for",
+      "Hasta cuándo": "Until when",
+      "Nombre, usuario y correo": "Name, username and e-mail",
+      "Darte acceso y enviarte los códigos de verificación": "Giving you access and sending you the verification codes",
+      "Mientras tengas cuenta": "While you have an account",
+      "Cargo y teléfono": "Job title and phone",
+      "Contactar con tu empresa si hace falta": "Contacting your company if needed",
+      "Mientras tu empresa sea cliente": "While your company is a client",
+      "Accesos e intentos de entrada": "Sign-ins and sign-in attempts",
+      "Proteger tu cuenta": "Protecting your account",
+      "12 meses": "12 months",
+      "Lo que aceptaste y cuándo": "What you accepted and when",
+      "Demostrar tu aceptación": "Proving your acceptance",
+      "Mientras tengas cuenta y el plazo legal después": "While you have an account, and the legal period after that",
+      "Las facturas no están aquí.": "Invoices are not here.",
+      "Son de tu empresa y se conservan el tiempo que exige la ley. Las gestiona el administrador de tu empresa.": "They belong to your company and are kept for as long as the law requires. Your company administrator manages them.",
+      "Descargar mis datos": "Download my data",
+      "Un archivo JSON con tus datos, que puedes guardar o llevar a otro servicio.": "A JSON file with your data, which you can keep or take to another service.",
+      "Tus derechos": "Your rights",
+      "Pídenos lo que necesites. Te respondemos en un mes como máximo.": "Ask us for what you need. We reply within one month at most.",
+      "Corregir un dato": "Correct some data",
+      "Si algo de lo que guardamos está mal o incompleto.": "If something we keep is wrong or incomplete.",
+      "Limitar el uso": "Restrict the use",
+      "Que guardemos tus datos pero no los usemos mientras se resuelve algo.": "We keep your data but do not use it while something is being resolved.",
+      "Oponerte a un uso": "Object to a use",
+      "Oponerse a un uso": "Object to a use",
+      "Si no estás de acuerdo con un uso que hacemos por interés propio, como los registros de seguridad.": "If you disagree with a use based on our own interest, such as the security logs.",
+      "Eliminar tu cuenta": "Delete your account",
+      "Eliminar la cuenta": "Delete the account",
+      "Borramos tus datos personales. Lo que la ley obliga a conservar, como las facturas, se queda el plazo legal.": "We delete your personal data. What the law requires us to keep, such as invoices, stays for the legal period.",
+      "Pedir": "Request",
+      "Si no estás de acuerdo con nuestra respuesta, puedes reclamar ante la autoridad de protección de datos.": "If you disagree with our reply, you can complain to the data protection authority.",
+      "Lo que aceptaste": "What you accepted",
+      "Ver los documentos": "See the documents",
+      "Tus solicitudes": "Your requests",
+      "No has hecho ninguna solicitud.": "You have not made any requests.",
+      "Te respondemos antes del": "We will reply by",
+      "Cuéntanos qué necesitas": "Tell us what you need",
+      "Enviar solicitud": "Send request",
+      "Te respondemos en un mes como máximo.": "We reply within one month at most.",
+      "Borramos tus datos personales y cerramos tu cuenta. Las facturas de tu empresa se conservan el plazo legal. Te respondemos en un mes como máximo.": "We delete your personal data and close your account. Your company’s invoices are kept for the legal period. We reply within one month at most.",
+      "Escribe qué dato y cómo debe quedar.": "Write which data and how it should read.",
+      "Escribe qué uso quieres limitar y por qué.": "Write which use you want to restrict and why.",
+      "Escribe a qué uso te opones y por qué.": "Write which use you object to and why.",
+      "Descargado el archivo con tus datos.": "Downloaded the file with your data.",
+      "Prorrogada": "Extended",
+      "Respondida": "Answered",
+      "Solicitudes de privacidad": "Privacy requests",
+      "Lo que piden las personas sobre sus datos. Cada solicitud tiene un mes para responderse.": "What people ask about their data. Each request has one month to be answered.",
+      "Persona": "Person",
+      "Qué pide": "What they ask",
+      "Plazo": "Deadline",
+      "Identidad": "Identity",
+      "Verificada": "Verified",
+      "Responder": "Reply",
+      "Prorrogar": "Extend",
+      "Vence hoy": "Due today",
+      "Queda 1 día": "1 day left",
+      "Escribe qué se hizo.": "Write what was done.",
+      "La persona la ve en su perfil, en «Tus solicitudes».": "The person sees it in their profile, under “Your requests”.",
+      "Marcar como respondida": "Mark as answered",
+      "Prorrogar dos meses": "Extend by two months",
+      "Motivo que se le comunica": "Reason given to the person",
+      "Escribe el motivo: la persona tiene derecho a saberlo.": "Write the reason: the person has the right to know it.",
+      "Prorrogar y avisar": "Extend and notify",
+      "Identidad verificada.": "Identity verified.",
+      "Solicitud respondida.": "Request answered.",
+      "Solicitud prorrogada. La persona recibe el motivo.": "Request extended. The person receives the reason.",
+      "Ya no trabajo en la empresa. Quiero que borren mi usuario.": "I no longer work at the company. I want my user deleted.",
+      "Mi cargo es Director financiero, no Contador.": "My job title is Finance Director, not Accountant.",
+      "No usen mis registros de acceso mientras revisan una incidencia.": "Do not use my access logs while you review an incident.",
+      "Limitado el uso de tus registros de acceso hasta cerrar la incidencia.": "Use of your access logs restricted until the incident is closed.",
+      "Actualizamos los Términos de servicio": "We have updated the Terms of service",
+      "Desde el 1 de noviembre de 2026 rige la versión 1.1. Para seguir usando eDoc tienes que aceptarla.": "Version 1.1 applies from 1 November 2026. To keep using eDoc you need to accept it.",
+      "Lo que cambia:": "What changes:",
+      "Cómo te avisamos de las paradas programadas del servicio.": "How we notify you of scheduled service downtime.",
+      "Los plazos para resolver incidencias.": "The timeframes for resolving incidents.",
+      "Leer los términos completos": "Read the full terms",
+      "Aceptar y continuar": "Accept and continue",
+      "Aceptados los términos nuevos.": "New terms accepted.",
+      "Actualizamos la Política de privacidad.": "We have updated the Privacy policy.",
+      "No tienes que hacer nada; puedes": "You do not need to do anything; you can",
+      "leer qué cambia": "read what changes",
+      "Tus derechos sobre tus datos": "Your rights over your data",
+      "Puedes pedirnos una copia de tus datos, corregirlos, limitar su uso, oponerte a un uso o eliminar tu cuenta. Te respondemos en un mes como máximo.": "You can ask us for a copy of your data, correct it, restrict its use, object to a use or delete your account. We reply within one month at most.",
+      "Ejercer mis derechos": "Exercise my rights",
+      "He leído la": "I have read the",
+      "Los Términos de servicio son el acuerdo para usar eDoc. La Política de privacidad explica qué datos personales tratamos, para qué y cuáles son tus derechos.": "The Terms of service are the agreement for using eDoc. The Privacy policy explains what personal data we process, what for and what your rights are.",
       "La damos de baja de la red Peppol en un máximo de 3 días hábiles. Hasta entonces, los documentos que te envíen siguen llegando.": "We remove it from the Peppol network within 3 working days at most. Until then, documents sent to you keep arriving.",
       "No es un problema de tus datos. Inténtalo de nuevo en unos minutos.": "It is not a problem with your details. Try again in a few minutes.",
       "Vuelve a intentarlo y, si se repite, escríbenos a soporte@edoc.ae con tu TIN.": "Try again and, if it happens again, write to soporte@edoc.ae with your TIN.",
@@ -2268,6 +2390,19 @@
     [/^Paso (\d+) de (\d+)$/, 'Step $1 of $2'],
     // Las tarjetas de la revisión final llevan el número suelto.
     [/^Paso (\d+)$/, 'Step $1'],
+    // Privacidad: plazos, versiones y avisos con una fecha dentro.
+    [/^Quedan (\d+) días$/, '$1 days left'],
+    [/^Vencida hace 1 día$/, 'Overdue by 1 day'],
+    [/^Vencida hace (\d+) días$/, 'Overdue by $1 days'],
+    [/^Nuevo plazo: (\S+)\.$/, 'New deadline: $1.'],
+    [/^(Aceptados|Leída|Informada) · versión ([\d.]+)$/, function (m, como, v) {
+      return ({ 'Aceptados': 'Accepted', 'Leída': 'Read', 'Informada': 'Notified' }[como]) + ' · version ' + v;
+    }],
+    [/^Solicitud enviada\. Te respondemos antes del (\S+)\.$/, 'Request sent. We will reply by $1.'],
+    [/^(.+) · (Corregir un dato|Limitar el uso|Oponerse a un uso|Eliminar la cuenta)$/, function (m, quien, tipo) {
+      return quien + ' · ' + ({ 'Corregir un dato': 'Correct some data', 'Limitar el uso': 'Restrict the use',
+        'Oponerse a un uso': 'Object to a use', 'Eliminar la cuenta': 'Delete the account' }[tipo]);
+    }],
     // El aviso del archivo demasiado grande lleva su peso dentro.
     [/^Ese archivo pesa ([\d.,]+) MB y el máximo son (\d+) MB\. Comprímelo o escanéalo con menos resolución\.$/,
      'That file is $1 MB and the maximum is $2 MB. Compress it or scan it at a lower resolution.'],

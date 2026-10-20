@@ -56,10 +56,11 @@ window.EDOC_ALCANCE = (function () {
     { archivo: 'admin-recuperar.html',     rotulo: 'Recuperar contraseña',                       grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'clave-primer-ingreso.html', rotulo: 'Cambio de contraseña del primer ingreso',   grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'legales.html',             rotulo: 'Textos legales y tratamiento de datos',      grupo: 'Fuera de la sesión', entrega: true  },
-    { archivo: 'onboarding.html',          rotulo: 'Asociarnos en EmaraTax · tras la aprobación', grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'tax-onboard.html', rotulo: 'Verificación desde EmaraTax',              grupo: 'Fuera de la sesión', entrega: true  },
     { archivo: 'registro.html',            rotulo: 'Registro de la empresa',                     grupo: 'Fuera de la sesión', entrega: true  },
-    { archivo: 'aprobacion-registro.html', rotulo: 'Aprobación del registro',                    grupo: 'Fuera de la sesión', entrega: true  }
+    { archivo: 'aprobacion-registro.html', rotulo: 'Aprobación del registro',                    grupo: 'Fuera de la sesión', entrega: true  },
+    { archivo: 'peppol.html',              rotulo: 'Mi registro Peppol',                         grupo: 'Administración',     entrega: true  },
+    { archivo: 'privacidad-solicitudes.html', rotulo: 'Solicitudes de privacidad · back-office',   grupo: 'Fuera de la sesión', entrega: true  }
   ];
 
   /* El parámetro de la dirección, tal cual viene. Se lee una vez y se reutiliza:

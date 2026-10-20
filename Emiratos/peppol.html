@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi registro Peppol · eDoc Emiratos</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="assets/css/edoc.css" rel="stylesheet">
+  <!-- Hotjar Tracking Code for Guru -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6776910,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+</head>
+<body data-seccion="administracion" data-pagina="peppol.html">
+<a class="salto-contenido" href="#armazon">Saltar al contenido</a>
+<main id="armazon" tabindex="-1" class="edoc-pagina">
+  <div class="edoc-titulo-barra">
+    <div>
+      <div class="edoc-miga"><span>Administración</span><span>Mi registro Peppol</span></div>
+      <h1 class="edoc-titulo">Mi registro Peppol</h1>
+      <p class="edoc-subtitulo">Tu dirección en la red Peppol: con ella te encuentran tus clientes y tus proveedores para enviarte facturas.</p>
+    </div>
+  </div>
+
+  <!-- Reunión del 19, el doctor Rafael: el registro en Peppol se hace al
+       vincularnos en EmaraTax, y «ya hemos creado su registro en Peppol, el
+       registro lo va a poder consultar en la plataforma de consulta… debemos
+       tener una opción, mi registro Peppol». Esta es esa opción. La dirección
+       se construye con el TIN, nunca con el TRN (circular del Ministerio sobre
+       TIN y TRN), y 0235 es el esquema de Emiratos en Peppol. -->
+  <section class="edoc-tablero" id="registro-activo">
+    <div class="edoc-tablero__cabecera">
+      <h2 class="edoc-tablero__titulo">Tu registro</h2>
+      <span class="edoc-estado edoc-estado--exito" id="estado-peppol">Activo</span>
+    </div>
+    <div class="edoc-tablero__cuerpo">
+      <div class="row rejilla">
+        <div class="col-12 col-lg-6">
+          <div class="edoc-etiqueta">Participant ID · tu dirección en la red</div>
+          <div class="reg__folio-fila">
+            <div class="reg__folio-cod" id="peppol-id">0235:1007766554</div>
+            <button type="button" class="btn btn-edoc-secundario btn-sm reg__folio-copiar" id="copiar-peppol">Copiar</button>
+          </div>
+          <div class="edoc-ayuda mt-2">Se construye con tu TIN, el número de diez cifras de la autoridad. No usa el TRN.</div>
+        </div>
+        <div class="col-12 col-lg-3">
+          <div class="edoc-etiqueta">Alta en la red</div>
+          <div class="cifra" id="peppol-alta">2026-09-02</div>
+        </div>
+        <div class="col-12 col-lg-3">
+          <div class="edoc-etiqueta">Proveedor que te dio de alta</div>
+          <div>GuruSoft S.A. · eDoc</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edoc-tablero" id="registro-pendiente" hidden>
+    <div class="edoc-tablero__cuerpo">
+      <p class="mb-2"><span class="edoc-estado edoc-estado--advertencia">Sin registro</span></p>
+      <p class="mb-0">Todavía no tienes registro en la red Peppol. Se crea en cuanto nos designes como proveedor en EmaraTax.</p>
+    </div>
+  </section>
+
+  <section class="edoc-tablero" id="registro-baja" hidden>
+    <div class="edoc-tablero__cuerpo">
+      <p class="mb-2"><span class="edoc-estado edoc-estado--advertencia">Dándose de baja</span></p>
+      <p class="mb-0">Comunicaste tu baja. En un máximo de 3 días hábiles finalizaremos tu registro en la red Peppol; sin embargo, hasta entonces seguirás recibiendo los documentos que te envíen.</p>
+    </div>
+  </section>
+
+  <div class="nota nota--decidido">
+    <span class="nota__sello">Decidido · 19 de octubre</span>
+    <strong>El registro Peppol se consulta aquí, no al final de la vinculación.</strong> Se da de alta al
+    vincularnos en EmaraTax (al enviar en <span class="cifra">tax-onboard</span>) y aquí se ve. El estado sale de
+    la misma marca que la franja del portal: designada, dada de baja o sin designar. En la maqueta,
+    <span class="cifra">?asociada=1</span>, <span class="cifra">?asociada=0</span> o la baja hecha en la
+    vinculación. <strong>Supuesto:</strong> la fecha de alta, que en el producto sale del SMP.
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/datos.js"></script>
+<script src="assets/js/alcance.js"></script>
+<script src="assets/js/idioma.js"></script>
+<script src="assets/js/campos.js"></script>
+<script src="assets/js/simulacro.js"></script>
+<script src="assets/js/edoc.js"></script>
+<script src="assets/js/pantallas.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (window.edocEnObra) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var estado = null;
+  try {
+    var q = new URLSearchParams(window.location.search);
+    if (q.get('asociada') === '1') window.sessionStorage.setItem('edoc-asociada', '1');
+    if (q.get('asociada') === '0') window.sessionStorage.removeItem('edoc-asociada');
+    estado = window.sessionStorage.getItem('edoc-asociada');
+  } catch (e) { /* nada */ }
+  var designada = estado === '1', baja = estado === '0';
+  $('registro-activo').hidden = !(designada || baja);
+  $('registro-pendiente').hidden = designada || baja;
+  $('registro-baja').hidden = !baja;
+  if (baja) {
+    $('estado-peppol').className = 'edoc-estado edoc-estado--advertencia';
+    $('estado-peppol').textContent = 'Dándose de baja';
+    $('copiar-peppol').hidden = true;
+  }
+  $('copiar-peppol').addEventListener('click', function () {
+    try {
+      navigator.clipboard.writeText($('peppol-id').textContent);
+      window.edocAvisar('Copiada tu dirección en la red.', 'exito');
+    } catch (error) {
+      window.edocAvisar('No pudimos copiarla. Selecciónala y cópiala a mano.', 'advertencia');
+    }
+  });
+}());
+</script>
+</body>
+</html>

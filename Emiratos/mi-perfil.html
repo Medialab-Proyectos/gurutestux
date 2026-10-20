@@ -39,6 +39,8 @@
       aria-controls="panel-seguridad" aria-selected="false" data-pestana="seguridad">Seguridad</button>
     <button type="button" class="edoc-pestanas__boton" role="tab" id="pestana-rol"
       aria-controls="panel-rol" aria-selected="false" data-pestana="rol">Rol</button>
+    <button type="button" class="edoc-pestanas__boton" role="tab" id="pestana-privacidad"
+      aria-controls="panel-privacidad" aria-selected="false" data-pestana="privacidad">Privacidad</button>
   </div>
 
   <!-- Las tres pestañas comparten la misma rejilla: lo principal a la izquierda
@@ -211,6 +213,125 @@
     contraseña acaba en una pantalla que administra a los demás. Por eso «Cambiar Contraseña» sale del menú de
     Administración y cuelga del avatar, junto a «Mi perfil».
   </div>
+
+  <!-- ===================== Privacidad ===================== -->
+  <!-- Los derechos sobre los datos personales, donde la persona los busca: en
+       su perfil. RGPD, arts. 15 a 21, y ley de datos de Emiratos (Decreto-ley
+       federal 45/2021). Aquí solo entran los datos de los que GuruSoft es
+       responsable —la cuenta, los accesos, lo aceptado—. Las facturas son de
+       la empresa cliente: ahí GuruSoft es encargado y no decide sobre ellas. -->
+  <div id="panel-privacidad" role="tabpanel" aria-labelledby="pestana-privacidad" hidden>
+    <div class="perfil-rejilla">
+      <div class="perfil-rejilla__principal">
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Tus datos personales</h2></div>
+          <div class="edoc-tablero__cuerpo">
+            <p class="edoc-secundario mb-3">Esto es lo que guardamos de ti en el portal, para qué y hasta cuándo.</p>
+            <div class="edoc-tabla-envoltura">
+              <table class="edoc-tabla" id="tabla-mis-datos">
+                <thead>
+                  <tr><th scope="col">Qué</th><th scope="col">Para qué</th><th scope="col">Hasta cuándo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Nombre, usuario y correo</th><td>Darte acceso y enviarte los códigos de verificación</td><td>Mientras tengas cuenta</td></tr>
+                  <tr><th scope="row">Cargo y teléfono</th><td>Contactar con tu empresa si hace falta</td><td>Mientras tu empresa sea cliente</td></tr>
+                  <tr><th scope="row">Accesos e intentos de entrada</th><td>Proteger tu cuenta</td><td>12 meses</td></tr>
+                  <tr><th scope="row">Lo que aceptaste y cuándo</th><td>Demostrar tu aceptación</td><td>Mientras tengas cuenta y el plazo legal después</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="edoc-aviso edoc-aviso--info mt-3 mb-3">
+              <span data-icono="info" class="edoc-aviso__icono" aria-hidden="true"></span>
+              <div><strong>Las facturas no están aquí.</strong> Son de tu empresa y se conservan el tiempo que exige la ley. Las gestiona el administrador de tu empresa.</div>
+            </div>
+            <!-- Portabilidad (art. 20) y copia (art. 15.3): un archivo que otro
+                 servicio pueda leer, sin esperar a que alguien lo prepare. -->
+            <button class="btn btn-edoc-secundario" type="button" id="descargar-mis-datos">
+              <span data-icono="descargar" aria-hidden="true"></span> Descargar mis datos</button>
+            <p class="edoc-ayuda mt-2 mb-0">Un archivo JSON con tus datos, que puedes guardar o llevar a otro servicio.</p>
+          </div>
+        </section>
+
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Tus derechos</h2></div>
+          <div class="edoc-tablero__cuerpo">
+            <p class="edoc-secundario mb-3">Pídenos lo que necesites. Te respondemos en un mes como máximo.</p>
+            <ul class="privacidad-derechos" id="lista-derechos">
+              <li>
+                <div><strong>Corregir un dato</strong><span>Si algo de lo que guardamos está mal o incompleto.</span></div>
+                <button class="btn btn-edoc-terciario btn-sm" type="button" data-derecho="corregir">Pedir</button>
+              </li>
+              <li>
+                <div><strong>Limitar el uso</strong><span>Que guardemos tus datos pero no los usemos mientras se resuelve algo.</span></div>
+                <button class="btn btn-edoc-terciario btn-sm" type="button" data-derecho="limitar">Pedir</button>
+              </li>
+              <li>
+                <div><strong>Oponerte a un uso</strong><span>Si no estás de acuerdo con un uso que hacemos por interés propio, como los registros de seguridad.</span></div>
+                <button class="btn btn-edoc-terciario btn-sm" type="button" data-derecho="oponerse">Pedir</button>
+              </li>
+              <li>
+                <div><strong>Eliminar tu cuenta</strong><span>Borramos tus datos personales. Lo que la ley obliga a conservar, como las facturas, se queda el plazo legal.</span></div>
+                <button class="btn btn-edoc-terciario btn-sm" type="button" data-derecho="eliminar">Pedir</button>
+              </li>
+            </ul>
+            <p class="edoc-ayuda mt-3 mb-0">Si no estás de acuerdo con nuestra respuesta, puedes reclamar ante la autoridad de protección de datos.</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="perfil-rejilla__lado">
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Lo que aceptaste</h2></div>
+          <div class="edoc-tablero__cuerpo">
+            <ul class="privacidad-lista" id="lista-aceptaciones"></ul>
+            <a class="edoc-enlace-texto" href="legales.html">Ver los documentos</a>
+          </div>
+        </section>
+
+        <section class="edoc-tablero">
+          <div class="edoc-tablero__cabecera"><h2 class="edoc-tablero__titulo">Tus solicitudes</h2></div>
+          <div class="edoc-tablero__cuerpo">
+            <ul class="privacidad-lista" id="lista-solicitudes"></ul>
+            <p class="edoc-secundario mb-0" id="sin-solicitudes" hidden>No has hecho ninguna solicitud.</p>
+          </div>
+        </section>
+
+        <div class="nota nota--decidido">
+          <span class="nota__sello">Para el equipo · RGPD</span>
+          <strong>Cada botón es un derecho.</strong> Corregir (art. 16), limitar (art. 18), oponerse (art. 21) y
+          eliminar (art. 17) llegan a la bandeja interna de solicitudes. La copia y la portabilidad (arts. 15 y 20)
+          no esperan a nadie: se descargan aquí. El plazo es de un mes, prorrogable dos más avisando (art. 12.3).
+          Eliminar no borra las facturas: las conserva la obligación legal (art. 17.3.b), y además son de la
+          empresa, no de la persona. <strong>Supuestos a confirmar con legal:</strong> los 12 meses de los
+          registros de acceso y el contacto de privacidad.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- La solicitud de un derecho: qué pides y por qué. Sin «¿Estás seguro?»:
+       se puede retirar mientras no se responda. -->
+  <div class="modal fade" id="modal-derecho" tabindex="-1" role="dialog" aria-labelledby="t-derecho" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="t-derecho">Corregir un dato</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <label class="edoc-etiqueta" for="derecho-detalle">Cuéntanos qué necesitas
+            <span class="marca-campo marca-campo--obligatorio" id="derecho-marca">Obligatorio</span></label>
+          <textarea class="form-control" id="derecho-detalle" rows="4" maxlength="1000"></textarea>
+          <div class="invalid-feedback edoc-error-campo" id="derecho-error" hidden>Escribe qué dato y cómo debe quedar.</div>
+          <p class="edoc-ayuda mt-2 mb-0" id="derecho-ayuda">Te respondemos en un mes como máximo.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-edoc-terciario" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-edoc-primario" id="derecho-enviar">Enviar solicitud</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -222,6 +343,7 @@
 <script src="assets/js/simulacro.js"></script>
 <script src="assets/js/edoc.js"></script>
 <script src="assets/js/pantallas.js"></script>
+<script src="assets/js/privacidad.js"></script>
 <script>
 (function () {
   'use strict';
@@ -278,7 +400,7 @@
 
   /* Las pestañas. Una barra de navegación dentro de la pantalla: el panel que
      se ve es el de la pestaña marcada, y el resto se esconde de verdad. */
-  var PANELES = ['cuenta', 'seguridad', 'rol'];
+  var PANELES = ['cuenta', 'seguridad', 'rol', 'privacidad'];
   function abrir(cual) {
     PANELES.forEach(function (p) {
       $('panel-' + p).hidden = p !== cual;
@@ -295,7 +417,97 @@
   // Al volver a la pantalla se abre por donde se dejó.
   var guardada = null;
   try { guardada = window.sessionStorage.getItem('edoc-perfil-pestana'); } catch (error) { /* nada */ }
+  /* ?pestana=privacidad abre directamente la de privacidad: la enlaza la
+     página legal, para ejercer los derechos desde donde se leen. */
+  var pedida = null;
+  try { pedida = new URLSearchParams(window.location.search).get('pestana'); } catch (error) { /* nada */ }
+  if (PANELES.indexOf(pedida) >= 0) guardada = pedida;
   abrir(PANELES.indexOf(guardada) >= 0 ? guardada : 'cuenta');
+
+  /* --- Privacidad --------------------------------------------------------- */
+  (function privacidad() {
+    var P = window.EDOC_PRIVACIDAD;
+    if (!P) return;
+
+    function pintarAceptaciones() {
+      $('lista-aceptaciones').innerHTML = P.aceptaciones().map(function (a) {
+        return '<li><strong>' + a.doc + '</strong><span>' + a.como + ' · versión ' + a.version + '</span>' +
+          '<span class="cifra">' + P.fechaHora(a.cuando) + '</span></li>';
+      }).join('');
+    }
+
+    function pintarSolicitudes() {
+      var lista = P.mias();
+      $('sin-solicitudes').hidden = lista.length > 0;
+      $('lista-solicitudes').innerHTML = lista.map(function (s) {
+        var est = P.ESTADOS[s.estado] || P.ESTADOS.recibida;
+        var cuando = s.estado === 'respondida'
+          ? (s.respuesta ? '<span>' + s.respuesta + '</span>' : '')
+          : '<span>Te respondemos antes del <span class="cifra">' + P.fecha(s.plazo) + '</span></span>';
+        return '<li><strong>' + P.TIPOS[s.tipo] + '</strong>' +
+          '<span class="edoc-estado edoc-estado--' + est[1] + '">' + est[0] + '</span>' +
+          '<span class="cifra">' + s.id + ' · ' + P.fecha(s.recibida) + '</span>' + cuando + '</li>';
+      }).join('');
+    }
+
+    /* Copia y portabilidad: el archivo se genera aquí mismo. */
+    $('descargar-mis-datos').addEventListener('click', function () {
+      var datos = {
+        generado: new Date().toISOString(),
+        persona: { nombre: P.YO.persona, usuario: P.YO.usuario, correo: P.YO.correo, empresa: P.YO.empresa },
+        aceptaciones: P.aceptaciones(),
+        solicitudes: P.mias()
+      };
+      var blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'mis-datos-edoc.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      window.edocAvisar('Descargado el archivo con tus datos.', 'exito');
+    });
+
+    var AYUDAS = {
+      corregir: 'Escribe qué dato y cómo debe quedar.',
+      limitar: 'Escribe qué uso quieres limitar y por qué.',
+      oponerse: 'Escribe a qué uso te opones y por qué.',
+      eliminar: ''
+    };
+    var pedido = null;
+    [].forEach.call(document.querySelectorAll('[data-derecho]'), function (b) {
+      b.addEventListener('click', function () {
+        pedido = b.dataset.derecho;
+        $('t-derecho').textContent = P.TIPOS[pedido];
+        $('derecho-detalle').value = '';
+        $('derecho-detalle').classList.remove('is-invalid');
+        $('derecho-error').hidden = true;
+        var obligatorio = pedido !== 'eliminar';
+        $('derecho-marca').textContent = obligatorio ? 'Obligatorio' : 'Opcional';
+        $('derecho-marca').className = 'marca-campo' + (obligatorio ? ' marca-campo--obligatorio' : '');
+        $('derecho-error').textContent = AYUDAS[pedido] || '';
+        $('derecho-ayuda').textContent = pedido === 'eliminar'
+          ? 'Borramos tus datos personales y cerramos tu cuenta. Las facturas de tu empresa se conservan el plazo legal. Te respondemos en un mes como máximo.'
+          : 'Te respondemos en un mes como máximo.';
+        window.jQuery('#modal-derecho').modal('show');
+      });
+    });
+
+    $('derecho-enviar').addEventListener('click', function () {
+      var detalle = $('derecho-detalle').value.trim();
+      if (pedido !== 'eliminar' && !detalle) {
+        $('derecho-detalle').classList.add('is-invalid');
+        $('derecho-error').hidden = false;
+        $('derecho-detalle').focus();
+        return;
+      }
+      var s = P.nueva(pedido, detalle);
+      window.jQuery('#modal-derecho').modal('hide');
+      pintarSolicitudes();
+      window.edocAvisar('Solicitud enviada. Te respondemos antes del ' + P.fecha(s.plazo) + '.', 'exito');
+    });
+
+    pintarAceptaciones();
+    pintarSolicitudes();
+  }());
 
   /* --- La contraseña, en esta misma vista ------------------------------- */
   var REGLAS = [

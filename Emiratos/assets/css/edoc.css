@@ -3079,3 +3079,33 @@ body.con-clasificacion .col-clasificacion { display: table-cell; }
   margin-top: 14px; padding-top: 10px; border-top: 1px solid #e6e6e6;
   font-size: 11.5px; color: #5f6771;
 }
+
+/* ---------------- Privacidad (Mi perfil y bandeja interna) ---------------- */
+.privacidad-derechos { list-style: none; margin: 0; padding: 0; }
+.privacidad-derechos li { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 0; border-bottom: 1px solid #e7e9ec; }
+.privacidad-derechos li:last-child { border-bottom: 0; }
+.privacidad-derechos strong { display: block; color: var(--edoc-azul); }
+.privacidad-derechos span { display: block; font-size: 13px; color: #5a6168; }
+.privacidad-derechos .btn { flex: 0 0 auto; }
+.privacidad-lista { list-style: none; margin: 0 0 12px; padding: 0; }
+.privacidad-lista li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px;
+  padding: 10px 0; border-bottom: 1px solid #e7e9ec; font-size: 13px; }
+.privacidad-lista li:last-child { border-bottom: 0; }
+.privacidad-lista li > strong { flex: 1 1 100%; color: var(--edoc-negro, #212121); }
+.privacidad-lista li > span { color: #5a6168; }
+.plazo { font-weight: 600; white-space: nowrap; }
+.plazo--bien { color: #5a6168; font-weight: 400; }
+.plazo--cerca { color: #b45309; }  /* ámbar oscuro: 5:1 sobre blanco */
+.plazo--vencido { color: var(--senal-error); }
+
+/* tax-onboard: el paso en el rótulo de la ayuda, a la derecha, antes de la
+   flecha; y la ayuda pegada al cuadro, ya sin el paso suelto en medio. */
+.edoc-fuera--plegada > summary .edoc-pasos-fuera { margin-left: auto; margin-right: 10px;
+  text-transform: none; letter-spacing: 0; font-weight: 600; }
+.edoc-fuera--plegada > summary .edoc-pasos-fuera:empty { display: none; }
+/* Con el paso a la vista, la flecha va pegada a él, a la derecha. */
+.edoc-fuera--plegada > summary:has(.edoc-pasos-fuera:not(:empty))::after { margin-left: 0; }
+.reg > .edoc-fuera--plegada { margin-top: -4px; }
+/* El enlace a la web, discreto bajo un resultado. */
+.reg__hecho-pie { text-align: center; font-size: 13px; margin: 18px 0 0; }

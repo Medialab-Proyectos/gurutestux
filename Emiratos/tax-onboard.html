@@ -42,7 +42,7 @@
   impuestos puede no ser el que usó con nosotros, y solo la autoridad sabe
   cuál es el bueno. El identificador fiscal sí es el mismo en los dos lados.
 -->
-<body data-seccion="" data-pagina="tax-onboard.html" data-armazon="minimo" data-quien="">
+<body data-seccion="" data-pagina="tax-onboard.html" data-armazon="minimo" data-idioma-propio="EN" data-quien="">
 <a class="salto-contenido" href="#armazon">Saltar al contenido</a>
 <main id="armazon" tabindex="-1" class="edoc-pagina">
   <div class="edoc-titulo-barra">
@@ -66,10 +66,10 @@
   <!-- Misma caja que la ayuda de abajo: es información nuestra, y suelta sobre
        el gris no se leía como tal. Con su icono y su rótulo se entiende que es
        algo que conviene saber, no un trozo de texto perdido. -->
-  <div class="edoc-fuera edoc-fuera--pie" id="fuera-antes">
-    <p class="edoc-fuera__rotulo"><span data-icono="info" aria-hidden="true"></span>Antes de empezar</p>
-    <p id="por-que">Esta comprobación <strong>la define la autoridad</strong> y la hacemos contra su sistema. <strong>Nada de lo que escribas aquí cambia tus datos en eDoc.</strong></p>
-  </div>
+  <!-- «Antes de empezar» y el paso ya no van sueltos: viven dentro de la
+       ayuda plegable. Reunión del 19: «arriba tiene pasos y abajo más pasos…
+       se puede desviar la atención». Arriba queda el título y la bienvenida;
+       el formulario manda. -->
 
   <div class="reg">
     <!-- Sin carril de pasos: «no wizard, no opciones adicionales, no guías
@@ -358,17 +358,19 @@
            lo mismo: no se equivocó en nada. -->
       <div id="cuerpo-nocliente" hidden>
         <p class="reg__hecho-icono reg__hecho-icono--aviso" aria-hidden="true"><span data-icono="alerta"></span></p>
-        <p class="reg__hecho">Tu empresa todavía no es cliente de GuruSoft</p>
-        <p class="reg__hecho-sub">Para designarnos primero tienes que registrarla con nosotros. Cuando la aprobemos y tengas tus credenciales, vuelve a EmaraTax y elígenos otra vez.</p>
-        <!-- Las dos salidas, pedidas en la revisión: registrarse o hablar con
-             alguien. Registrarse va primero porque es lo que hace la mayoría
-             y lo que la reunión del 16 pone como primer paso. El registro no
-             hereda los datos de la autoridad: con eso no basta para operar
-             —falta la aprobación—, y heredarlos invitaba a pensar que sí. -->
-        <div class="reg__nav reg__nav--centro">
-          <a class="btn btn-edoc-secundario" id="nocliente-asesor" href="mailto:soporte@edoc.ae">Contactar con un asesor</a>
-          <a class="btn btn-edoc-primario" id="nocliente-registro" href="registro.html?empezar=1">Registrar mi empresa</a>
+        <!-- Reunión del 19: «coinciden los datos en EmaraTax, pero tú no tienes
+             un contrato con nosotros. ¿Te parece bien que tu contacto se lo
+             pasemos a nuestro equipo comercial? Sí o no. Sí: un correo al
+             equipo comercial». Sin formularios nuevos —«yo no le metería
+             código»— y con un enlace a nuestra web. Pasar el contacto es un
+             tratamiento nuevo: por eso se pregunta y el «no» vale igual. -->
+        <p class="reg__hecho">Tu empresa no tiene un contrato con GuruSoft</p>
+        <p class="reg__hecho-sub" id="nocliente-texto">Tus datos coinciden con los de EmaraTax. ¿Nos autorizas a pasar tu contacto a nuestro equipo comercial para que te llame?</p>
+        <div class="reg__nav reg__nav--centro" id="nocliente-botones">
+          <button type="button" class="btn btn-edoc-secundario" id="nocliente-no">No, gracias</button>
+          <button type="button" class="btn btn-edoc-primario" id="nocliente-si">Sí, que me contacten</button>
         </div>
+        <p class="reg__hecho-pie"><a href="https://guru-soft.com/en/" target="_blank" rel="noopener" id="nocliente-web">Somos GuruSoft. Si quieres más información, haz clic aquí</a></p>
       </div>
 
       <!-- ======================== falta el código ======================== -->
@@ -433,16 +435,12 @@
              una ayuda nuestra. -->
         <p class="reg__hecho-icono" aria-hidden="true"><span data-icono="aprobar"></span></p>
         <p class="reg__hecho" id="remate-fuerte">Proceso completado</p>
-        <p class="reg__hecho-sub" id="remate-texto">Ya puedes cerrar esta ventana.</p>
-
-        <div id="caja-peppol">
-          <div class="edoc-etiqueta mb-2">Tu dirección en la red</div>
-          <p class="mb-2" id="peppol-texto">Con esta dirección te encuentran tus clientes y tus proveedores. Se construye con tu TIN, y la damos de alta nosotros.</p>
-          <div class="reg__folio-fila mb-4">
-            <div class="reg__folio-cod" id="peppol-id">—</div>
-            <button type="button" class="btn btn-edoc-secundario btn-sm reg__folio-copiar" id="copiar-peppol">Copiar</button>
-          </div>
-        </div>
+        <!-- Sin la dirección Peppol: reunión del 19, «le puso el participant de
+             Peppol en el último paso… eso no lo dice el manual, es muy
+             técnico». Se dice que quedó registrado y dónde consultarlo: en
+             eDoc Consulta, «Mi registro Peppol». La guía (4.2) pide «display
+             the relevant details»: el aviso de que quedó registrado lo es. -->
+        <p class="reg__hecho-sub" id="remate-texto">GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta. Ya puedes cerrar esta ventana.</p>
 
         <!-- Aquí había dos avisos azules, uno naranja y una línea de tiempo, y
              entre los cuatro decían tres veces «vuelve a EmaraTax y comprueba
@@ -455,8 +453,6 @@
 
       </div>
     </section>
-    <!-- El paso, entre el formulario y la ayuda: no es ayuda, es dónde está. -->
-    <p class="edoc-pasos-fuera" id="paso-actual">Paso 1 de 2</p>
     <!-- Debajo del cuadro: el paso en el que va y la salida. «Eso de Step 1 y
          Step 2 lo puede dejar al ladito, debajo del cuadro.» -->
     <!-- Plegada y cerrada de entrada: «debería colapsarse y aparecer
@@ -467,8 +463,11 @@
            que no puede llevarlas es el cuadro blanco de arriba. -->
       <!-- El paso no es ayuda: va en la esquina, en la misma fila que el
            rótulo, no como una línea más dentro de la caja. -->
-      <summary class="edoc-fuera__rotulo"><span data-icono="info" aria-hidden="true"></span>Ayuda</summary>
+      <!-- El paso va en el propio rótulo de la ayuda, a la derecha: se ve con
+           la caja cerrada sin ocupar una línea aparte. -->
+      <summary class="edoc-fuera__rotulo"><span data-icono="info" aria-hidden="true"></span>Ayuda<span class="edoc-pasos-fuera" id="paso-actual">Paso 1 de 2</span></summary>
       <div class="edoc-fuera__dentro">
+      <p class="edoc-fuera__punto" id="fuera-antes"><span data-icono="info" aria-hidden="true"></span><span>Esta comprobación <strong>la define la autoridad</strong> y la hacemos contra su sistema. <strong>Nada de lo que escribas aquí cambia tus datos en eDoc.</strong></span></p>
       <p class="edoc-fuera__punto" id="cuadran" hidden><span data-icono="aprobar" aria-hidden="true"></span><span><strong>Tus datos cuadran con el registro fiscal.</strong> Esto es lo que nos devuelve la autoridad. Si algo está mal, se corrige en EmaraTax, no aquí.</span></p>
       <div id="cierre-fuera" hidden>
         <!-- Lo primero, lo que hará casi todo el mundo: cerrar. Antes iba al
@@ -527,8 +526,6 @@
       <!-- Para quien no es cliente: lo más probable es que haya firmado y su
            alta en el portal siga en revisión, porque comercial le dice que nos
            elija. Se le explica qué esperar, sin mandarle a ningún sitio. -->
-      <p class="edoc-fuera__punto" id="ayuda-nocliente" hidden><span data-icono="soporte" aria-hidden="true"></span><span><strong>¿Ya te registraste?</strong> Puede que tu alta siga en revisión. Cuando recibas tus credenciales, vuelve a EmaraTax y elígenos otra vez.</span></p>
-      <p class="edoc-fuera__punto" id="ayuda-sincodigo" hidden><span data-icono="info" aria-hidden="true"></span><span><strong>¿Es la primera vez?</strong> <a href="onboarding.html?activa=1">Mira cómo se hace en EmaraTax</a></span></p>
       <p class="edoc-fuera__punto" id="salida-fuera"><span data-icono="salir" aria-hidden="true"></span><span><strong>Comprobamos con la autoridad que eres tú</strong> antes de enviar nada. ¿Prefieres no seguir? <strong>Cierra esta ventana</strong>: la de EmaraTax sigue abierta donde estabas.</span></p>
       </div>
     </details>
@@ -571,8 +568,9 @@
       <span class="cifra">legalType</span>, <span class="cifra">entityNameEn</span>,
       <span class="cifra">entityNameAr</span>, <span class="cifra">vatTrn</span> y
       <span class="cifra">effectiveDate</span>. Si no cuadra, se enseña el error sin decir cuál de los dos datos
-      falló. Si cuadra, <strong>se busca el TIN en nuestra base de clientes</strong>, y si no está se para aquí y se
-      le ofrece registrar su empresa o hablar con un asesor.
+      falló. Si cuadra, <strong>se busca el TIN en nuestra base de clientes</strong> (eDoc Consulta): apagado en
+      certificación y siempre encendido en producción. Si no está, se para aquí y se le pregunta si pasamos su
+      contacto a comercial; el sí envía un correo a comercial y guarda el consentimiento.
       Se guarda la respuesta con su fecha. En EmaraTax todavía no cambia nada.</li>
       <li><strong>Submit.</strong> Primero el alta en Peppol (guía 4.2: «ASP to call the Peppol») con la dirección
       <span class="cifra">0235:&lt;TIN&gt;</span>; en la baja, la salida del SMP, con tres días hábiles de plazo.
@@ -584,8 +582,8 @@
       <span class="cifra">field5</span>, sin describir (nota para José, más abajo). En nuestra base se guardan la
       acción, la fecha y la respuesta, y la empresa pasa a designada o a dada de baja. Con eso la autoridad nos
       enseña en su pestaña «Linkage Status with ASP».</li>
-      <li><strong>Proceso completado.</strong> No llama a nada. En el alta enseña la dirección en la red, con la
-      que sus clientes y proveedores le encuentran al facturar.</li>
+      <li><strong>Proceso completado.</strong> No llama a nada. Dice que quedó vinculado y registrado en
+      Peppol, y que lo consulte en eDoc Consulta («Mi registro Peppol»). La dirección no se enseña aquí.</li>
     </ol>
     Las dos llamadas llevan tres cabeceras: <span class="cifra">GW-APIKey</span>,
     <span class="cifra">Authorization</span> y <span class="cifra">CustomAuth</span>, que sale de
@@ -1136,6 +1134,13 @@
      EmaraTax y quien la revisa entra por la dirección pelada. Lo que pasa de
      verdad cuando falta se ve con ?sincodigo=1. */
   var sinCodigo = entrada.has('sincodigo');
+  /* ¿Es cliente nuestro? Reunión del 19, el doctor Rafael: «hagamos que
+     consulte eDoc y comentemos esa consulta… si ellos nos piden, es
+     simplemente descomentar». En certificación va apagada —la autoridad no
+     la pide en sus pruebas— y en producción, siempre encendida: «es ilógico
+     que registres clientes sin que tengan un contrato conmigo». En la maqueta
+     se apaga con ?certificacion=1. */
+  var COMPROBAR_CLIENTE = !entrada.has('certificacion');
   var codigoSimulado = !tokenDeLaAutoridad && !sinCodigo;
   var deLaAutoridad = !!tokenDeLaAutoridad || codigoSimulado;
   var revisando = deLaAutoridad && tinDeLaAutoridad.length > 0;
@@ -1326,8 +1331,6 @@
       /* El verde solo vale en el paso 2: en el final ya no dice nada. */
       if ($('cuadran')) $('cuadran').hidden = cual !== '2';
       if ($('salida-fuera')) $('salida-fuera').hidden = cual === '3';
-      if ($('ayuda-nocliente')) $('ayuda-nocliente').hidden = cual !== 'nocliente';
-      if ($('ayuda-sincodigo')) $('ayuda-sincodigo').hidden = cual !== 'sincodigo';
       /* Enviado ya, corregir no tiene sentido: lo enviado, enviado está. */
       if (cual === '3') $('caja-llave-bloqueada').hidden = true;
       /* Y el token sale de la barra: se gastó al enviar —«crregupdate» lo
@@ -1426,10 +1429,7 @@
        nuestro. Después de la autoridad ya sabemos que quien pregunta es el
        administrador de ese TIN. Y aquí se para: ni alta en Peppol ni
        «crregupdate». */
-    if (respuesta === 'nocliente') {
-      /* El asesor recibe el TIN en el asunto: es lo primero que va a pedir. */
-      $('nocliente-asesor').href = 'mailto:soporte@edoc.ae?subject=' +
-        encodeURIComponent('Quiero contratar eDoc · TIN ' + val('v-tin').replace(/\s/g, ''));
+    if (respuesta === 'nocliente' && COMPROBAR_CLIENTE) {
       conexion('falla'); ir('nocliente'); return;
     }
     conexion('comprobado');
@@ -1527,12 +1527,9 @@
     conexion(baja ? 'baja' : 'conectado');
     pintarRemate(baja);
     ir('3');
-    /* Tampoco aquí se da por hecho el resultado: se dice lo que hicimos y
-       dónde se comprueba. */
-    window.edocAvisar(baja
-      ? 'Baja enviada. Compruébalo en EmaraTax: debes aparecer sin proveedor nombrado.'
-      : 'Vinculación enviada. Compruébalo en EmaraTax: debemos aparecer como tu proveedor.',
-      baja ? 'advertencia' : 'exito');
+    /* Aquí salía un aviso flotante («Vinculación enviada. Compruébalo en
+       EmaraTax…»). Fuera, pedido en la revisión: repetía lo que ya dice
+       «Proceso completado» y no es parte del trámite de la autoridad. */
   }
   $('enviar').addEventListener('click', function () { enviar('ok'); });
   $('sim-envio-noresponde').addEventListener('click', function () { enviar('noresponde'); });
@@ -1551,66 +1548,26 @@
      la circular del Ministerio sobre TIN y TRN. El 0235 es el código que la
      autoridad de Emiratos tiene asignado en Peppol. */
   function pintarRemate(baja) {
-    var caja = $('caja-peppol');
-    $('peppol-id').textContent = '0235:' + val('v-tin').replace(/\s/g, '');
-    /* Una sola salida, y es volver a EmaraTax. Lo de llevarle al portal estuvo
-       aquí un día y es al revés: el contribuyente arrancó en impuestos y
-       termina en impuestos, y que la vinculación esté hecha no significa que
-       pueda entrar al portal —eso depende de lo comercial—. */
+    $('remate-fuerte').textContent = 'Proceso completado';
     if (baja) {
-      /* La guía, 6.2: también en la baja «ASP to call the Peppol and display
-         the relevant details». Llamar a Peppol es sacarle de nuestro SMP, con
-         tres días hábiles de plazo (requisitos de la autoridad Peppol), y
-         mientras tanto lo que le envíen sigue llegando. Sin «Copiar»: es una
-         dirección que se va. */
-      caja.hidden = false;
-      $('peppol-texto').textContent = 'La damos de baja de la red Peppol en un máximo de 3 días hábiles. ' +
-        'Hasta entonces, los documentos que te envíen siguen llegando.';
-      $('copiar-peppol').hidden = true;
-      /* El cierre ya no tiene titulo propio: lo dice «Proceso completado». */
-      /* Tampoco aquí se afirma el resultado: le comunicamos la baja, y quien
-         dice si consta es su registro. */
+      /* La baja: el plazo para salir de la red (3 días hábiles, requisitos de
+         la autoridad Peppol) y que, hasta entonces, lo que le envíen llega. */
+      $('remate-texto').textContent = 'Comunicamos tu baja con GuruSoft. En un máximo de 3 días hábiles ' +
+        'finalizaremos tu registro en la red Peppol; sin embargo, hasta entonces seguirás recibiendo los ' +
+        'documentos que te envíen. Ya puedes cerrar esta ventana.';
       $('comprobar-detalle').textContent = 'Vuelve a la pantalla de donde saliste: debes aparecer sin proveedor nombrado. El registro que vale es el suyo.';
       $('fallo-titulo').textContent = '¿Seguimos apareciendo?';
       $('fallo-detalle').textContent = 'Entonces la baja no quedó hecha. Vuelve a EmaraTax, elige otra vez la '
         + 'baja y espera a que te traiga al paso 1. Puedes comprobarlo más tarde, sin prisa. Si se repite, '
         + 'escríbenos a soporte@edoc.ae con tu TIN.';
-      /* A quien acaba de irse no se le ofrece el portal: es insistir justo
-         cuando acaba de decir que no. Se queda con la salida de cerrar. */
       $('ahora-cerrar').textContent = 'Ya está: la baja está enviada y puedes cerrar esta ventana. La de '
         + 'EmaraTax sigue abierta detrás, donde estabas.';
-      /* Igual que el del alta: lo que sabemos es que la enviamos. Y aquí
-         había además una afirmación que no se sostiene —«no podrás emitir ni
-         recibir»—: recibir no depende de nosotros, mientras tu identificador
-         siga en nuestro SMP el documento sigue llegando aquí, y el plazo para
-         sacarte es de 3 días hábiles. */
-      $('remate-fuerte').textContent = 'Proceso completado';
-      $('remate-texto').textContent = 'Ya puedes cerrar esta ventana.';
       return;
     }
-    /* En la reverificación la dirección ya la tenía: no es noticia. Solo en
-       el alta es nueva. */
-    caja.hidden = revisando;
-    $('peppol-texto').textContent = 'Con esta dirección te encuentran tus clientes y tus proveedores. Se construye con tu TIN, y la damos de alta nosotros.';
-    $('copiar-peppol').hidden = false;
-    if (revisando) {
-      /* Se había quedado en «Asociación enviada», que no es lo que acaba de
-         enviar quien viene a reverificarse. */
-      /* El cierre ya no tiene titulo propio: lo dice «Proceso completado». */
-      $('remate-fuerte').textContent = 'Proceso completado';
-      $('remate-texto').textContent = 'Ya puedes cerrar esta ventana.';
-    }
-    $('peppol-id').textContent = '0235:' + val('v-tin').replace(/\s/g, '');
+    $('remate-texto').textContent = revisando
+      ? 'Tus datos quedaron actualizados con GuruSoft como tu proveedor. Ya puedes cerrar esta ventana.'
+      : 'GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta. Ya puedes cerrar esta ventana.';
   }
-
-  $('copiar-peppol').addEventListener('click', function () {
-    try {
-      navigator.clipboard.writeText($('peppol-id').textContent);
-      window.edocAvisar('Copiada tu dirección en la red.', 'exito');
-    } catch (error) {
-      window.edocAvisar('No pudimos copiarla. Selecciónala y cópiala a mano.', 'advertencia');
-    }
-  });
 
   // Los dos botones de la maqueta, para ver las dos respuestas.
   function rellenar(correo) {
@@ -1638,11 +1595,24 @@
     rellenar('f.almarzooqi@alnoor.ae');
     verificar('nuestro');
   });
+  /* La respuesta a «¿pasamos tu contacto a comercial?». En el producto, el
+     sí envía un correo a comercial con la razón social, el TIN, el correo y
+     el móvil si lo dio, y guarda el consentimiento con su fecha. */
+  function respuestaComercial(si) {
+    $('nocliente-botones').hidden = true;
+    $('nocliente-texto').textContent = si
+      ? 'Listo. Nuestro equipo comercial te contactará en breve.'
+      : 'De acuerdo, no compartimos tu contacto.';
+    /* Sin aviso flotante: el texto de arriba ya lo dice. */
+  }
+  $('nocliente-si').addEventListener('click', function () { respuestaComercial(true); });
+  $('nocliente-no').addEventListener('click', function () { respuestaComercial(false); });
+
   $('sim-nocliente').addEventListener('click', function () {
     rellenar('f.almarzooqi@alnoor.ae');
     verificar('nocliente');
   });
-  if (revisando) $('sim-nocliente').hidden = true;
+  if (revisando || !COMPROBAR_CLIENTE) $('sim-nocliente').hidden = true;
 
   conexion('sin');
   /* Se lee de lo que llegó: la barra ya no lo enseña. */

@@ -119,7 +119,9 @@
             { rotulo: 'Usuarios', url: 'admin-usuarios.html' } ] },
         { titulo: 'Actualización Datos empresas', enlaces: [
             { rotulo: 'Actualización de identificación fiscal', url: 'admin-empresa.html' },
-            { rotulo: 'Actualización de contactos', url: 'admin-contactos.html' } ] },
+            { rotulo: 'Actualización de contactos', url: 'admin-contactos.html' },
+            /* Reunión del 19: «una opción, mi registro Peppol». */
+            { rotulo: 'Mi registro Peppol', url: 'peppol.html' } ] },
         { enlaces: [
             { rotulo: 'Credenciales de consumo Servicio eDoc', url: 'admin-credenciales.html' },
             // Fuera del primer MVP: se decidió el 16 de septiembre.
@@ -435,7 +437,7 @@
     return '<div class="edoc-estado-sistema edoc-estado-sistema--advertencia" role="alert">' +
       '<span class="edoc-estado-sistema__icono">' + icono('alerta') + '</span>' +
       '<span><strong>Tu empresa está activa. Falta que nos designes en EmaraTax.</strong> Hasta entonces no ' +
-      'podemos emitir ni recibir documentos a tu nombre. <a href="onboarding.html?activa=1">Cómo designarnos</a></span>' +
+      'podemos emitir ni recibir documentos a tu nombre.</span>' +
     '</div>';
   }
 

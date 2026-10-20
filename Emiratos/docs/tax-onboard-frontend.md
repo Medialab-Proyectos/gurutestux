@@ -25,6 +25,7 @@ La maqueta se publica en `https://gurutestux.vercel.app`. La página responde en
 | Paso 2: datos de la entidad | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=ok |
 | Los datos no coinciden (error genérico) | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=no |
 | La empresa no es cliente | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=nocliente |
+| Como en certificación: sin comprobar si es cliente | https://gurutestux.vercel.app/Emiratos/tax-onboard?certificacion=1 |
 | EmaraTax no responde, al verificar | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=noresponde |
 | EmaraTax no responde, al enviar | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=envio |
 | No pudimos completar el trámite | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=nuestro |
@@ -32,10 +33,10 @@ La maqueta se publica en `https://gurutestux.vercel.app`. La página responde en
 | Con un token «real»: se borra de la barra al entrar | https://gurutestux.vercel.app/Emiratos/tax-onboard?emarataxToken=REAL1234&TIN=1000001602 |
 | Todos los casos con un clic | https://gurutestux.vercel.app/Emiratos/panel.html |
 
-- **Idioma:** la página sale en inglés. Para verla en español se añade `&idioma=es` (o `?idioma=es` si no hay otros parámetros); se recuerda en las páginas siguientes. `?idioma=en` vuelve al inglés.
+- **Idioma:** la página sale siempre en inglés. Para verla en español se añade `&idioma=es` (o `?idioma=es` si no hay otros parámetros) a su propia dirección.
 - **Los parámetros de la maqueta** (`resultado`, `sincodigo`, `idioma`) se leen al entrar y desaparecen de la barra, que solo enseña lo que mandaría EmaraTax.
 - **«Proceso completado»** no tiene dirección propia: se llega escribiendo un correo y un TIN, pulsando «Verify Applicant Details», marcando la declaración y pulsando «Submit». En reverificación o baja hay que elegir antes la acción.
-- **Simuladores:** dentro del cuadro hay botones de maqueta («Simular que cuadra», «…no cuadra», «…no es cliente», «…EmaraTax no responde», «…un fallo nuestro», y en el paso 2 los de envío). En el producto no existen.
+- **Simuladores:** dentro del cuadro hay botones de maqueta («Simular que cuadra», «…no cuadra», «…no es cliente», «…EmaraTax no responde», «…un fallo nuestro», y en el paso 2 los de envío). **Son de prueba y en el producto no existen** (apartado 11).
 
 ### En local
 
@@ -52,8 +53,8 @@ y las mismas direcciones con `http://127.0.0.1:8080/Emiratos/…`. El servidor l
 | Inicio con la franja «Tu empresa está activa. Falta que nos designes en EmaraTax» | https://gurutestux.vercel.app/Emiratos/inicio.html?asociada=0 |
 | Administración, empresa sin designar | https://gurutestux.vercel.app/Emiratos/admin-empresa.html?asociada=0 |
 | Administración, empresa designada (cómo reverificar o darse de baja) | https://gurutestux.vercel.app/Emiratos/admin-empresa.html?asociada=1 |
-| Guía «Asociarnos en EmaraTax», justo después del registro | https://gurutestux.vercel.app/Emiratos/onboarding.html |
-| La misma guía, con la empresa ya activa | https://gurutestux.vercel.app/Emiratos/onboarding.html?activa=1 |
+| Mi registro Peppol, empresa designada | https://gurutestux.vercel.app/Emiratos/peppol.html?asociada=1 |
+| Mi registro Peppol, empresa sin designar | https://gurutestux.vercel.app/Emiratos/peppol.html?asociada=0 |
 
 ## 3. La dirección y sus parámetros
 
@@ -74,8 +75,8 @@ y las mismas direcciones con `http://127.0.0.1:8080/Emiratos/…`. El servidor l
 
 | Paso | Qué ve la persona | Qué hace el sistema | Qué se guarda |
 |---|---|---|---|
-| **Al abrir** | Título «Linking Request» o «Reverifying / Delinking Request», bienvenida, «Antes de empezar» y el formulario | Lee `emarataxToken` y `TIN` y borra el token de la barra. Sin token: estado «Falta el código». No llama a nada. | — |
-| **Verify Applicant Details** | Botón con el nombre exacto de la guía | 1) `POST …/verifyenduser`. 2) Si la autoridad confirma, busca el TIN **en nuestra base de clientes**. 3) Si no es cliente, se para. | La respuesta de la autoridad, con su fecha |
+| **Al abrir** | Título «Linking Request» o «Reverifying / Delinking Request», bienvenida y el formulario. Lo demás, dentro de la ayuda plegable | Lee `emarataxToken` y `TIN` y borra el token de la barra. Sin token: estado «Falta el código». No llama a nada. | — |
+| **Verify Applicant Details** | Botón con el nombre exacto de la guía | 1) `POST …/verifyenduser`. 2) Si la autoridad confirma, busca el TIN **en nuestra base de clientes** (eDoc Consulta). **Apagado en certificación y siempre encendido en producción.** 3) Si no es cliente, se para. | La respuesta de la autoridad, con su fecha |
 | **Datos de la entidad** | La ficha de la autoridad, sin edición, la declaración y «Submit» | Nada hasta pulsar «Submit». «Back» vuelve al paso 1 y desmarca la declaración. | — |
 | **Submit** | Botón «Submit» | 1) Alta en nuestro SMP de Peppol con `0235:<TIN>`; en la baja, la salida del SMP. 2) `POST …/crregupdate`. 3) Si todo va bien, «Proceso completado». | Acción, fecha y respuesta. La empresa pasa a designada o a dada de baja. |
 | **Proceso completado** | Visto verde, «Proceso completado», «Ya puedes cerrar esta ventana» | El token sale de la barra: ya se gastó. No llama a nada. | — |
@@ -86,9 +87,9 @@ y las mismas direcciones con `http://127.0.0.1:8080/Emiratos/…`. El servidor l
 
 | Trámite | Bajo «Proceso completado» |
 |---|---|
-| Alta | «Tu dirección en la red» con `0235:<TIN>` y el botón «Copiar». La guía (4.2) pide «ASP to call the Peppol and display the relevant details», y la circular del Ministerio sobre TIN y TRN obliga a construir la dirección con el TIN, nunca con el TRN. |
-| Reverificación | Nada más: la dirección ya la tenía. |
-| Baja | La dirección, sin «Copiar», con «La damos de baja de la red Peppol en un máximo de 3 días hábiles. Hasta entonces, los documentos que te envíen siguen llegando». El plazo sale de los requisitos de la autoridad Peppol: «the existing Accredited SP MUST deregister the End-User from their SMP within 3 working days». |
+| Alta | «GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta. Ya puedes cerrar esta ventana.» **La dirección Peppol no se enseña aquí**: es técnica y no está en la pantalla de la guía. Se consulta en el portal, en «Mi registro Peppol». |
+| Reverificación | «Tus datos quedaron actualizados con GuruSoft como tu proveedor. Ya puedes cerrar esta ventana.» |
+| Baja | «Comunicamos tu baja con GuruSoft. En un máximo de 3 días hábiles finalizaremos tu registro en la red Peppol; sin embargo, hasta entonces seguirás recibiendo los documentos que te envíen.» El plazo sale de los requisitos de la autoridad Peppol: «the existing Accredited SP MUST deregister the End-User from their SMP within 3 working days». |
 
 ## 5. El formulario (paso 1)
 
@@ -131,7 +132,7 @@ Todos los resultados siguen el mismo patrón: icono grande con el color de su se
 |---|---|---|---|---|---|
 | Completado | Envío correcto | ✓ verde | Proceso completado | Ya puedes cerrar esta ventana. | — |
 | No coinciden | `verifyenduser` dice que no cuadra | ✕ rojo | El correo o el TIN no coinciden con los de EmaraTax | Revisa los dos tal como constan allí y vuelve a intentarlo. | Volver a intentarlo |
-| No es cliente | Cuadra con la autoridad, pero el TIN no está en nuestra base (solo en el alta) | ⚠ ámbar | Tu empresa todavía no es cliente de GuruSoft | Para designarnos primero tienes que registrarla con nosotros… | Contactar con un asesor · Registrar mi empresa |
+| No es cliente | Cuadra con la autoridad, pero el TIN no está en nuestra base (solo en el alta y con la comprobación encendida) | ⚠ ámbar | Tu empresa no tiene un contrato con GuruSoft | Tus datos coinciden con los de EmaraTax. ¿Nos autorizas a pasar tu contacto a nuestro equipo comercial para que te llame? | No, gracias · Sí, que me contacten. Debajo, «Somos GuruSoft. Si quieres más información, haz clic aquí» |
 | EmaraTax no responde | 408 o 500, al verificar o al enviar | ⚠ ámbar | EmaraTax no responde ahora | No es un problema de tus datos. Inténtalo de nuevo en unos minutos. | Volver a intentarlo |
 | No pudimos completar | 401, 400, 404, error no controlado o fallo al dar de alta en Peppol | ✕ rojo | No pudimos completar el trámite | Vuelve a intentarlo y, si se repite, escríbenos a soporte@edoc.ae con tu TIN. | Volver a intentarlo |
 | Falta el código | Se llega sin token, o la autoridad lo rechaza por usado o vencido | ⚠ ámbar | Falta el código de EmaraTax | Esta página la abre EmaraTax cuando nos eliges… Vuelve a EmaraTax y pulsa «Proceed to ASP». | — |
@@ -143,24 +144,28 @@ Reglas de estos mensajes:
 - **«No pudimos completar» tampoco culpa a nadie.** Un 400 o un 401 salen también si alguien manipuló el token o la petición.
 - **Nunca se enseña el código ni el texto de la autoridad** (`GSB_001`, `msgDesc`…). Van al registro del servidor.
 - **Sin referencias ni «ya nos ha llegado el aviso»** mientras no exista un registro que lo respalde.
+- **Sin avisos flotantes de confirmación.** El resultado lo dice la propia pantalla («Proceso completado», el texto del no cliente…); un aviso flotante que lo repita sobra. Solo quedan dos de advertencia: si se intenta pegar el correo y al desbloquear el correo y el TIN para corregirlos.
 - **«Volver a intentarlo» empieza de cero:** vuelve al paso 1 con el correo, el móvil y la acción vacíos y la declaración desmarcada. Solo se mantiene el TIN que manda EmaraTax, bloqueado. **Nada de lo escrito se guarda tras un fallo.**
-- **«Registrar mi empresa»** lleva a `registro.html?empezar=1` sin heredar los datos de la autoridad: registrarse no basta para operar, falta la aprobación. **«Contactar con un asesor»** abre hoy un correo a soporte@edoc.ae con el TIN en el asunto. **Falta el canal comercial real**: lo decide comercial.
+- **No es cliente:** sin registrarse ni formularios. **«Sí, que me contacten»** envía un correo al equipo comercial con la razón social, el TIN, el correo y el móvil si lo dio, y guarda ese consentimiento con su fecha; **«No, gracias»** no comparte nada. El enlace lleva a la web de GuruSoft: hoy `https://guru-soft.com/en/`, porque `/ae` todavía no existe (da 404). **Falta el correo de comercial.**
 
 ## 8. Lo de fuera del cuadro (nuestro)
 
 - **Título y bienvenida**, alineados con el cuadro (1040 px de ancho, centrado). La barra del título no es pegajosa en esta página.
-- **«Antes de empezar»**, una línea, solo en el paso 1.
-- **«Paso 1 de 2» / «Paso 2 de 2»**, entre el cuadro y la ayuda. En los resultados no se enseña.
-- **Ayuda**: caja plegable, **cerrada de entrada** en todos los pasos (`<details>` con flecha y foco visible). Dentro, puntos con icono:
+- **Todo lo demás va dentro de la ayuda**, para que el formulario sea lo único que se ve: es la pantalla de la autoridad y cada proveedor tendrá la suya.
+- **Ayuda**: caja plegable, **cerrada de entrada** en todos los pasos (`<details>` con flecha y foco visible). En su rótulo, a la derecha, «Paso 1 de 2» o «Paso 2 de 2» (en los resultados no se enseña). Dentro, puntos con icono:
+  - Paso 1: «Esta comprobación la define la autoridad… Nada de lo que escribas aquí cambia tus datos en eDoc».
   - Paso 2: «Tus datos cuadran con el registro fiscal…», «¿Te equivocaste al escribir el correo o el TIN?» con el enlace para corregir, y la salida «Cierra esta ventana».
   - Final: cerrar la ventana y «¿Cómo compruebo que quedó hecho?». En la baja cambia a «¿Seguimos apareciendo?».
-  - No cliente y falta el código: su punto propio.
 
 ## 9. El API de EmaraTax
 
 ### Dónde está
 
-- **Portal oficial de APIs del gobierno**, donde está publicado el servicio, según la especificación técnica de la autoridad (*FTA Onboarding Technical Specifications*): https://api.government.ae/#default/apiDetails/c.restObject.API-Portal.oY0ngV2YEfBCQABQVgESBg.-1
+- **Para desarrollar no hace falta el portal: el contrato completo ya lo tenemos** (punto siguiente). El portal solo sirve para consultar la ficha publicada.
+- **UAE API Marketplace**, el portal oficial de APIs del gobierno, donde está publicado el servicio: https://api.government.ae/#default/home (catálogo en https://api.government.ae/#default/gallery). Lo confirma la página oficial del gobierno, [u.ae](https://u.ae/en/about-the-uae/digital-uae/digital-transformation/platforms-and-apps/uae-api-marketplace). La ficha del servicio, según la especificación técnica de la autoridad (*FTA Onboarding Technical Specifications*), es https://api.government.ae/#default/apiDetails/c.restObject.API-Portal.oY0ngV2YEfBCQABQVgESBg.-1.
+  - **El acceso está restringido.** Desde fuera de su red el servidor corta la conexión segura (comprobado el 19/10/2026: el dominio existe y conecta, pero rechaza el HTTPS, mientras u.ae y tax.gov.ae abren con normalidad). Si no abre, no es la dirección: hay que pedir acceso.
+  - **Para pedir acceso o resolver dudas del servicio:** soporte de e-invoicing de la autoridad, `e-invoicingsupport@tax.gov.ae` (la dirección que da la guía de onboarding en cada página).
+- **La pasarela de llamadas** (`api.gsb.government.ae`) sí responde, pero cada llamada necesita las cabeceras de la tabla de abajo, que se obtienen al dar de alta al proveedor en la pasarela. Las pruebas se hacen solo contra el entorno de pruebas.
 - **El contrato** (OpenAPI, Swagger, RAML, especificación y ejemplos de la pasarela GSB) está en la carpeta compartida del proyecto, `Reuniones/Documentos tecnicos/Api/`. **No está en este repositorio, que es público**, a propósito: pedírselo a producto.
   - `validateTaxPayerDetailsFTAX_openapi.json` y `validateTaxPayerDetailsFTAX.raml`: el contrato.
   - `GSB_validateTaxPayerDetails_FTAX_Specifications.docx`: campos, obligatoriedad y tabla de errores.
@@ -240,19 +245,54 @@ Cabeceras en las dos llamadas:
 6. **Nada de lo escrito sobrevive a un fallo.**
 7. **Nuestra base de clientes se consulta después de la autoridad.**
 
-## 11. Textos e idiomas
+## 11. Certificación y paso a producción
+
+La misma página sirve para las dos fases, pero hay cosas que cambian. Lo primero es certificarnos con exactamente lo que pide la autoridad; las reglas de la empresa se encienden al salir a producción.
+
+| | Certificación (pruebas de la autoridad) | Producción |
+|---|---|---|
+| **Entorno** | El de pruebas de la autoridad, con la dirección que declaramos en la acreditación: `https://qas-ae-entpr-site.edoclab.com/tax-onboard`. **Nunca contra producción**: circular del Ministerio, «the production environment must not be used for testing activities». | El de producción de la autoridad, con nuestra dirección de producción (pendiente de declarar). |
+| **¿Es cliente nuestro?** (consulta a eDoc Consulta tras verificar) | **Apagada.** La autoridad no la pide en sus pruebas y se programa ya, pero desactivada. | **Siempre encendida.** Política de la empresa: sin contrato, documentos aprobados por la Office Manager y producto creado, no hay vinculación. |
+| **Estado «no es cliente»** | No aparece. | Aparece, con «No, gracias / Sí, que me contacten» y el correo a comercial. |
+| **El interruptor** | Configuración del servidor, apagada. | Configuración del servidor, encendida. **No es un parámetro de la dirección**: en la maqueta se simula con `?certificacion=1`. |
+| **Alta en Peppol** | Al enviar, en el entorno de pruebas que indique la autoridad. | Al enviar, en nuestro SMP de producción. Se consulta en «Mi registro Peppol». |
+| **Registro de llamadas** | Guardar cada respuesta con fecha y hora: es la evidencia. | Lo mismo, más el código de error y el `Unique ReferenceID` cuando falla. |
+
+**Evidencias que pide la certificación** (formato de evidencia de la autoridad):
+
+1. En EmaraTax, la persona elige a GuruSoft en la lista de proveedores y confirma («Proceed to ASP» y «Yes»).
+2. La redirección llega a `tax-onboard` con el código y **el código desaparece de la barra**.
+3. Verificación con el **correo correcto** (pasa a los datos de la entidad) y con un **correo incorrecto** (error genérico).
+4. Envío: la declaración marcada, «Submit» y el final.
+5. En EmaraTax, la vinculación hecha («Linkage Status with ASP»).
+6. Lo mismo para la **reverificación** y la **baja**, que llegan con el TIN.
+7. **Fecha y hora** visibles en cada captura.
+
+Para entrar a EmaraTax de pruebas, la autoridad da credenciales y empresas de prueba ya creadas («persona 1, persona 2…»). No se crea ninguna empresa.
+
+**Lo que es solo de la maqueta y no va al producto:**
+
+- **Los botones «Simular…»** del paso 1 y del paso 2, y su texto «Aquí no se consulta de verdad a la autoridad». Son de prueba: en el producto las respuestas las da el API.
+- **El token a la vista en la barra.** En la maqueta, sin parámetros, se escribe uno simulado para enseñar cómo llega. En el producto la barra nunca muestra el token.
+- **Los parámetros `resultado`, `sincodigo`, `certificacion` e `idioma`.** Solo sirven para recorrer la maqueta.
+- **Los datos de ejemplo**: Al Noor Trading LLC, el TIN `1000001602`, los correos y las fechas.
+- **Las notas de diseño** (botón «Notas de diseño»), que son para el equipo.
+
+## 12. Textos e idiomas
 
 - Inglés por defecto y español con `?idioma=es`. Diccionario en [`assets/js/idioma.js`](../assets/js/idioma.js).
+- **`tax-onboard` va siempre en inglés** (`data-idioma-propio="EN"` en el `<body>`), aunque el navegador recuerde el español de otra página. Solo cambia si su propia dirección lleva `?idioma=es`.
 - **El diccionario traduce nodos de texto enteros.** Una `<strong>` dentro de una frase la parte en trozos y cada trozo necesita su entrada. Los textos que pone el guion también pasan por el diccionario.
 - Términos que no se traducen: los botones y títulos de la autoridad (*Verify Applicant Details*, *Submit*, *Linking Request*, *Proceed to ASP*), TIN, TRN, Peppol, EmaraTax.
 
-## 12. En el portal
+## 13. En el portal
 
-- **Empresa activa sin designar:** franja «Tu empresa está activa. Falta que nos designes en EmaraTax» con un solo enlace, «Cómo designarnos», a `onboarding.html?activa=1`. La portada dice «Activa · falta designarnos en EmaraTax» y Administración enseña el mismo estado. **Ningún enlace del portal lleva a `tax-onboard`**: sin el token de EmaraTax no se puede terminar.
+- **Empresa activa sin designar:** franja «Tu empresa está activa. Falta que nos designes en EmaraTax», sin enlaces. **El portal no publicita el onboarding de EmaraTax**: no hay guía ni enlace, porque lo inicia EmaraTax y sin su token no se puede hacer. La portada dice «Activa · falta designarnos en EmaraTax» y Administración enseña el mismo estado. **Ningún enlace del portal lleva a `tax-onboard`**: sin el token de EmaraTax no se puede terminar.
+- **Mi registro Peppol** (`peppol.html`, en Administración): el Participant ID `0235:<TIN>` con «Copiar», la fecha de alta y quién lo dio de alta. Sin designar: «Todavía no tienes registro en la red Peppol». En baja: «Dándose de baja», con el plazo de 3 días hábiles. El alta en Peppol se hace al enviar en `tax-onboard`.
 - **Empresa designada:** Administración explica cómo reverificar o darse de baja (se hace en EmaraTax), el plazo de 5 días hábiles para avisar cambios (MD 243, art. 5.3) y la sanción de AED 1.000 por día (Decisión del Gabinete 106/2025).
 - **El orden del negocio** (CEO, 16 oct): comercial, contrato, alta en el portal con credenciales y, después, la designación en EmaraTax. «No existe nuestro modelo de negocio de primero regístrate y luego yo te registro».
 
-## 13. Preguntas abiertas para José y la autoridad
+## 14. Preguntas abiertas para José y la autoridad
 
 1. El nombre real del parámetro del token en la dirección.
 2. Si el token caduca, cuánto dura y con qué respuesta lo rechaza la autoridad cuando está usado o vencido.
@@ -265,7 +305,7 @@ Cabeceras en las dos llamadas:
 9. Los largos máximos de correo y móvil.
 10. Si EmaraTax indica en la dirección qué eligió la persona (Reverify u Offboarding).
 
-## 14. Archivos
+## 15. Archivos
 
 | Archivo | Qué contiene |
 |---|---|
