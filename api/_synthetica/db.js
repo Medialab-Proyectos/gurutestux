@@ -69,7 +69,25 @@ const ESQUEMA = [
      cifrado text not null,
      actualizado timestamptz not null default now(),
      primary key (usuario_id, proyecto_id)
-   )`
+   )`,
+  // Relé: lo que el cliente hace en una página del espejo de un motor, hasta que el vigilante lo aplica (INTEGRACION.md).
+  `create table if not exists buzon (
+     id bigserial primary key,
+     usuario_id text not null references usuarios(id) on delete cascade,
+     proyecto_id text not null,
+     metodo text not null,
+     ruta text not null,
+     consulta text not null default '',
+     tipo text not null default 'application/octet-stream',
+     cuerpo text not null default '',
+     estado text not null default 'pendiente',
+     respuesta_estado integer,
+     respuesta_tipo text,
+     respuesta text,
+     creado timestamptz not null default now(),
+     hecho timestamptz
+   )`,
+  `create index if not exists buzon_pendiente on buzon (estado, id)`
 ];
 
 export function esquema() {

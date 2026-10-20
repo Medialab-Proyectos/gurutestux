@@ -215,6 +215,28 @@ th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align:
 .pcard.sintetico { border-top-color: #8D7AE6; }
 .pcard.seguimiento { border-top-color: var(--green); }
 .pcard.qa { border-top-color: #E07A2E; }
+/* Proyectos conectados a su motor (contrato synthetica.estado/v1) */
+.sem { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
+.sem::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px #2f7d3222; }
+.sem.atencion::before { background: var(--orange); box-shadow: 0 0 0 3px #d99a1426; } .sem.alto::before { background: var(--red); box-shadow: 0 0 0 3px #c6282826; }
+.lienzo { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-top: 14px; }
+.cajaf { position: relative; display: grid; gap: 6px; align-content: start; min-height: 128px; padding: 14px 14px 12px; border: 1px solid var(--line); border-top: 4px solid #b8bfd3; border-radius: 12px; background: var(--panel, #fff); color: inherit; text-decoration: none; transition: transform .15s ease, box-shadow .15s ease; }
+.cajaf:hover { transform: translateY(-2px); box-shadow: 0 10px 24px #0011741a; }
+.cajaf[aria-current="true"] { outline: 3px solid var(--brand); outline-offset: 2px; }
+.cajaf .num { font: 800 11px/1 ui-monospace, Consolas, monospace; color: var(--muted); letter-spacing: .06em; text-align: left; padding-right: 22px; }
+.cajaf h3 { font-size: 14px; line-height: 1.3; font-weight: 800; margin: 0; }
+.cajaf .que { font-size: 12px; color: var(--muted); }
+.cajaf.aprobada { border-top-color: var(--green); } .cajaf.omitida { border-top-style: dashed; opacity: .75; }
+.cajaf.en_curso { border-top-color: var(--orange); } .cajaf.espera_cliente { border-top-color: var(--brand); background: linear-gradient(180deg, #f3efff, #fff 60%); }
+.cajaf.espera_equipo { border-top-color: var(--blue); } .cajaf.bloqueada, .cajaf.pendiente { opacity: .62; } .cajaf.detenida { border-top-color: var(--red); }
+.cajaf .sem { position: absolute; top: 12px; right: 12px; } .cajaf .sem span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.mini-cajas { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 8px; } .mini-cajas i { width: 12px; height: 6px; border-radius: 3px; background: #dfe3ee; }
+.mini-cajas i.aprobada, .mini-cajas i.omitida { background: var(--green); } .mini-cajas i.en_curso { background: var(--orange); } .mini-cajas i.espera_cliente { background: var(--brand); }
+.mini-cajas i.espera_equipo { background: var(--blue); } .mini-cajas i.detenida { background: var(--red); }
+.panel-caja { margin-top: 16px; } .panel-caja iframe { display: block; width: 100%; height: 78vh; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.ayuda-viva { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-top: 14px; padding: 14px 16px; border-radius: 12px; background: #fff0e0; border: 2px solid var(--orange); animation: latido 1.6s ease-in-out infinite; }
+@keyframes latido { 50% { box-shadow: 0 0 0 6px #d99a1422; } } @media (prefers-reduced-motion: reduce) { .ayuda-viva { animation: none; } }
+.archivados summary { cursor: pointer; font-weight: 800; margin-top: 26px; }
 .qa-fila { position: relative; display: grid; gap: 8px; margin-top: 10px; padding: 12px 40px 12px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
 .qa-fila > .quitar-archivo { position: absolute; top: 8px; right: 8px; }
 .qa-fila > .btn { justify-self: start; }
@@ -581,17 +603,20 @@ const TIPOS = {
     ]
   },
   qa: {
-    nombre: 'QA visual', corto: 'QA visual', total: 'Informe en unas 4 horas',
-    resumen: 'Comparamos tu diseño (Figma o web) con el producto desarrollado, punto a punto: pixel perfect y maquetado.',
+    nombre: 'QA visual', corto: 'QA visual', total: 'Informe en unas 5 horas',
+    resumen: 'Comprobamos si tu producto cumple con su diseño (Figma, la web o imágenes), punto a punto: pixel perfect y maquetado.',
     etapas: [
-      { n: 1, nombre: 'Fuentes y plan', corto: 'Fuentes', min: 60, modo: 'auto',
-        hace: ['Leer tu diseño en Figma o en la web', 'Abrir tu producto con las credenciales que nos diste', 'Emparejar cada vista del diseño con su par en el producto', 'Elegir lo que entra según tu meta'],
-        entrega: 'Apruebas el plan: qué vistas vamos a comparar.' },
-      { n: 2, nombre: 'Ejecución', corto: 'Ejecución', min: 120, modo: 'auto',
+      { n: 1, nombre: 'Validación', corto: 'Validación', min: 30, modo: 'auto',
+        hace: ['Abrir tu producto', 'Entrar con las credenciales que nos diste', 'Leer tu diseño en Figma, la web o las imágenes', 'Revisar que cada recorrido se entienda'],
+        entrega: 'Si falta algo, te decimos qué completar.' },
+      { n: 2, nombre: 'Correspondencia', corto: 'Correspondencia', min: 45, modo: 'auto',
+        hace: ['Una pasada rápida por el producto', 'Cada vista del diseño con su par', 'Lo que falta en el producto', 'Lo que está en el producto sin diseño'],
+        entrega: 'Confirmas lo que no coincide y la apruebas.' },
+      { n: 3, nombre: 'Pixel perfect', corto: 'Pixel perfect', min: 120, modo: 'auto',
         hace: ['Comparación píxel a píxel', 'Textos, letra, color y tamaño de los componentes', 'Alineación e idioma', 'Responsive en celular y tableta'],
         entrega: 'Nada que validar: la comparación corre sola.' },
-      { n: 3, nombre: 'Informe', corto: 'Informe', min: 60, modo: 'auto',
-        hace: ['Lo que no quedó como en el diseño', 'Sugerencias de maquetado', 'Cada hallazgo con el diseño junto al producto', 'PDF para tu equipo de desarrollo'],
+      { n: 4, nombre: 'Informe', corto: 'Informe', min: 60, modo: 'auto',
+        hace: ['El índice de similitud', 'Lo que no quedó como en el diseño', 'Sugerencias de maquetado', 'PDF para tu equipo de desarrollo'],
         entrega: 'Lees el informe y lo compartes con tu equipo.' }
     ]
   },
@@ -1160,7 +1185,7 @@ function sesionVencida() { UI.sesion = null; DB = seed(); VERSION_NUBE = 0; loca
 // desde otro equipo) sin recargar la página. No interrumpe si la persona está escribiendo.
 function refrescarNube() {
   if (!NUBE || !UI.sesion || guardandoNube || guardarBaseT || document.visibilityState !== 'visible') return;
-  if (UI.wizard || (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))) return;
+  if (UI.wizard || (document.activeElement && /^(INPUT|TEXTAREA|SELECT|IFRAME)$/.test(document.activeElement.tagName))) return;
   api('api/base').then(r => r.ok ? r.json() : null).then(b => { if (b && b.version > VERSION_NUBE && !guardandoNube && !guardarBaseT) recargarNube(); }).catch(() => {});
 }
 document.addEventListener('visibilitychange', refrescarNube);
@@ -1279,10 +1304,88 @@ function entradasQA(q) {
     + fila('Credenciales', q.grupos.map(g => `«${esc(g.nombre)}»${g.para ? ' · ' + esc(g.para) : ''}: ${g.campos.map(c => esc(c.etiqueta)).join(', ')} <span class="chip green">cifradas</span>`).join('<br>'))
     + fila('Token de Figma', q.figma_token ? '<span class="chip green">entregado, cifrado</span>' : '');
 }
+/* ---- Proyectos conectados a su motor: la plataforma dibuja las cajas que el motor declara en su foto
+   (contrato synthetica.estado/v1, ver INTEGRACION.md). La regla de riesgo es la misma de contrato.py. */
+const NIVELES = ['ok', 'atencion', 'alto'];
+const EST_CAJA = { aprobada: 'Completa', omitida: 'Omitida', en_curso: 'En curso', espera_cliente: 'Te toca', espera_equipo: 'Lo hace el equipo', bloqueada: 'Bloqueada', pendiente: 'Pendiente', detenida: 'Detenida' };
+const EST_GENERAL = { en_curso: ['En curso', 'blue'], espera_cliente: ['Es tu turno', 'orange'], espera_equipo: ['Lo tiene el equipo', 'blue'], detenido: ['Detenido', 'red'], terminado: ['Terminado', 'green'] };
+const NIVEL_TXT = { ok: 'Al día', atencion: 'Atención', alto: 'En riesgo' };
+const horasDesde = iso => { const t = Date.parse(iso); return isNaN(t) ? null : (Date.now() - t) / 3600000; };
+function riesgoCaja(c, ayudas) {
+  let nivel = (c.riesgo || {}).nivel || 'ok'; const motivos = [...((c.riesgo || {}).motivos || [])];
+  const sube = n => { if (NIVELES.indexOf(n) > NIVELES.indexOf(nivel)) nivel = n; };
+  if (c.estado === 'en_curso' && c.eta_min && c.inicio) {
+    const h = horasDesde(c.inicio);
+    if (h != null && h * 60 > c.eta_min) { sube(h * 60 > 2 * c.eta_min ? 'alto' : 'atencion'); motivos.push(`Lleva ${h.toFixed(1)} h; se esperaba en ${(c.eta_min / 60).toFixed(1)} h`); }
+  }
+  if (c.espera === 'cliente') {
+    const h = horasDesde(c.fin || c.inicio);
+    if (h != null && h > 24) { sube(h > 72 ? 'alto' : 'atencion'); motivos.push(`Espera tu respuesta hace ${Math.round(h)} h`); }
+  }
+  if ((ayudas || []).some(a => String(a.caja) === String(c.id) && a.para === 'cliente')) sube('alto');
+  if (c.estado === 'detenida') sube('alto');
+  return { nivel, motivos };
+}
+const riesgoProyecto = p => (p.foto.cajas || []).map(c => riesgoCaja(c, p.foto.ayuda).nivel).reduce((a, n) => NIVELES.indexOf(n) > NIVELES.indexOf(a) ? n : a, 'ok');
+const luzRiesgo = (nivel, conTexto = true) => `<span class="sem ${nivel}" title="${NIVEL_TXT[nivel]}">${conTexto ? NIVEL_TXT[nivel] : `<span>${NIVEL_TXT[nivel]}</span>`}</span>`;
+const espejoDe = (p, ruta) => ruta ? `publicado/${encodeURIComponent(p.id)}/m${ruta.split('/').map(encodeURIComponent).join('/')}` : '';
+const cajaDe = (p, id) => (p.foto.cajas || []).find(c => String(c.id) === String(id));
+const etiquetaCaja = c => c.id === 'P' ? 'Previa' : /^\d/.test(String(c.id)) ? 'Caja ' + c.id : 'Estudio';
+function estadoFoto(p) {
+  const f = p.foto; const [txt, color] = EST_GENERAL[f.estado] || ['—', ''];
+  const sig = f.siguiente || {};
+  return { chip: `<span class="chip ${color}">${esc(txt)}</span>`, linea: sig.caja != null ? `${(cajaDe(p, sig.caja) || {}).nombre || 'Caja ' + sig.caja} · ${sig.texto || ''}` : (sig.texto || '') };
+}
+function miniCajas(p) { return `<div class="mini-cajas" aria-hidden="true">${(p.foto.cajas || []).map(c => `<i class="${c.estado}" title="${esc(c.nombre)}"></i>`).join('')}</div>`; }
+function vistaFoto(p, sel) {
+  const f = p.foto; const st = estadoFoto(p);
+  const pct = Math.round(100 * f.progreso.completas / Math.max(1, f.progreso.total));
+  const vieja = horasDesde(p.foto_recibida || f.generado);
+  const ayudas = (f.ayuda || []).filter(a => a.para === 'cliente');
+  const elegida = cajaDe(p, sel != null ? sel : (f.siguiente || {}).caja) || f.cajas[0];
+  const r = riesgoCaja(elegida, f.ayuda);
+  const quien = c => c.espera === 'cliente' ? 'Te toca a ti' : c.espera === 'equipo' ? 'Lo hace el equipo' : '';
+  return `
+    <div class="row between" style="align-items:flex-start;gap:16px;flex-wrap:wrap">
+      <div><p class="kicker">${esc(TIPOS[p.tipo] ? TIPOS[p.tipo].nombre : p.tipo)}${p.archivado ? ' · archivado' : ''}</p><h1 class="h1">${esc(p.nombre)}</h1>
+        <p class="sub">${p.url ? `<a href="${esc(p.url)}" rel="noopener" target="_blank">${esc(p.url)}</a> · ` : ''}Creado el ${fmtF(p.creado)}${vieja != null ? ` · actualizado ${vieja < 1 ? `hace ${Math.max(1, Math.round(vieja * 60))} min` : `el ${fmtF(p.foto_recibida || f.generado)}`}` : ''}</p></div>
+      <div style="min-width:260px">
+        <div class="row between small"><span>${st.chip}</span><span>${luzRiesgo(riesgoProyecto(p))}</span></div>
+        <div class="bar" style="margin-top:8px" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Cajas completas"><i style="width:${pct}%"></i></div>
+        <p class="small muted" style="margin-top:4px">${f.progreso.completas} de ${f.progreso.total} cajas completas</p>
+        <div class="row" style="margin-top:8px;justify-content:flex-end;gap:6px">${p.archivado ? `<button class="btn small primary" data-restaurar="${p.id}">Restaurar</button>` : `<button class="btn small" data-archivar="${p.id}">Archivar</button>`}</div>
+      </div>
+    </div>
+    ${vieja != null && vieja > 0.25 && !p.archivado && f.estado !== 'terminado' ? `<div class="note-box" style="margin-top:12px">La última actualización del equipo es de hace ${vieja < 1 ? Math.round(vieja * 60) + ' min' : Math.round(vieja) + ' h'}. Si hiciste algo hace poco, puede tardar en verse.</div>` : ''}
+    ${ayudas.map(a => `<div class="ayuda-viva" role="alert"><div><strong>Necesitamos tu ayuda: ${esc(a.titulo)}</strong><div class="small">${esc(a.texto)}</div></div><a class="btn primary small" href="#/p/${p.id}/e/${encodeURIComponent(a.caja)}">Responder</a></div>`).join('')}
+    ${f.siguiente && f.siguiente.caja != null ? `<div class="note-box ${f.siguiente.quien === 'cliente' ? 'green' : ''}" style="margin-top:14px"><strong>${f.siguiente.quien === 'cliente' ? 'Te toca' : 'Lo que sigue'}:</strong> ${esc(st.linea)}</div>` : ''}
+    <div class="lienzo" role="list" aria-label="Cajas del proyecto">${f.cajas.map(c => { const rc = riesgoCaja(c, f.ayuda);
+      return `<a role="listitem" class="cajaf ${c.estado}" href="#/p/${p.id}/e/${encodeURIComponent(c.id)}" aria-current="${c === elegida}">
+        ${luzRiesgo(rc.nivel, false)}<span class="num">${esc(etiquetaCaja(c).toUpperCase())}${c.opcional ? ' · OPCIONAL' : ''}</span><h3>${esc(c.nombre)}</h3>
+        <span class="chip ${{ aprobada: 'green', en_curso: 'orange', espera_cliente: 'orange', detenida: 'red', espera_equipo: 'blue' }[c.estado] || ''}">${esc(EST_CAJA[c.estado] || c.estado)}</span>
+        <span class="que">${esc(quien(c) || c.texto_estado || '')}</span></a>`; }).join('')}</div>
+    <section class="card panel-caja" aria-labelledby="caja-sel">
+      <div class="row between" style="flex-wrap:wrap;gap:10px"><div><p class="kicker">${esc(etiquetaCaja(elegida))}${elegida.ciclo > 1 ? ' · ciclo ' + elegida.ciclo : ''}</p><h2 id="caja-sel">${esc(elegida.nombre)}</h2>
+        <p class="sub">${esc(elegida.texto_estado || EST_CAJA[elegida.estado] || '')}${quien(elegida) ? ' · ' + quien(elegida) : ''}${elegida.fin ? ' · ' + fmtF(elegida.fin) : ''}</p></div>
+        <div class="row" style="gap:6px">${luzRiesgo(r.nivel)}${elegida.pagina ? `<a class="btn small" href="${espejoDe(p, elegida.pagina)}" target="_blank" rel="noopener">Abrir en otra pestaña</a>` : ''}</div></div>
+      ${r.motivos.length ? `<ul class="plain" style="margin-top:10px">${r.motivos.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
+      ${(elegida.pendientes_cliente || []).length ? `<div class="note-box" style="margin-top:10px"><strong>Lo que necesitamos de ti</strong><ul class="plain">${elegida.pendientes_cliente.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+      ${(elegida.logros || []).length ? `<h3 style="margin-top:14px">Qué logramos</h3><ul class="plain">${elegida.logros.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
+      ${(elegida.enlaces || []).length ? `<div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap">${elegida.enlaces.map(x => `<a class="btn small" href="${espejoDe(p, x.ruta)}" target="_blank" rel="noopener">${esc(x.titulo)}</a>`).join('')}</div>` : ''}
+      ${elegida.pagina && !p.archivado ? `<iframe src="${espejoDe(p, elegida.pagina)}" title="${esc(elegida.nombre)}" style="margin-top:14px"></iframe>`
+        : elegida.estado === 'bloqueada' ? '<p class="small muted" style="margin-top:12px">Se abre cuando se completan las cajas anteriores.</p>' : !elegida.pagina ? '<p class="small muted" style="margin-top:12px">Esta caja todavía no tiene una página para ver.</p>' : ''}
+    </section>`;
+}
+function archivar(pid, si) {
+  const p = proyecto(pid); if (!p) return;
+  if (si) p.archivado = { fecha: new Date().toISOString(), por: UI.actor }; else delete p.archivado;
+  save(); render(); toast(si ? 'Proyecto archivado. Lo encuentras en «Archivados» y puedes restaurarlo cuando quieras.' : 'Proyecto restaurado.');
+}
 function avisar(pid, a, asunto) {
   (DB.avisos || (DB.avisos = [])).push({ proyecto: pid, a, asunto, fecha: new Date().toISOString() });
 }
 function progresoProyecto(p) {
+  if (p.foto) return { pct: Math.round(100 * p.foto.progreso.completas / Math.max(1, p.foto.progreso.total)), restante: 0 };
   const et = catalogo(p).filter(e => e.min);
   const total = et.reduce((a, e) => a + e.min, 0);
   let hecho = 0, restante = 0;
@@ -1304,7 +1407,9 @@ const pendientesPara = pid => DB.ajustes.filter(a => {
 const visibles = () => DB.proyectos.filter(p => !p.cuenta || p.cuenta === UI.sesion || interna());
 function pendientes() {
   const out = [];
-  for (const p of visibles().filter(x => !x.cancelado)) for (const e of p.etapas) {
+  for (const p of visibles().filter(x => !x.cancelado && !x.archivado && x.foto)) for (const c of p.foto.cajas.filter(c => c.espera === 'cliente'))
+    out.push({ p, e: { n: c.id }, tipo: 'revisar', txt: `${c.nombre}: ${c.texto_estado || 'te toca'}` });
+  for (const p of visibles().filter(x => !x.cancelado && !x.archivado && !x.foto)) for (const e of p.etapas) {
     const d = defEtapa(p, e.n);
     if (e.estado === 'analista' && interna()) out.push({ p, e, tipo: 'analista', txt: e.pedida ? `${e.pedida.desde_inicio ? 'Volver a empezar el estudio' : 'Nueva ejecución'} con ${e.pedida.agentes} ${e.pedida.agentes === 1 ? 'agente' : 'agentes'}` : p.tipo === 'completo' ? 'Proyecto nuevo: lanzar el primer escenario' : 'Proyecto nuevo: lanzar el estudio' });
     if (e.estado === 'revision') {
@@ -1319,6 +1424,7 @@ const eleccionesPendientes = pid => DB.proyectos.filter(p => {
   return e && puede(p, 'aprobar', pid) && !DB.elecciones.some(el => el.proyecto === p.id && el.etapa === e.n && el.final);
 });
 function estadoTexto(p) {
+  if (p.foto) return estadoFoto(p);
   const e = actual(p); const d = defEtapa(p, e.n);
   if (p.cancelado) return { chip: '<span class="chip red">' + ICON.no + 'Cancelado</span>', linea: `Cancelado el ${fmtF(p.cancelado.fecha)} · ${MOTIVOS_CANCELAR[p.cancelado.motivo] || p.cancelado.motivo}` };
   if (e.estado === 'detenido') return { chip: '<span class="chip orange">' + ICON.pausa + 'Detenido</span>', linea: `${d.nombre} · detenido en ${Math.round(e.pausa.pct)} %` };
@@ -1744,7 +1850,7 @@ function renderSide(ruta) {
     </nav>
     <div>
       <p class="side-label">Tus proyectos</p>
-      <div class="side-projects">${visibles().map(p => {
+      <div class="side-projects">${visibles().filter(p => !p.archivado).map(p => {
         const st = estadoTexto(p);
         return `<a href="#/p/${p.id}" ${ruta[1] === p.id ? 'aria-current="page"' : ''}><strong>${esc(p.nombre)}</strong><small>${TIPOS[p.tipo].corto} · ${esc(st.linea)}</small></a>`;
       }).join('') || '<p class="muted small" style="padding:0 10px">Todavía no tienes proyectos.</p>'}</div>
@@ -1817,7 +1923,7 @@ async function importarTodo(file) {
   save(); render(); toast(`Importados ${nuevos} proyectos y ${(datos.archivos || []).length} archivos a sus carpetas.`);
 }
 function vistaProyectos() {
-  const mios = visibles();
+  const mios = visibles().filter(p => !p.archivado); const archivados = visibles().filter(p => p.archivado);
   const todos = pendientes().map(todoHTML);
   return `
     <section class="card" style="border-top:5px solid var(--brand);padding:26px">
@@ -1833,7 +1939,7 @@ function vistaProyectos() {
       <div class="todo-strip">${DB.borradores.map(b => `<div class="todo"><div><strong>${esc(b.w.nombre.trim() || 'Proyecto sin nombre')}</strong><div class="sub">${b.w.tipo ? TIPOS[b.w.tipo].nombre + ' · ' : ''}paso ${b.w.paso} de 4 · guardado el ${fmtF(b.fecha)}</div></div><div class="row"><a class="btn small primary" href="#/nuevo/${b.id}">Continuar</a><button class="btn small" data-borrar="${b.id}">Eliminar</button></div></div>`).join('')}</div>` : ''}
     <div class="projects" ${mios.length ? '' : 'hidden'}>${mios.map(p => {
       const st = estadoTexto(p); const pr = progresoProyecto(p);
-      const pendP = DB.ajustes.filter(a => a.proyecto === p.id && !a.auditoria && !a.fuera && p.etapas.find(e => e.n === a.etapa).estado === 'revision').length;
+      const pendP = p.foto ? 0 : DB.ajustes.filter(a => a.proyecto === p.id && !a.auditoria && !a.fuera && (p.etapas.find(e => e.n === a.etapa) || {}).estado === 'revision').length;
       return `<a class="pcard ${p.tipo}" href="#/p/${p.id}">
         <div class="row between"><span class="chip">${TIPOS[p.tipo].nombre}</span>${st.chip}</div>
         <div><h3>${esc(p.nombre)}</h3><p class="sub">${esc(st.linea)}</p></div>
@@ -1843,9 +1949,11 @@ function vistaProyectos() {
         </div>
         ${p.motor ? (() => { const est = estudioDe(p); return est ? `<p class="small muted">Motor: estudio del ${fmtF(est.fecha_hora)} · ${est.agentes} agentes · ${est.hallazgos.length} hallazgos</p>` : '<p class="small muted">Motor: todavía sin estudio</p>'; })() : p.ejemplo ? '<p class="small muted">Ejemplo: sin estudio en el motor</p>' : ''}
         ${pendP ? `<div><span class="chip orange">${pendP} ${pendP === 1 ? 'hallazgo' : 'hallazgos'} sin auditar</span></div>` : ''}
+        ${p.foto ? `<div class="row between small">${luzRiesgo(riesgoProyecto(p))}<span class="muted">${p.foto.progreso.completas} de ${p.foto.progreso.total} cajas</span></div>${miniCajas(p)}` : ''}
       </a>`;
     }).join('')}
-    </div>`;
+    </div>
+    ${archivados.length ? `<details class="archivados"><summary>Archivados (${archivados.length})</summary><div class="todo-strip" style="margin-top:10px">${archivados.map(p => `<div class="todo"><div><strong>${esc(p.nombre)}</strong><div class="sub">${esc(TIPOS[p.tipo] ? TIPOS[p.tipo].nombre : p.tipo)} · archivado el ${fmtF(p.archivado.fecha)}</div></div><div class="row"><a class="btn small" href="#/p/${p.id}">Ver</a><button class="btn small primary" data-restaurar="${p.id}">Restaurar</button></div></div>`).join('')}</div></details>` : ''}`;
 }
 
 function vistaValidar() {
@@ -1864,6 +1972,7 @@ function vistaValidar() {
 function vistaProyecto(pid, nSel) {
   const p = proyecto(pid);
   if (!p) return '<div class="empty">Ese proyecto no existe.</div>';
+  if (p.foto) return vistaFoto(p, nSel);
   if (p.tipo === 'completo' && nSel == null) return vistaCanvas(p);
   const cur = actual(p);
   const n = nSel != null ? +nSel : (UI.etapaVista[pid] ?? cur.n);
@@ -3172,6 +3281,8 @@ function wire(ruta) {
   document.querySelectorAll('[data-deshacer]').forEach(b => b.onclick = () => deshacer(b.dataset.deshacer));
   document.querySelectorAll('[data-nota]').forEach(b => b.onclick = () => { const [pid, n] = b.dataset.nota.split(':'); agregarNota(pid, +n); });
   document.querySelectorAll('[data-continuar]').forEach(b => b.onclick = () => continuar(b.dataset.continuar));
+  document.querySelectorAll('[data-archivar]').forEach(b => b.onclick = () => archivar(b.dataset.archivar, true));
+  document.querySelectorAll('[data-restaurar]').forEach(b => b.onclick = () => archivar(b.dataset.restaurar, false));
   document.querySelectorAll('[data-adelantar]').forEach(b => b.onclick = () => adelantar(b.dataset.adelantar));
   document.querySelectorAll('[data-probar]').forEach(b => b.onclick = () => { const [pid, n] = b.dataset.probar.split(':'); abrirPrototipo(pid, n); });
   document.querySelectorAll('[data-elegir]').forEach(b => b.onclick = () => {

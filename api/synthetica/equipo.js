@@ -4,6 +4,9 @@
 //   GET  /api/equipo?accion=archivo&cuenta=<id>&p=<ruta>   → descarga un archivo de esa cuenta
 //   GET  /api/equipo?accion=cuentas                       → cuentas registradas
 //   GET  /api/equipo?accion=credenciales&cuenta=<id>&id=<id> → las credenciales del proyecto, descifradas (QA visual)
+//   POST /api/equipo?accion=foto { cuenta, id, foto }       → guarda la foto del motor (contrato synthetica.estado/v1)
+//   GET  /api/equipo?accion=buzon                          → lo que los clientes hicieron en el espejo y falta aplicar
+//   POST /api/equipo?accion=buzon_hecho { id, estado, respuesta_estado, respuesta_tipo, respuesta } → el resultado del motor
 //   POST /api/equipo?accion=clave { correo, clave }        → el administrador pone una contraseña nueva
 //   POST /api/equipo?accion=borrar { cuenta, id }  → quita el proyecto, sus documentos y su historial
 //   POST /api/equipo?accion=subir&cuenta=<id>&p=<proyecto>/<ruta>  (cuerpo: el archivo) → publica en u/<cuenta>/publicado/
@@ -33,7 +36,7 @@ function resumen(p) {
   const actual = etapas.find(e => ['analista', 'pensando', 'detenido', 'revision', 'humana', 'vivo'].includes(e.estado)) || etapas.filter(e => e.estado === 'hecha').pop() || {};
   const pedida = etapas.find(e => e.pedida && !e.pedida.lanzada);
   return {
-    id: p.id, nombre: p.nombre, tipo: p.tipo, url: p.url || '', creado: p.creado,
+    id: p.id, nombre: p.nombre, tipo: p.tipo, url: p.url || '', creado: p.creado, archivado: !!p.archivado,
     etapa: actual.n ?? null, estado: p.cancelado ? 'cancelado' : actual.estado || '',
     pide_ejecucion: pedida ? { etapa: pedida.n, agentes: pedida.pedida.agentes, fecha: pedida.pedida.fecha, desde_inicio: !!pedida.pedida.desde_inicio } : null,
     archivos: (p.fuentes?.archivos || []).length + (p.fuentes?.manual ? 1 : 0)
@@ -245,6 +248,34 @@ export default async function handler(req, res) {
       if (!r.rows.length) return responder(res, 404, { error: 'Ese proyecto no tiene credenciales' });
       return responder(res, 200, { ...descifrar(r.rows[0].cifrado), actualizado: r.rows[0].actualizado });
     }
+    if (req.method === 'POST' && accion === 'foto') {
+      const d = await cuerpo(req);
+      const f = d.foto;
+      if (!f || f.contrato !== 'synthetica.estado/v1' || !Array.isArray(f.cajas)) return responder(res, 400, { error: 'La foto no cumple el contrato synthetica.estado/v1' });
+      if (JSON.stringify(f).length > 200_000) return responder(res, 413, { error: 'La foto pesa más de 200 KB' });
+      const ok = await cambiarDocumento(String(d.cuenta || ''), datos => {
+        const p = (datos.proyectos || []).find(x => x.id === d.id);
+        if (!p) return null;
+        p.foto = f; p.foto_recibida = new Date().toISOString();
+        return true;
+      });
+      if (!ok) return responder(res, 404, { error: 'No existe ese proyecto' });
+      return responder(res, 200, { ok: true });
+    }
+    if (req.method === 'GET' && accion === 'buzon') {
+      await query(`delete from buzon where creado < now() - interval '30 days'`);
+      const r = await query(`select id, usuario_id as cuenta, proyecto_id as proyecto, metodo, ruta, consulta, tipo, cuerpo, creado
+                             from buzon where estado = 'pendiente' order by id limit 20`);
+      return responder(res, 200, { pendientes: r.rows.map(x => ({ ...x, id: String(x.id) })) });
+    }
+    if (req.method === 'POST' && accion === 'buzon_hecho') {
+      const d = await cuerpo(req);
+      const r = await query(`update buzon set estado = $2, respuesta_estado = $3, respuesta_tipo = $4, respuesta = $5, hecho = now(), cuerpo = ''
+                             where id = $1 and estado = 'pendiente' returning id`,
+        [Number(d.id) || 0, d.estado === 'error' ? 'error' : 'hecho', Number(d.respuesta_estado) || null,
+         String(d.respuesta_tipo || 'application/json').slice(0, 120), String(d.respuesta ?? '').slice(0, 200_000)]);
+      return responder(res, r.rows.length ? 200 : 404, { ok: !!r.rows.length });
+    }
     if (req.method === 'POST' && accion === 'borrar') {
       const d = await cuerpo(req);
       let archivos = [];
@@ -261,6 +292,7 @@ export default async function handler(req, res) {
       if (!nombre) return responder(res, 404, { error: 'No existe ese proyecto' });
       if (archivos.length) await del(archivos);
       await query('delete from credenciales where usuario_id = $1 and proyecto_id = $2', [String(d.cuenta || ''), String(d.id || '')]);
+      await query('delete from buzon where usuario_id = $1 and proyecto_id = $2', [String(d.cuenta || ''), String(d.id || '')]);
       return responder(res, 200, { borrado: nombre, archivos: archivos.length });
     }
     return responder(res, 400, { error: 'Acción desconocida' });

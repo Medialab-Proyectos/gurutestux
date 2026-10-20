@@ -62,13 +62,23 @@ http.createServer(async (req, res) => {
       if (!cuenta || !ruta || ruta.includes('..')) { res.statusCode = 400; return res.end(); }
       const t = []; for await (const x of req) t.push(x);
       const f = path.join(BLOBS, 'u', cuenta, 'publicado', ruta); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, Buffer.concat(t));
+      fs.writeFileSync(f + '.__tipo', String(req.headers['x-tipo'] || ''));   // como Blob: el tipo viaja con el archivo
       res.setHeader('Content-Type', 'application/json'); return res.end(JSON.stringify({ ruta }));
     }
+    if (url.pathname.startsWith(BASE + '/publicado/') && req.method === 'POST') {   // relé: como la reescritura de vercel.json
+      const ruta = decodeURIComponent(url.pathname.slice((BASE + '/publicado/').length));
+      req.url = `/api/synthetica/publicado?ruta=${encodeURIComponent(ruta)}${url.search ? '&' + url.search.slice(1) : ''}`;
+      const { default: h } = await import('../../api/synthetica/publicado.js');
+      return await h(req, res);
+    }
     if (url.pathname.startsWith(BASE + '/publicado/')) {
-      const u = await usuarioDe(req); const ruta = decodeURIComponent(url.pathname.slice((BASE + '/publicado/').length));
+      const u = await usuarioDe(req); let ruta = decodeURIComponent(url.pathname.slice((BASE + '/publicado/').length));
       if (!u || ruta.includes('..')) { res.statusCode = 404; return res.end(); }
-      res.setHeader('Content-Type', TIPOS[path.extname(ruta)] || 'application/octet-stream');
-      return fs.createReadStream(path.join(BLOBS, 'u', u.id, 'publicado', ruta)).on('error', () => { res.statusCode = 404; res.end(); }).pipe(res);
+      if (ruta.endsWith('/')) ruta += 'index.html';
+      const f = path.join(BLOBS, 'u', u.id, 'publicado', ruta);
+      const tipo = fs.existsSync(f + '.__tipo') ? fs.readFileSync(f + '.__tipo', 'utf8') : '';
+      res.setHeader('Content-Type', TIPOS[path.extname(ruta)] || tipo || 'application/octet-stream');
+      return fs.createReadStream(f).on('error', () => { res.statusCode = 404; res.end(); }).pipe(res);
     }
     if (url.pathname === BASE + '/api/archivos' && req.method === 'DELETE') {
       const u = await usuarioDe(req); const trozos = []; for await (const t of req) trozos.push(t);

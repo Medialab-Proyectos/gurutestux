@@ -216,10 +216,12 @@ def cmd_bajar(api, a):
             "url": pr.get("url", "")
         }
         (carpeta / "arranque.json").write_text(json.dumps(arranque, ensure_ascii=False, indent=2), encoding="utf-8")
-        vincular(pr["id"], d["cuenta"]["id"], arranque["id"], pr.get("url", ""))
-        print("Estudio sintético. Siguiente paso, en Claude Code (motor de agentes):")
-        print(f'  /agentes-iniciar-proyecto {arranque["id"]} {arranque["url"]} {fuentes}')
-        print(f'  (el arranque ya está listo en {carpeta / "arranque.json"})')
+        vincular(pr["id"], d["cuenta"]["id"], arranque["id"], pr.get("url", ""), tipo="agentes")
+        objetivo = en.get("intencion") or en.get("analizar") or pr.get("nombre")
+        print("Estudio sintético por cajas. Siguiente paso (motor de agentes, desde _agentes_sinteticos/):")
+        print(f'  python -m agentes_sinteticos.cajas_estudio nuevo {arranque["id"]} --nombre "{pr["nombre"]}" --url {arranque["url"]} --objetivo "{objetivo}"')
+        print(f'  python -m agentes_sinteticos.cajas_estudio agregar {arranque["id"]} {fuentes}')
+        print("  El cliente completa la caja 1 (datos y contexto) desde la plataforma.")
         print("Deja corriendo el vigilante: cada minuto reporta a la plataforma lo que haga el motor.")
         print("  python operador.py vigilar")
     elif pr["tipo"] == "completo":
@@ -362,8 +364,9 @@ def vincular(pid, cuenta, motor_id, url, tipo=None):
 
 def cmd_vincular(api, a):
     p = buscar(api, a.proyecto)
-    vincular(p["id"], p["cuenta"]["id"], a.motor_id, p.get("url", ""), tipo="creacion" if a.creacion else None)
-    motor = "de creación de productos" if a.creacion else "de agentes"
+    tipo = a.motor or ("creacion" if a.creacion else None)
+    vincular(p["id"], p["cuenta"]["id"], a.motor_id, p.get("url", ""), tipo=tipo)
+    motor = {"creacion": "de creación de productos", "qa": "de QA visual", "agentes": "de agentes (por cajas)"}.get(tipo, "de agentes")
     print(f'{p["nombre"]} queda ligado al proyecto «{a.motor_id}» del motor {motor}. Corre: python operador.py vigilar')
 
 
@@ -599,10 +602,12 @@ PREGUNTAS_ESCENARIO = {   # las mismas de index.html (PREGUNTAS), por caja
 # ---------------------------------------------------------------- motor de QA visual (pixel perfect)
 # Vive aparte (_qa_visual/) y no sabe de la plataforma. El vigilante lee sus carpetas (solo lectura):
 #   caja-N/vuelta-K/entrada.md  → la caja N está en curso
-#   caja-N/vuelta-K/cierre.json → se publican sus logros; la caja 1 con «Lo que vamos a comparar» y la 3 con el informe
+#   caja-N/vuelta-K/cierre.json → se publican sus logros; la 1 con la validación, la 2 con la correspondencia y la 4 con el informe
+#   (cuatro cajas desde el 2026-10-16: validación, correspondencia, pixel perfect e informe)
 QA = AQUI.parent.parent / "_qa_visual" / "proyectos"
-QA_PUBLICA = {1: ("resumen.html", ["resumen.html", "miniaturas"], "Plan de la comparación"),
-              3: ("informe/index.html", ["informe", "informe.pdf"], "Informe de QA visual")}
+QA_PUBLICA = {1: ("validacion.html", ["validacion.html", "miniaturas"], "Validación"),
+              2: ("correspondencia.html", ["correspondencia.html", "miniaturas", "producto"], "Correspondencia"),
+              4: ("informe/index.html", ["informe", "informe.pdf"], "Informe de QA visual")}
 
 
 def revisar_qa(api, motor_agentes, pid, v, hecho):
@@ -610,7 +615,7 @@ def revisar_qa(api, motor_agentes, pid, v, hecho):
     base = QA / v["motor_id"]
     if not (base / "proyecto.json").exists():
         return dicho
-    for n in (1, 2, 3):
+    for n in (1, 2, 3, 4):
         for vuelta in sorted((base / f"caja-{n}").glob("vuelta-*"), key=lambda x: int(x.name.split("-")[1])):
             clave = f"qa-{n}-{vuelta.name}"
             if (vuelta / "entrada.md").exists() and not hecho.get("ini-" + clave):
@@ -629,7 +634,8 @@ def revisar_qa(api, motor_agentes, pid, v, hecho):
                     datos["prototipo"] = {"nombre": nombre, "href": f"publicado/{ruta}/{doc}"}
                 api.pedir("api/equipo?accion=etapa", "POST", datos)
                 hecho["fin-" + clave] = True
-                dicho.append({1: "plan publicado; el cliente lo aprueba", 2: "comparación terminada; arranca el informe", 3: "informe publicado"}[n] + f" ({vuelta.name})")
+                dicho.append({1: "validación publicada", 2: "correspondencia publicada; el cliente responde y la aprueba",
+                              3: "pixel perfect terminado; arranca el informe", 4: "informe publicado"}[n] + f" ({vuelta.name})")
     return dicho
 
 
@@ -763,26 +769,162 @@ def cmd_auditorias(api, a):
           "python -m agentes_sinteticos.lecciones_auditoria actualizar")
 
 
+# ---------------------------------------------------------------- integración por contrato (INTEGRACION.md)
+# Con la foto del motor (synthetica.estado/v1) la plataforma dibuja las cajas que el motor declara; el espejo publica sus
+# páginas y el relé lleva al motor lo que el cliente hace en ellas. Los proyectos sin foto siguen con su revisor anterior.
+import hashlib
+import contrato
+import espejo
+import motores
+
+REFRESCO_ESPEJO_S = 600   # además de cada cambio de foto, un recorrido completo cada 10 min (las páginas cambian sin cambiar la foto)
+
+
+def _firma_foto(f):
+    return hashlib.sha256(json.dumps({k: v for k, v in f.items() if k != "generado"}, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+
+
+def sincronizar(api, pid, v, hecho, forzar=False, solo_rapido=False):
+    """La foto del motor y su espejo. Devuelve (foto o None, líneas para el registro). None: el motor no tiene foto."""
+    motor = motores.DE_VINCULO.get(v.get("tipo"))
+    if not motor:
+        return None, []
+    try:
+        f = motores.foto(motor, v["motor_id"])
+    except (motores.FallaMotor, Exception) as e:
+        return None, [f"sin foto del motor {motor}: {e}"]
+    errores = contrato.validar(f)
+    if errores:
+        return None, ["la foto no cumple el contrato: " + "; ".join(errores[:4])]
+    dicho = []
+    firma_ = _firma_foto(f)
+    cambio = forzar or hecho.get("foto") != firma_
+    if not motores.asegurar(motor):
+        dicho.append(f"el servicio del motor {motor} no arranca: no se actualiza el espejo")
+    else:
+        man_nombre = f"espejo-{pid}.json"
+        manifiesto = leer(man_nombre, {})
+        ahora = datetime.now().timestamp()
+        completo = cambio or ahora - hecho.get("espejo_t", 0) > REFRESCO_ESPEJO_S
+        if completo and not solo_rapido:
+            r = espejo.publicar(api, subir, v["cuenta"], pid, motor, f, manifiesto)
+            hecho["espejo_t"] = ahora
+        elif f.get("espejo", {}).get("rapido"):
+            r = espejo.publicar(api, subir, v["cuenta"], pid, motor, f, manifiesto, solo=f["espejo"]["rapido"])
+        else:
+            r = {"subidos": 0, "avisos": [], "bloqueado": False}
+        escribir(man_nombre, manifiesto)
+        if r["subidos"]:
+            dicho.append(f"espejo: {r['subidos']} archivo(s) publicados")
+        dicho += [f"espejo: {x}" for x in r["avisos"][:3]]
+        if r.get("bloqueado"):
+            return f, dicho   # sin publicar la foto: la página que la acompaña no salió
+    if cambio:
+        api.pedir("api/equipo?accion=foto", "POST", {"cuenta": v["cuenta"], "id": pid, "foto": f})
+        hecho["foto"] = firma_
+        sig = f.get("siguiente") or {}
+        dicho.append(f"foto: {f['estado']} · {f['progreso']['completas']}/{f['progreso']['total']} cajas"
+                     + (f" · sigue la caja {sig.get('caja')} ({sig.get('quien') or 'nadie'})" if sig.get("caja") else ""))
+    hecho["ayuda"] = bool(f.get("ayuda"))
+    return f, dicho
+
+
+def procesar_buzon(api, vinculos, estado):
+    """Lleva al motor lo que el cliente hizo en el espejo; luego actualiza la foto y el espejo, y guarda la respuesta."""
+    import base64
+    pend = api.pedir("api/equipo?accion=buzon").get("pendientes", [])
+    hechos = []
+    for x in pend:
+        v = vinculos.get(x["proyecto"])
+        motor = motores.DE_VINCULO.get((v or {}).get("tipo"))
+        resultado = {"id": x["id"], "estado": "error", "respuesta_estado": 409, "respuesta_tipo": "application/json",
+                     "respuesta": json.dumps({"ok": False, "error": "Este proyecto no está conectado a su motor."}, ensure_ascii=False)}
+        try:
+            if not v or not motor or v.get("cuenta") != x["cuenta"]:
+                raise ValueError("proyecto sin vínculo")
+            f = motores.foto(motor, v["motor_id"])
+            if not x["ruta"].startswith(f"/{v['motor_id']}/") or not any(re.fullmatch(r.strip("^$"), x["ruta"]) for r in f.get("rutas_cliente", [])):
+                raise ValueError(f"ruta no declarada por el motor: {x['ruta']}")   # la base no manda: decide el motor
+            motores.asegurar(motor)
+            ruta = x["ruta"] + (f"?{x['consulta']}" if x.get("consulta") else "")
+            codigo, tipo, cuerpo = motores.pedir(motor, "POST", ruta, base64.b64decode(x.get("cuerpo") or ""), x.get("tipo"), timeout=300)
+            resultado.update(estado="hecho", respuesta_estado=codigo, respuesta_tipo=tipo or "application/json",
+                             respuesta=cuerpo.decode("utf-8", "replace")[:200_000])
+            _, dicho = sincronizar(api, x["proyecto"], v, estado.setdefault(x["proyecto"], {}), forzar=True)
+            hechos.append(f'{x["proyecto"]} → el cliente: POST {x["ruta"]} → {codigo}' + (f' · {dicho[-1]}' if dicho else ""))
+        except Exception as e:
+            hechos.append(f'{x["proyecto"]} → buzón {x["id"]} no aplicado: {e}')
+        api.pedir("api/equipo?accion=buzon_hecho", "POST", resultado)
+    return hechos
+
+
+def cmd_foto(api, a):
+    """La foto de un proyecto vinculado, validada (sin publicar)."""
+    v = leer("vinculos.json", {}).get(a.proyecto)
+    if not v or v.get("tipo") not in motores.DE_VINCULO:
+        sys.exit("Ese proyecto no está vinculado a un motor por cajas (qa, creacion o agentes).")
+    f = motores.foto(motores.DE_VINCULO[v["tipo"]], v["motor_id"])
+    errores = contrato.validar(f)
+    print(json.dumps(f, ensure_ascii=False, indent=2) if a.json else
+          f'{f["proyecto"]["nombre"]} · {f["estado"]} · {f["progreso"]["completas"]}/{f["progreso"]["total"]} · riesgo {contrato.peor(f)}')
+    for x in errores:
+        print("  ✗ " + x)
+    if not errores and not a.json:
+        for c in f["cajas"]:
+            r = contrato.riesgo(c, ayudas=f.get("ayuda"))
+            print(f'  {c["id"]:>7} {c["estado"]:15} {c["espera"] or "":8} {r["nivel"]:8} {c["texto_estado"][:60]}')
+
+
 def cmd_vigilar(api, a):
     import time
     motor = Path(a.motor).resolve()
     sys.path.insert(0, str(AQUI))
     print(f"Vigilando el motor en {motor}. Cada {a.cada} s reporta a {api.base}. Ctrl+C para salir.")
+    activo_hasta = 0   # tras una acción del cliente o con una ayuda abierta, el buzón se mira cada 3 s
     while True:
         vinculos = leer("vinculos.json", {})
         estado = leer("vigilancia.json", {})
+        try:
+            archivados = {p["id"] for p in api.pedir("api/equipo?accion=proyectos").get("proyectos", []) if p.get("archivado")}
+        except SystemExit as e:
+            archivados = set(); print(f"{datetime.now():%H:%M} no se pudo leer la lista de proyectos: {e}")
         for pid, v in vinculos.items():
+            if pid in archivados:
+                continue
             hecho = estado.setdefault(pid, {})
             try:
-                revisor = {"creacion": revisar_creacion, "qa": revisar_qa}.get(v.get("tipo"), revisar)
-                for linea in revisor(api, motor, pid, v, hecho):
+                f, dicho = sincronizar(api, pid, v, hecho)
+                if f is None:   # sin foto: el revisor de antes (proyectos anteriores a la integración)
+                    revisor = {"creacion": revisar_creacion, "qa": revisar_qa}.get(v.get("tipo"), revisar)
+                    dicho = (dicho if v.get("tipo") in motores.DE_VINCULO else []) + list(revisor(api, motor, pid, v, hecho))
+                for linea in dicho:
                     print(f'{datetime.now():%H:%M} {pid} → {linea}')
             except SystemExit as e:
                 print(f'{datetime.now():%H:%M} {pid}: {e}')
             escribir("vigilancia.json", estado)
+        try:
+            for linea in procesar_buzon(api, vinculos, estado):
+                print(f'{datetime.now():%H:%M} {linea}'); activo_hasta = time.time() + 120
+        except SystemExit as e:
+            print(f"{datetime.now():%H:%M} buzón: {e}")
+        escribir("vigilancia.json", estado)
         if a.una_vez:
             return
-        time.sleep(a.cada)
+        fin = time.time() + a.cada
+        while time.time() < fin:   # entre pasadas: el buzón y, con una ayuda abierta, lo rápido del espejo
+            rapido = time.time() < activo_hasta or any(h.get("ayuda") for h in estado.values())
+            time.sleep(3 if rapido else 10)
+            try:
+                hechos = procesar_buzon(api, vinculos, estado)
+                for linea in hechos:
+                    print(f'{datetime.now():%H:%M} {linea}'); activo_hasta = time.time() + 120
+                if rapido:
+                    for pid, v in vinculos.items():
+                        if estado.get(pid, {}).get("ayuda") and pid not in archivados:
+                            sincronizar(api, pid, v, estado[pid], solo_rapido=True)
+            except SystemExit as e:
+                print(f"{datetime.now():%H:%M} buzón: {e}")
+            escribir("vigilancia.json", estado)
 
 
 def main():
@@ -805,6 +947,8 @@ def main():
     s = sub.add_parser("reiniciar"); s.add_argument("proyecto"); s.add_argument("--desde", type=int, default=0)
     s = sub.add_parser("borrar"); s.add_argument("proyecto"); s.add_argument("--si", action="store_true")
     s = sub.add_parser("vincular"); s.add_argument("proyecto"); s.add_argument("motor_id"); s.add_argument("--creacion", action="store_true", help="Proyecto del motor de creación de productos")
+    s.add_argument("--motor", choices=["qa", "creacion", "agentes"], help="El motor por cajas del proyecto (integración por contrato)")
+    s = sub.add_parser("foto", help="La foto del motor de un proyecto vinculado, validada contra el contrato"); s.add_argument("proyecto"); s.add_argument("--json", action="store_true")
     s = sub.add_parser("respuestas"); s.add_argument("proyecto")
     s = sub.add_parser("auditorias", help="Lleva lo auditado en la plataforma a la base de lecciones del motor")
     s.add_argument("proyecto"); s.add_argument("--motor", default=str(AQUI.parent.parent / "_agentes_sinteticos"))
@@ -813,7 +957,7 @@ def main():
     a = ap.parse_args()
     api = Api(a.base)
     {"ingresar": cmd_ingresar, "salir": cmd_salir, "nuevos": cmd_nuevos, "bajar": cmd_bajar, "etapa": cmd_etapa,
-     "cuentas": cmd_cuentas, "clave": cmd_clave, "url": cmd_url, "propuestas": cmd_propuestas, "publicar": cmd_publicar, "reiniciar": cmd_reiniciar, "borrar": cmd_borrar, "vincular": cmd_vincular, "respuestas": cmd_respuestas, "auditorias": cmd_auditorias, "vigilar": cmd_vigilar}[a.cmd](api, a)
+     "cuentas": cmd_cuentas, "clave": cmd_clave, "url": cmd_url, "propuestas": cmd_propuestas, "publicar": cmd_publicar, "reiniciar": cmd_reiniciar, "borrar": cmd_borrar, "vincular": cmd_vincular, "respuestas": cmd_respuestas, "auditorias": cmd_auditorias, "vigilar": cmd_vigilar, "foto": cmd_foto}[a.cmd](api, a)
 
 
 if __name__ == "__main__":
