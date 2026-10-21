@@ -313,7 +313,7 @@
         <div class="onboarding-maqueta mt-4">
           <p class="edoc-secundario">Y lo que puede fallar al enviar. Marca antes la declaración.</p>
           <div class="d-flex hueco-2 flex-wrap">
-            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-envio-noresponde">Simular que EmaraTax no responde al enviar</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-envio-reintento">Simular que tarda más</button>
             <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-envio-nuestro">Simular un fallo nuestro al enviar</button>
           </div>
         </div>
@@ -415,6 +415,19 @@
           <div class="reg__nav reg__nav--centro">
             <button class="btn btn-edoc-primario" type="button" data-reintentar>Volver a intentarlo</button>
           </div>
+        </div>
+      </div>
+
+      <!-- ========================== enviando ========================== -->
+      <!-- Una pantalla de espera, con un giro y «Enviando y comprobando…», y nada
+           más. Lo pidió el CEO: desarrollo había puesto una lista de tareas y no
+           gustó. Lo que se hace por debajo (nuestra plataforma, Peppol y EmaraTax,
+           con sus reintentos) no es parte de la pantalla de la autoridad y no se
+           le cuenta a la persona. -->
+      <div id="cuerpo-proceso" hidden>
+        <div class="espera" role="status" aria-live="polite">
+          <span class="espera__giro" aria-hidden="true"></span>
+          <p class="reg__hecho">Enviando y comprobando…</p>
         </div>
       </div>
 
@@ -560,7 +573,8 @@
       vista, para enseñar cómo llega la dirección desde EmaraTax: lo pidió el CEO. <strong>En producción se
       borra al recibirlo</strong> (guía 4.1), que es lo que hace la maqueta cuando el código llega de verdad con
       <span class="cifra">?emarataxToken=</span>.</li>
-      <li><strong>Verify Applicant Details.</strong>
+      <li><strong>Verify Applicant Details.</strong> Mientras responden la autoridad y nuestra base, el botón se
+      desactiva y dice «Verifying…» (reunión del 21: las esperas se diseñan); así tampoco se envía dos veces.
       <span class="cifra">POST /api/prc/ects-einvoicing/v1/verifyenduser</span> con
       <span class="cifra">TIN</span>, <span class="cifra">email</span>, <span class="cifra">mobile</span>
       (opcional) y <span class="cifra">emarataxToken</span>. Responde <span class="cifra">verificationStatus</span>,
@@ -572,16 +586,23 @@
       certificación y siempre encendido en producción. Si no está, se para aquí y se le pregunta si pasamos su
       contacto a comercial; el sí envía un correo a comercial y guarda el consentimiento.
       Se guarda la respuesta con su fecha. En EmaraTax todavía no cambia nada.</li>
-      <li><strong>Submit.</strong> Primero el alta en Peppol (guía 4.2: «ASP to call the Peppol») con la dirección
-      <span class="cifra">0235:&lt;TIN&gt;</span>; en la baja, la salida del SMP, con tres días hábiles de plazo.
-      Después <span class="cifra">POST /api/prc/ects-einvoicing/v1/crregupdate</span> con la ficha tal cual,
+      <li><strong>Submit.</strong> La persona ve una sola pantalla de espera, con un giro y «Sending and
+      checking…», y nada más: ni lista de tareas, ni «check status», ni número de seguimiento. Por debajo, en
+      orden: <strong>1) Nuestra plataforma:</strong> se da de alta la empresa en eDoc Consulta (o se actualiza, o se marca
+      la baja). <strong>2) Peppol:</strong> alta en el SMP con <span class="cifra">0235:&lt;TIN&gt;</span> (guía
+      4.2: «ASP to call the Peppol»); en la reverificación se actualiza; en la baja se programa la salida del SMP,
+      con tres días hábiles de plazo. <strong>3) EmaraTax</strong>, la última porque es la que no deshacemos
+      nosotros: <span class="cifra">POST /api/prc/ects-einvoicing/v1/crregupdate</span> con la ficha tal cual,
       <span class="cifra">peppolParticipantId</span>, <span class="cifra">eventDate</span>,
       <span class="cifra">aspName</span>, <span class="cifra">aspAccrediationNumber</span>,
       <span class="cifra">emarataxToken</span>, <span class="cifra">action</span> (1 alta, 2 reverificación,
       3 baja), <span class="cifra">reason</span> en la 2 y la 3, y <span class="cifra">field1</span> a
       <span class="cifra">field5</span>, sin describir (nota para José, más abajo). En nuestra base se guardan la
       acción, la fecha y la respuesta, y la empresa pasa a designada o a dada de baja. Con eso la autoridad nos
-      enseña en su pestaña «Linkage Status with ASP».</li>
+      enseña en su pestaña «Linkage Status with ASP».
+      <br><strong>Si algo no responde,</strong> el servidor reintenta y la pantalla sigue esperando. Si al
+      final no se completa, se deshace lo nuestro y se enseña «No pudimos completar el trámite», genérico.
+      <strong>Para José:</strong> cuánto tarda de verdad el envío.</li>
       <li><strong>Proceso completado.</strong> No llama a nada. Dice que quedó vinculado y registrado en
       Peppol, y que lo consulte en eDoc Consulta («Mi registro Peppol»). La dirección no se enseña aquí.</li>
     </ol>
@@ -593,10 +614,10 @@
     <strong>Fallos de conexión.</strong> El servicio documenta cuatro respuestas de error para las dos
     llamadas: <span class="cifra">408 GSB_002</span> «Request has timed out», <span class="cifra">500 GSB_001</span>
     «An internal error occurred», <span class="cifra">401</span> «Unauthorized application request» y
-    <span class="cifra">400</span> «One or more validation errors occurred». La persona ve dos: 408 y 500, al
-    verificar o al enviar, son «EmaraTax no responde» y se vuelve al paso 1 con el formulario vacío —nada de lo
-    escrito se guarda— para verificar otra vez antes de mandar nada; 401, 400 y un fallo al darle de alta en
-    Peppol son «no pudimos completar el trámite», genérico y con el mismo reintento. No se dice de quién es el
+    <span class="cifra">400</span> «One or more validation errors occurred». Al verificar, la persona ve dos: 408 y 500 son «EmaraTax no responde» y se vuelve al paso 1 con el
+    formulario vacío —nada de lo escrito se guarda— para verificar otra vez antes de mandar nada; 401 y 400 son
+    «no pudimos completar el trámite», genérico y con el mismo reintento. Al enviar, si al final no se
+    completa, también «no pudimos completar el trámite» (punto «Submit»). No se dice de quién es el
     fallo: el 401 sale si nuestra clave del API o el <span class="cifra">CustomAuth</span> está mal, y el 400 si
     la petición llega mal formada, pero los dos salen también si alguien manipuló el token o la petición.
     <strong>Requisito, hoy no existe:</strong> guardar en un registro el código y el
@@ -1304,7 +1325,7 @@
   function quitarTokenDeLaBarra() { barraComoLaAutoridad(false); }
 
   function ir(cual) {
-    ['1', '2', '3', 'no', 'nocliente', 'sincodigo', 'conexion'].forEach(function (c) { $('cuerpo-' + c).hidden = true; });
+    ['1', '2', '3', 'no', 'nocliente', 'sincodigo', 'conexion', 'proceso'].forEach(function (c) { $('cuerpo-' + c).hidden = true; });
     $('cuerpo-' + cual).hidden = false;
     /* Tambien aqui: si la opcion se marco sin pasar por un «change» -el
        relleno de la maqueta lo hace- el boton se habria quedado con la
@@ -1319,6 +1340,7 @@
       'nocliente': ['', '', ''],
       'sincodigo': ['', '', ''],
       'conexion': ['', '', ''],
+      'proceso': ['', '', ''],
       '3': ['Listo', '', '']
     }[cual];
     if (PASOS) {
@@ -1330,9 +1352,10 @@
       if ($('cierre-fuera')) $('cierre-fuera').hidden = cual !== '3';
       /* El verde solo vale en el paso 2: en el final ya no dice nada. */
       if ($('cuadran')) $('cuadran').hidden = cual !== '2';
-      if ($('salida-fuera')) $('salida-fuera').hidden = cual === '3';
+      if ($('salida-fuera')) $('salida-fuera').hidden = cual === '3' || cual === 'proceso';
       /* Enviado ya, corregir no tiene sentido: lo enviado, enviado está. */
-      if (cual === '3') $('caja-llave-bloqueada').hidden = true;
+      if (cual === '3' || cual === 'proceso') $('caja-llave-bloqueada').hidden = true;
+      if (cual === 'proceso') quitarTokenDeLaBarra();
       /* Y el token sale de la barra: se gastó al enviar —«crregupdate» lo
          lleva— y es de un solo uso. Dejarlo a la vista después de enviar
          sugiere que esa dirección sirve para repetir el trámite. */
@@ -1421,6 +1444,25 @@
       return;
     }
     $('error-datos').hidden = true;
+    /* Reunión del 21: toda llamada que haga esperar se diseña. Aquí hay dos,
+       la autoridad y nuestra base, así que el botón se desactiva y dice qué
+       pasa: tampoco se puede pulsar dos veces. En la maqueta dura un cuarto
+       de segundo; en el producto, lo que tarden las dos. */
+    ocupado(true);
+    setTimeout(function () { ocupado(false); responder(respuesta); }, ESPERA_VERIFICAR);
+  }
+
+  var ESPERA_VERIFICAR = 250;
+  function ocupado(si) {
+    var boton = $('verificar');
+    if (si) boton.setAttribute('data-rotulo', boton.textContent);
+    boton.disabled = si;
+    boton.setAttribute('aria-busy', si ? 'true' : 'false');
+    boton.classList.toggle('is-ocupado', si);
+    boton.textContent = si ? 'Verificando…' : boton.getAttribute('data-rotulo');
+  }
+
+  function responder(respuesta) {
     /* La autoridad no contesta (408 o 500) o el fallo es nuestro (401 o 400). */
     if (respuesta === 'noresponde' || respuesta === 'nuestro') { mostrarConexion(respuesta); return; }
     if (respuesta === 'no') { conexion('falla'); ir('no'); return; }
@@ -1512,15 +1554,27 @@
     }
     caja.classList.remove('is-invalid');
     $('declaro-error').hidden = true;
-    /* Lo que puede fallar al enviar: no se anota nada ni se da por hecho. */
-    if (resultado === 'noresponde' || resultado === 'nuestro') {
-      mostrarConexion(resultado);
-      return;
-    }
-    /* En la maqueta, la asociación queda anotada: el portal enseña la conexión
-       como activa y el inicio deja de pedir el paso. */
-    var baja = document.querySelector('input[name="v-accion"]:checked');
-    baja = !!baja && baja.value === 'desvincular';
+    esperarEnvio(resultado);
+  }
+
+  /* Al enviar, solo la espera: un giro y «Enviando y comprobando…». En la
+     maqueta dura un segundo y medio; «Simular que tarda más», el triple. Si
+     al final no se completa, el mismo «No pudimos completar el trámite»,
+     genérico. */
+  var ESPERA_ENVIO = 1500;
+  function esperarEnvio(resultado) {
+    ir('proceso');
+    setTimeout(function () {
+      if (resultado === 'nuestro') { mostrarConexion('nuestro'); return; }
+      terminar();
+    }, resultado === 'reintento' ? ESPERA_ENVIO * 3 : ESPERA_ENVIO);
+  }
+
+  /* Cuando el envío termina bien. En la maqueta, la asociación queda
+     anotada: el portal enseña la conexión como activa y el inicio deja de
+     pedir el paso. */
+  function terminar() {
+    var baja = accionActual() === 'baja';
     try {
       window.sessionStorage.setItem('edoc-asociada', baja ? '0' : '1');
     } catch (error) { /* nada */ }
@@ -1531,8 +1585,15 @@
        EmaraTax…»). Fuera, pedido en la revisión: repetía lo que ya dice
        «Proceso completado» y no es parte del trámite de la autoridad. */
   }
+
+  function accionActual() {
+    var r = document.querySelector('input[name="v-accion"]:checked');
+    if (revisando && r && r.value === 'desvincular') return 'baja';
+    return revisando ? 'revision' : 'alta';
+  }
+
   $('enviar').addEventListener('click', function () { enviar('ok'); });
-  $('sim-envio-noresponde').addEventListener('click', function () { enviar('noresponde'); });
+  $('sim-envio-reintento').addEventListener('click', function () { enviar('reintento'); });
   $('sim-envio-nuestro').addEventListener('click', function () { enviar('nuestro'); });
   /* Volver desde un fallo, sea cual sea: al paso 1, vacío, a verificar otra
      vez antes de mandar nada. */
@@ -1628,8 +1689,10 @@
   else if (pedido === 'nuestro') { $('sim-nuestro').click(); }
   else if (pedido === 'envio') {
     $('sim-ok').click();
-    $('declaro').checked = true;
-    enviar('noresponde');
+    setTimeout(function () {
+      $('declaro').checked = true;
+      enviar('nuestro');
+    }, ESPERA_VERIFICAR + 50);
   }
   /* Con qué paso abre. Si viene de EmaraTax trae el código y va al
      formulario. Si entra en frío no lo trae, y sin «emarataxToken» no se

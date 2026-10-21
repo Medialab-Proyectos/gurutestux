@@ -27,7 +27,7 @@ La maqueta se publica en `https://gurutestux.vercel.app`. La página responde en
 | La empresa no es cliente | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=nocliente |
 | Como en certificación: sin comprobar si es cliente | https://gurutestux.vercel.app/Emiratos/tax-onboard?certificacion=1 |
 | EmaraTax no responde, al verificar | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=noresponde |
-| EmaraTax no responde, al enviar | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=envio |
+| Al enviar: la espera y después el fallo genérico | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=envio |
 | No pudimos completar el trámite | https://gurutestux.vercel.app/Emiratos/tax-onboard?resultado=nuestro |
 | Falta el código de EmaraTax | https://gurutestux.vercel.app/Emiratos/tax-onboard?sincodigo=1 |
 | Con un token «real»: se borra de la barra al entrar | https://gurutestux.vercel.app/Emiratos/tax-onboard?emarataxToken=REAL1234&TIN=1000001602 |
@@ -36,7 +36,7 @@ La maqueta se publica en `https://gurutestux.vercel.app`. La página responde en
 - **Idioma:** la página sale siempre en inglés. Para verla en español se añade `&idioma=es` (o `?idioma=es` si no hay otros parámetros) a su propia dirección.
 - **Los parámetros de la maqueta** (`resultado`, `sincodigo`, `idioma`) se leen al entrar y desaparecen de la barra, que solo enseña lo que mandaría EmaraTax.
 - **«Proceso completado»** no tiene dirección propia: se llega escribiendo un correo y un TIN, pulsando «Verify Applicant Details», marcando la declaración y pulsando «Submit». En reverificación o baja hay que elegir antes la acción.
-- **Simuladores:** dentro del cuadro hay botones de maqueta («Simular que cuadra», «…no cuadra», «…no es cliente», «…EmaraTax no responde», «…un fallo nuestro», y en el paso 2 los de envío). **Son de prueba y en el producto no existen** (apartado 11).
+- **Simuladores:** dentro del cuadro hay botones de maqueta («Simular que cuadra», «…no cuadra», «…no es cliente», «…EmaraTax no responde», «…un fallo nuestro», y en el paso 2 los de envío: «Simular que tarda más» y «Simular un fallo nuestro al enviar»). **Son de prueba y en el producto no existen** (apartado 11).
 
 ### En local
 
@@ -76,9 +76,9 @@ y las mismas direcciones con `http://127.0.0.1:8080/Emiratos/…`. El servidor l
 | Paso | Qué ve la persona | Qué hace el sistema | Qué se guarda |
 |---|---|---|---|
 | **Al abrir** | Título «Linking Request» o «Reverifying / Delinking Request», bienvenida y el formulario. Lo demás, dentro de la ayuda plegable | Lee `emarataxToken` y `TIN` y borra el token de la barra. Sin token: estado «Falta el código». No llama a nada. | — |
-| **Verify Applicant Details** | Botón con el nombre exacto de la guía | 1) `POST …/verifyenduser`. 2) Si la autoridad confirma, busca el TIN **en nuestra base de clientes** (eDoc Consulta). **Apagado en certificación y siempre encendido en producción.** 3) Si no es cliente, se para. | La respuesta de la autoridad, con su fecha |
+| **Verify Applicant Details** | Botón con el nombre exacto de la guía. Mientras responde, desactivado, con su giro y «Verifying…» | 1) `POST …/verifyenduser`. 2) Si la autoridad confirma, busca el TIN **en nuestra base de clientes** (eDoc Consulta). **Apagado en certificación y siempre encendido en producción.** 3) Si no es cliente, se para. | La respuesta de la autoridad, con su fecha |
 | **Datos de la entidad** | La ficha de la autoridad, sin edición, la declaración y «Submit» | Nada hasta pulsar «Submit». «Back» vuelve al paso 1 y desmarca la declaración. | — |
-| **Submit** | Botón «Submit» | 1) Alta en nuestro SMP de Peppol con `0235:<TIN>`; en la baja, la salida del SMP. 2) `POST …/crregupdate`. 3) Si todo va bien, «Proceso completado». | Acción, fecha y respuesta. La empresa pasa a designada o a dada de baja. |
+| **Submit** | Una pantalla de espera: un giro y «Sending and checking…», nada más (apartado 7.1) | 1) Nuestra plataforma: alta, actualización o baja de la empresa en eDoc Consulta. 2) Peppol: alta en nuestro SMP con `0235:<TIN>`; en la reverificación, actualización; en la baja, la salida del SMP. 3) EmaraTax: `POST …/crregupdate`. Si todo va bien, «Proceso completado». | Cada llamada e intento, con hora y respuesta. La empresa pasa a designada o a dada de baja. |
 | **Proceso completado** | Visto verde, «Proceso completado», «Ya puedes cerrar esta ventana» | El token sale de la barra: ya se gastó. No llama a nada. | — |
 
 **Por qué nuestra base va después de la autoridad y no antes:** si se mirara primero, cualquiera podría probar TIN al azar y saber quién es cliente nuestro. Después de la autoridad sabemos que quien pregunta es el administrador de ese TIN.
@@ -133,10 +133,19 @@ Todos los resultados siguen el mismo patrón: icono grande con el color de su se
 | Completado | Envío correcto | ✓ verde | Proceso completado | Ya puedes cerrar esta ventana. | — |
 | No coinciden | `verifyenduser` dice que no cuadra | ✕ rojo | El correo o el TIN no coinciden con los de EmaraTax | Revisa los dos tal como constan allí y vuelve a intentarlo. | Volver a intentarlo |
 | No es cliente | Cuadra con la autoridad, pero el TIN no está en nuestra base (solo en el alta y con la comprobación encendida) | ⚠ ámbar | Tu empresa no tiene un contrato con GuruSoft | Tus datos coinciden con los de EmaraTax. ¿Nos autorizas a pasar tu contacto a nuestro equipo comercial para que te llame? | No, gracias · Sí, que me contacten. Debajo, «Somos GuruSoft. Si quieres más información, haz clic aquí» |
-| EmaraTax no responde | 408 o 500, al verificar o al enviar | ⚠ ámbar | EmaraTax no responde ahora | No es un problema de tus datos. Inténtalo de nuevo en unos minutos. | Volver a intentarlo |
-| No pudimos completar | 401, 400, 404, error no controlado o fallo al dar de alta en Peppol | ✕ rojo | No pudimos completar el trámite | Vuelve a intentarlo y, si se repite, escríbenos a soporte@edoc.ae con tu TIN. | Volver a intentarlo |
+| EmaraTax no responde | 408 o 500, al verificar | ⚠ ámbar | EmaraTax no responde ahora | No es un problema de tus datos. Inténtalo de nuevo en unos minutos. | Volver a intentarlo |
+| No pudimos completar | 401, 400, 404 o error no controlado al verificar; al enviar, cualquier fallo que no se recupere | ✕ rojo | No pudimos completar el trámite | Vuelve a intentarlo y, si se repite, escríbenos a soporte@edoc.ae con tu TIN. | Volver a intentarlo |
 | Falta el código | Se llega sin token, o la autoridad lo rechaza por usado o vencido | ⚠ ámbar | Falta el código de EmaraTax | Esta página la abre EmaraTax cuando nos eliges… Vuelve a EmaraTax y pulsa «Proceed to ASP». | — |
 | Validación | Falta un dato obligatorio o tiene mal formato (paso 1) | ✕ pequeño, en la caja roja bajo el formulario | — | El texto del campo que falla | — |
+
+### 7.1 Al enviar: solo la espera
+
+Al pulsar «Submit», el formulario se reemplaza por una pantalla de espera: un giro y **«Sending and checking…»**, y nada más. **Sin lista de tareas, sin «check status» y sin número de seguimiento**: lo que se hace por debajo no es parte de la pantalla de la autoridad.
+
+- Si todo va bien, «Proceso completado».
+- Si algo no responde, el servidor reintenta y la pantalla sigue esperando. Si al final no se completa, se deshace lo nuestro y se enseña «No pudimos completar el trámite», genérico.
+- La espera es una región `role="status"`; con «reducir movimiento» el giro va más lento, no desaparece. Clases: `espera` y `espera__giro`.
+- Al pulsar «Verify Applicant Details» el botón se desactiva y dice «Verifying…» con un giro pequeño, para que no se envíe dos veces.
 
 Reglas de estos mensajes:
 
@@ -226,7 +235,7 @@ Cabeceras en las dos llamadas:
 | `GSB_999` | 500 | Excepción no controlada | No pudimos completar |
 | — | 400 | Petición mal formada (ejemplo oficial: «One or more validation errors occurred») | No pudimos completar |
 
-- **Reintentar es obligación del proveedor**: el servidor debería reintentar solo, una o dos veces, antes de enseñar «EmaraTax no responde».
+- **Reintentar es obligación del proveedor.** Al enviar, el servidor reintenta mientras la pantalla espera (apartado 7.1). Al verificar, la persona vuelve a intentarlo desde «EmaraTax no responde».
 - **Registro (requisito, hoy no existe):** guardar el código y el `Unique ReferenceID` que viene en `ExceptionDescription`, que es lo que pide el soporte de GSB.
 - Los ejemplos de error del documento de muestras están copiados de otro servicio (`manageInstituteApplicantDetails_MOE`): los textos exactos pueden variar.
 
@@ -304,6 +313,7 @@ Para entrar a EmaraTax de pruebas, la autoridad da credenciales y empresas de pr
 8. La fecha de la solicitud: está en su pantalla y no en la respuesta.
 9. Los largos máximos de correo y móvil.
 10. Si EmaraTax indica en la dirección qué eligió la persona (Reverify u Offboarding).
+11. Cuánto tarda de verdad el envío.
 
 ## 15. Archivos
 
