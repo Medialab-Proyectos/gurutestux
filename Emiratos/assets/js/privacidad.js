@@ -1,11 +1,11 @@
 /* Privacidad: lo común a Mi perfil (pestaña Privacidad), la re-aceptación de
    los términos al entrar y la bandeja interna de solicitudes.
 
-   Responde a los derechos del RGPD (arts. 15 a 21) y a los de la ley de datos
-   personales de Emiratos (Decreto-ley federal 45/2021), que son parecidos. El
-   plazo de respuesta es de un mes, prorrogable dos más avisando a la persona
-   (RGPD, art. 12.3). En Emiratos el reglamento que fijaría su plazo no se ha
-   publicado: se aplica el mismo.
+   En Emiratos manda la ley de datos personales de Emiratos (PDPL, Decreto-ley
+   federal 45/2021, arts. 13 a 19). El componente sigue el RGPD (arts. 15 a 21),
+   que es más exigente y la cubre. La PDPL no fija plazo de respuesta hasta que
+   se publique su reglamento (art. 28): damos un mes, prorrogable dos más
+   avisando a la persona (RGPD, art. 12.3). Fuentes: docs/privacidad-emiratos.md.
 
    En la maqueta todo vive en el navegador (localStorage) para que lo que pide
    la persona en su perfil aparezca en la bandeja interna y la respuesta vuelva
@@ -115,7 +115,8 @@
   }
 
   /* Lo que aceptó: qué documento, qué versión, cómo y cuándo. Sin esto una
-     aceptación no prueba nada (RGPD, art. 7.1: hay que poder demostrarla). */
+     aceptación no prueba nada: hay que poder demostrarla (PDPL, art. 6.A;
+     RGPD, art. 7.1). */
   function aceptaciones() {
     return leer(LLAVE_ACE) || [
       { doc: 'Términos de servicio', version: '1.0', como: 'Aceptados', cuando: '2026-09-02T10:41:00' },
