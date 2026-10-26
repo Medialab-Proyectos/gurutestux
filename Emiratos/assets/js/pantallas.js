@@ -61,10 +61,12 @@
     try { window.localStorage.setItem(LLAVE_REPORTES, JSON.stringify(lista)); } catch (error) { /* nada */ }
   }
 
+  /* En hora de Emiratos (datos.js, edocEmiratos). */
   function sello(fecha) {
     function dd(n) { return String(n).padStart(2, '0'); }
-    return fecha.getFullYear() + '-' + dd(fecha.getMonth() + 1) + '-' + dd(fecha.getDate()) +
-           ' ' + dd(fecha.getHours()) + ':' + dd(fecha.getMinutes());
+    fecha = window.edocEmiratos(fecha);
+    return fecha.getUTCFullYear() + '-' + dd(fecha.getUTCMonth() + 1) + '-' + dd(fecha.getUTCDate()) +
+           ' ' + dd(fecha.getUTCHours()) + ':' + dd(fecha.getUTCMinutes()) + ' GST';
   }
 
   window.edocReportes = leerReportes;

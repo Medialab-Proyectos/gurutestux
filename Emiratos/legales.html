@@ -59,25 +59,38 @@
           </thead>
           <tbody>
             <tr>
-              <th scope="row">Aviso de privacidad</th>
+              <th scope="row">Política de privacidad</th>
               <td>Qué datos personales se recogen, para qué, cuánto se guardan y a quién se ceden.
                   Aquí entra el registro de la empresa, que pide nombre, cargo y teléfono de personas.</td>
               <td class="cifra">—</td>
               <td><span class="edoc-estado edoc-estado--advertencia">Sin publicar</span></td>
               <td class="col-acciones">
                 <a class="edoc-accion" href="#" data-ver="privacidad" title="Ver el documento"
-                   aria-label="Ver el aviso de privacidad"><span data-icono="ver"></span></a>
+                   aria-label="Ver la política de privacidad"><span data-icono="ver"></span></a>
               </td>
             </tr>
             <tr>
-              <th scope="row">Términos y condiciones</th>
+              <th scope="row">Términos de servicio</th>
               <td>Las reglas del servicio: qué presta eDoc como proveedor de servicios, qué se espera
                   del cliente y qué pasa si una de las dos partes deja de cumplir.</td>
               <td class="cifra">—</td>
               <td><span class="edoc-estado edoc-estado--advertencia">Sin publicar</span></td>
               <td class="col-acciones">
                 <a class="edoc-accion" href="#" data-ver="condiciones" title="Ver el documento"
-                   aria-label="Ver los términos y condiciones"><span data-icono="ver"></span></a>
+                   aria-label="Ver los términos de servicio"><span data-icono="ver"></span></a>
+              </td>
+            </tr>
+            <!-- La tercera aceptación del registro (reunión del 25 oct): tiene su
+                 versión y su fecha en Mi perfil, así que también se lista aquí.
+                 PDPL art. 6.A y 6.C. -->
+            <tr>
+              <th scope="row">Tratamiento de datos personales</th>
+              <td>La aceptación, aparte de los términos, para que tratemos tus datos personales como explica la Política de privacidad. Se da en el registro y puedes retirarla desde Mi perfil.</td>
+              <td class="cifra">—</td>
+              <td><span class="edoc-estado edoc-estado--advertencia">Sin publicar</span></td>
+              <td class="col-acciones">
+                <a class="edoc-accion" href="#" data-ver="tratamiento" title="Ver el documento"
+                   aria-label="Ver la aceptación del tratamiento de datos personales"><span data-icono="ver"></span></a>
               </td>
             </tr>
           </tbody>
@@ -87,7 +100,10 @@
   </section>
 
   <!-- Los derechos, donde se leen los textos legales, y el camino para
-       ejercerlos. En Emiratos manda la ley de datos de Emiratos (PDPL,
+       ejercerlos. Son los mismos de Mi perfil › Privacidad, con las mismas
+       palabras: aquí se leen, allí se piden. PDPL arts. 6.C (retirar la
+       aceptación), 13 (saber), 14 (copia), 15 (corregir y borrar), 16
+       (limitar) y 17 (oponerse). En Emiratos manda la ley de datos de Emiratos (PDPL,
        Decreto-ley federal 45/2021): la persona puede pedir información (art.
        13) y reclamar ante la Oficina de Datos de los Emiratos (art. 24, pág. 10
        de la edición de Lexis). Por eso se nombra la Oficina y no «la
@@ -98,7 +114,16 @@
       <h2 class="edoc-tablero__titulo">Tus derechos sobre tus datos</h2>
     </div>
     <div class="edoc-tablero__cuerpo">
-      <p class="edoc-secundario mb-3">Puedes pedirnos una copia de tus datos, corregirlos, limitar su uso, oponerte a un uso o eliminar tu cuenta. Te respondemos en un mes como máximo.</p>
+      <p class="edoc-secundario mb-3">Todos se piden desde Mi perfil, en la pestaña Privacidad. Te respondemos en un mes como máximo.</p>
+      <ul class="privacidad-derechos mb-3">
+        <li><div><strong>Saber qué datos tenemos</strong><span>Qué guardamos de ti, para qué y hasta cuándo.</span></div></li>
+        <li><div><strong>Llevarte una copia</strong><span>Un archivo con tus datos, al momento, para guardarlo o llevarlo a otro servicio.</span></div></li>
+        <li><div><strong>Corregir un dato</strong><span>Si algo de lo que guardamos está mal o incompleto.</span></div></li>
+        <li><div><strong>Limitar el uso</strong><span>Que guardemos tus datos pero no los usemos mientras se resuelve algo.</span></div></li>
+        <li><div><strong>Oponerte a un uso</strong><span>Si no estás de acuerdo con un uso que hacemos por interés propio, como los registros de seguridad.</span></div></li>
+        <li><div><strong>Retirar tu aceptación del tratamiento</strong><span>Dejamos de tratar tus datos y se desactiva tu usuario. Tu empresa sigue con sus otros usuarios.</span></div></li>
+        <li><div><strong>Borrar tus datos (derecho al olvido)</strong><span>Borramos tus datos personales y cerramos tu cuenta. Lo que la ley obliga a conservar, como las facturas, se queda el plazo legal.</span></div></li>
+      </ul>
       <a class="btn btn-edoc-secundario" href="mi-perfil.html?pestana=privacidad">Ejercer mis derechos</a>
       <p class="edoc-ayuda mt-3 mb-0">Si no estás de acuerdo con nuestra respuesta, puedes presentar una reclamación ante la Oficina de Datos de los Emiratos (UAE Data Office).</p>
     </div>
@@ -149,7 +174,7 @@
             <table class="edoc-tabla">
               <tbody>
                 <tr><th scope="row">Quién</th><td>La persona y la empresa que envió la solicitud.</td></tr>
-                <tr><th scope="row">Qué documento</th><td>Cuál de los dos, y en <strong>qué versión</strong>.</td></tr>
+                <tr><th scope="row">Qué documento</th><td>Cuál de los tres (términos, política leída, tratamiento de datos), y en <strong>qué versión</strong>.</td></tr>
                 <tr><th scope="row">Cuándo</th><td>Fecha y hora, con su huso.</td></tr>
                 <tr><th scope="row">Desde dónde</th><td>Lo mínimo que permita demostrar que la aceptación existió.</td></tr>
               </tbody>
@@ -226,8 +251,9 @@
 (function () {
   'use strict';
   var TITULOS = {
-    privacidad:  'Aviso de privacidad',
-    condiciones: 'Términos y condiciones'
+    privacidad:  'Política de privacidad',
+    condiciones: 'Términos de servicio',
+    tratamiento: 'Tratamiento de datos personales'
   };
   document.querySelectorAll('[data-ver]').forEach(function (a) {
     a.addEventListener('click', function (e) {

@@ -545,21 +545,24 @@
 
       <!-- ------------------------------------- 6 · consentimientos -->
       <div class="paso" data-paso="6" hidden>
-        <!-- Ley de datos de Emiratos (PDPL), art. 4, casos 9 y 10: tratar los
-             datos que necesita el contrato o que pide otra ley no requiere
-             consentimiento. Estándar del componente: RGPD, art. 7.4, y
-             directrices 05/2020 del Comité Europeo de Protección de Datos
-             (apdos. 30 y 44): un consentimiento del que depende el servicio
-             no es libre y no vale. Antes había tres casillas obligatorias, una
-             de ellas «Acepto el tratamiento de datos». Tratar los datos de la
-             cuenta no se basa en un consentimiento sino en el contrato (art.
-             6.1.b), y la política de privacidad no se acepta: se informa de
-             ella (arts. 12 y 13). Quedan dos: los términos, que sí se aceptan,
-             y la política, que se declara leída. Si algún día hay usos
-             opcionales —avisos comerciales, analítica—, irán aparte y sin
-             marcar. -->
+        <!-- Tres casillas, cada una con su función:
+             · Términos de servicio: el contrato. Se aceptan.
+             · Política de privacidad: se informa de ella antes de tratar los
+               datos (PDPL, art. 13; RGPD, art. 13). Se declara leída.
+             · Tratamiento de datos personales: una aceptación aparte, con su
+               versión y fecha, que se puede retirar desde Mi perfil (PDPL,
+               art. 6.A y 6.C; RGPD, art. 7.1 y 7.3).
+             Volvió la tercera en la reunión del 25 de octubre de 2026: la
+             habíamos quitado porque el contrato basta como base (PDPL, art. 4,
+             caso 9), y Alejandro pidió reponerla: un oficial de seguridad
+             pregunta dónde aceptó el usuario el tratamiento, y la respuesta
+             tiene que estar a la vista, no deducirse del contrato. Retirarla
+             desactiva al usuario, pero la empresa sigue con sus otros
+             usuarios: el derecho a no aceptar existe siempre. Sin marcar de
+             antemano y separada de los términos, para que se vea como lo que
+             es. -->
         <div class="edoc-aviso edoc-aviso--info mb-3">
-          <div>Los Términos de servicio son el acuerdo para usar eDoc. La Política de privacidad explica qué datos personales tratamos, para qué y cuáles son tus derechos.</div>
+          <div>Los Términos de servicio son el acuerdo para usar eDoc. La Política de privacidad explica qué datos personales tratamos, para qué y cuáles son tus derechos. La aceptación del tratamiento de tus datos es aparte y puedes retirarla desde Mi perfil.</div>
         </div>
         <label class="reg__acepto" for="l-condiciones">
           <input type="checkbox" id="l-condiciones">
@@ -568,6 +571,10 @@
         <label class="reg__acepto" for="l-privacidad">
           <input type="checkbox" id="l-privacidad">
           <span>He leído la <a href="legales.html" target="_blank" rel="noopener">Política de privacidad</a></span>
+        </label>
+        <label class="reg__acepto" for="l-tratamiento">
+          <input type="checkbox" id="l-tratamiento">
+          <span>Acepto el tratamiento de mis datos personales tal como lo explica la <a href="legales.html" target="_blank" rel="noopener">Política de privacidad</a></span>
         </label>
 
         <div class="edoc-aviso edoc-aviso--advertencia mt-3">
@@ -906,7 +913,7 @@
         'd-tipo': 'TL', 'd-numero': 'CN-1183042',
         'r-com': 'Omar Haddad', 'r-com-c': 'ventas@alnoor.ae',
 
-        'l-privacidad': true, 'l-condiciones': true
+        'l-privacidad': true, 'l-condiciones': true, 'l-tratamiento': true
       }
     },
     '019fa464-9c10-7d2e-8a41-3f5b2c7e9d01': {
@@ -920,7 +927,7 @@
         'd-tipo': 'TL', 'd-numero': 'CN-2207719',
         'r-com': 'Sara Mansour', 'r-com-c': 'ventas@gulfmarine.ae',
 
-        'l-privacidad': true, 'l-condiciones': true
+        'l-privacidad': true, 'l-condiciones': true, 'l-tratamiento': true
       }
     }
   };
@@ -974,7 +981,8 @@
       4: [['d-archivo', 'El documento del registro'], ['d-tipo', 'Tipo de registro legal'],
           ['d-numero', 'Número de registro legal']],
       5: [['r-com', 'Contacto de ventas y cobranzas'], ['r-com-c', 'Correo de ventas y cobranzas']],
-      6: [['l-condiciones', 'Términos de servicio'], ['l-privacidad', 'Política de privacidad']]
+      6: [['l-condiciones', 'Términos de servicio'], ['l-privacidad', 'Política de privacidad'],
+          ['l-tratamiento', 'Tratamiento de datos personales']]
     })[paso] || [];
   }
 

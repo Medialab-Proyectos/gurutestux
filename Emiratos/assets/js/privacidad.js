@@ -25,7 +25,8 @@
     corregir: 'Corregir un dato',
     limitar: 'Limitar el uso',
     oponerse: 'Oponerse a un uso',
-    eliminar: 'Eliminar la cuenta'
+    eliminar: 'Borrar mis datos (derecho al olvido)',
+    retirar: 'Retirar la aceptación del tratamiento'
   };
 
   var ESTADOS = {
@@ -42,8 +43,9 @@
   }
 
   function dos(n) { return (n < 10 ? '0' : '') + n; }
-  function fecha(d) { d = new Date(d); return dos(d.getDate()) + '/' + dos(d.getMonth() + 1) + '/' + d.getFullYear(); }
-  function fechaHora(d) { d = new Date(d); return fecha(d) + ' ' + dos(d.getHours()) + ':' + dos(d.getMinutes()); }
+  /* En hora de Emiratos (datos.js, edocEmiratos). */
+  function fecha(d) { d = window.edocEmiratos(d); return dos(d.getUTCDate()) + '/' + dos(d.getUTCMonth() + 1) + '/' + d.getUTCFullYear(); }
+  function fechaHora(d) { var u = window.edocEmiratos(d); return fecha(d) + ' ' + dos(u.getUTCHours()) + ':' + dos(u.getUTCMinutes()) + ' GST'; }
 
   /* Un mes de calendario, como dice el RGPD: del 31 de enero al 28 de febrero. */
   function masMeses(d, n) {
@@ -120,7 +122,8 @@
   function aceptaciones() {
     return leer(LLAVE_ACE) || [
       { doc: 'Términos de servicio', version: '1.0', como: 'Aceptados', cuando: '2026-09-02T10:41:00' },
-      { doc: 'Política de privacidad', version: '1.0', como: 'Leída', cuando: '2026-09-02T10:41:00' }
+      { doc: 'Política de privacidad', version: '1.0', como: 'Leída', cuando: '2026-09-02T10:41:00' },
+      { doc: 'Tratamiento de datos personales', version: '1.0', como: 'Aceptado', cuando: '2026-09-02T10:41:00' }
     ];
   }
   function registrarAceptacion(doc, version, como) {

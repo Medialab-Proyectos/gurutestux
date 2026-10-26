@@ -272,7 +272,11 @@
                 <button class="btn btn-edoc-terciario btn-sm" type="button" data-derecho="oponerse">Pedir</button>
               </li>
               <li>
-                <div><strong>Eliminar tu cuenta</strong><span>Borramos tus datos personales. Lo que la ley obliga a conservar, como las facturas, se queda el plazo legal.</span></div>
+                <div><strong>Retirar tu aceptación del tratamiento</strong><span>Dejamos de tratar tus datos y se desactiva tu usuario. Tu empresa sigue con sus otros usuarios.</span></div>
+                <button class="btn btn-edoc-terciario btn-sm" type="button" data-derecho="retirar">Pedir</button>
+              </li>
+              <li>
+                <div><strong>Borrar tus datos (derecho al olvido)</strong><span>Borramos tus datos personales y cerramos tu cuenta. Lo que la ley obliga a conservar, como las facturas, se queda el plazo legal.</span></div>
                 <button class="btn btn-edoc-terciario btn-sm" type="button" data-derecho="eliminar">Pedir</button>
               </li>
             </ul>
@@ -308,6 +312,9 @@
           obliga a borrar lo que otra ley manda conservar (art. 15.3.c), y la MD 197 de 2026 manda conservarlas
           (art. 11). Además son de la empresa, no de la persona. Se reclama ante la Oficina de Datos (art. 24). <strong>Supuestos a confirmar con legal:</strong> los 12 meses de los
           registros de acceso y el contacto de privacidad.
+          <strong>De Amazon, Google, Microsoft, Temu y Mercado Libre (26 oct):</strong> lo aceptado con casillas y
+          el tratamiento se retira desmarcándolo, como en los paneles de Google y Microsoft; el derecho al olvido
+          con su nombre; y 7 días para cambiar de idea al borrar, como Temu. <strong>Por validar con Legal:</strong> los 7 días.
         </div>
       </div>
     </div>
@@ -433,12 +440,41 @@
     var P = window.EDOC_PRIVACIDAD;
     if (!P) return;
 
+    /* Una casilla por aceptación, como en el registro. Los términos y la
+       política quedan marcados y bloqueados: son el contrato y lo leído. El
+       tratamiento de datos se retira desmarcándolo, tan fácil como se dio
+       (PDPL art. 6.C; RGPD art. 7.3), igual que en los paneles de Google o
+       Microsoft. Desmarcar abre la solicitud de retirar: si se cancela, vuelve
+       a quedar marcada. */
+    var TRATAMIENTO = 'Tratamiento de datos personales';
+    function retiroPedido() {
+      return P.mias().filter(function (s) { return s.tipo === 'retirar' && s.estado !== 'respondida'; })[0];
+    }
     function pintarAceptaciones() {
-      $('lista-aceptaciones').innerHTML = P.aceptaciones().map(function (a) {
-        return '<li><strong>' + a.doc + '</strong><span>' + a.como + ' · versión ' + a.version + '</span>' +
-          '<span class="cifra">' + P.fechaHora(a.cuando) + '</span></li>';
+      var retiro = retiroPedido();
+      $('lista-aceptaciones').innerHTML = P.aceptaciones().map(function (a, i) {
+        var esTratamiento = a.doc === TRATAMIENTO;
+        var marcada = !(esTratamiento && retiro);
+        var libre = esTratamiento && !retiro;
+        var id = 'aceptacion-' + i;
+        return '<li class="privacidad-lista__casilla"><div class="form-check">' +
+          '<input class="form-check-input" type="checkbox" id="' + id + '"' + (marcada ? ' checked' : '') +
+          (libre ? ' data-retirar' : ' disabled') + '>' +
+          '<label class="form-check-label" for="' + id + '"><strong>' + a.doc + '</strong></label></div>' +
+          '<span>' + a.como + ' · versión ' + a.version + '</span>' +
+          '<span class="cifra">' + P.fechaHora(a.cuando) + '</span>' +
+          (libre ? '<span class="edoc-ayuda">Desmárcala para retirarla.</span>' : '') +
+          (esTratamiento && retiro ? '<span class="edoc-estado edoc-estado--advertencia">Retiro pedido</span>' : '') +
+          '</li>';
       }).join('');
     }
+    var enviado = false;
+    $('lista-aceptaciones').addEventListener('change', function (e) {
+      if (e.target.matches('[data-retirar]') && !e.target.checked) pedir('retirar');
+    });
+    window.jQuery('#modal-derecho').on('hidden.bs.modal', function () {
+      if (pedido === 'retirar' && !enviado) pintarAceptaciones();
+    });
 
     function pintarSolicitudes() {
       var lista = P.mias();
@@ -474,38 +510,47 @@
       corregir: 'Escribe qué dato y cómo debe quedar.',
       limitar: 'Escribe qué uso quieres limitar y por qué.',
       oponerse: 'Escribe a qué uso te opones y por qué.',
-      eliminar: ''
+      eliminar: '',
+      retirar: ''
     };
+    var SIN_DETALLE = ['eliminar', 'retirar'];
     var pedido = null;
     [].forEach.call(document.querySelectorAll('[data-derecho]'), function (b) {
-      b.addEventListener('click', function () {
-        pedido = b.dataset.derecho;
+      b.addEventListener('click', function () { pedir(b.dataset.derecho); });
+    });
+
+    function pedir(cual) {
+        pedido = cual;
+        enviado = false;
         $('t-derecho').textContent = P.TIPOS[pedido];
         $('derecho-detalle').value = '';
         $('derecho-detalle').classList.remove('is-invalid');
         $('derecho-error').hidden = true;
-        var obligatorio = pedido !== 'eliminar';
+        var obligatorio = SIN_DETALLE.indexOf(pedido) < 0;
         $('derecho-marca').textContent = obligatorio ? 'Obligatorio' : 'Opcional';
         $('derecho-marca').className = 'marca-campo' + (obligatorio ? ' marca-campo--obligatorio' : '');
         $('derecho-error').textContent = AYUDAS[pedido] || '';
         $('derecho-ayuda').textContent = pedido === 'eliminar'
-          ? 'Borramos tus datos personales y cerramos tu cuenta. Las facturas de tu empresa se conservan el plazo legal. Te respondemos en un mes como máximo.'
+          ? 'Borramos tus datos personales y cerramos tu cuenta. Tienes 7 días para cambiar de idea: si entras al portal antes, se cancela. Las facturas de tu empresa se conservan el plazo legal.'
+          : pedido === 'retirar'
+          ? 'Dejamos de tratar tus datos personales y se desactiva tu usuario: ya no podrás entrar al portal. Tu empresa sigue funcionando con sus otros usuarios y sus facturas se conservan el plazo legal. Te respondemos en un mes como máximo.'
           : 'Te respondemos en un mes como máximo.';
         window.jQuery('#modal-derecho').modal('show');
-      });
-    });
+    }
 
     $('derecho-enviar').addEventListener('click', function () {
       var detalle = $('derecho-detalle').value.trim();
-      if (pedido !== 'eliminar' && !detalle) {
+      if (SIN_DETALLE.indexOf(pedido) < 0 && !detalle) {
         $('derecho-detalle').classList.add('is-invalid');
         $('derecho-error').hidden = false;
         $('derecho-detalle').focus();
         return;
       }
       var s = P.nueva(pedido, detalle);
+      enviado = true;
       window.jQuery('#modal-derecho').modal('hide');
       pintarSolicitudes();
+      pintarAceptaciones();
       window.edocAvisar('Solicitud enviada. Te respondemos antes del ' + P.fecha(s.plazo) + '.', 'exito');
     });
 

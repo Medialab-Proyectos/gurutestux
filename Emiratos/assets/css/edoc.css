@@ -3094,6 +3094,13 @@ body.con-clasificacion .col-clasificacion { display: table-cell; }
 .privacidad-lista li:last-child { border-bottom: 0; }
 .privacidad-lista li > strong { flex: 1 1 100%; color: var(--edoc-negro, #212121); }
 .privacidad-lista li > span { color: #5a6168; }
+/* Lo aceptado, con su casilla: la etiqueta ocupa la fila y el resto se alinea con su texto. */
+.privacidad-lista__casilla > .form-check { flex: 1 1 100%; }
+.privacidad-lista__casilla > .form-check strong { color: var(--edoc-negro, #212121); }
+.privacidad-lista__casilla > span { margin-left: 1.25rem; }
+.privacidad-lista__casilla > span + span { margin-left: 0; }
+.privacidad-lista__casilla > .edoc-ayuda, .privacidad-lista__casilla > .edoc-estado { flex: 1 1 100%; margin-left: 1.25rem; }
+.privacidad-lista__casilla > .edoc-estado { flex: 0 0 auto; }
 .plazo { font-weight: 600; white-space: nowrap; }
 .plazo--bien { color: #5a6168; font-weight: 400; }
 .plazo--cerca { color: #b45309; }  /* ámbar oscuro: 5:1 sobre blanco */

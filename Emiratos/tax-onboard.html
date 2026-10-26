@@ -314,6 +314,8 @@
           <p class="edoc-secundario">Y lo que puede fallar al enviar. Marca antes la declaración.</p>
           <div class="d-flex hueco-2 flex-wrap">
             <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-envio-reintento">Simular que tarda más</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-envio-espera">Simular que EmaraTax no responde al enviar</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-envio-peppol">Simular que ya está en Peppol con otro proveedor</button>
             <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-envio-nuestro">Simular un fallo nuestro al enviar</button>
           </div>
         </div>
@@ -388,11 +390,13 @@
       <!-- Los cuatro errores que documenta el servicio para las dos llamadas
            (Service Samples, 8-jul-2025) se quedan en dos, por lo que puede
            hacer la persona:
-             · 408 GSB_002 y 500 GSB_001, al verificar o al enviar: «EmaraTax no
+             · 408 GSB_002 y 500 (GSB_001, GSB_999 o el servicio virtual caído),
+               al verificar: «EmaraTax no
                responde». Un solo error: «no sabemos si llegó» era hilar
                demasiado. Se vuelve al paso 1 y se verifica otra vez antes de
                mandar nada, en vez de reenviar a ciegas.
-             · 401 y 400, y un fallo al darle de alta en Peppol: «no pudimos
+             · 401 GSB_003, 404 GSB_404 y 400, y un fallo al darle de alta en
+               Peppol: «no pudimos
                completar el trámite», genérico. No se dice de quién es el fallo:
                un 400 o un 401 también sale si alguien manipuló el token o la
                petición. Se le ofrece reintentar y, si se repite, soporte.
@@ -400,6 +404,34 @@
            que lo respalde. Queda como requisito en la nota para desarrollo.
            Y nunca se enseña el código ni el texto de la autoridad. -->
       <div id="cuerpo-conexion" hidden>
+        <!-- 408 o 500 AL ENVIAR (reunión con Alejandro del 26 oct). Después de
+             «Submit» la persona ya no tiene nada más que darnos: decirle
+             «vuelve a intentarlo» la invita a pulsar diez veces, y si EmaraTax
+             está en mantenimiento una hora, a repetir todo el trámite desde
+             EmaraTax para volver a fallar. Así que la solicitud se guarda y el
+             servidor la reintenta en segundo plano durante una hora como
+             máximo. La guía de la autoridad pide enseñar cómo se maneja el
+             error: «Negative test cases to assess error handling» (pág. 4). -->
+        <div data-caso="enespera" hidden>
+          <p class="reg__hecho-icono reg__hecho-icono--aviso" aria-hidden="true"><span data-icono="reenviar"></span></p>
+          <p class="reg__hecho">Recibimos tu solicitud</p>
+          <p class="reg__hecho-sub">EmaraTax no responde ahora y lo seguimos intentando durante una hora. No tienes que hacer nada: lo verás en EmaraTax, en «Linkage Status with ASP».</p>
+          <p class="reg__hecho-sub">Si en una hora no aparece, vuelve a empezar desde EmaraTax. Ya puedes cerrar esta ventana.</p>
+        </div>
+        <!-- Guía de pruebas, 4.2 (pág. 10): «ASP to call the Peppol and display
+             the relevant details. (Recommended to test the peppol linked TIN
+             also)». En Peppol cada empresa está con un solo proveedor (un solo
+             SMP en el SML), así que si el TIN ya está con otro, nuestra alta en
+             Peppol no se puede hacer. Pasa al enviar, en el paso 2) Peppol:
+             se deshace lo de nuestra plataforma y NO se avisa a EmaraTax
+             (crregupdate va después), así que nada cambia. Solo en el alta:
+             en la reverificación y la baja el TIN vinculado es el nuestro. -->
+        <div data-caso="otroproveedor" hidden>
+          <p class="reg__hecho-icono reg__hecho-icono--aviso" aria-hidden="true"><span data-icono="alerta"></span></p>
+          <p class="reg__hecho">Tu empresa ya está registrada en Peppol con otro proveedor</p>
+          <p class="reg__hecho-sub">En Peppol cada empresa trabaja con un solo proveedor a la vez. Para vincularte con GuruSoft, primero date de baja con tu proveedor actual desde EmaraTax y después vuelve a elegirnos.</p>
+          <p class="reg__hecho-sub">No hicimos ningún cambio: tu registro actual sigue como estaba. Ya puedes cerrar esta ventana.</p>
+        </div>
         <div data-caso="noresponde" hidden>
           <p class="reg__hecho-icono reg__hecho-icono--aviso" aria-hidden="true"><span data-icono="alerta"></span></p>
           <p class="reg__hecho">EmaraTax no responde ahora</p>
@@ -600,9 +632,22 @@
       <span class="cifra">field5</span>, sin describir (nota para José, más abajo). En nuestra base se guardan la
       acción, la fecha y la respuesta, y la empresa pasa a designada o a dada de baja. Con eso la autoridad nos
       enseña en su pestaña «Linkage Status with ASP».
-      <br><strong>Si algo no responde,</strong> el servidor reintenta y la pantalla sigue esperando. Si al
-      final no se completa, se deshace lo nuestro y se enseña «No pudimos completar el trámite», genérico.
-      <strong>Para José:</strong> cuánto tarda de verdad el envío.</li>
+      <br><strong>Si EmaraTax no responde al enviar</strong> (408 o 500), la solicitud se guarda y el servidor la
+      reintenta en segundo plano durante una hora como máximo —Alejandro propuso, por ejemplo, cada 20 minutos—.
+      La pantalla dice «Recibimos tu solicitud» y que lo verá en EmaraTax, en «Linkage Status with ASP»; no hay
+      botón de reintentar. Si en la hora no se completa, se deshace lo nuestro. <strong>Lo respalda la especificación del
+      servicio</strong> (GSB validateTaxPayerDetails_FTAX, tabla 12): con 408 y 500 «the request will not be
+      processed» y «Service provider have to retry sending the request again». No fija cuántas veces ni en
+      cuánto tiempo («Number of Retries: N/A», tabla 16): la hora es decisión nuestra. Límites de la misma tabla:
+      300 peticiones al día y respuesta en menos de 2 segundos. <strong>Para José, antes de comprometerlo:</strong>
+      que el <span class="cifra">emarataxToken</span> siga valiendo esa hora —la especificación solo dice «Token
+      from the redirect url», sin plazo; si caduca antes, la ventana es la del token—, qué
+      <span class="cifra">eventDate</span> se manda al reintentar y que reintentar no dé de alta dos veces en Peppol. Si el fallo es nuestro
+      (401 o 400), «No pudimos completar el trámite», genérico. <strong>Si el TIN ya está en Peppol con otro
+      proveedor</strong> (guía 4.2: «test the peppol linked TIN also»), el alta en el SMP se rechaza: se deshace lo
+      nuestro, no se llama a <span class="cifra">crregupdate</span> y se enseña «Tu empresa ya está registrada en
+      Peppol con otro proveedor». <strong>Para José:</strong> qué responde el registro de Peppol en ese caso y si
+      conviene comprobarlo antes, al verificar, para no hacerle llegar hasta el final. Y cuánto tarda de verdad el envío.</li>
       <li><strong>Proceso completado.</strong> No llama a nada. Dice que quedó vinculado y registrado en
       Peppol, y que lo consulte en eDoc Consulta («Mi registro Peppol»). La dirección no se enseña aquí.</li>
     </ol>
@@ -616,8 +661,8 @@
     «An internal error occurred», <span class="cifra">401</span> «Unauthorized application request» y
     <span class="cifra">400</span> «One or more validation errors occurred». Al verificar, la persona ve dos: 408 y 500 son «EmaraTax no responde» y se vuelve al paso 1 con el
     formulario vacío —nada de lo escrito se guarda— para verificar otra vez antes de mandar nada; 401 y 400 son
-    «no pudimos completar el trámite», genérico y con el mismo reintento. Al enviar, si al final no se
-    completa, también «no pudimos completar el trámite» (punto «Submit»). No se dice de quién es el
+    «no pudimos completar el trámite», genérico y con el mismo reintento. Al enviar, 408 y 500 dejan la
+    solicitud en espera y se reintenta una hora; 401 y 400, «no pudimos completar el trámite» (punto «Submit»). No se dice de quién es el
     fallo: el 401 sale si nuestra clave del API o el <span class="cifra">CustomAuth</span> está mal, y el 400 si
     la petición llega mal formada, pero los dos salen también si alguien manipuló el token o la petición.
     <strong>Requisito, hoy no existe:</strong> guardar en un registro el código y el
@@ -1465,6 +1510,9 @@
   function responder(respuesta) {
     /* La autoridad no contesta (408 o 500) o el fallo es nuestro (401 o 400). */
     if (respuesta === 'noresponde' || respuesta === 'nuestro') { mostrarConexion(respuesta); return; }
+    /* No cuadra: su pantalla aparte, con «Volver a intentarlo». El 26 de
+       octubre se probó dejarlo en la misma ventana (Alejandro, guru10262) y
+       se volvió a esta, que es la que está desarrollada en QA. */
     if (respuesta === 'no') { conexion('falla'); ir('no'); return; }
     /* Nuestra base se mira DESPUÉS de la autoridad, nunca antes: si fuera
        antes, cualquiera podría escribir TIN al azar y saber quién es cliente
@@ -1559,13 +1607,16 @@
 
   /* Al enviar, solo la espera: un giro y «Enviando y comprobando…». En la
      maqueta dura un segundo y medio; «Simular que tarda más», el triple. Si
-     al final no se completa, el mismo «No pudimos completar el trámite»,
+     EmaraTax no responde, la solicitud queda en espera y se reintenta (ver
+     «enespera»). Si el fallo es nuestro, «No pudimos completar el trámite»,
      genérico. */
   var ESPERA_ENVIO = 1500;
   function esperarEnvio(resultado) {
     ir('proceso');
     setTimeout(function () {
       if (resultado === 'nuestro') { mostrarConexion('nuestro'); return; }
+      if (resultado === 'espera') { mostrarConexion('enespera'); return; }
+      if (resultado === 'peppol') { mostrarConexion('otroproveedor'); return; }
       terminar();
     }, resultado === 'reintento' ? ESPERA_ENVIO * 3 : ESPERA_ENVIO);
   }
@@ -1595,6 +1646,10 @@
   $('enviar').addEventListener('click', function () { enviar('ok'); });
   $('sim-envio-reintento').addEventListener('click', function () { enviar('reintento'); });
   $('sim-envio-nuestro').addEventListener('click', function () { enviar('nuestro'); });
+  $('sim-envio-espera').addEventListener('click', function () { enviar('espera'); });
+  $('sim-envio-peppol').addEventListener('click', function () { enviar('peppol'); });
+  // Solo en el alta: en la reverificación y la baja el TIN vinculado es el nuestro.
+  if (revisando) $('sim-envio-peppol').hidden = true;
   /* Volver desde un fallo, sea cual sea: al paso 1, vacío, a verificar otra
      vez antes de mandar nada. */
   [].forEach.call(document.querySelectorAll('#cuerpo-conexion [data-reintentar]'), function (b) {
@@ -1678,6 +1733,13 @@
   conexion('sin');
   /* Se lee de lo que llegó: la barra ya no lo enseña. */
   var pedido = entrada.get('resultado');
+  /* Para recorrer la guía de pruebas con un enlace por caso: ?accion=baja
+     llega con «Baja» elegida en la reverificación. */
+  if (revisando && entrada.get('accion') === 'baja') {
+    $('v-salir').checked = true;
+    pintarMotivos();
+    pintarPalabra();
+  }
   if (sinCodigo) {
     $('nota-marca').innerHTML = '<strong>Bienvenido a GuruSoft · eDoc.</strong> Esta página la abre EmaraTax cuando nos eliges como proveedor de facturación electrónica.';
     ir('sincodigo');
@@ -1687,11 +1749,43 @@
   else if (pedido === 'nocliente' && !revisando) { $('sim-nocliente').click(); }
   else if (pedido === 'noresponde') { $('sim-noresponde').click(); }
   else if (pedido === 'nuestro') { $('sim-nuestro').click(); }
+  /* Guía 4.2: «Select the tick box and click submit», hasta el final. */
+  else if (pedido === 'completado') {
+    $('sim-ok').click();
+    setTimeout(function () {
+      $('declaro').checked = true;
+      enviar('ok');
+    }, ESPERA_VERIFICAR + 50);
+  }
+  /* Negativo de la 4.2: enviar sin marcar la casilla. */
+  else if (pedido === 'sincasilla') {
+    $('sim-ok').click();
+    setTimeout(function () { enviar('ok'); }, ESPERA_VERIFICAR + 50);
+  }
+  /* Negativo de la 5.1: «Mandatory to choose one of the options». */
+  else if (pedido === 'sinaccion' && revisando) {
+    $('v-correo').value = 'f.almarzooqi@alnoor.ae';
+    verificar('ok');
+  }
   else if (pedido === 'envio') {
     $('sim-ok').click();
     setTimeout(function () {
       $('declaro').checked = true;
       enviar('nuestro');
+    }, ESPERA_VERIFICAR + 50);
+  }
+  else if (pedido === 'peppol' && !revisando) {
+    $('sim-ok').click();
+    setTimeout(function () {
+      $('declaro').checked = true;
+      enviar('peppol');
+    }, ESPERA_VERIFICAR + 50);
+  }
+  else if (pedido === 'espera') {
+    $('sim-ok').click();
+    setTimeout(function () {
+      $('declaro').checked = true;
+      enviar('espera');
     }, ESPERA_VERIFICAR + 50);
   }
   /* Con qué paso abre. Si viene de EmaraTax trae el código y va al

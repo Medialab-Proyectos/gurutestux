@@ -266,6 +266,18 @@ window.EDOC = (function () {
      que es lo que hace falta para poder enseñarlo. El mensaje del rechazo sí es
      el de verdad: viaja con el documento. */
   var HORAS = { C2: '08:15', C5: '08:20', C3: '08:26', C4: '09:40' };
+
+  /* La hora del portal es la de Emiratos (GST, UTC+4, sin horario de verano),
+     esté donde esté quien mira y esté donde esté el servidor. Lo pidió
+     Alejandro el 26 de octubre: la autoridad cruza nuestras evidencias con sus
+     registros, y en su hora. Lo guardado sin zona ya es hora de Emiratos.
+     Devuelve una fecha cuyos campos UTC son la hora de Emiratos. */
+  window.edocEmiratos = function (d) {
+    if (typeof d === 'string' && !/(Z|[+-]\d\d:?\d\d)$/.test(d)) {
+      d = (/^\d{4}-\d\d-\d\d$/.test(d) ? d + 'T00:00:00' : d) + '+04:00';
+    }
+    return new Date(new Date(d).getTime() + 4 * 3600 * 1000);
+  };
   var MENSAJES = {
     C2: { aprobado:  'Validado y transmitido a la red.',
           rechazado: 'El XML no pasó nuestras validaciones.',
@@ -301,7 +313,7 @@ window.EDOC = (function () {
     var propio = doc['motivo' + clave];
     return {
       estado: estado,
-      fecha: doc.fecha + ' ' + (HORAS[clave] || ''),
+      fecha: doc.fecha + (HORAS[clave] ? ' ' + HORAS[clave] + ' GST' : ''),
       mensaje: propio || (MENSAJES[clave] && MENSAJES[clave][estado]) || ''
     };
   }
@@ -406,7 +418,7 @@ window.EDOC = (function () {
        nada. */
     { id: 'av-ventana', tipo: 'notificacion', leido: false, cuando: 'ayer', ir: '', fijo: true,
       titulo: 'Mantenimiento programado',
-      detalle: 'El sábado 6 de septiembre, de 02:00 a 04:00, el portal no estará disponible.' },
+      detalle: 'El sábado 6 de septiembre, de 02:00 a 04:00 (hora de Emiratos), el portal no estará disponible.' },
     { id: 'av-inv882317', tipo: 'notificacion', leido: true, cuando: '2026-09-02', ir: 'emitidos.html',
       titulo: 'Un documento quedó fuera de la respuesta',
       detalle: 'INV-882317 no recibió respuesta de la plataforma receptora dentro del plazo.' },
@@ -448,7 +460,7 @@ window.EDOC = (function () {
     { clave: 'mantenimiento', activo: false, senal: 'advertencia',
       titulo: 'Mantenimiento en curso',
       detalle: 'Estamos trabajando en el portal. Puedes consultar, pero lo que emitas ahora ' +
-               'quedará en cola hasta que terminemos. Previsto hasta las 04:00.' },
+               'quedará en cola hasta que terminemos. Previsto hasta las 04:00 (hora de Emiratos).' },
     /* OJO con lo que este aviso dice. Hasta el 21 de octubre de 2026 añadía que
        la norma obligaba al cliente a avisar a la autoridad de una caída en 2
        días hábiles: lo decía el artículo 12 de la Decisión Ministerial 243 de
