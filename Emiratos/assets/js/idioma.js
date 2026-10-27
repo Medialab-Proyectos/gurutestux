@@ -1801,6 +1801,7 @@
       "Simular un fallo nuestro": "Simulate a failure on our side",
       "Y lo que puede fallar al enviar. Marca antes la declaración.": "And what can fail on submit. Tick the declaration first.",
       "Simular un fallo nuestro al enviar": "Simulate a failure on our side on submit",
+      "Ejemplo de la maqueta: así se ve cuando ya nos designaste en EmaraTax, con datos de ejemplo.": "Mockup example: this is how it looks once you have appointed us in EmaraTax, with sample data.",
       "Una persona puede entrar a EmaraTax con su propio correo y administrar varias empresas, como un contador. Aquí va el correo registrado para la cuenta de esta empresa (Taxable Person). Si no lo encuentras, abre un ticket de soporte por los canales oficiales de soporte de la FTA (Federal Tax Authority).": "A person can sign in to EmaraTax with their own email and manage several companies, like an accountant. Enter the email registered for this company’s account (Taxable Person). If you cannot find it, raise a support ticket through the official FTA (Federal Tax Authority) Support channels.",
       "Si después de unos minutos seguimos apareciendo": "If we still appear after a few minutes",
       "Si después de unos minutos no aparece": "If it does not appear after a few minutes",

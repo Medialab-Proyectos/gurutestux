@@ -74,6 +74,40 @@
     </div>
   </section>
 
+  <!-- Revisión del 27 oct: sin designarnos solo se ve el estado vacío, y así
+       nadie ve cómo queda la página. En la maqueta, debajo, el registro activo
+       con datos de ejemplo. Fuera de la capa de notas: hace falta para
+       recorrer la maqueta; en el producto no existe. -->
+  <div class="onboarding-maqueta mt-4" id="ejemplo-registro" hidden>
+    <p class="edoc-secundario">Ejemplo de la maqueta: así se ve cuando ya nos designaste en EmaraTax, con datos de ejemplo.</p>
+    <section class="edoc-tablero mb-0">
+      <div class="edoc-tablero__cabecera">
+        <h2 class="edoc-tablero__titulo">Tu registro</h2>
+        <span class="edoc-estado edoc-estado--exito">Activo</span>
+      </div>
+      <div class="edoc-tablero__cuerpo">
+        <div class="row rejilla">
+          <div class="col-12 col-lg-6">
+            <div class="edoc-etiqueta">Participant ID · tu dirección en la red</div>
+            <div class="reg__folio-fila">
+              <div class="reg__folio-cod" id="peppol-id-ejemplo">0235:1007766554</div>
+              <button type="button" class="btn btn-edoc-secundario btn-sm reg__folio-copiar" id="copiar-peppol-ejemplo">Copiar</button>
+            </div>
+            <div class="edoc-ayuda mt-2">Se construye con tu TIN, el número de diez cifras de la autoridad. No usa el TRN.</div>
+          </div>
+          <div class="col-12 col-lg-3">
+            <div class="edoc-etiqueta">Alta en la red</div>
+            <div class="cifra">2026-09-02</div>
+          </div>
+          <div class="col-12 col-lg-3">
+            <div class="edoc-etiqueta">Proveedor que te dio de alta</div>
+            <div>GuruSoft S.A. · eDoc</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <section class="edoc-tablero" id="registro-baja" hidden>
     <div class="edoc-tablero__cuerpo">
       <p class="mb-2"><span class="edoc-estado edoc-estado--advertencia">Dándose de baja</span></p>
@@ -115,11 +149,21 @@
   $('registro-activo').hidden = !(designada || baja);
   $('registro-pendiente').hidden = designada || baja;
   $('registro-baja').hidden = !baja;
+  $('ejemplo-registro').hidden = designada || baja;
   if (baja) {
     $('estado-peppol').className = 'edoc-estado edoc-estado--advertencia';
     $('estado-peppol').textContent = 'Dándose de baja';
     $('copiar-peppol').hidden = true;
   }
+  function copiar(id) {
+    try {
+      navigator.clipboard.writeText($(id).textContent);
+      window.edocAvisar('Copiada tu dirección en la red.', 'exito');
+    } catch (error) {
+      window.edocAvisar('No pudimos copiarla. Selecciónala y cópiala a mano.', 'advertencia');
+    }
+  }
+  $('copiar-peppol-ejemplo').addEventListener('click', function () { copiar('peppol-id-ejemplo'); });
   $('copiar-peppol').addEventListener('click', function () {
     try {
       navigator.clipboard.writeText($('peppol-id').textContent);
