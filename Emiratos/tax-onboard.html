@@ -100,8 +100,14 @@
              la autoridad las cuatro son iguales. -->
         <div class="row rejilla">
           <div class="col-12 col-lg-6">
+            <!-- Qué correo es y por qué, en el «?» (proceso del usuario final,
+                 V1.2, 7.1): quien entra a EmaraTax puede administrar varias
+                 empresas. Sin línea fija debajo del campo (revisión del 27 oct). -->
             <label class="edoc-etiqueta" for="v-correo">Correo registrado en EmaraTax
-              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
+              <span class="marca-campo marca-campo--obligatorio">Obligatorio</span>
+              <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="right"
+                data-content="Una persona puede entrar a EmaraTax con su propio correo y administrar varias empresas, como un contador. Aquí va el correo registrado para la cuenta de esta empresa (Taxable Person). Si no lo encuentras, abre un ticket de soporte por los canales oficiales de soporte de la FTA (Federal Tax Authority)."
+                aria-label="Qué correo es">?</button></label>
             <!-- Se escribe, no se pega: este campo es el segundo factor de la
                  comprobación, y pegarlo de otra ventana lo vacía de sentido.
                  Qué correo es lo dice ahora la autoridad (proceso del usuario
@@ -112,11 +118,7 @@
             <!-- 254 es el máximo de una dirección de correo (RFC 5321). El
                  contrato del API no publica ninguno suyo. -->
             <input type="email" class="form-control" id="v-correo" autocomplete="off"
-                   maxlength="254" placeholder="El que consta en EmaraTax" aria-describedby="ayuda-correo">
-            <!-- A la vista y antes de escribir, no en un «?»: reunión del 27 oct,
-                 «que no sea reactivo, sino proactivo». La autoridad sabe que se
-                 equivocan por esto (proceso del usuario final, V1.2, 7.1). -->
-            <p class="edoc-ayuda mt-1 mb-0" id="ayuda-correo">El correo vinculado a la cuenta de tu empresa (Taxable Person) en EmaraTax, no el que usas para entrar al portal.</p>
+                   maxlength="254" placeholder="El que consta en EmaraTax">
           </div>
           <div class="col-12 col-lg-6">
             <label class="edoc-etiqueta" for="v-tin">TIN (número de identificación fiscal)
@@ -668,7 +670,7 @@
       Se guarda la respuesta con su fecha. En EmaraTax todavía no cambia nada.
       <br><strong>Lo que la autoridad aclara</strong> («UAE E-invoicing End-User Process for Onboarding, Reverify
       and Offboarding», V1.2, sección 7), revisado con Alejandro y José el 27 de octubre: <strong>7.1</strong> el
-      correo tiene su propio mensaje, distinto del del TIN, y una ayuda a la vista bajo el campo antes de
+      correo tiene su propio mensaje, distinto del del TIN, y el «?» del campo explica qué correo es antes de
       escribirlo. <strong>Para José:</strong> qué <span class="cifra">msgCode</span> devuelve la autoridad cuando falla
       el correo y cuando falla el TIN, y cuál se valida primero. <strong>7.2</strong> sin TRN no se puede completar
       el alta ni la reverificación: <span class="cifra">crregupdate</span> lo exige («TRN Number (Mandatory for

@@ -87,7 +87,7 @@ Problemas que la autoridad ya vio con otros proveedores y lo que el proveedor de
 
 | N.º | Caso | Tipo | Qué dice la autoridad | Qué debe verse | Enlace |
 |---|---|---|---|---|---|
-| 7.1 | Se usa el correo del usuario que entra a EmaraTax y no el de la empresa | Negativo | «Advise the taxpayer to confirm that the email address… is the one linked to the Taxable Person's account, rather than the portal user's email address»; si no lo encuentra, «raise a support ticket through the official FTA Support channels» | Antes de escribir, la ayuda bajo el campo; si falla, un mensaje solo del correo con lo mismo y los canales oficiales de la FTA, sin decir por dónde | [D](https://gurutestux.vercel.app/Emiratos/tax-onboard.html?emarataxToken=abc123&resultado=no) |
+| 7.1 | Se usa el correo del usuario que entra a EmaraTax y no el de la empresa | Negativo | «Advise the taxpayer to confirm that the email address… is the one linked to the Taxable Person's account, rather than the portal user's email address»; si no lo encuentra, «raise a support ticket through the official FTA Support channels» | Antes de escribir, el «?» del campo de correo explica qué correo es; si falla, un mensaje solo del correo con lo mismo y los canales oficiales de la FTA, sin decir por dónde | [D](https://gurutestux.vercel.app/Emiratos/tax-onboard.html?emarataxToken=abc123&resultado=no) |
 | 7.2 | El servicio no devuelve el TRN aunque la empresa lo tenga | Negativo | Revisar los datos en EmaraTax y, «where applicable», una «Amend Taxable Person (AMTP)» o un ticket en la FTA | El TRN como «Not returned by EmaraTax» y un aviso, no un error: sin él no se completa el alta ni la reverificación (el envío lo exige, tabla 10 de la especificación), con «How to resolve it»: AMTP si sus datos están mal; si están bien, «raise a support ticket with the FTA (Federal Tax Authority) Support Centre», con las palabras del documento. En la baja se puede seguir | [V](https://gurutestux.vercel.app/Emiratos/tax-onboard.html?emarataxToken=abc123&resultado=sintrn) |
 | 7.3 | La vinculación no aparece en EmaraTax | Negativo | El contribuyente lo reporta primero a su proveedor; el proveedor «should retry submitting the request» y, si sigue, lo escala a e-invoicingsupport@tax.gov.ae | Al terminar, la ayuda se abre sola y el paso va resaltado con color, como una orden: «Please check that our ASP (GuruSoft) appears as your provider under «Linkage Status with ASP»», con negritas; y en negrita «If it does not appear after a few minutes», con qué hacer (escribirnos con el TIN, sin repetir el trámite); debajo, que ya puede cerrar | [F](https://gurutestux.vercel.app/Emiratos/tax-onboard.html?emarataxToken=abc123&resultado=completado) |
 | 7.4 | El tipo de entidad («Legal Type») no viene | Positivo | «Treat the Legal Type field as optional»; quitar la validación que lo exija y reintentar los envíos que fallaron por él | La ficha con «—» en el tipo de entidad, y se puede seguir | [W](https://gurutestux.vercel.app/Emiratos/tax-onboard.html?emarataxToken=abc123&resultado=sintipo) |
@@ -115,20 +115,6 @@ Lo pidió Alejandro en la revisión del 26 de octubre:
 - **Debajo de cada captura, qué muestra y la hora:** la de Emiratos y la de Colombia. Para no convertir horas, el equipo que toma las capturas puede poner Windows en la zona «(UTC+04:00) Abu Dabi, Mascate».
 - **Con los datos de prueba de la autoridad:** una captura con otro correo (por ejemplo, uno nuestro) no sirve. Si todavía no los tenemos, mejor esperar.
 - **Las instrucciones internas en amarillo** y con «solo uso interno», para quitarlas del documento final.
-
-## 10. Pendiente de confirmar
-
-| Tema | Con quién |
-|---|---|
-| Cuánto dura el código de EmaraTax y si sirve para reintentar durante una hora (E3) | José y la autoridad (e-invoicingsupport@tax.gov.ae) |
-| Qué fecha se manda al reintentar (`eventDate`) y que reintentar no dé de alta dos veces en Peppol | José |
-| Qué responde el registro de Peppol cuando el TIN ya está con otro proveedor (4.2-N) y si conviene comprobarlo al verificar | José |
-| «ASP to call the Peppol and display the relevant details» (pág. 10): «Process completed» dice que se creó el registro en Peppol, pero no enseña el identificador 0235:TIN, que se quitó en la reunión del 19 de octubre | Alejandro o gerencia |
-| Qué código (msgCode) devuelve la autoridad cuando falla el correo y cuando falla el TIN, y cuál se valida primero (7.1) | José y Miguel |
-| Que QA no exija «Legal Type» (7.4) | José |
-| Sesión para recorrer paso a paso toda la vinculación, simulando cada caso | Marjorie la programa |
-| Cuál es la versión vigente del proceso del usuario final: el archivo dice V1.2 y la portada, «Draft Version 1.0» del 18 de agosto de 2025. Compararlo con el que pasó el Dr. Rafael el 27 de octubre | Alejandro |
-| La plantilla de evidencias de la etapa 2 con sus puntos («please provide evidence…»), que no está en `Reuniones/Documentos tecnicos` | Alejandro |
 
 ---
 
