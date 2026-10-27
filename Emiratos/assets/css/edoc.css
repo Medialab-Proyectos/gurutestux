@@ -2112,6 +2112,10 @@ body[data-armazon='minimo'] .edoc-titulo-barra { position: static; }
   border-radius: 4px; }
 .edoc-fuera__dentro { margin-top: 12px; }
 .edoc-fuera__subrotulo { margin: 4px 0 0; }
+/* Al terminar, el siguiente paso dentro de la ayuda: con el color del aviso informativo,
+   para que se lea como una orden y no como una nota más (reunión del 27 oct). */
+.ayuda-resaltada { background: #eceffa; border: 1px solid #b9c1e6; border-radius: var(--radio);
+  padding: 10px 14px 4px; margin: 6px 0 10px; color: #222c63; }
 @media (prefers-reduced-motion: reduce) { .edoc-fuera--plegada > summary::after { transition: none; } }
 .edoc-fuera__plegable { margin: 4px 0 0; }
 .edoc-fuera__plegable summary { display: flex; gap: 10px; align-items: center; cursor: pointer;

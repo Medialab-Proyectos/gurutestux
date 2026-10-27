@@ -104,13 +104,19 @@
               <span class="marca-campo marca-campo--obligatorio">Obligatorio</span></label>
             <!-- Se escribe, no se pega: este campo es el segundo factor de la
                  comprobación, y pegarlo de otra ventana lo vacía de sentido.
-                 Y sin consejos sobre qué correo es: no sabemos sus reglas y
-                 decirle «no uno personal» puede despistarle cuando el que tiene
-                 registrado sí lo es. -->
+                 Qué correo es lo dice ahora la autoridad (proceso del usuario
+                 final, V1.2, 7.1): el vinculado a la cuenta de la empresa
+                 («Taxable Person»), que puede no ser el del usuario que entra a
+                 EmaraTax, y si no lo encuentra, el soporte de la FTA. Antes no
+                 había consejo porque no sabíamos sus reglas. -->
             <!-- 254 es el máximo de una dirección de correo (RFC 5321). El
                  contrato del API no publica ninguno suyo. -->
             <input type="email" class="form-control" id="v-correo" autocomplete="off"
-                   maxlength="254" placeholder="El que consta en EmaraTax">
+                   maxlength="254" placeholder="El que consta en EmaraTax" aria-describedby="ayuda-correo">
+            <!-- A la vista y antes de escribir, no en un «?»: reunión del 27 oct,
+                 «que no sea reactivo, sino proactivo». La autoridad sabe que se
+                 equivocan por esto (proceso del usuario final, V1.2, 7.1). -->
+            <p class="edoc-ayuda mt-1 mb-0" id="ayuda-correo">El correo vinculado a la cuenta de tu empresa (Taxable Person) en EmaraTax, no el que usas para entrar al portal.</p>
           </div>
           <div class="col-12 col-lg-6">
             <label class="edoc-etiqueta" for="v-tin">TIN (número de identificación fiscal)
@@ -214,13 +220,16 @@
           <p class="edoc-secundario">Aquí no se consulta de verdad a la autoridad. Estos botones enseñan las respuestas posibles.</p>
           <div class="d-flex hueco-2 flex-wrap">
             <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-ok">Simular que cuadra</button>
-            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-no">Simular que no cuadra</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-no">Simular que el correo no coincide</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-notin">Simular que el TIN no coincide</button>
             <!-- Cuadra con la autoridad, pero el TIN no está entre nuestros
                  clientes. Solo en el alta: en la reverificación y la baja la
                  autoridad solo manda el TIN si ya estamos vinculados. -->
             <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-nocliente">Simular que no es cliente</button>
             <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-noresponde">Simular que EmaraTax no responde</button>
             <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-nuestro">Simular un fallo nuestro</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-sintrn">Simular que no devuelve el TRN</button>
+            <button type="button" class="btn btn-edoc-terciario btn-sm" id="sim-sintipo">Simular que no trae el tipo de entidad</button>
           </div>
         </div>
       </div>
@@ -272,6 +281,30 @@
             <dd class="reg__ficha-dato cifra" id="r-envio">2025-08-25</dd>
           </div>
         </dl>
+
+        <!-- Proceso del usuario final, V1.2, 7.2: el servicio puede no devolver
+             el TRN aunque la empresa lo tenga activo. «Advise the taxpayer to
+             review their registered information in EmaraTax» y, si hace falta,
+             AMTP o ticket en la FTA. No se bloquea: la dirección en Peppol se
+             hace con el TIN, no con el TRN. Para José: confirmarlo. -->
+        <!-- Reunión del 27 oct: no es un error que asuste, es un «no podemos
+             seguir» con cómo resolverlo. Y no se puede seguir: la
+             especificación del servicio pide el TRN para el alta y la
+             reverificación («TRN Number (Mandatory for Register and update)»,
+             tabla 10); en la baja no. Las dos salidas son las de la autoridad
+             (7.2): corregir con una AMTP o un ticket en la FTA. -->
+        <div class="edoc-aviso edoc-aviso--advertencia mt-3" id="aviso-sintrn" hidden>
+          <span data-icono="alerta" class="edoc-aviso__icono" aria-hidden="true"></span>
+          <div>
+            <p class="mb-2"><strong>Falta el TRN de tu empresa para completar la vinculación.</strong> EmaraTax no lo devolvió, aunque tu empresa puede tenerlo activo, y sin él no podemos completar el registro.</p>
+            <p class="mb-1"><strong>Cómo resolverlo</strong></p>
+            <ol class="mb-2 pl-3">
+              <li>Revisa los datos de tu empresa registrados en EmaraTax. Si algo está mal o desactualizado, corrígelo con una solicitud de modificación («Amend Taxable Person», AMTP) desde EmaraTax.</li>
+              <li>Si tus datos están bien, abre un ticket de soporte con el Centro de Soporte de la FTA (Federal Tax Authority).</li>
+            </ol>
+            <p class="mb-0">Cuando esté resuelto, vuelve a empezar desde EmaraTax.</p>
+          </div>
+        </div>
 
         <!-- Decía «el correo y el TIN quedan bloqueados», y en este paso esos
              campos no están en pantalla: el paso 1 entero está oculto. Era
@@ -337,9 +370,19 @@
         <!-- El mismo patrón que «Proceso completado»: icono grande con el
              color de su señal, el mensaje como título y la explicación
              debajo. Sin caja de color: con el icono grande era repetirla. -->
+        <!-- Reunión del 27 oct: un mensaje por dato, no «el correo o el TIN».
+             La autoridad pide un caso propio para el correo (proceso del
+             usuario final, V1.2, 7.1, «Required Actions»): «Advise the
+             taxpayer to confirm that the email address… is the one linked to
+             the Taxable Person's account, rather than the portal user's» y, si
+             no lo encuentra, «raise a support ticket through the official FTA
+             Support channels». Se dice tal cual: sin inventar por dónde ni un
+             teléfono, que puede cambiar. Cuál de los dos falló lo dice la
+             respuesta de la autoridad (msgCode): para José. -->
         <p class="reg__hecho-icono reg__hecho-icono--error" aria-hidden="true"><span data-icono="rechazar"></span></p>
-        <p class="reg__hecho" id="error-no-cuadra">El correo o el TIN no coinciden con los de EmaraTax</p>
-        <p class="reg__hecho-sub">Revisa los dos tal como constan allí y vuelve a intentarlo.</p>
+        <p class="reg__hecho" id="error-no-cuadra">El correo no coincide con el de tu empresa en EmaraTax</p>
+        <p class="reg__hecho-sub" id="no-cuadra-1">Confirma que escribiste el correo vinculado a la cuenta de tu empresa (Taxable Person) en EmaraTax, no el que usas para entrar al portal.</p>
+        <p class="reg__hecho-sub" id="no-cuadra-2">Si no lo encuentras o tus datos necesitan corrección, abre un ticket de soporte por los canales oficiales de soporte de la FTA (Federal Tax Authority).</p>
         <div class="reg__nav reg__nav--centro">
           <button class="btn btn-edoc-primario" type="button" id="reintentar">Volver a intentarlo</button>
         </div>
@@ -485,7 +528,8 @@
              técnico». Se dice que quedó registrado y dónde consultarlo: en
              eDoc Consulta, «Mi registro Peppol». La guía (4.2) pide «display
              the relevant details»: el aviso de que quedó registrado lo es. -->
-        <p class="reg__hecho-sub" id="remate-texto">GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta. Ya puedes cerrar esta ventana.</p>
+        <p class="reg__hecho-sub" id="remate-texto">GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta.</p>
+        </div>
 
         <!-- Aquí había dos avisos azules, uno naranja y una línea de tiempo, y
              entre los cuatro decían tres veces «vuelve a EmaraTax y comprueba
@@ -518,25 +562,29 @@
         <!-- Lo primero, lo que hará casi todo el mundo: cerrar. Antes iba al
              final, tras un separador y un rótulo «¿Y ahora?», y la caja se
              veía muy separada. -->
-        <p class="edoc-fuera__punto" id="ahora-cerrar-p"><span data-icono="salir" aria-hidden="true"></span><span id="ahora-cerrar">Ya está: el trámite con la autoridad está hecho y puedes cerrar esta ventana. La de EmaraTax sigue abierta detrás, donde estabas.</span></p>
-        <!-- Ya no es un plegable dentro de otro: la caja entera se pliega. -->
-        <p class="edoc-fuera__subrotulo"><strong>¿Cómo compruebo que quedó hecho?</strong></p>
+        <!-- Reunión del 27 oct: con el proceso completado nadie abre la ayuda, y
+             si cierra la ventana y no aparece, ya no tiene dónde mirar. Por eso
+             al terminar la ayuda se abre sola (ver ir()): comprobar en EmaraTax,
+             qué hacer si no aparece (proceso del usuario final, V1.2, 7.3: lo
+             reporta a su proveedor) y que ya puede cerrar. -->
+        <!-- Resaltado y con color, y dicho como una orden: «no es una ayuda, es
+             una orden… por favor verifique que nuestro ASP (GuruSoft) aparece
+             en su portal de EmaraTax», y «ahí es donde viene la negrita: si al
+             cabo de unos minutos no aparece…» (reunión del 27 oct). -->
+        <div class="ayuda-resaltada">
+        <p class="edoc-fuera__subrotulo"><strong>Comprueba en EmaraTax que quedó hecho</strong></p>
         <ol class="emt__pasos">
           <li class="emt__paso">
-            <span class="emt__paso-t">Compruébalo en EmaraTax</span>
-            <span class="emt__paso-p" id="comprobar-detalle">Vuelve a la pantalla de donde saliste: en la lista
-            de proveedores debe figurar GuruSoft como tu proveedor vinculado. El registro que vale es el
-            suyo.</span>
+            <span class="emt__paso-t">Verifica en EmaraTax</span>
+            <span class="emt__paso-p" id="comprobar-detalle">Por favor, comprueba que <strong>nuestro ASP (GuruSoft)</strong> aparece como tu proveedor en <strong>«Linkage Status with ASP»</strong>.</span>
           </li>
-          <!-- En la baja esta pregunta es al revés —lo que hay que mirar es
-               que YA NO aparezcamos— y la salida tampoco es la misma, así que
-               el guión cambia las dos. -->
           <li class="emt__paso">
-            <span class="emt__paso-t" id="fallo-titulo">¿No aparecemos?</span>
-            <span class="emt__paso-p" id="fallo-detalle">Entonces no quedó hecho. Vuelve a pulsar
-            <strong>Proceed to ASP</strong> y espera a que te traiga otra vez al paso 1. Puedes comprobarlo más tarde, sin prisa. Si se repite, escríbenos a soporte@edoc.ae con tu TIN.</span>
+            <span class="emt__paso-t"><strong id="fallo-titulo">Si después de unos minutos no aparece</strong></span>
+            <span class="emt__paso-p" id="fallo-detalle">Escríbenos a soporte@edoc.ae con tu TIN: lo revisamos, lo volvemos a enviar y, si hace falta, lo llevamos a la autoridad. No hace falta que repitas el trámite.</span>
           </li>
         </ol>
+        </div>
+        <p class="edoc-fuera__punto" id="ahora-cerrar-p"><span data-icono="salir" aria-hidden="true"></span><span id="ahora-cerrar">Ya puedes cerrar esta ventana.</span></p>
 
         <!-- Aquí NO hay botón de volver a EmaraTax, y es a propósito: el
              contribuyente vino de una página concreta de su sesión y esa
@@ -617,7 +665,20 @@
       falló. Si cuadra, <strong>se busca el TIN en nuestra base de clientes</strong> (eDoc Consulta): apagado en
       certificación y siempre encendido en producción. Si no está, se para aquí y se le pregunta si pasamos su
       contacto a comercial; el sí envía un correo a comercial y guarda el consentimiento.
-      Se guarda la respuesta con su fecha. En EmaraTax todavía no cambia nada.</li>
+      Se guarda la respuesta con su fecha. En EmaraTax todavía no cambia nada.
+      <br><strong>Lo que la autoridad aclara</strong> («UAE E-invoicing End-User Process for Onboarding, Reverify
+      and Offboarding», V1.2, sección 7), revisado con Alejandro y José el 27 de octubre: <strong>7.1</strong> el
+      correo tiene su propio mensaje, distinto del del TIN, y una ayuda a la vista bajo el campo antes de
+      escribirlo. <strong>Para José:</strong> qué <span class="cifra">msgCode</span> devuelve la autoridad cuando falla
+      el correo y cuando falla el TIN, y cuál se valida primero. <strong>7.2</strong> sin TRN no se puede completar
+      el alta ni la reverificación: <span class="cifra">crregupdate</span> lo exige («TRN Number (Mandatory for
+      Register and update)», tabla 10 de la especificación); en la baja no. Se quitan la declaración y «Submit», y
+      un aviso dice cómo resolverlo: AMTP o ticket en la FTA. <strong>7.3</strong> comprobar en EmaraTax y qué hacer
+      si no aparece van en la ayuda, que al terminar se abre sola. <strong>7.4</strong>
+      <span class="cifra">legalType</span> es opcional: no validarlo como obligatorio en ningún punto y reintentar los
+      envíos que fallaron por él; si no viene, la ficha enseña «—». <strong>7.5</strong> lo que es de los datos de la
+      cuenta va a la FTA con las palabras de la autoridad: «through the official FTA Support channels» (7.1) y
+      «with the FTA Support Centre» (7.2), sin decir por dónde ni dar un teléfono. <strong>Para José:</strong> que QA no exija <span class="cifra">legalType</span>.</li>
       <li><strong>Submit.</strong> La persona ve una sola pantalla de espera, con un giro y «Sending and
       checking…», y nada más: ni lista de tareas, ni «check status», ni número de seguimiento. Por debajo, en
       orden: <strong>1) Nuestra plataforma:</strong> se da de alta la empresa en eDoc Consulta (o se actualiza, o se marca
@@ -1394,7 +1455,10 @@
       $('fuera-antes').hidden = cual !== '1';
       $('salida-fuera').hidden = cual === '3';
       /* Hay dos cajas con esta clase: la de arriba la maneja su propio id. */
-      if ($('cierre-fuera')) $('cierre-fuera').hidden = cual !== '3';
+      if ($('cierre-fuera')) $('cierre-fuera').hidden = cual !== '3';
+      /* Al terminar se abre sola: lo que dice ahí es el siguiente paso (reunión
+         del 27 oct). */
+      if (cual === '3') $('caja-ayuda').open = true;
       /* El verde solo vale en el paso 2: en el final ya no dice nada. */
       if ($('cuadran')) $('cuadran').hidden = cual !== '2';
       if ($('salida-fuera')) $('salida-fuera').hidden = cual === '3' || cual === 'proceso';
@@ -1513,7 +1577,7 @@
     /* No cuadra: su pantalla aparte, con «Volver a intentarlo». El 26 de
        octubre se probó dejarlo en la misma ventana (Alejandro, guru10262) y
        se volvió a esta, que es la que está desarrollada en QA. */
-    if (respuesta === 'no') { conexion('falla'); ir('no'); return; }
+    if (respuesta === 'no' || respuesta === 'notin') { pintarNoCuadra(respuesta === 'notin' ? 'tin' : 'correo'); conexion('falla'); ir('no'); return; }
     /* Nuestra base se mira DESPUÉS de la autoridad, nunca antes: si fuera
        antes, cualquiera podría escribir TIN al azar y saber quién es cliente
        nuestro. Después de la autoridad ya sabemos que quien pregunta es el
@@ -1525,6 +1589,7 @@
     conexion('comprobado');
     // Lo que devuelve la autoridad se enseña tal cual; lo escrito no lo pisa.
     bloquearLlave(true);
+    pintarFaltantes();
     ir('2');
   }
 
@@ -1670,19 +1735,45 @@
          la autoridad Peppol) y que, hasta entonces, lo que le envíen llega. */
       $('remate-texto').textContent = 'Comunicamos tu baja con GuruSoft. En un máximo de 3 días hábiles ' +
         'finalizaremos tu registro en la red Peppol; sin embargo, hasta entonces seguirás recibiendo los ' +
-        'documentos que te envíen. Ya puedes cerrar esta ventana.';
-      $('comprobar-detalle').textContent = 'Vuelve a la pantalla de donde saliste: debes aparecer sin proveedor nombrado. El registro que vale es el suyo.';
-      $('fallo-titulo').textContent = '¿Seguimos apareciendo?';
-      $('fallo-detalle').textContent = 'Entonces la baja no quedó hecha. Vuelve a EmaraTax, elige otra vez la '
-        + 'baja y espera a que te traiga al paso 1. Puedes comprobarlo más tarde, sin prisa. Si se repite, '
-        + 'escríbenos a soporte@edoc.ae con tu TIN.';
-      $('ahora-cerrar').textContent = 'Ya está: la baja está enviada y puedes cerrar esta ventana. La de '
-        + 'EmaraTax sigue abierta detrás, donde estabas.';
+        'documentos que te envíen.';
+      $('comprobar-detalle').innerHTML = 'Por favor, comprueba que <strong>nuestro ASP (GuruSoft)</strong> ya no aparece como tu proveedor en <strong>«Linkage Status with ASP»</strong>.';
+      $('fallo-titulo').textContent = 'Si después de unos minutos seguimos apareciendo';
+      $('fallo-detalle').textContent = 'Escríbenos a soporte@edoc.ae con tu TIN: lo revisamos, lo volvemos a enviar y, si hace falta, lo llevamos a la autoridad. No hace falta que repitas el trámite.';
+      $('ahora-cerrar').textContent = 'Ya puedes cerrar esta ventana.';
       return;
     }
     $('remate-texto').textContent = revisando
-      ? 'Tus datos quedaron actualizados con GuruSoft como tu proveedor. Ya puedes cerrar esta ventana.'
-      : 'GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta. Ya puedes cerrar esta ventana.';
+      ? 'Tus datos quedaron actualizados con GuruSoft como tu proveedor.'
+      : 'GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta.';
+  }
+
+  /* Qué no coincidió: el correo (el caso que pide la autoridad, 7.1) o el TIN. */
+  var NO_CUADRA = {
+    correo: ['El correo no coincide con el de tu empresa en EmaraTax', 'Confirma que escribiste el correo vinculado a la cuenta de tu empresa (Taxable Person) en EmaraTax, no el que usas para entrar al portal.', 'Si no lo encuentras o tus datos necesitan corrección, abre un ticket de soporte por los canales oficiales de soporte de la FTA (Federal Tax Authority).'],
+    tin: ['El TIN no coincide con EmaraTax', 'Revisa que sea el TIN de la empresa que elegiste en EmaraTax: diez dígitos, sin espacios ni guiones.', '']
+  };
+  function pintarNoCuadra(cual) {
+    var m = NO_CUADRA[cual];
+    $('error-no-cuadra').textContent = m[0];
+    $('no-cuadra-1').textContent = m[1];
+    $('no-cuadra-2').textContent = m[2];
+    $('no-cuadra-2').hidden = !m[2];
+  }
+
+  /* Lo que la autoridad puede no mandar (proceso del usuario final, V1.2):
+     el TRN (7.2) y el tipo de entidad, que pasó a opcional (7.4: «Treat the
+     Legal Type field as optional»). Se enseña que no vino; no se bloquea. */
+  var faltaEnFicha = null;
+  var FICHA_LLENA = { tipo: $('r-tipo').textContent, trn: $('r-trn').textContent };
+  function pintarFaltantes() {
+    $('r-tipo').textContent = faltaEnFicha === 'tipo' ? '—' : FICHA_LLENA.tipo;
+    $('r-trn').textContent = faltaEnFicha === 'trn' ? 'No lo devolvió EmaraTax' : FICHA_LLENA.trn;
+    /* Sin TRN no se completa el alta ni la reverificación: se quitan la
+       declaración y «Enviar», y queda «Volver». En la baja no hace falta. */
+    var bloquea = faltaEnFicha === 'trn' && accionActual() !== 'baja';
+    $('aviso-sintrn').hidden = !bloquea;
+    $('declaro').closest('.form-check').hidden = bloquea;
+    $('enviar').hidden = bloquea;
   }
 
   // Los dos botones de la maqueta, para ver las dos respuestas.
@@ -1696,12 +1787,27 @@
     if (revisando) pintarMotivos();
   }
   $('sim-ok').addEventListener('click', function () {
+    faltaEnFicha = null;
+    rellenar('f.almarzooqi@alnoor.ae');
+    verificar('ok');
+  });
+  $('sim-sintrn').addEventListener('click', function () {
+    faltaEnFicha = 'trn';
+    rellenar('f.almarzooqi@alnoor.ae');
+    verificar('ok');
+  });
+  $('sim-sintipo').addEventListener('click', function () {
+    faltaEnFicha = 'tipo';
     rellenar('f.almarzooqi@alnoor.ae');
     verificar('ok');
   });
   $('sim-no').addEventListener('click', function () {
     rellenar('otro.correo@alnoor.ae');
     verificar('no');
+  });
+  $('sim-notin').addEventListener('click', function () {
+    rellenar('f.almarzooqi@alnoor.ae');
+    verificar('notin');
   });
   $('sim-noresponde').addEventListener('click', function () {
     rellenar('f.almarzooqi@alnoor.ae');
@@ -1729,6 +1835,7 @@
     verificar('nocliente');
   });
   if (revisando || !COMPROBAR_CLIENTE) $('sim-nocliente').hidden = true;
+  if (revisando) $('sim-notin').hidden = true;
 
   conexion('sin');
   /* Se lee de lo que llegó: la barra ya no lo enseña. */
@@ -1745,7 +1852,10 @@
     ir('sincodigo');
   }
   else if (pedido === 'no') { $('sim-no').click(); }
+  else if (pedido === 'notin' && !revisando) { $('sim-notin').click(); }
   else if (pedido === 'ok') { $('sim-ok').click(); }
+  else if (pedido === 'sintrn') { $('sim-sintrn').click(); }
+  else if (pedido === 'sintipo') { $('sim-sintipo').click(); }
   else if (pedido === 'nocliente' && !revisando) { $('sim-nocliente').click(); }
   else if (pedido === 'noresponde') { $('sim-noresponde').click(); }
   else if (pedido === 'nuestro') { $('sim-nuestro').click(); }
