@@ -290,20 +290,6 @@ La plantilla repite el alta completa después de una baja (7.1.1 a 7.2.4): son l
 
 ---
 
-## 8. Para preparar la evidencia
-
-Lo pidió Alejandro en las revisiones del 26, el 27 y el 29 de octubre:
-
-- **La numeración de la plantilla, tal cual,** y debajo de cada captura un texto que diga qué muestra: por ejemplo, «la página de llegada, en el ambiente Sandbox, como se ve en el sello de arriba a la izquierda, a las 10:15 hora de Emiratos».
-- **La hora de Emiratos en cada captura,** y la de Colombia si hace falta. El equipo que toma las capturas puede poner Windows en la zona «(UTC+04:00) Abu Dabi, Mascate».
-- **Un escritorio limpio,** sin otras aplicaciones a la vista, y en el computador de Miguel, desde la IP que tiene registrada la autoridad (plantilla, 7.4.1): si la petición sale de otra IP, puede que no responda.
-- **Cero mensajes en español:** el navegador y el equipo, en inglés.
-- **Con los datos de prueba de la autoridad:** una captura con otro correo no vale.
-- **El documento de trabajo es el de la carpeta del proyecto en SharePoint** (certificación, fase 2), no copias en chats.
-- **Ensayar antes:** el día de las evidencias solo se toma cada captura y se pega.
-
----
-
 ## Enlaces
 
 Dirección base: `https://gurutestux.vercel.app/Emiratos/tax-onboard.html`
