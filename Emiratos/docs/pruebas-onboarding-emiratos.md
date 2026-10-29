@@ -2,10 +2,6 @@
 
 Cada captura que pide la plantilla de evidencias, con la pantalla de eDoc tal como debe verse y el enlace para abrirla en la maqueta. Sirve para preparar el día de las evidencias de la etapa 2 (Sandbox testing) y para que desarrollo compare su versión con la maqueta, captura por captura.
 
-**Fuentes:** la plantilla de evidencias del equipo, «UAE E-invoicing · End-User Scenario Test Evidence» (`UAE_EA_Evidence_Onboarding.docx`), que sigue la «UAE E-invoicing End-User Scenario Template for ASPs» de la autoridad (borrador 1.0) y conserva su numeración; la guía de pruebas «FTA Onboarding Testing Overview» (1.0); el proceso del usuario final (V1.2, sección 7); y la revisión del 29 de octubre de 2026 con Alejandro, José, Miguel y Felipe.
-
-**Cómo usar los enlaces:** abren la maqueta en inglés, como se verá en producción. Para verla en español, añade `&idioma=es`. La maqueta no consulta a la autoridad: cada enlace enseña la respuesta de ese caso. Las capturas de este documento son de la maqueta, con el sello «SANDBOX» que llevará el ambiente de pruebas; las de la evidencia se toman en el ambiente real.
-
 ---
 
 ## 1. Resumen
