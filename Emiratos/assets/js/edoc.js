@@ -492,15 +492,22 @@
      hay menú y no hay dónde volver. «Haga de cuenta que está en otro
      servidor… es una página de un solo uso.»
 
-     Solo la marca, que sí se queda y lleva al portal. Sin sello de ambiente,
-     sin selector de idioma, sin «Nombre nativo» y sin «Volver al acceso»,
+     Solo la marca, que sí se queda y lleva al portal, y el sello del ambiente:
+     «Sandbox» en las pruebas de certificación y nada en producción —un auditor
+     preguntará cómo se distingue uno de otro (reunión del 29 oct)—. Sin
+     selector de idioma, sin «Nombre nativo» y sin «Volver al acceso»,
      que sería devolverle a un sitio donde no ha entrado.
 
      El botón de las notas se queda porque es herramienta de maqueta: solo
      existe en local y es como se revisa esto.                             */
   function encabezadoMinimo() {
+    var amb = 'SANDBOX';
+    try { amb = (new URLSearchParams(window.location.search).get('ambiente') || document.body.dataset.ambiente || 'SANDBOX').toUpperCase(); } catch (error) { /* nada */ }
+    var sello = (amb === 'PROD' || amb === 'PRO') ? '' :
+      '<div class="edoc-contexto"><span class="edoc-ambiente edoc-ambiente--' + amb.toLowerCase() + '" ' +
+      'title="Estás en el ambiente de ' + amb + '">' + icono('servidor') + '<span>' + rotuloAmbiente(amb) + '</span></span></div>';
     return '' +
-    '<header class="edoc-encabezado edoc-encabezado--minimo">' +
+    '<header class="edoc-encabezado edoc-encabezado--minimo">' + sello +
       '<a class="edoc-encabezado__marca" href="index.html" aria-label="eDoc">' +
         '<img src="assets/img/edoc-logo-neg-compacto.svg" alt="eDoc · Electronic Invoicing">' +
       '</a>' +

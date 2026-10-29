@@ -82,8 +82,27 @@
            autoridad y lo único que tiene que hacer aquí es escribir dos datos
            y verificar. -->
 
+      <!-- ============================ 0 · bienvenida ============================ -->
+      <!-- Reunión del 29 oct y plantilla de evidencias (4.1.1 y 4.1.2, dos
+           capturas distintas): primero la página a la que llega desde
+           EmaraTax, con la bienvenida grande —«gracias por elegirnos como tu
+           ASP»: allí se llama ASP—, y después el formulario en blanco. La
+           bienvenida que estaba bajo el título se vino aquí. Solo en el alta:
+           en la reverificación y la baja la plantilla (5.1.1 y 6.1.1) pide ver
+           ya las dos opciones. -->
+      <div id="cuerpo-bienvenida" hidden>
+        <div class="bienvenida">
+          <p class="bienvenida__titulo">Gracias por elegirnos como tu ASP</p>
+          <p class="reg__hecho-sub">Bienvenido a GuruSoft · eDoc. Vienes de EmaraTax, donde nos elegiste como tu proveedor de facturación electrónica (ASP).</p>
+          <p class="reg__hecho-sub">Aquí comprobamos tus datos con la autoridad y completamos la vinculación.</p>
+          <div class="reg__nav reg__nav--centro">
+            <button class="btn btn-edoc-primario" type="button" id="empezar">Continuar</button>
+          </div>
+        </div>
+      </div>
+
       <!-- ============================ 1 · los datos ============================ -->
-      <div id="cuerpo-1">
+      <div id="cuerpo-1" hidden>
         <!-- Su nombre para esta caja. «Tus datos en impuestos» era nuestro, y
              además confundía: «no son mis detalles, son mis datos». -->
         <h2 class="reg__titulo mb-3">Datos del solicitante</h2>
@@ -119,6 +138,7 @@
                  contrato del API no publica ninguno suyo. -->
             <input type="email" class="form-control" id="v-correo" autocomplete="off"
                    maxlength="254" placeholder="El que consta en EmaraTax">
+            <div class="invalid-feedback edoc-error-campo" id="e-correo" hidden></div>
           </div>
           <div class="col-12 col-lg-6">
             <label class="edoc-etiqueta" for="v-tin">TIN (número de identificación fiscal)
@@ -126,8 +146,11 @@
               <button type="button" class="edoc-ayuda-que" data-toggle="popover" data-placement="left"
                 data-content="El número con el que te conoce la autoridad, diez dígitos. Es el de la cuenta que acabas de elegir en EmaraTax. No es el TRN: el TRN es más largo, es de un impuesto concreto y aquí no hace falta, porque nos lo da la autoridad."
                 aria-label="Qué es el TIN">?</button></label>
+            <!-- La plantilla de evidencias (4.1.3) lo dice: el TIN «starts with
+                 1 and has the required 10-digit length». -->
             <input class="form-control cifra" id="v-tin" inputmode="numeric" maxlength="10"
-              placeholder="10 dígitos">
+              placeholder="10 dígitos, empieza por 1">
+            <div class="invalid-feedback edoc-error-campo" id="e-tin" hidden></div>
           </div>
         </div>
 
@@ -161,8 +184,11 @@
             <!-- E.164 permite 15 dígitos contando el prefijo; como el prefijo
                  va aparte y el más largo de la lista son 3 (+971), aquí caben
                  12. El móvil de Emiratos son 9. -->
+            <!-- Sin texto de ejemplo: en un campo opcional parecía un dato ya
+                 escrito que había que cambiar (reunión del 29 oct). -->
             <input class="form-control cifra" id="v-tel" inputmode="tel" autocomplete="tel"
-              maxlength="12" placeholder="50 123 4567">
+              maxlength="12">
+            <div class="invalid-feedback edoc-error-campo" id="e-tel" hidden></div>
           </div>
         </div>
 
@@ -214,7 +240,11 @@
                Details», en las capturas de las páginas 9 y 11 de la guía. El
                texto de la guía dice «Click on Verify», pero el botón se llama
                así, y es lo que comparan al certificar. -->
-          <button class="btn btn-edoc-primario" type="button" id="verificar">Verificar datos del solicitante</button>
+          <!-- Desactivado hasta que los datos son válidos: plantilla de
+               evidencias, 4.1.4, «Validate cannot be clicked until the required
+               field validations are complete». Al lado se dice por qué. -->
+          <p class="edoc-ayuda mb-0 mr-3 align-self-center" id="verificar-pista">Completa los datos obligatorios para poder verificarlos.</p>
+          <button class="btn btn-edoc-primario" type="button" id="verificar" disabled aria-describedby="verificar-pista">Verificar datos del solicitante</button>
         </div>
 
         <!-- Fuera de la capa de notas: hace falta para recorrer la maqueta. -->
@@ -240,6 +270,29 @@
       <div id="cuerpo-2" hidden>
         <!-- Su nombre: «Entity Details». «Lo que responde la autoridad» era
              nuestro, y es justo lo que no se puede inventar aquí dentro. -->
+        <!-- El correo correcto se ve aquí mismo, no en una pantalla aparte: arriba
+             el correo y el TIN que escribió, bloqueados y con su visto, y debajo
+             los datos de la entidad, en una sola vista como la de la autoridad
+             (guía de pruebas, pág. 10: «Applicant Details» y «Entity Details»).
+             Revisión del 29 oct, 00:27–00:30: «el TIN bloqueado y el correo
+             bloqueado con el chulito… y aparte los detalles no se dejan
+             editar». Es la evidencia de la plantilla 4.2.1: correcto e
+             incorrecto se distinguen. El correo que se enseña es el que
+             escribió la persona, no el que devuelve la autoridad (regla del 15). -->
+        <div class="verificado" id="verificado-resumen">
+          <h2 class="reg__titulo mb-2">Datos del solicitante</h2>
+          <dl class="reg__ficha reg__ficha--verificada">
+            <div>
+              <dt class="reg__ficha-rotulo">Correo registrado en EmaraTax</dt>
+              <dd class="reg__ficha-dato" id="r-correo-ok"></dd>
+            </div>
+            <div>
+              <dt class="reg__ficha-rotulo">TIN (número de identificación fiscal)</dt>
+              <dd class="reg__ficha-dato cifra" id="r-tin-ok"></dd>
+            </div>
+          </dl>
+          <p class="verificado__ok"><span data-icono="aprobar" aria-hidden="true"></span> Verificados con EmaraTax</p>
+        </div>
         <h2 class="reg__titulo mb-2">Datos de la entidad</h2>
         <!-- Algo que le identifique, que es lo que faltaba: «ahí ya no ve el
              correo». Se enseña el TIN, que la autoridad ya manda en la
@@ -257,6 +310,8 @@
         <!-- En la reverificación el guión marca aquí lo que es distinto de lo
              que teníamos: el sentido del trámite es que algo cambió, y lo útil
              es ver qué. En el alta no hay con qué comparar y no se marca nada. -->
+        <!-- Plantilla de evidencias, 4.2.2: que se vea que no se editan. -->
+        <p class="edoc-secundario mb-2 ficha-solo-lectura"><span data-icono="candado" aria-hidden="true"></span> Datos que devuelve EmaraTax. No se pueden editar.</p>
         <dl class="reg__ficha" id="ficha-autoridad">
           <div>
             <dt class="reg__ficha-rotulo">Tipo de entidad</dt>
@@ -332,8 +387,9 @@
                consentimiento hay que pedirlo aparte, se pide aparte. -->
           <label class="form-check-label" for="declaro">Declaro que toda la información facilitada es verdadera,
           exacta y completa, a mi leal saber y entender.</label>
-          <div class="invalid-feedback edoc-error-campo" id="declaro-error" hidden>Marca la casilla para poder
-          enviarla.</div>
+          <!-- «Marca la casilla» obligaba a marcar sin leer: «lo puede meter en
+               un problema legal» (reunión del 29 oct). -->
+          <div class="invalid-feedback edoc-error-campo" id="declaro-error" hidden>Debes aceptar la declaración para continuar.</div>
         </div>
 
         <div class="reg__nav">
@@ -372,7 +428,9 @@
         <!-- El mismo patrón que «Proceso completado»: icono grande con el
              color de su señal, el mensaje como título y la explicación
              debajo. Sin caja de color: con el icono grande era repetirla. -->
-        <!-- Reunión del 27 oct: un mensaje por dato, no «el correo o el TIN».
+        <!-- Revisión del 29 oct (00:25): el título se cierra en «no coincide» y la
+             ayuda de la FTA va aparte, más corta y en otro color.
+             Reunión del 27 oct: un mensaje por dato, no «el correo o el TIN».
              La autoridad pide un caso propio para el correo (proceso del
              usuario final, V1.2, 7.1, «Required Actions»): «Advise the
              taxpayer to confirm that the email address… is the one linked to
@@ -382,9 +440,9 @@
              teléfono, que puede cambiar. Cuál de los dos falló lo dice la
              respuesta de la autoridad (msgCode): para José. -->
         <p class="reg__hecho-icono reg__hecho-icono--error" aria-hidden="true"><span data-icono="rechazar"></span></p>
-        <p class="reg__hecho" id="error-no-cuadra">El correo no coincide con el de tu empresa en EmaraTax</p>
-        <p class="reg__hecho-sub" id="no-cuadra-1">Confirma que escribiste el correo vinculado a la cuenta de tu empresa (Taxable Person) en EmaraTax, no el que usas para entrar al portal.</p>
-        <p class="reg__hecho-sub" id="no-cuadra-2">Si no lo encuentras o tus datos necesitan corrección, abre un ticket de soporte por los canales oficiales de soporte de la FTA (Federal Tax Authority).</p>
+        <p class="reg__hecho" id="error-no-cuadra">El correo no coincide con EmaraTax</p>
+        <p class="reg__hecho-sub" id="no-cuadra-1">Usa el correo registrado para tu empresa (Taxable Person), no el que usas para entrar.</p>
+        <p class="reg__hecho-sub reg__hecho-nota" id="no-cuadra-2">¿No lo encuentras? Abre un ticket de soporte por los canales oficiales de soporte de la FTA (Federal Tax Authority).</p>
         <div class="reg__nav reg__nav--centro">
           <button class="btn btn-edoc-primario" type="button" id="reintentar">Volver a intentarlo</button>
         </div>
@@ -427,8 +485,11 @@
            Lo único útil es decir qué falta y dónde se consigue. -->
       <div id="cuerpo-sincodigo" hidden>
         <p class="reg__hecho-icono reg__hecho-icono--aviso" aria-hidden="true"><span data-icono="alerta"></span></p>
-        <p class="reg__hecho">Falta el código de EmaraTax</p>
-        <p class="reg__hecho-sub">Esta página la abre EmaraTax cuando nos eliges como proveedor, y sin su código no podemos comprobar tus datos. Vuelve a EmaraTax y pulsa «Proceed to ASP».</p>
+        <!-- «¿Código de qué?»: la persona nunca ve ese código (reunión del 29
+             oct). Se dice lo que pasó en sus palabras: el proceso tiene un
+             límite de tiempo y hay que empezar otra vez desde EmaraTax. -->
+        <p class="reg__hecho">Vuelve a empezar desde EmaraTax</p>
+        <p class="reg__hecho-sub">Este proceso tiene un límite de tiempo, o la página se abrió sin pasar por EmaraTax. Vuelve a EmaraTax, elígenos de nuevo como tu ASP y pulsa «Proceed to ASP».</p>
       </div>
 
       <!-- ======================== fallo de conexión ======================== -->
@@ -459,9 +520,13 @@
              error: «Negative test cases to assess error handling» (pág. 4). -->
         <div data-caso="enespera" hidden>
           <p class="reg__hecho-icono reg__hecho-icono--aviso" aria-hidden="true"><span data-icono="reenviar"></span></p>
-          <p class="reg__hecho">Recibimos tu solicitud</p>
-          <p class="reg__hecho-sub">EmaraTax no responde ahora y lo seguimos intentando durante una hora. No tienes que hacer nada: lo verás en EmaraTax, en «Linkage Status with ASP».</p>
-          <p class="reg__hecho-sub">Si en una hora no aparece, vuelve a empezar desde EmaraTax. Ya puedes cerrar esta ventana.</p>
+          <!-- Reunión del 29 oct: «en este momento no podemos completar el
+               registro, lo intentaremos más tarde; si el problema persiste,
+               contacta…». Sin prometer una hora: la ventana de reintentos la
+               fija desarrollo. Plantilla de evidencias, 4.2.6 y 4.2.7. -->
+          <p class="reg__hecho">No pudimos completar el registro en este momento</p>
+          <p class="reg__hecho-sub">Lo intentaremos de nuevo automáticamente; no tienes que hacer nada. Cuando quede hecho, lo verás en EmaraTax, en «Linkage Status with ASP».</p>
+          <p class="reg__hecho-sub">Si el problema persiste, contacta con el soporte de eDoc: soporte@edoc.ae. Ya puedes cerrar esta ventana.</p>
         </div>
         <!-- Guía de pruebas, 4.2 (pág. 10): «ASP to call the Peppol and display
              the relevant details. (Recommended to test the peppol linked TIN
@@ -530,7 +595,7 @@
              técnico». Se dice que quedó registrado y dónde consultarlo: en
              eDoc Consulta, «Mi registro Peppol». La guía (4.2) pide «display
              the relevant details»: el aviso de que quedó registrado lo es. -->
-        <p class="reg__hecho-sub" id="remate-texto">GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta.</p>
+        <p class="reg__hecho-sub" id="remate-texto">GuruSoft ya es tu ASP de facturación electrónica y tu registro en la red Peppol está creado. Ya puedes cerrar esta ventana o seguir en EmaraTax.</p>
         </div>
 
         <!-- Aquí había dos avisos azules, uno naranja y una línea de tiempo, y
@@ -556,7 +621,7 @@
            rótulo, no como una línea más dentro de la caja. -->
       <!-- El paso va en el propio rótulo de la ayuda, a la derecha: se ve con
            la caja cerrada sin ocupar una línea aparte. -->
-      <summary class="edoc-fuera__rotulo"><span data-icono="info" aria-hidden="true"></span>Ayuda<span class="edoc-pasos-fuera" id="paso-actual">Paso 1 de 2</span></summary>
+      <summary class="edoc-fuera__rotulo"><span data-icono="info" aria-hidden="true"></span><span id="ayuda-rotulo">Ayuda</span><span class="edoc-pasos-fuera" id="paso-actual">Paso 1 de 2</span></summary>
       <div class="edoc-fuera__dentro">
       <p class="edoc-fuera__punto" id="fuera-antes"><span data-icono="info" aria-hidden="true"></span><span>Esta comprobación <strong>la define la autoridad</strong> y la hacemos contra su sistema. <strong>Nada de lo que escribas aquí cambia tus datos en eDoc.</strong></span></p>
       <p class="edoc-fuera__punto" id="cuadran" hidden><span data-icono="aprobar" aria-hidden="true"></span><span><strong>Tus datos cuadran con el registro fiscal.</strong> Esto es lo que nos devuelve la autoridad. Si algo está mal, se corrige en EmaraTax, no aquí.</span></p>
@@ -578,15 +643,16 @@
         <ol class="emt__pasos">
           <li class="emt__paso">
             <span class="emt__paso-t">Verifica en EmaraTax</span>
-            <span class="emt__paso-p" id="comprobar-detalle">Por favor, comprueba que <strong>nuestro ASP (GuruSoft)</strong> aparece como tu proveedor en <strong>«Linkage Status with ASP»</strong>.</span>
+            <span class="emt__paso-p" id="comprobar-detalle">Por favor, comprueba que el <strong>ASP GuruSoft</strong> aparece como tu proveedor en <strong>«Linkage Status with ASP»</strong>.</span>
           </li>
           <li class="emt__paso">
             <span class="emt__paso-t"><strong id="fallo-titulo">Si después de unos minutos no aparece</strong></span>
-            <span class="emt__paso-p" id="fallo-detalle">Escríbenos a soporte@edoc.ae con tu TIN: lo revisamos, lo volvemos a enviar y, si hace falta, lo llevamos a la autoridad. No hace falta que repitas el trámite.</span>
+            <span class="emt__paso-p" id="fallo-detalle">Contacta con el soporte de eDoc: soporte@edoc.ae.</span>
           </li>
         </ol>
         </div>
-        <p class="edoc-fuera__punto" id="ahora-cerrar-p"><span data-icono="salir" aria-hidden="true"></span><span id="ahora-cerrar">Ya puedes cerrar esta ventana.</span></p>
+        <!-- «Ya puedes cerrar» subió al texto de «Proceso completado» (reunión
+             del 29 oct). -->
 
         <!-- Aquí NO hay botón de volver a EmaraTax, y es a propósito: el
              contribuyente vino de una página concreta de su sesión y esa
@@ -668,6 +734,16 @@
       certificación y siempre encendido en producción. Si no está, se para aquí y se le pregunta si pasamos su
       contacto a comercial; el sí envía un correo a comercial y guarda el consentimiento.
       Se guarda la respuesta con su fecha. En EmaraTax todavía no cambia nada.
+      <br><strong>Plantilla de evidencias y reunión del 29 de octubre</strong> (UAE_EA_Evidence_Onboarding.docx,
+      sobre la «End-User Scenario Template for ASPs» de la autoridad): bienvenida aparte del formulario (4.1.1 y
+      4.1.2); TIN de 10 dígitos que empieza por 1 y correo con @ y dominio, con mensaje propio en cada campo y
+      nunca el del navegador (4.1.3); «Verify» desactivado hasta que todo es válido (4.1.4); el correo correcto con
+      su confirmación verde (4.2.1); la ficha con aspecto de campo bloqueado (4.2.2); la marca del ambiente en la
+      cabecera («Sandbox»; nada en producción). <strong>Para desarrollo:</strong> evidencia de la llamada a la
+      API con cabeceras y cuerpo, y de la respuesta cuando falta un campo (4.1.5 y 4.1.6); respuesta de Peppol en
+      inglés cuando el TIN ya está vinculado y registro de éxito y falla (4.2.4 y 4.2.5); recuperación con la
+      tabla de procesos y un proceso automático que retoma los que quedaron a medias (4.2.6, 4.2.7, 7.2.5);
+      enmascarar el correo y el TIN en esa tabla; no permitir volver atrás desde la bienvenida.
       <br><strong>Lo que la autoridad aclara</strong> («UAE E-invoicing End-User Process for Onboarding, Reverify
       and Offboarding», V1.2, sección 7), revisado con Alejandro y José el 27 de octubre: <strong>7.1</strong> el
       correo tiene su propio mensaje, distinto del del TIN, y el «?» del campo explica qué correo es antes de
@@ -1252,6 +1328,8 @@
      nombre del parámetro de la dirección; estos son los únicos oficiales. Los
      de antes (auth, tin) siguen valiendo para no romper enlaces viejos. */
   function deEntrada(oficial, viejo) { return entrada.get(oficial) || entrada.get(viejo) || ''; }
+  /* El ambiente se lee antes de limpiar la dirección: la cabecera se pinta después. */
+  if (entrada.get('ambiente')) document.body.dataset.ambiente = entrada.get('ambiente');
   var tokenDeLaAutoridad = deEntrada('emarataxToken', 'auth');
   var tinDeLaAutoridad = deEntrada('TIN', 'tin').replace(/\D/g, '');
   /* Y el TIN solo cuenta si viene con el codigo. Antes bastaba el TIN y
@@ -1433,7 +1511,12 @@
   function quitarTokenDeLaBarra() { barraComoLaAutoridad(false); }
 
   function ir(cual) {
-    ['1', '2', '3', 'no', 'nocliente', 'sincodigo', 'conexion', 'proceso'].forEach(function (c) { $('cuerpo-' + c).hidden = true; });
+    ['bienvenida', '1', '2', '3', 'no', 'nocliente', 'sincodigo', 'conexion', 'proceso'].forEach(function (c) { $('cuerpo-' + c).hidden = true; });
+    /* La bienvenida vive en su página (reunión del 29 oct); bajo el título solo
+       queda el aviso del código vencido. */
+    $('nota-marca').hidden = cual !== 'sincodigo';
+    /* Al terminar no es «ayuda», es lo que sigue. */
+    $('ayuda-rotulo').textContent = cual === '3' ? 'Qué sigue' : 'Ayuda';
     $('cuerpo-' + cual).hidden = false;
     /* Tambien aqui: si la opcion se marco sin pasar por un «change» -el
        relleno de la maqueta lo hace- el boton se habria quedado con la
@@ -1449,6 +1532,7 @@
       'sincodigo': ['', '', ''],
       'conexion': ['', '', ''],
       'proceso': ['', '', ''],
+      'bienvenida': ['', '', ''],
       '3': ['Listo', '', '']
     }[cual];
     if (PASOS) {
@@ -1497,8 +1581,8 @@
     if (!correoValido(val('v-correo'))) {
       return { campo: correo, texto: 'Escribe el correo del administrador, tal como consta en EmaraTax.' };
     }
-    if (!/^\d{10}$/.test(val('v-tin').replace(/\s/g, ''))) {
-      return { campo: tin, texto: 'El TIN son diez dígitos, sin espacios ni guiones. Es el número de la cuenta que elegiste en EmaraTax.' };
+    if (!/^1\d{9}$/.test(val('v-tin').replace(/\s/g, ''))) {
+      return { campo: tin, texto: 'El TIN debe tener 10 dígitos y empezar por 1.' };
     }
     /* El móvil es opcional —su guía lo dice: «Mobile number is optional»—,
        así que vacío pasa. Escrito tiene que ser un número: si no, se envía a
@@ -1543,6 +1627,8 @@
     });
     pintarMotivos();
     pintarPalabra();
+    tocado = {};
+    validarEnVivo();
   }
 
   function verificar(respuesta) {
@@ -1560,7 +1646,60 @@
        pasa: tampoco se puede pulsar dos veces. En la maqueta dura un cuarto
        de segundo; en el producto, lo que tarden las dos. */
     ocupado(true);
-    setTimeout(function () { ocupado(false); responder(respuesta); }, ESPERA_VERIFICAR);
+    setTimeout(function () { ocupado(false); validarEnVivo(); responder(respuesta); }, ESPERA_VERIFICAR);
+  }
+
+  /* --- Validación mientras se escribe -----------------------------------
+     Plantilla de evidencias, 4.1.3 y 4.1.4: cada campo con su mensaje claro
+     —nunca el del navegador, que sale en su idioma— y «Verify» desactivado
+     hasta que todo es válido. El mensaje sale al salir del campo, no a la
+     primera tecla; después se corrige en vivo. */
+  var tocado = {};
+  var MSG = {
+    correo: 'Escribe un correo válido, con @ y un dominio: por ejemplo, nombre@empresa.ae.',
+    tin: 'El TIN debe tener 10 dígitos y empezar por 1.',
+    tel: 'El móvil son solo dígitos, sin el prefijo del país: ese va en la casilla de al lado. Déjalo vacío si prefieres no darlo.'
+  };
+  function erroresCampos() {
+    var e = {};
+    if (!correoValido(val('v-correo'))) e.correo = MSG.correo;
+    if (!/^1\d{9}$/.test(val('v-tin').replace(/\s/g, ''))) e.tin = MSG.tin;
+    var movil = val('v-tel').replace(/[^0-9]/g, '');
+    if (val('v-tel').trim() && !/^\d{5,12}$/.test(movil)) e.tel = MSG.tel;
+    if (revisando && !document.querySelector('input[name="v-accion"]:checked')) e.accion = true;
+    return e;
+  }
+  function validarEnVivo() {
+    var e = erroresCampos();
+    [['correo', 'v-correo', 'e-correo'], ['tin', 'v-tin', 'e-tin'], ['tel', 'v-tel', 'e-tel']].forEach(function (c) {
+      var mal = !!e[c[0]] && !!tocado[c[0]];
+      $(c[1]).classList.toggle('is-invalid', mal);
+      $(c[2]).textContent = e[c[0]] || '';
+      $(c[2]).hidden = !mal;
+    });
+    var listo = !Object.keys(e).length;
+    if (!$('verificar').classList.contains('is-ocupado')) $('verificar').disabled = !listo;
+    $('verificar-pista').hidden = listo;
+    if (listo) $('error-datos').hidden = true;
+    return listo;
+  }
+  [['v-correo', 'correo'], ['v-tin', 'tin'], ['v-tel', 'tel']].forEach(function (c) {
+    $(c[0]).addEventListener('input', validarEnVivo);
+    $(c[0]).addEventListener('blur', function () {
+      if (val(c[0])) tocado[c[1]] = true;
+      validarEnVivo();
+    });
+  });
+  [].forEach.call(document.querySelectorAll('input[name="v-accion"]'), function (r) {
+    r.addEventListener('change', validarEnVivo);
+  });
+
+  /* --- El correo correcto también se ve (plantilla, 4.2.1) ---------------
+     En la misma vista de los datos: el correo y el TIN que escribió,
+     bloqueados y con su visto. Sin pantalla aparte. */
+  function pintarVerificado() {
+    $('r-correo-ok').textContent = val('v-correo');
+    $('r-tin-ok').textContent = val('v-tin').replace(/\s/g, '');
   }
 
   var ESPERA_VERIFICAR = 250;
@@ -1592,6 +1731,7 @@
     // Lo que devuelve la autoridad se enseña tal cual; lo escrito no lo pisa.
     bloquearLlave(true);
     pintarFaltantes();
+    pintarVerificado();
     ir('2');
   }
 
@@ -1656,6 +1796,7 @@
   });
 
   $('verificar').addEventListener('click', function () { verificar('ok'); });
+  $('empezar').addEventListener('click', function () { ir('1'); $('v-correo').focus(); });
   $('reintentar').addEventListener('click', function () { conexion('sin'); ir('1'); });
   $('volver-1').addEventListener('click', function () { olvidarFicha(); conexion('sin'); ir('1'); });
 
@@ -1737,22 +1878,21 @@
          la autoridad Peppol) y que, hasta entonces, lo que le envíen llega. */
       $('remate-texto').textContent = 'Comunicamos tu baja con GuruSoft. En un máximo de 3 días hábiles ' +
         'finalizaremos tu registro en la red Peppol; sin embargo, hasta entonces seguirás recibiendo los ' +
-        'documentos que te envíen.';
-      $('comprobar-detalle').innerHTML = 'Por favor, comprueba que <strong>nuestro ASP (GuruSoft)</strong> ya no aparece como tu proveedor en <strong>«Linkage Status with ASP»</strong>.';
-      $('fallo-titulo').textContent = 'Si después de unos minutos seguimos apareciendo';
-      $('fallo-detalle').textContent = 'Escríbenos a soporte@edoc.ae con tu TIN: lo revisamos, lo volvemos a enviar y, si hace falta, lo llevamos a la autoridad. No hace falta que repitas el trámite.';
-      $('ahora-cerrar').textContent = 'Ya puedes cerrar esta ventana.';
+        'documentos que te envíen. Ya puedes cerrar esta ventana o seguir en EmaraTax.';
+      $('comprobar-detalle').innerHTML = 'Por favor, comprueba que el <strong>ASP GuruSoft</strong> ya no aparece como tu proveedor en <strong>«Linkage Status with ASP»</strong>.';
+      $('fallo-titulo').textContent = 'Si después de unos minutos sigue apareciendo';
+      $('fallo-detalle').textContent = 'Contacta con el soporte de eDoc: soporte@edoc.ae.';
       return;
     }
     $('remate-texto').textContent = revisando
-      ? 'Tus datos quedaron actualizados con GuruSoft como tu proveedor.'
-      : 'GuruSoft quedó vinculado como tu proveedor de facturación electrónica y ya creamos tu registro en la red Peppol. Puedes consultarlo en eDoc Consulta.';
+      ? 'Tus datos quedaron actualizados con GuruSoft como tu ASP. Ya puedes cerrar esta ventana o seguir en EmaraTax.'
+      : 'GuruSoft ya es tu ASP de facturación electrónica y tu registro en la red Peppol está creado. Ya puedes cerrar esta ventana o seguir en EmaraTax.';
   }
 
   /* Qué no coincidió: el correo (el caso que pide la autoridad, 7.1) o el TIN. */
   var NO_CUADRA = {
-    correo: ['El correo no coincide con el de tu empresa en EmaraTax', 'Confirma que escribiste el correo vinculado a la cuenta de tu empresa (Taxable Person) en EmaraTax, no el que usas para entrar al portal.', 'Si no lo encuentras o tus datos necesitan corrección, abre un ticket de soporte por los canales oficiales de soporte de la FTA (Federal Tax Authority).'],
-    tin: ['El TIN no coincide con EmaraTax', 'Revisa que sea el TIN de la empresa que elegiste en EmaraTax: diez dígitos, sin espacios ni guiones.', '']
+    correo: ['El correo no coincide con EmaraTax', 'Usa el correo registrado para tu empresa (Taxable Person), no el que usas para entrar.', '¿No lo encuentras? Abre un ticket de soporte por los canales oficiales de soporte de la FTA (Federal Tax Authority).'],
+    tin: ['El TIN no coincide con EmaraTax', 'Revisa que sea el TIN de la empresa que elegiste en EmaraTax.', '']
   };
   function pintarNoCuadra(cual) {
     var m = NO_CUADRA[cual];
@@ -1849,6 +1989,8 @@
     pintarMotivos();
     pintarPalabra();
   }
+  /* Por defecto, el formulario; cada caso de la maqueta lo cambia. */
+  ir('1');
   if (sinCodigo) {
     $('nota-marca').innerHTML = '<strong>Bienvenido a GuruSoft · eDoc.</strong> Esta página la abre EmaraTax cuando nos eliges como proveedor de facturación electrónica.';
     ir('sincodigo');
@@ -1904,7 +2046,11 @@
      formulario. Si entra en frío no lo trae, y sin «emarataxToken» no se
      puede preguntar a la autoridad: el formulario no tendría manera de
      terminar. Lo que le sirve es la guía, y la puerta para ir. */
+  else if (pedido === 'verificado') { $('sim-ok').click(); }
+  else if (pedido === 'formulario') { ir('1'); }
+  else if (!revisando) { ir('bienvenida'); }
   else { ir('1'); }
+  validarEnVivo();
 }());
 </script>
 </body>

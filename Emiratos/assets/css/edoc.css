@@ -2057,6 +2057,8 @@ body.con-barra-estado .edoc-estado-sistema { top: 0; }
    a la izquierda, sin nada del portal. */
 .edoc-encabezado--minimo { justify-content: space-between; }
 .edoc-encabezado--minimo .edoc-encabezado__marca { position: static; transform: none; margin-right: auto; }
+/* Con el sello del ambiente a la izquierda, la marca vuelve al centro, como en el portal. */
+.edoc-encabezado--minimo .edoc-contexto + .edoc-encabezado__marca { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; }
 
 /* Lo nuestro vive FUERA del cuadro blanco: ese cuadro es el formulario de
    la autoridad y dentro no cabe nada que no sea suyo. Gris, discreto y
@@ -3136,3 +3138,29 @@ body.con-clasificacion .col-clasificacion { display: table-cell; }
                           border-top-color: #fff; border-radius: 50%;
                           animation: edoc-captcha-giro .8s linear infinite; }
 @media (prefers-reduced-motion: reduce) { .btn.is-ocupado::before { animation-duration: 2s; } }
+
+/* --- Vinculación con EmaraTax: reunión del 29 oct y plantilla de evidencias --- */
+.edoc-ambiente--sandbox { background: var(--senal-advertencia); color: #3d2400; }
+.bienvenida { text-align: center; padding: 22px 0 8px; }
+.bienvenida__titulo { font-family: var(--fuente-titulos); font-size: 30px; font-weight: 700;
+  color: var(--edoc-azul); margin: 0 0 12px; text-wrap: balance; }
+/* 4.2.2: los datos de la autoridad con aspecto de campo bloqueado. */
+#ficha-autoridad .reg__ficha-dato { background: #eef0f3; border: 1px solid #d3d8de; border-radius: var(--radio);
+  padding: 7px 10px; color: #3c4148; cursor: not-allowed; display: block; width: 100%; }
+.ficha-solo-lectura { display: flex; align-items: center; gap: 6px; }
+.ficha-solo-lectura svg { width: 15px; height: 15px; }
+/* 4.2.3: la casilla de la declaración, más grande y con letra más grande. */
+.form-check:has(> #declaro) { padding-left: 2.1rem; }
+#declaro { width: 20px; height: 20px; margin-left: -2.1rem; margin-top: .15rem; }
+label[for="declaro"] { font-size: 15px; }
+/* La ayuda de la FTA, aparte y más pequeña que el mensaje. */
+.reg__hecho-nota { font-size: 12.5px; color: #5a6168; border-top: 1px solid #e3e6eb; padding-top: 10px; margin-top: 4px; }
+#verificar:disabled { opacity: .55; cursor: not-allowed; }
+/* 4.2.1: el correo y el TIN verificados, bloqueados y con su visto, en la vista de los datos. */
+.verificado { margin-bottom: 18px; }
+.reg__ficha--verificada .reg__ficha-dato { display: block; width: 100%; background: #f3f8e8; border: 1px solid #a8c634;
+  border-radius: var(--radio); padding: 7px 34px 7px 10px; color: #2d3a0e; position: relative; cursor: not-allowed; }
+.reg__ficha--verificada .reg__ficha-dato::after { content: '\2713'; position: absolute; right: 11px; top: 50%;
+  transform: translateY(-50%); color: #5b7a12; font-weight: 700; }
+.verificado__ok { display: flex; align-items: center; gap: 6px; color: #4d6b12; font-weight: 600; font-size: 13px; margin: 2px 0 0; }
+.verificado__ok svg { width: 16px; height: 16px; }
